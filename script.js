@@ -1777,28 +1777,42 @@ document.addEventListener('keydown', (e) => {
 
     const calc = panel.querySelector('#scratch-calc');
     const res = panel.querySelector('#scratch-res');
+    // Position du curseur SUIVIE à la main : fiable même quand on clique sur le pavé
+    // (selectionStart est remis à 0 au clic souris dans certains navigateurs → texte inversé).
+    let caret = 0;
+    const clampCaret = () => { if (caret == null || caret < 0 || caret > calc.value.length) caret = calc.value.length; };
+    const syncCaret = () => { try { if (calc.selectionStart != null) caret = calc.selectionStart; } catch (_) {} };
     const recalc = () => { res.textContent = safeCalc(calc.value); };
     const insertAtCalc = (v) => {
-      const s = (calc.selectionStart != null) ? calc.selectionStart : calc.value.length;
-      const e = (calc.selectionEnd != null) ? calc.selectionEnd : calc.value.length;
-      calc.value = calc.value.slice(0, s) + v + calc.value.slice(e);
-      const pos = s + v.length;
-      calc.focus(); calc.setSelectionRange(pos, pos); recalc();
+      clampCaret();
+      calc.value = calc.value.slice(0, caret) + v + calc.value.slice(caret);
+      caret += v.length;
+      calc.focus();
+      try { calc.setSelectionRange(caret, caret); } catch (_) {}
+      recalc();
     };
     const backspaceCalc = () => {
-      const s = calc.selectionStart, e = calc.selectionEnd;
-      if (s === e && s > 0) { calc.value = calc.value.slice(0, s - 1) + calc.value.slice(e); calc.setSelectionRange(s - 1, s - 1); }
-      else if (s !== e) { calc.value = calc.value.slice(0, s) + calc.value.slice(e); calc.setSelectionRange(s, s); }
-      calc.focus(); recalc();
+      clampCaret();
+      if (caret > 0) {
+        calc.value = calc.value.slice(0, caret - 1) + calc.value.slice(caret);
+        caret -= 1;
+        calc.focus();
+        try { calc.setSelectionRange(caret, caret); } catch (_) {}
+      }
+      recalc();
     };
-    calc.addEventListener('input', recalc);
-    btn.addEventListener('click', () => { const open = panel.style.display === 'block'; panel.style.display = open ? 'none' : 'block'; if (!open) calc.focus(); });
+    // Clavier physique / clic DANS le champ → on met à jour la position suivie
+    calc.addEventListener('input', () => { syncCaret(); recalc(); });
+    calc.addEventListener('keyup', syncCaret);
+    calc.addEventListener('mouseup', syncCaret);
+    calc.addEventListener('focus', syncCaret);
+    btn.addEventListener('click', () => { const open = panel.style.display === 'block'; panel.style.display = open ? 'none' : 'block'; if (!open) { calc.focus(); syncCaret(); } });
     panel.querySelector('#scratch-close').addEventListener('click', () => { panel.style.display = 'none'; });
     panel.querySelectorAll('.scratch-key').forEach(k => {
       k.addEventListener('mousedown', e => e.preventDefault()); // garde le curseur dans le champ
       k.addEventListener('click', () => {
         const v = k.dataset.k;
-        if (v === 'C') { calc.value = ''; recalc(); calc.focus(); return; }
+        if (v === 'C') { calc.value = ''; caret = 0; recalc(); calc.focus(); return; }
         if (v === '←') { backspaceCalc(); return; }
         if (v === '=') { recalc(); return; }
         insertAtCalc(v);
