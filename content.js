@@ -686,6 +686,15 @@ const SECTIONS_CONTENT = {
           <div class="simple-exp-content">Le milieu M est « à mi-chemin » : on parcourt la moitié de \\(\\vec{AB}\\). Dans un repère, les composantes d'un vecteur, c'est juste « de combien on se déplace » en x et en y entre le départ et l'arrivée.</div>
         </div>
       </div>
+      <div class="formula-box vecteur">
+        <h3><span class="tag tag-vecteur">Vecteurs</span> Distance entre deux points</h3>
+        <div class="formula-main vecteur">$$AB = \\|\\vec{AB}\\| = \\sqrt{(x_B - x_A)^2 + (y_B - y_A)^2}$$</div>
+        <p class="note">La <strong>longueur</strong> du segment [AB] = la <strong>norme</strong> du vecteur \\(\\vec{AB}\\).</p>
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">C'est le théorème de Pythagore ! Pour aller de A à B tu te déplaces de \\((x_B-x_A)\\) horizontalement et de \\((y_B-y_A)\\) verticalement : ça forme un triangle rectangle dont [AB] est l'hypoténuse. La distance vaut donc \\(\\sqrt{\\text{(déplacement en x)}^2 + \\text{(déplacement en y)}^2}\\). 🧮 Brouillon dispo pour calculer.</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="grid2">
@@ -1054,6 +1063,16 @@ const SECTIONS_CONTENT = {
     </div>
   </div>
   <p style="color:var(--text-secondary); margin-bottom:2rem; font-size:15px;">💡 Chaque exercice se révèle étape par étape. Si tu bloques, clique sur l'étape suivante — une explication te guidera.</p>
+
+  <div class="gen-panel">
+    <div class="gen-head">
+      <h3>🎲 Générateur d'exercices</h3>
+      <button type="button" class="gen-new" onclick="genNew()">🔄 Nouvel exercice</button>
+    </div>
+    <p class="gen-sub">Entraîne-toi à l'infini : des exercices à valeurs aléatoires avec correction pas-à-pas. Choisis un type ou laisse en aléatoire.</p>
+    <div id="gen-chips" class="gen-chips"></div>
+    <div id="gen-output"></div>
+  </div>
 
   <div class="exercise-card" style="border-left:4px solid var(--color-nav);">
     <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧭 Vecteurs — points alignés ?</h3>

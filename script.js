@@ -393,6 +393,14 @@ function answer(qi, chosen) {
   setTimeout(() => { if (correctBtn) correctBtn.style.transform = ''; }, 500);
 
   const data = loadSavedData();
+  // Suivi de la réussite par chapitre (pour les Stats par chapitre)
+  if (q.chapter) {
+    data.chapterStats = data.chapterStats || {};
+    var _cs = data.chapterStats[q.chapter] || { correct: 0, total: 0 };
+    _cs.total++;
+    if (chosen === q.ans) _cs.correct++;
+    data.chapterStats[q.chapter] = _cs;
+  }
   if (chosen === q.ans) {
     score++;
     correctStreak++;
@@ -506,6 +514,7 @@ function showQuizSummary() {
       <div class="score-num" style="font-size:48px;">${score}/${currentQuestions.length}</div>
       <p style="font-size:18px; color:var(--text-secondary); margin-bottom:1rem;">Score : ${currentQuestions.length > 0 ? Math.round(score / currentQuestions.length * 100) : 0}%</p>
       <p style="font-size:16px; color:var(--text-secondary);">XP gagné : +${xpGained}</p>
+      <button class="nav-btn" onclick="shareScore()" style="margin-top:1rem; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; border:none;">📲 Partager mon score</button>
       <button class="nav-btn" onclick="resetQuiz()" style="margin-top:1rem;">🔄 Rejouer</button>
       <button class="nav-btn" onclick="backToQuizStart()" style="margin-top:1rem; margin-left:0.5rem;">🏠 Accueil quiz</button>
     </div>
@@ -529,6 +538,135 @@ function showQuizSummary() {
   
   container.innerHTML = summaryHTML;
   safeMathJax([container]); // rendre les formules (fractions, racines) du récap
+}
+
+// ── PARTAGE DE SCORE : génère une carte-image (story Insta/TikTok) ──
+const SHARE_URL = 'https://drackson227.github.io/Math/';
+function _scoreVerdict(pct) {
+  if (pct >= 100) return { txt: 'PARFAIT !', emoji: '🏆' };
+  if (pct >= 80)  return { txt: 'EXCELLENT !', emoji: '🔥' };
+  if (pct >= 60)  return { txt: 'BIEN JOUÉ', emoji: '💪' };
+  if (pct >= 40)  return { txt: 'CONTINUE !', emoji: '📈' };
+  return { txt: 'À RETRAVAILLER', emoji: '📚' };
+}
+function _roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+async function buildScoreCard(score, total, pct) {
+  try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (_) {}
+  const W = 1080, H = 1080;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+  // Fond dégradé sombre
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#1b1635'); bg.addColorStop(1, '#0d0f16');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  // Halo violet/bleu décoratif
+  const halo = ctx.createRadialGradient(W / 2, 470, 60, W / 2, 470, 520);
+  halo.addColorStop(0, 'rgba(139,109,250,0.30)'); halo.addColorStop(1, 'rgba(13,15,22,0)');
+  ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+  // Titre
+  const tg = ctx.createLinearGradient(W / 2 - 230, 0, W / 2 + 230, 0);
+  tg.addColorStop(0, '#a78bfa'); tg.addColorStop(1, '#60a5fa');
+  ctx.fillStyle = tg; ctx.font = '800 76px Inter, Arial, sans-serif';
+  ctx.fillText('Maths GR2', W / 2, 200);
+  ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = '500 30px Inter, Arial, sans-serif';
+  ctx.fillText('Géométrie analytique', W / 2, 250);
+  // Verdict emoji
+  const v = _scoreVerdict(pct);
+  ctx.font = '120px Arial'; ctx.fillText(v.emoji, W / 2, 430);
+  // Score géant
+  ctx.fillStyle = tg; ctx.font = '800 230px Inter, Arial, sans-serif';
+  ctx.fillText(score + '/' + total, W / 2, 660);
+  // Pourcentage
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 64px Inter, Arial, sans-serif';
+  ctx.fillText(pct + '%', W / 2, 750);
+  // Verdict texte
+  ctx.fillStyle = '#22c55e'; ctx.font = '700 44px Inter, Arial, sans-serif';
+  ctx.fillText(v.txt, W / 2, 830);
+  // Pastille d'appel à l'action
+  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  _roundRect(ctx, W / 2 - 360, 910, 720, 96, 48); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.font = '600 36px Inter, Arial, sans-serif';
+  ctx.fillText('🎯 À toi de battre mon score !', W / 2, 970);
+  // URL
+  ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = '500 30px Inter, Arial, sans-serif';
+  ctx.fillText('drackson227.github.io/Math', W / 2, 1040);
+  return c;
+}
+async function shareScore() {
+  const total = (typeof currentQuestions !== 'undefined' && currentQuestions) ? currentQuestions.length : 0;
+  const sc = (typeof score !== 'undefined') ? score : 0;
+  const pct = total > 0 ? Math.round(sc / total * 100) : 0;
+  let canvas;
+  try { canvas = await buildScoreCard(sc, total, pct); }
+  catch (e) { if (typeof showToast === 'function') showToast('Impossible de générer l’image 😕', '#dc3545'); return; }
+  const text = `J'ai eu ${sc}/${total} (${pct}%) sur Maths GR2 ! 🔥 Essaie : ${SHARE_URL}`;
+  canvas.toBlob(async (blob) => {
+    if (!blob) return;
+    const file = new File([blob], 'mathsgr2-score.png', { type: 'image/png' });
+    // Partage natif (mobile) avec l'image si possible
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Mon score Maths GR2', text }); return; }
+      catch (e) { if (e && e.name === 'AbortError') return; }
+    }
+    // Repli : téléchargement de l'image + copie du texte
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'mathsgr2-score.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    try { if (navigator.clipboard) await navigator.clipboard.writeText(text); } catch (_) {}
+    if (typeof showToast === 'function') showToast('🖼️ Image téléchargée — poste-la en story !', 'var(--color-nav)');
+  }, 'image/png');
+}
+
+// ── STATS PAR CHAPITRE (écran d'accueil quiz) ──
+var CHAP_LABELS = { vecteur: 'Vecteurs', cercle: 'Cercle', parabole: 'Parabole', droite: 'Droites' };
+var CHAP_ORDER = ['vecteur', 'cercle', 'parabole', 'droite'];
+function _statColor(p) { return p >= 75 ? '#22c55e' : (p >= 50 ? '#f59e0b' : '#ef4444'); }
+function renderChapterStats() {
+  var box = document.getElementById('chapter-stats');
+  if (!box) return;
+  var data = loadSavedData();
+  var cs = data.chapterStats || {};
+  var done = CHAP_ORDER.filter(function (c) { return cs[c] && cs[c].total > 0; });
+  if (!done.length) {
+    box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' +
+      '<p class="chap-empty">Réponds à quelques questions du quiz pour découvrir tes points forts et tes points faibles ici. 💪</p></div>';
+    return;
+  }
+  var weakest = null, weakPct = 101;
+  var rows = CHAP_ORDER.map(function (c) {
+    var s = cs[c];
+    if (!s || !s.total) return '';
+    var p = Math.round(s.correct / s.total * 100);
+    if (s.total >= 2 && p < weakPct) { weakPct = p; weakest = c; }
+    return '<div class="chap-row"><span class="chap-name">' + CHAP_LABELS[c] + '</span>' +
+      '<span class="chap-bar"><span class="chap-fill" style="width:' + p + '%; background:' + _statColor(p) + ';"></span></span>' +
+      '<span class="chap-pct" style="color:' + _statColor(p) + ';">' + p + '%</span></div>';
+  }).join('');
+  var reco;
+  if (weakest && weakPct < 75) {
+    reco = '<div class="chap-reco">🎯 À réviser en priorité : <strong>' + CHAP_LABELS[weakest] + '</strong> (' + weakPct + '%)' +
+      '<button class="chap-revise" onclick="reviseChapter(\'' + weakest + '\')">Réviser ce chapitre →</button></div>';
+  } else {
+    reco = '<div class="chap-reco">🌟 Excellent niveau partout, continue comme ça !</div>';
+  }
+  box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' + rows + reco + '</div>';
+}
+function reviseChapter(ch) {
+  var sel = document.getElementById('chapter-filter'); if (sel) sel.value = ch;
+  var dsel = document.getElementById('difficulty-filter'); if (dsel) dsel.value = 'all';
+  if (typeof filterQuiz === 'function') filterQuiz();
+  missedOnlyMode = false;
+  startQuiz();
 }
 
 function updateLevel(data) {
@@ -611,6 +749,7 @@ function backToQuizStart() {
   document.getElementById('quiz-start-screen').style.display = 'block';
   const data = loadSavedData();
   const bsDisplayEl = document.getElementById('best-score-display'); if(bsDisplayEl) bsDisplayEl.textContent = `Meilleur score : ${data.bestScore || 0}%`;
+  if (typeof renderChapterStats === 'function') renderChapterStats();
 }
 
 function resetQuiz() {
@@ -861,6 +1000,7 @@ function showSection(evtOrId, id) {
     if (!examActive && !quizRunning) setTimeout(filterQuiz, 50);
     if (typeof renderLeaderboard === 'function') renderLeaderboard();
     if (typeof leaderboardPush === 'function') leaderboardPush();
+    if (typeof renderChapterStats === 'function') renderChapterStats();
   }
   if (sectionId === 'profil') requestAnimationFrame(() => updateProfile()); // throttle handled inside
   if (sectionId === 'flashcards') initFlashcards();
@@ -1619,7 +1759,7 @@ document.addEventListener('keydown', (e) => {
         '<button type="button" id="scratch-close" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px;">✕</button>' +
       '</div>' +
       '<div style="display:flex; gap:6px; margin-bottom:8px;">' +
-        '<input id="scratch-calc" type="text" inputmode="text" placeholder="ex : √(9+16)" style="flex:1; min-width:0; padding:8px 10px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px;">' +
+        '<input id="scratch-calc" type="text" inputmode="text" dir="ltr" placeholder="ex : √(9+16)" style="flex:1; min-width:0; padding:8px 10px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; direction:ltr; text-align:left; unicode-bidi:plaintext;">' +
         '<span id="scratch-res" style="min-width:64px; text-align:right; font-weight:700; color:var(--color-parabole); font-size:14px; align-self:center;"></span>' +
       '</div>' +
       '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:8px;">' +
@@ -1630,7 +1770,7 @@ document.addEventListener('keydown', (e) => {
           return '<button type="button" class="scratch-key" data-k="'+k+'" style="padding:9px 0; border-radius:8px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); cursor:pointer; font-size:15px; '+special+'">'+k+'</button>';
         }).join('') +
       '</div>' +
-      '<textarea id="scratch-pad" placeholder="Écris tes calculs ici…" style="width:100%; height:120px; resize:vertical; padding:8px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-family:monospace;"></textarea>';
+      '<textarea id="scratch-pad" dir="ltr" placeholder="Écris tes calculs ici…" style="width:100%; height:120px; resize:vertical; padding:8px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-family:monospace; direction:ltr; text-align:left; unicode-bidi:plaintext;"></textarea>';
 
     document.body.appendChild(btn);
     document.body.appendChild(panel);

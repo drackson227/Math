@@ -11,26 +11,34 @@
   <meta property="og:site_name" content="Maths GR2">
   <meta property="og:title" content="Maths GR2 — Révise les maths en t'amusant">
   <meta property="og:description" content="Cercle, parabole, droites : cours animés, quiz, flashcards, défi du jour, quiz multijoueur et chat. Créé par Drackson.">
-  <meta property="og:url" content="https://drackson1.netlify.app/">
-  <meta property="og:image" content="https://drackson1.netlify.app/og-image.png">
+  <meta property="og:url" content="https://drackson227.github.io/Math/">
+  <meta property="og:image" content="https://drackson227.github.io/Math/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Maths GR2 — Révise les maths en t'amusant">
   <meta name="twitter:description" content="Cours animés, quiz, flashcards, multijoueur et chat. Créé par Drackson.">
-  <meta name="twitter:image" content="https://drackson1.netlify.app/og-image.png">
+  <meta name="twitter:image" content="https://drackson227.github.io/Math/og-image.png">
   <meta name="author" content="Drackson">
   <meta name="robots" content="index, follow">
   <link rel="icon" type="image/svg+xml" href="logo.svg">
-  <link rel="apple-touch-icon" href="logo.svg">
-  <!-- Police Inter en LOCAL (fonctionne sans internet) -->
-  <link rel="stylesheet" href="lib/fonts/inter.css">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <!-- PWA : application installable -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Maths GR2">
+  <!-- Police Inter via CDN Google Fonts (compatible GitHub Pages) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.css">
   <style>
     /* B7 fix: focus-overlay.show was missing from style.css */
     .focus-mode-overlay.show { display: flex !important; }
   </style>
-  <!-- MathJax config (doit être avant le script). Tout est en LOCAL → fonctionne SANS internet. -->
+  <!-- MathJax config (doit être avant le script). Chargé via CDN (compatible GitHub Pages). -->
   <script>
     window.MathJax = {
       tex: {
@@ -38,11 +46,10 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: { uvec: ['\\hat{#1}', 1] }
       },
-      chtml: { fontURL: 'lib/mathjax/es5/output/chtml/fonts/woff-v2' },
       startup: { ready() { MathJax.startup.defaultReady(); } }
     };
   </script>
-  <script id="MathJax-script" async src="lib/mathjax/es5/tex-mml-chtml.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
@@ -190,9 +197,11 @@
     <h1 style="font-size:28px; font-weight:800; background:linear-gradient(135deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0;">Maths GR2</h1>
   </div>
   <p style="font-size:13px; color:var(--text-secondary);">Géométrie analytique plane — Cercle · Parabole · Droites</p>
+  <p style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
   <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
+  <button class="nav-btn" onclick="openSearch()" style="border-color:var(--color-nav);">🔍 Rechercher</button>
   <button class="nav-btn active" onclick="showSection(event,'synthese')">📚 Synthèse</button>
   <button class="nav-btn" onclick="showSection(event,'formules')">🧮 Formules clés</button>
   <button class="nav-btn" onclick="showSection(event,'methodes')">📝 Méthodes</button>
@@ -353,6 +362,9 @@
       </div>
       <div id="leaderboard-list"></div>
     </div>
+
+    <div id="chapter-stats" class="chap-stats" style="max-width:380px; margin:1.25rem auto 0; text-align:left;"></div>
+
       <div style="margin:1rem 0; padding:0.75rem 1rem; background:var(--bg-card); border-radius:10px; border:1px solid var(--border-subtle); display:inline-block;">
         <span id="quiz-count-display" style="color:var(--color-nav); font-weight:700; font-size:16px;">— questions</span>
         <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
@@ -521,6 +533,7 @@
   <p style="margin:0 0 0.5rem;">Créé par <strong style="color:var(--color-nav);">Drackson</strong></p>
   <p style="margin:0 0 0.75rem;">
     <a href="https://instagram.com/drackson227" target="_blank" rel="noopener" style="color:var(--color-parabole); text-decoration:none; font-weight:600;">📸 @drackson227</a>
+    <a href="https://www.tiktok.com/@drackson227" target="_blank" rel="noopener" style="color:var(--color-nav); text-decoration:none; font-weight:600; margin-left:14px;">🎵 TikTok @Drackson227</a>
   </p>
   <p style="margin:0;">
     <button onclick="openPremiumModal()" style="background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); border-radius:8px; padding:5px 12px; font-size:12px; cursor:pointer;">⭐ Débloquer le Premium</button>
@@ -592,18 +605,51 @@
     <div id="demo-controls" class="demo-controls"></div>
   </div>
 </div>
-  <!-- GSAP + Flip en LOCAL (animations fluides, fonctionne sans internet) -->
-  <script src="lib/gsap.min.js"></script>
-  <script src="lib/Flip.min.js"></script>
+  <!-- GSAP + Flip via CDN (animations fluides, compatible GitHub Pages) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
   <script>try { if (window.gsap && window.Flip) gsap.registerPlugin(Flip); } catch(e){}</script>
   <script src="data.js"></script>
   <script src="content.js"></script>
   <script src="script.js"></script>
-  <!-- Comptes + sauvegarde cloud (Supabase) en LOCAL -->
-  <script src="lib/supabase.min.js"></script>
+  <!-- Comptes + sauvegarde cloud (Supabase) via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js"></script>
   <script src="chat.js"></script>
   <script src="multiplayer.js"></script>
+  <script src="search.js"></script>
+  <script src="generator.js"></script>
   <script src="backtotop.js"></script>
+  <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((e) => console.warn('SW non enregistré :', e));
+      });
+    }
+    // Bouton d'installation (Chrome/Edge/Android) : apparaît quand l'appli est installable
+    (function () {
+      let deferred = null;
+      const mkBtn = () => {
+        let b = document.getElementById('pwa-install-btn');
+        if (b) return b;
+        b = document.createElement('button');
+        b.id = 'pwa-install-btn';
+        b.type = 'button';
+        b.textContent = '📲 Installer l’appli';
+        b.style.cssText = 'position:fixed; right:16px; bottom:16px; z-index:2600; padding:11px 16px; border-radius:14px; border:none; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.4);';
+        b.addEventListener('click', async () => {
+          if (!deferred) return;
+          deferred.prompt();
+          try { await deferred.userChoice; } catch (_) {}
+          deferred = null; b.remove();
+        });
+        document.body.appendChild(b);
+        return b;
+      };
+      window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; mkBtn(); });
+      window.addEventListener('appinstalled', () => { const b = document.getElementById('pwa-install-btn'); if (b) b.remove(); });
+    })();
+  </script>
 </body>
 </html>

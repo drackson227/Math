@@ -267,7 +267,61 @@ const allQuestions = [
   {q: "Les droites d₁ : 2x+3y−1=0 et d₂ : 3x−2y+4=0 sont :", opts: ["Perpendiculaires","Parallèles","Confondues","Sécantes non perpendiculaires"], ans: 0, chapter: "droite", difficulty: "avance",
     exp: "On calcule les deux pentes avec \\(m=-\\dfrac{a}{b}\\) :<br>\\(m_1=-\\dfrac{2}{3}\\)<br>\\(m_2=-\\dfrac{3}{-2}=\\dfrac{3}{2}\\)<br>Produit :<br>\\(m_1\\cdot m_2=-\\dfrac{2}{3}\\times\\dfrac{3}{2}=-1\\)<br>→ <strong>perpendiculaires</strong>.",
     formula: "\\(m=-\\dfrac{a}{b}\\) pour chaque droite, puis test \\(m_1\\cdot m_2=-1\\)",
-    simple: "Chaque droite est en \\(ax+by+c=0\\), donc tu trouves sa pente avec \\(-\\dfrac{a}{b}\\). Tu obtiens \\(-\\frac23\\) et \\(\\frac32\\). Tu les multiplies : ça fait −1 → angle droit, perpendiculaires."}];
+    simple: "Chaque droite est en \\(ax+by+c=0\\), donc tu trouves sa pente avec \\(-\\dfrac{a}{b}\\). Tu obtiens \\(-\\frac23\\) et \\(\\frac32\\). Tu les multiplies : ça fait −1 → angle droit, perpendiculaires."},
+
+  // ── Questions supplémentaires (juin 2026) ──
+  {q: "La distance entre A(1 ; 2) et B(4 ; 6) vaut :", opts: ["5", "7", "\\(\\sqrt{7}\\)", "25"], ans: 0, chapter: "cercle", difficulty: "facile",
+    exp: "On applique la formule de Pythagore :<br>\\(AB=\\sqrt{(4-1)^2+(6-2)^2}=\\sqrt{9+16}=\\sqrt{25}=5\\)",
+    formula: "\\(AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}\\)",
+    simple: "Tu calcules le déplacement en x (4−1=3) et en y (6−2=4), tu les mets au carré, tu additionnes, et tu prends la racine : \\(\\sqrt{9+16}=\\sqrt{25}=5\\). 🧮 Brouillon dispo."},
+  {q: "La norme du vecteur \\(\\vec{u}=(6\\,;\\,8)\\) est :", opts: ["10", "14", "\\(\\sqrt{14}\\)", "48"], ans: 0, chapter: "vecteur", difficulty: "facile",
+    exp: "\\(\\|\\vec{u}\\|=\\sqrt{6^2+8^2}=\\sqrt{36+64}=\\sqrt{100}=10\\)",
+    formula: "\\(\\|\\vec{u}\\|=\\sqrt{x^2+y^2}\\)",
+    simple: "La norme = la longueur de la flèche. C'est Pythagore avec les composantes : \\(\\sqrt{6^2+8^2}=\\sqrt{100}=10\\)."},
+  {q: "Les composantes de \\(\\vec{AB}\\) avec A(2 ; −1) et B(5 ; 3) sont :", opts: ["(3 ; 4)", "(7 ; 2)", "(−3 ; −4)", "(3 ; −4)"], ans: 0, chapter: "vecteur", difficulty: "facile",
+    exp: "\\(\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)=(5-2\\,;\\,3-(-1))=(3\\,;\\,4)\\)",
+    formula: "\\(\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)\\)",
+    simple: "« Arrivée moins départ » : pour x, 5−2=3 ; pour y, 3−(−1)=4. Attention au moins-moins qui fait plus !"},
+  {q: "Le milieu de [AB] avec A(−2 ; 4) et B(6 ; −2) est :", opts: ["(2 ; 1)", "(4 ; 2)", "(2 ; 2)", "(8 ; 6)"], ans: 0, chapter: "vecteur", difficulty: "facile",
+    exp: "\\(M=\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)=\\left(\\dfrac{-2+6}{2}\\,;\\,\\dfrac{4-2}{2}\\right)=(2\\,;\\,1)\\)",
+    formula: "\\(M=\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)\\)",
+    simple: "Le milieu = la moyenne des coordonnées. Tu additionnes les x et tu divises par 2, pareil pour les y."},
+  {q: "Les vecteurs \\(\\vec{u}=(2\\,;\\,3)\\) et \\(\\vec{v}=(4\\,;\\,6)\\) sont :", opts: ["Colinéaires", "Orthogonaux", "Égaux", "De sens opposés"], ans: 0, chapter: "vecteur", difficulty: "intermediaire",
+    exp: "On a \\(\\vec{v}=2\\,\\vec{u}\\). Le déterminant \\(2\\times6-3\\times4=0\\) → ils sont <strong>colinéaires</strong> (même direction).",
+    formula: "Colinéaires si \\(x_u\\,y_v-y_u\\,x_v=0\\)",
+    simple: "v est exactement 2 fois u, donc ils pointent dans la même direction : colinéaires. Le test : le déterminant vaut 0."},
+  {q: "Le centre du cercle \\((x-3)^2+(y+5)^2=16\\) est :", opts: ["(3 ; −5)", "(−3 ; 5)", "(3 ; 5)", "(−3 ; −5)"], ans: 0, chapter: "cercle", difficulty: "facile",
+    exp: "Forme canonique \\((x-x_0)^2+(y-y_0)^2=R^2\\). Ici \\(x_0=3\\) et \\((y+5)=(y-(-5))\\) donc \\(y_0=-5\\).",
+    formula: "Centre \\(C(x_0\\,;\\,y_0)\\) dans \\((x-x_0)^2+(y-y_0)^2=R^2\\)",
+    simple: "On lit l'opposé de ce qui est dans les parenthèses : \\(x-3\\) → 3 ; \\(y+5=y-(-5)\\) → −5. Attention au signe du +5 !"},
+  {q: "Le rayon du cercle \\((x-1)^2+(y-2)^2=49\\) est :", opts: ["7", "49", "\\(\\sqrt{7}\\)", "14"], ans: 0, chapter: "cercle", difficulty: "facile",
+    exp: "Le membre de droite vaut \\(R^2=49\\), donc \\(R=\\sqrt{49}=7\\).",
+    formula: "\\(R=\\sqrt{R^2}\\)",
+    simple: "À droite c'est R² (pas R !). Comme 49=7², le rayon est 7. Erreur classique : répondre 49."},
+  {q: "Le point P(5 ; 0) par rapport au cercle de centre O(0 ; 0) et de rayon 4 est :", opts: ["À l'extérieur", "Sur le cercle", "À l'intérieur", "Au centre"], ans: 0, chapter: "cercle", difficulty: "intermediaire",
+    exp: "On compare la distance au centre et le rayon : \\(d(O,P)=\\sqrt{5^2+0^2}=5\\). Comme \\(5>4\\), P est <strong>à l'extérieur</strong>.",
+    formula: "\\(d(O,P)\\) vs \\(R\\) : > extérieur, = dessus, < intérieur",
+    simple: "Tu mesures la distance du point au centre (ici 5) et tu la compares au rayon (4). Plus loin que le rayon = dehors."},
+  {q: "Le sommet de la parabole \\(y=2(x-3)^2+5\\) est :", opts: ["(3 ; 5)", "(−3 ; 5)", "(3 ; −5)", "(2 ; 5)"], ans: 0, chapter: "parabole", difficulty: "facile",
+    exp: "Forme canonique \\(y=A(x-\\alpha)^2+\\beta\\) → sommet \\(S(\\alpha\\,;\\,\\beta)=(3\\,;\\,5)\\).",
+    formula: "\\(S(\\alpha\\,;\\,\\beta)\\) dans \\(y=A(x-\\alpha)^2+\\beta\\)",
+    simple: "On lit directement : \\(x-3\\) → α=3 ; le \\(+5\\) à la fin → β=5. Le sommet est (3 ; 5)."},
+  {q: "La parabole \\(y=-3x^2+2x-1\\) :", opts: ["S'ouvre vers le bas", "S'ouvre vers le haut", "Est une droite", "N'a pas de sommet"], ans: 0, chapter: "parabole", difficulty: "facile",
+    exp: "Le coefficient de \\(x^2\\) est \\(A=-3<0\\) → la parabole <strong>s'ouvre vers le bas</strong>.",
+    formula: "\\(A>0\\) : vers le haut · \\(A<0\\) : vers le bas",
+    simple: "Regarde juste le signe devant x². Ici c'est −3, donc négatif → la parabole fait un chapeau (vers le bas)."},
+  {q: "La pente de la droite passant par A(1 ; 2) et B(3 ; 8) est :", opts: ["3", "2", "4", "\\(\\tfrac{1}{2}\\)"], ans: 0, chapter: "droite", difficulty: "facile",
+    exp: "\\(m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{8-2}{3-1}=\\dfrac{6}{2}=3\\)",
+    formula: "\\(m=\\dfrac{y_B-y_A}{x_B-x_A}\\)",
+    simple: "La pente = (différence des y) ÷ (différence des x) = 6 ÷ 2 = 3. Une animation existe dans les Graphiques !"},
+  {q: "Un vecteur normal à la droite \\(3x-4y+1=0\\) est :", opts: ["(3 ; −4)", "(4 ; 3)", "(−4 ; 3)", "(3 ; 4)"], ans: 0, chapter: "droite", difficulty: "intermediaire",
+    exp: "Pour une droite \\(ax+by+c=0\\), le vecteur normal est \\(\\vec{n}=(a\\,;\\,b)=(3\\,;\\,-4)\\).",
+    formula: "\\(\\vec{n}=(a\\,;\\,b)\\)  pour  \\(ax+by+c=0\\)",
+    simple: "Le vecteur normal se lit directement : ce sont les coefficients devant x et y, soit (3 ; −4)."},
+  {q: "La droite perpendiculaire à \\(y=2x+1\\) a pour pente :", opts: ["\\(-\\tfrac{1}{2}\\)", "2", "\\(\\tfrac{1}{2}\\)", "−2"], ans: 0, chapter: "droite", difficulty: "intermediaire",
+    exp: "Deux droites perpendiculaires vérifient \\(m\\cdot m'=-1\\). Ici \\(m=2\\) donc \\(m'=-\\dfrac{1}{2}\\).",
+    formula: "\\(m\\cdot m'=-1\\)",
+    simple: "Perpendiculaire = on inverse et on change le signe : 2 devient \\(-\\tfrac{1}{2}\\). Vérifie : \\(2\\times(-\\tfrac12)=-1\\). ✓"}];
 
 // ════════════════════════════════════════════════════════════
 //  NOTIONS CLÉS par chapitre (onglet « Progression »)
@@ -377,7 +431,16 @@ const flashcards = [
   {front: "Comment trouver l'intersection de deux droites ?", back: "Résoudre le système $y = m_1 x + p_1$ et $y = m_2 x + p_2$.", chapter: "droite"},
   {front: "Comment vérifier qu'un point appartient à un cercle ?", back: "Substituer $(x,y)$ dans l'équation : $(x-h)^2+(y-k)^2=R^2$ doit être vérifié.", chapter: "cercle"},
   {front: "Distance entre A(x₁,y₁) et B(x₂,y₂) ?", back: "$$d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$$", chapter: "cercle"},
-  {front: "Équation d'un cercle passant par 3 points ?", back: "Substituer les 3 points dans $x^2+y^2+ax+by+c=0$ → système 3×3.", chapter: "cercle"}];
+  {front: "Équation d'un cercle passant par 3 points ?", back: "Substituer les 3 points dans $x^2+y^2+ax+by+c=0$ → système 3×3.", chapter: "cercle"},
+  {front: "Norme d'un vecteur \\(\\vec{u}=(x\\,;\\,y)\\) ?", back: "$$\\|\\vec{u}\\|=\\sqrt{x^2+y^2}$$ (c'est Pythagore sur les composantes).", chapter: "vecteur"},
+  {front: "Distance entre deux points A et B (point à point) ?", back: "$$AB=\\|\\vec{AB}\\|=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}$$", chapter: "vecteur"},
+  {front: "Coordonnées du milieu M de [AB] ?", back: "$$M\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)$$ (la moyenne des coordonnées).", chapter: "vecteur"},
+  {front: "Test de colinéarité de \\(\\vec{u}=(x\\,;\\,y)\\) et \\(\\vec{v}=(x'\\,;\\,y')\\) ?", back: "Le déterminant est nul : $$x\\,y' - y\\,x' = 0$$", chapter: "vecteur"},
+  {front: "Vecteur normal et vecteur directeur de \\(ax+by+c=0\\) ?", back: "Normal \\(\\vec{n}=(a\\,;\\,b)\\). Directeur \\(\\vec{u}=(-b\\,;\\,a)\\) (perpendiculaire au normal).", chapter: "droite"},
+  {front: "Comment savoir si un point est dans / sur / hors d'un cercle ?", back: "Compare \\(d(P,C)\\) au rayon R : si \\(<R\\) intérieur, \\(=R\\) sur le cercle, \\(>R\\) extérieur.", chapter: "cercle"},
+  {front: "Sens d'ouverture d'une parabole \\(y=Ax^2+\\dots\\) ?", back: "\\(A>0\\) → vers le <strong>haut</strong> (U) ; \\(A<0\\) → vers le <strong>bas</strong> (∩).", chapter: "parabole"},
+  {front: "Axe de symétrie d'une parabole de sommet \\(S(\\alpha\\,;\\,\\beta)\\) ?", back: "La droite verticale $$x=\\alpha$$", chapter: "parabole"},
+  {front: "Pente d'une droite à partir de deux points ?", back: "$$m=\\dfrac{y_B-y_A}{x_B-x_A}$$ (variation des y sur variation des x).", chapter: "droite"}];
 
 const focusContent = {
   cercle: [
@@ -442,7 +505,7 @@ const T = (id, html, cls) => `<span class="atok ${cls || ''}" data-tid="${id}" d
 const FRAC = (num, den) => `<span class="afrac"><span class="anum">${num}</span><span class="abar atok" data-tid="bar" data-flip-id="bar"></span><span class="aden">${den}</span></span>`;
 // Vraie racine carrée : symbole √ + contenu surmonté d'une barre (vinculum).
 // Les tokens passés dans `content` restent animables (chacun garde son data-tid).
-const ROOT = (id, content) => `<span class="aroot" data-tid="${id}rt" data-flip-id="${id}rt"><span class="arad">√</span><span class="arootc">${content}</span></span>`;
+const ROOT = (id, content) => `<span class="aroot" data-tid="${id}rt" data-flip-id="${id}rt"><span class="arad"><svg viewBox="0 0 14 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.8 14 L4 22.5 L7 1.2 L13.5 1.2" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="arootc">${content}</span></span>`;
 
 const DEMOS = {
   pente: {
@@ -528,7 +591,7 @@ const DEMOS = {
         ),
         merge: [
           { from: ['t6','op1','tm4','op2','tc'], to: 'n3' },
-          { from: ['pl','d4','op3','d1','pr'], to: 'd5' }
+          { from: ['d4','op3','d1'], to: 'd5' }
         ]
       },
       {
@@ -537,7 +600,7 @@ const DEMOS = {
         eq: T('d','d') + T('eq','=') + FRAC(T('nr','3√5', 'atok-result'), T('dr','5', 'atok-result')),
         merge: [
           { from: ['absL','n3','absR'], to: 'nr' },
-          { from: ['rad','d5'], to: 'dr' }
+          { from: ['rrt','d5'], to: 'dr' }
         ]
       }
     ]
