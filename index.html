@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Maths GR2 — application d'étude de géométrie analytique plane : cercle, parabole et droites. Synthèse, formules, méthodes, exercices guidés, graphiques interactifs, flashcards à répétition espacée et quiz.">
+  <meta name="theme-color" content="#0f1117">
+  <title>Maths GR2 — Géométrie analytique plane</title>
+  <!-- Partage sur réseaux sociaux (Open Graph + Twitter) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Maths GR2">
+  <meta property="og:title" content="Maths GR2 — Révise les maths en t'amusant">
+  <meta property="og:description" content="Cercle, parabole, droites : cours animés, quiz, flashcards, défi du jour, quiz multijoueur et chat. Créé par Drackson.">
+  <meta property="og:url" content="https://drackson1.netlify.app/">
+  <meta property="og:image" content="https://drackson1.netlify.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Maths GR2 — Révise les maths en t'amusant">
+  <meta name="twitter:description" content="Cours animés, quiz, flashcards, multijoueur et chat. Créé par Drackson.">
+  <meta name="twitter:image" content="https://drackson1.netlify.app/og-image.png">
+  <meta name="author" content="Drackson">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="apple-touch-icon" href="logo.svg">
+  <!-- Police Inter en LOCAL (fonctionne sans internet) -->
+  <link rel="stylesheet" href="lib/fonts/inter.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* B7 fix: focus-overlay.show was missing from style.css */
+    .focus-mode-overlay.show { display: flex !important; }
+  </style>
+  <!-- MathJax config (doit être avant le script). Tout est en LOCAL → fonctionne SANS internet. -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: { uvec: ['\\hat{#1}', 1] }
+      },
+      chtml: { fontURL: 'lib/mathjax/es5/output/chtml/fonts/woff-v2' },
+      startup: { ready() { MathJax.startup.defaultReady(); } }
+    };
+  </script>
+  <script id="MathJax-script" async src="lib/mathjax/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<canvas id="particle-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;pointer-events:none;z-index:0;opacity:0.6;display:none;"></canvas>
+<h2 class="sr-only">Application d'étude — Maths GR2 : Géométrie analytique plane (Cercle, Parabole, Droites)</h2>
+
+<button class="settings-toggle" onclick="toggleSettings()" aria-label="Ouvrir les paramètres">⚙️</button>
+
+<div class="settings-panel" id="settings-panel" style="width:320px; max-height:90vh; overflow-y:auto;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <h3 style="font-size:16px; font-weight:700; color:var(--text-primary);">⚙️ Paramètres</h3>
+    <button onclick="toggleSettings()" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:18px;">✕</button>
+  </div>
+
+  <div class="settings-row">
+    <label>🎨 Thème couleur</label>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+      <button class="theme-btn active" onclick="setTheme('default')" style="padding:8px 4px; font-size:11px;">🌙 Défaut</button>
+      <button class="theme-btn" onclick="setTheme('forest')"  style="padding:8px 4px; font-size:11px;">🌿 Forêt</button>
+      <button class="theme-btn" onclick="setTheme('ocean')"   style="padding:8px 4px; font-size:11px;">🌊 Océan</button>
+      <button class="theme-btn" onclick="setTheme('sunset')"  style="padding:8px 4px; font-size:11px;">🌅 Coucher</button>
+      <button class="theme-btn" onclick="setTheme('minimal')" style="padding:8px 4px; font-size:11px;">⚡ Clair</button>
+      <button class="theme-btn" onclick="setTheme('midnight')" style="padding:8px 4px; font-size:11px;">🌌 Minuit</button>
+    </div>
+  </div>
+
+  <div class="settings-row">
+    <label>🌌 Fond</label>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+      <button class="theme-btn" id="bg-btn-normal"     onclick="setBgEffect('normal')"    style="padding:8px 4px; font-size:11px;">Normal</button>
+      <button class="theme-btn" id="bg-btn-gradient"          onclick="setBgEffect('gradient')"  style="padding:8px 4px; font-size:11px;">🌊 Gradient</button>
+      <button class="theme-btn active" id="bg-btn-particles"         onclick="setBgEffect('particles')" style="padding:8px 4px; font-size:11px;">✨ Particules</button>
+    </div>
+  </div>
+
+  <div class="settings-row">
+    <label>🎵 Musique d'ambiance</label>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px;">
+      <button class="theme-btn active" id="music-btn-off"   onclick="setAmbientMusic('off')"   style="padding:8px 4px; font-size:11px;">Off</button>
+      <button class="theme-btn" id="music-btn-lofi"         onclick="setAmbientMusic('lofi')"  style="padding:8px 4px; font-size:11px;">🎵 Lo-fi</button>
+      <button class="theme-btn" id="music-btn-rain"         onclick="setAmbientMusic('rain')"  style="padding:8px 4px; font-size:11px;">🌧 Pluie</button>
+      <button class="theme-btn" id="music-btn-white"        onclick="setAmbientMusic('white')" style="padding:8px 4px; font-size:11px;">〰 Bruit blanc</button>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+      <span style="font-size:13px;">🔉</span>
+      <input type="range" id="volume-slider" min="0" max="100" value="40" step="5"
+             oninput="setAmbientVolume(this.value)" aria-label="Volume de la musique d'ambiance"
+             style="flex:1; accent-color:var(--color-nav); cursor:pointer;">
+      <span id="volume-value" style="font-size:12px; color:var(--text-secondary); min-width:34px; text-align:right;">40 %</span>
+    </div>
+  </div>
+
+  <div class="settings-row">
+    <label>⏱️ Affichage Pomodoro</label>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px;">
+      <button class="theme-btn" id="pomo-display-bar" onclick="setPomodoroDisplay('bar')" style="padding:8px 4px; font-size:11px;">Barre en bas</button>
+      <button class="theme-btn active" id="pomo-display-float" onclick="setPomodoroDisplay('float')" style="padding:8px 4px; font-size:11px;">Icône flottante</button>
+    </div>
+  </div>
+
+  <div class="settings-row">
+    <label>📏 Taille du texte</label>
+    <select onchange="setTextSize(this.value)">
+      <option value="normal">Normal</option>
+      <option value="small">Petit</option>
+      <option value="large">Grand</option>
+      <option value="xlarge">Très grand</option>
+    </select>
+  </div>
+
+  <div class="settings-row">
+    <label>✨ Effet flashcards</label>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+      <button class="theme-btn active" id="fx-off-btn"     onclick="toggleFlashcardEffect('none')"    style="padding:8px; font-size:11px;">Aucun</button>
+      <button class="theme-btn" id="fx-glow-btn"           onclick="toggleFlashcardEffect('glow')"    style="padding:8px; font-size:11px;">✨ Lueur</button>
+      <button class="theme-btn" id="fx-aurora-btn"         onclick="toggleFlashcardEffect('aurora')"  style="padding:8px; font-size:11px;">🌌 Aurora</button>
+      <button class="theme-btn" id="fx-sparkle-btn"        onclick="toggleFlashcardEffect('sparkle')" style="padding:8px; font-size:11px;">💫 Sparkle</button>
+      <button class="theme-btn" id="fx-rainbow-btn"        onclick="toggleFlashcardEffect('rainbow')" style="padding:8px; font-size:11px;">🌈 Rainbow</button>
+      <button class="theme-btn" id="fx-shake-btn"          onclick="toggleFlashcardEffect('shake')"   style="padding:8px; font-size:11px;">📳 Shake</button>
+    </div>
+    <p style="font-size:10px; color:var(--text-secondary); margin-top:4px;">Tu peux en activer 2 à la fois</p>
+  </div>
+
+  <div class="settings-row">
+    <label>🎯 Mode Focus</label>
+    <button class="theme-btn" onclick="toggleFocusMode(); toggleSettings();" style="width:100%; padding:10px;">Activer →</button>
+  </div>
+  <div class="settings-row">
+    <label>⏱️ Pomodoro 25min</label>
+    <button class="theme-btn" onclick="togglePomodoro(); toggleSettings();" style="width:100%; padding:10px;">Lancer →</button>
+  </div>
+  <div class="settings-row">
+    <label>📝 Examen surprise</label>
+    <button class="theme-btn" id="exam-toggle-btn" onclick="toggleExamMode(); toggleSettings();" style="width:100%; padding:10px;">5 questions, 5 min →</button>
+  </div>
+  <div class="settings-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-subtle);">
+    <button onclick="toggleSettings()" style="width:100%; padding:12px; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:white; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:600;">✕ Fermer les paramètres</button>
+  </div>
+</div>
+
+<div class="pomodoro-overlay" id="pomodoro-overlay" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.92); z-index:3000; display:none; align-items:center; justify-content:center;">
+  <div style="position:relative; background:var(--bg-card); border-radius:24px; padding:3rem; text-align:center; max-width:420px; width:90%; border:1px solid var(--border-subtle);">
+    <button onclick="togglePomodoro()" style="position:absolute; top:1rem; right:1rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:22px;">✕</button>
+    <button onclick="hidePomodoroOverlay()" style="position:absolute; top:1rem; right:3rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px; font-weight:600;">👁 Masquer</button>
+    <h3 style="font-size:22px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">⏱️ Pomodoro</h3>
+    <p id="pomodoro-status" style="font-size:15px; color:var(--text-secondary); margin-bottom:1.5rem;">Session de travail — Concentre-toi !</p>
+    
+    <!-- Circular timer -->
+    <div style="position:relative; width:160px; height:160px; margin:0 auto 1.5rem;">
+      <svg width="160" height="160" style="transform:rotate(-90deg);">
+        <circle cx="80" cy="80" r="70" fill="none" stroke="var(--border-subtle)" stroke-width="8"/>
+        <circle id="pomodoro-ring" cx="80" cy="80" r="70" fill="none" stroke="var(--color-nav)" stroke-width="8"
+          stroke-dasharray="439.8" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear;"/>
+      </svg>
+      <div id="pomodoro-timer" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:44px; font-weight:700; color:var(--color-nav);">25:00</div>
+    </div>
+    
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="nav-btn" id="pomodoro-pause-btn" onclick="pausePomodoro()">▶ Démarrer</button>
+      <button class="nav-btn" onclick="resetPomodoro()">↩ Réinitialiser</button>
+      <button class="nav-btn" onclick="togglePomodoro()">✕ Fermer</button>
+    </div>
+    
+    <div style="margin-top:1.5rem; display:flex; gap:8px; justify-content:center;">
+      <div id="pomo-1" style="width:12px; height:12px; border-radius:50%; background:var(--border-subtle);"></div>
+      <div id="pomo-2" style="width:12px; height:12px; border-radius:50%; background:var(--border-subtle);"></div>
+      <div id="pomo-3" style="width:12px; height:12px; border-radius:50%; background:var(--border-subtle);"></div>
+      <div id="pomo-4" style="width:12px; height:12px; border-radius:50%; background:var(--border-subtle);"></div>
+    </div>
+    <p style="font-size:12px; color:var(--text-secondary); margin-top:0.5rem;">Pomodoro <span id="pomo-count">0</span>/4</p>
+  </div>
+</div>
+
+<div class="container">
+<div style="text-align:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-subtle);">
+  <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:0.25rem;">
+    <svg width="48" height="48" viewBox="0 0 120 120" style="flex-shrink:0;" aria-hidden="true">
+      <defs><linearGradient id="hdrLogoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
+      <rect x="10" y="10" width="100" height="100" rx="28" fill="url(#hdrLogoGrad)"/>
+      <line x1="28" y1="86" x2="92" y2="86" stroke="rgba(255,255,255,0.5)" stroke-width="3"/>
+      <path d="M 32 86 Q 60 28 88 86" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="60" cy="52" r="6" fill="#ffffff"/>
+    </svg>
+    <h1 style="font-size:28px; font-weight:800; background:linear-gradient(135deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0;">Maths GR2</h1>
+  </div>
+  <p style="font-size:13px; color:var(--text-secondary);">Géométrie analytique plane — Cercle · Parabole · Droites</p>
+</div>
+<nav class="nav" role="navigation" aria-label="Sections de l'application">
+  <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
+  <button class="nav-btn active" onclick="showSection(event,'synthese')">📚 Synthèse</button>
+  <button class="nav-btn" onclick="showSection(event,'formules')">🧮 Formules clés</button>
+  <button class="nav-btn" onclick="showSection(event,'methodes')">📝 Méthodes</button>
+  <button class="nav-btn" onclick="showSection(event,'exercices')">✏️ Exercices guidés</button>
+  <button class="nav-btn" onclick="showSection(event,'graphiques')">📊 Graphiques</button>
+  <button class="nav-btn" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
+  <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
+  <button class="nav-btn" onclick="showSection(event,'mesexos')">🛠️ Mes exercices</button>
+  <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
+  <button class="nav-btn" onclick="showSection(event,'erreurs')">⚠️ Erreurs fréquentes</button>
+  <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
+  <button class="nav-btn" onclick="showSection(event,'journal')">📓 Journal</button>
+  <button class="nav-btn" onclick="showSection(event,'profil')">👤 Mon profil</button>
+</nav>
+
+<div id="synthese" class="section active"><!-- contenu chargé depuis content.js --></div>
+
+<div id="formules" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="methodes" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="exercices" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="graphiques" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📊 Graphiques interactifs</h2>
+  <p style="color:var(--text-secondary); margin-bottom:2rem; font-size:15px;">💡 Explore visuellement les courbes de géométrie analytique. <strong style="color:var(--text-primary)">Modifie les paramètres</strong> : le tracé se met à jour tout seul.</p>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:2rem; margin-bottom:2rem;">
+
+    <!-- CERCLE -->
+    <div style="background:var(--bg-card); border:1px solid rgba(96,165,250,0.3); border-radius:20px; padding:1.5rem; box-shadow:0 0 30px rgba(96,165,250,0.1);">
+      <h3 style="font-size:17px; font-weight:700; color:var(--color-cercle); margin-bottom:1rem;">🔵 Cercle</h3>
+      <canvas id="graph-cercle" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
+      <div id="cercle-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-cercle); font-family:'Courier New',monospace; text-align:center; background:rgba(96,165,250,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">h</label><input type="number" id="cercle-h" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">k</label><input type="number" id="cercle-k" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">R</label><input type="number" id="cercle-r" value="3" min="0.1" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+      </div>
+    </div>
+
+    <!-- PARABOLE -->
+    <div style="background:var(--bg-card); border:1px solid rgba(52,211,153,0.3); border-radius:20px; padding:1.5rem; box-shadow:0 0 30px rgba(52,211,153,0.1);">
+      <h3 style="font-size:17px; font-weight:700; color:var(--color-parabole); margin-bottom:1rem;">🟢 Parabole</h3>
+      <canvas id="graph-parabole" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
+      <div id="parabole-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-parabole); font-family:'Courier New',monospace; text-align:center; background:rgba(52,211,153,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">a</label><input type="number" id="parabole-a" value="1" step="0.25" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">b</label><input type="number" id="parabole-b" value="0" step="0.5" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">c</label><input type="number" id="parabole-c" value="0" step="0.5" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+      </div>
+    </div>
+
+    <!-- DROITE -->
+    <div style="background:var(--bg-card); border:1px solid rgba(251,191,36,0.3); border-radius:20px; padding:1.5rem; box-shadow:0 0 30px rgba(251,191,36,0.1);">
+      <h3 style="font-size:17px; font-weight:700; color:var(--color-droite); margin-bottom:1rem;">🟡 Droite</h3>
+      <canvas id="graph-droite" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
+      <div id="droite-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-droite); font-family:'Courier New',monospace; text-align:center; background:rgba(251,191,36,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">m</label><input type="number" id="droite-m" value="1" step="0.25" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">p</label><input type="number" id="droite-p" value="0" step="0.5" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="flashcards" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:2rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🎴 Flashcards avec répétition espacée</h2>
+  
+  <div id="flashcard-container">
+    <div class="flashcard-wrapper" onclick="flipCard()">
+      <div class="flashcard-inner" id="flashcard">
+        <div class="flashcard-front">
+          <div id="flashcard-content" style="font-size:24px; color:var(--text-primary);">
+            Cliquez pour commencer
+          </div>
+        </div>
+        <div class="flashcard-back">
+          <div id="flashcard-back-content" style="font-size:24px; color:var(--text-primary);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:11px; color:var(--text-secondary); margin-top:0.5rem;">⌨️ Espace = retourner · → Je savais · ← Je ne savais pas · ↓ J'ai hésité</p>
+
+  <div style="text-align:center; margin-top:1.5rem;">
+    <div style="max-width:600px; margin:0 auto 0.5rem; height:4px; background:var(--border-subtle); border-radius:2px;">
+      <div id="flashcard-prog-bar" style="height:100%; background:var(--color-nav); border-radius:2px; transition:width 0.4s ease; width:0%;"></div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap;">
+      <button onclick="filterFlashcards('all')" id="fc-filter-all" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:var(--color-nav); color:#fff; font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">Toutes</button>
+      <button onclick="filterFlashcards('vecteur')" id="fc-filter-vecteur" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:transparent; color:var(--color-nav); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🧭 Vecteurs</button>
+      <button onclick="filterFlashcards('cercle')" id="fc-filter-cercle" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-cercle); background:transparent; color:var(--color-cercle); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🔵 Cercle</button>
+      <button onclick="filterFlashcards('parabole')" id="fc-filter-parabole" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-parabole); background:transparent; color:var(--color-parabole); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🟢 Parabole</button>
+      <button onclick="filterFlashcards('droite')" id="fc-filter-droite" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🟡 Droite</button>
+    </div>
+    <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
+    <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.75rem;">🔔 — à réviser aujourd'hui</p>
+    <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
+    <p style="text-align:center; font-size:11px; color:var(--text-secondary); opacity:0.55; margin-bottom:0.5rem;">
+      ␣/↵ Retourner &nbsp;·&nbsp; ← Difficile &nbsp;·&nbsp; → Facile
+    </p>
+    <div id="flashcard-controls" style="display:none; gap:10px; justify-content:center;">
+      <button onclick="rateCard('hard'); event.stopPropagation();" style="padding:10px 20px; border:1px solid var(--border-subtle); border-radius:8px; cursor:pointer; background:var(--bg-card); color:var(--text-secondary);">😓 Je ne savais pas</button>
+      <button onclick="rateCard('medium'); event.stopPropagation();" style="padding:10px 20px; border:1px solid var(--border-subtle); border-radius:8px; cursor:pointer; background:var(--bg-card); color:var(--text-secondary);">🤔 J'ai hésité</button>
+      <button onclick="rateCard('easy'); event.stopPropagation();" style="padding:10px 20px; border:1px solid var(--border-subtle); border-radius:8px; cursor:pointer; background:var(--bg-card); color:var(--text-secondary);">😊 Je savais</button>
+    </div>
+  </div>
+</div>
+
+<div id="journal" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:2rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📓 Journal de bord</h2>
+  
+  <div style="max-width:800px; margin:0 auto;">
+    <div style="margin-bottom:2rem;">
+      <textarea id="journal-entry" class="journal-textarea" placeholder="Écrivez vos notes, questions ou réflexions ici..." maxlength="5000"></textarea>
+      <button class="nav-btn" onclick="saveJournalEntry()" style="margin-top:1rem;">💾 Sauvegarder</button>
+    </div>
+    
+    <h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">📜 Dernières entrées</h3>
+    <div id="journal-history" style="display:flex; flex-direction:column; gap:1rem;"></div>
+  </div>
+</div>
+
+<div id="quiz" class="section">
+  <!-- Écran d'accueil quiz -->
+  <div id="quiz-start-screen" style="text-align:center; padding:3rem 1rem;">
+    <div style="font-size:64px; margin-bottom:1rem;">🧠</div>
+    <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
+    <p style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur le cercle, la parabole et les droites.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:2rem;">
+      <select id="chapter-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+        <option value="all">Tous les chapitres</option>
+        <option value="vecteur">Vecteurs</option>
+        <option value="cercle">Cercle</option>
+        <option value="parabole">Parabole</option>
+        <option value="droite">Droites</option>
+      </select>
+      <select id="difficulty-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+        <option value="all">Toutes difficultés</option>
+        <option value="facile">Facile</option>
+        <option value="intermediaire">Intermédiaire</option>
+        <option value="difficile">Difficile</option>
+        <option value="avance">Avancé</option>
+      </select>
+    </div>
+    <button id="daily-btn" onclick="startDailyChallenge()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(239,68,68,0.32);">🔥 Défi du jour — 5 questions</button>
+    <button id="mp-launch-btn" onclick="openMultiplayer()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#22d3ee,#3b82f6); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(59,130,246,0.32);">🎮 Jouer à plusieurs</button>
+    <button id="missed-filter-btn" onclick="filterMissedOnly(); startQuiz();" style="display:block; margin:0 auto 1.5rem; padding:10px 20px; border-radius:8px; border:2px solid var(--color-droite); font-size:14px; cursor:pointer; background:var(--color-droite-light); color:var(--color-droite); font-weight:600;">⚠️ Réviser mes erreurs</button>
+    <button onclick="startQuiz()" style="background:var(--color-nav); color:#fff; border:none; border-radius:12px; padding:16px 48px; font-size:18px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-glow-nav);">▶ Commencer le quiz</button>
+    <p id="best-score-display" style="margin-top:1.5rem; color:var(--text-secondary); font-size:14px;">Meilleur score : —</p>
+
+    <div style="max-width:380px; margin:1.25rem auto 0; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.1rem 1.25rem; text-align:left;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+        <span style="font-size:15px; font-weight:800; color:var(--color-nav);">🏆 Classement</span>
+        <span style="font-size:11px; color:var(--text-secondary);">Top 10 — XP</span>
+      </div>
+      <div id="leaderboard-list"></div>
+    </div>
+      <div style="margin:1rem 0; padding:0.75rem 1rem; background:var(--bg-card); border-radius:10px; border:1px solid var(--border-subtle); display:inline-block;">
+        <span id="quiz-count-display" style="color:var(--color-nav); font-weight:700; font-size:16px;">— questions</span>
+        <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
+      </div>
+      <br>
+      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
+  </div>
+  <!-- Écran quiz actif -->
+  <div id="quiz-active-screen" style="display:none;">
+    <div class="score-bar">
+      <div><div class="score-num" id="score-display" aria-live="polite">—/—</div><div class="score-label">réponses correctes</div></div>
+      <div style="flex:1;"><div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div></div>
+      <button class="nav-btn" onclick="backToQuizStart()">← Retour</button>
+      <button class="nav-btn" onclick="resetQuiz()">🔄 Recommencer</button>
+    </div>
+    <p style="font-size:11px; color:var(--text-secondary); text-align:center; margin-bottom:0.75rem; opacity:0.65;">⌨️ Touches <strong>1–4</strong> pour répondre rapidement</p>
+    <div id="quiz-container"></div>
+  </div>
+</div>
+
+<div id="mesexos" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🛠️ Mes exercices</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:15px;">Crée tes propres questions (les 3 thèmes), avec ta réponse et une explication. Elles restent enregistrées sur cet appareil, et tu peux les réviser comme un mini-quiz.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
+    <!-- Formulaire de création -->
+    <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
+      <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">➕ Nouvelle question</h3>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Thème</label>
+      <select id="exo-theme" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
+        <option value="vecteur">🧭 Vecteurs (thème 1)</option>
+        <option value="cercle">🔵 Cercle</option>
+        <option value="parabole">🟢 Parabole</option>
+        <option value="droite">🟡 Droites</option>
+      </select>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Question</label>
+      <textarea id="exo-question" rows="2" placeholder="Ex : Quel est le rayon du cercle x²+y²−4x−2=0 ?" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.9rem;"></textarea>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Ta réponse</label>
+      <input id="exo-answer" type="text" placeholder="Ex : R = 3" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Explication <span style="font-weight:400; opacity:0.7;">(facultatif)</span></label>
+      <textarea id="exo-exp" rows="2" placeholder="Comment on arrive au résultat…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.5rem;"></textarea>
+      <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin-bottom:1rem;">💡 Astuce : pour de vraies maths, écris entre <code>\\( … \\)</code> — ex. <code>\\(R=\\sqrt{9}=3\\)</code>.</p>
+      <button onclick="saveCustomExo()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la question</button>
+    </div>
+
+    <!-- Liste + révision -->
+    <div>
+      <div style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap;">
+        <button onclick="reviewCustomExos()" id="exo-review-btn" style="flex:1; min-width:140px; padding:10px; border-radius:10px; border:1px solid var(--color-parabole); background:var(--color-parabole-light); color:var(--color-parabole); font-size:14px; font-weight:700; cursor:pointer;">▶ Réviser mes questions</button>
+      </div>
+      <div id="exo-list"></div>
+    </div>
+  </div>
+
+  <!-- Overlay de révision -->
+  <div id="exo-review-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:3000; align-items:center; justify-content:center; padding:1rem;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:20px; padding:2rem; max-width:560px; width:100%; max-height:90vh; overflow-y:auto; position:relative;">
+      <button onclick="closeExoReview()" style="position:absolute; top:1rem; right:1rem; background:transparent; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer;">✕</button>
+      <div id="exo-review-counter" style="font-size:13px; color:var(--text-secondary); margin-bottom:1rem;"></div>
+      <div id="exo-review-theme" style="display:inline-block; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:1rem;"></div>
+      <div id="exo-review-q" style="font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:1.5rem; line-height:1.5;"></div>
+      <div id="exo-review-reveal" style="display:none;">
+        <div style="background:var(--bg-main); border-left:3px solid var(--color-parabole); border-radius:0 10px 10px 0; padding:1rem; margin-bottom:1rem;">
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-parabole); font-weight:700; margin-bottom:4px;">Réponse</div>
+          <div id="exo-review-a" style="font-size:17px; color:var(--text-primary);"></div>
+        </div>
+        <div id="exo-review-expbox" style="background:var(--bg-main); border-left:3px solid var(--color-cercle); border-radius:0 10px 10px 0; padding:1rem; margin-bottom:1rem;">
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-cercle); font-weight:700; margin-bottom:4px;">Explication</div>
+          <div id="exo-review-exp" style="font-size:15px; color:var(--text-primary); line-height:1.6;"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+        <button id="exo-reveal-btn" onclick="revealExoAnswer()" style="padding:10px 20px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">👁 Voir la réponse</button>
+        <button onclick="nextExoReview()" style="padding:10px 20px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-weight:600; cursor:pointer;">Suivante →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="progression" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📈 Ma progression</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:15px;">Vois d'un coup d'œil les notions que tu maîtrises et celles à retravailler. Une notion est <strong>acquise</strong> quand tu as réussi au moins 2 fois une question qui la concerne, dans le Quiz.</p>
+
+  <div style="background:linear-gradient(135deg, var(--color-cercle-light), var(--color-parabole-light)); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:0.75rem;">
+      <span style="font-size:17px; font-weight:700; color:var(--text-primary);">Progression générale</span>
+      <span id="prog-global-pct" style="font-size:22px; font-weight:800; color:var(--color-nav);">0 %</span>
+    </div>
+    <div style="height:14px; background:var(--border-subtle); border-radius:8px; overflow:hidden;">
+      <div id="prog-global-bar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); border-radius:8px; transition:width 0.6s ease;"></div>
+    </div>
+    <p id="prog-global-count" style="font-size:13px; color:var(--text-secondary); margin-top:0.5rem;">— notions maîtrisées</p>
+  </div>
+
+  <div id="prog-chapters"><!-- généré par renderProgression() --></div>
+</div>
+
+<div id="erreurs" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="chat" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">💬 Chat Mondial</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Discute maths avec les autres élèves : pose tes questions, partage des astuces et des formules <code>\( … \)</code>, et même des images / GIF (colle un lien). 🙏 Reste respectueux : ce salon est public et modéré.</p>
+
+  <div id="chat-gate"></div>
+
+  <div id="chat-main" class="chat-main" style="display:none;">
+    <div id="chat-messages" class="chat-messages"></div>
+
+    <div id="chat-panel" class="chat-panel" style="display:none;"></div>
+
+    <div class="chat-tools" id="chat-tools">
+      <button type="button" class="chat-tool" onclick="chatToggleEmoji()" title="Emoji">😀</button>
+      <button type="button" class="chat-tool" onclick="chatToggleMedia()" title="Bibliothèque de GIF">🎬 GIF</button>
+      <span class="chat-tool-sep"></span>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertFrac()" title="Fraction (case du haut / case du bas)"><span style="display:inline-flex;flex-direction:column;line-height:0.8;font-size:11px;"><span>a</span><span style="border-top:1px solid currentColor;">b</span></span></button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertSqrt()" title="Racine carrée">√</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertSup()" title="Exposant (puissance)">x²</button>
+      <span class="chat-tool-sep"></span>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('+')" title="Plus">+</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('−')" title="Moins">−</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('×')" title="Multiplié">×</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('÷')" title="Divisé">÷</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('=')" title="Égal">=</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('±')" title="Plus ou moins">±</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('π')" title="Pi">π</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('∞')" title="Infini">∞</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('°')" title="Degré">°</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('≈')" title="Environ égal">≈</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('≤')" title="Inférieur ou égal">≤</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('≥')" title="Supérieur ou égal">≥</button>
+      <button type="button" class="chat-tool" onmousedown="event.preventDefault()" onclick="chatInsertText('≠')" title="Différent">≠</button>
+    </div>
+
+    <input id="chat-file-input" type="file" accept="image/*,.gif" style="display:none;" onchange="chatHandleFile(this.files[0]); this.value='';" aria-label="Choisir une image ou un GIF">
+
+    <div id="chat-preview" class="chat-preview" style="display:none;"></div>
+
+    <div class="chat-composer">
+      <div id="chat-input" class="chat-input" contenteditable="true" role="textbox" aria-multiline="true" data-ph="Écris un message…  (les boutons fraction, √, x² créent des cases à remplir)"></div>
+      <button id="chat-send-btn" class="chat-send-btn" onclick="chatSend()" aria-label="Envoyer">➤</button>
+    </div>
+    <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin:0.4rem 2px 0;">💡 Clique sur <strong>a/b</strong>, <strong>√</strong> ou <strong>x²</strong> : des cases apparaissent, tu écris directement dedans (haut, bas, etc.).</p>
+  </div>
+</div>
+
+<div id="profil" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:2rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">👤 Mon profil</h2>
+  <div class="stats-grid">
+    <!-- M8 — ces cartes sont générées dynamiquement par updateProfile() -->
+  </div>
+  <h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">Historique des scores (7 dernières sessions)</h3>
+  <canvas id="score-chart-canvas" width="600" height="200" style="width:100%; border-radius:12px; background:var(--bg-card); display:block;"></canvas>
+
+  <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border-subtle);">
+    <h3 style="font-size:24px; font-weight:600; margin-bottom:0.5rem;">💾 Sauvegarde de mes progrès</h3>
+    <p style="color:var(--text-secondary); font-size:14px; margin-bottom:1rem;">Exporte tes progrès dans un fichier, ou réimporte-les — pratique pour changer d'appareil ou avant de vider le cache du navigateur.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="nav-btn" onclick="exportProgress()">⬇️ Exporter mes progrès</button>
+      <button class="nav-btn" onclick="document.getElementById('import-file').click()">⬆️ Importer un fichier</button>
+      <input type="file" id="import-file" accept="application/json,.json" style="display:none;" onchange="importProgress(this.files[0])" aria-label="Importer un fichier de progrès">
+    </div>
+  </div>
+</div>
+
+<footer style="text-align:center; padding:2rem 1rem 3rem; margin-top:2rem; border-top:1px solid var(--border-subtle); color:var(--text-secondary); font-size:13px;">
+  <p style="margin:0 0 0.5rem;">Créé par <strong style="color:var(--color-nav);">Drackson</strong></p>
+  <p style="margin:0 0 0.75rem;">
+    <a href="https://instagram.com/drackson227" target="_blank" rel="noopener" style="color:var(--color-parabole); text-decoration:none; font-weight:600;">📸 @drackson227</a>
+  </p>
+  <p style="margin:0;">
+    <button onclick="openPremiumModal()" style="background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); border-radius:8px; padding:5px 12px; font-size:12px; cursor:pointer;">⭐ Débloquer le Premium</button>
+    <span onclick="openPremiumModal()" title="Accès créateur" style="cursor:pointer; opacity:0.3; margin-left:8px;">⚙</span>
+  </p>
+</footer>
+
+<div class="focus-mode-overlay" id="focus-overlay">
+  <button class="focus-close" onclick="toggleFocusMode()">✕</button>
+  <div class="focus-card" id="focus-content">
+    <div id="focus-selection">
+      <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">🎯 Mode Focus</h2>
+      <p style="font-size:15px; color:var(--text-secondary); margin-bottom:2rem;">Concentre-toi sur un seul chapitre, carte par carte, sans distraction.</p>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:500px; margin:0 auto;">
+        <button onclick="startFocus('cercle')" style="background:rgba(96,165,250,0.15); border:2px solid var(--color-cercle); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-cercle); font-weight:700; font-size:16px; transition:all 0.2s;">
+          🔵<br>Cercle<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
+        </button>
+        <button onclick="startFocus('parabole')" style="background:rgba(52,211,153,0.15); border:2px solid var(--color-parabole); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-parabole); font-weight:700; font-size:16px; transition:all 0.2s;">
+          📈<br>Parabole<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
+        </button>
+        <button onclick="startFocus('droite')" style="background:rgba(251,191,36,0.15); border:2px solid var(--color-droite); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-droite); font-weight:700; font-size:16px; transition:all 0.2s;">
+          📐<br>Droites<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
+        </button>
+      </div>
+      <p style="font-size:13px; color:var(--text-secondary); margin-top:1.5rem;">⌨️ Flèches gauche/droite pour naviguer · Échap pour quitter</p>
+    </div>
+    <div id="focus-cards" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <span id="focus-counter" style="font-size:16px; color:var(--text-secondary);">1 / 10</span>
+        <div style="flex:1; margin:0 1rem; background:var(--border-subtle); border-radius:10px; height:8px;">
+          <div id="focus-progress" style="background:var(--color-nav); height:100%; width:0%; border-radius:10px; transition:width 0.3s;"></div>
+        </div>
+      </div>
+      <div id="focus-card-content" style="text-align:center; padding:2rem;">
+        <!-- Card content will be injected here -->
+      </div>
+      <div class="focus-nav" style="margin-top:2rem;">
+        <button class="focus-btn" onclick="backToFocusSelection()" style="background:var(--bg-card); border:1px solid var(--border-subtle); color:var(--text-secondary);">← Changer de chapitre</button>
+        <button class="focus-btn" onclick="prevFocusCard()">← Précédent</button>
+        <button class="focus-btn" onclick="nextFocusCard()">Suivant →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Quiz multijoueur (salon de groupe) -->
+<div id="mp-overlay" class="mp-overlay" style="display:none;">
+  <div class="mp-box">
+    <button class="mp-close" onclick="closeMultiplayer()" aria-label="Fermer">✕</button>
+    <div id="mp-body"></div>
+  </div>
+</div>
+
+<!-- Résolution animée pas-à-pas -->
+<div class="demo-overlay" id="demo-overlay">
+  <div class="demo-box">
+    <button class="demo-close" onclick="closeDemo()" aria-label="Fermer la résolution animée">✕</button>
+    <h3 id="demo-title" class="demo-title">Résolution animée</h3>
+    <p id="demo-subtitle" class="demo-subtitle"></p>
+    <div class="demo-progress-track"><div id="demo-progress-fill" class="demo-progress-fill"></div></div>
+    <div id="demo-split" class="demo-split">
+      <div id="demo-stage" class="demo-stage" aria-live="polite"></div>
+      <canvas id="demo-canvas" width="320" height="240" class="demo-canvas" style="display:none;"></canvas>
+    </div>
+    <div id="demo-annot" class="demo-annot" style="display:none;"></div>
+    <p id="demo-brief" class="demo-brief"></p>
+    <div id="demo-more" class="demo-more" style="display:none;"></div>
+    <div id="demo-controls" class="demo-controls"></div>
+  </div>
+</div>
+  <!-- GSAP + Flip en LOCAL (animations fluides, fonctionne sans internet) -->
+  <script src="lib/gsap.min.js"></script>
+  <script src="lib/Flip.min.js"></script>
+  <script>try { if (window.gsap && window.Flip) gsap.registerPlugin(Flip); } catch(e){}</script>
+  <script src="data.js"></script>
+  <script src="content.js"></script>
+  <script src="script.js"></script>
+  <!-- Comptes + sauvegarde cloud (Supabase) en LOCAL -->
+  <script src="lib/supabase.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="chat.js"></script>
+  <script src="multiplayer.js"></script>
+  <script src="backtotop.js"></script>
+</body>
+</html>
