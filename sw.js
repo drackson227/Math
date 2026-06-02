@@ -1,9 +1,10 @@
 /* Service Worker — Maths GR2
    Rend le site installable (PWA) et utilisable hors-ligne après la 1re visite.
-   - Fichiers locaux : cache d'abord, réseau ensuite.
+   - Fichiers locaux : RÉSEAU d'abord (toujours la dernière version en ligne),
+     repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v3';
+const CACHE = 'mathsgr2-v4';
 const CORE = [
   './', './index.html', './style.css',
   './data.js', './content.js', './script.js',
@@ -37,14 +38,15 @@ self.addEventListener('fetch', (e) => {
   // Données live : on laisse passer sans toucher au cache
   if (NEVER_CACHE.some((h) => url.hostname.includes(h))) return;
 
-  // Même origine : cache d'abord (rapide + hors-ligne)
+  // Même origine : RÉSEAU d'abord → toujours la dernière version quand en ligne ;
+  // repli sur le cache uniquement si hors-ligne.
   if (url.origin === location.origin) {
     e.respondWith(
-      caches.match(req).then((hit) => hit || fetch(req).then((res) => {
+      fetch(req).then((res) => {
         const cp = res.clone();
         caches.open(CACHE).then((c) => c.put(req, cp));
         return res;
-      }).catch(() => caches.match('./index.html')))
+      }).catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
     );
     return;
   }
