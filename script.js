@@ -1759,7 +1759,7 @@ document.addEventListener('keydown', (e) => {
         '<button type="button" id="scratch-close" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px;">✕</button>' +
       '</div>' +
       '<div style="display:flex; gap:6px; margin-bottom:8px;">' +
-        '<input id="scratch-calc" type="text" inputmode="text" dir="ltr" placeholder="ex : √(9+16)" style="flex:1; min-width:0; padding:8px 10px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; direction:ltr; text-align:left; unicode-bidi:plaintext;">' +
+        '<input id="scratch-calc" type="text" inputmode="text" dir="ltr" placeholder="ex : √(9+16)" style="flex:1; min-width:0; padding:8px 10px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; direction:ltr; text-align:left;">' +
         '<span id="scratch-res" style="min-width:64px; text-align:right; font-weight:700; color:var(--color-parabole); font-size:14px; align-self:center;"></span>' +
       '</div>' +
       '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:8px;">' +
@@ -1770,7 +1770,7 @@ document.addEventListener('keydown', (e) => {
           return '<button type="button" class="scratch-key" data-k="'+k+'" style="padding:9px 0; border-radius:8px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); cursor:pointer; font-size:15px; '+special+'">'+k+'</button>';
         }).join('') +
       '</div>' +
-      '<textarea id="scratch-pad" dir="ltr" placeholder="Écris tes calculs ici…" style="width:100%; height:120px; resize:vertical; padding:8px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-family:monospace; direction:ltr; text-align:left; unicode-bidi:plaintext;"></textarea>';
+      '<textarea id="scratch-pad" dir="ltr" placeholder="Écris tes calculs ici…" style="width:100%; height:120px; resize:vertical; padding:8px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-family:monospace; direction:ltr; text-align:left;"></textarea>';
 
     document.body.appendChild(btn);
     document.body.appendChild(panel);
