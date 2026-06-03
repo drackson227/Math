@@ -1,7 +1,7 @@
 {
-  "name": "Maths GR2 — Géométrie analytique",
-  "short_name": "Maths GR2",
-  "description": "Révise la géométrie analytique : cercle, parabole, droites et vecteurs. Cours animés, quiz, flashcards, défi du jour, multijoueur et chat.",
+  "name": "GR2 Study — Réviser toutes les matières",
+  "short_name": "GR2 Study",
+  "description": "Révise toutes tes matières : maths, français, histoire-géo, chimie-bio. Cours, quiz, flashcards, défi du jour, multijoueur et chat.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",

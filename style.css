@@ -22,15 +22,41 @@
   --shadow-glow-nav: 0 0 20px rgba(167,139,250,0.2);
 }
 
-body { 
-  font-family: 'Inter', 'Segoe UI', sans-serif; 
-  background: var(--bg-main); 
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg-main);
   color: var(--text-primary);
-  min-height: 100vh; 
+  line-height: 1.55;
+  min-height: 100vh;
   padding: 1rem;
 }
 
-.container { 
+/* Titres en Poppins (police plus moderne) ; texte courant en Inter (lisible).
+   Repli automatique sur Inter/système si Poppins n'est pas (encore) en cache hors-ligne. */
+h1, h2, h3, h4,
+.chap-title, .nav-btn, .wel-title, .mtab, .demo-launch, .subj-btn {
+  font-family: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ── Barre de sélection de matière (multi-matières GR2 Study) ── */
+.subject-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 1.4rem; }
+.subj-btn { padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary); font-size: 14px; font-weight: 700; cursor: pointer; transition: transform 0.12s ease, border-color 0.18s ease, color 0.18s ease; }
+.subj-btn:hover { border-color: var(--color-nav); color: var(--text-primary); }
+.subj-btn:active { transform: scale(0.96); }
+.subj-btn.on { background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border-color: transparent; box-shadow: 0 4px 16px rgba(167,139,250,0.35); }
+
+/* ── Écran « matière en préparation » ── */
+body.subject-locked .nav,
+body.subject-locked .section { display: none !important; }
+.subject-prep { align-items: center; justify-content: center; padding: 2rem 1rem; min-height: 46vh; }
+.subject-prep-card { max-width: 520px; width: 100%; text-align: center; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 2.6rem 1.8rem; box-shadow: 0 14px 44px rgba(0,0,0,0.32); }
+.subject-prep-emoji { font-size: 64px; line-height: 1; margin-bottom: 0.7rem; }
+.subject-prep-card h2 { font-size: 24px; margin: 0 0 0.8rem; color: var(--text-primary); }
+.subject-prep-text { font-size: 15px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 1.7rem; }
+.subject-prep-btn { background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border: none; border-radius: 12px; padding: 12px 24px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Poppins', 'Inter', sans-serif; }
+.subject-prep-btn:active { transform: scale(0.97); }
+
+.container {
   max-width: 1200px; 
   margin: 0 auto; 
   background: var(--bg-container); 
@@ -1222,33 +1248,41 @@ textarea:focus-visible,
 .gen-answer { margin-top: 6px; padding: 12px 14px; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); border-radius: 12px; font-size: 16px; font-weight: 700; color: #22c55e; }
 
 /* ── Stats par chapitre ── */
-.chap-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.1rem 1.25rem; }
-.chap-title { font-size: 15px; font-weight: 800; color: var(--color-nav); margin-bottom: 0.8rem; }
-.chap-empty { font-size: 13px; color: var(--text-secondary); margin: 0; }
-.chap-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
-.chap-name { flex: 0 0 70px; font-size: 13px; font-weight: 600; color: var(--text-primary); }
-.chap-bar { flex: 1; height: 9px; background: var(--bg-main); border-radius: 6px; overflow: hidden; }
-.chap-fill { display: block; height: 100%; border-radius: 6px; transition: width 0.5s ease; }
-.chap-pct { flex: 0 0 40px; text-align: right; font-size: 13px; font-weight: 700; }
-.chap-reco { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--border-subtle); font-size: 13.5px; color: var(--text-secondary); }
-.chap-revise { display: block; margin-top: 0.6rem; width: 100%; background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border: none; border-radius: 10px; padding: 9px 14px; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+.chap-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.3rem 1.4rem; }
+.chap-title { font-size: 18px; font-weight: 800; color: var(--color-nav); margin-bottom: 0.4rem; }
+.chap-help { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.5; }
+.chap-empty { font-size: 14px; color: var(--text-secondary); margin: 0; }
+.chap-block { margin-bottom: 1.1rem; }
+.chap-block:last-of-type { margin-bottom: 0.4rem; }
+.chap-row { display: flex; align-items: center; gap: 12px; margin-bottom: 7px; }
+.chap-name { flex: 0 0 82px; font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.chap-bar { flex: 1; height: 13px; background: var(--bg-main); border-radius: 7px; overflow: hidden; }
+.chap-bar.mini { height: 8px; border-radius: 5px; }
+.chap-fill { display: block; height: 100%; border-radius: inherit; transition: width 0.5s ease; }
+.chap-pct { flex: 0 0 46px; text-align: right; font-size: 15px; font-weight: 800; }
+.chap-subs { padding-left: 12px; margin-top: 4px; border-left: 2px solid var(--border-subtle); }
+.chap-sub { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
+.chap-subname { flex: 0 0 70px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.chap-subpct { flex: 0 0 46px; text-align: right; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+.chap-reco { margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--border-subtle); font-size: 14.5px; color: var(--text-secondary); }
+.chap-revise { display: block; margin-top: 0.7rem; width: 100%; background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border: none; border-radius: 10px; padding: 11px 14px; font-size: 14.5px; font-weight: 700; cursor: pointer; }
 .chap-revise:active { transform: scale(0.97); }
 
 /* ── Fiche de révision imprimable ── */
 #revision-sheet { display: none; }
 @media print {
   body > *:not(#revision-sheet) { display: none !important; }
-  #revision-sheet { display: block !important; color: #000; background: #fff; padding: 0; font-family: Inter, Arial, sans-serif; }
-  .rs-head { text-align: center; margin-bottom: 14px; }
-  .rs-head h1 { font-size: 20px; margin: 0 0 2px; color: #000; }
-  .rs-head p { font-size: 11px; color: #555; margin: 0; }
-  .rs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .rs-block { border: 1px solid #ccc; border-radius: 8px; padding: 8px 10px; break-inside: avoid; }
-  .rs-block h2 { font-size: 14px; margin: 0 0 6px; border-bottom: 2px solid currentColor; padding-bottom: 3px; }
-  .rs-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 3px 0; border-bottom: 1px dotted #ddd; }
-  .rs-label { font-size: 11px; color: #333; flex: 0 0 auto; }
-  .rs-formula { font-size: 12px; text-align: right; }
-  @page { margin: 12mm; }
+  #revision-sheet { display: block !important; color: #000; background: #fff; padding: 0; font-family: 'Poppins', Inter, Arial, sans-serif; }
+  .rs-head { text-align: center; margin-bottom: 26px; }
+  .rs-head h1 { font-size: 30px; margin: 0 0 4px; color: #000; }
+  .rs-head p { font-size: 14px; color: #555; margin: 0; }
+  .rs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .rs-block { border: 1.5px solid #bbb; border-radius: 12px; padding: 16px 18px; break-inside: avoid; }
+  .rs-block h2 { font-size: 20px; margin: 0 0 12px; border-bottom: 3px solid currentColor; padding-bottom: 6px; }
+  .rs-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px dotted #ccc; }
+  .rs-label { font-size: 15px; color: #222; flex: 0 0 auto; }
+  .rs-formula { font-size: 16px; text-align: right; }
+  @page { margin: 16mm; }
 }
 
 /* ── Écran de bienvenue ── */

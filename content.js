@@ -494,103 +494,11 @@ const SECTIONS_CONTENT = {
       </div>
     </div>
   </div>
-
-  <div class="synth-section parabole">
-    <h2>Chapitre III — Parabole</h2>
-    <p>Une <strong>parabole</strong> est l'ensemble des points équidistants d'un point fixe (le <em>foyer</em> F) et d'une droite (la <em>directrice</em> d).</p>
-    
-    <div style="text-align:center; margin:1.5rem 0;">
-      <svg width="250" height="200" viewBox="0 0 250 200" style="background:var(--bg-main); border-radius:10px; border:2px solid var(--border-subtle); max-width:100%;">
-        <line x1="20" y1="30" x2="230" y2="30" stroke="#95a5a6" stroke-width="2"/>
-        <text x="228" y="22" text-anchor="end" font-size="11" fill="#94a3b8">directrice</text>
-        <circle cx="125" cy="100" r="4" fill="#e74c3c"/>
-        <text x="125" y="90" text-anchor="middle" font-size="11" fill="#e74c3c" font-weight="bold">F (foyer)</text>
-        <circle cx="125" cy="65" r="4" fill="#27ae60"/>
-        <text x="125" y="55" text-anchor="middle" font-size="11" fill="#27ae60" font-weight="bold">S (sommet)</text>
-        <path d="M 30 180 Q 125 20 220 180" fill="none" stroke="#10b981" stroke-width="3"/>
-        <line x1="125" y1="65" x2="125" y2="100" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3,3"/>
-        <line x1="125" y1="65" x2="125" y2="30" stroke="#95a5a6" stroke-width="1" stroke-dasharray="3,3"/>
-        <circle cx="80" cy="140" r="3" fill="#10b981"/>
-        <text x="80" y="155" text-anchor="middle" font-size="10" fill="#10b981">P (point)</text>
-        <line x1="80" y1="140" x2="125" y2="100" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3,3"/>
-        <line x1="80" y1="140" x2="80" y2="30" stroke="#95a5a6" stroke-width="1" stroke-dasharray="3,3"/>
-      </svg>
-    </div>
-    
-    <div class="key-rule parabole">
-      <h3>Équation cartésienne</h3>
-      <div class="formula-main parabole">$$f(x) = \\frac{1}{2(q-k)} \\cdot (x-p)^2 + \\frac{q+k}{2}$$</div>
-      <p><em>Explication détaillée :</em></p>
-      <ul>
-        <li><strong>F(p ; q)</strong> = foyer de la parabole (point fixe) <em style="font-size:12px; color:var(--text-secondary);">(notation p,q pour ne pas confondre avec les a,b du cercle)</em></li>
-        <li><strong>d ≡ y = k</strong> = directrice de la parabole (droite fixe)</li>
-        <li>Tout point P(x ; y) de la parabole satisfait : distance(P, F) = distance(P, d)</li>
-        <li>Cette équation se simplifie en forme canonique : f(x) = A·(x − α)² + β</li>
-      </ul>
-      
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">
-          Cette formule compliquée décrit la forme de la courbe en U. Le foyer est comme un point spécial qui attire la courbe, et la directrice est une ligne qui repousse la courbe. La courbe est toujours à égale distance de ces deux !
-        </div>
-      </div>
-    </div>
-    
-    <p>On retrouve la forme canonique d'une fonction du 2ᵉ degré : \\(f(x) = A \\cdot (x-\\alpha)^2 + \\beta\\)</p>
-    <p><em>Explication :</em> Cette forme est celle d'une fonction quadratique standard où :</p>
-    <ul>
-      <li>\\(A = \\frac{1}{2(b - k)}\\) (détermine l'ouverture)</li>
-      <li>\\(\\alpha = a\\) (abscisse du sommet)</li>
-      <li>\\(\\beta = \\frac{b + k}{2}\\) (ordonnée du sommet)</li>
-    </ul>
-    
-    <div class="simple-exp-box">
-      <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-      <div class="simple-exp-content">
-        Cette forme est plus simple ! A nous dit si la courbe est ouverte vers le haut ou vers le bas. α et β nous disent où est le point le plus bas ou le plus haut de la courbe (le sommet). C'est comme trouver le fond d'un bol !
-      </div>
-    </div>
-    
-    <div class="grid2" style="margin-top:1.5rem;">
-      <div class="card parabole">
-        <h3>🎯 Les 3 éléments clés</h3>
-        <ul style="font-size:15px; color:var(--text-secondary); padding-left:1.5rem; line-height:2.2;">
-          <li><strong>Foyer</strong> F(a ; b)</li>
-          <li><strong>Directrice</strong> d ≡ y = k</li>
-          <li><strong>Sommet</strong> \\(S\\left(a ; \\frac{b+k}{2}\\right)\\)</li>
-        </ul>
-      </div>
-      <div class="card parabole">
-        <h3>🔄 Relations entre éléments</h3>
-        <ul style="font-size:15px; color:var(--text-secondary); padding-left:1.5rem; line-height:2.2;">
-          <li>Foyer + directrice → Sommet \\(S\\left(a ; \\frac{b+k}{2}\\right)\\)</li>
-          <li>Sommet + directrice → Foyer F(a ; 2β−k)</li>
-          <li>Foyer + sommet → Directrice y = 2β−b</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="simple-exp-box">
-      <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-      <div class="simple-exp-content">
-        Retiens une seule idée : le <strong>sommet est toujours pile au milieu</strong> entre le foyer (un point) et la directrice (une ligne). Du coup, dès que tu connais 2 des 3 éléments, tu trouves le 3e : c'est juste un jeu de « milieu » et de « symétrique » (l'un est le reflet de l'autre par rapport au sommet). Les \\(2\\beta-k\\) et \\(2\\beta-b\\) ne font que calculer ce reflet.
-      </div>
-    </div>
-    
-    <p style="margin-top:1.5rem;">L'axe de symétrie AS est la droite verticale x = a passant par le foyer.</p>
-    
-    <div class="simple-exp-box">
-      <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-      <div class="simple-exp-content">
-        L'axe de symétrie est une ligne verticale qui coupe la parabole en deux parties égales. C'est comme si tu pliais la courbe en deux le long de cette ligne !
-      </div>
-    </div>
-  </div>
 </div>`,
 
   formules: `<div id="formules" class="section">
   <div style="margin-bottom:1.5rem;">
-    <input type="search" id="formula-search" oninput="filterFormulas(this.value)" placeholder="🔍 Rechercher une formule (ex. rayon, foyer, pente, vecteur…)" aria-label="Rechercher une formule" style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:15px; box-sizing:border-box;">
+    <input type="search" id="formula-search" oninput="filterFormulas(this.value)" placeholder="🔍 Rechercher une formule (ex. rayon, centre, pente, vecteur…)" aria-label="Rechercher une formule" style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:15px; box-sizing:border-box;">
     <button id="formula-bookmark-filter" type="button" onclick="toggleBookmarkFilter(this)" aria-pressed="false" style="margin-top:8px; padding:8px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:13px; cursor:pointer; font-weight:600;">★ Voir mes formules marquées</button>
     <button type="button" onclick="printRevisionSheet()" style="margin-top:8px; margin-left:8px; padding:8px 14px; border-radius:20px; border:none; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; font-size:13px; cursor:pointer; font-weight:700;">📄 Fiche de révision (PDF)</button>
     <p id="formula-search-empty" style="display:none; color:var(--text-secondary); margin-top:0.75rem;">Aucune formule ne correspond à ta recherche.</p>
@@ -763,63 +671,6 @@ const SECTIONS_CONTENT = {
         </div>
       </div>
     </div>
-    <div>
-      <div class="formula-box parabole">
-        <h3><span class="tag tag-parabole">Parabole</span> Équation cartésienne</h3>
-        <div class="formula-main parabole">$$f(x) = \\frac{1}{2(q-k)} \\cdot (x-p)^2 + \\frac{q+k}{2}$$</div>
-        <p class="note"><strong>F(p ; q)</strong> = foyer, <strong>y = k</strong> = directrice</p>
-        <div style="text-align:center; margin:1rem 0;">
-          <svg width="300" height="240" viewBox="0 0 300 240" style="background:var(--bg-main); border-radius:12px; border:2px solid var(--border-subtle); display:block; margin:0 auto; max-width:100%;">
-            <!-- Parabole ouverte vers le haut -->
-            <path d="M 60 70 Q 150 250 240 70" fill="none" stroke="#34d399" stroke-width="3"/>
-            <!-- Directrice y = k (horizontale, en bas) -->
-            <line x1="30" y1="200" x2="270" y2="200" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="7,5"/>
-            <text x="276" y="204" font-size="12" fill="#f59e0b" font-weight="bold">y=k</text>
-            <!-- Foyer F -->
-            <circle cx="150" cy="140" r="5" fill="#f87171"/>
-            <text x="158" y="138" font-size="13" fill="#f87171" font-weight="bold">F</text>
-            <!-- Sommet S (à mi-chemin entre F et directrice) -->
-            <circle cx="150" cy="170" r="4" fill="#a78bfa"/>
-            <text x="158" y="178" font-size="12" fill="#a78bfa" font-weight="bold">S</text>
-            <!-- Point M sur la parabole + ses 2 distances égales -->
-            <circle cx="210" cy="118" r="4" fill="#e5e7eb"/>
-            <text x="216" y="115" font-size="12" fill="#e5e7eb" font-weight="bold">M</text>
-            <!-- distance M->F -->
-            <line x1="210" y1="118" x2="150" y2="140" stroke="#f87171" stroke-width="2"/>
-            <!-- distance M->directrice (verticale) -->
-            <line x1="210" y1="118" x2="210" y2="200" stroke="#f59e0b" stroke-width="2"/>
-            <!-- marques d'égalité -->
-            <text x="182" y="118" font-size="12" fill="#f87171" font-weight="bold">d₁</text>
-            <text x="216" y="162" font-size="12" fill="#f59e0b" font-weight="bold">d₂</text>
-            <rect x="92" y="214" width="116" height="18" rx="5" fill="var(--bg-main)" opacity="0.9"/>
-            <text x="150" y="227" text-anchor="middle" font-size="12" fill="#e5e7eb" font-weight="bold">d₁ = d₂ (toujours)</text>
-          </svg>
-        </div>
-        <div class="formula-legend">
-          <span class="formula-legend-item"><span class="symbol">a, b</span> <span class="meaning">Coordonnées du foyer</span><span class="accordion-icon">▾</span><span class="tooltip">Coordonnées du foyer</span><div class="accordion-content">F(p;q) est le foyer de la parabole. Tout point de la parabole est à égale distance de F et de la directrice. L'axe de symétrie est la droite verticale x=p. (On utilise p,q pour ne pas confondre avec les coefficients a,b du cercle.)</div></span>
-          <span class="formula-legend-item"><span class="symbol">k</span> <span class="meaning">Ordonnée directrice</span><span class="accordion-icon">▾</span><span class="tooltip">Ordonnée de la directrice</span><div class="accordion-content">La directrice est la droite horizontale y=k. C'est la 'ligne repoussoir' de la parabole : chaque point de la courbe est aussi loin de F que de cette droite.</div></span>
-          <span class="formula-legend-item"><span class="symbol">x</span> <span class="meaning">Variable</span><span class="accordion-icon">▾</span><span class="tooltip">Variable de la fonction</span><div class="accordion-content">x est la variable indépendante. Pour chaque valeur de x, f(x) donne l'ordonnée y du point correspondant sur la parabole.</div></span>
-        </div>
-        <div class="simple-exp-box">
-          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-          <div class="simple-exp-content">Le foyer F est un point "attracteur" à l'intérieur de la courbe. La directrice est une ligne "repoussoir" en dessous (ou au-dessus). Chaque point de la parabole est exactement à égale distance des deux. C'est littéralement la définition de la parabole !</div>
-        </div>
-      </div>
-      <div class="formula-box parabole">
-        <h3><span class="tag tag-parabole">Parabole</span> Forme canonique</h3>
-        <div class="formula-main parabole">$$f(x) = A \\cdot (x-\\alpha)^2 + \\beta$$</div>
-        <p class="note"><strong>A</strong> = ouverture, <strong>α</strong> = abscisse sommet, <strong>β</strong> = ordonnée sommet</p>
-        <div class="formula-legend">
-          <span class="formula-legend-item"><span class="symbol">A</span> <span class="meaning">Ouverture</span><span class="accordion-icon">▾</span><span class="tooltip">Coefficient d'ouverture</span><div class="accordion-content">A détermine l'ouverture : A>0 = parabole ouverte vers le HAUT (forme ∪), A&lt;0 = vers le BAS (forme ∩). Plus |A| est grand, plus la parabole est étroite et 'pincée'.</div></span>
-          <span class="formula-legend-item"><span class="symbol">α, β</span> <span class="meaning">Coordonnées sommet</span><span class="accordion-icon">▾</span><span class="tooltip">Coordonnées du sommet</span><div class="accordion-content">Le sommet S(α;β) est le point le plus bas (si A>0) ou le plus haut (si A&lt;0) de la parabole. C'est le point où la parabole 'change de direction'. L'axe de symétrie passe par x=α.</div></span>
-          <span class="formula-legend-item"><span class="symbol">x</span> <span class="meaning">Variable</span><span class="accordion-icon">▾</span><span class="tooltip">Variable de la fonction</span><div class="accordion-content">x est la variable indépendante. Pour chaque valeur de x, f(x) donne l'ordonnée y du point correspondant sur la parabole.</div></span>
-        </div>
-        <div class="simple-exp-box">
-          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-          <div class="simple-exp-content">La forme la plus pratique ! Tu lis tout directement : A dit si la courbe est en ∪ (A&gt;0) ou en ∩ (A&lt;0), α est l'abscisse du sommet (point le plus bas ou le plus haut), et β son ordonnée. Exemple : f(x) = 2(x−3)²+5 → sommet en (3 ; 5), ouvert vers le haut.</div>
-        </div>
-      </div>
-    </div>
   </div>
   <div class="grid2" style="margin-top:1.5rem;">
     <div>
@@ -893,16 +744,16 @@ const SECTIONS_CONTENT = {
       <button onclick="openDemo('cercle_carre_geo')" class="demo-launch">▶ Compléter le carré (en images)</button>
       <button onclick="openDemo('cercle_carre')" class="demo-launch">▶ Compléter le carré (calcul)</button>
       <button onclick="openDemo('distance')" class="demo-launch">▶ Distance point-droite</button>
-      <button onclick="openDemo('parabole_geo')" class="demo-launch">▶ Parabole (foyer/directrice)</button>
     </div>
   </div>
   <div class="methods-tabs">
     <button class="mtab on" onclick=\"showMethod('m1', this)\">Forme dev → canonique</button>
     <button class="mtab" onclick=\"showMethod('m2', this)\">Cercle par 3 points</button>
-    <button class="mtab" onclick=\"showMethod('m3', this)\">Foyer/directrice/sommet</button>
     <button class="mtab" onclick=\"showMethod('m4', this)\">Équation droite passant par A</button>
     <button class="mtab" onclick=\"showMethod('m5', this)\">Droite parallèle / perp.</button>
     <button class="mtab" onclick=\"showMethod('m6', this)\">Vecteurs : colinéarité / alignement</button>
+    <button class="mtab" onclick=\"showMethod('m7', this)\">Cercle circonscrit (médiatrices)</button>
+    <button class="mtab" onclick=\"showMethod('m8', this)\">Multiplier des fractions</button>
   </div>
   <div id="m1" class="method-content on">
     <div class="formula-box"><h3>Méthode — Forme développée → Forme canonique</h3><p class="note"><strong>Exemple :</strong> x² + y² + 8x − 12y + 3 = 0</p></div>
@@ -943,35 +794,6 @@ const SECTIONS_CONTENT = {
       <div class="step-item"><div class="step-num">4</div><div class="step-text">Équation : $$x^2 + y^2 + 9x − 3y − 20 = 0$$
         <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
         <div class="why-content">On substitue a=9, b=-3, c=-20. TOUJOURS vérifier en substituant un des 3 points : le résultat doit être 0.</div>
-      </div></div>
-    </div>
-  </div>
-  <div id="m3" class="method-content">
-    <div class="formula-box"><h3>Méthode — Foyer, directrice, sommet</h3><p class="note"><strong>Exemple :</strong> \\(f(x) = \\frac{1}{16}(x+1)^2 - 1\\)</p></div>
-    <div class="step-list">
-      <div class="step-item"><div class="step-num">1</div><div class="step-text">Identifier : \\(\\alpha = -1\\), \\(\\beta = -1\\), \\(A = \\frac{1}{16}\\)
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">Dans f(x)=A(x-α)²+β : A est le coefficient devant, α est le nombre soustrait à x (attention au signe!), β est le terme constant final.</div>
-      </div></div>
-      <div class="step-item"><div class="step-num">2</div><div class="step-text">Sommet S(−1 ; −1)
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">Le sommet S(α;β) se lit directement : S(-1;-1). C'est le point minimum (A>0) ou maximum (A&lt;0) de la parabole.</div>
-      </div></div>
-      <div class="step-item"><div class="step-num">3</div><div class="step-text">De \\(A = \\dfrac{1}{16}\\) : $$\\frac{1}{2(b-k)} = \\frac{1}{16}$$ → $$2(b-k) = 16$$ → $$b - k = 8$$
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">\\(A=\\dfrac{1}{2(b-k)}\\) s'inverse en \\(2(b-k)=\\dfrac{1}{A}\\). Ici \\(A=\\dfrac{1}{16}\\), donc \\(\\dfrac{1}{A}=16\\), d'où \\(2(b-k)=16\\) et \\(b-k=8\\).</div>
-      </div></div>
-      <div class="step-item"><div class="step-num">4</div><div class="step-text">De β = −1 : $$\\frac{b+k}{2} = -1$$ → $$b + k = -2$$
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">Le sommet est à mi-chemin entre le foyer et la directrice : \\(\\beta=\\dfrac{b+k}{2}\\). Donc \\(b+k=2\\beta=2(-1)=-2\\).</div>
-      </div></div>
-      <div class="step-item"><div class="step-num">5</div><div class="step-text">Système : b − k = 8 et b + k = −2 → addition : 2b = 6 → <strong>b = 3</strong>, puis k = −2 − b = −5 → <strong>k = −5</strong>
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">Addition : (b-k)+(b+k)=2b → 8+(-2)=6 → b=3. Soustraction : (b+k)-(b-k)=2k → -2-8=-10 → k=-5.</div>
-      </div></div>
-      <div class="step-item"><div class="step-num">6</div><div class="step-text">Foyer F(−1 ; 3), directrice y = −5
-        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">Foyer F(α;b)=F(-1;3) car l'abscisse du foyer = abscisse du sommet = α. Directrice y=k=-5.</div>
       </div></div>
     </div>
   </div>
@@ -1039,6 +861,59 @@ const SECTIONS_CONTENT = {
     </div>
     <div class="formula-box" style="margin-top:1.25rem;"><p class="note"><strong>À retenir :</strong><br>• <strong>Composantes</strong> : \\(\\vec{AB}=\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}\\)<br>• <strong>Colinéaires</strong> (même direction) : \\(ad-bc=0\\) ou \\(\\vec{u}=k\\,\\vec{v}\\)<br>• <strong>A, B, C alignés</strong> ⟺ \\(\\vec{AB}\\) et \\(\\vec{AC}\\) colinéaires<br>• <strong>Droites (AB) // (CD)</strong> ⟺ \\(\\vec{AB}\\) et \\(\\vec{CD}\\) colinéaires<br>• <strong>Milieu de [AB]</strong> : \\(M\\!\\begin{pmatrix}\\frac{x_A+x_B}{2}\\\\\\frac{y_A+y_B}{2}\\end{pmatrix}\\)</p></div>
   </div>
+  <div id="m7" class="method-content">
+    <div class="formula-box"><h3>Méthode — Cercle circonscrit d'un triangle (médiatrices)</h3><p class="note"><strong>Exemple :</strong> A(−1 ; −4), B(−10 ; 5), C(2 ; 1) — trouver le cercle qui passe par les 3 sommets.</p></div>
+    <div class="formula-box" style="margin-bottom:1rem;"><p class="note">🎯 <strong>Idée :</strong> le centre du cercle circonscrit est à égale distance des 3 sommets, donc il est sur les <strong>médiatrices</strong> des côtés. On écrit 2 médiatrices, on les croise → on obtient le centre, puis le rayon = distance centre → un sommet.</p></div>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-text">Médiatrice de [AB] — milieu et vecteur normal : $$M_{AB}\\left(\\tfrac{-1+(-10)}{2}\\,;\\tfrac{-4+5}{2}\\right)=\\left(-\\tfrac{11}{2}\\,;\\tfrac{1}{2}\\right),\\quad \\vec{AB}=\\begin{pmatrix}-9\\\\9\\end{pmatrix}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">La médiatrice de [AB] passe par le milieu de [AB] et est <strong>perpendiculaire</strong> à [AB]. Donc \\(\\vec{AB}\\) est un vecteur <strong>normal</strong> de la médiatrice : son équation est de la forme \\(-9x+9y+c=0\\) (les coefficients de x et y = les composantes du vecteur normal).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text">Équation de la médiatrice [AB] : on remplace \\(x,y\\) par le milieu pour trouver \\(c\\) : $$-9\\cdot\\left(-\\tfrac{11}{2}\\right)+9\\cdot\\tfrac{1}{2}+c=0 \\;\\Rightarrow\\; \\tfrac{99}{2}+\\tfrac{9}{2}+c=0 \\;\\Rightarrow\\; 54+c=0$$ d'où \\(c=-54\\) : $$-9x+9y-54=0 \\;\\Leftrightarrow\\; x=y-6$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">Le milieu appartient à la médiatrice, donc ses coordonnées vérifient l'équation : on les substitue pour trouver \\(c\\). \\(-9\\times-\\tfrac{11}{2}=\\tfrac{99}{2}\\) et \\(9\\times\\tfrac{1}{2}=\\tfrac{9}{2}\\), somme \\(\\tfrac{108}{2}=54\\). On peut diviser toute l'équation par 9 : \\(-x+y-6=0\\), soit \\(x=y-6\\) (plus simple pour la suite).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text">Médiatrice de [BC] (même technique) : $$M_{BC}\\left(\\tfrac{-10+2}{2}\\,;\\tfrac{5+1}{2}\\right)=(-4\\,;3),\\quad \\vec{BC}=\\begin{pmatrix}12\\\\-4\\end{pmatrix}$$ $$12x-4y+c=0 \\;\\Rightarrow\\; 12(-4)-4(3)+c=0 \\;\\Rightarrow\\; -60+c=0 \\;\\Rightarrow\\; 12x-4y+60=0$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">On refait exactement la même chose pour le côté [BC] : milieu de [BC], vecteur \\(\\vec{BC}\\) comme normal, puis on substitue le milieu \\((-4;3)\\) : \\(12(-4)-4(3)=-48-12=-60\\), donc \\(c=60\\).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-text">Intersection des 2 médiatrices = centre Ω. On remplace \\(x=y-6\\) dans la 2ᵉ : $$12(y-6)-4y+60=0 \\;\\Rightarrow\\; 8y-12=0 \\;\\Rightarrow\\; y=\\tfrac{3}{2}$$ puis \\(x=\\tfrac{3}{2}-6=-\\tfrac{9}{2}\\) : $$\\boxed{\\;\\Omega\\left(-\\tfrac{9}{2}\\,;\\tfrac{3}{2}\\right)\\;}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">Le centre est sur LES DEUX médiatrices à la fois : c'est leur point d'intersection. On résout le système par substitution. \\(12(y-6)=12y-72\\), donc \\(12y-72-4y+60=8y-12=0\\) → \\(y=\\tfrac{12}{8}=\\tfrac{3}{2}\\), puis \\(x=y-6=\\tfrac{3}{2}-\\tfrac{12}{2}=-\\tfrac{9}{2}\\).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">5</div><div class="step-text">Rayon = distance du centre à un sommet (ici C) : $$R=\\sqrt{\\left(-\\tfrac{9}{2}-2\\right)^2+\\left(\\tfrac{3}{2}-1\\right)^2}=\\sqrt{\\left(-\\tfrac{13}{2}\\right)^2+\\left(\\tfrac{1}{2}\\right)^2}=\\sqrt{\\tfrac{169}{4}+\\tfrac{1}{4}}=\\sqrt{\\tfrac{170}{4}}=\\tfrac{\\sqrt{170}}{2}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">Le rayon est la distance entre le centre et n'importe lequel des 3 sommets (ils sont tous à distance R). \\(-\\tfrac{9}{2}-2=-\\tfrac{9}{2}-\\tfrac{4}{2}=-\\tfrac{13}{2}\\) et \\(\\tfrac{3}{2}-1=\\tfrac{1}{2}\\). On élève au carré, on additionne, et \\(\\sqrt{\\tfrac{170}{4}}=\\tfrac{\\sqrt{170}}{2}\\) car \\(\\sqrt{4}=2\\).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">6</div><div class="step-text">Équation du cercle \\((x-x_0)^2+(y-y_0)^2=R^2\\) : $$\\left(x+\\tfrac{9}{2}\\right)^2+\\left(y-\\tfrac{3}{2}\\right)^2=\\tfrac{170}{4}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">On remplace par le centre \\(\\Omega(-\\tfrac{9}{2};\\tfrac{3}{2})\\) et \\(R^2=\\tfrac{170}{4}\\). Attention au signe : centre \\(x_0=-\\tfrac{9}{2}\\) donne \\((x-(-\\tfrac{9}{2}))^2=(x+\\tfrac{9}{2})^2\\). Vérification : on peut substituer A, B ou C, on doit retomber sur \\(\\tfrac{170}{4}\\).</div>
+      </div></div>
+    </div>
+    <div class="formula-box" style="margin-top:1.25rem;"><p class="note"><strong>À retenir (les 5 temps) :</strong><br>1️⃣ médiatrice de [AB] : milieu + \\(\\vec{AB}\\) comme normal<br>2️⃣ médiatrice de [BC] : milieu + \\(\\vec{BC}\\) comme normal<br>3️⃣ croiser les 2 médiatrices → <strong>centre Ω</strong><br>4️⃣ \\(R=\\) distance Ω → un sommet<br>5️⃣ écrire \\((x-x_0)^2+(y-y_0)^2=R^2\\)</p></div>
+  </div>
+  <div id="m8" class="method-content">
+    <div class="formula-box"><h3>Méthode — Multiplier (et simplifier) des fractions</h3><p class="note"><strong>La règle d'or :</strong> $$\\frac{a}{b}\\times\\frac{c}{d}=\\frac{a\\times c}{b\\times d}$$ on multiplie les numérateurs entre eux, ET les dénominateurs entre eux. (Pas besoin de même dénominateur — ça c'est pour l'addition !)</p></div>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-text">Multiplier le haut par le haut, le bas par le bas : $$\\frac{2}{3}\\times\\frac{4}{5}=\\frac{2\\times4}{3\\times5}=\\frac{8}{15}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">C'est LA différence avec l'addition : pour multiplier, on n'a PAS besoin du même dénominateur. On multiplie simplement numérateur × numérateur et dénominateur × dénominateur. Ici \\(2\\times4=8\\) et \\(3\\times5=15\\).</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text">Un entier × une fraction : on met l'entier sur 1. $$5\\times\\frac{2}{3}=\\frac{5}{1}\\times\\frac{2}{3}=\\frac{10}{3}$$ et avec un négatif : $$-9\\times\\left(-\\frac{11}{2}\\right)=\\frac{(-9)\\times(-11)}{2}=\\frac{99}{2}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">Tout entier \\(n\\) s'écrit \\(\\tfrac{n}{1}\\). Donc multiplier un entier par une fraction = multiplier l'entier par le numérateur, le dénominateur ne change pas. Pour les signes : moins × moins = plus, donc \\((-9)\\times(-11)=+99\\). (C'est exactement le calcul utilisé dans la méthode du cercle circonscrit !)</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text">Simplifier AVANT de multiplier (plus malin) : on barre un facteur commun en haut et en bas. $$\\frac{3}{4}\\times\\frac{8}{9}=\\frac{3}{4}\\times\\frac{8}{9}=\\frac{1}{1}\\times\\frac{2}{3}=\\frac{2}{3}$$ (on simplifie 3 avec 9, et 8 avec 4)
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">On peut simplifier « en croix » avant de multiplier : \\(3\\) et \\(9\\) se divisent par 3 (→ 1 et 3), \\(8\\) et \\(4\\) se divisent par 4 (→ 2 et 1). On obtient \\(\\tfrac{1}{1}\\times\\tfrac{2}{3}=\\tfrac{2}{3}\\). C'est plus simple que de calculer \\(\\tfrac{24}{36}\\) puis simplifier.</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-text">Fraction de fraction (division) = multiplier par l'inverse : $$\\frac{a}{b}\\div\\frac{c}{d}=\\frac{a}{b}\\times\\frac{d}{c}$$ Exemple : $$\\frac{2}{3}\\div\\frac{4}{5}=\\frac{2}{3}\\times\\frac{5}{4}=\\frac{10}{12}=\\frac{5}{6}$$
+        <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+        <div class="why-content">Diviser par une fraction = multiplier par sa « fraction retournée » (l'inverse : on échange numérateur et dénominateur). Ensuite on applique la règle de multiplication, puis on simplifie : \\(\\tfrac{10}{12}=\\tfrac{5}{6}\\) (on divise par 2).</div>
+      </div></div>
+    </div>
+    <div class="formula-box" style="margin-top:1.25rem;"><p class="note"><strong>⚠️ Ne pas confondre :</strong><br>• <strong>Multiplier</strong> : \\(\\frac{a}{b}\\times\\frac{c}{d}=\\frac{ac}{bd}\\) — direct, pas de dénominateur commun.<br>• <strong>Additionner</strong> : \\(\\frac{a}{b}+\\frac{c}{d}\\) — là OUI il faut le même dénominateur d'abord.<br>• <strong>Diviser</strong> : on multiplie par l'inverse.</p></div>
+  </div>
 </div>`,
 
   exercices: `<div id="exercices" class="section">
@@ -1050,11 +925,6 @@ const SECTIONS_CONTENT = {
         <p style="font-size:12px; font-weight:700; color:var(--color-cercle); margin-bottom:6px;">🔵 CERCLE</p>
         <p style="font-size:13px; color:var(--text-primary); margin:2px 0;">\\((x-h)^2+(y-k)^2=R^2\\)</p>
         <p style="font-size:11px; color:var(--text-secondary); margin:2px 0;">Centre C(h;k) · Rayon R</p>
-      </div>
-      <div style="background:rgba(52,211,153,0.08); border-radius:10px; padding:1rem; border-left:3px solid var(--color-parabole);">
-        <p style="font-size:12px; font-weight:700; color:var(--color-parabole); margin-bottom:6px;">🟢 PARABOLE</p>
-        <p style="font-size:13px; color:var(--text-primary); margin:2px 0;">\\(y=ax^2+bx+c\\)</p>
-        <p style="font-size:11px; color:var(--text-secondary); margin:2px 0;">Sommet \\(x_s=-\\dfrac{b}{2a}\\)</p>
       </div>
       <div style="background:rgba(251,191,36,0.08); border-radius:10px; padding:1rem; border-left:3px solid var(--color-droite);">
         <p style="font-size:12px; font-weight:700; color:var(--color-droite); margin-bottom:6px;">🟡 DROITE</p>
@@ -1219,56 +1089,6 @@ const SECTIONS_CONTENT = {
     </div>
   </div>
 
-  <div class="exercise-card parabole">
-    <h3 style="font-size:20px; font-weight:600; color:var(--color-parabole); margin-bottom:0.5rem;">🎯 Intersection droite et parabole</h3>
-    <div style="background:rgba(52,211,153,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;">
-      <p style="color:var(--text-secondary); font-size:14px; margin-bottom:0.5rem;">🎓 <strong style="color:var(--color-parabole)">Ce que tu vas apprendre :</strong> trouver les points d'intersection entre une parabole et une droite.</p>
-      <p style="font-size:16px; color:var(--text-primary);"><strong>Énoncé :</strong> Intersection de y = x² − 2x + 1 avec y = 2x − 1.</p>
-    </div>
-    <button class="step-btn" onclick="showExerciseStep(this, 6)">▶ Commencer — Étape 1</button>
-    <div class="exercise-step parabole" data-step="6">
-      <span class="step-badge">Étape 1 sur 4</span>
-      <p style="color:var(--color-parabole); font-weight:700; font-size:15px; margin-bottom:0.5rem;">📌 Étape 1 — Égaler les deux expressions</p>
-      <p>Aux points d'intersection, les deux y sont égaux. On pose :</p>
-      <div class="formula-main parabole">$$x^2 - 2x + 1 = 2x - 1 \\implies x^2 - 4x + 2 = 0$$</div>
-      <p style="font-size:14px; color:var(--text-secondary); margin-top:0.5rem;">💬 <em>On passe tout à gauche : on soustrait 2x et on ajoute 1 des deux côtés.</em></p>
-      <button class="why-btn" onclick="toggleWhyStep(this)">💡 Pourquoi cette étape ?</button>
-      <div class="why-content">Égaler les deux expressions de y est le principe fondamental pour trouver les points d'intersection. Si deux courbes ont le même y pour un même x, elles se croisent en ce point. Cela réduit le problème à une équation à une seule inconnue x.</div>
-      <button class="step-btn" onclick="showExerciseStep(this, 7)">▶ Étape 2 — Discriminant</button>
-    </div>
-    <div class="exercise-step parabole" data-step="7">
-      <span class="step-badge">Étape 2 sur 4</span>
-      <p style="color:var(--color-parabole); font-weight:700; font-size:15px; margin-bottom:0.5rem;">📌 Étape 2 — Calculer le discriminant Δ</p>
-      <div class="formula-main parabole">$$\\Delta = b^2 - 4ac = (-4)^2 - 4(1)(2) = 16 - 8 = 8 > 0$$</div>
-      <p style="font-size:14px; color:var(--text-secondary); margin-top:0.5rem;">💬 <em>Δ > 0 → 2 solutions réelles distinctes → la droite coupe la parabole en 2 points !</em><br>Si Δ = 0 : tangente (1 point). Si Δ &lt; 0 : pas d'intersection.</p>
-      <button class="why-btn" onclick="toggleWhyStep(this)">💡 Pourquoi cette étape ?</button>
-      <div class="why-content">Le discriminant Δ = b² - 4ac indique le nombre de solutions réelles. Δ > 0 : 2 solutions distinctes (la droite coupe la parabole). Δ = 0 : 1 solution (tangente). Δ < 0 : 0 solution (pas d'intersection). C'est un outil puissant pour prédire le comportement géométrique avant même de calculer les solutions.</div>
-      <button class="step-btn" onclick="showExerciseStep(this, 8)">▶ Étape 3 — Solutions x</button>
-    </div>
-    <div class="exercise-step parabole" data-step="8">
-      <span class="step-badge">Étape 3 sur 4</span>
-      <p style="color:var(--color-parabole); font-weight:700; font-size:15px; margin-bottom:0.5rem;">📌 Étape 3 — Trouver x₁ et x₂</p>
-      <div class="formula-main parabole">$$x = \\frac{4 \\pm \\sqrt{8}}{2} = \\frac{4 \\pm 2\\sqrt{2}}{2} = 2 \\pm \\sqrt{2}$$</div>
-      <p style="font-size:14px; color:var(--text-secondary); margin-top:0.5rem;">💬 <em>x₁ = 2 + √2 ≈ 3.41 et x₂ = 2 − √2 ≈ 0.59</em></p>
-      <button class="why-btn" onclick="toggleWhyStep(this)">💡 Pourquoi cette étape ?</button>
-      <div class="why-content">La formule quadratique \\(x = \\dfrac{-b \\pm \\sqrt{\\Delta}}{2a}\\) donne les deux solutions. Ici, on simplifie \\(\\sqrt{8} = 2\\sqrt{2}\\) pour obtenir une forme plus élégante. Le \\(\\pm\\) indique qu'il y a deux solutions : une avec \\(+\\), une avec \\(-\\). Ces \\(x\\) sont les abscisses des points d'intersection.</div>
-      <button class="step-btn" onclick="showExerciseStep(this, 9)">▶ Étape 4 — Coordonnées y</button>
-    </div>
-    <div class="exercise-step parabole" data-step="9">
-      <span class="step-badge">Étape 4 sur 4</span>
-      <p style="color:var(--color-parabole); font-weight:700; font-size:15px; margin-bottom:0.5rem;">✅ Étape 4 — Trouver les y via y = 2x − 1</p>
-      <div style="background:var(--bg-formula); border-radius:8px; padding:1rem; margin:0.75rem 0; font-size:14px; color:var(--text-secondary);">
-        y₁ = 2(2+√2) − 1 = <strong style="color:var(--color-parabole)">3 + 2√2 ≈ 5.83</strong><br><br>
-        y₂ = 2(2−√2) − 1 = <strong style="color:var(--color-parabole)">3 − 2√2 ≈ 0.17</strong>
-      </div>
-      <p><strong>Points d'intersection :</strong></p>
-      <div class="formula-main parabole">$$P_1(2+\\sqrt{2}; 3+2\\sqrt{2}) \\quad \\text{et} \\quad P_2(2-\\sqrt{2}; 3-2\\sqrt{2})$$</div>
-      <p style="font-size:14px; color:var(--text-secondary); margin-top:0.5rem;">✔ <em>Vérifie : substitue x₁ dans les DEUX équations → tu dois obtenir le même y₁ !</em></p>
-      <button class="why-btn" onclick="toggleWhyStep(this)">💡 Pourquoi cette étape ?</button>
-      <div class="why-content">Une fois les x trouvés, on calcule les y correspondants en substituant dans l'une des équations (la droite y = 2x - 1 est plus simple). On obtient ainsi les coordonnées complètes des points d'intersection. La vérification par substitution dans les deux équations confirme le résultat.</div>
-    </div>
-  </div>
-
   <div class="exercise-card cercle">
     <h3 style="font-size:20px; font-weight:600; color:var(--color-cercle); margin-bottom:0.5rem;">🎯 Tangente à un cercle</h3>
     <div style="background:rgba(96,165,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;">
@@ -1372,13 +1192,6 @@ const SECTIONS_CONTENT = {
     <div class="formula-box cercle"><h3>❌ Oublier la condition d'existence</h3><p><strong>Erreur :</strong> Calculer le rayon sans vérifier $a^2+b^2-4c>0$</p><p><strong>Correction :</strong> Toujours vérifier que $a^2+b^2-4c>0$</p><p><strong>Contre-exemple :</strong> \\(x^2+y^2+2x+2y+3=0\\) n'est pas un cercle car \\(4+4-12=-4&lt;0\\).</p></div>
     <div class="formula-box cercle"><h3>❌ Confondre diamètre et rayon</h3><p><strong>Erreur :</strong> Prendre |AB| comme rayon</p><p><strong>Correction :</strong> Le rayon est \\(\\dfrac{|AB|}{2}\\)</p><p><strong>Contre-exemple :</strong> Si [AB] est un diamètre de longueur 10, le rayon est 5, pas 10.</p></div>
     <div class="formula-box cercle"><h3>❌ Erreur dans le calcul de la distance</h3><p><strong>Erreur :</strong> Oublier la racine carrée</p><p><strong>Correction :</strong> \\(d(P,C) = \\sqrt{(x_P-x_0)^2 + (y_P-y_0)^2}\\)</p><p><strong>Contre-exemple :</strong> Distance entre (0;0) et (3;4) est \\(\\sqrt{25}=5\\), pas 25.</p></div>
-  </div>
-  <div class="synth-section parabole">
-    <h3 style="font-size:24px; font-weight:600; color:var(--color-parabole); margin-bottom:1.5rem;">Parabole</h3>
-    <div class="formula-box parabole"><h3>❌ Confondre foyer et sommet</h3><p><strong>Erreur :</strong> Croire que le foyer est le point le plus bas/haut</p><p><strong>Correction :</strong> Le sommet est le point extrême, le foyer est à l'intérieur</p><p><strong>Contre-exemple :</strong> Pour \\(f(x)=x^2\\), le sommet est (0;0) mais le foyer est (0;0.25).</p></div>
-    <div class="formula-box parabole"><h3>❌ Erreur dans le signe de l'ouverture</h3><p><strong>Erreur :</strong> Penser que A>0 ouvre vers le bas</p><p><strong>Correction :</strong> A>0 ouvre vers le haut, A&lt;0 ouvre vers le bas</p><p><strong>Contre-exemple :</strong> \\(f(x)=x^2\\) s'ouvre vers le haut, \\(f(x)=-x^2\\) s'ouvre vers le bas.</p></div>
-    <div class="formula-box parabole"><h3>❌ Confondre axe de symétrie</h3><p><strong>Erreur :</strong> Penser que l'axe est y = a</p><p><strong>Correction :</strong> L'axe de symétrie est x = a (droite verticale)</p><p><strong>Contre-exemple :</strong> Pour une parabole de foyer F(2;3), l'axe est x=2, pas y=3.</p></div>
-    <div class="formula-box parabole"><h3>❌ Erreur dans le calcul du sommet</h3><p><strong>Erreur :</strong> Prendre S(α; -β)</p><p><strong>Correction :</strong> Le sommet est S(α; β)</p><p><strong>Contre-exemple :</strong> Pour \\(f(x)=2(x-3)^2+5\\), le sommet est (3;5), pas (3;-5).</p></div>
   </div>
   <div class="synth-section droite">
     <h3 style="font-size:24px; font-weight:600; color:var(--color-droite); margin-bottom:1.5rem;">Droites</h3>

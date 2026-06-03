@@ -93,7 +93,7 @@
     results = doSearch(q);
     sel = results.length ? 0 : -1;
     if (!q.trim()) {
-      box.innerHTML = '<div class="search-empty">Tape un mot : <em>rayon, pente, milieu, foyer, distance, vecteur…</em></div>';
+      box.innerHTML = '<div class="search-empty">Tape un mot : <em>rayon, pente, milieu, centre, distance, vecteur…</em></div>';
       return;
     }
     if (!results.length) {

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Maths GR2 — application d'étude de géométrie analytique plane : cercle, parabole et droites. Synthèse, formules, méthodes, exercices guidés, graphiques interactifs, flashcards à répétition espacée et quiz.">
+  <meta name="description" content="Maths GR2 — application d'étude de géométrie analytique plane : vecteurs, cercle et droites. Synthèse, formules, méthodes, exercices guidés, graphiques interactifs, flashcards à répétition espacée et quiz.">
   <meta name="theme-color" content="#0f1117">
-  <title>Maths GR2 — Géométrie analytique plane</title>
+  <title>GR2 Study — Réviser toutes les matières</title>
   <!-- Partage sur réseaux sociaux (Open Graph + Twitter) -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Maths GR2">
-  <meta property="og:title" content="Maths GR2 — Révise les maths en t'amusant">
-  <meta property="og:description" content="Cercle, parabole, droites : cours animés, quiz, flashcards, défi du jour, quiz multijoueur et chat. Créé par Drackson.">
+  <meta property="og:site_name" content="GR2 Study">
+  <meta property="og:title" content="GR2 Study — Révise toutes tes matières">
+  <meta property="og:description" content="Vecteurs, cercle, droites : cours animés, quiz, flashcards, défi du jour, quiz multijoueur et chat. Créé par Drackson.">
   <meta property="og:url" content="https://drackson227.github.io/Math/">
   <meta property="og:image" content="https://drackson227.github.io/Math/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -28,11 +28,11 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Maths GR2">
+  <meta name="apple-mobile-web-app-title" content="GR2 Study">
   <!-- Police Inter via CDN Google Fonts (compatible GitHub Pages) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
   <style>
     /* B7 fix: focus-overlay.show was missing from style.css */
@@ -56,7 +56,7 @@
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <canvas id="particle-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;pointer-events:none;z-index:0;opacity:0.6;display:none;"></canvas>
-<h2 class="sr-only">Application d'étude — Maths GR2 : Géométrie analytique plane (Cercle, Parabole, Droites)</h2>
+<h2 class="sr-only">Application d'étude — Maths GR2 : Géométrie analytique plane (Vecteurs, Cercle, Droites)</h2>
 
 <button class="settings-toggle" onclick="toggleSettings()" aria-label="Ouvrir les paramètres">⚙️</button>
 
@@ -195,10 +195,16 @@
       <path d="M 32 86 Q 60 28 88 86" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
       <circle cx="60" cy="52" r="6" fill="#ffffff"/>
     </svg>
-    <h1 style="font-size:28px; font-weight:800; background:linear-gradient(135deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0;">Maths GR2</h1>
+    <h1 style="font-size:28px; font-weight:800; background:linear-gradient(135deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0;">GR2 Study</h1>
   </div>
-  <p style="font-size:13px; color:var(--text-secondary);">Géométrie analytique plane — Cercle · Parabole · Droites</p>
-  <p style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
+  <p id="app-subtitle" style="font-size:13px; color:var(--text-secondary);">Maths — Géométrie analytique plane · Vecteurs · Cercle · Droites</p>
+  <p id="app-validated" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
+</div>
+<div id="subject-bar" class="subject-bar" role="tablist" aria-label="Choisir une matière">
+  <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
+  <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
+  <button class="subj-btn" data-subj="histoire" onclick="setSubject('histoire')">🌍 Histoire-Géo</button>
+  <button class="subj-btn" data-subj="chimie" onclick="setSubject('chimie')">🧪 Chimie-Bio</button>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
   <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
@@ -207,7 +213,7 @@
   <button class="nav-btn" onclick="showSection(event,'formules')">🧮 Formules clés</button>
   <button class="nav-btn" onclick="showSection(event,'methodes')">📝 Méthodes</button>
   <button class="nav-btn" onclick="showSection(event,'exercices')">✏️ Exercices guidés</button>
-  <button class="nav-btn" onclick="showSection(event,'graphiques')">📊 Graphiques</button>
+  <button class="nav-btn" data-math-only onclick="showSection(event,'graphiques')">📊 Graphiques</button>
   <button class="nav-btn" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
   <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
   <button class="nav-btn" onclick="showSection(event,'mesexos')">🛠️ Mes exercices</button>
@@ -217,6 +223,15 @@
   <button class="nav-btn" onclick="showSection(event,'journal')">📓 Journal</button>
   <button class="nav-btn" onclick="showSection(event,'profil')">👤 Mon profil</button>
 </nav>
+
+<div id="subject-prep" class="subject-prep" style="display:none;">
+  <div class="subject-prep-card">
+    <div class="subject-prep-emoji" id="prep-emoji">✍️</div>
+    <h2 id="prep-title">Français — en préparation</h2>
+    <p class="subject-prep-text">Cette matière arrive bientôt ! 📚<br>Le cadre est prêt : dès que les <strong>photos des cours</strong> sont ajoutées, tu auras ici le cours, les flashcards, le quiz et la fiche de révision — comme en maths.</p>
+    <button class="subject-prep-btn" onclick="setSubject('maths')">← Revenir aux Maths</button>
+  </div>
+</div>
 
 <div id="synthese" class="section active"><!-- contenu chargé depuis content.js --></div>
 
@@ -240,18 +255,6 @@
         <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">h</label><input type="number" id="cercle-h" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
         <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">k</label><input type="number" id="cercle-k" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
         <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">R</label><input type="number" id="cercle-r" value="3" min="0.1" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-      </div>
-    </div>
-
-    <!-- PARABOLE -->
-    <div style="background:var(--bg-card); border:1px solid rgba(52,211,153,0.3); border-radius:20px; padding:1.5rem; box-shadow:0 0 30px rgba(52,211,153,0.1);">
-      <h3 style="font-size:17px; font-weight:700; color:var(--color-parabole); margin-bottom:1rem;">🟢 Parabole</h3>
-      <canvas id="graph-parabole" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
-      <div id="parabole-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-parabole); font-family:'Courier New',monospace; text-align:center; background:rgba(52,211,153,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">a</label><input type="number" id="parabole-a" value="1" step="0.25" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">b</label><input type="number" id="parabole-b" value="0" step="0.5" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">c</label><input type="number" id="parabole-c" value="0" step="0.5" oninput="drawParabole()" style="width:58px; padding:6px 8px; border:1px solid rgba(52,211,153,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
       </div>
     </div>
 
@@ -297,7 +300,6 @@
       <button onclick="filterFlashcards('all')" id="fc-filter-all" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:var(--color-nav); color:#fff; font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">Toutes</button>
       <button onclick="filterFlashcards('vecteur')" id="fc-filter-vecteur" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:transparent; color:var(--color-nav); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🧭 Vecteurs</button>
       <button onclick="filterFlashcards('cercle')" id="fc-filter-cercle" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-cercle); background:transparent; color:var(--color-cercle); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🔵 Cercle</button>
-      <button onclick="filterFlashcards('parabole')" id="fc-filter-parabole" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-parabole); background:transparent; color:var(--color-parabole); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🟢 Parabole</button>
       <button onclick="filterFlashcards('droite')" id="fc-filter-droite" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🟡 Droite</button>
     </div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
@@ -333,13 +335,12 @@
   <div id="quiz-start-screen" style="text-align:center; padding:3rem 1rem;">
     <div style="font-size:64px; margin-bottom:1rem;">🧠</div>
     <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
-    <p style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur le cercle, la parabole et les droites.</p>
+    <p style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur les vecteurs, le cercle et les droites.</p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:2rem;">
       <select id="chapter-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
         <option value="all">Tous les chapitres</option>
         <option value="vecteur">Vecteurs</option>
         <option value="cercle">Cercle</option>
-        <option value="parabole">Parabole</option>
         <option value="droite">Droites</option>
       </select>
       <select id="difficulty-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
@@ -399,7 +400,6 @@
       <select id="exo-theme" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
         <option value="vecteur">🧭 Vecteurs (thème 1)</option>
         <option value="cercle">🔵 Cercle</option>
-        <option value="parabole">🟢 Parabole</option>
         <option value="droite">🟡 Droites</option>
       </select>
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Question</label>
@@ -546,12 +546,9 @@
     <div id="focus-selection">
       <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">🎯 Mode Focus</h2>
       <p style="font-size:15px; color:var(--text-secondary); margin-bottom:2rem;">Concentre-toi sur un seul chapitre, carte par carte, sans distraction.</p>
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:500px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:500px; margin:0 auto;">
         <button onclick="startFocus('cercle')" style="background:rgba(96,165,250,0.15); border:2px solid var(--color-cercle); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-cercle); font-weight:700; font-size:16px; transition:all 0.2s;">
           🔵<br>Cercle<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
-        </button>
-        <button onclick="startFocus('parabole')" style="background:rgba(52,211,153,0.15); border:2px solid var(--color-parabole); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-parabole); font-weight:700; font-size:16px; transition:all 0.2s;">
-          📈<br>Parabole<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
         </button>
         <button onclick="startFocus('droite')" style="background:rgba(251,191,36,0.15); border:2px solid var(--color-droite); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-droite); font-weight:700; font-size:16px; transition:all 0.2s;">
           📐<br>Droites<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
@@ -620,6 +617,7 @@
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>
   <script src="generator.js"></script>
+  <script src="subjects.js"></script>
   <script src="backtotop.js"></script>
   <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
   <script>

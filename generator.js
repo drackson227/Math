@@ -1,6 +1,6 @@
 /* Générateur d'exercices aléatoires — Maths GR2
-   7 types (distance, milieu, composantes+norme, cercle canonique/développé, pente,
-   sommet parabole). Valeurs aléatoires à résultats « propres » (entiers / triplets
+   6 types (distance, milieu, composantes+norme, cercle canonique/développé, pente).
+   Valeurs aléatoires à résultats « propres » (entiers / triplets
    de Pythagore). Correction pas-à-pas révélée à la demande. */
 (function () {
   'use strict';
@@ -110,22 +110,6 @@
           'Simplification : \\(m=' + m + '\\)'
         ]
       };
-    },
-    sommet_parabole: function () {
-      var A = rinz(-3, 3), al = ri(-6, 6), be = ri(-6, 6);
-      var Astr = A === 1 ? '' : (A === -1 ? '-' : A);
-      var eq = 'y = ' + Astr + fac('x', al) + '^2' + term(be, '');
-      return {
-        chapter: 'parabole',
-        title: 'Sommet d’une parabole',
-        statement: 'Donne le sommet et le sens d’ouverture de \\(' + eq + '\\).',
-        answer: '\\(S(' + al + '\\,;\\,' + be + ')\\) , ouverture vers le ' + (A > 0 ? 'haut' : 'bas'),
-        steps: [
-          'Forme canonique : \\(y=A(x-\\alpha)^2+\\beta\\) → sommet \\(S(\\alpha\\,;\\,\\beta)\\).',
-          'On lit : \\(\\alpha=' + al + '\\), \\(\\beta=' + be + '\\) donc \\(S(' + al + '\\,;\\,' + be + ')\\).',
-          'Signe de \\(A=' + A + '\\) : ' + (A > 0 ? '\\(A>0\\) → ouverture vers le haut.' : '\\(A<0\\) → ouverture vers le bas.')
-        ]
-      };
     }
   };
 
@@ -135,8 +119,7 @@
     { id: 'composantes', label: '➡️ Composantes' },
     { id: 'cercle_canonique', label: '🔵 Cercle (canonique)' },
     { id: 'cercle_developpe', label: '🔵 Cercle (développé)' },
-    { id: 'pente', label: '📈 Pente' },
-    { id: 'sommet_parabole', label: '🟢 Sommet parabole' }
+    { id: 'pente', label: '📈 Pente' }
   ];
 
   var currentType = 'random';

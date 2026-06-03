@@ -3,7 +3,7 @@
    Ce fichier NE CHANGE JAMAIS → ne pas envoyer à Claude
    ============================================================ */
 
-const allQuestions = [
+let allQuestions = [
   {q: "Que représente le vecteur \\(\\vec{AB}\\) ?", opts: ["La translation qui amène A sur B", "Le segment [AB]", "La droite (AB)", "Le milieu de [AB]"], ans: 0, chapter: "vecteur", difficulty: "facile", exp: "Un vecteur \\(\\vec{AB}\\) représente la translation de A vers B (segment orienté)."},
   {q: "Relation de Chasles : \\(\\vec{AB}+\\vec{BC}\\) = ?", opts: ["\\(\\vec{AC}\\)", "\\(\\vec{CA}\\)", "\\(\\vec{BA}\\)", "\\(\\vec{AB}\\)"], ans: 0, chapter: "vecteur", difficulty: "facile",
     exp: "\\(\\vec{AB}+\\vec{BC}=\\vec{AC}\\) : l'extrémité du 1er (B) est l'origine du 2e (B), elles s'« annulent », il reste le tout premier départ (A) et la toute dernière arrivée (C).",
@@ -85,61 +85,6 @@ const allQuestions = [
     exp: "Le rayon est \\(R=\\dfrac{\\sqrt{a^2+b^2-4c}}{2}\\). Pour que la racine existe et donne un vrai cercle, il faut que ce qui est <strong>sous la racine soit positif</strong> : \\(a^2+b^2-4c>0\\).",
     formula: "\\(a^2+b^2-4c>0\\)  (sinon : =0 → un point, <0 → rien)",
     simple: "On ne peut pas prendre la racine carrée d'un nombre négatif. Comme le rayon contient \\(\\sqrt{a^2+b^2-4c}\\), il faut que ce nombre soit positif, sinon le cercle n'existe pas."},
-  {q: "Le sommet d'une parabole de foyer F(2;6) et directrice y=2 est :", opts: ["S(2;4)", "S(2;8)", "S(4;2)", "S(2;2)"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "Le sommet est <strong>pile au milieu</strong> entre le foyer et la directrice.<br>Le foyer est en hauteur \\(y=6\\), la directrice en hauteur \\(y=2\\).<br>\\(y_S=\\dfrac{6+2}{2}=4\\)<br>Le sommet garde le même x que le foyer : \\(x_S=2\\).<br>Donc \\(S(2\\,;\\,4)\\).",
-    formula: "\\(y_S=\\dfrac{y_F + k}{2}\\)  (k = hauteur de la directrice)  ·  \\(x_S=x_F\\)",
-    simple: "Imagine le foyer (un point) et la directrice (une ligne horizontale). Le sommet de la parabole est juste <strong>au milieu</strong> des deux, à mi-hauteur. Le foyer est à 6, la ligne à 2 : le milieu est à \\((6+2)/2=4\\). Et le sommet est droit en dessous du foyer, donc même x."},
-  {q: "Pour une parabole de sommet S(−1;3) et directrice y=1, le foyer est :", opts: ["F(−1;5)", "F(−1;1)", "F(1;5)", "F(−1;−1)"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "Le sommet est au milieu du foyer et de la directrice. On connaît le sommet (\\(y=3\\)) et la directrice (\\(y=1\\)), on cherche le foyer.<br>Distance sommet → directrice : \\(3-1=2\\).<br>Le foyer est à la même distance, mais de l'autre côté du sommet :<br>\\(y_F=3+2=5\\)<br>Même x que le sommet : \\(x_F=-1\\).<br>Donc \\(F(-1\\,;\\,5)\\).",
-    formula: "\\(y_F = 2\\,y_S - k\\)  (le foyer est le symétrique de la directrice par rapport au sommet)  ·  \\(x_F=x_S\\)",
-    simple: "Le sommet est <strong>pile au milieu</strong> entre la directrice (la ligne) et le foyer (le point). Donc le foyer est aussi loin du sommet que la ligne, mais de l'<strong>autre côté</strong>. La ligne est 2 crans en dessous du sommet (3 → 1), donc le foyer est 2 crans au-dessus : \\(3+2=5\\). On dit que le foyer est le « symétrique » de la directrice par rapport au sommet = son reflet de l'autre côté."},
-  {q: "Dans f(x) = A(x−α)² + β, le sommet est :", opts: ["S(α ; β)", "S(−α ; β)", "S(α ; −β)", "S(−α ; −β)"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "La forme canonique \\(f(x)=A(x-\\alpha)^2+\\beta\\) donne le sommet <strong>directement</strong> : \\(S(\\alpha\\,;\\,\\beta)\\). Attention : dans \\((x-\\alpha)\\), le \\(\\alpha\\) est ce qu'on <strong>soustrait</strong> à x.",
-    formula: "\\(f(x)=A(x-\\alpha)^2+\\beta \\Rightarrow S(\\alpha\\,;\\,\\beta)\\)",
-    simple: "C'est l'avantage de la forme canonique : le sommet se lit sans calcul. Le nombre dans la parenthèse (avec son signe inversé) donne le x du sommet, et le nombre tout seul donne le y. Ex : \\((x-3)^2+5\\) → sommet (3 ; 5)."},
-  {q: "Si A > 0 dans f(x) = A(x−α)² + β, la parabole :", opts: ["S'ouvre vers le haut", "S'ouvre vers le bas", "Est horizontale", "Est verticale"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Le signe de A donne le sens d'ouverture. \\(A>0\\) → la parabole <strong>s'ouvre vers le haut</strong> (comme un bol).",
-    formula: "\\(A>0\\) → vers le haut 🙂  ·  \\(A<0\\) → vers le bas 🙁",
-    simple: "Regarde juste le signe du nombre A devant. Positif → la parabole sourit (vers le haut). Négatif → elle fait la moue (vers le bas)."},
-  {q: "L'axe de symétrie d'une parabole de foyer F(a;b) est :", opts: ["La droite x = a", "La droite y = b", "La droite x = b", "La droite y = a"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "L'axe de symétrie est la droite <strong>verticale</strong> \\(x=a\\) (a = abscisse du foyer). La parabole est symétrique de part et d'autre de cette droite.",
-    formula: "Axe de symétrie : \\(x=a\\)  (= abscisse du foyer et du sommet)",
-    simple: "Imagine plier la parabole en deux : le pli est une droite verticale qui passe par le foyer et le sommet. Comme elle est verticale, son équation est « x = un nombre », ici \\(x=a\\)."},
-  {q: "Le sommet est toujours à mi-chemin entre :", opts: ["Le foyer et la directrice", "Deux foyers", "Deux directrices", "L'origine et le foyer"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Le sommet est le point de la parabole le plus proche de la directrice ; il est <strong>équidistant</strong> du foyer et de la directrice, donc pile au milieu des deux.",
-    formula: "Sommet = milieu entre foyer F et directrice",
-    demo: "parabole_geo",
-    simple: "Une parabole a un point (le foyer) et une ligne (la directrice). Le sommet est juste au milieu des deux. C'est le point « bas » (ou « haut ») de la courbe."},
-  {q: "L'équation cartésienne d'une parabole vient de :", opts: ["distance(P,F) = distance(P,d)", "distance(P,F) = 2·distance(P,d)", "distance(P,F) + distance(P,d) = 0", "distance(P,F) × distance(P,d) = 1"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "<strong>Définition</strong> de la parabole : l'ensemble des points P aussi loin du foyer F que de la directrice d. On écrit \\(\\text{dist}(P,F)=\\text{dist}(P,d)\\), puis on développe pour obtenir l'équation.",
-    formula: "\\(\\text{dist}(P,F)=\\text{dist}(P,\\text{directrice})\\)",
-    demo: "parabole_geo",
-    simple: "Une parabole, c'est tous les points qui sont à égale distance d'un point (le foyer) et d'une ligne (la directrice). Cette idée d'égalité, c'est ce qui donne l'équation. Regarde l'animation : un point glisse et les deux distances restent égales."},
-  {q: "Pour f(x) = 2(x−3)² + 5, le sommet est :", opts: ["S(3 ; 5)", "S(−3 ; 5)", "S(3 ; −5)", "S(−3 ; −5)"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "On lit dans \\(f(x)=A(x-\\alpha)^2+\\beta\\) :<br>\\(\\alpha=3\\) (signe inversé dans la parenthèse)<br>\\(\\beta=5\\)<br>Donc \\(S(3\\,;\\,5)\\).",
-    formula: "\\(f(x)=A(x-\\alpha)^2+\\beta \\Rightarrow S(\\alpha\\,;\\,\\beta)\\)",
-    simple: "Le sommet se lit direct : le nombre dans la parenthèse avec le signe inversé (\\(x-3\\) → 3), et le nombre tout seul (5). Le 2 devant ne change pas le sommet, juste l'ouverture."},
-  {q: "Pour f(x) = 2(x−3)² + 5, l'ouverture est :", opts: ["Vers le haut (A > 0)", "Vers le bas (A > 0)", "Vers la gauche", "Vers la droite"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Le nombre devant est \\(A=2>0\\), donc la parabole <strong>s'ouvre vers le haut</strong>.",
-    formula: "\\(A>0\\) → vers le haut  ·  \\(A<0\\) → vers le bas",
-    simple: "Tu regardes le signe du 2 devant la parenthèse : positif → vers le haut (un bol qui sourit)."},
-  {q: "La relation entre A et les paramètres foyer/directrice est :", opts: ["\\(A = \\dfrac{1}{2(b-k)}\\)", "\\(A = 2(b-k)\\)", "\\(A = \\dfrac{b-k}{2}\\)", "\\(A = b-k\\)"], ans: 0, chapter: "parabole", difficulty: "difficile",
-    exp: "La relation qui lie le coefficient A au foyer F(a ; b) et à la directrice y = k est :<br>\\(A = \\dfrac{1}{2(b-k)}\\)<br>(\\(b-k\\) = écart vertical entre le foyer et la directrice).",
-    formula: "\\(A = \\dfrac{1}{2(b-k)}\\)  ·  F(a;b), directrice y=k",
-    simple: "Plus le foyer et la directrice sont proches, plus la parabole est « serrée » (A grand). Cette formule relie les deux : A dépend de l'écart \\(b-k\\) entre la hauteur du foyer et celle de la directrice."},
-  {q: "Si le sommet est S(α;β) et la directrice y=k, le foyer est :", opts: ["F(α ; 2β−k)", "F(α ; β−k)", "F(α ; k)", "F(2α ; β)"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "Le sommet est au milieu du foyer et de la directrice. Le foyer est donc le <strong>symétrique de la directrice</strong> par rapport au sommet :<br>\\(y_F = 2\\beta - k\\)<br>et même abscisse : \\(x_F=\\alpha\\). Donc \\(F(\\alpha\\,;\\,2\\beta-k)\\).",
-    formula: "\\(F(\\alpha\\,;\\,2\\beta-k)\\)  (symétrique de la directrice / sommet)",
-    simple: "Le sommet est pile au milieu entre la ligne (directrice, hauteur k) et le point (foyer). Le foyer est donc « de l'autre côté » du sommet, à la même distance. La formule \\(2\\beta-k\\) calcule ce reflet : on part de la hauteur du sommet et on ajoute l'écart."},
-  {q: "Si le sommet est S(α;β) et le foyer F(a;b), la directrice est :", opts: ["y = 2β−b", "y = β−b", "y = b", "y = 2b−β"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "Symétrie inverse de la question précédente : la <strong>directrice est le symétrique du foyer</strong> par rapport au sommet :<br>\\(y = 2\\beta - b\\).",
-    formula: "Directrice : \\(y = 2\\beta - b\\)  (symétrique du foyer / sommet)",
-    simple: "Même idée que pour le foyer, mais à l'envers : la directrice (ligne) est le reflet du foyer (point) de l'autre côté du sommet. On calcule pareil : \\(2\\beta - b\\)."},
-  {q: "Une parabole est définie par :", opts: ["Un foyer et une directrice", "Deux foyers", "Deux directrices", "Un centre et un rayon"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Une parabole est entièrement déterminée par <strong>un foyer</strong> (un point) et <strong>une directrice</strong> (une droite) : c'est l'ensemble des points à égale distance des deux.",
-    formula: "Parabole = points équidistants d'un foyer F et d'une directrice",
-    demo: "parabole_geo",
-    simple: "Un point + une ligne suffisent à dessiner une parabole. (À ne pas confondre : le cercle, lui, est défini par un centre et un rayon ; deux foyers, ce serait une ellipse.)"},
   {q: "Pour d ≡ 3x − 4y + 5 = 0, le vecteur directeur est :", opts: ["\\(\\vec{u}=\\begin{pmatrix}4\\\\3\\end{pmatrix}\\)", "\\(\\vec{u}=\\begin{pmatrix}3\\\\-4\\end{pmatrix}\\)", "\\(\\vec{u}=\\begin{pmatrix}-4\\\\3\\end{pmatrix}\\)", "\\(\\vec{u}=\\begin{pmatrix}3\\\\4\\end{pmatrix}\\)"], ans: 0, chapter: "droite", difficulty: "intermediaire",
     exp: "On lit \\(a=3\\) et \\(b=-4\\), puis on applique :<br>\\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}=\\begin{pmatrix}-(-4)\\\\3\\end{pmatrix}=\\begin{pmatrix}4\\\\3\\end{pmatrix}\\)",
     formula: "\\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\)  (droite \\(ax+by+c=0\\))",
@@ -201,18 +146,10 @@ const allQuestions = [
     formula: "\\(R = \\dfrac{\\sqrt{a^2+b^2-4c}}{2}\\)  (à partir de \\(x^2+y^2+ax+by+c=0\\))",
     demo: "cercle_carre_combo",
     simple: "Dans l'équation, tu repères les 3 nombres devant x, devant y, et tout seul : ce sont a, b, c. Tu les mets dans la formule du rayon, tu calignes la racine, tu divises par 2. Astuce : utilise le 🧮 Brouillon en bas pour taper \\(√(36+4-24)/2\\)."},
-  {q: "Si S(2;−1) est le sommet d'une parabole et A=3, la forme canonique est :", opts: ["f(x)=3(x−2)²−1","f(x)=3(x+2)²−1","f(x)=3(x−2)²+1","f(x)=−3(x−2)²−1"], ans: 0, chapter: "parabole", difficulty: "intermediaire",
-    exp: "On remplace dans \\(f(x)=A(x-\\alpha)^2+\\beta\\) avec \\(\\alpha=2\\), \\(\\beta=-1\\), \\(A=3\\) :<br>\\(f(x)=3(x-2)^2+(-1)=3(x-2)^2-1\\)",
-    formula: "\\(f(x)=A(x-\\alpha)^2+\\beta\\)  ·  sommet \\(S(\\alpha;\\beta)\\)",
-    simple: "Tu mets le sommet et le A dans la formule. Le x du sommet (2) entre dans la parenthèse avec le signe inversé → \\((x-2)\\). Le y du sommet (−1) se met à la fin → \\(-1\\). Et A=3 devant."},
   {q: "La droite 4x−3y+6=0 a pour pente m =", opts: ["\\(\\dfrac{4}{3}\\)","\\(-\\dfrac{4}{3}\\)","\\(\\dfrac{3}{4}\\)","\\(-\\dfrac{3}{4}\\)"], ans: 0, chapter: "droite", difficulty: "facile",
     exp: "On lit les coefficients de \\(ax+by+c=0\\) :<br>\\(a=4\\)<br>\\(b=-3\\)<br>Puis :<br>\\(m=-\\dfrac{a}{b}=-\\dfrac{4}{-3}=\\dfrac{4}{3}\\)",
     formula: "\\(m=-\\dfrac{a}{b}\\)  (pour une droite écrite \\(ax+by+c=0\\))",
     simple: "💡 <strong>Astuce</strong> : la pente, c'est presque le vecteur directeur \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\), mais écrit en <strong>fraction</strong> (le bas divise le haut) au lieu d'une colonne : \\(m=\\dfrac{a}{-b}=-\\dfrac{a}{b}\\). Donc si tu connais le vecteur directeur, tu connais la pente : tu mets juste le bas du vecteur sous le haut. Attention au signe — il y a bien un moins."},
-  {q: "Pour une parabole f(x)=x²−4x+7, l'abscisse du sommet est :", opts: ["x=2","x=−2","x=4","x=7"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Pour \\(f(x)=ax^2+bx+c\\), ici \\(a=1\\), \\(b=-4\\) :<br>\\(x_S=-\\dfrac{b}{2a}=-\\dfrac{-4}{2(1)}=\\dfrac{4}{2}=2\\)",
-    formula: "\\(x_S=-\\dfrac{b}{2a}\\)  (forme développée \\(ax^2+bx+c\\))",
-    simple: "Quand la parabole est écrite \\(ax^2+bx+c\\) (pas en forme canonique), le x du sommet se calcule avec \\(-\\dfrac{b}{2a}\\). Ici b=−4, a=1 : \\(-\\dfrac{-4}{2}=2\\)."},
   {q: "Un point P est à l'extérieur d'un cercle si :", opts: ["d(P,C) > R","d(P,C) < R","d(P,C) = R","d(P,C) = 0"], ans: 0, chapter: "cercle", difficulty: "facile",
     exp: "On compare la distance \\(d(P,C)\\) (point → centre) au rayon. P est <strong>à l'extérieur</strong> quand il est plus loin que le bord : \\(d(P,C)>R\\).",
     formula: "\\(d(P,C)>R\\) : extérieur · \\(=R\\) : dessus · \\(<R\\) : intérieur",
@@ -226,10 +163,6 @@ const allQuestions = [
     formula: "\\(x^2+bx = \\left(x+\\tfrac{b}{2}\\right)^2 - \\left(\\tfrac{b}{2}\\right)^2\\)",
     demo: "cercle_carre_combo",
     deep: "D'où vient le \\(-1\\) ? Quand tu transformes \\(x^2+2x\\) en carré, tu écris \\((x+1)^2\\). Mais \\((x+1)^2 = x^2+2x+1\\) : il y a un \\(+1\\) en trop ! Donc pour ne rien changer, tu le retires : \\((x+1)^2 - 1\\). Pareil pour y : \\((y-2)^2 = y^2-4y+4\\), il y a un \\(+4\\) en trop, donc \\((y-2)^2 - 4\\). Ensuite tu as \\(-1\\), \\(-4\\) et le \\(-4\\) du départ : tu les fais passer à droite (ils deviennent \\(+1\\), \\(+4\\), \\(+4\\)), ce qui donne \\(1+4+4=9\\). Regarde l'animation pour le voir bouger."},
-  {q: "Pour f(x)=−2(x+1)²+4, la parabole s'ouvre :", opts: ["Vers le bas (A&lt;0)","Vers le haut (A>0)","Vers la gauche","Vers la droite"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "On regarde le signe de A (le nombre devant la parenthèse) :<br>\\(A=-2\\)<br>\\(A<0\\) → la parabole s'ouvre <strong>vers le bas</strong>.",
-    formula: "\\(A>0 \\Rightarrow\\) ouvre vers le <strong>haut</strong> 🙂  ·  \\(A<0 \\Rightarrow\\) ouvre vers le <strong>bas</strong> 🙁",
-    simple: "Regarde juste le nombre devant la parenthèse (ici −2). S'il est <strong>positif</strong>, la parabole sourit (vers le haut). S'il est <strong>négatif</strong>, elle fait la moue (vers le bas). Le reste de la formule (le +1, le +4) ne change PAS le sens d'ouverture, juste la position."},
   {q: "Le cercle x²+y²−4x+6y−12=0 a pour rayon :", opts: ["R = 5","R = 10","R = 25","\\(R=\\sqrt{13}\\)"], ans: 0, chapter: "cercle", difficulty: "difficile",
     exp: "On repère :<br>\\(a=-4\\)<br>\\(b=6\\)<br>\\(c=-12\\)<br>Puis :<br>\\(R=\\dfrac{\\sqrt{a^2+b^2-4c}}{2}=\\dfrac{\\sqrt{16+36+48}}{2}=\\dfrac{\\sqrt{100}}{2}=5\\)",
     formula: "\\(R = \\dfrac{\\sqrt{a^2+b^2-4c}}{2}\\)",
@@ -243,18 +176,6 @@ const allQuestions = [
     exp: "On compare la <strong>distance entre les centres</strong> à la <strong>somme des rayons</strong>.<br>Distance des centres : \\(d=5\\)<br>Somme des rayons : \\(R_1+R_2=2+2=4\\)<br>Comme \\(d>R_1+R_2\\) (\\(5>4\\)), les deux cercles ne se touchent pas : ils sont <strong>extérieurs</strong> l'un à l'autre.",
     formula: "\\(d>R_1+R_2\\) : extérieurs  ·  \\(d=R_1+R_2\\) : tangents (1 point)  ·  \\(d<R_1+R_2\\) : sécants (2 points)",
     deep: "Imagine deux ronds. Pour savoir comment ils se placent, tu compares 2 nombres :<br>• <strong>d</strong> = la distance entre leurs centres (ici les centres sont en (0;0) et (5;0), donc \\(d=5\\)).<br>• <strong>la somme des rayons</strong> = \\(2+2=4\\) : c'est la portée maximale pour qu'ils se touchent.<br>Si d est <strong>plus grand</strong> que cette somme, les ronds sont trop loin → ils ne se touchent pas du tout = <strong>extérieurs</strong>. S'ils sont à égalité, ils se touchent juste (tangents). Si d est plus petit, ils se chevauchent (sécants, 2 points communs). Ici \\(5>4\\) → extérieurs."},
-  {q: "Le sommet de la parabole y = 2x² − 8x + 5 est :", opts: ["S(2 ; −3)","S(−2 ; −3)","S(2 ; 3)","S(2 ; 5)"], ans: 0, chapter: "parabole", difficulty: "difficile",
-    exp: "<strong>Étape 1 — l'abscisse</strong> du sommet (ici a=2, b=−8) :<br>\\(x_S=-\\dfrac{b}{2a}=-\\dfrac{-8}{2(2)}=\\dfrac{8}{4}=2\\)<br><br><strong>Étape 2 — l'ordonnée</strong>, en remplaçant x par 2 dans la fonction :<br>\\(y_S=2(2)^2-8(2)+5=8-16+5=-3\\)<br><br>Donc \\(S(2\\,;\\,-3)\\).",
-    formula: "\\(x_S=-\\dfrac{b}{2a}\\)  puis  \\(y_S=f(x_S)\\)  (pour \\(y=ax^2+bx+c\\))",
-    simple: "Pour une parabole écrite \\(y=ax^2+bx+c\\), le sommet (le point le plus haut ou le plus bas) se trouve en 2 temps. 1) Son x : tu fais \\(-\\dfrac{b}{2a}\\). 2) Son y : tu remets ce x dans la fonction et tu calcules. Ici on trouve x=2, puis en remplaçant on tombe sur y=−3."},
-  {q: "La parabole de sommet S(1;2) passant par A(3;10) a pour coefficient :", opts: ["A = 2","A = 4","A = 3","A = 8"], ans: 0, chapter: "parabole", difficulty: "avance",
-    exp: "On part de la forme canonique avec le sommet S(1;2) :<br>\\(f(x)=A(x-1)^2+2\\)<br>La parabole passe par A(3;10), donc \\(f(3)=10\\) :<br>\\(A(3-1)^2+2=10\\)<br>\\(4A+2=10\\)<br>\\(4A=8 \\Rightarrow A=2\\)",
-    formula: "\\(f(x)=A(x-\\alpha)^2+\\beta\\)  ·  on trouve A avec un point connu",
-    simple: "Tu écris la parabole avec son sommet : \\(A(x-1)^2+2\\). Le A est encore inconnu. Mais tu sais qu'elle passe par le point (3;10), donc tu remplaces x par 3 et f(x) par 10, et tu résous pour trouver A. 🧮 Brouillon dispo."},
-  {q: "La parabole y = −(x+2)² + 4 coupe l'axe des abscisses en :", opts: ["x = 0 et x = −4","x = 2 et x = −2","x = −2 seulement","x = 4 et x = −4"], ans: 0, chapter: "parabole", difficulty: "difficile",
-    exp: "Couper l'axe des abscisses = quand \\(y=0\\) :<br>\\(0=-(x+2)^2+4\\)<br>\\((x+2)^2=4\\)<br>\\(x+2=2\\) ou \\(x+2=-2\\)<br>\\(x=0\\) ou \\(x=-4\\)",
-    formula: "Axe des abscisses : on pose \\(y=0\\) et on résout",
-    simple: "L'axe des abscisses, c'est la ligne horizontale où \\(y=0\\). Tu remplaces donc y par 0 et tu résous. Comme il y a un carré, il y a deux solutions : une avec +2, une avec −2 (n'oublie pas la solution négative !)."},
   {q: "La distance du point P(3;4) à la droite 2x−y+1=0 vaut :", opts: ["\\(\\dfrac{3}{\\sqrt5}=\\dfrac{3\\sqrt5}{5}\\)","\\(\\dfrac{3}{5}\\)","\\(\\sqrt5\\)","3"], ans: 0, chapter: "droite", difficulty: "difficile",
     exp: "On remplace P(3;4) dans la formule (a=2, b=−1, c=1) :<br>\\(d=\\dfrac{|2(3)-4+1|}{\\sqrt{2^2+(-1)^2}}\\)<br>\\(d=\\dfrac{|6-4+1|}{\\sqrt{5}}=\\dfrac{3}{\\sqrt5}=\\dfrac{3\\sqrt5}{5}\\)",
     formula: "\\(d=\\dfrac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}\\)",
@@ -269,7 +190,7 @@ const allQuestions = [
     formula: "\\(m=-\\dfrac{a}{b}\\) pour chaque droite, puis test \\(m_1\\cdot m_2=-1\\)",
     simple: "Chaque droite est en \\(ax+by+c=0\\), donc tu trouves sa pente avec \\(-\\dfrac{a}{b}\\). Tu obtiens \\(-\\frac23\\) et \\(\\frac32\\). Tu les multiplies : ça fait −1 → angle droit, perpendiculaires."},
 
-  // ── Questions supplémentaires (juin 2026) ──
+  // ── Questions supplémentaires (juin 2026) ──,
   {q: "La distance entre A(1 ; 2) et B(4 ; 6) vaut :", opts: ["5", "7", "\\(\\sqrt{7}\\)", "25"], ans: 0, chapter: "cercle", difficulty: "facile",
     exp: "On applique la formule de Pythagore :<br>\\(AB=\\sqrt{(4-1)^2+(6-2)^2}=\\sqrt{9+16}=\\sqrt{25}=5\\)",
     formula: "\\(AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}\\)",
@@ -302,14 +223,6 @@ const allQuestions = [
     exp: "On compare la distance au centre et le rayon : \\(d(O,P)=\\sqrt{5^2+0^2}=5\\). Comme \\(5>4\\), P est <strong>à l'extérieur</strong>.",
     formula: "\\(d(O,P)\\) vs \\(R\\) : > extérieur, = dessus, < intérieur",
     simple: "Tu mesures la distance du point au centre (ici 5) et tu la compares au rayon (4). Plus loin que le rayon = dehors."},
-  {q: "Le sommet de la parabole \\(y=2(x-3)^2+5\\) est :", opts: ["(3 ; 5)", "(−3 ; 5)", "(3 ; −5)", "(2 ; 5)"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Forme canonique \\(y=A(x-\\alpha)^2+\\beta\\) → sommet \\(S(\\alpha\\,;\\,\\beta)=(3\\,;\\,5)\\).",
-    formula: "\\(S(\\alpha\\,;\\,\\beta)\\) dans \\(y=A(x-\\alpha)^2+\\beta\\)",
-    simple: "On lit directement : \\(x-3\\) → α=3 ; le \\(+5\\) à la fin → β=5. Le sommet est (3 ; 5)."},
-  {q: "La parabole \\(y=-3x^2+2x-1\\) :", opts: ["S'ouvre vers le bas", "S'ouvre vers le haut", "Est une droite", "N'a pas de sommet"], ans: 0, chapter: "parabole", difficulty: "facile",
-    exp: "Le coefficient de \\(x^2\\) est \\(A=-3<0\\) → la parabole <strong>s'ouvre vers le bas</strong>.",
-    formula: "\\(A>0\\) : vers le haut · \\(A<0\\) : vers le bas",
-    simple: "Regarde juste le signe devant x². Ici c'est −3, donc négatif → la parabole fait un chapeau (vers le bas)."},
   {q: "La pente de la droite passant par A(1 ; 2) et B(3 ; 8) est :", opts: ["3", "2", "4", "\\(\\tfrac{1}{2}\\)"], ans: 0, chapter: "droite", difficulty: "facile",
     exp: "\\(m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{8-2}{3-1}=\\dfrac{6}{2}=3\\)",
     formula: "\\(m=\\dfrac{y_B-y_A}{x_B-x_A}\\)",
@@ -355,15 +268,6 @@ const learningConcepts = {
     { concept: "Cercle tangent à une droite", keywords: ["tangent à la droite"] },
     { concept: "Position de deux cercles", keywords: ["Deux cercles"] }
   ],
-  parabole: [
-    { concept: "Définition (foyer & directrice)", keywords: ["parabole est définie", "cartésienne d'une parabole", "définie par"] },
-    { concept: "Sommet (forme canonique)", keywords: ["le sommet est", "sommet d'une parabole", "Si S("] },
-    { concept: "Sommet (forme développée)", keywords: ["abscisse du sommet", "sommet de la parabole y"] },
-    { concept: "Sens d'ouverture (signe de A)", keywords: ["s'ouvre", "l'ouverture est", "A > 0"] },
-    { concept: "Axe de symétrie", keywords: ["axe de symétrie"] },
-    { concept: "Foyer / directrice / sommet", keywords: ["le foyer est", "la directrice est", "mi-chemin", "relation entre A"] },
-    { concept: "Intersection avec les axes", keywords: ["coupe l'axe", "passant par"] }
-  ],
   droite: [
     { concept: "Forme explicite y = mx + p", keywords: ["forme explicite", "p représente"] },
     { concept: "Pente d'une droite", keywords: ["pour pente", "a pour pente", "pente de d", "Si m >"] },
@@ -377,7 +281,7 @@ const learningConcepts = {
   ]
 };
 
-const flashcards = [
+let flashcards = [
   {front: "Qu'est-ce qu'un vecteur \\(\\vec{AB}\\) ?", back: "La <strong>translation</strong> qui amène A sur B. C'est un segment <em>orienté</em> : direction, sens et longueur.", chapter: "vecteur"},
   {front: "Les 3 caractéristiques d'un vecteur ?", back: "<strong>Direction</strong> (droite AB), <strong>sens</strong> (de A vers B), <strong>norme</strong> \\(\\|\\vec{AB}\\|\\) (longueur du segment [AB]).", chapter: "vecteur"},
   {front: "Quand deux vecteurs sont-ils égaux ?", back: "Quand ils ont la <strong>même direction</strong>, le <strong>même sens</strong> et la <strong>même norme</strong> (ils définissent la même translation).", chapter: "vecteur"},
@@ -397,35 +301,19 @@ const flashcards = [
   {front: "Quelle est la forme développée d'un cercle ?", back: "$$x^2 + y^2 + ax + by + c = 0$$", chapter: "cercle"},
   {front: "Comment trouver le centre d'un cercle en forme développée ?", back: "$$C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)$$", chapter: "cercle"},
   {front: "Condition d'existence d'un cercle ?", back: "$$a^2 + b^2 - 4c > 0$$", chapter: "cercle"},
-  {front: "Forme canonique d'une parabole ?", back: "$$f(x) = A(x-\\alpha)^2 + \\beta$$", chapter: "parabole"},
-  {front: "Comment trouver le sommet d'une parabole ?", back: "$$S(\\alpha ; \\beta)$$", chapter: "parabole"},
-  {front: "Définition d'une parabole ?", back: "Points équidistants du foyer et de la directrice", chapter: "parabole"},
   {front: "Équation explicite d'une droite ?", back: "$$y = mx + p$$", chapter: "droite"},
   {front: "Condition pour que deux droites soient parallèles ?", back: "$$m_1 = m_2$$ (et $p_1 \\neq p_2$ sinon elles sont confondues)", chapter: "droite"},
   {front: "Condition pour que deux droites soient perpendiculaires ?", back: "$$m \\cdot m' = -1$$", chapter: "droite"},
-  // --- 5 cartes Cercle supplémentaires ---
   {front: "Comment calculer le rayon depuis la forme développée x²+y²+ax+by+c=0 ?", back: "$$R = \\frac{\\sqrt{a^2 + b^2 - 4c}}{2}$$", chapter: "cercle"},
   {front: "Que se passe-t-il si a²+b²−4c = 0 ?", back: "Un seul point : $C\\left(-\\dfrac{a}{2} ; -\\dfrac{b}{2}\\right)$. Pas de cercle.", chapter: "cercle"},
   {front: "Que se passe-t-il si a²+b²−4c &lt; 0 ?", back: "Impossible — aucun point ne satisfait l'équation.", chapter: "cercle"},
   {front: "Comment passer de la forme développée à la forme canonique ?", back: "Compléter le carré pour x et pour y séparément.", chapter: "cercle"},
   {front: "Un cercle de diamètre [AB] : comment trouver centre et rayon ?", back: "Centre = milieu de [AB] ; $R = \\dfrac{|AB|}{2}$", chapter: "cercle"},
-  // --- 5 cartes Parabole supplémentaires ---
-  {front: "Relation entre A (forme canonique) et les paramètres foyer/directrice ?", back: "$$A = \\frac{1}{2(b-k)}$$ où F(a ; b) et directrice y = k", chapter: "parabole"},
-  {front: "Formule du foyer si l'on connaît le sommet S(α;β) et la directrice y=k ?", back: "$$F(\\alpha \\; ; \\; 2\\beta - k)$$", chapter: "parabole"},
-  {front: "Formule de la directrice si l'on connaît le sommet S(α;β) et le foyer F(a;b) ?", back: "$$y = 2\\beta - b$$", chapter: "parabole"},
-  {front: "Que représente A dans f(x) = A(x−α)² + β ?", back: "L'ouverture : A>0 vers le haut, A&lt;0 vers le bas. |A| grand = parabole étroite.", chapter: "parabole"},
-  {front: "Quelle est l'équation de l'axe de symétrie d'une parabole de sommet S(α;β) ?", back: "$$x = \\alpha$$ (droite verticale)", chapter: "parabole"},
-  // --- 5 cartes Droites supplémentaires ---
   {front: "Vecteur directeur de d ≡ ax+by+c=0 ?", back: "$$\\vec{u} = \\begin{pmatrix} -b \\\\ a \\end{pmatrix}$$", chapter: "droite"},
   {front: "Vecteur normal de d ≡ ax+by+c=0 ?", back: "$$\\vec{n} = \\begin{pmatrix} a \\\\ b \\end{pmatrix}$$", chapter: "droite"},
   {front: "Pente d'une droite ax+by+c=0 ?", back: "$$m = -\\dfrac{a}{b}$$", chapter: "droite"},
   {front: "Équation d'une droite passant par \\(A(x_A\\,;y_A)\\) avec pente m ?", back: "$$y - y_A = m(x - x_A)$$", chapter: "droite"},
-  {front: "Distance du point P(xₚ;yₚ) à la droite ax+by+c=0 ?", back: "$$d = \\frac{|ax_P + by_P + c|}{\\sqrt{a^2 + b^2}}$$", chapter: "droite"}
-,
-  {front: "Comment trouver le sommet d'une parabole y = ax² + bx + c ?", back: "$$x_s = \\frac{-b}{2a}, \\quad y_s = a x_s^2 + b x_s + c$$", chapter: "parabole"},
-  {front: "Quand la parabole est-elle ouverte vers le haut ?", back: "Quand $a > 0$. Vers le bas si $a < 0$.", chapter: "parabole"},
-  {front: "Discriminant d'une parabole : que vaut-il ?", back: "$$\\Delta = b^2 - 4ac$$  $\\Delta>0$: 2 zéros · $=0$: 1 · $<0$: aucun", chapter: "parabole"},
-  {front: "Formule pour les zéros de ax² + bx + c = 0 ?", back: "$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$", chapter: "parabole"},
+  {front: "Distance du point P(xₚ;yₚ) à la droite ax+by+c=0 ?", back: "$$d = \\frac{|ax_P + by_P + c|}{\\sqrt{a^2 + b^2}}$$", chapter: "droite"},
   {front: "Condition pour deux droites parallèles ?", back: "Mêmes pentes $m_1 = m_2$ et ordonnées à l'origine différentes.", chapter: "droite"},
   {front: "Condition pour deux droites perpendiculaires ?", back: "$$m_1 \\times m_2 = -1$$", chapter: "droite"},
   {front: "Comment trouver l'intersection de deux droites ?", back: "Résoudre le système $y = m_1 x + p_1$ et $y = m_2 x + p_2$.", chapter: "droite"},
@@ -438,9 +326,8 @@ const flashcards = [
   {front: "Test de colinéarité de \\(\\vec{u}=(x\\,;\\,y)\\) et \\(\\vec{v}=(x'\\,;\\,y')\\) ?", back: "Le déterminant est nul : $$x\\,y' - y\\,x' = 0$$", chapter: "vecteur"},
   {front: "Vecteur normal et vecteur directeur de \\(ax+by+c=0\\) ?", back: "Normal \\(\\vec{n}=(a\\,;\\,b)\\). Directeur \\(\\vec{u}=(-b\\,;\\,a)\\) (perpendiculaire au normal).", chapter: "droite"},
   {front: "Comment savoir si un point est dans / sur / hors d'un cercle ?", back: "Compare \\(d(P,C)\\) au rayon R : si \\(<R\\) intérieur, \\(=R\\) sur le cercle, \\(>R\\) extérieur.", chapter: "cercle"},
-  {front: "Sens d'ouverture d'une parabole \\(y=Ax^2+\\dots\\) ?", back: "\\(A>0\\) → vers le <strong>haut</strong> (U) ; \\(A<0\\) → vers le <strong>bas</strong> (∩).", chapter: "parabole"},
-  {front: "Axe de symétrie d'une parabole de sommet \\(S(\\alpha\\,;\\,\\beta)\\) ?", back: "La droite verticale $$x=\\alpha$$", chapter: "parabole"},
-  {front: "Pente d'une droite à partir de deux points ?", back: "$$m=\\dfrac{y_B-y_A}{x_B-x_A}$$ (variation des y sur variation des x).", chapter: "droite"}];
+  {front: "Pente d'une droite à partir de deux points ?", back: "$$m=\\dfrac{y_B-y_A}{x_B-x_A}$$ (variation des y sur variation des x).", chapter: "droite"}
+];
 
 const focusContent = {
   cercle: [
@@ -459,23 +346,6 @@ const focusContent = {
     {title: "a²+b²−4c &lt; 0", content: "Impossible", note: "Aucun point ne satisfait l'équation"},
     {title: "Forme dév. → canonique", content: "Compléter le carré", note: "En x et en y séparément"},
     {title: "Cercle par diamètre", content: "Centre = milieu [AB]", note: "R = $\\frac{|AB|}{2}$"}
-  ],
-  parabole: [
-    {title: "Définition", content: "Points équidistants du foyer et de la directrice", note: "distance(P,F) = distance(P,d)"},
-    {title: "Équation cartésienne", content: "$$f(x) = \\frac{1}{2(b-k)}(x-a)^2 + \\frac{b+k}{2}$$", note: "F(a;b), directrice y=k"},
-    {title: "Forme canonique", content: "$$f(x) = A(x-\\alpha)^2 + \\beta$$", note: "Sommet S(α;β)"},
-    {title: "Sommet", content: "$$S(a; \\frac{b+k}{2})$$", note: "Le sommet est le point le plus bas (A>0) ou le plus haut (A&lt;0) de la parabole. Il se trouve exactement à mi-chemin entre le foyer F(a;b) et la directrice y=k."},
-    {title: "Ouverture", content: "A > 0 : vers le haut", note: "Si A>0 la parabole forme un ∪ (ouverte vers le haut). Si A&lt;0 elle forme un ∩ (ouverte vers le bas). Plus |A| est grand, plus la parabole est étroite et pincée."},
-    {title: "Axe de symétrie", content: "x = a", note: "L'axe x=a est une droite verticale qui passe par le foyer et le sommet. La parabole est parfaitement symétrique par rapport à cet axe."},
-    {title: "Foyer depuis sommet", content: "$$F(\\alpha; 2\\beta-k)$$", note: "Si sommet S(α;β) et directrice y=k"},
-    {title: "Directrice depuis sommet", content: "y = 2β-b", note: "Si sommet S(α;β) et foyer F(a;b)"},
-    {title: "Exemple", content: "f(x) = 2(x-3)² + 5", note: "Ici A=2>0 donc ouverture vers le haut. Le sommet S(3;5) est le point le plus bas. L'axe de symétrie est x=3."},
-    {title: "Rappel", content: "$A = \\frac{1}{2(b-k)}$", note: "Relation entre A et paramètres"},
-    {title: "A et les paramètres", content: "$$A = \\frac{1}{2(b-k)}$$", note: "F(a;b) et directrice y=k"},
-    {title: "Foyer depuis sommet", content: "$$F(\\alpha ; 2\\beta-k)$$", note: "Sommet S(α;β), directrice y=k"},
-    {title: "Directrice depuis sommet", content: "$$y = 2\\beta - b$$", note: "Sommet S(α;β), foyer F(a;b)"},
-    {title: "Ouverture selon A", content: "A > 0 → haut | A&lt;0 → bas", note: "|A| grand = parabole étroite"},
-    {title: "Axe de symétrie", content: "$$x = \\alpha$$", note: "Droite verticale par le sommet"}
   ],
   droite: [
     {title: "Équation vectorielle", content: "$$\\vec{AP} = k\\vec{u}$$", note: "Paramètre k"},
@@ -507,7 +377,7 @@ const FRAC = (num, den) => `<span class="afrac"><span class="anum">${num}</span>
 // Les tokens passés dans `content` restent animables (chacun garde son data-tid).
 const ROOT = (id, content) => `<span class="aroot" data-tid="${id}rt" data-flip-id="${id}rt"><span class="arad"><svg viewBox="0 0 14 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.8 14 L4 22.5 L7 1.2 L13.5 1.2" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="arootc">${content}</span></span>`;
 
-const DEMOS = {
+let DEMOS = {
   pente: {
     title: "Pente d'une droite par deux points",
     subtitle: "Exemple avec A(1 ; 2) et B(3 ; 8)",
@@ -791,14 +661,5 @@ const DEMOS = {
     ]
   },
 
-  parabole_geo: {
-    type: 'geo',
-    title: "Parabole : foyer et directrice",
-    subtitle: "Tout point de la parabole est à égale distance du foyer et de la directrice",
-    scenes: [
-      { phase: 'intro', brief: "Voici une parabole, son foyer F (point doré) et sa directrice (droite verte)." },
-      { phase: 'slide', brief: "Pour CHAQUE point P de la parabole, distance(P, F) = distance(P, directrice). Regarde P glisser : les deux segments restent toujours égaux.", more: "C'est la propriété fondamentale : la parabole est l'ensemble des points équidistants du foyer et de la directrice." },
-      { phase: 'still', brief: "Cette égalité des deux distances EST la définition de la parabole. C'est de là que vient son équation." }
-    ]
-  }
+
 };

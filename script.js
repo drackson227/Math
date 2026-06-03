@@ -1,6 +1,6 @@
 ﻿/* ============================================================
    Application principale — Maths GR2
-   Géométrie analytique plane : Cercle · Parabole · Droites
+   Géométrie analytique plane : Vecteurs · Cercle · Droites
    ============================================================ */
 
 // Helper sécurisé : attend que MathJax soit prêt avant de typeset
@@ -404,7 +404,7 @@ function answer(qi, chosen) {
   if (chosen === q.ans) {
     score++;
     correctStreak++;
-    data.xp += 10;
+    data.xp += (XP_BY_DIFF[q.difficulty] || 10);
     data.masteredQuestions[q.q] = (data.masteredQuestions[q.q] || 0) + 1;
     // Remove from missed questions if correct
     data.missedQuestions = (data.missedQuestions || []).filter(mq => mq !== q.q);
@@ -657,14 +657,6 @@ function printRevisionSheet() {
       ['Existence', 'a^2+b^2-4c>0'],
       ['Distance point-centre', 'd=\\sqrt{(x_P-x_0)^2+(y_P-y_0)^2}']
     ]) +
-    section('Parabole', '#059669', [
-      ['Forme canonique', 'y=A(x-\\alpha)^2+\\beta'],
-      ['Sommet', 'S(\\alpha\\,;\\,\\beta)'],
-      ['Abscisse sommet (dév.)', 'x_s=-\\tfrac{b}{2a}'],
-      ['Axe de symétrie', 'x=\\alpha'],
-      ['Ouverture', 'A>0:\\text{ haut}\\quad A<0:\\text{ bas}'],
-      ['Zéros', 'x=\\tfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}']
-    ]) +
     section('Droites', '#d97706', [
       ['Forme explicite', 'y=mx+p'],
       ['Pente (2 points)', 'm=\\tfrac{y_B-y_A}{x_B-x_A}'],
@@ -681,14 +673,38 @@ function printRevisionSheet() {
 }
 
 // ── STATS PAR CHAPITRE (écran d'accueil quiz) ──
-var CHAP_LABELS = { vecteur: 'Vecteurs', cercle: 'Cercle', parabole: 'Parabole', droite: 'Droites' };
-var CHAP_ORDER = ['vecteur', 'cercle', 'parabole', 'droite'];
+var CHAP_LABELS = { vecteur: 'Vecteurs', cercle: 'Cercle', droite: 'Droites' };
+var CHAP_ORDER = ['vecteur', 'cercle', 'droite'];
+// XP gagné par bonne réponse selon la difficulté (le classement récompense les questions dures)
+var XP_BY_DIFF = { facile: 5, intermediaire: 10, difficile: 15, avance: 20 };
+// Niveaux de difficulté : poids pour la maîtrise pondérée (une difficile « vaut » plus qu'une facile)
+var DIFFS = [
+  { key: 'facile',        label: 'Facile',   w: 1 },
+  { key: 'intermediaire', label: 'Inter.',   w: 2 },
+  { key: 'difficile',     label: 'Difficile',w: 3 },
+  { key: 'avance',        label: 'Avancé',   w: 4 }
+];
 function _statColor(p) { return p >= 75 ? '#22c55e' : (p >= 50 ? '#f59e0b' : '#ef4444'); }
+// Maîtrise d'un chapitre : on regarde TOUTES les questions du chapitre (pas seulement celles tentées).
+// Une question est « maîtrisée » si réussie au moins une fois. Les difficiles pèsent plus.
+function _chapterMastery(ch, mastered) {
+  var per = {}; DIFFS.forEach(function (d) { per[d.key] = { tot: 0, mas: 0 }; });
+  (typeof allQuestions !== 'undefined' ? allQuestions : []).forEach(function (q) {
+    if (q.chapter !== ch) return;
+    var dk = per[q.difficulty] ? q.difficulty : 'facile';
+    per[dk].tot++;
+    if (mastered[q.q]) per[dk].mas++;
+  });
+  var totW = 0, masW = 0;
+  DIFFS.forEach(function (d) { totW += per[d.key].tot * d.w; masW += per[d.key].mas * d.w; });
+  return { per: per, pct: totW > 0 ? Math.round(masW / totW * 100) : 0 };
+}
 function renderChapterStats() {
   var box = document.getElementById('chapter-stats');
   if (!box) return;
   var data = loadSavedData();
   var cs = data.chapterStats || {};
+  var mastered = data.masteredQuestions || {};
   var done = CHAP_ORDER.filter(function (c) { return cs[c] && cs[c].total > 0; });
   if (!done.length) {
     box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' +
@@ -696,23 +712,34 @@ function renderChapterStats() {
     return;
   }
   var weakest = null, weakPct = 101;
-  var rows = CHAP_ORDER.map(function (c) {
-    var s = cs[c];
-    if (!s || !s.total) return '';
-    var p = Math.round(s.correct / s.total * 100);
-    if (s.total >= 2 && p < weakPct) { weakPct = p; weakest = c; }
-    return '<div class="chap-row"><span class="chap-name">' + CHAP_LABELS[c] + '</span>' +
-      '<span class="chap-bar"><span class="chap-fill" style="width:' + p + '%; background:' + _statColor(p) + ';"></span></span>' +
-      '<span class="chap-pct" style="color:' + _statColor(p) + ';">' + p + '%</span></div>';
+  var rows = CHAP_ORDER.map(function (ch) {
+    if (!cs[ch] || !cs[ch].total) return '';
+    var st = _chapterMastery(ch, mastered);
+    if (st.pct < weakPct) { weakPct = st.pct; weakest = ch; }
+    var subs = DIFFS.map(function (d) {
+      var p = st.per[d.key];
+      if (p.tot === 0) return '';
+      var pc = Math.round(p.mas / p.tot * 100);
+      return '<div class="chap-sub"><span class="chap-subname">' + d.label + '</span>' +
+        '<span class="chap-bar mini"><span class="chap-fill" style="width:' + pc + '%; background:' + _statColor(pc) + ';"></span></span>' +
+        '<span class="chap-subpct">' + p.mas + '/' + p.tot + '</span></div>';
+    }).join('');
+    return '<div class="chap-block">' +
+      '<div class="chap-row"><span class="chap-name">' + CHAP_LABELS[ch] + '</span>' +
+      '<span class="chap-bar"><span class="chap-fill" style="width:' + st.pct + '%; background:' + _statColor(st.pct) + ';"></span></span>' +
+      '<span class="chap-pct" style="color:' + _statColor(st.pct) + ';">' + st.pct + '%</span></div>' +
+      '<div class="chap-subs">' + subs + '</div></div>';
   }).join('');
   var reco;
   if (weakest && weakPct < 75) {
     reco = '<div class="chap-reco">🎯 À réviser en priorité : <strong>' + CHAP_LABELS[weakest] + '</strong> (' + weakPct + '%)' +
       '<button class="chap-revise" onclick="reviseChapter(\'' + weakest + '\')">Réviser ce chapitre →</button></div>';
   } else {
-    reco = '<div class="chap-reco">🌟 Excellent niveau partout, continue comme ça !</div>';
+    reco = '<div class="chap-reco">🌟 Maîtrise complète, bravo ! Tu as réussi des questions de chaque niveau.</div>';
   }
-  box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' + rows + reco + '</div>';
+  box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' +
+    '<p class="chap-help">Barre du haut = maîtrise globale (les questions difficiles comptent plus). En dessous, ta réussite niveau par niveau.</p>' +
+    rows + reco + '</div>';
 }
 function reviseChapter(ch) {
   var sel = document.getElementById('chapter-filter'); if (sel) sel.value = ch;
@@ -1117,8 +1144,7 @@ let formulaBookmarksReady = false;
 const DEMO_FOR_FORMULA = [
   { match: 'développée', id: 'cercle_carre' },
   { match: 'pente', id: 'pente' },
-  { match: 'distance point', id: 'distance' },
-  { match: 'cartésienne', id: 'parabole_geo' }
+  { match: 'distance point', id: 'distance' }
 ];
 function initFormulaBookmarks() {
   const boxes = document.querySelectorAll('#formules .formula-box');
@@ -1441,7 +1467,6 @@ function renderDemoFrame(animate) {
     stage.style.display = 'none';
     canvas.style.display = 'block';
     if (d.geo === 'square') drawCompleteSquareGeo(frame.phase);
-    else drawParaboleGeo(frame.phase);
   } else if (d.type === 'combo') {
     // Calcul animé à GAUCHE + dessin (carré ou cercle) à DROITE, ensemble.
     stage.style.display = '';
@@ -1529,80 +1554,6 @@ function drawDemoFigure(p) {
   const tw = ctx.measureText(lbl).width;
   ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(px + 9, py + 6, tw + 8, 19);
   ctx.fillStyle = '#fca5a5'; ctx.fillText(lbl, px + 13, py + 19);
-}
-
-// Démo géométrique animée : parabole y = x²/(4p), foyer F(0;p), directrice y=−p.
-// Un point P glisse sur la courbe ; on montre que d(P,F) = d(P,directrice).
-function drawParaboleGeo(phase) {
-  const canvas = document.getElementById('demo-canvas');
-  if (!canvas) return;
-  canvas.width = 460; canvas.height = 320;
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const p = 1, scale = 26, ox = W / 2, oy = H - 80;
-  const toPx = (x, y) => [ox + x * scale, oy - y * scale];
-
-  const base = () => {
-    ctx.fillStyle = getThemeColor('--bg-formula', '#0d1117'); ctx.fillRect(0, 0, W, H);
-    // directrice y = -p
-    const dy = toPx(0, -p)[1];
-    ctx.strokeStyle = getThemeColor('--color-parabole', '#34d399'); ctx.lineWidth = 2; ctx.setLineDash([6, 5]);
-    ctx.beginPath(); ctx.moveTo(12, dy); ctx.lineTo(W - 12, dy); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = getThemeColor('--color-parabole', '#34d399'); ctx.font = '12px Inter';
-    ctx.fillText('directrice', W - 88, dy - 6);
-    // parabole
-    ctx.strokeStyle = getThemeColor('--color-nav', '#a78bfa'); ctx.lineWidth = 2.5; ctx.beginPath();
-    let first = true;
-    for (let px = 12; px <= W - 12; px += 2) {
-      const x = (px - ox) / scale, y = x * x / (4 * p), sy = oy - y * scale;
-      if (sy < -10) { first = true; continue; }
-      if (first) { ctx.moveTo(px, sy); first = false; } else ctx.lineTo(px, sy);
-    }
-    ctx.stroke();
-    // foyer
-    const [fx, fy] = toPx(0, p);
-    ctx.fillStyle = getThemeColor('--color-droite', '#fbbf24');
-    ctx.beginPath(); ctx.arc(fx, fy, 5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillText('F', fx + 8, fy - 6);
-  };
-  const drawP = (xVal) => {
-    const yVal = xVal * xVal / (4 * p);
-    const [pxp, pyp] = toPx(xVal, yVal);
-    const [fx, fy] = toPx(0, p);
-    const dy = toPx(0, -p)[1];
-    // segment P→F
-    ctx.strokeStyle = getThemeColor('--color-droite', '#fbbf24'); ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(pxp, pyp); ctx.lineTo(fx, fy); ctx.stroke();
-    // segment P→directrice (vertical)
-    ctx.strokeStyle = getThemeColor('--color-parabole', '#34d399');
-    ctx.beginPath(); ctx.moveTo(pxp, pyp); ctx.lineTo(pxp, dy); ctx.stroke();
-    // point P
-    ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(pxp, pyp, 5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = getThemeColor('--text-primary', '#e2e8f0'); ctx.font = '12px Inter';
-    ctx.fillText('P', pxp + 8, pyp - 6);
-    // distances égales
-    const dPF = Math.hypot(xVal, yVal - p);
-    const dPd = yVal + p;
-    ctx.font = 'bold 13px Inter';
-    ctx.fillStyle = getThemeColor('--color-droite', '#fbbf24'); ctx.fillText('d(P, F) = ' + dPF.toFixed(2), 14, 24);
-    ctx.fillStyle = getThemeColor('--color-parabole', '#34d399'); ctx.fillText('d(P, directrice) = ' + dPd.toFixed(2), 14, 44);
-  };
-
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (phase === 'slide' && !reduce) {
-    let t = -1.4;
-    const loop = () => {
-      const x = 4.2 * Math.sin(t);
-      base(); drawP(x);
-      t += 0.018;
-      demoGeoAnim = requestAnimationFrame(loop);
-    };
-    loop();
-  } else if (phase === 'still' || (phase === 'slide' && reduce)) {
-    base(); drawP(2.6);
-  } else {
-    base();
-  }
 }
 
 // ── DÉMO GÉOMÉTRIQUE « compléter le carré » (modèle des aires) ──
@@ -1776,7 +1727,7 @@ document.addEventListener('keydown', (e) => {
 (function welcomeScreen() {
   var KEY = 'mathsgr2_welcome_seen';
   var slides = [
-    { emoji: '👋', title: 'Bienvenue sur Maths GR2 !', text: 'Ton appli pour réviser la géométrie analytique : cercle, parabole, droites et vecteurs. 100% gratuit.' },
+    { emoji: '👋', title: 'Bienvenue sur Maths GR2 !', text: 'Ton appli pour réviser la géométrie analytique : vecteurs, cercle et droites. 100% gratuit.' },
     { emoji: '📚', title: 'Apprends à ton rythme', text: 'Cours animés, formules clés, méthodes pas-à-pas, flashcards et un générateur d’exercices à l’infini.' },
     { emoji: '🎮', title: 'Teste-toi et amuse-toi', text: 'Quiz, défi du jour, parties à plusieurs et chat mondial. Tu peux même installer l’appli et l’utiliser hors-ligne !' }
   ];
@@ -2063,21 +2014,20 @@ function updateProfile() {
   const chapterSection = document.createElement('div');
   chapterSection.id = 'chapter-mastery-section';
   chapterSection.style.marginTop = '2rem';
-  const chapterCounts = { vecteur: 0, cercle: 0, parabole: 0, droite: 0 };
+  const chapterCounts = { vecteur: 0, cercle: 0, droite: 0 };
   const chapterTotals = {
     vecteur: allQuestions.filter(q => q.chapter === 'vecteur').length,
     cercle: allQuestions.filter(q => q.chapter === 'cercle').length,
-    parabole: allQuestions.filter(q => q.chapter === 'parabole').length,
     droite: allQuestions.filter(q => q.chapter === 'droite').length
   };
   Object.keys(data.masteredQuestions || {}).forEach(questionText => {
     const q = allQuestions.find(q => q.q === questionText);
     if (q && chapterCounts[q.chapter] !== undefined) chapterCounts[q.chapter]++;
   });
-  const chapterColors = { vecteur: 'var(--color-nav)', cercle: 'var(--color-cercle)', parabole: 'var(--color-parabole)', droite: 'var(--color-droite)' };
-  const chapterLabels = { vecteur: '🧭 Vecteurs', cercle: '🔵 Cercle', parabole: '📈 Parabole', droite: '📐 Droites' };
+  const chapterColors = { vecteur: 'var(--color-nav)', cercle: 'var(--color-cercle)', droite: 'var(--color-droite)' };
+  const chapterLabels = { vecteur: '🧭 Vecteurs', cercle: '🔵 Cercle', droite: '📐 Droites' };
   chapterSection.innerHTML = '<h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">📊 Maîtrise par chapitre</h3>';
-  ['vecteur','cercle','parabole','droite'].forEach(ch => {
+  ['vecteur','cercle','droite'].forEach(ch => {
     const pct = chapterTotals[ch] > 0 ? Math.round(chapterCounts[ch] / chapterTotals[ch] * 100) : 0;
     const row = document.createElement('div');
     row.style.marginBottom = '1rem';
@@ -2268,10 +2218,10 @@ function filterFlashcards(chapter) {
   filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
   buildFlashcardQueue();           // re-trie la file par échéance pour le nouveau filtre
   currentFlashcardIndex = 0;
-  ['all','vecteur','cercle','parabole','droite'].forEach(ch => {
+  ['all','vecteur','cercle','droite'].forEach(ch => {
     const btn = document.getElementById('fc-filter-' + ch);
     if (!btn) return;
-    const cols = {all:'var(--color-nav)',vecteur:'var(--color-nav)',cercle:'var(--color-cercle)',parabole:'var(--color-parabole)',droite:'var(--color-droite)'};
+    const cols = {all:'var(--color-nav)',vecteur:'var(--color-nav)',cercle:'var(--color-cercle)',droite:'var(--color-droite)'};
     btn.style.background = ch === chapter ? cols[ch] : 'transparent';
     btn.style.color = ch === chapter ? '#fff' : cols[ch];
   });
@@ -3386,72 +3336,6 @@ function drawCercle() {
   renderGraphEq('cercle-eq', `${hTex} + ${kTex} = ${r}^2 = ${rSquared}`);
 }
 
-// ─── PARABOLE ───
-function drawParabole() {
-  const aRaw = clampInput(document.getElementById('parabole-a').value, 1, -1000, 1000);
-  const a = (aRaw === 0) ? 1 : aRaw; // a=0 ferait une droite, pas une parabole
-  const b = clampInput(document.getElementById('parabole-b').value, 0, -1000, 1000);
-  const c = clampInput(document.getElementById('parabole-c').value, 0, -1000, 1000);
-  const cElP = document.getElementById('graph-parabole');
-  if (cElP && cElP.offsetWidth > 0) { cElP.width = cElP.offsetWidth; cElP.height = Math.round(cElP.offsetWidth * 0.72); }
-  const _parabole = canvasCtx('graph-parabole');
-  if (!_parabole) return;
-  const { ctx, W, H } = _parabole;
-  ctx.clearRect(0, 0, W, H);
-
-  const vx = -b / (2 * a);
-  const vy = a*vx*vx + b*vx + c;
-  const yRange = Math.max(Math.abs(vy) + 8, 10);
-  const xRange = Math.max(Math.abs(vx) + 6, 8);
-  const scaleX = (W - 60) / (xRange * 2);
-  const scaleY = (H - 60) / (yRange * 2);
-  const scale = Math.min(scaleX, scaleY);
-  const ox = W/2 - vx * scale;
-  const oy = H/2 + vy * scale;
-
-  drawGrid(ctx, W, H, ox, oy, scale, '#fff');
-
-  // Draw parabola
-  ctx.beginPath();
-  let first = true;
-  for (let px = 0; px < W; px += 1) {
-    const xVal = (px - ox) / scale;
-    const yVal = a * xVal * xVal + b * xVal + c;
-    const py = oy - yVal * scale;
-    if (py < -H || py > 2*H) { first = true; continue; }
-    if (first) { ctx.moveTo(px, py); first = false; }
-    else ctx.lineTo(px, py);
-  }
-  ctx.strokeStyle = getThemeColor('--color-parabole', '#34d399');
-  ctx.lineWidth = 2.5;
-  ctx.shadowColor = getThemeColor('--color-parabole', '#34d399');
-  ctx.shadowBlur = 8;
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-
-  // Vertex
-  const vpx = ox + vx * scale;
-  const vpy = oy - vy * scale;
-  drawDot(ctx, vpx, vpy, 5, '#ef4444', `S(${Math.round(vx*100)/100} ; ${Math.round(vy*100)/100})`);
-
-  // Axis of symmetry
-  ctx.beginPath();
-  ctx.moveTo(vpx, 0);
-  ctx.lineTo(vpx, H);
-  ctx.strokeStyle = getThemeColor('--color-parabole', '#34d399') + '44';
-  ctx.lineWidth = 1;
-  ctx.setLineDash([6, 4]);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Equation
-  const aStr = a === 1 ? '' : (a === -1 ? '-' : a);
-  const bStr = b === 0 ? '' : (b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`);
-  const cStr = c === 0 ? '' : (c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`);
-  const vxR = Math.round(vx*100)/100, vyR = Math.round(vy*100)/100;
-  renderGraphEq('parabole-eq', `y = ${aStr}x^2${bStr}${cStr} \\quad\\mid\\quad \\text{Sommet } (${vxR}\\,;\\,${vyR})`);
-}
-
 // ─── DROITE ───
 function drawDroite() {
   const m = clampInput(document.getElementById('droite-m').value, 0, -1000, 1000);
@@ -3526,7 +3410,6 @@ function drawDroite() {
 const EXO_THEMES = {
   vecteur:  { label: '🧭 Vecteurs',  color: 'var(--color-nav)' },
   cercle:   { label: '🔵 Cercle',    color: 'var(--color-cercle)' },
-  parabole: { label: '🟢 Parabole',  color: 'var(--color-parabole)' },
   droite:   { label: '🟡 Droites',   color: 'var(--color-droite)' }
 };
 
@@ -3642,7 +3525,6 @@ function closeExoReview() {
 const PROG_CHAP = {
   vecteur:  { label: '🧭 Vecteurs',  color: 'var(--color-nav)' },
   cercle:   { label: '🔵 Cercle',    color: 'var(--color-cercle)' },
-  parabole: { label: '🟢 Parabole',  color: 'var(--color-parabole)' },
   droite:   { label: '🟡 Droites',   color: 'var(--color-droite)' }
 };
 
@@ -3742,23 +3624,18 @@ function reviseChapter(chapter) {
 let graphsInitialized = false;
 function initGraphs() {
   drawCercle();
-  drawParabole();
   drawDroite();
   if (graphsInitialized) return; // Prevent listener accumulation on repeat visits
   graphsInitialized = true;
   // B5 — redraw on window resize so canvases stay crisp
   window.addEventListener('resize', () => {
     if (document.getElementById('graphiques').classList.contains('active')) {
-      drawCercle(); drawParabole(); drawDroite();
+      drawCercle(); drawDroite();
     }
   });
   ['cercle-h','cercle-k','cercle-r'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') drawCercle(); });
-  });
-  ['parabole-a','parabole-b','parabole-c'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') drawParabole(); });
   });
   ['droite-m','droite-p'].forEach(id => {
     const el = document.getElementById(id);
