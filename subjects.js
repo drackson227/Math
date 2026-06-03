@@ -88,6 +88,7 @@
     try { if (typeof buildFlashcardQueue === 'function') buildFlashcardQueue(); } catch (_) {}
     try { if (typeof loadFlashcard === 'function') loadFlashcard(); } catch (_) {}
     try { if (typeof genInit === 'function') genInit(); } catch (_) {}
+    try { if (typeof window.mountAnswerSheets === 'function') window.mountAnswerSheets(); } catch (_) {}
     try { if (typeof renderChapterStats === 'function') renderChapterStats(); } catch (_) {}
     try { if (typeof updateBestScoreDisplay === 'function') updateBestScoreDisplay(); } catch (_) {}
   }

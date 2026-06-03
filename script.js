@@ -49,7 +49,7 @@ function loadSavedData() {
     streak: 0,
     lastDate: null,
     xp: 0,
-    level: 'Apprenti géomètre',
+    level: 'Apprenti',
     badges: [],
     calendar: {},
     wrongQuestions: [],
@@ -767,7 +767,7 @@ function updateLevel(data) {
     data.level = 'Analyste';
     if (!data.badges.includes('Analyste')) data.badges.push('Analyste');
   } else {
-    data.level = 'Apprenti géomètre';
+    data.level = 'Apprenti';
   }
 }
 
@@ -1943,6 +1943,8 @@ function updateProfile() {
   if (oldChart) oldChart.remove();
   const oldXpSection = document.getElementById('xp-section');
   if (oldXpSection) oldXpSection.remove();
+  const oldBreakdown = document.getElementById('subject-breakdown');
+  if (oldBreakdown) oldBreakdown.remove();
   
   const statsData = [
     { id: 'total-quizzes', value: data.totalQuizzes || 0, label: 'Quiz complétés' },
@@ -1950,7 +1952,7 @@ function updateProfile() {
     { id: 'mastered-questions', value: Object.keys(data.masteredQuestions || {}).length, label: 'Questions maîtrisées' },
     { id: 'current-streak', value: data.streak || 0, label: 'Jours consécutifs' },
     { id: 'xp-total', value: data.xp || 0, label: 'XP Total' },
-    { id: 'level-display', value: data.level || 'Apprenti géomètre', label: 'Niveau' },
+    { id: 'level-display', value: data.level || 'Apprenti', label: 'Niveau' },
     { id: 'pomodoros-completed', value: (data.pomodorosCompleted || 0) + ' 🍅', label: 'Pomodoros' }
   ];
   statsData.forEach(s => {
@@ -1972,7 +1974,7 @@ function updateProfile() {
   const nextLevel = data.xp >= 300 ? 'Max' : data.xp >= 100 ? '300 XP' : '100 XP';
   xpSection.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-      <span style="font-size:14px; color:var(--text-secondary);">⚡ Progression — ${data.level || 'Apprenti géomètre'}</span>
+      <span style="font-size:14px; color:var(--text-secondary);">⚡ Progression — ${data.level || 'Apprenti'}</span>
       <span style="font-size:13px; color:var(--color-nav);">${data.xp || 0} XP → ${nextLevel}</span>
     </div>
     <div style="height:8px; background:var(--border-subtle); border-radius:4px; overflow:hidden;">
@@ -1980,6 +1982,38 @@ function updateProfile() {
     </div>
   `;
   document.querySelector('.stats-grid').after(xpSection);
+
+  // Progression par matière (les questions de chaque matière réussies au moins une fois)
+  const mastered = data.masteredQuestions || {};
+  const subjRows = [];
+  if (window.SUBJECTS) {
+    Object.keys(window.SUBJECTS).forEach(key => {
+      const s = window.SUBJECTS[key];
+      const qs = s && s.content && s.content.questions;
+      if (!s.ready || !qs || !qs.length) return;
+      let done = 0;
+      qs.forEach(q => { if ((mastered[q.q] || 0) >= 1) done++; });
+      subjRows.push({ icon: s.icon || '📘', label: s.label || key, done, total: qs.length });
+    });
+  }
+  if (subjRows.length) {
+    const bd = document.createElement('div');
+    bd.id = 'subject-breakdown';
+    bd.style.cssText = 'margin-bottom:2rem;';
+    bd.innerHTML = '<h3 style="font-size:20px; font-weight:700; margin-bottom:1rem;">📚 Progression par matière</h3>' +
+      subjRows.map(r => {
+        const pct = r.total ? Math.round(r.done / r.total * 100) : 0;
+        return '<div style="margin-bottom:0.85rem;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:14px;">' +
+            '<span style="font-weight:600; color:var(--text-primary);">' + r.icon + ' ' + r.label + '</span>' +
+            '<span style="color:var(--text-secondary); font-size:13px;">' + r.done + ' / ' + r.total + ' · ' + pct + '%</span>' +
+          '</div>' +
+          '<div style="height:9px; background:var(--border-subtle); border-radius:5px; overflow:hidden;">' +
+            '<div style="width:' + pct + '%; height:100%; background:linear-gradient(90deg, var(--color-cercle), var(--color-nav)); border-radius:5px; transition:width 0.6s ease;"></div>' +
+          '</div></div>';
+      }).join('');
+    xpSection.after(bd);
+  }
 
   // Badges display
   const badgesSectionNew = document.createElement('div');

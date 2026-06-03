@@ -72,6 +72,39 @@
         <div class="simple-exp-content">La <strong>mole</strong> est juste une « grande quantité » d'atomes/molécules (un peu comme « une douzaine » = 12, sauf qu'une mole = 6,02·10²³). <strong>m = n·M</strong> : si tu connais le nombre de moles (n) et la masse d'une mole (M, lue dans le tableau périodique), tu trouves la masse totale. <strong>PV = nRT</strong> relie pression, volume et quantité d'un gaz : c'est utile dès qu'un exercice parle de litres de gaz. ⚠️ La température va toujours en <strong>kelvins</strong> (ajoute 273 aux °C).</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>Résoudre un problème stœchiométrique (méthode du tableau)</h2>
+      <p>Le cœur du chapitre : « quelle masse de B faut-il / se forme-t-il ? ». On s'appuie sur la relation <strong>n = m / M</strong> (quantité de matière = masse ÷ masse molaire) et une <strong>méthode en tableau</strong>.</p>
+      <ol style="line-height:2;">
+        <li><strong>Écrire</strong> l'équation chimique <strong>pondérée</strong>.</li>
+        <li><strong>Lecture molaire</strong> : noter les coefficients, et placer les données (m, M) dans un tableau (une colonne par composé).</li>
+        <li><strong>n initial</strong> de chaque composé : n = m / M.</li>
+        <li><strong>n final</strong> : on fait réagir en respectant les proportions de l'équation (le réactif s'épuise, le produit apparaît).</li>
+        <li><strong>Résolution</strong> : m = n · M pour la grandeur cherchée.</li>
+      </ol>
+      <div class="key-rule"><div class="formula-main">n = m / M &nbsp;&nbsp;↔&nbsp;&nbsp; m = n · M</div></div>
+      <p><strong>Exemple — Fe + S → FeS (1 : 1 : 1).</strong> Pour <strong>100 g de fer</strong> (M = 55,86) : n = 100 / 55,86 = <strong>1,79 mol</strong>. Proportions 1:1 → 1,79 mol de soufre nécessaire → m = 1,79 · 32,06 = <strong>57,4 g de S</strong> ; et 1,79 mol de FeS se forment → m = 1,79 · 87,91 = <strong>157 g de FeS</strong>.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">L'astuce : on ne peut pas comparer directement des <strong>grammes</strong> (un gramme de fer et un gramme de soufre n'ont pas le même nombre d'atomes). On passe donc tout en <strong>moles</strong> avec n = m/M, parce que l'équation pondérée parle en <strong>moles</strong> (les coefficients). Une fois en moles, on applique les proportions, puis on revient aux grammes avec m = n·M. Le tableau sert juste à ranger proprement : une ligne « n initial », une ligne « n final ».</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>Réactif limitant & réactif en excès</h2>
+      <p>Si les réactifs ne sont <strong>pas</strong> en proportions exactes, l'un s'épuise en premier : c'est le <strong>réactif limitant</strong> (il décide de la quantité de produit formé). Celui qui reste est le <strong>réactif en excès</strong>.</p>
+      <ul style="line-height:2;">
+        <li>Calcule le <strong>n initial</strong> de chaque réactif (n = m/M).</li>
+        <li>Compare avec les coefficients : le réactif dont il y a le <strong>moins</strong> (proportionnellement) est le <strong>limitant</strong>.</li>
+        <li>La quantité de produit se calcule <strong>à partir du limitant</strong>.</li>
+      </ul>
+      <p><strong>Exemple :</strong> 50 g Fe (n = 50/55,85 = 0,895 mol) + 50 g S (n = 50/32,06 = 1,56 mol), réaction 1 : 1. Le fer s'épuise le premier → <strong>le fer est le réactif limitant</strong>. Il reste 1,56 − 0,895 = <strong>0,665 mol de soufre en excès</strong>, et il se forme 0,895 mol de FeS.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Imagine une recette : pour 1 burger il faut 1 pain + 1 steak. Si tu as 5 pains mais seulement 3 steaks, tu ne peux faire que <strong>3 burgers</strong> : le <strong>steak est le limitant</strong>, et il te reste 2 pains <strong>en excès</strong>. En chimie c'est pareil, sauf qu'on compte en <strong>moles</strong> (pas en pièces), donc on convertit d'abord les grammes en moles.</div>
+      </div>
+    </div>
   </div>`;
 
   sections.formules = `<div id="formules" class="section">
@@ -94,6 +127,7 @@
     <div class="methods-tabs">
       <button class="mtab on" onclick="showMethod('cm1', this)">Pondérer une équation</button>
       <button class="mtab" onclick="showMethod('cm2', this)">Combustion d'un hydrocarbure</button>
+      <button class="mtab" onclick="showMethod('cm3', this)">Problème stœchiométrique</button>
     </div>
     <div id="cm1" class="method-content on">
       <div class="formula-box"><h3>Méthode — Pondérer pas à pas</h3><p class="note"><strong>Exemple :</strong> H₃PO₄ + Mg → Mg₃(PO₄)₂ + H₂</p></div>
@@ -134,6 +168,27 @@
         <div class="step-item"><div class="step-num">4</div><div class="step-text">Résultat : C₄H₁₀ + 13/2 O₂ → 4 CO₂ + 5 H₂O ✓ (×2 si on veut des coefficients entiers).
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
           <div class="why-content">Les coefficients fractionnaires (13/2) sont acceptés, mais pour avoir des nombres entiers on multiplie toute l'équation par 2 : 2 C₄H₁₀ + 13 O₂ → 8 CO₂ + 10 H₂O.</div>
+        </div></div>
+      </div>
+    </div>
+    <div id="cm3" class="method-content">
+      <div class="formula-box"><h3>Méthode — Problème stœchiométrique (tableau)</h3><p class="note"><strong>Exemple :</strong> quelle masse de soufre faut-il pour 100 g de fer ? Fe + S → FeS</p></div>
+      <div class="step-list">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">Écrire l'équation <strong>pondérée</strong> : Fe + S → FeS (1 : 1 : 1).
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Sans équation pondérée, on ne connaît pas les proportions. Ici tout est 1:1:1.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">Lecture molaire + données : M(Fe)=55,86 ; M(S)=32,06 ; M(FeS)=87,91 ; m(Fe)=100 g.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On range les masses molaires et la donnée connue dans un tableau (une colonne par composé) pour s'y retrouver.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">n initial du fer : n = m / M = 100 / 55,86 = <strong>1,79 mol</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On convertit les grammes en moles, car l'équation raisonne en moles.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">Proportions 1:1 → 1,79 mol de S et 1,79 mol de FeS. Résolution : m(S)=1,79·32,06=<strong>57,4 g</strong> ; m(FeS)=1,79·87,91=<strong>157 g</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On revient aux grammes avec m = n·M. Vérifie : 57,4 g de S + 100 g de Fe = 157 g de FeS (conservation de la masse ✓).</div>
         </div></div>
       </div>
     </div>
@@ -180,6 +235,33 @@
         <div class="formula-main">C₈H₁₈ + 25/2 O₂ → 8 CO₂ + 9 H₂O</div>
       </div>
     </div>
+
+    <h3 style="font-size:22px; font-weight:700; color:var(--color-nav); margin:2.2rem 0 0.4rem;">🧮 Problèmes à résoudre — feuille de réponse corrigée</h3>
+    <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Écris ton calcul <strong>ligne par ligne</strong> dans la feuille : chaque ligne avec « = » est vérifiée (✓/✗), et ta réponse finale est comparée à la solution. Le clavier 🔢 t'aide pour ÷ × √ … (masses molaires M en g/mol).</p>
+
+    <div class="exercise-card">
+      <h3 style="font-size:19px; font-weight:600; color:var(--color-nav); margin-bottom:0.4rem;">⚖️ Fe + S → FeS — masse de soufre</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:0.9rem; margin-bottom:0.9rem;"><p>Quelle masse de <strong>soufre</strong> faut-il pour faire réagir complètement <strong>100 g de fer</strong> ? &nbsp;<em>M(Fe) = 55,86 · M(S) = 32,06</em></p></div>
+      <div class="ansheet-wrap"><div class="ansheet-title">📝 Ta feuille de réponse (corrigée en direct)</div><div class="chem-sheet" data-answer="57,4 g" data-keypad></div></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 221)">👁️ Voir la solution</button>
+      <div class="exercise-step" data-step="221"><span class="step-badge">Solution</span><p>n(Fe) = m/M = 100 / 55,86 = 1,79 mol. Proportions 1:1 → 1,79 mol de S → m = 1,79 · 32,06 = <strong>57,4 g de soufre</strong>.</p></div>
+    </div>
+
+    <div class="exercise-card">
+      <h3 style="font-size:19px; font-weight:600; color:var(--color-nav); margin-bottom:0.4rem;">⚖️ Fe + S → FeS — masse de sulfure formé</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:0.9rem; margin-bottom:0.9rem;"><p>Quelle masse de <strong>sulfure de fer (FeS)</strong> se forme à partir de 100 g de fer ? &nbsp;<em>M(FeS) = 87,91</em></p></div>
+      <div class="ansheet-wrap"><div class="ansheet-title">📝 Ta feuille de réponse (corrigée en direct)</div><div class="chem-sheet" data-answer="157 g" data-keypad></div></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 222)">👁️ Voir la solution</button>
+      <div class="exercise-step" data-step="222"><span class="step-badge">Solution</span><p>1,79 mol de FeS se forment → m = 1,79 · 87,91 = <strong>157 g de FeS</strong>. (Vérif : 100 g Fe + 57,4 g S = 157 g ✓)</p></div>
+    </div>
+
+    <div class="exercise-card">
+      <h3 style="font-size:19px; font-weight:600; color:var(--color-nav); margin-bottom:0.4rem;">🧪 2 HgO → 2 Hg + O₂ — masse de mercure</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:0.9rem; margin-bottom:0.9rem;"><p>Quelle masse de <strong>mercure</strong> obtient-on en décomposant <strong>2 g d'oxyde de mercure (II)</strong> ? &nbsp;<em>M(HgO) = 216,6 · M(Hg) = 200,6</em></p></div>
+      <div class="ansheet-wrap"><div class="ansheet-title">📝 Ta feuille de réponse (corrigée en direct)</div><div class="chem-sheet" data-answer="1,85 g" data-keypad></div></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 223)">👁️ Voir la solution</button>
+      <div class="exercise-step" data-step="223"><span class="step-badge">Solution</span><p>n(HgO) = 2 / 216,6 = 0,00923 mol. Rapport 2 HgO → 2 Hg (1:1) → 0,00923 mol de Hg → m = 0,00923 · 200,6 = <strong>1,85 g de mercure</strong>.</p></div>
+    </div>
   </div>`;
 
   sections.erreurs = `<div id="erreurs" class="section">
@@ -209,7 +291,13 @@
     { q: "Quelle formule relie masse, quantité de matière et masse molaire ?", opts: ["m = n · M", "m = n / M", "m = M / n", "m = n + M"], ans: 0, chapter: "mole", difficulty: "facile", exp: "m = n · M (m en g, n en mol, M en g/mol)." },
     { q: "Le nombre de particules se calcule par :", opts: ["N = n · Nₐ", "N = n / Nₐ", "N = M · Nₐ", "N = n · M"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "N = n · Nₐ avec Nₐ ≈ 6,02·10²³ /mol." },
     { q: "La loi des gaz parfaits s'écrit :", opts: ["P·V = n·R·T", "P·V = n/R·T", "P/V = n·R·T", "P·V = R·T/n"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "PV = nRT, avec T en kelvins." },
-    { q: "Dans PV = nRT, la température doit être exprimée en :", opts: ["kelvins (K)", "degrés Celsius", "degrés Fahrenheit", "joules"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "T en kelvins : T(K) = θ(°C) + 273." }
+    { q: "Dans PV = nRT, la température doit être exprimée en :", opts: ["kelvins (K)", "degrés Celsius", "degrés Fahrenheit", "joules"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "T en kelvins : T(K) = θ(°C) + 273." },
+    { q: "Quelle est la 1ʳᵉ étape d'un problème stœchiométrique ?", opts: ["Écrire l'équation pondérée", "Calculer la masse molaire", "Convertir en litres", "Mesurer la température"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "Sans équation pondérée, on ne connaît pas les proportions entre composés." },
+    { q: "Pour comparer des réactifs, on convertit leurs masses en :", opts: ["moles (n = m/M)", "litres", "grammes par mole", "degrés"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "L'équation raisonne en moles : on passe des grammes aux moles avec n = m/M." },
+    { q: "n = m/M : si m = 100 g et M = 55,86 g/mol, alors n ≈", opts: ["1,79 mol", "5,59 mol", "0,56 mol", "155,9 mol"], ans: 0, chapter: "stoechio", difficulty: "intermediaire", exp: "n = 100 / 55,86 ≈ 1,79 mol." },
+    { q: "Le réactif qui s'épuise en premier s'appelle :", opts: ["le réactif limitant", "le réactif en excès", "le catalyseur", "le produit"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "Le réactif limitant fixe la quantité maximale de produit ; l'autre est en excès." },
+    { q: "La quantité de produit formé se calcule à partir :", opts: ["du réactif limitant", "du réactif en excès", "du produit le plus lourd", "de la température"], ans: 0, chapter: "stoechio", difficulty: "intermediaire", exp: "C'est le limitant qui détermine combien de produit on peut former." },
+    { q: "50 g Fe (0,895 mol) + 50 g S (1,56 mol), réaction 1:1. Le limitant est :", opts: ["le fer", "le soufre", "aucun", "les deux"], ans: 0, chapter: "stoechio", difficulty: "difficile", exp: "0,895 mol < 1,56 mol → le fer s'épuise le premier : il est limitant (0,665 mol de S en excès)." }
   ];
 
   /* ---------- Flashcards ---------- */
@@ -225,7 +313,12 @@
     { front: "Acide + métal → ?", back: "sel + hydrogène (H₂)", chapter: "types" },
     { front: "m = ? (masse)", back: "m = n · M (n = quantité de matière en mol, M = masse molaire g/mol)", chapter: "mole" },
     { front: "Nombre de particules N = ?", back: "N = n · Nₐ (Nₐ ≈ 6,02·10²³ /mol)", chapter: "mole" },
-    { front: "Loi des gaz parfaits ?", back: "P·V = n·R·T (R ≈ 0,082 L·atm/mol·K, T en kelvins)", chapter: "mole" }
+    { front: "Loi des gaz parfaits ?", back: "P·V = n·R·T (R ≈ 0,082 L·atm/mol·K, T en kelvins)", chapter: "mole" },
+    { front: "n = ? (quantité de matière)", back: "n = m / M (m en g, M masse molaire en g/mol). Et m = n · M.", chapter: "stoechio" },
+    { front: "Étapes d'un problème stœchiométrique ?", back: "1) équation pondérée · 2) lecture molaire + données · 3) n = m/M · 4) proportions (n final) · 5) m = n·M.", chapter: "stoechio" },
+    { front: "Réactif limitant ?", back: "Le réactif qui s'épuise en premier ; il fixe la quantité de produit formé.", chapter: "stoechio" },
+    { front: "Réactif en excès ?", back: "Le réactif présent en trop : il en reste après la réaction.", chapter: "stoechio" },
+    { front: "Pourquoi passer en moles ?", back: "Parce que l'équation pondérée raisonne en moles (coefficients) : on ne peut pas comparer directement des grammes.", chapter: "stoechio" }
   ];
 
   window.registerSubject('chimie', {
@@ -235,8 +328,8 @@
       questions: questions,
       flashcards: flashcards,
       demos: {},
-      chapOrder: ['ponderation', 'combustion', 'types', 'mole'],
-      chapLabels: { ponderation: 'Pondération', combustion: 'Combustions', types: 'Types de réactions', mole: 'Mole & gaz' }
+      chapOrder: ['ponderation', 'combustion', 'types', 'mole', 'stoechio'],
+      chapLabels: { ponderation: 'Pondération', combustion: 'Combustions', types: 'Types de réactions', mole: 'Mole & gaz', stoechio: 'Stœchiométrie & réactif limitant' }
     }
   });
 })();

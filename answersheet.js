@@ -26,7 +26,10 @@
     return null;
   }
 
-  function approxEq(a, b) { return Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(a), Math.abs(b)); }
+  // tolérance ligne (0,1 %) : accepte les arrondis intermédiaires (ex. 1,79 pour 1,79007)
+  function approxEq(a, b) { return Math.abs(a - b) <= 1e-3 * Math.max(1, Math.abs(a), Math.abs(b)); }
+  // tolérance « réponse finale » plus souple (1 %) : arrondis de chimie (57,4 g, 1,85 g…)
+  function approxEqLoose(a, b) { return Math.abs(a - b) <= 1e-2 * Math.max(1, Math.abs(a), Math.abs(b)); }
 
   function checkLine(line) {
     var t = (line || '').trim();
@@ -53,7 +56,7 @@
     if (a.length < b.length) return false;
     var used = new Array(a.length).fill(false);
     return b.every(function (bn) {
-      for (var i = 0; i < a.length; i++) { if (!used[i] && approxEq(a[i], bn)) { used[i] = true; return true; } }
+      for (var i = 0; i < a.length; i++) { if (!used[i] && approxEqLoose(a[i], bn)) { used[i] = true; return true; } }
       return false;
     });
   }
@@ -235,7 +238,19 @@
     panel.querySelector('#feuille-clear').addEventListener('click', function () { if (sheet._clear) sheet._clear(); });
   }
 
-  window.AnswerSheet = { mount: mount, checkLine: checkLine, evalExpr: evalExpr, finalMatches: finalMatches };
+  // Monte une feuille de réponse sur chaque élément [data-answer] non encore monté.
+  // Utilisé par les exercices interactifs de Chimie/Bio (appelé après injection des sections).
+  function mountAll(root) {
+    var scope = root || document;
+    var els = scope.querySelectorAll('[data-answer]:not([data-mounted])');
+    Array.prototype.forEach.call(els, function (el) {
+      el.setAttribute('data-mounted', '1');
+      mount(el, { answer: el.getAttribute('data-answer'), keypad: el.hasAttribute('data-keypad'), liveResult: true });
+    });
+  }
+  window.mountAnswerSheets = mountAll;
+
+  window.AnswerSheet = { mount: mount, checkLine: checkLine, evalExpr: evalExpr, finalMatches: finalMatches, mountAll: mountAll };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildTool);
   else buildTool();

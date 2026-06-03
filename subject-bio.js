@@ -49,88 +49,113 @@
   function dots(coords) {
     return '<g fill="#cbd5e1">' + coords.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="2.3"/>'; }).join('') + '</g>';
   }
+  // Étiquette posée directement sur le schéma : texte + ligne de rappel + point sur l'organite.
+  // anchor 'end' = étiquette à gauche (le texte finit en tx) ; 'start' = à droite.
+  function lbl(tx, ty, text, anchor, px, py) {
+    var lx = anchor === 'end' ? tx + 4 : tx - 4;
+    return '<line x1="' + lx + '" y1="' + (ty - 3.5) + '" x2="' + px + '" y2="' + py + '" stroke="#9aa4b8" stroke-width="1" opacity="0.7"/>' +
+      '<circle cx="' + px + '" cy="' + py + '" r="2.7" fill="#f1f5f9"/>' +
+      '<text x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '" font-family="inherit" font-size="12.5" font-weight="600" fill="#f1f5f9">' + text + '</text>';
+  }
 
-  // ===== CELLULE ANIMALE =====
+  // ===== CELLULE ANIMALE (étiquetée directement) =====
   var _animalSvg =
-    '<svg viewBox="0 0 380 270" width="380" height="270" style="' + SVGSTYLE + '">' +
+    '<svg viewBox="0 0 480 280" width="480" height="280" style="' + SVGSTYLE + '">' +
       '<defs>' +
         '<radialGradient id="bCytoA" cx="42%" cy="35%"><stop offset="0%" stop-color="#2e2a55"/><stop offset="100%" stop-color="#1a1733"/></radialGradient>' +
         '<radialGradient id="bNuc" cx="40%" cy="35%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient>' +
         '<radialGradient id="bMito" cx="40%" cy="32%"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#9f1239"/></radialGradient>' +
       '</defs>' +
       // membrane
-      '<ellipse cx="190" cy="138" rx="150" ry="104" fill="url(#bCytoA)" stroke="#a78bfa" stroke-width="3.5"/>' +
-      '<ellipse cx="190" cy="138" rx="144" ry="98" fill="none" stroke="#8b7fd6" stroke-width="1" opacity="0.5"/>' +
-      // noyau
-      '<circle cx="130" cy="128" r="48" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="3"/>' +
-      '<circle cx="130" cy="128" r="48" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="2 6" opacity="0.7"/>' +
-      '<circle cx="145" cy="140" r="15" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>' +
-      '<g fill="none" stroke="#bfdbfe" stroke-width="1.3" opacity="0.45"><path d="M110 115 q12 8 22 -2"/><path d="M118 145 q14 -6 26 4"/></g>' +
+      '<ellipse cx="240" cy="140" rx="108" ry="92" fill="url(#bCytoA)" stroke="#a78bfa" stroke-width="3.5"/>' +
+      '<ellipse cx="240" cy="140" rx="102" ry="86" fill="none" stroke="#8b7fd6" stroke-width="1" opacity="0.5"/>' +
+      // noyau + nucléole
+      '<circle cx="210" cy="128" r="42" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="3"/>' +
+      '<circle cx="210" cy="128" r="42" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="2 6" opacity="0.7"/>' +
+      '<circle cx="224" cy="140" r="13" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>' +
+      '<g fill="none" stroke="#bfdbfe" stroke-width="1.3" opacity="0.45"><path d="M192 116 q12 8 22 -2"/><path d="M198 145 q14 -6 26 4"/></g>' +
       // mitochondries
-      mito(272, 80, -18) + mito(258, 192, 22) +
-      // réticulum endoplasmique rugueux
-      '<g fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"><path d="M196 108 q14 9 0 18 q-14 9 0 18 q14 9 0 16"/><path d="M210 106 q14 9 0 18 q-14 9 0 18 q14 9 0 16"/></g>' +
-      dots([[196,108],[211,106],[196,144],[210,140],[197,160]]) +
+      mito(305, 95, -18) + mito(290, 188, 20) +
+      // réticulum endoplasmique
+      '<g fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"><path d="M256 120 q14 9 0 18 q-14 9 0 18"/><path d="M270 118 q14 9 0 18 q-14 9 0 18"/></g>' +
+      dots([[256,120],[270,118],[256,156],[270,154]]) +
       // appareil de Golgi
-      '<g fill="none" stroke="#2dd4bf" stroke-width="2.6"><path d="M120 200 q30 -13 60 0"/><path d="M124 208 q26 -11 52 0"/><path d="M128 216 q22 -9 44 0"/></g>' +
-      '<g fill="#5eead4"><circle cx="186" cy="206" r="3"/><circle cx="190" cy="216" r="2.6"/></g>' +
+      '<g fill="none" stroke="#2dd4bf" stroke-width="2.6"><path d="M178 200 q28 -12 56 0"/><path d="M182 208 q24 -10 48 0"/><path d="M186 216 q20 -8 40 0"/></g>' +
       // lysosome
-      '<circle cx="250" cy="128" r="14" fill="rgba(244,114,182,0.22)" stroke="#f472b6" stroke-width="2"/>' +
-      dots([[246,124],[254,130],[249,134]]) +
+      '<circle cx="308" cy="142" r="13" fill="rgba(244,114,182,0.22)" stroke="#f472b6" stroke-width="2"/>' +
+      dots([[304,138],[312,144],[307,147]]) +
       // ribosomes libres
-      dots([[300,140],[308,150],[294,156],[315,120],[88,196],[300,110]]) +
-      // pastilles
-      badge(1, 190, 34) + badge(2, 104, 104) + badge(3, 159, 150) + badge(4, 272, 80) +
-      badge(5, 203, 152) + badge(6, 150, 216) + badge(7, 300, 140) + badge(8, 250, 128) +
+      dots([[330,170],[322,182],[300,210],[180,170]]) +
+      // étiquettes (gauche)
+      lbl(120, 60, 'Membrane', 'end', 160, 84) +
+      lbl(120, 120, 'Noyau', 'end', 188, 122) +
+      lbl(120, 167, 'Nucléole', 'end', 222, 143) +
+      lbl(120, 214, 'Golgi', 'end', 198, 206) +
+      // étiquettes (droite)
+      lbl(360, 72, 'Mitochondrie', 'start', 305, 95) +
+      lbl(360, 125, 'Réticulum (RE)', 'start', 262, 138) +
+      lbl(360, 170, 'Lysosome', 'start', 308, 142) +
+      lbl(360, 214, 'Ribosomes', 'start', 326, 176) +
     '</svg>';
-  var SVG_ANIMAL = wrap(_animalSvg, numLegend(['Membrane plasmique', 'Noyau', 'Nucléole', 'Mitochondrie', 'Réticulum endoplasmique', 'Appareil de Golgi', 'Ribosomes', 'Lysosome']));
+  var SVG_ANIMAL = wrap(_animalSvg, '');
 
-  // ===== CELLULE VÉGÉTALE =====
+  // ===== CELLULE VÉGÉTALE (étiquetée directement) =====
   var _plantSvg =
-    '<svg viewBox="0 0 380 280" width="380" height="280" style="' + SVGSTYLE + '">' +
+    '<svg viewBox="0 0 480 280" width="480" height="280" style="' + SVGSTYLE + '">' +
       '<defs>' +
         '<linearGradient id="bWall" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a3e635"/><stop offset="100%" stop-color="#4d7c0f"/></linearGradient>' +
         '<radialGradient id="bCytoP" cx="40%" cy="35%"><stop offset="0%" stop-color="#243056"/><stop offset="100%" stop-color="#141a30"/></radialGradient>' +
         '<radialGradient id="bChloro" cx="40%" cy="32%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#166534"/></radialGradient>' +
       '</defs>' +
-      // paroi + membrane
-      '<rect x="18" y="22" width="344" height="236" rx="26" fill="url(#bWall)"/>' +
-      '<rect x="31" y="35" width="318" height="210" rx="16" fill="url(#bCytoP)" stroke="#a78bfa" stroke-width="2.2"/>' +
+      // paroi (verte) + membrane
+      '<rect x="100" y="26" width="280" height="228" rx="24" fill="url(#bWall)"/>' +
+      '<rect x="112" y="38" width="256" height="204" rx="15" fill="url(#bCytoP)" stroke="#a78bfa" stroke-width="2.4"/>' +
       // grande vacuole
-      '<rect x="66" y="68" width="214" height="150" rx="22" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>' +
-      '<path d="M86 96 q10 -14 26 -8" fill="none" stroke="#7dd3fc" stroke-width="1.4" opacity="0.6"/>' +
+      '<rect x="136" y="74" width="150" height="132" rx="20" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>' +
+      '<path d="M152 100 q10 -14 26 -8" fill="none" stroke="#7dd3fc" stroke-width="1.4" opacity="0.6"/>' +
       // noyau (repoussé en coin)
-      '<circle cx="305" cy="84" r="29" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2.5"/>' +
-      '<circle cx="314" cy="92" r="9" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>' +
+      '<circle cx="330" cy="82" r="26" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2.5"/>' +
+      '<circle cx="338" cy="89" r="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>' +
       // chloroplastes
-      chloro(150, 52, 8) + chloro(222, 52, -7) + chloro(316, 150, 18) + chloro(316, 208, -16) + chloro(150, 235, 6) + chloro(216, 235, -8) +
+      chloro(170, 58, 8) + chloro(240, 56, -7) + chloro(330, 150, 18) + chloro(330, 205, -16) + chloro(168, 224, 6) + chloro(238, 226, -8) +
       // mitochondrie
-      mito(92, 54, 14, 0.8) +
-      // pastilles
-      badge(1, 190, 24) + badge(2, 35, 140) + badge(3, 305, 84) + badge(4, 173, 143) + badge(5, 316, 150) + badge(6, 92, 54) +
+      mito(300, 150, 12, 0.8) +
+      // étiquettes (gauche)
+      lbl(96, 52, 'Paroi', 'end', 104, 64) +
+      lbl(96, 112, 'Membrane', 'end', 114, 116) +
+      lbl(96, 165, 'Vacuole', 'end', 175, 140) +
+      lbl(96, 220, 'Chloroplaste', 'end', 168, 224) +
+      // étiquettes (droite)
+      lbl(390, 74, 'Noyau', 'start', 332, 82) +
+      lbl(390, 156, 'Mitochondrie', 'start', 322, 150) +
     '</svg>';
-  var SVG_PLANT = wrap(_plantSvg, numLegend(['Paroi (cellulose)', 'Membrane plasmique', 'Noyau', 'Grande vacuole', 'Chloroplaste', 'Mitochondrie']));
+  var SVG_PLANT = wrap(_plantSvg, '');
 
-  // ===== BACTÉRIE (procaryote) =====
+  // ===== BACTÉRIE / procaryote (étiquetée directement) =====
   var _bactSvg =
-    '<svg viewBox="0 0 380 200" width="380" height="200" style="' + SVGSTYLE + '">' +
+    '<svg viewBox="0 0 480 210" width="480" height="210" style="' + SVGSTYLE + '">' +
       '<defs><radialGradient id="bCytoB" cx="40%" cy="35%"><stop offset="0%" stop-color="#2a2440"/><stop offset="100%" stop-color="#181228"/></radialGradient></defs>' +
       // flagelle
-      '<path d="M283 100 q18 -14 34 0 t34 0 t22 0" fill="none" stroke="#94a3b8" stroke-width="2.6"/>' +
+      '<path d="M340 100 q18 -14 34 0 t34 0 t24 0" fill="none" stroke="#94a3b8" stroke-width="2.6"/>' +
       // paroi + membrane
-      '<rect x="55" y="58" width="230" height="84" rx="42" fill="url(#bCytoB)" stroke="#fbbf24" stroke-width="7"/>' +
-      '<rect x="64" y="67" width="212" height="66" rx="33" fill="none" stroke="#fcd34d" stroke-width="2" opacity="0.8"/>' +
+      '<rect x="150" y="60" width="190" height="80" rx="40" fill="url(#bCytoB)" stroke="#fbbf24" stroke-width="7"/>' +
+      '<rect x="158" y="68" width="174" height="64" rx="32" fill="none" stroke="#fcd34d" stroke-width="2" opacity="0.8"/>' +
       // nucléoïde (ADN libre)
-      '<path d="M138 100 q16 -24 38 -9 q24 16 44 -3 q-9 28 -38 17 q-30 -9 -44 -5 Z" fill="rgba(167,139,250,0.14)" stroke="#a78bfa" stroke-width="2.6"/>' +
+      '<path d="M205 100 q16 -22 36 -8 q22 14 42 -3 q-8 26 -36 16 q-28 -8 -42 -5 Z" fill="rgba(167,139,250,0.16)" stroke="#a78bfa" stroke-width="2.6"/>' +
       // plasmides
-      '<circle cx="108" cy="80" r="9" fill="none" stroke="#34d399" stroke-width="3"/>' +
-      '<circle cx="236" cy="120" r="7" fill="none" stroke="#34d399" stroke-width="3"/>' +
+      '<circle cx="200" cy="84" r="8" fill="none" stroke="#34d399" stroke-width="3"/>' +
+      '<circle cx="300" cy="118" r="6.5" fill="none" stroke="#34d399" stroke-width="3"/>' +
       // ribosomes
-      dots([[128,122],[200,76],[216,120],[150,74],[252,92],[176,124],[120,98]]) +
-      // pastilles
-      badge(1, 80, 60) + badge(2, 178, 100) + badge(3, 108, 80) + badge(4, 252, 92) + badge(5, 345, 100) +
+      dots([[230,80],[265,122],[290,90],[245,118],[210,118]]) +
+      // étiquettes (gauche)
+      lbl(140, 56, 'Paroi + membrane', 'end', 168, 72) +
+      lbl(140, 108, 'Nucléoïde (ADN)', 'end', 225, 100) +
+      lbl(140, 150, 'Plasmide', 'end', 198, 86) +
+      // étiquettes (droite)
+      lbl(352, 70, 'Ribosomes', 'start', 290, 90) +
+      lbl(352, 132, 'Flagelle', 'start', 418, 100) +
     '</svg>';
-  var SVG_BACT = wrap(_bactSvg, numLegend(['Paroi + membrane', 'Nucléoïde (ADN libre)', 'Plasmide', 'Ribosomes', 'Flagelle']));
+  var SVG_BACT = wrap(_bactSvg, '');
 
   // ===== ADN — vraie double hélice =====
   var SVG_DNA = (function () {
@@ -268,6 +293,42 @@
         <div class="simple-exp-content">L'ADN, c'est le <strong>mode d'emploi</strong> qui fabrique et fait fonctionner ton corps. Il ressemble à une <strong>échelle torsadée</strong> : les deux montants sont les brins, et les barreaux sont les paires de bases (A avec T, C avec G — toujours ces couples). Quand l'ADN est très condensé, il forme les <strong>chromosomes</strong> : on en a 46 (23 paires).</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>6. Le cycle cellulaire & la mitose</h2>
+      <p>Une cellule passe par un <strong>cycle</strong> : elle grandit, copie son ADN, puis se divise. Les phases se succèdent toujours dans le même ordre : <strong>G1, S, G2</strong> (l'<strong>interphase</strong>) puis <strong>M</strong> (la <strong>mitose</strong>).</p>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:1rem 0; font-size:13px;">
+        ${['G1','S — copie de l\'ADN','G2','Mitose (M)'].map(function (n, i, a) {
+          return '<span style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 10px; font-weight:600; color:var(--text-primary);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
+        }).join('')}
+      </div>
+      <ul style="line-height:2;">
+        <li><strong>Interphase</strong> (G1 + S + G2) : la phase la plus longue ; la cellule grandit et <strong>réplique son ADN</strong> (pendant la phase S).</li>
+        <li><strong>Mitose (M)</strong> : division du <strong>noyau</strong> → <strong>2 cellules-filles identiques</strong> (même information génétique que la cellule-mère).</li>
+        <li>Après la mitose : la cellule repart en G1, ou entre en <strong>G0</strong> (repos, sans division).</li>
+      </ul>
+      <p style="margin-top:1rem;"><strong>Les étapes visibles de la mitose :</strong></p>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0.6rem 0 1rem; font-size:13px;">
+        ${['Interphase','Prophase','Métaphase','Anaphase','Télophase'].map(function (n, i, a) {
+          return '<span style="background:rgba(167,139,250,0.12); border:1px solid var(--color-nav); border-radius:8px; padding:6px 10px; font-weight:600; color:var(--color-nav);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
+        }).join('')}
+      </div>
+      <p>Quand l'ADN se condense au maximum, il prend une forme en <strong>X</strong> : c'est un chromosome <strong>dédoublé</strong>, fait de 2 <strong>chromatides-sœurs</strong> identiques reliées par le <strong>centromère</strong>.</p>
+      <div style="text-align:center; margin:0.8rem 0;">
+        <svg viewBox="0 0 380 200" width="380" height="200" style="${SVGSTYLE}">
+          <path d="M150 30 Q188 100 150 170" fill="none" stroke="#a78bfa" stroke-width="15" stroke-linecap="round"/>
+          <path d="M214 30 Q176 100 214 170" fill="none" stroke="#7c3aed" stroke-width="15" stroke-linecap="round"/>
+          <ellipse cx="182" cy="100" rx="13" ry="9" fill="#fbbf24" stroke="#92400e" stroke-width="1"/>
+          ${lbl(120, 56, 'Chromatide', 'end', 156, 66)}
+          ${lbl(250, 56, 'Chromatide-sœur', 'start', 208, 66)}
+          ${lbl(250, 114, 'Centromère', 'start', 193, 100)}
+        </svg>
+      </div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Pense au cycle comme à la « vie » d'une cellule : elle <strong>grandit</strong>, elle <strong>photocopie</strong> son ADN (phase S), puis elle se <strong>coupe en deux</strong> (mitose). Avant de se diviser, chaque chromosome a été copié → il a 2 moitiés identiques (les <strong>chromatides-sœurs</strong>) collées au milieu (le <strong>centromère</strong>), d'où la forme en X. La mitose donne 2 cellules <strong>identiques</strong> à la cellule de départ : c'est comme ça que ton corps grandit et répare ses tissus.</div>
+      </div>
+    </div>
   </div>`;
 
   sections.formules = `<div id="formules" class="section">
@@ -339,6 +400,13 @@
       <button class="step-btn" onclick="showExerciseStep(this, 311)">▶ Voir la réponse</button>
       <div class="exercise-step" data-step="311"><span class="step-badge">Réponse</span><p>Dans l'ADN, l'adénine (<strong>A</strong>) s'apparie toujours avec la <strong>thymine (T)</strong>. (Et C avec G.) ✅</p></div>
     </div>
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Cycle cellulaire : remettre dans l'ordre</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> dans quel ordre se déroulent ces phases de la mitose : Anaphase, Prophase, Télophase, Métaphase ?</p></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 321)">▶ Indice</button>
+      <div class="exercise-step" data-step="321"><span class="step-badge">Indice</span><p>Moyen mnémo : <strong>P-M-A-T</strong>. La cellule prépare (P), aligne (M), sépare (A), puis termine (T).</p><button class="step-btn" onclick="showExerciseStep(this, 322)">▶ Réponse</button></div>
+      <div class="exercise-step" data-step="322"><span class="step-badge">Réponse</span><p><strong>Prophase → Métaphase → Anaphase → Télophase</strong> → 2 cellules-filles identiques. ✅</p></div>
+    </div>
   </div>`;
 
   sections.erreurs = `<div id="erreurs" class="section">
@@ -369,7 +437,13 @@
     { q: "La forme de l'ADN est :", opts: ["une double hélice", "une sphère", "un cube", "une ligne droite"], ans: 0, chapter: "adn", difficulty: "facile", exp: "L'ADN est une double hélice (2 brins enroulés)." },
     { q: "Dans l'ADN, l'adénine (A) s'apparie avec :", opts: ["la thymine (T)", "la cytosine (C)", "la guanine (G)", "l'adénine (A)"], ans: 0, chapter: "adn", difficulty: "intermediaire", exp: "Appariement : A–T et C–G." },
     { q: "Combien de paires de chromosomes chez l'humain ?", opts: ["23", "46", "12", "2"], ans: 0, chapter: "adn", difficulty: "intermediaire", exp: "23 paires (46 chromosomes au total)." },
-    { q: "Le caryotype d'une femme contient la paire sexuelle :", opts: ["XX", "XY", "YY", "XO"], ans: 0, chapter: "adn", difficulty: "facile", exp: "Femme = XX, homme = XY." }
+    { q: "Le caryotype d'une femme contient la paire sexuelle :", opts: ["XX", "XY", "YY", "XO"], ans: 0, chapter: "adn", difficulty: "facile", exp: "Femme = XX, homme = XY." },
+    { q: "Le cycle cellulaire comprend l'interphase et :", opts: ["la mitose", "la respiration", "la photosynthèse", "la digestion"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Cycle = interphase (G1, S, G2) + mitose (M)." },
+    { q: "L'ADN est copié (répliqué) pendant la phase :", opts: ["S", "G1", "G2", "M"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "La réplication de l'ADN a lieu en phase S de l'interphase." },
+    { q: "La mitose produit :", opts: ["2 cellules-filles identiques", "4 cellules différentes", "une seule grande cellule", "des gamètes"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "La mitose donne 2 cellules-filles identiques à la cellule-mère." },
+    { q: "Les 2 moitiés identiques d'un chromosome dédoublé s'appellent :", opts: ["chromatides-sœurs", "nucléotides", "ribosomes", "centrioles"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Un chromosome en X = 2 chromatides-sœurs reliées par le centromère." },
+    { q: "Qu'est-ce qui relie les deux chromatides-sœurs ?", opts: ["le centromère", "le noyau", "la membrane", "un ribosome"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Le centromère relie les 2 chromatides-sœurs (point de jonction de l'X)." },
+    { q: "Ordre correct des phases visibles de la mitose :", opts: ["Prophase → Métaphase → Anaphase → Télophase", "Anaphase → Prophase → Télophase → Métaphase", "Télophase → Anaphase → Métaphase → Prophase", "Métaphase → Prophase → Télophase → Anaphase"], ans: 0, chapter: "cycle", difficulty: "difficile", exp: "PMAT : Prophase, Métaphase, Anaphase, Télophase." }
   ];
 
   var flashcards = [
@@ -384,18 +458,23 @@
     { front: "Ce que la cellule végétale a en plus ?", back: "Paroi rigide, chloroplastes (photosynthèse), grande vacuole.", chapter: "organites" },
     { front: "Forme et composition de l'ADN ?", back: "Double hélice de nucléotides (sucre + phosphate + base azotée).", chapter: "adn" },
     { front: "Appariement des bases de l'ADN ?", back: "A–T et C–G (toujours).", chapter: "adn" },
-    { front: "Chromosomes chez l'humain ?", back: "23 paires (46 au total) ; paire sexuelle XX (femme) ou XY (homme).", chapter: "adn" }
+    { front: "Chromosomes chez l'humain ?", back: "23 paires (46 au total) ; paire sexuelle XX (femme) ou XY (homme).", chapter: "adn" },
+    { front: "Les deux grandes parties du cycle cellulaire ?", back: "L'<strong>interphase</strong> (G1, S, G2) puis la <strong>mitose</strong> (M).", chapter: "cycle" },
+    { front: "Quand l'ADN est-il répliqué ?", back: "Pendant la <strong>phase S</strong> de l'interphase.", chapter: "cycle" },
+    { front: "Résultat de la mitose ?", back: "<strong>2 cellules-filles identiques</strong> à la cellule-mère (même ADN).", chapter: "cycle" },
+    { front: "Phases visibles de la mitose ?", back: "Prophase → Métaphase → Anaphase → Télophase (PMAT).", chapter: "cycle" },
+    { front: "Chromatides-sœurs & centromère ?", back: "Un chromosome dédoublé (forme X) = 2 chromatides-sœurs identiques reliées par le <strong>centromère</strong>.", chapter: "cycle" }
   ];
 
   window.registerSubject('bio', {
-    subtitle: 'Biologie — organisation du vivant, cellule, organites, ADN',
+    subtitle: 'Biologie — le vivant, cellule, organites, ADN, cycle cellulaire',
     content: {
       sections: sections,
       questions: questions,
       flashcards: flashcards,
       demos: {},
-      chapOrder: ['organisation', 'cellule', 'organites', 'adn'],
-      chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes' }
+      chapOrder: ['organisation', 'cellule', 'organites', 'adn', 'cycle'],
+      chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes', cycle: 'Cycle cellulaire & mitose' }
     }
   });
 })();
