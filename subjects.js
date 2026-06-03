@@ -48,6 +48,20 @@
     });
   }
 
+  // Met à jour le titre + l'intro de l'écran Quiz selon la matière active
+  function updateQuizHeader(key) {
+    var t = document.getElementById('quiz-title');
+    var p = document.getElementById('quiz-subtitle');
+    var s = window.SUBJECTS[key] || {};
+    if (t) t.textContent = 'Quiz — ' + (key === 'maths' ? 'Maths GR2' : (s.label || ''));
+    if (p) {
+      var order = (typeof CHAP_ORDER !== 'undefined') ? CHAP_ORDER : [];
+      var labels = (typeof CHAP_LABELS !== 'undefined') ? CHAP_LABELS : {};
+      var names = order.map(function (c) { return (labels[c] || c); });
+      p.textContent = names.length ? ('Teste tes connaissances : ' + names.join(' · ') + '.') : 'Teste tes connaissances.';
+    }
+  }
+
   function rebuildChapterFilter() {
     var sel = document.getElementById('chapter-filter');
     if (!sel) return;
@@ -126,6 +140,7 @@
       try { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([document.body]); } catch (_) {}
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {}
     }
+    updateQuizHeader(key);
   };
 
   function init() {

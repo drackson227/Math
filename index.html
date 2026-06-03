@@ -336,8 +336,8 @@
   <!-- Écran d'accueil quiz -->
   <div id="quiz-start-screen" style="text-align:center; padding:3rem 1rem;">
     <div style="font-size:64px; margin-bottom:1rem;">🧠</div>
-    <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
-    <p style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur les vecteurs, le cercle et les droites.</p>
+    <h2 id="quiz-title" style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
+    <p id="quiz-subtitle" style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur les vecteurs, le cercle et les droites.</p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:2rem;">
       <select id="chapter-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
         <option value="all">Tous les chapitres</option>
@@ -624,6 +624,7 @@
   <script src="subject-chimie.js"></script>
   <script src="subject-bio.js"></script>
   <script src="gestures.js"></script>
+  <script src="bat.js"></script>
   <script src="backtotop.js"></script>
   <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
   <script>

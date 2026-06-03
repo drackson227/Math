@@ -4,11 +4,11 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v11';
+const CACHE = 'mathsgr2-v13';
 const CORE = [
   './', './index.html', './style.css',
   './data.js', './content.js', './script.js',
-  './auth.js', './chat.js', './multiplayer.js', './search.js', './generator.js', './subjects.js', './subject-chimie.js', './subject-bio.js', './answersheet.js', './gestures.js', './backtotop.js',
+  './auth.js', './chat.js', './multiplayer.js', './search.js', './generator.js', './subjects.js', './subject-chimie.js', './subject-bio.js', './answersheet.js', './gestures.js', './bat.js', './backtotop.js',
   './manifest.json', './logo.svg', './icon-192.png', './icon-512.png'
 ];
 // Librairies CDN à précharger pour le HORS-LIGNE (MathJax SVG = auto-contenu, pas de polices séparées)
