@@ -24,6 +24,10 @@
       <p>Pondérer (= équilibrer), c'est faire en sorte que le nombre des différents atomes qui constituent les molécules de <strong>réactifs</strong> soit égal au nombre des différents atomes qui constituent les molécules de <strong>produits</strong> (conservation de la matière).</p>
       <p>👉 On ajuste uniquement les <strong>coefficients stœchiométriques</strong> (les nombres placés <em>devant</em> les formules). On ne change <strong>jamais</strong> les indices à l'intérieur des formules.</p>
       <div class="key-rule"><div class="formula-main">H₂SO₄ + 2 NaOH → Na₂SO₄ + 2 H₂O</div></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Une réaction chimique ne <strong>crée</strong> ni ne <strong>détruit</strong> d'atomes : elle les <strong>réarrange</strong>. Donc s'il y a 4 atomes d'oxygène à gauche, il doit y en avoir 4 à droite. Pondérer, c'est juste rajouter des « paquets » (les coefficients) devant les molécules pour que le compte tombe juste des deux côtés. Le petit chiffre <em>dans</em> la formule (comme le 2 de H₂O) dit combien d'atomes il y a dans UNE molécule : si tu le changes, ce n'est plus la même substance !</div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -35,6 +39,10 @@
       </ul>
       <p>Astuce d'ordre de pondération : on équilibre dans l'ordre <strong>C, puis H, puis O</strong> (« CHO »).</p>
       <div class="key-rule"><div class="formula-main">C₄H₁₀ + 13/2 O₂ → 4 CO₂ + 5 H₂O</div></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Brûler = faire réagir avec l'oxygène de l'air. Si l'oxygène est <strong>suffisant</strong>, le carbone devient du CO₂ (gaz « normal ») : c'est la combustion <strong>complète</strong>. Si l'oxygène <strong>manque</strong>, le carbone n'est pas « fini de brûler » et donne du <strong>CO</strong> (monoxyde) : combustion <strong>incomplète</strong>. On finit toujours par l'oxygène (le « O » de CHO) parce qu'il est dans plusieurs molécules à la fois (CO₂ et H₂O) : plus facile de l'ajuster en dernier, quand tout le reste est fixé.</div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -45,6 +53,10 @@
         <li><strong>Acide + métal</strong> → <strong>sel + hydrogène (H₂)</strong> &nbsp;(ex. 2 H₃PO₄ + 3 Mg → Mg₃(PO₄)₂ + 3 H₂)</li>
       </ul>
       <p>Ordre de pondération conseillé : <strong>M, X, H, O</strong> (métal, puis le reste, puis H, puis O).</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Retiens 3 « recettes » : un <strong>acide</strong> + une base (hydroxyde ou oxyde) donne un <strong>sel + de l'eau</strong> ; un <strong>acide + un métal</strong> donne un <strong>sel + du gaz hydrogène (H₂)</strong> qui fait des bulles. Le « sel » ici ne veut pas dire le sel de cuisine, c'est juste le composé formé par le métal et le reste de l'acide. L'ordre M-X-H-O est une astuce : on commence par ce qui apparaît le moins souvent (le métal) et on garde l'oxygène pour la fin.</div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -55,6 +67,10 @@
         <li><strong>Gaz parfaits :</strong> P · V = n · R · T &nbsp;(R ≈ 0,082 L·atm/(mol·K), T en K)</li>
         <li><strong>CNTP :</strong> conditions normales de température et de pression (références pour les gaz).</li>
       </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">La <strong>mole</strong> est juste une « grande quantité » d'atomes/molécules (un peu comme « une douzaine » = 12, sauf qu'une mole = 6,02·10²³). <strong>m = n·M</strong> : si tu connais le nombre de moles (n) et la masse d'une mole (M, lue dans le tableau périodique), tu trouves la masse totale. <strong>PV = nRT</strong> relie pression, volume et quantité d'un gaz : c'est utile dès qu'un exercice parle de litres de gaz. ⚠️ La température va toujours en <strong>kelvins</strong> (ajoute 273 aux °C).</div>
+      </div>
     </div>
   </div>`;
 
@@ -82,19 +98,43 @@
     <div id="cm1" class="method-content on">
       <div class="formula-box"><h3>Méthode — Pondérer pas à pas</h3><p class="note"><strong>Exemple :</strong> H₃PO₄ + Mg → Mg₃(PO₄)₂ + H₂</p></div>
       <div class="step-list">
-        <div class="step-item"><div class="step-num">1</div><div class="step-text">Compter les atomes de chaque élément des deux côtés.</div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-text">Équilibrer d'abord le métal / le groupement complexe : il faut 3 Mg et 2 (PO₄) → <strong>2 H₃PO₄</strong> et <strong>3 Mg</strong>, produit <strong>Mg₃(PO₄)₂</strong>.</div></div>
-        <div class="step-item"><div class="step-num">3</div><div class="step-text">Équilibrer l'hydrogène : 2 H₃PO₄ donnent 6 H → <strong>3 H₂</strong>.</div></div>
-        <div class="step-item"><div class="step-num">4</div><div class="step-text">Vérifier tous les atomes : 2 H₃PO₄ + 3 Mg → Mg₃(PO₄)₂ + 3 H₂ ✓</div></div>
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">Compter les atomes de chaque élément des deux côtés.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On fait un « inventaire » : combien de Mg, de P, de O, de H de chaque côté ? C'est ce qui montre ce qui est déséquilibré et par quoi commencer.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">Équilibrer d'abord le métal / le groupement complexe : il faut 3 Mg et 2 (PO₄) → <strong>2 H₃PO₄</strong> et <strong>3 Mg</strong>, produit <strong>Mg₃(PO₄)₂</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On commence par le métal et les gros groupes (comme PO₄ qui reste « en bloc ») : ils n'apparaissent qu'à un endroit, donc plus simples à fixer. Le produit Mg₃(PO₄)₂ impose 3 Mg et 2 PO₄ → on en déduit les coefficients des réactifs.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">Équilibrer l'hydrogène : 2 H₃PO₄ donnent 6 H → <strong>3 H₂</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Une fois les gros morceaux placés, l'hydrogène se déduit : 2 × H₃PO₄ = 6 H, et comme H₂ contient 2 H, il faut 6 ÷ 2 = 3 molécules de H₂.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">Vérifier tous les atomes : 2 H₃PO₄ + 3 Mg → Mg₃(PO₄)₂ + 3 H₂ ✓
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Toujours recompter à la fin chaque élément des deux côtés : si tout colle (ici 3 Mg, 2 P, 8 O, 6 H de chaque côté), l'équation est pondérée. Sinon, on a oublié un élément.</div>
+        </div></div>
       </div>
     </div>
     <div id="cm2" class="method-content">
       <div class="formula-box"><h3>Méthode — Combustion complète</h3><p class="note"><strong>Exemple :</strong> C₄H₁₀ + O₂ → CO₂ + H₂O</p></div>
       <div class="step-list">
-        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>C</strong> d'abord : 4 carbones → <strong>4 CO₂</strong>.</div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>H</strong> ensuite : 10 hydrogènes → <strong>5 H₂O</strong>.</div></div>
-        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>O</strong> en dernier : à droite 4·2 + 5 = 13 oxygènes → <strong>13/2 O₂</strong>.</div></div>
-        <div class="step-item"><div class="step-num">4</div><div class="step-text">Résultat : C₄H₁₀ + 13/2 O₂ → 4 CO₂ + 5 H₂O ✓ (×2 si on veut des coefficients entiers).</div></div>
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>C</strong> d'abord : 4 carbones → <strong>4 CO₂</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Tout le carbone du C₄H₁₀ doit se retrouver dans le CO₂. 4 C à gauche → il faut 4 CO₂ à droite (chaque CO₂ contient 1 carbone).</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>H</strong> ensuite : 10 hydrogènes → <strong>5 H₂O</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Tout l'hydrogène finit dans l'eau. 10 H à gauche, et H₂O contient 2 H → il faut 10 ÷ 2 = 5 H₂O.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>O</strong> en dernier : à droite 4·2 + 5 = 13 oxygènes → <strong>13/2 O₂</strong>.
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">On compte l'oxygène une fois CO₂ et H₂O fixés : 4 CO₂ = 8 O, plus 5 H₂O = 5 O, total 13 O. Comme O₂ contient 2 O, il faut 13 ÷ 2 = 13/2 molécules de O₂.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">Résultat : C₄H₁₀ + 13/2 O₂ → 4 CO₂ + 5 H₂O ✓ (×2 si on veut des coefficients entiers).
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">Les coefficients fractionnaires (13/2) sont acceptés, mais pour avoir des nombres entiers on multiplie toute l'équation par 2 : 2 C₄H₁₀ + 13 O₂ → 8 CO₂ + 10 H₂O.</div>
+        </div></div>
       </div>
     </div>
   </div>`;
