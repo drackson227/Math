@@ -6,52 +6,164 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
-  // ---- petites illustrations SVG (lisibles sur fond sombre) ----
-  var SVG_ANIMAL =
-    '<svg viewBox="0 0 280 200" width="280" height="200" style="max-width:100%;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);">' +
-      '<ellipse cx="140" cy="100" rx="130" ry="88" fill="rgba(167,139,250,0.08)" stroke="#a78bfa" stroke-width="3"/>' +
-      '<circle cx="112" cy="96" r="38" fill="rgba(96,165,250,0.22)" stroke="#60a5fa" stroke-width="2"/>' +
-      '<circle cx="112" cy="96" r="11" fill="#60a5fa"/>' +
-      '<ellipse cx="205" cy="66" rx="24" ry="12" fill="rgba(248,113,113,0.25)" stroke="#f87171" stroke-width="2"/>' +
-      '<path d="M186 66 q6 -7 12 0 t12 0" fill="none" stroke="#f87171" stroke-width="1.5"/>' +
-      '<ellipse cx="200" cy="135" rx="22" ry="11" fill="rgba(248,113,113,0.25)" stroke="#f87171" stroke-width="2"/>' +
-      '<circle cx="160" cy="150" r="9" fill="rgba(251,191,36,0.3)" stroke="#fbbf24" stroke-width="1.5"/>' +
-      '<g fill="#e5e7eb">' +
-      '<circle cx="170" cy="100" r="2"/><circle cx="178" cy="112" r="2"/><circle cx="150" cy="120" r="2"/><circle cx="190" cy="98" r="2"/><circle cx="162" cy="78" r="2"/></g>' +
-    '</svg>';
+  // ---- Illustrations SVG « façon manuel scolaire » (fond sombre) ----
+  var SVGSTYLE = 'max-width:100%;height:auto;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);';
 
-  var SVG_PLANT =
-    '<svg viewBox="0 0 280 200" width="280" height="200" style="max-width:100%;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);">' +
-      '<rect x="14" y="20" width="252" height="160" rx="10" fill="rgba(74,222,128,0.06)" stroke="#16a34a" stroke-width="6"/>' +
-      '<rect x="24" y="30" width="232" height="140" rx="6" fill="none" stroke="#86efac" stroke-width="2"/>' +
-      '<rect x="86" y="64" width="120" height="78" rx="12" fill="rgba(96,165,250,0.12)" stroke="#60a5fa" stroke-width="2"/>' +
-      '<circle cx="54" cy="60" r="14" fill="rgba(96,165,250,0.22)" stroke="#60a5fa" stroke-width="2"/>' +
-      '<ellipse cx="60" cy="120" rx="16" ry="9" fill="rgba(52,211,153,0.3)" stroke="#34d399" stroke-width="2"/>' +
-      '<ellipse cx="225" cy="70" rx="16" ry="9" fill="rgba(52,211,153,0.3)" stroke="#34d399" stroke-width="2"/>' +
-      '<ellipse cx="228" cy="135" rx="16" ry="9" fill="rgba(52,211,153,0.3)" stroke="#34d399" stroke-width="2"/>' +
-    '</svg>';
-
-  var SVG_BACT =
-    '<svg viewBox="0 0 280 160" width="280" height="160" style="max-width:100%;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);">' +
-      '<rect x="60" y="50" width="160" height="60" rx="30" fill="rgba(251,191,36,0.08)" stroke="#fbbf24" stroke-width="3"/>' +
-      '<path d="M95 80 q12 -12 24 0 t24 0 t24 0" fill="none" stroke="#a78bfa" stroke-width="2.5"/>' +
-      '<g fill="#e5e7eb"><circle cx="100" cy="95" r="2"/><circle cx="150" cy="62" r="2"/><circle cx="185" cy="95" r="2"/><circle cx="120" cy="68" r="2"/></g>' +
-      '<path d="M60 80 q-25 -18 -45 -6" fill="none" stroke="#94a3b8" stroke-width="2"/>' +
-      '<path d="M220 80 q25 18 45 6" fill="none" stroke="#94a3b8" stroke-width="2"/>' +
-    '</svg>';
-
-  var SVG_DNA =
-    '<svg viewBox="0 0 240 160" width="240" height="160" style="max-width:100%;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);">' +
-      '<path d="M70 10 C 130 50, 130 110, 70 150" fill="none" stroke="#60a5fa" stroke-width="3"/>' +
-      '<path d="M170 10 C 110 50, 110 110, 170 150" fill="none" stroke="#f87171" stroke-width="3"/>' +
-      '<g stroke="#a78bfa" stroke-width="3">' +
-      '<line x1="92" y1="28" x2="148" y2="28"/><line x1="108" y1="52" x2="132" y2="52"/><line x1="108" y1="80" x2="132" y2="80"/><line x1="108" y1="108" x2="132" y2="108"/><line x1="92" y1="132" x2="148" y2="132"/></g>' +
-    '</svg>';
-
-  function legend(items) {
-    return '<div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; font-size:12px; color:var(--text-secondary);">' +
-      items.map(function (it) { return '<span>' + it + '</span>'; }).join('') + '</div>';
+  // pastille numérotée posée sur un organite
+  function badge(n, x, y) {
+    return '<g><circle cx="' + x + '" cy="' + y + '" r="10.5" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.6"/>' +
+      '<text x="' + x + '" y="' + (y + 3.8) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" font-family="inherit">' + n + '</text></g>';
   }
+  // légende numérotée (1,2,3…) sous le schéma
+  function numLegend(items) {
+    return '<div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin-top:12px;font-size:13px;color:var(--text-secondary);">' +
+      items.map(function (t, i) {
+        return '<span style="display:inline-flex;align-items:center;gap:6px;">' +
+          '<span style="display:inline-flex;width:19px;height:19px;border-radius:50%;background:#0f172a;border:1.6px solid #e2e8f0;color:#e2e8f0;font-size:11px;font-weight:700;align-items:center;justify-content:center;flex:0 0 auto;">' + (i + 1) + '</span>' + t + '</span>';
+      }).join('') + '</div>';
+  }
+  // légende à pastilles de couleur
+  function colorLegend(items) {
+    return '<div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin-top:12px;font-size:13px;color:var(--text-secondary);">' +
+      items.map(function (it) {
+        return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:4px;background:' + it[0] + ';display:inline-block;flex:0 0 auto;"></span>' + it[1] + '</span>';
+      }).join('') + '</div>';
+  }
+  function wrap(svg, leg) { return '<div style="text-align:center;">' + svg + leg + '</div>'; }
+
+  // mitochondrie (haricot + crêtes)
+  function mito(x, y, rot, sc) {
+    sc = sc || 1;
+    return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ') scale(' + sc + ')">' +
+      '<ellipse rx="28" ry="14" fill="url(#bMito)" stroke="#fecaca" stroke-width="1.5"/>' +
+      '<path d="M-22 -1 q7 -10 13 0 q6 10 13 0 q5 -8 11 0" fill="none" stroke="#fee2e2" stroke-width="1.6" opacity="0.85"/>' +
+      '</g>';
+  }
+  // chloroplaste (ovale vert + thylakoïdes)
+  function chloro(x, y, rot) {
+    return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')">' +
+      '<ellipse rx="26" ry="13" fill="url(#bChloro)" stroke="#86efac" stroke-width="1.5"/>' +
+      '<g fill="#15803d" opacity="0.9"><ellipse cx="-13" cy="0" rx="3.6" ry="7"/><ellipse cx="-2" cy="0" rx="3.6" ry="7"/><ellipse cx="9" cy="0" rx="3.6" ry="7"/></g>' +
+      '</g>';
+  }
+  function dots(coords) {
+    return '<g fill="#cbd5e1">' + coords.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="2.3"/>'; }).join('') + '</g>';
+  }
+
+  // ===== CELLULE ANIMALE =====
+  var _animalSvg =
+    '<svg viewBox="0 0 380 270" width="380" height="270" style="' + SVGSTYLE + '">' +
+      '<defs>' +
+        '<radialGradient id="bCytoA" cx="42%" cy="35%"><stop offset="0%" stop-color="#2e2a55"/><stop offset="100%" stop-color="#1a1733"/></radialGradient>' +
+        '<radialGradient id="bNuc" cx="40%" cy="35%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient>' +
+        '<radialGradient id="bMito" cx="40%" cy="32%"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#9f1239"/></radialGradient>' +
+      '</defs>' +
+      // membrane
+      '<ellipse cx="190" cy="138" rx="150" ry="104" fill="url(#bCytoA)" stroke="#a78bfa" stroke-width="3.5"/>' +
+      '<ellipse cx="190" cy="138" rx="144" ry="98" fill="none" stroke="#8b7fd6" stroke-width="1" opacity="0.5"/>' +
+      // noyau
+      '<circle cx="130" cy="128" r="48" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="3"/>' +
+      '<circle cx="130" cy="128" r="48" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="2 6" opacity="0.7"/>' +
+      '<circle cx="145" cy="140" r="15" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>' +
+      '<g fill="none" stroke="#bfdbfe" stroke-width="1.3" opacity="0.45"><path d="M110 115 q12 8 22 -2"/><path d="M118 145 q14 -6 26 4"/></g>' +
+      // mitochondries
+      mito(272, 80, -18) + mito(258, 192, 22) +
+      // réticulum endoplasmique rugueux
+      '<g fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"><path d="M196 108 q14 9 0 18 q-14 9 0 18 q14 9 0 16"/><path d="M210 106 q14 9 0 18 q-14 9 0 18 q14 9 0 16"/></g>' +
+      dots([[196,108],[211,106],[196,144],[210,140],[197,160]]) +
+      // appareil de Golgi
+      '<g fill="none" stroke="#2dd4bf" stroke-width="2.6"><path d="M120 200 q30 -13 60 0"/><path d="M124 208 q26 -11 52 0"/><path d="M128 216 q22 -9 44 0"/></g>' +
+      '<g fill="#5eead4"><circle cx="186" cy="206" r="3"/><circle cx="190" cy="216" r="2.6"/></g>' +
+      // lysosome
+      '<circle cx="250" cy="128" r="14" fill="rgba(244,114,182,0.22)" stroke="#f472b6" stroke-width="2"/>' +
+      dots([[246,124],[254,130],[249,134]]) +
+      // ribosomes libres
+      dots([[300,140],[308,150],[294,156],[315,120],[88,196],[300,110]]) +
+      // pastilles
+      badge(1, 190, 34) + badge(2, 104, 104) + badge(3, 159, 150) + badge(4, 272, 80) +
+      badge(5, 203, 152) + badge(6, 150, 216) + badge(7, 300, 140) + badge(8, 250, 128) +
+    '</svg>';
+  var SVG_ANIMAL = wrap(_animalSvg, numLegend(['Membrane plasmique', 'Noyau', 'Nucléole', 'Mitochondrie', 'Réticulum endoplasmique', 'Appareil de Golgi', 'Ribosomes', 'Lysosome']));
+
+  // ===== CELLULE VÉGÉTALE =====
+  var _plantSvg =
+    '<svg viewBox="0 0 380 280" width="380" height="280" style="' + SVGSTYLE + '">' +
+      '<defs>' +
+        '<linearGradient id="bWall" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a3e635"/><stop offset="100%" stop-color="#4d7c0f"/></linearGradient>' +
+        '<radialGradient id="bCytoP" cx="40%" cy="35%"><stop offset="0%" stop-color="#243056"/><stop offset="100%" stop-color="#141a30"/></radialGradient>' +
+        '<radialGradient id="bChloro" cx="40%" cy="32%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#166534"/></radialGradient>' +
+      '</defs>' +
+      // paroi + membrane
+      '<rect x="18" y="22" width="344" height="236" rx="26" fill="url(#bWall)"/>' +
+      '<rect x="31" y="35" width="318" height="210" rx="16" fill="url(#bCytoP)" stroke="#a78bfa" stroke-width="2.2"/>' +
+      // grande vacuole
+      '<rect x="66" y="68" width="214" height="150" rx="22" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>' +
+      '<path d="M86 96 q10 -14 26 -8" fill="none" stroke="#7dd3fc" stroke-width="1.4" opacity="0.6"/>' +
+      // noyau (repoussé en coin)
+      '<circle cx="305" cy="84" r="29" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2.5"/>' +
+      '<circle cx="314" cy="92" r="9" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>' +
+      // chloroplastes
+      chloro(150, 52, 8) + chloro(222, 52, -7) + chloro(316, 150, 18) + chloro(316, 208, -16) + chloro(150, 235, 6) + chloro(216, 235, -8) +
+      // mitochondrie
+      mito(92, 54, 14, 0.8) +
+      // pastilles
+      badge(1, 190, 24) + badge(2, 35, 140) + badge(3, 305, 84) + badge(4, 173, 143) + badge(5, 316, 150) + badge(6, 92, 54) +
+    '</svg>';
+  var SVG_PLANT = wrap(_plantSvg, numLegend(['Paroi (cellulose)', 'Membrane plasmique', 'Noyau', 'Grande vacuole', 'Chloroplaste', 'Mitochondrie']));
+
+  // ===== BACTÉRIE (procaryote) =====
+  var _bactSvg =
+    '<svg viewBox="0 0 380 200" width="380" height="200" style="' + SVGSTYLE + '">' +
+      '<defs><radialGradient id="bCytoB" cx="40%" cy="35%"><stop offset="0%" stop-color="#2a2440"/><stop offset="100%" stop-color="#181228"/></radialGradient></defs>' +
+      // flagelle
+      '<path d="M283 100 q18 -14 34 0 t34 0 t22 0" fill="none" stroke="#94a3b8" stroke-width="2.6"/>' +
+      // paroi + membrane
+      '<rect x="55" y="58" width="230" height="84" rx="42" fill="url(#bCytoB)" stroke="#fbbf24" stroke-width="7"/>' +
+      '<rect x="64" y="67" width="212" height="66" rx="33" fill="none" stroke="#fcd34d" stroke-width="2" opacity="0.8"/>' +
+      // nucléoïde (ADN libre)
+      '<path d="M138 100 q16 -24 38 -9 q24 16 44 -3 q-9 28 -38 17 q-30 -9 -44 -5 Z" fill="rgba(167,139,250,0.14)" stroke="#a78bfa" stroke-width="2.6"/>' +
+      // plasmides
+      '<circle cx="108" cy="80" r="9" fill="none" stroke="#34d399" stroke-width="3"/>' +
+      '<circle cx="236" cy="120" r="7" fill="none" stroke="#34d399" stroke-width="3"/>' +
+      // ribosomes
+      dots([[128,122],[200,76],[216,120],[150,74],[252,92],[176,124],[120,98]]) +
+      // pastilles
+      badge(1, 80, 60) + badge(2, 178, 100) + badge(3, 108, 80) + badge(4, 252, 92) + badge(5, 345, 100) +
+    '</svg>';
+  var SVG_BACT = wrap(_bactSvg, numLegend(['Paroi + membrane', 'Nucléoïde (ADN libre)', 'Plasmide', 'Ribosomes', 'Flagelle']));
+
+  // ===== ADN — vraie double hélice =====
+  var SVG_DNA = (function () {
+    var w = 280, h = 320, cx = 140, amp = 80, turns = 2.5, n = 48;
+    var L = [], R = [], i, t, y, ph, s;
+    for (i = 0; i <= n; i++) {
+      t = i / n; y = +(24 + t * (h - 48)).toFixed(1); ph = t * Math.PI * 2 * turns; s = Math.sin(ph);
+      L.push([+(cx + amp * s).toFixed(1), y]);
+      R.push([+(cx - amp * s).toFixed(1), y]);
+    }
+    function poly(p) { return p.map(function (q, k) { return (k ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join(' '); }
+    var COL = { A: '#60a5fa', T: '#f87171', C: '#34d399', G: '#fbbf24' };
+    var pairs = [['A', 'T'], ['C', 'G'], ['G', 'C'], ['T', 'A']];
+    var rungs = '', labels = '';
+    var k = 0;
+    for (i = 3; i < n - 2; i += 3) {
+      var lx = L[i][0], rx = R[i][0], yy = L[i][1];
+      s = Math.sin(i / n * Math.PI * 2 * turns);
+      var op = (0.4 + 0.55 * Math.abs(s)).toFixed(2);
+      var pr = pairs[k % pairs.length];
+      rungs += '<line x1="' + lx + '" y1="' + yy + '" x2="' + cx + '" y2="' + yy + '" stroke="' + COL[pr[0]] + '" stroke-width="6" stroke-linecap="round" opacity="' + op + '"/>';
+      rungs += '<line x1="' + cx + '" y1="' + yy + '" x2="' + rx + '" y2="' + yy + '" stroke="' + COL[pr[1]] + '" stroke-width="6" stroke-linecap="round" opacity="' + op + '"/>';
+      k++;
+    }
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" style="' + SVGSTYLE + '">' +
+      rungs +
+      '<path d="' + poly(L) + '" fill="none" stroke="#3b82f6" stroke-width="6.5" stroke-linecap="round"/>' +
+      '<path d="' + poly(R) + '" fill="none" stroke="#ef4444" stroke-width="6.5" stroke-linecap="round"/>' +
+      labels +
+    '</svg>';
+    return wrap(svg, colorLegend([['#3b82f6', 'Brin 1'], ['#ef4444', 'Brin 2'], ['#60a5fa', 'A'], ['#f87171', 'T'], ['#34d399', 'C'], ['#fbbf24', 'G']]) +
+      '<p style="text-align:center;font-size:12.5px;color:var(--text-secondary);margin-top:6px;">Appariement constant : <strong>A–T</strong> et <strong>C–G</strong></p>');
+  })();
 
   var sections = {};
 
@@ -98,7 +210,6 @@
           </ul>
         </div>
       </div>
-      ${legend(['🟣 membrane', '🔵 noyau (ADN)', '🔴 mitochondrie', '🟡 nucléoïde'])}
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
         <div class="simple-exp-content">La différence n°1 = <strong>le noyau</strong>. « Pro-caryote » veut dire « avant le noyau » (pas de noyau, ADN qui flotte), « eu-caryote » = « vrai noyau » (ADN bien rangé dans un coffre, le noyau). Les bactéries sont procaryotes ; les animaux, plantes et champignons sont eucaryotes.</div>
@@ -128,7 +239,7 @@
       <h2>4. Cellule animale vs cellule végétale</h2>
       <div class="grid2" style="margin-top:0.5rem;">
         <div class="card"><h3>🐾 Cellule animale</h3><div style="text-align:center;">${SVG_ANIMAL}</div></div>
-        <div class="card"><h3>🌿 Cellule végétale</h3><div style="text-align:center;">${SVG_PLANT}</div>${legend(['🟩 paroi', '🟢 chloroplaste', '🔵 grande vacuole'])}</div>
+        <div class="card"><h3>🌿 Cellule végétale</h3><div style="text-align:center;">${SVG_PLANT}</div></div>
       </div>
       <p style="margin-top:1rem;">La cellule <strong>végétale</strong> possède 3 choses en plus :</p>
       <ul style="line-height:2;">
@@ -144,7 +255,7 @@
 
     <div class="synth-section">
       <h2>5. L'ADN & les chromosomes</h2>
-      <div style="text-align:center; margin:0.5rem 0;">${SVG_DNA}${legend(['🔵🔴 les 2 brins', '🟣 bases (barreaux)'])}</div>
+      <div style="text-align:center; margin:0.5rem 0;">${SVG_DNA}</div>
       <ul style="line-height:2.1;">
         <li>L'<strong>ADN</strong> est une molécule en forme de <strong>double hélice</strong> (2 brins enroulés).</li>
         <li>Il est fait de <strong>nucléotides</strong> = sucre (désoxyribose) + phosphate + une <strong>base azotée</strong>.</li>
