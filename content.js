@@ -592,6 +592,7 @@ const SECTIONS_CONTENT = {
   <div style="margin-bottom:1.5rem;">
     <input type="search" id="formula-search" oninput="filterFormulas(this.value)" placeholder="🔍 Rechercher une formule (ex. rayon, foyer, pente, vecteur…)" aria-label="Rechercher une formule" style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:15px; box-sizing:border-box;">
     <button id="formula-bookmark-filter" type="button" onclick="toggleBookmarkFilter(this)" aria-pressed="false" style="margin-top:8px; padding:8px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:13px; cursor:pointer; font-weight:600;">★ Voir mes formules marquées</button>
+    <button type="button" onclick="printRevisionSheet()" style="margin-top:8px; margin-left:8px; padding:8px 14px; border-radius:20px; border:none; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; font-size:13px; cursor:pointer; font-weight:700;">📄 Fiche de révision (PDF)</button>
     <p id="formula-search-empty" style="display:none; color:var(--text-secondary); margin-top:0.75rem;">Aucune formule ne correspond à ta recherche.</p>
   </div>
   <div class="grid2">

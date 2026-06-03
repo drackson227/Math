@@ -13,8 +13,8 @@
 
   var st = blankState();
   function blankState() {
-    return { code: null, isHost: false, room: null, players: [], channel: null,
-             shownIdx: undefined, answeredThis: false, myChoice: -1, timer: null, timeLeft: 0, timeUp: false };
+    return { mode: 'group', code: null, isHost: false, room: null, players: [], channel: null,
+             shownIdx: undefined, answeredThis: false, myChoice: -1, timer: null, timeLeft: 0, timeUp: false, autostart: false };
   }
 
   function sb() { return window.MGR2Auth ? window.MGR2Auth.sb() : null; }
@@ -29,6 +29,14 @@
   window.openMultiplayer = function () {
     if (!sb() || !user()) { if (window.MGR2Auth) window.MGR2Auth.openLogin(); else toast('Connecte-toi pour jouer à plusieurs', '#f87171'); return; }
     var ov = el('mp-overlay'); if (!ov) return;
+    st.mode = 'group';
+    ov.style.display = 'flex';
+    showHome();
+  };
+  window.openDuel = function () {
+    if (!sb() || !user()) { if (window.MGR2Auth) window.MGR2Auth.openLogin(); else toast('Connecte-toi pour jouer en duel', '#f87171'); return; }
+    var ov = el('mp-overlay'); if (!ov) return;
+    st.mode = 'duel';
     ov.style.display = 'flex';
     showHome();
   };
@@ -41,10 +49,13 @@
 
   /* ---------- écran d'accueil ---------- */
   function showHome() {
+    var duel = st.mode === 'duel';
     body(
-      '<h2 class="mp-title">🎮 Quiz à plusieurs</h2>' +
-      '<p class="mp-sub">Affronte tes amis sur les mêmes questions, en direct !</p>' +
-      '<button class="mp-btn mp-btn-primary" onclick="mpCreate()">➕ Créer une partie</button>' +
+      '<h2 class="mp-title">' + (duel ? '⚔️ Duel 1 contre 1' : '🎮 Quiz à plusieurs') + '</h2>' +
+      '<p class="mp-sub">' + (duel
+        ? 'Défie un ami en tête-à-tête : 5 questions, le plus rapide et précis gagne ! La partie démarre dès qu’il rejoint.'
+        : 'Affronte tes amis sur les mêmes questions, en direct !') + '</p>' +
+      '<button class="mp-btn mp-btn-primary" onclick="mpCreate()">➕ ' + (duel ? 'Créer un duel' : 'Créer une partie') + '</button>' +
       '<div class="mp-or">ou</div>' +
       '<div class="mp-join">' +
         '<input id="mp-code-input" maxlength="4" placeholder="CODE" oninput="this.value=this.value.toUpperCase()" class="mp-code-input">' +
@@ -71,7 +82,7 @@
   window.mpCreate = function () {
     var client = sb(), u = user(); if (!client || !u) return;
     var code = genCode();
-    var row = { code: code, host_id: u.id, status: 'lobby', q_index: -1, questions: pickQuestions(QPERGAME) };
+    var row = { code: code, host_id: u.id, status: 'lobby', q_index: -1, questions: pickQuestions(st.mode === 'duel' ? 5 : QPERGAME) };
     client.from(R_ROOMS).insert(row).select().single().then(function (res) {
       if (res.error) { console.warn('mp create:', res.error.message); toast('Création impossible (tables créées ?)', '#f87171'); return; }
       st.code = code; st.isHost = true; st.room = res.data;
@@ -119,6 +130,10 @@
   /* ---------- routeur d'affichage ---------- */
   function render() {
     if (!st.room) return;
+    // Duel : démarrage automatique dès que l'adversaire a rejoint (2 joueurs)
+    if (st.mode === 'duel' && st.isHost && st.room.status === 'lobby' && st.players.length >= 2 && !st.autostart) {
+      st.autostart = true; window.mpStart();
+    }
     if (st.room.status === 'lobby') renderLobby();
     else if (st.room.status === 'playing') renderQuestion();
     else if (st.room.status === 'finished') renderPodium();
@@ -129,16 +144,22 @@
       var crown = (st.room && p.user_id === st.room.host_id) ? ' 👑' : '';
       return '<li class="mp-player">' + esc(p.pseudo) + crown + '</li>';
     }).join('');
+    var duel = st.mode === 'duel';
+    var hostControls = duel
+      ? (st.players.length < 2
+          ? '<p class="mp-wait">⏳ En attente d\'un adversaire… partage le code !</p>'
+          : '<p class="mp-wait">⚔️ Adversaire trouvé — ça commence !</p>')
+      : (st.isHost
+          ? '<button class="mp-btn mp-btn-primary" onclick="mpStart()"' + (st.players.length < 1 ? ' disabled' : '') + '>▶ Démarrer la partie</button>'
+          : '<p class="mp-wait">⏳ En attente que l\'hôte démarre…</p>');
     body(
-      '<h2 class="mp-title">Salle d\'attente</h2>' +
+      '<h2 class="mp-title">' + (duel ? '⚔️ Duel — salle d\'attente' : 'Salle d\'attente') + '</h2>' +
       '<div class="mp-codebox">Code : <span class="mp-code">' + esc(st.code) + '</span>' +
         '<button class="mp-copy" onclick="mpCopyCode()" title="Copier">📋</button></div>' +
-      '<p class="mp-sub">Partage ce code. Les autres tapent « Rejoindre » avec.</p>' +
-      '<div class="mp-playerstitle">Joueurs (' + st.players.length + ')</div>' +
+      '<p class="mp-sub">' + (duel ? 'Envoie ce code à ton adversaire. Le duel démarre tout seul dès qu\'il rejoint.' : 'Partage ce code. Les autres tapent « Rejoindre » avec.') + '</p>' +
+      '<div class="mp-playerstitle">' + (duel ? 'Joueurs (' + st.players.length + '/2)' : 'Joueurs (' + st.players.length + ')') + '</div>' +
       '<ul class="mp-players">' + (list || '<li class="mp-player">…</li>') + '</ul>' +
-      (st.isHost
-        ? '<button class="mp-btn mp-btn-primary" onclick="mpStart()"' + (st.players.length < 1 ? ' disabled' : '') + '>▶ Démarrer la partie</button>'
-        : '<p class="mp-wait">⏳ En attente que l\'hôte démarre…</p>') +
+      hostControls +
       '<button class="mp-quit" onclick="closeMultiplayer()">Quitter</button>'
     );
   }

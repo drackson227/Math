@@ -627,6 +627,59 @@ async function shareScore() {
   }, 'image/png');
 }
 
+// ── FICHE DE RÉVISION IMPRIMABLE / PDF ──
+function printRevisionSheet() {
+  var sheet = document.getElementById('revision-sheet');
+  if (!sheet) return;
+  var section = function (title, color, items) {
+    return '<div class="rs-block"><h2 style="color:' + color + '">' + title + '</h2>' +
+      items.map(function (it) {
+        return '<div class="rs-item"><span class="rs-label">' + it[0] + '</span><span class="rs-formula">\\(' + it[1] + '\\)</span></div>';
+      }).join('') + '</div>';
+  };
+  sheet.innerHTML =
+    '<div class="rs-head"><h1>📐 Fiche de révision — Maths GR2</h1>' +
+    '<p>Géométrie analytique plane · drackson227.github.io/Math</p></div>' +
+    '<div class="rs-grid">' +
+    section('Vecteurs', '#7c3aed', [
+      ['Composantes', '\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)'],
+      ['Norme', '\\|\\vec{AB}\\|=\\sqrt{x^2+y^2}'],
+      ['Distance A→B', 'AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}'],
+      ['Milieu', 'M\\left(\\tfrac{x_A+x_B}{2}\\,;\\,\\tfrac{y_A+y_B}{2}\\right)'],
+      ['Relation de Chasles', '\\vec{AB}+\\vec{BC}=\\vec{AC}'],
+      ['Colinéarité', 'x\\,y\'-y\\,x\'=0']
+    ]) +
+    section('Cercle', '#2563eb', [
+      ['Forme canonique', '(x-x_0)^2+(y-y_0)^2=R^2'],
+      ['Forme développée', 'x^2+y^2+ax+by+c=0'],
+      ['Centre', 'C\\left(-\\tfrac{a}{2}\\,;\\,-\\tfrac{b}{2}\\right)'],
+      ['Rayon', 'R=\\tfrac{\\sqrt{a^2+b^2-4c}}{2}'],
+      ['Existence', 'a^2+b^2-4c>0'],
+      ['Distance point-centre', 'd=\\sqrt{(x_P-x_0)^2+(y_P-y_0)^2}']
+    ]) +
+    section('Parabole', '#059669', [
+      ['Forme canonique', 'y=A(x-\\alpha)^2+\\beta'],
+      ['Sommet', 'S(\\alpha\\,;\\,\\beta)'],
+      ['Abscisse sommet (dév.)', 'x_s=-\\tfrac{b}{2a}'],
+      ['Axe de symétrie', 'x=\\alpha'],
+      ['Ouverture', 'A>0:\\text{ haut}\\quad A<0:\\text{ bas}'],
+      ['Zéros', 'x=\\tfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}']
+    ]) +
+    section('Droites', '#d97706', [
+      ['Forme explicite', 'y=mx+p'],
+      ['Pente (2 points)', 'm=\\tfrac{y_B-y_A}{x_B-x_A}'],
+      ['Vecteur directeur', '\\vec{u}=(-b\\,;\\,a)'],
+      ['Vecteur normal', '\\vec{n}=(a\\,;\\,b)'],
+      ['Parallèles / perp.', 'm_1=m_2\\quad|\\quad m\\cdot m\'=-1'],
+      ['Distance point-droite', 'd=\\tfrac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}']
+    ]) +
+    '</div>';
+  var doPrint = function () { setTimeout(function () { window.print(); }, 60); };
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([sheet]).then(doPrint).catch(doPrint);
+  } else { doPrint(); }
+}
+
 // ── STATS PAR CHAPITRE (écran d'accueil quiz) ──
 var CHAP_LABELS = { vecteur: 'Vecteurs', cercle: 'Cercle', parabole: 'Parabole', droite: 'Droites' };
 var CHAP_ORDER = ['vecteur', 'cercle', 'parabole', 'droite'];
@@ -1718,6 +1771,45 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); demoNext(); }
   else if (e.key === 'ArrowLeft') { e.preventDefault(); demoPrev(); }
 });
+
+// ── ÉCRAN DE BIENVENUE (1re visite) ──
+(function welcomeScreen() {
+  var KEY = 'mathsgr2_welcome_seen';
+  var slides = [
+    { emoji: '👋', title: 'Bienvenue sur Maths GR2 !', text: 'Ton appli pour réviser la géométrie analytique : cercle, parabole, droites et vecteurs. 100% gratuit.' },
+    { emoji: '📚', title: 'Apprends à ton rythme', text: 'Cours animés, formules clés, méthodes pas-à-pas, flashcards et un générateur d’exercices à l’infini.' },
+    { emoji: '🎮', title: 'Teste-toi et amuse-toi', text: 'Quiz, défi du jour, parties à plusieurs et chat mondial. Tu peux même installer l’appli et l’utiliser hors-ligne !' }
+  ];
+  var i = 0;
+  function render(ov) {
+    var s = slides[i];
+    ov.querySelector('.wel-emoji').textContent = s.emoji;
+    ov.querySelector('.wel-title').textContent = s.title;
+    ov.querySelector('.wel-text').textContent = s.text;
+    Array.prototype.forEach.call(ov.querySelectorAll('.wel-dot'), function (d, k) { d.classList.toggle('on', k === i); });
+    ov.querySelector('.wel-next').textContent = (i === slides.length - 1) ? 'Commencer 🚀' : 'Suivant →';
+  }
+  function close(ov) { ov.classList.remove('show'); try { localStorage.setItem(KEY, '1'); } catch (e) {} setTimeout(function () { if (ov.parentNode) ov.remove(); }, 250); }
+  window.showWelcome = function (force) {
+    try { if (!force && localStorage.getItem(KEY) === '1') return; } catch (e) {}
+    if (document.getElementById('welcome-overlay')) return;
+    var ov = document.createElement('div');
+    ov.id = 'welcome-overlay'; ov.className = 'wel-overlay'; ov.setAttribute('role', 'dialog');
+    ov.innerHTML = '<div class="wel-card">' +
+      '<button class="wel-skip" type="button">Passer</button>' +
+      '<div class="wel-emoji"></div><h2 class="wel-title"></h2><p class="wel-text"></p>' +
+      '<div class="wel-dots"><span class="wel-dot"></span><span class="wel-dot"></span><span class="wel-dot"></span></div>' +
+      '<button class="wel-next" type="button"></button></div>';
+    document.body.appendChild(ov);
+    i = 0; render(ov);
+    requestAnimationFrame(function () { ov.classList.add('show'); });
+    ov.querySelector('.wel-skip').addEventListener('click', function () { close(ov); });
+    ov.querySelector('.wel-next').addEventListener('click', function () { if (i < slides.length - 1) { i++; render(ov); } else { close(ov); } });
+    ov.addEventListener('mousedown', function (e) { if (e.target === ov) close(ov); });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(function () { showWelcome(); }, 900); });
+  else setTimeout(function () { showWelcome(); }, 900);
+})();
 
 // ── BLOC-NOTES / CALCULATRICE (brouillon pendant le quiz) ──
 // Bouton flottant + panneau : une zone de brouillon libre + un mini-calcul SÛR
@@ -3682,7 +3774,7 @@ function initGraphs() {
 //  - État stocké en local (mathsgr2_premium). Sans serveur : un code peut être
 //    partagé — suffisant pour une vente entre élèves, pas un paywall inviolable.
 // ════════════════════════════════════════════════════════════
-const PREMIUM_SECTIONS = ['mesexos', 'progression', 'journal']; // bonus payants
+const PREMIUM_SECTIONS = []; // site 100% gratuit : toutes les sections sont accessibles à tous
 const PAYPAL_LINK  = 'https://paypal.me/Drackson227';
 // Les codes ne sont PAS écrits en clair (sinon lisibles dans le code source du site).
 // On ne stocke que leur empreinte (hash) : impossible de retrouver un code depuis son hash.

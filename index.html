@@ -49,7 +49,8 @@
       startup: { ready() { MathJax.startup.defaultReady(); } }
     };
   </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Sortie SVG : formules auto-contenues (aucun fichier de police séparé) → fonctionnent hors-ligne une fois en cache -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 </head>
 <body>
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
@@ -351,6 +352,7 @@
     </div>
     <button id="daily-btn" onclick="startDailyChallenge()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(239,68,68,0.32);">🔥 Défi du jour — 5 questions</button>
     <button id="mp-launch-btn" onclick="openMultiplayer()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#22d3ee,#3b82f6); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(59,130,246,0.32);">🎮 Jouer à plusieurs</button>
+    <button id="duel-launch-btn" onclick="openDuel()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#fb7185,#e11d48); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(225,29,72,0.32);">⚔️ Duel 1 contre 1</button>
     <button id="missed-filter-btn" onclick="filterMissedOnly(); startQuiz();" style="display:block; margin:0 auto 1.5rem; padding:10px 20px; border-radius:8px; border:2px solid var(--color-droite); font-size:14px; cursor:pointer; background:var(--color-droite-light); color:var(--color-droite); font-weight:600;">⚠️ Réviser mes erreurs</button>
     <button onclick="startQuiz()" style="background:var(--color-nav); color:#fff; border:none; border-radius:12px; padding:16px 48px; font-size:18px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-glow-nav);">▶ Commencer le quiz</button>
     <p id="best-score-display" style="margin-top:1.5rem; color:var(--text-secondary); font-size:14px;">Meilleur score : —</p>
@@ -535,10 +537,7 @@
     <a href="https://instagram.com/drackson227" target="_blank" rel="noopener" style="color:var(--color-parabole); text-decoration:none; font-weight:600;">📸 @drackson227</a>
     <a href="https://www.tiktok.com/@drackson227" target="_blank" rel="noopener" style="color:var(--color-nav); text-decoration:none; font-weight:600; margin-left:14px;">🎵 TikTok @Drackson227</a>
   </p>
-  <p style="margin:0;">
-    <button onclick="openPremiumModal()" style="background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); border-radius:8px; padding:5px 12px; font-size:12px; cursor:pointer;">⭐ Débloquer le Premium</button>
-    <span onclick="openPremiumModal()" title="Accès créateur" style="cursor:pointer; opacity:0.3; margin-left:8px;">⚙</span>
-  </p>
+  <p style="margin:0; font-size:12px; color:var(--text-secondary); opacity:0.8;">💜 100% gratuit — bonne révision !</p>
 </footer>
 
 <div class="focus-mode-overlay" id="focus-overlay">
@@ -617,6 +616,8 @@
   <script src="auth.js"></script>
   <script src="chat.js"></script>
   <script src="multiplayer.js"></script>
+  <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
+  <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>
   <script src="generator.js"></script>
   <script src="backtotop.js"></script>

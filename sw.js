@@ -4,12 +4,19 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v4';
+const CACHE = 'mathsgr2-v5';
 const CORE = [
   './', './index.html', './style.css',
   './data.js', './content.js', './script.js',
-  './auth.js', './chat.js', './multiplayer.js', './search.js', './backtotop.js',
+  './auth.js', './chat.js', './multiplayer.js', './search.js', './generator.js', './backtotop.js',
   './manifest.json', './logo.svg', './icon-192.png', './icon-512.png'
+];
+// Librairies CDN à précharger pour le HORS-LIGNE (MathJax SVG = auto-contenu, pas de polices séparées)
+const CDN_PRECACHE = [
+  'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
 // Hôtes CDN dont on garde une copie en cache (pour le hors-ligne)
@@ -18,7 +25,13 @@ const CACHEABLE_CDN = ['cdn.jsdelivr.net', 'cdnjs.cloudflare.com', 'fonts.google
 const NEVER_CACHE = ['supabase.co', 'supabase.in', 'giphy.com'];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then((c) => c.addAll(CORE)
+        // Préchargement CDN non bloquant : un échec n'empêche pas l'installation
+        .then(() => Promise.allSettled(CDN_PRECACHE.map((u) => c.add(u)))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (e) => {
