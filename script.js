@@ -1878,8 +1878,9 @@ document.addEventListener('keydown', (e) => {
     if (!onQuiz && panel) panel.style.display = 'none';
   };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { build(); updateScratchVisibility(); });
-  else { build(); updateScratchVisibility(); }
+  // Ancien brouillon FUSIONNÉ avec la feuille intelligente → outil unique « 🧮 Brouillon »
+  // dans answersheet.js. On ne construit plus #scratch-btn ici (updateScratchVisibility
+  // reste défini et inoffensif : il sort si le bouton n'existe pas).
 })();
 
 

@@ -1294,9 +1294,18 @@ textarea:focus-visible,
 .ansheet-line:focus { outline: none; border-color: var(--color-nav); }
 .ansheet-row[data-st="ok"] .ansheet-line { border-color: #22c55e; }
 .ansheet-row[data-st="wrong"] .ansheet-line { border-color: #ef4444; }
-.ansheet-status { flex: 0 0 20px; text-align: center; font-weight: 800; font-size: 15px; }
+.ansheet-status { flex: 0 0 auto; min-width: 26px; text-align: right; font-weight: 800; font-size: 14px; font-family: 'Courier New', monospace; white-space: nowrap; }
 .ansheet-row[data-st="ok"] .ansheet-status { color: #22c55e; }
 .ansheet-row[data-st="wrong"] .ansheet-status { color: #ef4444; cursor: help; }
+.ansheet-row[data-st="calc"] .ansheet-status { color: var(--text-secondary); font-weight: 600; }
+.ansheet-row[data-st="calc"] .ansheet-line { border-color: rgba(96,165,250,0.35); }
+
+/* Clavier de calcul intégré */
+.ansheet-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 10px; }
+.ansheet-key { padding: 9px 0; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); cursor: pointer; font-size: 15px; font-weight: 600; }
+.ansheet-key:active { transform: scale(0.95); }
+.ansheet-key.k-del { color: #f87171; border-color: rgba(248,113,113,0.4); }
+.ansheet-key.k-eq { grid-column: span 2; background: var(--color-nav); color: #fff; border-color: var(--color-nav); font-weight: 700; }
 .ansheet-final { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 .ansheet-final label { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
 .ansheet-final-input { flex: 1; min-width: 120px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; }
@@ -1308,8 +1317,8 @@ textarea:focus-visible,
 .ansheet-final[data-st="wrong"] .ansheet-final-status { color: #ef4444; }
 
 /* Feuille libre flottante */
-#feuille-btn { position: fixed; left: 16px; bottom: 64px; z-index: 2400; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--color-cercle); background: var(--bg-card); color: var(--color-cercle); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
-#feuille-panel { position: fixed; left: 16px; bottom: 112px; z-index: 2400; width: 340px; max-width: 92vw; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.5); display: none; max-height: 70vh; overflow-y: auto; }
+#feuille-btn { position: fixed; left: 16px; bottom: 16px; z-index: 2400; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--color-nav); background: var(--bg-card); color: var(--color-nav); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+#feuille-panel { position: fixed; left: 16px; bottom: 64px; z-index: 2400; width: 340px; max-width: 92vw; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.5); display: none; max-height: 76vh; overflow-y: auto; }
 #feuille-panel.show { display: block; }
 .feuille-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .feuille-head strong { font-size: 13px; color: var(--text-primary); }

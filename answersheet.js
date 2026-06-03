@@ -1,12 +1,15 @@
-/* GR2 Study — Feuille de réponses intelligente
-   Tu écris ton calcul ligne par ligne ; chaque ligne contenant un « = » est vérifiée
-   en direct (✓/✗ + vraie valeur) si les deux côtés sont calculables (nombres, fractions,
-   √, ^, π). Un champ « réponse finale » se compare à la réponse attendue (comparaison
-   des nombres). Utilisable sous chaque exercice du générateur + en feuille libre. */
+/* GR2 Study — Brouillon intelligent (feuille + calculatrice fusionnées)
+   Tu écris ton calcul ligne par ligne :
+   • une ligne SANS « = » mais calculable affiche son résultat en direct ( = 5 ) ;
+   • une ligne AVEC « = » est vérifiée : ✓ juste, ✗ faux (vraie valeur au survol) ;
+   • un clavier de calcul insère √ π ^ ( ) ÷ × … dans la ligne active ;
+   • la touche « = » calcule l'expression et l'écrit ( 2+3 → 2+3 = 5 ).
+   Évaluateur sûr : nombres, fractions, + − × ÷ . ( ) √ ^ π. */
 (function () {
   'use strict';
 
-  // ---- Évaluateur sûr : renvoie un nombre ou null ----
+  function round(v) { return Math.round(v * 1e6) / 1e6; }
+
   function evalExpr(raw) {
     if (raw == null) return null;
     var e = String(raw).trim();
@@ -15,7 +18,7 @@
          .replace(/\^/g, '**').replace(/×/g, '*').replace(/÷/g, '/')
          .replace(/−/g, '-').replace(/,/g, '.');
     var cleaned = e.replace(/Math\.sqrt/g, '').replace(/Math\.PI/g, '');
-    if (/[^0-9\s+\-*/.()]/.test(cleaned)) return null; // contient autre chose qu'un calcul
+    if (/[^0-9\s+\-*/.()]/.test(cleaned)) return null;
     try {
       var v = Function('"use strict"; return (' + e + ')')();
       if (typeof v === 'number' && isFinite(v)) return v;
@@ -23,11 +26,8 @@
     return null;
   }
 
-  function approxEq(a, b) {
-    return Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(a), Math.abs(b));
-  }
+  function approxEq(a, b) { return Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(a), Math.abs(b)); }
 
-  // ---- Vérifier une ligne : {status:'ok'|'wrong'|'neutral', value} ----
   function checkLine(line) {
     var t = (line || '').trim();
     if (!t || t.indexOf('=') < 0) return { status: 'neutral' };
@@ -40,7 +40,6 @@
     return ok ? { status: 'ok', value: first } : { status: 'wrong', value: first };
   }
 
-  // ---- Extraire les nombres (pour comparer la réponse finale) ----
   function numbersOf(str) {
     if (str == null) return [];
     var s = String(str).replace(/\\[a-zA-Z]+/g, ' ').replace(/[{}\\]/g, ' ');
@@ -54,21 +53,25 @@
     if (a.length < b.length) return false;
     var used = new Array(a.length).fill(false);
     return b.every(function (bn) {
-      for (var i = 0; i < a.length; i++) {
-        if (!used[i] && approxEq(a[i], bn)) { used[i] = true; return true; }
-      }
+      for (var i = 0; i < a.length; i++) { if (!used[i] && approxEq(a[i], bn)) { used[i] = true; return true; } }
       return false;
     });
   }
 
-  // ---- Monter une feuille dans un conteneur ----
+  var KEYS = ['C', '←', '(', ')', '7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', '.', '√(', '^', 'π', '+', '='];
+
   function mount(container, opts) {
     opts = opts || {};
+    var liveResult = opts.liveResult !== false;
     container.classList.add('ansheet');
     container.innerHTML = '';
-    var rows = document.createElement('div');
-    rows.className = 'ansheet-rows';
+    var rows = document.createElement('div'); rows.className = 'ansheet-rows';
     container.appendChild(rows);
+
+    var activeInput = null, caret = 0;
+    function clampCaret() { if (!activeInput) return; if (caret == null || caret < 0 || caret > activeInput.value.length) caret = activeInput.value.length; }
+    function syncCaret() { try { if (activeInput && activeInput.selectionStart != null) caret = activeInput.selectionStart; } catch (_) {} }
+    function setActive(inp) { activeInput = inp; syncCaret(); }
 
     function save() {
       if (!opts.storageKey) return;
@@ -76,12 +79,27 @@
       try { localStorage.setItem(opts.storageKey, JSON.stringify(vals)); } catch (_) {}
     }
 
-    function update(row, inp, st) {
-      var r = checkLine(inp.value);
-      row.dataset.st = r.status;
-      st.textContent = r.status === 'ok' ? '✓' : (r.status === 'wrong' ? '✗' : '');
-      st.title = (r.status === 'wrong' && r.value != null) ? ('≈ ' + (Math.round(r.value * 1e6) / 1e6)) : '';
+    function update(inp) {
+      var row = inp.closest('.ansheet-row'); if (!row) return;
+      var st = row.querySelector('.ansheet-status');
+      var t = inp.value.trim();
+      if (t.indexOf('=') >= 0) {
+        var r = checkLine(inp.value);
+        row.dataset.st = r.status;
+        st.textContent = r.status === 'ok' ? '✓' : (r.status === 'wrong' ? '✗' : '');
+        st.title = (r.status === 'wrong' && r.value != null) ? ('≈ ' + round(r.value)) : '';
+      } else if (liveResult && t) {
+        var v = evalExpr(t);
+        if (v !== null) { row.dataset.st = 'calc'; st.textContent = '= ' + round(v); st.title = ''; }
+        else { row.dataset.st = 'neutral'; st.textContent = ''; st.title = ''; }
+      } else { row.dataset.st = 'neutral'; st.textContent = ''; st.title = ''; }
       save();
+    }
+
+    function goNext(inp) {
+      var row = inp.closest('.ansheet-row');
+      if (row.nextElementSibling) { row.nextElementSibling.querySelector('.ansheet-line').focus(); }
+      else { var nr = newRow(''); rows.appendChild(nr); nr.querySelector('.ansheet-line').focus(); }
     }
 
     function newRow(value) {
@@ -92,36 +110,76 @@
       if (value) inp.value = value;
       var st = document.createElement('span'); st.className = 'ansheet-status';
       row.appendChild(inp); row.appendChild(st);
-      inp.addEventListener('input', function () { update(row, inp, st); });
+      inp.addEventListener('focus', function () { setActive(inp); });
+      inp.addEventListener('input', function () { syncCaret(); update(inp); });
+      inp.addEventListener('keyup', syncCaret);
+      inp.addEventListener('mouseup', syncCaret);
       inp.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault(); update(row, inp, st);
-          if (row.nextElementSibling) { row.nextElementSibling.querySelector('.ansheet-line').focus(); }
-          else { var nr = newRow(''); rows.appendChild(nr); nr.querySelector('.ansheet-line').focus(); }
-        } else if (e.key === 'Backspace' && inp.value === '' && rows.children.length > 1) {
+        if (e.key === 'Enter') { e.preventDefault(); update(inp); goNext(inp); }
+        else if (e.key === 'Backspace' && inp.value === '' && rows.children.length > 1) {
           e.preventDefault();
           var prev = row.previousElementSibling; row.remove(); save();
-          if (prev) { var p = prev.querySelector('.ansheet-line'); p.focus(); try { p.setSelectionRange(p.value.length, p.value.length); } catch (_) {} }
+          if (prev) { var p = prev.querySelector('.ansheet-line'); setActive(p); p.focus(); try { p.setSelectionRange(p.value.length, p.value.length); } catch (_) {} }
         }
       });
       return row;
     }
 
+    // ---- clavier de calcul (optionnel) ----
+    if (opts.keypad) {
+      function insertActive(v) {
+        if (!activeInput) { activeInput = rows.querySelector('.ansheet-line'); caret = activeInput ? activeInput.value.length : 0; }
+        if (!activeInput) return;
+        clampCaret();
+        activeInput.value = activeInput.value.slice(0, caret) + v + activeInput.value.slice(caret);
+        caret += v.length;
+        activeInput.focus();
+        try { activeInput.setSelectionRange(caret, caret); } catch (_) {}
+        update(activeInput);
+      }
+      function backspaceActive() {
+        if (!activeInput) return; clampCaret();
+        if (caret > 0) { activeInput.value = activeInput.value.slice(0, caret - 1) + activeInput.value.slice(caret); caret -= 1; activeInput.focus(); try { activeInput.setSelectionRange(caret, caret); } catch (_) {} }
+        update(activeInput);
+      }
+      function pressEquals() {
+        if (!activeInput) return;
+        var t = activeInput.value;
+        if (t.indexOf('=') < 0) {
+          var v = evalExpr(t.trim());
+          if (v !== null) { activeInput.value = t.replace(/\s+$/, '') + ' = ' + round(v); caret = activeInput.value.length; update(activeInput); goNext(activeInput); return; }
+        }
+        insertActive('=');
+      }
+      var keys = document.createElement('div'); keys.className = 'ansheet-keys';
+      KEYS.forEach(function (k) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'ansheet-key'; b.textContent = k;
+        if (k === 'C' || k === '←') b.classList.add('k-del');
+        if (k === '=') b.classList.add('k-eq');
+        b.addEventListener('mousedown', function (e) { e.preventDefault(); }); // garder le focus dans la ligne
+        b.addEventListener('click', function () {
+          if (k === 'C') { if (activeInput) { activeInput.value = ''; caret = 0; activeInput.focus(); update(activeInput); } return; }
+          if (k === '←') { backspaceActive(); return; }
+          if (k === '=') { pressEquals(); return; }
+          insertActive(k);
+        });
+        keys.appendChild(b);
+      });
+      container.appendChild(keys);
+    }
+
+    // ---- restauration ----
     var initial = [];
     if (opts.storageKey) { try { initial = JSON.parse(localStorage.getItem(opts.storageKey) || '[]'); } catch (_) {} }
     if (!initial.length) initial = [''];
-    initial.forEach(function (v) {
-      var row = newRow(v); rows.appendChild(row);
-      update(row, row.querySelector('.ansheet-line'), row.querySelector('.ansheet-status'));
-    });
+    initial.forEach(function (v) { var row = newRow(v); rows.appendChild(row); update(row.querySelector('.ansheet-line')); });
 
     container._clear = function () {
-      rows.innerHTML = '';
-      var row = newRow(''); rows.appendChild(row);
-      save();
-      row.querySelector('.ansheet-line').focus();
+      rows.innerHTML = ''; var row = newRow(''); rows.appendChild(row); save();
+      var l = row.querySelector('.ansheet-line'); setActive(l); l.focus();
     };
 
+    // ---- réponse finale (exercices) ----
     if (opts.answer) {
       var fin = document.createElement('div'); fin.className = 'ansheet-final';
       var lab = document.createElement('label'); lab.textContent = 'Réponse finale :';
@@ -138,27 +196,36 @@
     }
   }
 
-  // ---- Feuille libre flottante (bouton + panneau) ----
-  function buildFree() {
+  // ---- Outil flottant : Brouillon intelligent ----
+  function buildTool() {
     if (document.getElementById('feuille-btn')) return;
+
+    // migration : ancien brouillon (texte simple) → feuille multi-lignes
+    try {
+      if (!localStorage.getItem('gr2_feuille')) {
+        var old = localStorage.getItem('mathsgr2_scratch');
+        if (old && old.trim()) localStorage.setItem('gr2_feuille', JSON.stringify(old.split(/\r?\n/)));
+      }
+    } catch (_) {}
+
     var btn = document.createElement('button');
-    btn.id = 'feuille-btn'; btn.type = 'button'; btn.textContent = '📝 Feuille';
-    btn.setAttribute('aria-label', 'Ouvrir la feuille de réponses');
+    btn.id = 'feuille-btn'; btn.type = 'button'; btn.textContent = '🧮 Brouillon';
+    btn.setAttribute('aria-label', 'Ouvrir le brouillon intelligent');
 
     var panel = document.createElement('div');
     panel.id = 'feuille-panel';
     panel.innerHTML =
-      '<div class="feuille-head"><strong>📝 Feuille intelligente</strong>' +
+      '<div class="feuille-head"><strong>🧮 Brouillon intelligent</strong>' +
         '<button type="button" id="feuille-close" aria-label="Fermer">✕</button></div>' +
-      '<p class="feuille-hint">Écris ton calcul. Chaque ligne avec « = » est vérifiée : ✓ juste, ✗ faux (survole pour voir la vraie valeur).</p>' +
+      '<p class="feuille-hint">Calcule ligne par ligne. Une ligne calculable affiche son résultat ; avec « = » elle est vérifiée (✓/✗). La touche « = » calcule pour toi.</p>' +
       '<div id="feuille-sheet"></div>' +
-      '<button type="button" id="feuille-clear" class="feuille-clear">🗑️ Effacer la feuille</button>';
+      '<button type="button" id="feuille-clear" class="feuille-clear">🗑️ Effacer le brouillon</button>';
 
     document.body.appendChild(btn);
     document.body.appendChild(panel);
 
     var sheet = panel.querySelector('#feuille-sheet');
-    mount(sheet, { storageKey: 'gr2_feuille' });
+    mount(sheet, { storageKey: 'gr2_feuille', keypad: true, liveResult: true });
 
     btn.addEventListener('click', function () {
       panel.classList.toggle('show');
@@ -170,6 +237,6 @@
 
   window.AnswerSheet = { mount: mount, checkLine: checkLine, evalExpr: evalExpr, finalMatches: finalMatches };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildFree);
-  else buildFree();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildTool);
+  else buildTool();
 })();
