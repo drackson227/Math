@@ -7,7 +7,15 @@
   'use strict';
 
   var U = 3;                 // taille d'un « pixel » (px) → bat ≈ 132px de large
-  var COLOR = '#16131f';     // silhouette (le halo violet la rend visible)
+  // Dégradé vertical pour donner du relief (lumière venant du haut) au lieu d'un noir plat
+  var TOP = [0x9a, 0x86, 0xd6];   // haut : lavande clair (oreilles / dos)
+  var MID = [0x5b, 0x4c, 0x92];   // milieu : violet (corps)
+  var BOT = [0x2c, 0x22, 0x46];   // bas : violet profond (ailes basses / pattes)
+  function mix(a, b, t) { return [Math.round(a[0] + (b[0] - a[0]) * t), Math.round(a[1] + (b[1] - a[1]) * t), Math.round(a[2] + (b[2] - a[2]) * t)]; }
+  function shade(y, rows) {
+    var t = y / (rows - 1), c = t < 0.5 ? mix(TOP, MID, t * 2) : mix(MID, BOT, (t - 0.5) * 2);
+    return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+  }
 
   // 4 frames de battement d'ailes (41 × 44), tracées image par image depuis la vidéo
   var FRAMES = [
@@ -186,11 +194,11 @@
   ];
 
   function shadow(grid) {
-    var parts = [];
-    for (var y = 0; y < grid.length; y++) {
-      var row = grid[y];
+    var parts = [], rows = grid.length;
+    for (var y = 0; y < rows; y++) {
+      var row = grid[y], col = shade(y, rows);
       for (var x = 0; x < row.length; x++) {
-        if (row[x] === '#') parts.push((x * U) + 'px ' + (y * U) + 'px 0 0 ' + COLOR);
+        if (row[x] === '#') parts.push((x * U) + 'px ' + (y * U) + 'px 0 0 ' + col);
       }
     }
     return parts.join(',');
@@ -205,7 +213,9 @@
     st.textContent =
       '.bat-sprite{position:absolute;width:' + U + 'px;height:' + U + 'px;background:transparent;' +
         'box-shadow:' + S[0] + ';animation:bat-flap .45s infinite;' +
-        'filter:drop-shadow(0 0 3px rgba(167,139,250,.95)) drop-shadow(0 0 9px rgba(124,58,237,.55));}' +
+        // retournée pour regarder vers la droite (= sens du vol). Pivot au centre du sprite.
+        'transform:scaleX(-1);transform-origin:' + (22 * U) + 'px ' + (20 * U) + 'px;' +
+        'filter:drop-shadow(0 0 3px rgba(167,139,250,.9)) drop-shadow(0 0 9px rgba(124,58,237,.5));}' +
       '@keyframes bat-flap{' +
         '0%,24%{box-shadow:' + S[0] + ';}' +
         '25%,49%{box-shadow:' + S[1] + ';}' +
