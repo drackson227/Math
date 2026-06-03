@@ -203,8 +203,10 @@
 <div id="subject-bar" class="subject-bar" role="tablist" aria-label="Choisir une matière">
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
   <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
+  <button class="subj-btn" data-subj="anglais" onclick="setSubject('anglais')">🇬🇧 Anglais</button>
   <button class="subj-btn" data-subj="histoire" onclick="setSubject('histoire')">🌍 Histoire-Géo</button>
-  <button class="subj-btn" data-subj="chimie" onclick="setSubject('chimie')">🧪 Chimie-Bio</button>
+  <button class="subj-btn" data-subj="chimie" onclick="setSubject('chimie')">🧪 Chimie</button>
+  <button class="subj-btn" data-subj="bio" onclick="setSubject('bio')">🧬 Bio</button>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
   <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
@@ -616,8 +618,11 @@
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>
+  <script src="answersheet.js"></script>
   <script src="generator.js"></script>
   <script src="subjects.js"></script>
+  <script src="subject-chimie.js"></script>
+  <script src="gestures.js"></script>
   <script src="backtotop.js"></script>
   <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
   <script>

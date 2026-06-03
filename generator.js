@@ -142,9 +142,12 @@
       '<div class="gen-card">' +
         '<div class="gen-tag">' + (current.title) + '</div>' +
         '<div class="gen-statement">' + current.statement + '</div>' +
+        '<div class="ansheet-wrap"><div class="ansheet-title">📝 Ta feuille de réponse (corrigée en direct)</div><div class="gen-sheet"></div></div>' +
         '<button type="button" class="gen-solve" onclick="genSolution()">👁️ Afficher la solution</button>' +
         '<div id="gen-solution" class="gen-solution" hidden></div>' +
       '</div>';
+    var sheetEl = out.querySelector('.gen-sheet');
+    if (sheetEl && window.AnswerSheet) window.AnswerSheet.mount(sheetEl, { answer: current.answer });
     if (typeof safeMathJax === 'function') safeMathJax([out]);
   };
 
@@ -179,6 +182,8 @@
     mountChips();
     if (!current) window.genNew();
   }
+  // Exposé pour re-monter le générateur après une bascule de matière (subjects.js).
+  window.genInit = init;
   // Les sections sont injectées au DOMContentLoaded (content.js) ; on s'enregistre après.
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 300); });
   else setTimeout(init, 300);
