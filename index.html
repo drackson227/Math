@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Maths GR2 — application d'étude de géométrie analytique plane : vecteurs, cercle et droites. Synthèse, formules, méthodes, exercices guidés, graphiques interactifs, flashcards à répétition espacée et quiz.">
+  <meta name="description" content="GR2 Study — application d'étude multi-matières (Maths, Chimie, Bio…) : cours, formules, méthodes, exercices guidés, flashcards à répétition espacée, quiz, défi du jour et multijoueur.">
   <meta name="theme-color" content="#0f1117">
   <title>GR2 Study — Réviser toutes les matières</title>
   <!-- Partage sur réseaux sociaux (Open Graph + Twitter) -->
@@ -16,8 +16,8 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Maths GR2 — Révise les maths en t'amusant">
-  <meta name="twitter:description" content="Cours animés, quiz, flashcards, multijoueur et chat. Créé par Drackson.">
+  <meta name="twitter:title" content="GR2 Study — Révise toutes tes matières">
+  <meta name="twitter:description" content="Maths, Chimie, Bio… : cours animés, quiz, flashcards, défi du jour, multijoueur et chat. Créé par Drackson.">
   <meta name="twitter:image" content="https://drackson227.github.io/Math/og-image.png">
   <meta name="author" content="Drackson">
   <meta name="robots" content="index, follow">
@@ -56,7 +56,7 @@
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <canvas id="particle-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;pointer-events:none;z-index:0;opacity:0.6;display:none;"></canvas>
-<h2 class="sr-only">Application d'étude — Maths GR2 : Géométrie analytique plane (Vecteurs, Cercle, Droites)</h2>
+<h2 class="sr-only">GR2 Study — Application d'étude multi-matières (Maths, Chimie, Bio…)</h2>
 
 <button class="settings-toggle" onclick="toggleSettings()" aria-label="Ouvrir les paramètres">⚙️</button>
 
@@ -146,6 +146,10 @@
   <div class="settings-row">
     <label>📝 Examen surprise</label>
     <button class="theme-btn" id="exam-toggle-btn" onclick="toggleExamMode(); toggleSettings();" style="width:100%; padding:10px;">5 questions, 5 min →</button>
+  </div>
+  <div class="settings-row">
+    <label>⌨️ Raccourcis clavier</label>
+    <button class="theme-btn" onclick="showShortcuts(); toggleSettings();" style="width:100%; padding:10px;">Voir les raccourcis (?) →</button>
   </div>
   <div class="settings-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-subtle);">
     <button onclick="toggleSettings()" style="width:100%; padding:12px; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:white; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:600;">✕ Fermer les paramètres</button>
@@ -277,7 +281,7 @@
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:2rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🎴 Flashcards avec répétition espacée</h2>
   
   <div id="flashcard-container">
-    <div class="flashcard-wrapper" onclick="flipCard()">
+    <div class="flashcard-wrapper" onclick="flipCard()" role="button" tabindex="0" aria-label="Flashcard — clique ou appuie sur Espace pour la retourner" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();flipCard();}">
       <div class="flashcard-inner" id="flashcard">
         <div class="flashcard-front">
           <div id="flashcard-content" style="font-size:24px; color:var(--text-primary);">
@@ -298,12 +302,7 @@
     <div style="max-width:600px; margin:0 auto 0.5rem; height:4px; background:var(--border-subtle); border-radius:2px;">
       <div id="flashcard-prog-bar" style="height:100%; background:var(--color-nav); border-radius:2px; transition:width 0.4s ease; width:0%;"></div>
     </div>
-    <div style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap;">
-      <button onclick="filterFlashcards('all')" id="fc-filter-all" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:var(--color-nav); color:#fff; font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">Toutes</button>
-      <button onclick="filterFlashcards('vecteur')" id="fc-filter-vecteur" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-nav); background:transparent; color:var(--color-nav); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🧭 Vecteurs</button>
-      <button onclick="filterFlashcards('cercle')" id="fc-filter-cercle" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-cercle); background:transparent; color:var(--color-cercle); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🔵 Cercle</button>
-      <button onclick="filterFlashcards('droite')" id="fc-filter-droite" style="padding:5px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:12px; cursor:pointer; font-weight:600; transition:all 0.2s;">🟡 Droite</button>
-    </div>
+    <div id="fc-filters" style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; justify-content:center;"><!-- chips générés par rebuildFlashcardFilters() selon la matière --></div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
     <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.75rem;">🔔 — à réviser aujourd'hui</p>
     <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
@@ -392,7 +391,7 @@
 
 <div id="mesexos" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🛠️ Mes exercices</h2>
-  <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:15px;">Crée tes propres questions (les 3 thèmes), avec ta réponse et une explication. Elles restent enregistrées sur cet appareil, et tu peux les réviser comme un mini-quiz.</p>
+  <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:15px;">Crée tes propres questions (selon les chapitres de la matière choisie), avec ta réponse et une explication. Elles restent enregistrées sur cet appareil — par matière — et tu peux les réviser comme un mini-quiz.</p>
 
   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
     <!-- Formulaire de création -->
@@ -405,9 +404,9 @@
         <option value="droite">🟡 Droites</option>
       </select>
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Question</label>
-      <textarea id="exo-question" rows="2" placeholder="Ex : Quel est le rayon du cercle x²+y²−4x−2=0 ?" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.9rem;"></textarea>
+      <textarea id="exo-question" rows="2" placeholder="Écris ta question ici…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.9rem;"></textarea>
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Ta réponse</label>
-      <input id="exo-answer" type="text" placeholder="Ex : R = 3" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
+      <input id="exo-answer" type="text" placeholder="La bonne réponse…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Explication <span style="font-weight:400; opacity:0.7;">(facultatif)</span></label>
       <textarea id="exo-exp" rows="2" placeholder="Comment on arrive au résultat…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.5rem;"></textarea>
       <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin-bottom:1rem;">💡 Astuce : pour de vraies maths, écris entre <code>\\( … \\)</code> — ex. <code>\\(R=\\sqrt{9}=3\\)</code>.</p>
@@ -470,7 +469,7 @@
 
 <div id="chat" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">💬 Chat Mondial</h2>
-  <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Discute maths avec les autres élèves : pose tes questions, partage des astuces et des formules <code>\( … \)</code>, et même des images / GIF (colle un lien). 🙏 Reste respectueux : ce salon est public et modéré.</p>
+  <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Discute avec les autres élèves (toutes matières) : pose tes questions, partage des astuces et des formules <code>\( … \)</code>, et même des images / GIF (colle un lien). 🙏 Reste respectueux : ce salon est public et modéré.</p>
 
   <div id="chat-gate"></div>
 
@@ -548,14 +547,7 @@
     <div id="focus-selection">
       <h2 style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">🎯 Mode Focus</h2>
       <p style="font-size:15px; color:var(--text-secondary); margin-bottom:2rem;">Concentre-toi sur un seul chapitre, carte par carte, sans distraction.</p>
-      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:500px; margin:0 auto;">
-        <button onclick="startFocus('cercle')" style="background:rgba(96,165,250,0.15); border:2px solid var(--color-cercle); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-cercle); font-weight:700; font-size:16px; transition:all 0.2s;">
-          🔵<br>Cercle<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
-        </button>
-        <button onclick="startFocus('droite')" style="background:rgba(251,191,36,0.15); border:2px solid var(--color-droite); border-radius:16px; padding:1.5rem 1rem; cursor:pointer; color:var(--color-droite); font-weight:700; font-size:16px; transition:all 0.2s;">
-          📐<br>Droites<br><span style="font-size:11px; font-weight:400; color:var(--text-secondary);">15 fiches</span>
-        </button>
-      </div>
+      <div id="focus-chapter-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:16px; max-width:560px; margin:0 auto;"><!-- chapitres générés par rebuildFocusChapters() selon la matière --></div>
       <p style="font-size:13px; color:var(--text-secondary); margin-top:1.5rem;">⌨️ Flèches gauche/droite pour naviguer · Échap pour quitter</p>
     </div>
     <div id="focus-cards" style="display:none;">
@@ -625,6 +617,7 @@
   <script src="subject-bio.js"></script>
   <script src="gestures.js"></script>
   <script src="bat.js"></script>
+  <script src="shortcuts.js"></script>
   <script src="backtotop.js"></script>
   <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
   <script>

@@ -558,6 +558,15 @@ function _roundRect(ctx, x, y, w, h, r) {
   ctx.arcTo(x, y, x + w, y, r);
   ctx.closePath();
 }
+// Libellé de la matière active (pour partages, cartes de score, etc.)
+function _subjLabel() {
+  try {
+    if (window.SUBJECTS && window.currentSubject && window.SUBJECTS[window.currentSubject]) {
+      return window.SUBJECTS[window.currentSubject].label || 'Révisions';
+    }
+  } catch (_) {}
+  return 'Révisions';
+}
 async function buildScoreCard(score, total, pct) {
   try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (_) {}
   const W = 1080, H = 1080;
@@ -576,9 +585,9 @@ async function buildScoreCard(score, total, pct) {
   const tg = ctx.createLinearGradient(W / 2 - 230, 0, W / 2 + 230, 0);
   tg.addColorStop(0, '#a78bfa'); tg.addColorStop(1, '#60a5fa');
   ctx.fillStyle = tg; ctx.font = '800 76px Inter, Arial, sans-serif';
-  ctx.fillText('Maths GR2', W / 2, 200);
+  ctx.fillText('GR2 Study', W / 2, 200);
   ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = '500 30px Inter, Arial, sans-serif';
-  ctx.fillText('Géométrie analytique', W / 2, 250);
+  ctx.fillText(_subjLabel(), W / 2, 250);
   // Verdict emoji
   const v = _scoreVerdict(pct);
   ctx.font = '120px Arial'; ctx.fillText(v.emoji, W / 2, 430);
@@ -608,13 +617,13 @@ async function shareScore() {
   let canvas;
   try { canvas = await buildScoreCard(sc, total, pct); }
   catch (e) { if (typeof showToast === 'function') showToast('Impossible de générer l’image 😕', '#dc3545'); return; }
-  const text = `J'ai eu ${sc}/${total} (${pct}%) sur Maths GR2 ! 🔥 Essaie : ${SHARE_URL}`;
+  const text = `J'ai eu ${sc}/${total} (${pct}%) en ${_subjLabel()} sur GR2 Study ! 🔥 Essaie : ${SHARE_URL}`;
   canvas.toBlob(async (blob) => {
     if (!blob) return;
     const file = new File([blob], 'mathsgr2-score.png', { type: 'image/png' });
     // Partage natif (mobile) avec l'image si possible
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: 'Mon score Maths GR2', text }); return; }
+      try { await navigator.share({ files: [file], title: 'Mon score GR2 Study', text }); return; }
       catch (e) { if (e && e.name === 'AbortError') return; }
     }
     // Repli : téléchargement de l'image + copie du texte
@@ -942,18 +951,48 @@ let focusIndex = 0;
 
 // focusContent défini dans data.js
 
-function toggleFocusMode() { 
+function toggleFocusMode() {
   const overlay = document.getElementById('focus-overlay');
   overlay.classList.toggle('show');
   // H2 — Réinitialiser vers la sélection SEULEMENT à l'ouverture, pas à la fermeture
   if (overlay.classList.contains('show')) {
+    rebuildFocusChapters();   // chapitres de la matière active
     document.getElementById('focus-selection').style.display = 'block';
     document.getElementById('focus-cards').style.display = 'none';
   }
 }
 
+// Nombre de fiches focus pour un chapitre : cartes "focus" dédiées (maths) ou flashcards du chapitre.
+function focusCountFor(ch) {
+  if (typeof focusContent !== 'undefined' && focusContent[ch]) return focusContent[ch].length;
+  if (typeof flashcards !== 'undefined' && flashcards) return flashcards.filter(c => c.chapter === ch).length;
+  return 0;
+}
+
+// Construit la sélection de chapitres du Mode Focus selon la matière active.
+function rebuildFocusChapters() {
+  const grid = document.getElementById('focus-chapter-grid');
+  if (!grid) return;
+  const order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER) ? CHAP_ORDER : [];
+  const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
+  const usable = order.filter(ch => focusCountFor(ch) > 0);
+  if (!usable.length) { grid.innerHTML = '<p style="color:var(--text-secondary); grid-column:1/-1;">Aucune fiche disponible pour cette matière.</p>'; return; }
+  grid.innerHTML = usable.map(ch => {
+    const n = focusCountFor(ch);
+    return '<button class="focus-chap-btn" onclick="startFocus(\'' + ch + '\')">' +
+      '<span style="font-size:15px; font-weight:700;">' + (labels[ch] || ch) + '</span>' +
+      '<span style="font-size:11px; font-weight:400; color:var(--text-secondary); display:block; margin-top:4px;">' + n + ' fiche' + (n > 1 ? 's' : '') + '</span>' +
+      '</button>';
+  }).join('');
+}
+
 function startFocus(chapter) {
-  focusCards = focusContent[chapter] || [];
+  let cards = (typeof focusContent !== 'undefined' && focusContent[chapter]) ? focusContent[chapter] : null;
+  if (!cards && typeof flashcards !== 'undefined' && flashcards) {
+    // Repli pour les matières sans "focusContent" dédié : on réutilise les flashcards du chapitre.
+    cards = flashcards.filter(c => c.chapter === chapter).map(c => ({ title: c.front, content: c.back, note: '' }));
+  }
+  focusCards = cards || [];
   focusIndex = 0;
   document.getElementById('focus-selection').style.display = 'none';
   document.getElementById('focus-cards').style.display = 'block';
@@ -1727,8 +1766,8 @@ document.addEventListener('keydown', (e) => {
 (function welcomeScreen() {
   var KEY = 'mathsgr2_welcome_seen';
   var slides = [
-    { emoji: '👋', title: 'Bienvenue sur Maths GR2 !', text: 'Ton appli pour réviser la géométrie analytique : vecteurs, cercle et droites. 100% gratuit.' },
-    { emoji: '📚', title: 'Apprends à ton rythme', text: 'Cours animés, formules clés, méthodes pas-à-pas, flashcards et un générateur d’exercices à l’infini.' },
+    { emoji: '👋', title: 'Bienvenue sur GR2 Study !', text: 'Ton appli pour réviser toutes tes matières : Maths, Chimie, Bio… Choisis une matière en haut. 100% gratuit.' },
+    { emoji: '📚', title: 'Apprends à ton rythme', text: 'Cours animés, formules clés, méthodes pas-à-pas, flashcards à répétition espacée et un générateur d’exercices à l’infini.' },
     { emoji: '🎮', title: 'Teste-toi et amuse-toi', text: 'Quiz, défi du jour, parties à plusieurs et chat mondial. Tu peux même installer l’appli et l’utiliser hors-ligne !' }
   ];
   var i = 0;
@@ -2215,16 +2254,26 @@ let flashcardData = {};
 
 let filteredFlashcards = null;
 
+// Reconstruit les puces de filtre des flashcards selon la matière active
+// (chapitres tirés de CHAP_ORDER / CHAP_LABELS) — fonctionne pour Maths, Chimie, Bio…
+function rebuildFlashcardFilters() {
+  const wrap = document.getElementById('fc-filters');
+  if (!wrap) return;
+  const order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER) ? CHAP_ORDER : [];
+  const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
+  let html = '<button type="button" class="fc-chip on" data-ch="all" onclick="filterFlashcards(\'all\')">Toutes</button>';
+  order.forEach(function (ch) {
+    html += '<button type="button" class="fc-chip" data-ch="' + ch + '" onclick="filterFlashcards(\'' + ch + '\')">' + (labels[ch] || ch) + '</button>';
+  });
+  wrap.innerHTML = html;
+}
+
 function filterFlashcards(chapter) {
   filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
   buildFlashcardQueue();           // re-trie la file par échéance pour le nouveau filtre
   currentFlashcardIndex = 0;
-  ['all','vecteur','cercle','droite'].forEach(ch => {
-    const btn = document.getElementById('fc-filter-' + ch);
-    if (!btn) return;
-    const cols = {all:'var(--color-nav)',vecteur:'var(--color-nav)',cercle:'var(--color-cercle)',droite:'var(--color-droite)'};
-    btn.style.background = ch === chapter ? cols[ch] : 'transparent';
-    btn.style.color = ch === chapter ? '#fff' : cols[ch];
+  document.querySelectorAll('#fc-filters .fc-chip').forEach(b => {
+    b.classList.toggle('on', b.dataset.ch === chapter);
   });
   loadFlashcard();
 }
@@ -3414,6 +3463,27 @@ const EXO_THEMES = {
   droite:   { label: '🟡 Droites',   color: 'var(--color-droite)' }
 };
 
+// Matière courante (pour ranger les exercices perso par matière)
+function curSubject() { return (window.currentSubject) || 'maths'; }
+
+// Libellé + couleur d'un thème d'exercice perso (compatibilité avec les anciens enregistrements)
+function exoThemeInfo(e) {
+  if (e.themeLabel) return { label: e.themeLabel, color: 'var(--color-nav)' };
+  if (EXO_THEMES[e.theme]) return EXO_THEMES[e.theme];
+  if (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS && CHAP_LABELS[e.theme]) return { label: CHAP_LABELS[e.theme], color: 'var(--color-nav)' };
+  return { label: e.theme, color: 'var(--text-secondary)' };
+}
+
+// Remplit le menu « Thème » de Mes exercices avec les chapitres de la matière active
+function rebuildExoThemes() {
+  const sel = document.getElementById('exo-theme');
+  if (!sel) return;
+  const order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER) ? CHAP_ORDER : [];
+  const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
+  if (!order.length) return;
+  sel.innerHTML = order.map(ch => '<option value="' + ch + '">' + (labels[ch] || ch) + '</option>').join('');
+}
+
 function escapeHtmlExo(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
@@ -3427,9 +3497,12 @@ function saveCustomExo() {
     showToast('⚠️ Remplis au moins la question et la réponse', '#f87171');
     return;
   }
+  const themeLabel = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS && CHAP_LABELS[theme])
+    ? CHAP_LABELS[theme]
+    : (EXO_THEMES[theme] ? EXO_THEMES[theme].label : theme);
   const data = loadSavedData();
   data.customExercises = data.customExercises || [];
-  data.customExercises.unshift({ id: Date.now(), theme, q, a, exp, created: new Date().toISOString() });
+  data.customExercises.unshift({ id: Date.now(), theme, themeLabel, subject: curSubject(), q, a, exp, created: new Date().toISOString() });
   saveData(data);
   document.getElementById('exo-question').value = '';
   document.getElementById('exo-answer').value = '';
@@ -3450,7 +3523,8 @@ function renderCustomExoList() {
   const list = document.getElementById('exo-list');
   if (!list) return;
   const data = loadSavedData();
-  const exos = data.customExercises || [];
+  const cur = curSubject();
+  const exos = (data.customExercises || []).filter(e => (e.subject || 'maths') === cur);
   const reviewBtn = document.getElementById('exo-review-btn');
   if (reviewBtn) reviewBtn.style.display = exos.length ? '' : 'none';
   if (!exos.length) {
@@ -3458,7 +3532,7 @@ function renderCustomExoList() {
     return;
   }
   list.innerHTML = exos.map(e => {
-    const t = EXO_THEMES[e.theme] || { label: e.theme, color: 'var(--text-secondary)' };
+    const t = exoThemeInfo(e);
     return '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; padding:1rem 1.1rem; margin-bottom:0.85rem;">' +
       '<div style="display:flex; justify-content:space-between; align-items:start; gap:10px;">' +
         '<span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; color:' + t.color + '; border:1px solid ' + t.color + ';">' + t.label + '</span>' +
@@ -3477,7 +3551,8 @@ let exoReviewIndex = 0;
 
 function reviewCustomExos() {
   const data = loadSavedData();
-  exoReviewQueue = shuffleArray([...(data.customExercises || [])]);
+  const cur = curSubject();
+  exoReviewQueue = shuffleArray((data.customExercises || []).filter(e => (e.subject || 'maths') === cur));
   if (!exoReviewQueue.length) { showToast('Crée d\'abord une question', '#f87171'); return; }
   exoReviewIndex = 0;
   document.getElementById('exo-review-overlay').style.display = 'flex';
@@ -3487,7 +3562,7 @@ function reviewCustomExos() {
 function showExoReviewCard() {
   const e = exoReviewQueue[exoReviewIndex];
   if (!e) return;
-  const t = EXO_THEMES[e.theme] || { label: e.theme, color: 'var(--text-secondary)' };
+  const t = exoThemeInfo(e);
   document.getElementById('exo-review-counter').textContent = 'Question ' + (exoReviewIndex + 1) + ' / ' + exoReviewQueue.length;
   const themeEl = document.getElementById('exo-review-theme');
   themeEl.textContent = t.label;

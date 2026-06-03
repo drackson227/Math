@@ -84,6 +84,7 @@
 
   function resetEngine() {
     try { if (typeof filterQuiz === 'function') filterQuiz(); } catch (_) {}
+    try { if (typeof rebuildFlashcardFilters === 'function') { filteredFlashcards = null; rebuildFlashcardFilters(); } } catch (_) {}
     try { if (typeof buildFlashcardQueue === 'function') buildFlashcardQueue(); } catch (_) {}
     try { if (typeof loadFlashcard === 'function') loadFlashcard(); } catch (_) {}
     try { if (typeof genInit === 'function') genInit(); } catch (_) {}
@@ -141,6 +142,11 @@
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {}
     }
     updateQuizHeader(key);
+    // Reconstruit les éléments dépendant de la matière même au tout premier chargement
+    // (resetEngine n'est appelé que lors d'un changement de matière).
+    try { if (typeof rebuildFlashcardFilters === 'function') rebuildFlashcardFilters(); } catch (_) {}
+    try { if (typeof rebuildExoThemes === 'function') rebuildExoThemes(); } catch (_) {}
+    try { if (typeof renderCustomExoList === 'function') renderCustomExoList(); } catch (_) {}
   };
 
   function init() {

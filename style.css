@@ -860,6 +860,9 @@ textarea:focus-visible,
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+  /* Effets décoratifs en boucle (dessinés en JS) : on les masque pour le confort/accessibilité */
+  #particle-canvas { display: none !important; }
+  .bat-fly { display: none !important; }
 }
 
 /* ── Résolution animée pas-à-pas ── */
@@ -1353,3 +1356,12 @@ textarea:focus-visible,
 .wel-dot.on { background: var(--color-nav); width: 22px; border-radius: 4px; }
 .wel-next { width: 100%; background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border: none; border-radius: 12px; padding: 13px; font-size: 16px; font-weight: 700; cursor: pointer; }
 .wel-next:active { transform: scale(0.98); }
+
+/* ── Puces de filtre des flashcards (générées par matière) ── */
+.fc-chip { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); font-size: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.fc-chip:hover { border-color: var(--color-nav); color: var(--text-primary); }
+.fc-chip.on { background: var(--color-nav); border-color: var(--color-nav); color: #fff; }
+
+/* ── Boutons de chapitre du Mode Focus (générés par matière) ── */
+.focus-chap-btn { background: rgba(167,139,250,0.12); border: 2px solid var(--color-nav); border-radius: 16px; padding: 1.3rem 1rem; cursor: pointer; color: var(--color-nav); text-align: center; transition: transform 0.15s ease, background 0.2s ease; }
+.focus-chap-btn:hover { background: rgba(167,139,250,0.22); transform: translateY(-2px); }
