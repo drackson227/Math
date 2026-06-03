@@ -7,14 +7,20 @@
   'use strict';
 
   var U = 3;                 // taille d'un « pixel » (px) → bat ≈ 132px de large
-  // Dégradé vertical pour donner du relief (lumière venant du haut) au lieu d'un noir plat
-  var TOP = [0x9a, 0x86, 0xd6];   // haut : lavande clair (oreilles / dos)
-  var MID = [0x5b, 0x4c, 0x92];   // milieu : violet (corps)
-  var BOT = [0x2c, 0x22, 0x46];   // bas : violet profond (ailes basses / pattes)
-  function mix(a, b, t) { return [Math.round(a[0] + (b[0] - a[0]) * t), Math.round(a[1] + (b[1] - a[1]) * t), Math.round(a[2] + (b[2] - a[2]) * t)]; }
-  function shade(y, rows) {
-    var t = y / (rows - 1), c = t < 0.5 ? mix(TOP, MID, t * 2) : mix(MID, BOT, (t - 0.5) * 2);
-    return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+  var BODY = '#1b1730';      // corps : silhouette sombre (le halo violet la détache du fond)
+  var EYE = '#ffd24a';       // yeux brillants (jaune ambré)
+
+  // Trouve la tête (rangée la plus haute + centre des pixels du haut) pour y poser les yeux,
+  // ce qui les fait suivre la tête à chaque frame du battement d'ailes.
+  function headAnchor(grid) {
+    var rows = grid.length, cols = grid[0].length, rtop = 0;
+    for (var y = 0; y < rows; y++) { if (grid[y].indexOf('#') >= 0) { rtop = y; break; } }
+    var sx = 0, n = 0;
+    for (var y = rtop; y < Math.min(rows, rtop + 9); y++) {
+      var row = grid[y];
+      for (var x = 0; x < cols; x++) { if (row[x] === '#') { sx += x; n++; } }
+    }
+    return { cx: n ? Math.round(sx / n) : Math.round(cols / 2), row: Math.min(rows - 2, rtop + 5) };
   }
 
   // 4 frames de battement d'ailes (41 × 44), tracées image par image depuis la vidéo
@@ -194,14 +200,22 @@
   ];
 
   function shadow(grid) {
-    var parts = [], rows = grid.length;
+    var rows = grid.length, cols = grid[0].length, parts = [];
+    // corps
     for (var y = 0; y < rows; y++) {
-      var row = grid[y], col = shade(y, rows);
-      for (var x = 0; x < row.length; x++) {
-        if (row[x] === '#') parts.push((x * U) + 'px ' + (y * U) + 'px 0 0 ' + col);
+      var row = grid[y];
+      for (var x = 0; x < cols; x++) {
+        if (row[x] === '#') parts.push((x * U) + 'px ' + (y * U) + 'px 0 0 ' + BODY);
       }
     }
-    return parts.join(',');
+    // yeux (2×2 chacun) posés sur la tête, par-dessus le corps (préfixés = au premier plan)
+    var h = headAnchor(grid), eyes = [];
+    [h.cx - 4, h.cx + 2].forEach(function (ex) {
+      for (var dy = 0; dy < 2; dy++) for (var dx = 0; dx < 2; dx++) {
+        eyes.push(((ex + dx) * U) + 'px ' + ((h.row + dy) * U) + 'px 0 0 ' + EYE);
+      }
+    });
+    return eyes.concat(parts).join(',');
   }
 
   var S = FRAMES.map(shadow);   // 4 chaînes box-shadow
