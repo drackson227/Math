@@ -162,6 +162,103 @@
   var SVG_DNA = wrap(cellImg('adn.png',
     'Schéma du cours — La structure de l\'ADN : double hélice, brins reliés par les bases azotées appariées (Adénine–Thymine, Cytosine–Guanine), désoxyribose et phosphate.'), '');
 
+  // ===== CYCLE CELLULAIRE & MITOSE — schéma redessiné (séquence + graphe quantité d'ADN) =====
+  var SVG_MITOSE = (function () {
+    var FIG = 'max-width:700px;width:100%;height:auto;background:#f8fafc;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.18);';
+    var INKG = '#1f2937', AX = '#475569', GRID = '#dbe2ec', CURVE = '#7c3aed', B = '#2563eb', R = '#dc2626', CEN = '#f59e0b';
+    function txt(x, y, t, s, w, f, a) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-family="inherit" font-size="' + (s || 13) + '" font-weight="' + (w || 500) + '" fill="' + (f || INKG) + '">' + t + '</text>'; }
+    // chromosome dédoublé (en X) : 2 chromatides + centromère
+    function chromX(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
+      '<path d="M-8 -13 Q4 0 -8 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/>' +
+      '<path d="M8 -13 Q-4 0 8 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/>' +
+      '<circle r="2.6" fill="' + CEN + '"/></g>'; }
+    // chromosome simple (1 chromatide)
+    function chromI(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
+      '<path d="M0 -13 Q5 0 0 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/></g>'; }
+    function cell(cx, cy, r) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>'; }
+    function arrow(x1, x2, y) { return '<line x1="' + x1 + '" y1="' + y + '" x2="' + (x2 - 8) + '" y2="' + y + '" stroke="' + AX + '" stroke-width="2.2"/>' +
+      '<path d="M' + (x2 - 9) + ' ' + (y - 5) + ' L' + x2 + ' ' + y + ' L' + (x2 - 9) + ' ' + (y + 5) + ' Z" fill="' + AX + '"/>'; }
+
+    var s = '<svg viewBox="0 0 820 580" width="820" height="580" style="' + FIG + '" role="img" aria-label="Le cycle cellulaire et la mitose : séquence de division et graphe de la quantité d\'ADN au cours du temps.">';
+    s += txt(410, 26, 'Le cycle cellulaire et la mitose', 17, 800, CURVE);
+
+    // ---------- SÉQUENCE DE MITOSE (haut) ----------
+    var cy = 100;
+    // A — cellule de départ (2 chromosomes simples : 1 long bleu, 1 court rouge)
+    s += cell(72, cy, 32) + chromI(64, cy - 2, 1, B) + chromI(84, cy + 4, 0.7, R);
+    s += arrow(108, 168, cy) + txt(138, cy + 30, 'Réplication', 10.5, 600, AX) + txt(138, cy + 42, "de l'ADN", 10.5, 600, AX);
+    // B — après réplication (2 chromosomes dédoublés en X)
+    s += cell(200, cy, 32) + chromX(192, cy - 2, 1, B) + chromX(212, cy + 4, 0.72, R);
+    s += arrow(236, 300, cy);
+    s += txt(432, 48, 'Mitose', 13, 800, CURVE);
+    // C — métaphase (fuseau + chromosomes alignés à l'équateur)
+    s += cell(352, cy, 48);
+    s += '<g stroke="' + AX + '" stroke-width="1" opacity="0.6" fill="none">' +
+      '<path d="M308 100 Q352 58 396 100"/><path d="M308 100 Q352 142 396 100"/>' +
+      '<line x1="310" y1="100" x2="352" y2="84"/><line x1="310" y1="100" x2="352" y2="116"/>' +
+      '<line x1="394" y1="100" x2="352" y2="84"/><line x1="394" y1="100" x2="352" y2="116"/></g>';
+    s += '<circle cx="308" cy="100" r="3" fill="' + AX + '"/><circle cx="396" cy="100" r="3" fill="' + AX + '"/>';
+    s += chromX(352, 82, 0.9, B) + chromX(352, 118, 0.75, R);
+    s += txt(352, 162, 'Métaphase', 10.5, 600, AX);
+    s += arrow(404, 462, cy);
+    // D — anaphase/télophase (cellule qui se pince, chromatides vers les pôles)
+    s += '<path d="M512 53 a47 47 0 0 1 0 94 q-16 -10 -16 -47 q0 -37 16 -47 Z" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>';
+    s += '<path d="M512 53 a47 47 0 0 0 0 94 q16 -10 16 -47 q0 -37 -16 -47 Z" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>';
+    s += chromI(490, 86, 0.8, B) + chromI(498, 116, 0.62, R) + chromI(534, 86, 0.8, B) + chromI(526, 116, 0.62, R);
+    s += txt(512, 162, 'Anaphase', 10.5, 600, AX);
+    s += arrow(566, 636, cy);
+    s += txt(752, 94, 'Deux cellules', 11, 700, INKG) + txt(752, 108, 'diploïdes', 11, 700, INKG);
+    // E & F — 2 cellules-filles
+    s += cell(665, 74, 26) + chromI(659, 72, 0.78, B) + chromI(673, 78, 0.55, R);
+    s += cell(665, 132, 26) + chromI(659, 130, 0.78, B) + chromI(673, 136, 0.55, R);
+
+    // séparateur
+    s += '<line x1="40" y1="196" x2="780" y2="196" stroke="' + GRID + '" stroke-width="1.5"/>';
+
+    // ---------- GRAPHE QUANTITÉ D'ADN = f(temps) (bas) ----------
+    var ox = 92, base = 462, u = 86; // base = ADN 0 ; u = px par unité d'ADN
+    function tx(h) { return ox + h * (680 / 24); }
+    function vy(v) { return base - v * u; }
+    // grille horizontale (1 et 2)
+    s += '<line x1="' + ox + '" y1="' + vy(1) + '" x2="' + tx(24) + '" y2="' + vy(1) + '" stroke="' + GRID + '" stroke-width="1" stroke-dasharray="4 4"/>';
+    s += '<line x1="' + ox + '" y1="' + vy(2) + '" x2="' + tx(24) + '" y2="' + vy(2) + '" stroke="' + GRID + '" stroke-width="1" stroke-dasharray="4 4"/>';
+    // axes
+    s += '<line x1="' + ox + '" y1="248" x2="' + ox + '" y2="' + base + '" stroke="' + AX + '" stroke-width="2"/>';
+    s += '<line x1="' + ox + '" y1="' + base + '" x2="' + (tx(24) + 14) + '" y2="' + base + '" stroke="' + AX + '" stroke-width="2"/>';
+    s += '<path d="M' + (tx(24) + 14) + ' ' + (base - 4) + ' L' + (tx(24) + 22) + ' ' + base + ' L' + (tx(24) + 14) + ' ' + (base + 4) + ' Z" fill="' + AX + '"/>';
+    s += '<path d="M' + (ox - 4) + ' 252 L' + ox + ' 244 L' + (ox + 4) + ' 252 Z" fill="' + AX + '"/>';
+    // graduations Y
+    s += txt(ox - 12, base + 4, '0', 12, 500, AX, 'end') + txt(ox - 12, vy(1) + 4, '1', 12, 600, AX, 'end') + txt(ox - 12, vy(2) + 4, '2', 12, 600, AX, 'end');
+    // titre Y (vertical)
+    s += '<text transform="translate(34 ' + (vy(1)) + ') rotate(-90)" text-anchor="middle" font-family="inherit" font-size="12.5" font-weight="700" fill="' + INKG + '">Quantité d\'ADN (UA)</text>';
+    // graduations X (toutes les 2 h)
+    var h, gx;
+    for (h = 0; h <= 24; h += 2) { gx = tx(h); s += '<line x1="' + gx + '" y1="' + base + '" x2="' + gx + '" y2="' + (base + 4) + '" stroke="' + AX + '" stroke-width="1.5"/>' + txt(gx, base + 17, h, 10.5, 500, AX); }
+    s += txt(tx(24) + 6, base + 34, 'Temps (heures)', 12, 700, INKG, 'end');
+    // courbe d'ADN
+    var pts = [[0, 2], [1.5, 2], [2.5, 1], [9, 1], [15, 2], [20, 2], [21, 2], [22, 1], [24, 1]];
+    var dpath = pts.map(function (p, i) { return (i ? 'L' : 'M') + tx(p[0]).toFixed(1) + ' ' + vy(p[1]).toFixed(1); }).join(' ');
+    s += '<path d="' + dpath + '" fill="none" stroke="' + CURVE + '" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>';
+    // chromosomes au-dessus de la courbe (états successifs)
+    s += chromX(tx(1), vy(2) - 26, 0.82, B);        // M : dédoublé
+    s += chromI(tx(5.6), vy(1) - 24, 0.82, B);       // G1 : simple
+    s += chromI(tx(11), vy(1.45) - 20, 0.82, B) + chromI(tx(12.4), vy(1.45) - 20, 0.5, R); // S : réplication en cours
+    s += chromX(tx(17.5), vy(2) - 26, 0.82, B);      // G2 : dédoublé
+    s += chromX(tx(21), vy(2) - 26, 0.82, B);        // M : dédoublé
+    // étiquettes des phases (sous la courbe, près de l'axe)
+    s += txt(tx(1), base - 8, 'M', 13, 800, INKG) + txt(tx(5.6), base - 8, 'G₁', 13, 800, INKG) + txt(tx(12), base - 8, 'S', 13, 800, INKG) + txt(tx(17.5), base - 8, 'G₂', 13, 800, INKG) + txt(tx(21), base - 8, 'M', 13, 800, INKG);
+    // accolades Cycle cellulaire & Interphase
+    function span(x1, x2, y, label, col) { return '<line x1="' + x1 + '" y1="' + y + '" x2="' + x2 + '" y2="' + y + '" stroke="' + col + '" stroke-width="1.6"/>' +
+      '<line x1="' + x1 + '" y1="' + (y - 4) + '" x2="' + x1 + '" y2="' + (y + 4) + '" stroke="' + col + '" stroke-width="1.6"/>' +
+      '<line x1="' + x2 + '" y1="' + (y - 4) + '" x2="' + x2 + '" y2="' + (y + 4) + '" stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="' + ((x1 + x2) / 2 - 52) + '" y="' + (y - 9) + '" width="104" height="18" fill="#f8fafc"/>' +
+      txt((x1 + x2) / 2, y + 4, label, 12, 700, col); }
+    s += span(tx(2.5), tx(22), base + 50, 'Cycle cellulaire', CURVE);
+    s += span(tx(2.5), tx(20), base + 78, 'Interphase', AX);
+
+    return wrap(s, '<p style="text-align:center;font-size:12.5px;color:var(--text-secondary);margin-top:8px;">Pendant la phase <strong>S</strong>, l\'ADN est répliqué (quantité 1 → 2) ; la <strong>mitose (M)</strong> sépare les chromatides-sœurs → 2 cellules filles identiques (retour à 1).</p>');
+  })();
+
   var sections = {};
 
   sections.synthese = `<div id="synthese" class="section active">
@@ -287,7 +384,7 @@
       </div>
       <p>Quand l'ADN se condense au maximum, il prend une forme en <strong>X</strong> : c'est un chromosome <strong>dédoublé</strong>, fait de 2 <strong>chromatides-sœurs</strong> identiques reliées par le <strong>centromère</strong>.</p>
       <div style="text-align:center; margin:0.8rem 0;">
-        ${cellImg('mitose.png', 'Schéma du cours — le cycle cellulaire et la mitose : réplication de l\'ADN puis mitose donnant deux cellules diploïdes ; graphique de la quantité d\'ADN au cours du cycle (M, G1, S, G2, M ; interphase).')}
+        ${SVG_MITOSE}
       </div>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
