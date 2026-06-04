@@ -39,11 +39,33 @@
       '<path d="M-22 -1 q7 -10 13 0 q6 10 13 0 q5 -8 11 0" fill="none" stroke="#fee2e2" stroke-width="1.6" opacity="0.85"/>' +
       '</g>';
   }
-  // chloroplaste (ovale vert + thylakoïdes)
+  // chloroplaste (ovale vert + grana = piles de thylakoïdes, façon manuel)
   function chloro(x, y, rot) {
+    var grana = '';
+    [-14, -1, 12].forEach(function (gx, i) {
+      grana += '<g transform="translate(' + gx + ',' + (i === 1 ? 1 : 0) + ')" fill="#14532d" opacity="0.95">' +
+        '<ellipse cy="-5" rx="4" ry="1.8"/><ellipse cy="-1.5" rx="4" ry="1.8"/><ellipse cy="2" rx="4" ry="1.8"/></g>';
+    });
     return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')">' +
-      '<ellipse rx="26" ry="13" fill="url(#bChloro)" stroke="#86efac" stroke-width="1.5"/>' +
-      '<g fill="#15803d" opacity="0.9"><ellipse cx="-13" cy="0" rx="3.6" ry="7"/><ellipse cx="-2" cy="0" rx="3.6" ry="7"/><ellipse cx="9" cy="0" rx="3.6" ry="7"/></g>' +
+      '<ellipse rx="27" ry="14" fill="url(#bChloro)" stroke="#bbf7d0" stroke-width="1.5"/>' +
+      '<path d="M-14 0 H12" stroke="#14532d" stroke-width="1" opacity="0.45"/>' +
+      grana +
+      '</g>';
+  }
+  // appareil de Golgi : pile de citernes incurvées + vésicules
+  function golgi(x, y) {
+    var s = '<g fill="none" stroke="#2dd4bf" stroke-width="2.4">';
+    for (var i = 0; i < 4; i++) { var w = 22 - i * 3; s += '<path d="M' + (x - w) + ' ' + (y + i * 7) + ' q' + w + ' -10 ' + (2 * w) + ' 0"/>'; }
+    s += '</g><g fill="#5eead4"><circle cx="' + (x - 4) + '" cy="' + (y + 32) + '" r="3"/><circle cx="' + (x + 30) + '" cy="' + (y + 30) + '" r="2.6"/><circle cx="' + (x + 14) + '" cy="' + (y + 36) + '" r="2.4"/></g>';
+    return s;
+  }
+  // centriole : deux barillets perpendiculaires (paire)
+  function centriole(x, y) {
+    return '<g stroke="#cbd5e1" stroke-width="1.3" fill="rgba(203,213,225,0.22)">' +
+      '<rect x="' + (x - 9) + '" y="' + (y - 4) + '" width="18" height="8" rx="2"/>' +
+      '<line x1="' + (x - 4) + '" y1="' + (y - 4) + '" x2="' + (x - 4) + '" y2="' + (y + 4) + '"/><line x1="' + x + '" y1="' + (y - 4) + '" x2="' + x + '" y2="' + (y + 4) + '"/><line x1="' + (x + 4) + '" y1="' + (y - 4) + '" x2="' + (x + 4) + '" y2="' + (y + 4) + '"/>' +
+      '<rect x="' + (x + 8) + '" y="' + (y - 9) + '" width="8" height="18" rx="2"/>' +
+      '<line x1="' + (x + 8) + '" y1="' + (y - 4) + '" x2="' + (x + 16) + '" y2="' + (y - 4) + '"/><line x1="' + (x + 8) + '" y1="' + y + '" x2="' + (x + 16) + '" y2="' + y + '"/><line x1="' + (x + 8) + '" y1="' + (y + 4) + '" x2="' + (x + 16) + '" y2="' + (y + 4) + '"/>' +
       '</g>';
   }
   function dots(coords) {
@@ -66,36 +88,40 @@
         '<radialGradient id="bNuc" cx="40%" cy="35%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient>' +
         '<radialGradient id="bMito" cx="40%" cy="32%"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#9f1239"/></radialGradient>' +
       '</defs>' +
-      // membrane
-      '<ellipse cx="240" cy="140" rx="108" ry="92" fill="url(#bCytoA)" stroke="#a78bfa" stroke-width="3.5"/>' +
-      '<ellipse cx="240" cy="140" rx="102" ry="86" fill="none" stroke="#8b7fd6" stroke-width="1" opacity="0.5"/>' +
-      // noyau + nucléole
-      '<circle cx="210" cy="128" r="42" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="3"/>' +
-      '<circle cx="210" cy="128" r="42" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="2 6" opacity="0.7"/>' +
-      '<circle cx="224" cy="140" r="13" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>' +
-      '<g fill="none" stroke="#bfdbfe" stroke-width="1.3" opacity="0.45"><path d="M192 116 q12 8 22 -2"/><path d="M198 145 q14 -6 26 4"/></g>' +
-      // mitochondries
-      mito(305, 95, -18) + mito(290, 188, 20) +
-      // réticulum endoplasmique
-      '<g fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9"><path d="M256 120 q14 9 0 18 q-14 9 0 18"/><path d="M270 118 q14 9 0 18 q-14 9 0 18"/></g>' +
-      dots([[256,120],[270,118],[256,156],[270,154]]) +
-      // appareil de Golgi
-      '<g fill="none" stroke="#2dd4bf" stroke-width="2.6"><path d="M178 200 q28 -12 56 0"/><path d="M182 208 q24 -10 48 0"/><path d="M186 216 q20 -8 40 0"/></g>' +
+      // membrane plasmique (double trait)
+      '<ellipse cx="240" cy="152" rx="116" ry="100" fill="url(#bCytoA)" stroke="#a78bfa" stroke-width="4"/>' +
+      '<ellipse cx="240" cy="152" rx="110" ry="94" fill="none" stroke="#8b7fd6" stroke-width="1.2" opacity="0.5"/>' +
+      // noyau : double membrane nucléaire + pores (tirets) + nucléole + chromatine
+      '<circle cx="200" cy="150" r="46" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2"/>' +
+      '<circle cx="200" cy="150" r="46" fill="none" stroke="#1e3a8a" stroke-width="3" stroke-dasharray="3 6" opacity="0.8"/>' +
+      '<circle cx="200" cy="150" r="41" fill="none" stroke="#bfdbfe" stroke-width="1.4" opacity="0.6"/>' +
+      '<circle cx="214" cy="160" r="15" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>' +
+      '<g fill="none" stroke="#bfdbfe" stroke-width="1.2" opacity="0.4"><path d="M180 134 q12 8 22 -2"/><path d="M186 168 q14 -6 26 4"/></g>' +
+      // centriole (paire de barillets)
+      centriole(196, 86) +
+      // réticulum endoplasmique RUGUEUX (avec ribosomes) près du noyau
+      '<g fill="none" stroke="#fbbf24" stroke-width="2"><path d="M258 104 q20 -9 40 0 q-3 12 -20 12 q-20 0 -20 -12"/><path d="M264 118 q16 -6 30 0"/></g>' +
+      '<g fill="#fde68a"><circle cx="258" cy="104" r="2"/><circle cx="278" cy="96" r="2"/><circle cx="298" cy="104" r="2"/><circle cx="266" cy="116" r="2"/><circle cx="292" cy="116" r="2"/></g>' +
+      // réticulum endoplasmique LISSE (tubes lisses, sans ribosomes)
+      '<g fill="none" stroke="#fdba74" stroke-width="2"><path d="M238 206 q14 -11 28 0 q14 11 28 0"/><path d="M242 216 q13 -8 25 0 q12 8 24 0"/></g>' +
+      // appareil de Golgi (citernes empilées + vésicules)
+      golgi(168, 206) +
+      // mitochondries (à crêtes)
+      mito(322, 122, -15) + mito(298, 206, 18) +
       // lysosome
-      '<circle cx="308" cy="142" r="13" fill="rgba(244,114,182,0.22)" stroke="#f472b6" stroke-width="2"/>' +
-      dots([[304,138],[312,144],[307,147]]) +
-      // ribosomes libres
-      dots([[330,170],[322,182],[300,210],[180,170]]) +
+      '<circle cx="324" cy="160" r="11" fill="rgba(244,114,182,0.28)" stroke="#f472b6" stroke-width="2"/>' +
+      dots([[320,156],[328,162],[323,165]]) +
       // étiquettes (gauche)
-      lbl(120, 60, 'Membrane', 'end', 160, 84) +
-      lbl(120, 120, 'Noyau', 'end', 188, 122) +
-      lbl(120, 167, 'Nucléole', 'end', 222, 143) +
-      lbl(120, 214, 'Golgi', 'end', 198, 206) +
+      lbl(120, 52, 'Membrane', 'end', 158, 90) +
+      lbl(120, 94, 'Centriole', 'end', 190, 86) +
+      lbl(120, 140, 'Noyau', 'end', 156, 148) +
+      lbl(120, 182, 'Nucléole', 'end', 210, 162) +
+      lbl(120, 224, 'Golgi', 'end', 168, 208) +
       // étiquettes (droite)
-      lbl(360, 72, 'Mitochondrie', 'start', 305, 95) +
-      lbl(360, 125, 'Réticulum (RE)', 'start', 262, 138) +
-      lbl(360, 170, 'Lysosome', 'start', 308, 142) +
-      lbl(360, 214, 'Ribosomes', 'start', 326, 176) +
+      lbl(360, 70, 'RE rugueux', 'start', 296, 104) +
+      lbl(360, 120, 'Mitochondrie', 'start', 322, 122) +
+      lbl(360, 164, 'Lysosome', 'start', 324, 160) +
+      lbl(360, 210, 'RE lisse', 'start', 262, 206) +
     '</svg>';
   var SVG_ANIMAL = wrap(_animalSvg, '');
 
@@ -107,27 +133,31 @@
         '<radialGradient id="bCytoP" cx="40%" cy="35%"><stop offset="0%" stop-color="#243056"/><stop offset="100%" stop-color="#141a30"/></radialGradient>' +
         '<radialGradient id="bChloro" cx="40%" cy="32%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#166534"/></radialGradient>' +
       '</defs>' +
-      // paroi (verte) + membrane
-      '<rect x="100" y="26" width="280" height="228" rx="24" fill="url(#bWall)"/>' +
-      '<rect x="112" y="38" width="256" height="204" rx="15" fill="url(#bCytoP)" stroke="#a78bfa" stroke-width="2.4"/>' +
-      // grande vacuole
-      '<rect x="136" y="74" width="150" height="132" rx="20" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>' +
-      '<path d="M152 100 q10 -14 26 -8" fill="none" stroke="#7dd3fc" stroke-width="1.4" opacity="0.6"/>' +
-      // noyau (repoussé en coin)
-      '<circle cx="330" cy="82" r="26" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2.5"/>' +
-      '<circle cx="338" cy="89" r="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>' +
-      // chloroplastes
-      chloro(170, 58, 8) + chloro(240, 56, -7) + chloro(330, 150, 18) + chloro(330, 205, -16) + chloro(168, 224, 6) + chloro(238, 226, -8) +
-      // mitochondrie
-      mito(300, 150, 12, 0.8) +
+      // paroi (verte, rigide) + plasmodesmes (canaux) + membrane
+      '<rect x="100" y="26" width="280" height="232" rx="24" fill="url(#bWall)"/>' +
+      '<g fill="#243056"><rect x="176" y="26" width="9" height="13" rx="2"/><rect x="232" y="26" width="9" height="13" rx="2"/><rect x="176" y="245" width="9" height="13" rx="2"/></g>' +
+      '<rect x="112" y="38" width="256" height="208" rx="15" fill="url(#bCytoP)" stroke="#a78bfa" stroke-width="2.4"/>' +
+      // grande vacuole centrale (dominante)
+      '<rect x="132" y="76" width="156" height="138" rx="20" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>' +
+      '<path d="M150 102 q10 -14 26 -8" fill="none" stroke="#7dd3fc" stroke-width="1.4" opacity="0.6"/>' +
+      // noyau + nucléole (repoussé en coin)
+      '<circle cx="330" cy="84" r="27" fill="url(#bNuc)" stroke="#93c5fd" stroke-width="2.5"/>' +
+      '<circle cx="330" cy="84" r="27" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="3 6" opacity="0.7"/>' +
+      '<circle cx="338" cy="91" r="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>' +
+      // chloroplastes (à grana)
+      chloro(168, 56, 8) + chloro(240, 54, -7) + chloro(330, 156, 16) + chloro(326, 214, -14) + chloro(166, 226, 6) + chloro(236, 228, -8) +
+      // appareil de Golgi + mitochondrie
+      golgi(300, 120) +
+      mito(306, 178, 12, 0.85) +
       // étiquettes (gauche)
-      lbl(96, 52, 'Paroi', 'end', 104, 64) +
-      lbl(96, 112, 'Membrane', 'end', 114, 116) +
-      lbl(96, 165, 'Vacuole', 'end', 175, 140) +
-      lbl(96, 220, 'Chloroplaste', 'end', 168, 224) +
+      lbl(96, 50, 'Paroi', 'end', 104, 60) +
+      lbl(96, 100, 'Membrane', 'end', 114, 110) +
+      lbl(96, 150, 'Vacuole', 'end', 160, 145) +
+      lbl(96, 215, 'Chloroplaste', 'end', 166, 226) +
       // étiquettes (droite)
-      lbl(390, 74, 'Noyau', 'start', 332, 82) +
-      lbl(390, 156, 'Mitochondrie', 'start', 322, 150) +
+      lbl(392, 70, 'Noyau', 'start', 332, 84) +
+      lbl(392, 124, 'Golgi', 'start', 312, 122) +
+      lbl(392, 180, 'Mitochondrie', 'start', 322, 178) +
     '</svg>';
   var SVG_PLANT = wrap(_plantSvg, '');
 
