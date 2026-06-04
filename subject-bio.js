@@ -156,37 +156,9 @@
   var SVG_BACT = wrap(_bactSvg, '');
 
   // ===== ADN — vraie double hélice =====
-  var SVG_DNA = (function () {
-    var w = 280, h = 320, cx = 140, amp = 80, turns = 2.5, n = 48;
-    var L = [], R = [], i, t, y, ph, s;
-    for (i = 0; i <= n; i++) {
-      t = i / n; y = +(24 + t * (h - 48)).toFixed(1); ph = t * Math.PI * 2 * turns; s = Math.sin(ph);
-      L.push([+(cx + amp * s).toFixed(1), y]);
-      R.push([+(cx - amp * s).toFixed(1), y]);
-    }
-    function poly(p) { return p.map(function (q, k) { return (k ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join(' '); }
-    var COL = { A: '#60a5fa', T: '#f87171', C: '#34d399', G: '#fbbf24' };
-    var pairs = [['A', 'T'], ['C', 'G'], ['G', 'C'], ['T', 'A']];
-    var rungs = '', labels = '';
-    var k = 0;
-    for (i = 3; i < n - 2; i += 3) {
-      var lx = L[i][0], rx = R[i][0], yy = L[i][1];
-      s = Math.sin(i / n * Math.PI * 2 * turns);
-      var op = (0.4 + 0.55 * Math.abs(s)).toFixed(2);
-      var pr = pairs[k % pairs.length];
-      rungs += '<line x1="' + lx + '" y1="' + yy + '" x2="' + cx + '" y2="' + yy + '" stroke="' + COL[pr[0]] + '" stroke-width="6" stroke-linecap="round" opacity="' + op + '"/>';
-      rungs += '<line x1="' + cx + '" y1="' + yy + '" x2="' + rx + '" y2="' + yy + '" stroke="' + COL[pr[1]] + '" stroke-width="6" stroke-linecap="round" opacity="' + op + '"/>';
-      k++;
-    }
-    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" style="' + SVGSTYLE + '">' +
-      rungs +
-      '<path d="' + poly(L) + '" fill="none" stroke="#3b82f6" stroke-width="6.5" stroke-linecap="round"/>' +
-      '<path d="' + poly(R) + '" fill="none" stroke="#ef4444" stroke-width="6.5" stroke-linecap="round"/>' +
-      labels +
-    '</svg>';
-    return wrap(svg, colorLegend([['#3b82f6', 'Brin 1'], ['#ef4444', 'Brin 2'], ['#60a5fa', 'A'], ['#f87171', 'T'], ['#34d399', 'C'], ['#fbbf24', 'G']]) +
-      '<p style="text-align:center;font-size:12.5px;color:var(--text-secondary);margin-top:6px;">Appariement constant : <strong>A–T</strong> et <strong>C–G</strong></p>');
-  })();
+  // ADN — IMAGE EXACTE DU COURS (« La structure de l'ADN », photo scannée + nettoyée)
+  var SVG_DNA = wrap(cellImg('adn.png',
+    'Schéma du cours — La structure de l\'ADN : double hélice, brins reliés par les bases azotées appariées (Adénine–Thymine, Cytosine–Guanine), désoxyribose et phosphate.'), '');
 
   var sections = {};
 
@@ -313,14 +285,7 @@
       </div>
       <p>Quand l'ADN se condense au maximum, il prend une forme en <strong>X</strong> : c'est un chromosome <strong>dédoublé</strong>, fait de 2 <strong>chromatides-sœurs</strong> identiques reliées par le <strong>centromère</strong>.</p>
       <div style="text-align:center; margin:0.8rem 0;">
-        <svg viewBox="0 0 380 200" width="380" height="200" style="${SVGSTYLE}">
-          <path d="M150 30 Q188 100 150 170" fill="none" stroke="#a78bfa" stroke-width="15" stroke-linecap="round"/>
-          <path d="M214 30 Q176 100 214 170" fill="none" stroke="#7c3aed" stroke-width="15" stroke-linecap="round"/>
-          <ellipse cx="182" cy="100" rx="13" ry="9" fill="#fbbf24" stroke="#92400e" stroke-width="1"/>
-          ${lbl(120, 56, 'Chromatide', 'end', 156, 66)}
-          ${lbl(250, 56, 'Chromatide-sœur', 'start', 208, 66)}
-          ${lbl(250, 114, 'Centromère', 'start', 193, 100)}
-        </svg>
+        ${cellImg('mitose.png', 'Schéma du cours — le cycle cellulaire et la mitose : réplication de l\'ADN puis mitose donnant deux cellules diploïdes ; graphique de la quantité d\'ADN au cours du cycle (M, G1, S, G2, M ; interphase).')}
       </div>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
