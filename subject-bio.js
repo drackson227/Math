@@ -157,10 +157,47 @@
   var SVG_BACT = wrap(cellImg('procaryote.png',
     'Schéma du cours — structure d\'une bactérie (procaryote) : pili, capsule, ribosomes, paroi cellulaire, membrane plasmique, région nucléoïde contenant l\'ADN, mésosome, flagelles.'), '');
 
-  // ===== ADN — vraie double hélice =====
-  // ADN — IMAGE EXACTE DU COURS (« La structure de l'ADN », photo scannée + nettoyée)
-  var SVG_DNA = wrap(cellImg('adn.png',
-    'Schéma du cours — La structure de l\'ADN : double hélice, brins reliés par les bases azotées appariées (Adénine–Thymine, Cytosine–Guanine), désoxyribose et phosphate.'), '');
+  // ===== ADN — schéma redessiné (échelle de bases nette + double hélice) =====
+  var SVG_DNA = (function () {
+    var FIG = 'max-width:720px;width:100%;height:auto;background:#fff;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15);';
+    var OR = '#f59e0b', PH = '#7c3aed', INK = '#1f2937', LEAD = '#9aa4b8';
+    var COL = { A: '#ef4444', T: '#22c55e', G: '#3b82f6', C: '#eab308' };
+    function txt(x, y, t, s, w, f, a) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-family="inherit" font-size="' + (s || 12) + '" font-weight="' + (w || 500) + '" fill="' + (f || INK) + '">' + t + '</text>'; }
+    var s = '<svg viewBox="0 0 760 360" width="760" height="360" style="' + FIG + '" role="img" aria-label="La structure de l\'ADN : deux brins (désoxyribose + phosphate) reliés par les bases azotées appariées A-T et C-G, formant une double hélice.">';
+    s += txt(380, 26, "La structure de l'ADN", 16, 800, '#7c3aed');
+    var x0 = 80, x1 = 400, yt = 138, yb = 246;
+    // brins (rails sucre-phosphate)
+    s += '<line x1="' + x0 + '" y1="' + yt + '" x2="' + x1 + '" y2="' + yt + '" stroke="' + OR + '" stroke-width="9" stroke-linecap="round"/>';
+    s += '<line x1="' + x0 + '" y1="' + yb + '" x2="' + x1 + '" y2="' + yb + '" stroke="' + OR + '" stroke-width="9" stroke-linecap="round"/>';
+    // phosphates (cercles violets) sur les brins
+    [100, 160, 220, 280, 340, 400].forEach(function (nx) { s += '<circle cx="' + nx + '" cy="' + yt + '" r="5.5" fill="' + PH + '"/><circle cx="' + nx + '" cy="' + yb + '" r="5.5" fill="' + PH + '"/>'; });
+    // rungs = paires de bases (couleur + lettre) + étiquettes
+    var rungs = [[120, 'T', 'A', 'Thymine', 'Adénine'], [200, 'G', 'C', 'Guanine', 'Cytosine'], [280, 'C', 'G', 'Cytosine', 'Guanine'], [360, 'A', 'T', 'Adénine', 'Thymine']];
+    rungs.forEach(function (r) {
+      var rx = r[0];
+      s += '<rect x="' + (rx - 11) + '" y="' + (yt + 4) + '" width="22" height="46" rx="3" fill="' + COL[r[1]] + '"/>' + txt(rx, yt + 33, r[1], 14, 800, '#fff');
+      s += '<rect x="' + (rx - 11) + '" y="' + (yb - 50) + '" width="22" height="46" rx="3" fill="' + COL[r[2]] + '"/>' + txt(rx, yb - 18, r[2], 14, 800, '#fff');
+      s += '<line x1="' + rx + '" y1="' + (yt - 5) + '" x2="' + rx + '" y2="104" stroke="' + LEAD + '" stroke-width="1"/>' + txt(rx, 96, r[3], 10.5, 600, INK);
+      s += '<line x1="' + rx + '" y1="' + (yb + 5) + '" x2="' + rx + '" y2="286" stroke="' + LEAD + '" stroke-width="1"/>' + txt(rx, 297, r[4], 10.5, 600, INK);
+    });
+    // étiquettes Désoxyribose (brin orange) & Phosphate (cercle violet)
+    s += '<line x1="400" y1="' + yb + '" x2="436" y2="' + (yb + 14) + '" stroke="' + LEAD + '" stroke-width="1"/>' + txt(440, yb + 18, 'Désoxyribose', 11, 600, INK, 'start');
+    s += '<line x1="400" y1="' + yt + '" x2="436" y2="' + (yt - 14) + '" stroke="' + LEAD + '" stroke-width="1"/>' + txt(440, yt - 14, 'Phosphate', 11, 600, INK, 'start');
+    // ---- double hélice (à droite) ----
+    var hx0 = 470, hx1 = 720, cyH = 192, amp = 46, n = 60, turns = 1.8, i, ph, a;
+    var top = [], bot = [];
+    for (i = 0; i <= n; i++) { a = i / n; ph = a * Math.PI * 2 * turns; var x = hx0 + a * (hx1 - hx0); top.push([x.toFixed(1), (cyH + amp * Math.sin(ph)).toFixed(1)]); bot.push([x.toFixed(1), (cyH - amp * Math.sin(ph)).toFixed(1)]); }
+    function poly(p) { return p.map(function (q, k) { return (k ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join(' '); }
+    // barreaux de l'hélice (colorés)
+    var bcol = [COL.T, COL.G, COL.C, COL.A, COL.T, COL.G, COL.C, COL.A];
+    for (i = 4; i < n; i += 6) { s += '<line x1="' + top[i][0] + '" y1="' + top[i][1] + '" x2="' + bot[i][0] + '" y2="' + bot[i][1] + '" stroke="' + bcol[(i / 6) % bcol.length | 0] + '" stroke-width="4" stroke-linecap="round" opacity="0.9"/>'; }
+    s += '<path d="' + poly(top) + '" fill="none" stroke="' + OR + '" stroke-width="6" stroke-linecap="round"/>';
+    s += '<path d="' + poly(bot) + '" fill="none" stroke="#fbbf24" stroke-width="6" stroke-linecap="round"/>';
+    s += txt(595, 300, 'Double hélice', 11.5, 700, '#7c3aed');
+    return wrap(s + '</svg>', '<div style="display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin-top:8px;font-size:12.5px;color:var(--text-secondary);">' +
+      [['A', COL.A], ['T', COL.T], ['G', COL.G], ['C', COL.C]].map(function (b) { return '<span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:' + b[1] + ';display:inline-block;"></span>' + ({ A: 'Adénine', T: 'Thymine', G: 'Guanine', C: 'Cytosine' })[b[0]] + '</span>'; }).join('') +
+      '<span>· Appariement : <strong>A–T</strong> et <strong>C–G</strong></span></div>');
+  })();
 
   // ===== CYCLE CELLULAIRE & MITOSE — schéma redessiné (séquence + graphe quantité d'ADN) =====
   var SVG_MITOSE = (function () {
@@ -450,6 +487,26 @@
   sections.exercices = `<div id="exercices" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.5rem;">✏️ Exercices guidés</h2>
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🦠 Légende le schéma — la bactérie</h3>
+      <p style="color:var(--text-secondary); margin-bottom:1rem;">Écris le nom de chaque structure dans la case (au bout de chaque flèche), puis clique sur <strong>Corriger</strong>.</p>
+      <div class="lblexo">
+        <img src="procaryote-blank.png" alt="Schéma d'une bactérie à légender" loading="lazy"/>
+        <span class="lx" style="left:30.7%; top:5.5%; width:14%;"><input type="text" data-answer="Pili" aria-label="structure 1" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:45%; top:26%; width:17%;"><input type="text" data-answer="Ribosomes" aria-label="structure 2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:47%; top:33%; width:15%;"><input type="text" data-answer="Capsule" aria-label="structure 3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:48.5%; top:38.5%; width:24%;"><input type="text" data-answer="Paroi cellulaire" aria-label="structure 4" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:56.5%; top:46%; width:23%;"><input type="text" data-answer="Membrane plasmique" aria-label="structure 5" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:56.5%; top:56%; width:32%;"><input type="text" data-answer="Région nucléoïde" aria-label="structure 6" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:67%; top:66%; width:17%;"><input type="text" data-answer="Mésosome" aria-label="structure 7" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+        <span class="lx" style="left:70%; top:73%; width:18%;"><input type="text" data-answer="Flagelles" aria-label="structure 8" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
+      </div>
+      <div class="lblexo-foot">
+        <button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>
+        <button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>
+        <span class="lblexo-score"></span>
+      </div>
+    </div>
     <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Quel type de cellule ?</h3>
       <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> une cellule possède un noyau, une paroi rigide, des chloroplastes et une grande vacuole. Quel type ?</p></div>

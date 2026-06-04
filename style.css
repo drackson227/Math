@@ -1271,6 +1271,20 @@ textarea:focus-visible,
 .chap-revise { display: block; margin-top: 0.7rem; width: 100%; background: linear-gradient(135deg, #a78bfa, #60a5fa); color: #fff; border: none; border-radius: 10px; padding: 11px 14px; font-size: 14.5px; font-weight: 700; cursor: pointer; }
 .chap-revise:active { transform: scale(0.97); }
 
+/* ===== Exercice interactif « légende le schéma » ===== */
+.lblexo { position: relative; max-width: 430px; margin: 1rem auto; border-radius: 12px; }
+.lblexo > img { width: 100%; display: block; border-radius: 12px; background: #fff; }
+.lblexo .lx { position: absolute; }
+.lblexo .lx input { width: 100%; box-sizing: border-box; font: 700 11px/1.1 inherit; text-align: center; padding: 3px 2px; border: 2px solid var(--color-nav); border-radius: 6px; background: #fff; color: #1f2937; outline: none; box-shadow: 0 1px 4px rgba(0,0,0,0.18); }
+.lblexo .lx input::placeholder { color: #b9a9e6; font-weight: 800; }
+.lblexo .lx input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.28); }
+.lblexo .lx input.ok { border-color: #16a34a; background: #dcfce7; color: #15803d; }
+.lblexo .lx input.no { border-color: #dc2626; background: #fee2e2; color: #b91c1c; }
+.lblexo .lx .sol { display: none; font: 800 9.5px/1.1 inherit; color: #15803d; text-align: center; margin-top: 2px; background: #fff; border: 1px solid #16a34a; border-radius: 4px; padding: 1px 2px; white-space: nowrap; }
+.lblexo.corrected .lx input.no ~ .sol { display: block; }
+.lblexo-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 14px 0 2px; }
+.lblexo-score { font-weight: 800; color: var(--color-nav); font-size: 16px; }
+
 /* ── Fiche de révision imprimable ── */
 #revision-sheet { display: none; }
 @media print {

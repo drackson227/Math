@@ -1049,6 +1049,45 @@ function showExerciseStep(btn, stepNum) {
   }
 }
 
+// ===== Exercice interactif « légende le schéma » =====
+function normLabel(s) {
+  return (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/['’()]/g, ' ').replace(/\b(le|la|les|l|un|une|des|de|du|d)\b/g, ' ')
+    .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function checkLabelExo(btn) {
+  const card = btn.closest('.exercise-card') || btn.closest('.lblexo-wrap');
+  if (!card) return;
+  const box = card.querySelector('.lblexo');
+  if (!box) return;
+  const inputs = box.querySelectorAll('input[data-answer]');
+  let ok = 0;
+  inputs.forEach((inp) => {
+    const ans = normLabel(inp.getAttribute('data-answer'));
+    const val = normLabel(inp.value);
+    const good = val.length >= 3 && (val === ans || ans.indexOf(val) === 0 || val.indexOf(ans) === 0 || (' ' + ans + ' ').indexOf(' ' + val + ' ') >= 0 || (' ' + val + ' ').indexOf(' ' + ans + ' ') >= 0);
+    inp.classList.remove('ok', 'no');
+    inp.classList.add(good ? 'ok' : 'no');
+    const sol = inp.parentElement.querySelector('.sol');
+    if (sol) sol.textContent = '→ ' + inp.getAttribute('data-answer');
+    if (good) ok++;
+  });
+  box.classList.add('corrected');
+  const sc = card.querySelector('.lblexo-score');
+  if (sc) sc.textContent = ok + ' / ' + inputs.length + (ok === inputs.length ? '  🎉' : '');
+}
+function resetLabelExo(btn) {
+  const card = btn.closest('.exercise-card');
+  if (!card) return;
+  const box = card.querySelector('.lblexo');
+  if (box) {
+    box.classList.remove('corrected');
+    box.querySelectorAll('input[data-answer]').forEach((inp) => { inp.value = ''; inp.classList.remove('ok', 'no'); });
+  }
+  const sc = card.querySelector('.lblexo-score');
+  if (sc) sc.textContent = '';
+}
+
 function toggleWhyMethod(btn) {
   const content = btn.nextElementSibling;
   content.style.display = content.style.display === 'block' ? 'none' : 'block';

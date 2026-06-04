@@ -118,6 +118,9 @@
       <div>
         <div class="formula-box"><h3>Réactions acide-base / métal</h3><div class="formula-main">acide + hydroxyde → sel + eau<br>acide + oxyde → sel + eau<br>acide + métal → sel + H₂</div></div>
         <div class="formula-box"><h3>Mole, masse & gaz</h3><div class="formula-main">m = n · M<br>N = n · N<sub>A</sub><br>P · V = n · R · T</div><p class="note">N<sub>A</sub> ≈ 6,02·10²³ /mol · R ≈ 0,082 L·atm/(mol·K) · T en kelvins.</p></div>
+        <div class="formula-box"><h3>Concentration molaire</h3><div class="formula-main">C = n / V</div><p class="note">C en <strong>mol/L</strong> (mol·L⁻¹) · n en mol · V en <strong>litres</strong>. On note aussi [X] = concentration de l'espèce X.</p></div>
+        <div class="formula-box"><h3>Concentration massique</h3><div class="formula-main">C<sub>m</sub> = m / V &nbsp;&nbsp;↔&nbsp;&nbsp; C<sub>m</sub> = C · M</div><p class="note">C<sub>m</sub> en <strong>g/L</strong> · m en g · V en L. Lien avec la molaire : on multiplie par la masse molaire M.</p></div>
+        <div class="formula-box"><h3>Dilution</h3><div class="formula-main">C₁ · V₁ = C₂ · V₂</div><p class="note">La quantité de soluté ne change pas quand on dilue. (n = C·V conservé.) Facteur de dilution F = V₂/V₁ = C₁/C₂.</p></div>
       </div>
     </div>
   </div>`;
