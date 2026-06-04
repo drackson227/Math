@@ -153,7 +153,9 @@
       tlbl(352, 74, 'Ribosomes', 'start', 292, 98) +
       tlbl(352, 140, 'Flagelle', 'start', 420, 110) +
     '</svg>';
-  var SVG_BACT = wrap(_bactSvg, '');
+  // Procaryote — IMAGE EXACTE DU COURS (bactérie : Pili, Capsule, Ribosomes, Paroi, Membrane, Région nucléoïde/ADN, Mésosome, Flagelles)
+  var SVG_BACT = wrap(cellImg('procaryote.png',
+    'Schéma du cours — structure d\'une bactérie (procaryote) : pili, capsule, ribosomes, paroi cellulaire, membrane plasmique, région nucléoïde contenant l\'ADN, mésosome, flagelles.'), '');
 
   // ===== ADN — vraie double hélice =====
   // ADN — IMAGE EXACTE DU COURS (« La structure de l'ADN », photo scannée + nettoyée)
