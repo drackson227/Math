@@ -317,17 +317,17 @@
   ];
   var ANIM_PTS = [
     { l: 11.5, t: 6.5, w: 18, a: 'Réticulum endoplasmique rugueux' }, { l: 11.5, t: 15.8, w: 12, a: 'Ribosome' },
-    { l: 63.5, t: 3.6, w: 17, a: 'Pore nucléaire' }, { l: 63.5, t: 9.8, w: 11, a: 'Nucléole' }, { l: 63.5, t: 16.8, w: 22.5, a: 'Membrane nucléaire' },
-    { l: 87.5, t: 10.8, w: 9.5, a: 'Noyau' }, { l: 64.5, t: 26.8, w: 19, a: 'Appareil de Golgi' }, { l: 80, t: 33.8, w: 11, a: 'Centriole' },
-    { l: 79.5, t: 39.8, w: 11.5, a: 'Lysosome' }, { l: 80, t: 71, w: 13.5, a: 'Cytoplasme' },
+    { l: 63.5, t: 1.2, w: 17, a: 'Pore nucléaire' }, { l: 63.5, t: 7.3, w: 11, a: 'Nucléole' }, { l: 63.5, t: 14.3, w: 22.5, a: 'Membrane nucléaire' },
+    { l: 87.5, t: 10.8, w: 9.5, a: 'Noyau' }, { l: 64.5, t: 24.3, w: 19, a: 'Appareil de Golgi' }, { l: 80, t: 31.3, w: 11, a: 'Centriole' },
+    { l: 79.5, t: 37.3, w: 11.5, a: 'Lysosome' }, { l: 80, t: 71, w: 13.5, a: 'Cytoplasme' },
     { l: 11, t: 76.5, w: 17.5, a: 'Réticulum endoplasmique lisse' }, { l: 80, t: 88.5, w: 13, a: 'Membrane plasmique' }, { l: 12.3, t: 92.8, w: 15.5, a: 'Mitochondrie' }
   ];
   var VEG_PTS = [
-    { l: 23.9, t: 2, w: 18, a: 'Paroi cellulaire' }, { l: 54, t: 2, w: 17, a: 'Peroxysome' }, { l: 0.5, t: 13.5, w: 25, a: 'Membrane cellulaire' },
-    { l: 6.7, t: 20, w: 20, a: 'Chloroplaste' }, { l: 5, t: 33, w: 22, a: 'Ponctuation avec plasmodesme' },
-    { l: 4.9, t: 54.5, w: 24, a: 'Mitochondrie' }, { l: 1.4, t: 64.5, w: 26, a: 'Vacuole centrale' }, { l: 70.7, t: 21.5, w: 16, a: 'Cytosol' },
-    { l: 72, t: 28, w: 23, a: 'Réticulum endoplasmique rugueux' }, { l: 78, t: 35, w: 10, a: 'Noyau' }, { l: 82, t: 46, w: 13, a: 'Nucléole' },
-    { l: 69.8, t: 55, w: 24, a: 'Réticulum endoplasmique lisse' }, { l: 60.6, t: 84, w: 30, a: 'Appareil de Golgi' }
+    { l: 24, t: 2.3, w: 17, a: 'Paroi cellulaire' }, { l: 42, t: 1, w: 20, a: 'Peroxysome' }, { l: 0.5, t: 14.4, w: 22, a: 'Membrane cellulaire' },
+    { l: 6, t: 21.7, w: 16, a: 'Chloroplaste' }, { l: 5, t: 28.8, w: 18, a: 'Ponctuation avec plasmodesme' },
+    { l: 5, t: 55, w: 22, a: 'Mitochondrie' }, { l: 1, t: 65, w: 20, a: 'Vacuole centrale' }, { l: 74, t: 21, w: 14, a: 'Cytosol' },
+    { l: 71, t: 28.5, w: 22, a: 'Réticulum endoplasmique rugueux' }, { l: 75, t: 47, w: 13, a: 'Noyau' }, { l: 75, t: 55, w: 15, a: 'Nucléole' },
+    { l: 70, t: 60, w: 23, a: 'Réticulum endoplasmique lisse' }, { l: 60, t: 75, w: 30, a: 'Appareil de Golgi' }
   ];
 
   var sections = {};
