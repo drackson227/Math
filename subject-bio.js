@@ -296,6 +296,40 @@
     return wrap(s, '<p style="text-align:center;font-size:12.5px;color:var(--text-secondary);margin-top:8px;">Pendant la phase <strong>S</strong>, l\'ADN est répliqué (quantité 1 → 2) ; la <strong>mitose (M)</strong> sépare les chromatides-sœurs → 2 cellules filles identiques (retour à 1).</p>');
   })();
 
+  // ===== Exercice interactif « légende le schéma » (réutilisable) =====
+  function labelExo(emoji, title, img, pts) {
+    var boxes = pts.map(function (p, i) {
+      return '<span class="lx" style="left:' + p.l + '%; top:' + p.t + '%; width:' + p.w + '%;">' +
+        '<input type="text" data-answer="' + p.a.replace(/"/g, '&quot;') + '" aria-label="structure ' + (i + 1) + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + (i + 1) + '"/></span>';
+    }).join('');
+    return '<div class="exercise-card">' +
+      '<h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">' + emoji + ' Légende le schéma — ' + title + '</h3>' +
+      '<p style="color:var(--text-secondary); margin-bottom:1rem;">Écris le nom de chaque structure dans sa case (numérotée), puis clique sur <strong>Corriger</strong>.</p>' +
+      '<div class="lblexo"><img src="' + img + '" alt="Schéma à légender : ' + title + '" loading="lazy"/>' + boxes + '</div>' +
+      '<div class="lblexo-foot"><button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>' +
+      '<button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>' +
+      '<span class="lblexo-score"></span></div><div class="lblexo-corr"></div></div>';
+  }
+  var PROCA_PTS = [
+    { l: 30.7, t: 5.5, w: 14, a: 'Pili' }, { l: 45, t: 26, w: 17, a: 'Ribosomes' }, { l: 47, t: 33, w: 15, a: 'Capsule' },
+    { l: 48.5, t: 38.5, w: 24, a: 'Paroi cellulaire' }, { l: 56.5, t: 46, w: 23, a: 'Membrane plasmique' },
+    { l: 56.5, t: 56, w: 32, a: 'Région nucléoïde' }, { l: 67, t: 66, w: 17, a: 'Mésosome' }, { l: 70, t: 73, w: 18, a: 'Flagelles' }
+  ];
+  var ANIM_PTS = [
+    { l: 11.5, t: 6.5, w: 18, a: 'Réticulum endoplasmique rugueux' }, { l: 11.5, t: 15.8, w: 12, a: 'Ribosome' },
+    { l: 63.5, t: 3.6, w: 17, a: 'Pore nucléaire' }, { l: 63.5, t: 9.8, w: 11, a: 'Nucléole' }, { l: 63.5, t: 16.8, w: 22.5, a: 'Membrane nucléaire' },
+    { l: 87.5, t: 10.8, w: 9.5, a: 'Noyau' }, { l: 64.5, t: 26.8, w: 19, a: 'Appareil de Golgi' }, { l: 80, t: 33.8, w: 11, a: 'Centriole' },
+    { l: 79.5, t: 39.8, w: 11.5, a: 'Lysosome' }, { l: 80, t: 71, w: 13.5, a: 'Cytoplasme' },
+    { l: 11, t: 76.5, w: 17.5, a: 'Réticulum endoplasmique lisse' }, { l: 80, t: 88.5, w: 13, a: 'Membrane plasmique' }, { l: 12.3, t: 92.8, w: 15.5, a: 'Mitochondrie' }
+  ];
+  var VEG_PTS = [
+    { l: 23.9, t: 2, w: 18, a: 'Paroi cellulaire' }, { l: 54, t: 2, w: 17, a: 'Peroxysome' }, { l: 0.5, t: 13.5, w: 25, a: 'Membrane cellulaire' },
+    { l: 6.7, t: 20, w: 20, a: 'Chloroplaste' }, { l: 5, t: 33, w: 22, a: 'Ponctuation avec plasmodesme' },
+    { l: 4.9, t: 54.5, w: 24, a: 'Mitochondrie' }, { l: 1.4, t: 64.5, w: 26, a: 'Vacuole centrale' }, { l: 70.7, t: 21.5, w: 16, a: 'Cytosol' },
+    { l: 72, t: 28, w: 23, a: 'Réticulum endoplasmique rugueux' }, { l: 78, t: 35, w: 10, a: 'Noyau' }, { l: 82, t: 46, w: 13, a: 'Nucléole' },
+    { l: 69.8, t: 55, w: 24, a: 'Réticulum endoplasmique lisse' }, { l: 60.6, t: 84, w: 30, a: 'Appareil de Golgi' }
+  ];
+
   var sections = {};
 
   sections.synthese = `<div id="synthese" class="section active">
@@ -487,26 +521,10 @@
   sections.exercices = `<div id="exercices" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.5rem;">✏️ Exercices guidés</h2>
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
-    <div class="exercise-card">
-      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🦠 Légende le schéma — la bactérie</h3>
-      <p style="color:var(--text-secondary); margin-bottom:1rem;">Écris le nom de chaque structure dans la case (au bout de chaque flèche), puis clique sur <strong>Corriger</strong>.</p>
-      <div class="lblexo">
-        <img src="procaryote-blank.png" alt="Schéma d'une bactérie à légender" loading="lazy"/>
-        <span class="lx" style="left:30.7%; top:5.5%; width:14%;"><input type="text" data-answer="Pili" aria-label="structure 1" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:45%; top:26%; width:17%;"><input type="text" data-answer="Ribosomes" aria-label="structure 2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:47%; top:33%; width:15%;"><input type="text" data-answer="Capsule" aria-label="structure 3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:48.5%; top:38.5%; width:24%;"><input type="text" data-answer="Paroi cellulaire" aria-label="structure 4" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:56.5%; top:46%; width:23%;"><input type="text" data-answer="Membrane plasmique" aria-label="structure 5" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:56.5%; top:56%; width:32%;"><input type="text" data-answer="Région nucléoïde" aria-label="structure 6" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:67%; top:66%; width:17%;"><input type="text" data-answer="Mésosome" aria-label="structure 7" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-        <span class="lx" style="left:70%; top:73%; width:18%;"><input type="text" data-answer="Flagelles" aria-label="structure 8" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="?"/><span class="sol"></span></span>
-      </div>
-      <div class="lblexo-foot">
-        <button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>
-        <button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>
-        <span class="lblexo-score"></span>
-      </div>
-    </div>
+    <p style="color:var(--text-secondary); margin:-0.6rem 0 1rem; font-size:14px;">🧩 <strong>Légende les schémas</strong> : remplis chaque case numérotée, puis « Corriger » (la correction s'affiche dessous).</p>
+    ${labelExo('🦠', 'la bactérie (procaryote)', 'procaryote-blank.png', PROCA_PTS)}
+    ${labelExo('🐾', 'la cellule animale', 'cellule-animale-blank.png', ANIM_PTS)}
+    ${labelExo('🌿', 'la cellule végétale', 'cellule-vegetale-blank.png', VEG_PTS)}
     <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Quel type de cellule ?</h3>
       <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> une cellule possède un noyau, une paroi rigide, des chloroplastes et une grande vacuole. Quel type ?</p></div>

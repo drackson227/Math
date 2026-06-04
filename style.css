@@ -1280,10 +1280,19 @@ textarea:focus-visible,
 .lblexo .lx input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.28); }
 .lblexo .lx input.ok { border-color: #16a34a; background: #dcfce7; color: #15803d; }
 .lblexo .lx input.no { border-color: #dc2626; background: #fee2e2; color: #b91c1c; }
-.lblexo .lx .sol { display: none; font: 800 9.5px/1.1 inherit; color: #15803d; text-align: center; margin-top: 2px; background: #fff; border: 1px solid #16a34a; border-radius: 4px; padding: 1px 2px; white-space: nowrap; }
-.lblexo.corrected .lx input.no ~ .sol { display: block; }
 .lblexo-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 14px 0 2px; }
 .lblexo-score { font-weight: 800; color: var(--color-nav); font-size: 16px; }
+/* panneau de correction (sous le schéma, propre, sans débordement) */
+.lblexo-corr { display: none; margin: 10px auto 0; max-width: 520px; }
+.lblexo-corr.show { display: block; }
+.lblexo-corr h4 { margin: 0 0 8px; font-size: 15px; font-weight: 800; color: var(--color-nav); }
+.lblexo-corr ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.lblexo-corr li { display: flex; align-items: center; gap: 8px; font-size: 14px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 7px 10px; }
+.lblexo-corr li .ico { flex: 0 0 auto; font-size: 15px; }
+.lblexo-corr li.bad { border-color: rgba(220,38,38,0.4); }
+.lblexo-corr li .mine { color: #b91c1c; text-decoration: line-through; opacity: 0.8; }
+.lblexo-corr li .good { color: #15803d; font-weight: 800; }
+.lblexo-corr li.okk .good { color: #15803d; }
 
 /* ── Fiche de révision imprimable ── */
 #revision-sheet { display: none; }

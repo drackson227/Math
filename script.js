@@ -1055,6 +1055,7 @@ function normLabel(s) {
     .replace(/['’()]/g, ' ').replace(/\b(le|la|les|l|un|une|des|de|du|d)\b/g, ' ')
     .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
 }
+function _escHtml(s) { return (s || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
 function checkLabelExo(btn) {
   const card = btn.closest('.exercise-card') || btn.closest('.lblexo-wrap');
   if (!card) return;
@@ -1062,19 +1063,27 @@ function checkLabelExo(btn) {
   if (!box) return;
   const inputs = box.querySelectorAll('input[data-answer]');
   let ok = 0;
-  inputs.forEach((inp) => {
-    const ans = normLabel(inp.getAttribute('data-answer'));
+  const items = [];
+  inputs.forEach((inp, idx) => {
+    const answer = inp.getAttribute('data-answer');
+    const ans = normLabel(answer);
     const val = normLabel(inp.value);
     const good = val.length >= 3 && (val === ans || ans.indexOf(val) === 0 || val.indexOf(ans) === 0 || (' ' + ans + ' ').indexOf(' ' + val + ' ') >= 0 || (' ' + val + ' ').indexOf(' ' + ans + ' ') >= 0);
     inp.classList.remove('ok', 'no');
     inp.classList.add(good ? 'ok' : 'no');
-    const sol = inp.parentElement.querySelector('.sol');
-    if (sol) sol.textContent = '→ ' + inp.getAttribute('data-answer');
     if (good) ok++;
+    const mine = good ? '' : '<span class="mine">' + (_escHtml(inp.value.trim()) || '(vide)') + '</span> → ';
+    items.push('<li class="' + (good ? 'okk' : 'bad') + '"><span class="ico">' + (good ? '✅' : '❌') + '</span><span><strong>' + (idx + 1) + '.</strong> ' + mine + '<span class="good">' + _escHtml(answer) + '</span></span></li>');
   });
   box.classList.add('corrected');
+  const n = inputs.length;
   const sc = card.querySelector('.lblexo-score');
-  if (sc) sc.textContent = ok + ' / ' + inputs.length + (ok === inputs.length ? '  🎉' : '');
+  if (sc) sc.textContent = ok + ' / ' + n + (ok === n ? '  🎉' : '');
+  const corr = card.querySelector('.lblexo-corr');
+  if (corr) {
+    corr.innerHTML = '<h4>Correction ' + (ok === n ? '— parfait ! 🎉' : '— ' + ok + '/' + n) + '</h4><ul>' + items.join('') + '</ul>';
+    corr.classList.add('show');
+  }
 }
 function resetLabelExo(btn) {
   const card = btn.closest('.exercise-card');
@@ -1086,6 +1095,8 @@ function resetLabelExo(btn) {
   }
   const sc = card.querySelector('.lblexo-score');
   if (sc) sc.textContent = '';
+  const corr = card.querySelector('.lblexo-corr');
+  if (corr) { corr.classList.remove('show'); corr.innerHTML = ''; }
 }
 
 function toggleWhyMethod(btn) {
