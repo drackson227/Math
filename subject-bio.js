@@ -48,6 +48,10 @@
       }).join('') + '</div>';
   }
   function wrap(svg, leg) { return '<div style="text-align:center;">' + svg + leg + '</div>'; }
+  // image scannée du cours (schéma exact, nettoyé fond blanc)
+  function cellImg(src, alt) {
+    return '<img src="' + src + '" alt="' + alt + '" loading="lazy" style="max-width:100%;height:auto;display:block;margin:0 auto;background:#fff;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 10px rgba(0,0,0,0.18);"/>';
+  }
 
   // mitochondrie « manuel » : haricot à double membrane, crêtes en doigts vers l'intérieur
   function mito(x, y, rot, sc) {
@@ -118,102 +122,13 @@
       '<text x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '" font-family="inherit" font-size="12.5" font-weight="600" fill="#f1f5f9">' + text + '</text>';
   }
 
-  // ===== CELLULE ANIMALE — planche façon manuel (cf. cours, p. « La cellule animale ») =====
-  var _animalSvg =
-    '<svg viewBox="0 0 560 390" width="560" height="390" style="' + PAPER + '">' +
-      // ---- membrane plasmique (double trait, forme arrondie) ----
-      '<ellipse cx="280" cy="200" rx="150" ry="145" fill="#fdf6e3" stroke="' + INK + '" stroke-width="2.6"/>' +
-      '<ellipse cx="280" cy="200" rx="144" ry="139" fill="none" stroke="' + INK + '" stroke-width="1"/>' +
-      // ---- noyau : enveloppe nucléaire double + pores + chromatine + nucléole ----
-      '<circle cx="240" cy="190" r="64" fill="#d6e4f7" stroke="' + INK + '" stroke-width="2"/>' +
-      '<circle cx="240" cy="190" r="58" fill="none" stroke="' + INK + '" stroke-width="1.2"/>' +
-      // pores nucléaires (petits points sur l\'enveloppe)
-      '<g fill="' + INK + '"><circle cx="240" cy="129" r="2.4"/><circle cx="279" cy="143" r="2.4"/><circle cx="301" cy="190" r="2.4"/><circle cx="279" cy="237" r="2.4"/><circle cx="201" cy="237" r="2.4"/><circle cx="179" cy="190" r="2.4"/><circle cx="201" cy="143" r="2.4"/></g>' +
-      // chromatine (filaments)
-      '<g fill="none" stroke="#5a7db5" stroke-width="1.2" opacity="0.7"><path d="M212 168 q14 10 26 -2 q12 -10 26 2"/><path d="M210 210 q16 -8 30 4 q14 10 28 -4"/></g>' +
-      // nucléole
-      '<circle cx="258" cy="202" r="21" fill="#9db8de" stroke="' + INK + '" stroke-width="1.4"/>' +
-      // ---- réticulum endoplasmique RUGUEUX (sacs + ribosomes), autour du noyau ----
-      reticulum(150, 95, 18, true) +
-      reticulum(132, 200, -88, true) +
-      // ---- réticulum endoplasmique LISSE (sacs lisses, sans ribosomes) ----
-      reticulum(352, 252, -22, false) +
-      // ---- ribosomes libres ----
-      ink_dots([[200, 132], [184, 150], [212, 142], [196, 118], [330, 165], [344, 178]]) +
-      // ---- mitochondries (à crêtes) ----
-      mito(312, 96, 6) + mito(378, 188, 70) + mito(196, 292, 22) +
-      // ---- appareil de Golgi ----
-      golgi(330, 246, 0.95) +
-      // ---- centriole (paire de barillets) ----
-      centriole(252, 300) +
-      // ---- lysosomes ----
-      '<circle cx="322" cy="306" r="12" fill="#e6d5ee" stroke="' + INK + '" stroke-width="1.6"/>' + ink_dots([[318, 302, 1.4], [326, 308, 1.4], [321, 311, 1.4]]) +
-      '<circle cx="206" cy="244" r="9" fill="#e6d5ee" stroke="' + INK + '" stroke-width="1.4"/>' +
-      // ---- étiquettes (gauche) ----
-      tlbl(118, 70, 'Réticulum\nendoplasmique\nrugueux', 'end', 158, 100) +
-      tlbl(118, 168, 'Ribosome', 'end', 196, 118) +
-      tlbl(118, 296, 'Mitochondrie', 'end', 196, 292) +
-      // ---- étiquettes (droite) ----
-      tlbl(442, 66, 'Pore nucléaire', 'start', 279, 143) +
-      tlbl(442, 100, 'Nucléole', 'start', 264, 202) +
-      tlbl(442, 134, 'Membrane\nnucléaire', 'start', 304, 180) +
-      tlbl(442, 192, 'Noyau', 'start', 232, 178) +
-      tlbl(442, 232, 'Appareil\nde Golgi', 'start', 348, 250) +
-      tlbl(442, 296, 'Centriole', 'start', 270, 300) +
-      tlbl(442, 330, 'Lysosome', 'start', 332, 306) +
-      // ---- étiquettes (bas) ----
-      tlbl(168, 376, 'Membrane plasmique', 'end', 214, 332) +
-      tlbl(398, 376, 'Cytoplasme', 'start', 318, 318) +
-    '</svg>';
-  var SVG_ANIMAL = wrap(_animalSvg, '');
+  // ===== CELLULE ANIMALE — IMAGE EXACTE DU COURS (photo scannée + nettoyée) =====
+  var SVG_ANIMAL = wrap(cellImg('cellule-animale.png',
+    'Schéma du cours — cellule animale (eucaryote) : réticulum endoplasmique rugueux, ribosome, pore nucléaire, nucléole, membrane nucléaire, noyau, appareil de Golgi, centriole, lysosome, membrane plasmique, cytoplasme, mitochondries.'), '');
 
-  // ===== CELLULE VÉGÉTALE — planche façon manuel (cf. cours, p. « La cellule végétale ») =====
-  var _plantSvg =
-    '<svg viewBox="-38 0 598 400" width="598" height="400" style="' + PAPER + '">' +
-      // ---- paroi cellulaire (épaisse, rigide) ----
-      '<rect x="100" y="58" width="360" height="292" rx="30" fill="#d6ecbe" stroke="' + INK + '" stroke-width="2.6"/>' +
-      '<rect x="109" y="67" width="342" height="274" rx="24" fill="#fdf6e3" stroke="' + INK + '" stroke-width="1.4"/>' +
-      // membrane plasmique (juste sous la paroi)
-      '<rect x="114" y="72" width="332" height="264" rx="21" fill="none" stroke="' + INK + '" stroke-width="0.9"/>' +
-      // ponctuations / plasmodesmes (canaux qui traversent la paroi, à gauche)
-      '<g stroke="' + INK + '" stroke-width="1.2" fill="#d6ecbe">' +
-        '<rect x="100" y="186" width="9" height="9"/><line x1="100" y1="190.5" x2="109" y2="190.5"/>' +
-        '<rect x="100" y="205" width="9" height="9"/><line x1="100" y1="209.5" x2="109" y2="209.5"/>' +
-      '</g>' +
-      // ---- grande vacuole centrale (dominante) ----
-      '<rect x="170" y="118" width="198" height="182" rx="24" fill="#d2eef2" stroke="' + INK + '" stroke-width="1.8"/>' +
-      '<rect x="176" y="124" width="186" height="170" rx="20" fill="none" stroke="' + INK + '" stroke-width="0.8" opacity="0.6"/>' +
-      '<text x="269" y="203" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#0e7490"><tspan x="269">Vacuole</tspan><tspan x="269" dy="17">centrale</tspan></text>' +
-      // ---- noyau + nucléole (côté droit) ----
-      '<circle cx="410" cy="150" r="37" fill="#d6e4f7" stroke="' + INK + '" stroke-width="2"/>' +
-      '<circle cx="410" cy="150" r="32" fill="none" stroke="' + INK + '" stroke-width="1.1"/>' +
-      '<circle cx="420" cy="158" r="12" fill="#9db8de" stroke="' + INK + '" stroke-width="1.3"/>' +
-      // ---- chloroplastes (à grana) ----
-      chloro(140, 145, 78) + chloro(140, 232, 78) + chloro(232, 92, 0) + chloro(252, 318, 0) + chloro(330, 318, 0) +
-      // ---- peroxysome ----
-      '<circle cx="312" cy="92" r="10" fill="#f1e3c6" stroke="' + INK + '" stroke-width="1.5"/><circle cx="312" cy="92" r="3" fill="' + INK + '"/>' +
-      // ---- réticulum endoplasmique rugueux (près du noyau) ----
-      reticulum(408, 242, 78, true) +
-      // ---- appareil de Golgi ----
-      golgi(408, 300, 0.7) +
-      // ---- mitochondrie ----
-      mito(150, 300, 60, 0.78) +
-      // ---- étiquettes (haut) ----
-      tlbl(150, 34, 'Paroi cellulaire', 'end', 182, 58) +
-      tlbl(404, 34, 'Peroxysome', 'start', 312, 90) +
-      // ---- étiquettes (gauche) ----
-      tlbl(95, 96, 'Membrane\ncellulaire', 'end', 114, 110) +
-      tlbl(95, 150, 'Chloroplaste', 'end', 140, 145) +
-      tlbl(95, 205, 'Ponctuation\navec plasmodesme', 'end', 100, 200) +
-      tlbl(95, 300, 'Mitochondrie', 'end', 150, 300) +
-      // ---- étiquettes (droite) ----
-      tlbl(465, 86, 'Cytosol', 'start', 380, 112) +
-      tlbl(465, 130, 'Noyau', 'start', 414, 150) +
-      tlbl(465, 165, 'Nucléole', 'start', 422, 158) +
-      tlbl(465, 230, 'Réticulum\nendoplasmique\nrugueux', 'start', 412, 242) +
-      tlbl(465, 308, 'Appareil\nde Golgi', 'start', 416, 304) +
-    '</svg>';
-  var SVG_PLANT = wrap(_plantSvg, '');
+  // ===== CELLULE VÉGÉTALE — IMAGE EXACTE DU COURS (photo scannée + nettoyée) =====
+  var SVG_PLANT = wrap(cellImg('cellule-vegetale.png',
+    'Schéma du cours — cellule végétale : paroi cellulaire, peroxysome, membrane cellulaire, chloroplaste, cytosol, ponctuation avec plasmodesme, réticulum endoplasmique rugueux et lisse, noyau, nucléole, mitochondrie, vacuole centrale, appareil de Golgi.'), '');
 
   // ===== BACTÉRIE / procaryote — planche façon manuel =====
   var _bactSvg =
