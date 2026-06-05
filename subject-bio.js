@@ -374,6 +374,7 @@
       '<ol class="lblexo-list">' + lis + '</ol>' +
       '<div class="lblexo-foot"><button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>' +
       '<button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>' +
+      '<button class="step-btn" onclick="toggleMarks(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">🙈 Cacher les n°</button>' +
       '<span class="lblexo-score"></span></div><div class="lblexo-corr"></div></div>';
   }
   var PROCA_PTS = [

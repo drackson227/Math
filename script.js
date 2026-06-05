@@ -33,6 +33,31 @@ let correctStreak = 0;
 let questionAnswered = [];
 let timerIds = [];
 let currentActiveQuestion = 0;
+let quizResults = []; // par question : true (juste), false (faux), 'skip' (passée)
+
+// Barre de progression visuelle du quiz (Q x/N + pastilles vert/rouge/courant)
+function updateQuizProgress() {
+  const el = document.getElementById('quiz-progress');
+  if (!el) return;
+  const n = currentQuestions.length;
+  if (!n) { el.innerHTML = ''; return; }
+  const done = quizResults.filter(function (r) { return r !== undefined && r !== null; }).length;
+  const cur = Math.min(currentActiveQuestion + 1, n);
+  let dots = '';
+  for (let i = 0; i < n; i++) {
+    let cls = 'qd';
+    if (quizResults[i] === true) cls += ' qd-ok';
+    else if (quizResults[i] === false) cls += ' qd-no';
+    else if (quizResults[i] === 'skip') cls += ' qd-skip';
+    else if (i === currentActiveQuestion) cls += ' qd-cur';
+    dots += '<span class="' + cls + '"></span>';
+  }
+  const pct = Math.round(done / n * 100);
+  el.innerHTML = '<div class="qp-row"><span class="qp-label">Question ' + cur + ' / ' + n + '</span>' +
+    '<span class="qp-count">' + done + '/' + n + ' répondues</span></div>' +
+    '<div class="qp-dots">' + dots + '</div>' +
+    '<div class="qp-bar"><div style="width:' + pct + '%;"></div></div>';
+}
 
 function loadSavedData() {
   try {
@@ -272,10 +297,16 @@ function startDailyChallenge() {
 function buildQuiz() {
   const container = document.getElementById('quiz-container');
   container.innerHTML = '';
+  quizResults = [];
   if (currentQuestions.length === 0) {
     container.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--text-secondary);">Aucune question ne correspond aux filtres.</p>';
     return;
   }
+
+  const progEl = document.createElement('div');
+  progEl.id = 'quiz-progress';
+  progEl.className = 'quiz-progress';
+  container.appendChild(progEl);
 
   currentQuestions.forEach((q, i) => {
     const div = document.createElement('div');
@@ -297,6 +328,7 @@ function buildQuiz() {
     container.appendChild(div);
   });
 
+  updateQuizProgress();
   safeMathJax([container]);
 }
 
@@ -381,6 +413,7 @@ function unlockNextQuestion() {
       }, 300);
     }
   }
+  updateQuizProgress();
 }
 
 
@@ -393,6 +426,7 @@ function answer(qi, chosen) {
 
   clearInterval(timerIds[qi]);
   const q = currentQuestions[qi];
+  quizResults[qi] = (chosen === q.ans);
   const opts = document.querySelectorAll(`#opts-${qi} .opt`);
   opts.forEach((o,j) => {
     o.classList.add('disabled');
@@ -461,6 +495,7 @@ function skipQuestion(qi) {
   skipped++;
   correctStreak = 0;
   const q = currentQuestions[qi];
+  quizResults[qi] = 'skip';
   const opts = document.querySelectorAll(`#opts-${qi} .opt`);
   opts.forEach(o => o.classList.add('disabled'));
   // Show correct answer on skip, consistent with timer auto-skip (F19)
@@ -1153,8 +1188,10 @@ function checkLabelExo(btn) {
     items.push('<li class="' + (good ? 'okk' : 'bad') + '"><span class="ico">' + (good ? '✅' : '❌') + '</span><span><strong>' + (idx + 1) + '.</strong> ' + mine + '<span class="good">' + _escHtml(answer) + '</span></span></li>');
   });
   const n = inputs.length;
+  if (!card.dataset.firstScore) card.dataset.firstScore = ok + '/' + n;
   const sc = card.querySelector('.lblexo-score');
-  if (sc) sc.textContent = ok + ' / ' + n + (ok === n ? '  🎉' : '');
+  if (sc) sc.innerHTML = ok + ' / ' + n + (ok === n ? '  🎉' : '') +
+    ' <span style="color:var(--text-secondary); font-weight:600; font-size:13px;">· 1ᵉʳ essai : ' + card.dataset.firstScore + '</span>';
   const corr = card.querySelector('.lblexo-corr');
   if (corr) {
     corr.innerHTML = '<h4>Correction ' + (ok === n ? '— parfait ! 🎉' : '— ' + ok + '/' + n) + '</h4><ul>' + items.join('') + '</ul>';
@@ -1170,6 +1207,14 @@ function resetLabelExo(btn) {
   if (sc) sc.textContent = '';
   const corr = card.querySelector('.lblexo-corr');
   if (corr) { corr.classList.remove('show'); corr.innerHTML = ''; }
+}
+
+// Masque / affiche les numéros sur un schéma à légender (entraînement examen)
+function toggleMarks(btn) {
+  const card = btn.closest('.exercise-card'); if (!card) return;
+  const box = card.querySelector('.lblexo'); if (!box) return;
+  const hidden = box.classList.toggle('marks-hidden');
+  btn.textContent = hidden ? '👁️ Afficher les n°' : '🙈 Cacher les n°';
 }
 
 function checkPunnett(btn) {
@@ -2159,10 +2204,11 @@ function renderStudyDashboard() {
     '<summary style="cursor:pointer; font-weight:700;">⏳ Planning d\'examen</summary>' +
     '<p style="font-size:12px; color:var(--text-secondary); margin:.5rem 0 .3rem;">Mets la date de chaque examen → jours restants + cartes/jour conseillées pour tout réviser à temps.</p>' +
     planRows + '</details>';
+  var mixedBtn = totalDue > 0 ? '<button type="button" onclick="startMixedRevision()" class="nav-btn" style="display:block; width:100%; margin-bottom:0.9rem; background:linear-gradient(135deg, var(--color-nav), var(--color-parabole)); color:#fff; border:none;">🔀 Tout réviser (' + totalDue + ' carte' + (totalDue > 1 ? 's' : '') + ' mélangées)</button>' : '';
   el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.7rem;">📅 À réviser aujourd\'hui</h3>' + goalCard + planningCard +
     '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.9rem;">' +
-    (totalDue > 0 ? '🔔 <strong>' + totalDue + '</strong> carte' + (totalDue > 1 ? 's' : '') + ' à réviser au total. Clique une matière pour t\'y mettre.' : 'Tout est à jour, bravo ! Clique une matière pour t\'entraîner quand même.') +
-    '</p>' + rows;
+    (totalDue > 0 ? '🔔 <strong>' + totalDue + '</strong> carte' + (totalDue > 1 ? 's' : '') + ' à réviser au total.' : 'Tout est à jour, bravo ! Clique une matière pour t\'entraîner quand même.') +
+    '</p>' + mixedBtn + rows;
 }
 
 function updateProfile() {
@@ -2804,6 +2850,32 @@ function shuffleFlashcards() {
   currentFlashcardIndex = 0;
   loadFlashcard();
   if (typeof showToast === 'function') showToast('🔀 Cartes mélangées', 'var(--color-nav)');
+}
+
+// Révision « tout en un » : mélange les cartes DUES de toutes les matières en une seule session
+function startMixedRevision() {
+  const data = loadSavedData(); const fc = data.flashcardData || {}; const now = Date.now();
+  const pool = [];
+  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (k) {
+    const s = window.SUBJECTS && window.SUBJECTS[k];
+    if (!s || !s.ready || !s.content || !s.content.flashcards) return;
+    s.content.flashcards.forEach(function (c) {
+      const r = fc[c.front];
+      if (!r || !r.due || new Date(r.due).getTime() <= now) pool.push({ front: c.front, back: c.back, chapter: c.chapter, _subj: k });
+    });
+  });
+  if (!pool.length) { if (typeof showToast === 'function') showToast('Tout est à jour — aucune carte à réviser ! 🎉', 'var(--color-parabole)'); return; }
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
+  showSection('flashcards');
+  setTimeout(function () {
+    filteredFlashcards = pool;
+    flashcardQueue = pool;
+    currentFlashcardIndex = 0;
+    fcSessionCount = 0;
+    const se = document.getElementById('fc-session'); if (se) { se.style.display = 'none'; se.textContent = ''; }
+    loadFlashcard();
+    if (typeof showToast === 'function') showToast('🔀 Révision mixte : ' + pool.length + ' carte' + (pool.length > 1 ? 's' : '') + ' de toutes les matières', 'var(--color-nav)');
+  }, 60);
 }
 
 // Saut direct vers une carte précise (utilisé par la recherche globale)

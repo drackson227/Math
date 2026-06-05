@@ -238,6 +238,44 @@
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">⚛️ Légende l'atome</h3>
+      <p style="color:var(--text-secondary); margin-bottom:1rem;">Écris ce que désigne chaque numéro, puis clique sur <strong>Corriger</strong>. Astuce : <strong>🙈 Cacher les n°</strong> pour t'entraîner comme à l'examen.</p>
+      <div class="lblexo lblexo-svg">
+        <svg viewBox="0 0 220 220" role="img" aria-label="Schéma d'un atome à légender">
+          <circle cx="110" cy="110" r="92" fill="none" stroke="#7c5cff" stroke-width="2" opacity="0.7"/>
+          <circle cx="110" cy="110" r="58" fill="none" stroke="#7c5cff" stroke-width="2" opacity="0.7"/>
+          <circle cx="96" cy="104" r="11" fill="#e0524d"/>
+          <circle cx="120" cy="104" r="11" fill="#e0524d"/>
+          <circle cx="110" cy="123" r="11" fill="#e0524d"/>
+          <circle cx="110" cy="99" r="11" fill="#9aa3b2"/>
+          <circle cx="98" cy="119" r="11" fill="#9aa3b2"/>
+          <circle cx="123" cy="120" r="11" fill="#9aa3b2"/>
+          <circle cx="110" cy="52" r="7" fill="#4f7cf0"/>
+          <circle cx="110" cy="168" r="7" fill="#4f7cf0"/>
+          <circle cx="18" cy="110" r="7" fill="#4f7cf0"/>
+          <circle cx="202" cy="110" r="7" fill="#4f7cf0"/>
+          <circle cx="110" cy="18" r="7" fill="#4f7cf0"/>
+        </svg>
+        <span class="lx-mark" style="left:50%; top:31%;">1</span>
+        <span class="lx-mark" style="left:43.6%; top:47.3%;">2</span>
+        <span class="lx-mark" style="left:55.9%; top:54.5%;">3</span>
+        <span class="lx-mark" style="left:50%; top:8.2%;">4</span>
+        <span class="lx-mark" style="left:76.4%; top:50%;">5</span>
+      </div>
+      <ol class="lblexo-list">
+        <li><span class="lx-num">1</span><input type="text" data-answer="Noyau" aria-label="structure 1" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure 1…"/></li>
+        <li><span class="lx-num">2</span><input type="text" data-answer="Proton" aria-label="structure 2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure 2…"/></li>
+        <li><span class="lx-num">3</span><input type="text" data-answer="Neutron" aria-label="structure 3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure 3…"/></li>
+        <li><span class="lx-num">4</span><input type="text" data-answer="Électron" aria-label="structure 4" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure 4…"/></li>
+        <li><span class="lx-num">5</span><input type="text" data-answer="Couche électronique" aria-label="structure 5" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure 5…"/></li>
+      </ol>
+      <div class="lblexo-foot"><button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>
+      <button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>
+      <button class="step-btn" onclick="toggleMarks(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">🙈 Cacher les n°</button>
+      <span class="lblexo-score"></span></div><div class="lblexo-corr"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧪 Pondérer : H₂SO₄ + Al(OH)₃ → Al₂(SO₄)₃ + H₂O</h3>
       <button class="step-btn" onclick="showExerciseStep(this, 201)">▶ Commencer</button>
       <div class="exercise-step" data-step="201">

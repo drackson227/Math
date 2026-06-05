@@ -1277,6 +1277,26 @@ textarea:focus-visible,
 /* pastilles numérotées posées sur le schéma (au bout des flèches) */
 .lblexo .lx-mark { position: absolute; transform: translate(-50%, -50%); min-width: clamp(14px, 4vw, 22px); height: clamp(14px, 4vw, 22px); padding: 0 4px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--color-nav); color: #fff; font-weight: 800; font-size: clamp(8.5px, 2.4vw, 12px); line-height: 1; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,0.35); z-index: 2; }
 .lblexo .lx-mark:active, .lblexo .lx-mark:hover { z-index: 3; transform: translate(-50%, -50%) scale(1.25); }
+/* Schéma dessiné en SVG (ex. atome chimie) */
+.lblexo > svg { width: 100%; display: block; border-radius: 12px; background: #0d1530; border: 1px solid var(--border-subtle); }
+/* Mode « cacher les numéros » : on garde la pastille mais on masque le chiffre */
+.lblexo.marks-hidden .lx-mark { color: transparent; background: rgba(124,92,255,0.45); }
+.lblexo.marks-hidden .lx-mark.ok { background: rgba(22,163,74,0.6); }
+.lblexo.marks-hidden .lx-mark.no { background: rgba(220,38,38,0.6); }
+
+/* ════════ Quiz : barre de progression ════════ */
+.quiz-progress { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding: 10px 4px 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border-subtle); }
+.quiz-progress .qp-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 7px; }
+.quiz-progress .qp-label { font-weight: 800; font-size: 15px; color: var(--text-primary); }
+.quiz-progress .qp-count { font-size: 12.5px; color: var(--text-secondary); }
+.quiz-progress .qp-dots { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.quiz-progress .qd { width: 12px; height: 12px; border-radius: 50%; background: var(--border-subtle); transition: background .25s, transform .25s; }
+.quiz-progress .qd-ok { background: #34d399; }
+.quiz-progress .qd-no { background: #f87171; }
+.quiz-progress .qd-skip { background: #fbbf24; }
+.quiz-progress .qd-cur { background: var(--color-nav); transform: scale(1.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nav) 30%, transparent); }
+.quiz-progress .qp-bar { height: 7px; background: var(--border-subtle); border-radius: 5px; overflow: hidden; }
+.quiz-progress .qp-bar > div { height: 100%; background: linear-gradient(90deg, var(--color-nav), var(--color-parabole)); border-radius: 5px; transition: width .4s ease; }
 .lblexo .lx-mark.ok { background: #16a34a; }
 .lblexo .lx-mark.no { background: #dc2626; }
 /* liste de saisie SOUS le schéma (lisible sur mobile) */
