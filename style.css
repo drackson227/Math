@@ -1591,3 +1591,25 @@ textarea:focus-visible,
 /* Puce Favoris (flashcards) */
 .fc-chip-fav { border-color: #fbbf24; color: #fbbf24; }
 .fc-chip-fav.on { background: #fbbf24; border-color: #fbbf24; color: #1a1407; }
+
+/* Glossaire / index des fiches */
+.gloss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.gloss-card { position: relative; display: flex; flex-direction: column; gap: 2px; text-align: left; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 0.7rem 0.85rem; cursor: pointer; color: var(--text-primary); transition: transform 0.15s, box-shadow 0.15s; }
+.gloss-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.28); }
+.gloss-title { font-weight: 700; font-size: 14.5px; }
+.gloss-sub { font-size: 11.5px; color: var(--text-secondary); }
+.gloss-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
+
+/* Confort de lecture / dyslexie : police lisible + espacement aéré */
+body.reading-comfort, body.reading-comfort p, body.reading-comfort li, body.reading-comfort span,
+body.reading-comfort .synth-section, body.reading-comfort .formula-box, body.reading-comfort .exercise-card,
+body.reading-comfort #imgModalBody, body.reading-comfort .gloss-card {
+  font-family: 'Verdana', 'Tahoma', 'Trebuchet MS', 'Segoe UI', sans-serif;
+  letter-spacing: 0.03em;
+}
+body.reading-comfort p, body.reading-comfort li, body.reading-comfort .synth-section p,
+body.reading-comfort .imd-block, body.reading-comfort .imd-anecdote {
+  line-height: 2 !important;
+  word-spacing: 0.06em;
+}
+body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { line-height: 1.7; letter-spacing: 0.03em; }

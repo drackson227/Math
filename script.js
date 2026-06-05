@@ -424,6 +424,7 @@ function answer(qi, chosen) {
   updateLevel(data);
   updateCalendar(data);
   saveData(data);
+  recordStudyAction();
   updateMissedBtn();
 
   answered++;
@@ -1259,6 +1260,7 @@ function showSection(evtOrId, id) {
     if (typeof renderChapterStats === 'function') renderChapterStats();
   }
   if (sectionId === 'profil') requestAnimationFrame(() => updateProfile()); // throttle handled inside
+  if (sectionId === 'glossaire' && typeof renderGlossaire === 'function') renderGlossaire();
   if (sectionId === 'flashcards') initFlashcards();
   if (sectionId === 'formules') initFormulaBookmarks();
   if (sectionId === 'journal') loadJournalHistory();
@@ -2099,7 +2101,18 @@ function renderStudyDashboard() {
       '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:15px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' + dueBadge + '</div>' +
       '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div></button>';
   });
-  el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.3rem;">📅 À réviser aujourd\'hui</h3>' +
+  // Carte « objectif du jour + temps d'étude »
+  var d0 = loadSavedData(); var st = _getStudy(d0); saveData(d0);
+  var goalPct = Math.min(100, Math.round(st.dayActions / DAILY_GOAL * 100));
+  var goalDone = st.dayActions >= DAILY_GOAL;
+  var goalCard = '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1rem 1.2rem; margin-bottom:1rem;">' +
+    '<div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">' +
+    '<span style="font-weight:700;">🎯 Objectif du jour</span>' +
+    '<span style="color:var(--text-secondary); font-size:13px;">' + st.dayActions + ' / ' + DAILY_GOAL + ' ' + (goalDone ? '✅' : '') + '</span></div>' +
+    '<div style="height:12px; background:var(--border-subtle); border-radius:8px; overflow:hidden; margin-top:.5rem;"><div style="height:100%; width:' + goalPct + '%; background:' + (goalDone ? '#34d399' : 'var(--color-nav)') + '; border-radius:8px; transition:width .5s;"></div></div>' +
+    '<p style="font-size:12.5px; color:var(--text-secondary); margin-top:.6rem;">⏱️ Aujourd\'hui : <strong>' + fmtDur(st.daySec) + '</strong> &nbsp;·&nbsp; Total : <strong>' + fmtDur(st.totalSec) + '</strong></p>' +
+    '</div>';
+  el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.7rem;">📅 À réviser aujourd\'hui</h3>' + goalCard +
     '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.9rem;">' +
     (totalDue > 0 ? '🔔 <strong>' + totalDue + '</strong> carte' + (totalDue > 1 ? 's' : '') + ' à réviser au total. Clique une matière pour t\'y mettre.' : 'Tout est à jour, bravo ! Clique une matière pour t\'entraîner quand même.') +
     '</p>' + rows;
@@ -2728,6 +2741,7 @@ function rateCard(rating) {
   };
   saveData(data);
   flashcardData = data.flashcardData;
+  recordStudyAction();
 
   if (cards.length === 0) return;
   // Avance dans la file de session (déjà triée par échéance), sans la re-trier
@@ -4350,3 +4364,117 @@ document.addEventListener('DOMContentLoaded', function () {
     if (ab) { document.querySelectorAll('.theme-btn[onclick^="setAccentMode"]').forEach(function (b) { b.classList.remove('active'); }); ab.classList.add('active'); }
   }, 300);
 });
+
+/* ════════════ Glossaire / Index de toutes les fiches ════════════ */
+function _glossaireEntries() {
+  var seen = {}, out = [];
+  function add(map) {
+    if (!map) return;
+    Object.keys(map).forEach(function (k) {
+      if (seen[k]) return;
+      var info = map[k];
+      if (!info || !info.title) return;
+      seen[k] = 1;
+      out.push({ key: k, title: info.title, sub: info.sub || '', theme: (window.INFO_THEME && window.INFO_THEME[k]) || '' });
+    });
+  }
+  add(window.IMG_INFO); add(window.INFO_TOPICS);
+  out.sort(function (a, b) { return a.title.localeCompare(b.title, 'fr'); });
+  return out;
+}
+var GLOSS_META = {
+  royal: ['Histoire', '#f5c542'], art: ['Histoire', '#e0a458'], reforme: ['Histoire', '#8aa0e0'], print: ['Histoire', '#c9a063'],
+  science: ['Bio', '#34d399'], eng: ['Anglais', '#818cf8'], chem: ['Chimie', '#c084fc'],
+  myth: ['Français', '#d4a017'], theatre: ['Français', '#fb5b78'], lettres: ['Français', '#f472b6'], geo: ['Géo', '#2dd4bf']
+};
+function renderGlossaire() {
+  var box = document.getElementById('glossaire-list');
+  if (!box) return;
+  var entries = _glossaireEntries();
+  var cards = entries.map(function (e) {
+    var m = GLOSS_META[e.theme] || ['', 'var(--color-nav)'];
+    var search = (e.title + ' ' + e.sub + ' ' + m[0]).toLowerCase().replace(/"/g, '');
+    return '<button type="button" class="gloss-card" data-search="' + search + '" onclick="openInfoCard(\'' + e.key + '\')" style="border-left:4px solid ' + m[1] + ';">' +
+      '<span class="gloss-title">' + e.title + '</span>' +
+      (e.sub ? '<span class="gloss-sub">' + e.sub + '</span>' : '') +
+      (m[0] ? '<span class="gloss-tag" style="color:' + m[1] + ';">' + m[0] + '</span>' : '') +
+      '</button>';
+  }).join('');
+  box.innerHTML = '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.6rem;">' + entries.length + ' fiches</p>' +
+    '<div class="gloss-grid">' + cards + '</div>' +
+    '<p id="gloss-empty" style="display:none; color:var(--text-secondary); margin-top:1rem;">Aucune fiche trouvée.</p>';
+}
+function filterGlossaire() {
+  var inp = document.getElementById('glossaire-search');
+  var q = (inp ? inp.value : '').toLowerCase().trim();
+  var cards = document.querySelectorAll('#glossaire-list .gloss-card');
+  var shown = 0;
+  cards.forEach(function (c) {
+    var match = !q || c.dataset.search.indexOf(q) >= 0;
+    c.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  var empty = document.getElementById('gloss-empty');
+  if (empty) empty.style.display = shown ? 'none' : 'block';
+}
+
+/* ════════════ Objectif quotidien + temps d'étude ════════════ */
+var DAILY_GOAL = 20;
+function _today() { return new Date().toISOString().slice(0, 10); }
+function _getStudy(data) {
+  data.study = data.study || { totalSec: 0, day: _today(), daySec: 0, dayActions: 0 };
+  if (data.study.day !== _today()) { data.study.day = _today(); data.study.daySec = 0; data.study.dayActions = 0; }
+  return data.study;
+}
+function recordStudyAction() {
+  var d = loadSavedData(); var s = _getStudy(d); s.dayActions++; saveData(d);
+}
+function fmtDur(sec) {
+  var h = Math.floor(sec / 3600), m = Math.round((sec % 3600) / 60);
+  return h > 0 ? (h + ' h ' + (m < 10 ? '0' : '') + m) : (m + ' min');
+}
+var _studyTick = null;
+function startStudyTimer() {
+  if (_studyTick) return;
+  _studyTick = setInterval(function () {
+    if (document.visibilityState && document.visibilityState !== 'visible') return;
+    var d = loadSavedData(); var s = _getStudy(d); s.totalSec += 30; s.daySec += 30; saveData(d);
+  }, 30000);
+}
+document.addEventListener('DOMContentLoaded', function () { setTimeout(startStudyTimer, 1500); });
+
+/* ════════════ Confort de lecture (dyslexie) ════════════ */
+function setReadingMode(mode) {
+  document.body.classList.toggle('reading-comfort', mode === 'comfort');
+  try { localStorage.setItem('mathsgr2_reading', mode); } catch (_) {}
+  var n = document.getElementById('read-btn-normal'), c = document.getElementById('read-btn-comfort');
+  if (n) n.classList.toggle('active', mode !== 'comfort');
+  if (c) c.classList.toggle('active', mode === 'comfort');
+}
+document.addEventListener('DOMContentLoaded', function () {
+  try { setReadingMode(localStorage.getItem('mathsgr2_reading') || 'normal'); } catch (_) {}
+});
+
+/* ════════════ Rappel de révision à l'ouverture ════════════ */
+function showRevisionReminder() {
+  try {
+    if (sessionStorage.getItem('mathsgr2_reminded')) return;
+    if (!window.SUBJECTS) return;
+    var data = loadSavedData(); var fc = data.flashcardData || {}; var now = Date.now(); var total = 0;
+    ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (key) {
+      var s = window.SUBJECTS[key]; if (!s || !s.ready || !s.content) return;
+      (s.content.flashcards || []).forEach(function (c) { var r = fc[c.front]; if (!r || !r.due || new Date(r.due).getTime() <= now) total++; });
+    });
+    if (total <= 0) return;
+    sessionStorage.setItem('mathsgr2_reminded', '1');
+    var bar = document.createElement('div');
+    bar.id = 'revision-reminder';
+    bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:3000; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; gap:12px; max-width:92vw; animation:imgModalIn .25s ease;';
+    bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
+      '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:var(--color-nav); color:#fff; border:none; border-radius:9px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer;">📚 Réviser</button>' +
+      '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer;">✕</button>';
+    document.body.appendChild(bar);
+    setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 12000);
+  } catch (_) {}
+}
+document.addEventListener('DOMContentLoaded', function () { setTimeout(showRevisionReminder, 1800); });

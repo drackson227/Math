@@ -88,6 +88,15 @@
   </div>
 
   <div class="settings-row">
+    <label>📖 Confort de lecture</label>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px;">
+      <button class="theme-btn active" id="read-btn-normal" onclick="setReadingMode('normal')" style="padding:8px 4px; font-size:11px;">Normal</button>
+      <button class="theme-btn" id="read-btn-comfort" onclick="setReadingMode('comfort')" style="padding:8px 4px; font-size:11px;">🔤 Dyslexie / aéré</button>
+    </div>
+    <p style="font-size:11px; color:var(--text-secondary); margin:6px 0 0;">Texte plus espacé et police plus lisible.</p>
+  </div>
+
+  <div class="settings-row">
     <label>🌌 Fond</label>
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
       <button class="theme-btn" id="bg-btn-normal"     onclick="setBgEffect('normal')"    style="padding:8px 4px; font-size:11px;">Normal</button>
@@ -233,6 +242,7 @@
   <button class="nav-btn" id="nav-extra2" data-extra style="display:none;" onclick="showSection(event,'extra2')">⭐ Extra 2</button>
   <button class="nav-btn" data-math-only onclick="showSection(event,'graphiques')">📊 Graphiques</button>
   <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
+  <button class="nav-btn" onclick="showSection(event,'glossaire')">📖 Index des fiches</button>
   <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
   <button class="nav-btn" onclick="showSection(event,'mesexos')">🛠️ Mes exercices</button>
   <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
@@ -397,7 +407,7 @@
         <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
       </div>
       <br>
-      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
+      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.favoriteCards=[]; d.study={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
   </div>
   <!-- Écran quiz actif -->
   <div id="quiz-active-screen" style="display:none;">
@@ -492,6 +502,13 @@
 
 <div id="extra1" class="section"><!-- onglet bonus défini par la matière --></div>
 <div id="extra2" class="section"><!-- onglet bonus défini par la matière --></div>
+
+<div id="glossaire" class="section">
+  <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">📖 Index des fiches</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1rem;">Toutes les fiches cliquables du site (personnages &amp; notions). Clique pour ouvrir, ou cherche par mot-clé.</p>
+  <input type="text" id="glossaire-search" placeholder="🔍 Rechercher une fiche (Luther, mole, Réforme…)" oninput="filterGlossaire()" style="width:100%; max-width:480px; padding:11px 14px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px; margin-bottom:1.2rem;">
+  <div id="glossaire-list"></div>
+</div>
 
 <div id="chat" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">💬 Chat Mondial</h2>
