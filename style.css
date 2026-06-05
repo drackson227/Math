@@ -1470,3 +1470,9 @@ textarea:focus-visible,
 .compare-table .cat { background: rgba(96,165,250,0.07); }
 .compare-table .pro { background: rgba(248,180,90,0.07); }
 @media (max-width: 600px) { .compare-table { font-size: 12.5px; } .compare-table th, .compare-table td { padding: 0.45rem 0.5rem; } }
+
+/* Liens croisés dans les fiches d'info + bouton retour */
+.info-link { color: var(--color-nav); font-weight: 700; cursor: pointer; text-decoration: none; border-bottom: 1.5px dotted var(--color-nav); transition: background 0.15s ease; border-radius: 3px; }
+.info-link:hover { background: rgba(167,139,250,0.18); }
+.imd-back { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle, #2a2740); color: var(--text-secondary); font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 10px; cursor: pointer; margin-bottom: 0.7rem; }
+.imd-back:hover { background: rgba(255,255,255,0.12); color: #fff; }

@@ -77,6 +77,112 @@
     }
   });
 
+  /* Notions cliquables (fiches sans portrait dédié — image réutilisée) + mots → fiche */
+  window.INFO_TOPICS = window.INFO_TOPICS || {};
+  Object.assign(window.INFO_TOPICS, {
+    "edit-de-nantes": {
+      title: "L'Édit de Nantes (1598)", sub: "tolérance religieuse", img: "henri4.jpg",
+      cours: "<p>Signé en <strong>1598</strong> par le roi <strong>Henri IV</strong>, l'Édit de Nantes met fin aux <strong>guerres de religion</strong> en France. Il accorde aux <strong>protestants</strong> la liberté de culte (la <strong>tolérance</strong>).</p>",
+      exam: "<ul><li><strong>1598</strong> : signé par <strong>Henri IV</strong> (tolérance).</li><li><strong>1685</strong> : <strong>Louis XIV</strong> le révoque → fin de la tolérance.</li></ul>"
+    },
+    "indulgences": {
+      title: "Les indulgences", sub: "l'abus dénoncé par Luther", img: "europe_religions.jpg",
+      cours: "<p>Une <strong>indulgence</strong>, c'est <strong>payer l'Église pour obtenir le pardon de ses péchés</strong>. Cette pratique enrichit l'Église mais choque beaucoup de croyants.</p>",
+      exam: "<ul><li>C'est l'abus que <strong>Luther</strong> dénonce en <strong>1517</strong> (95 thèses).</li><li>Idée protestante opposée : le salut par la <strong>foi seule</strong>.</li></ul>"
+    },
+    "humanisme": {
+      title: "L'Humanisme", sub: "courant de pensée (XVᵉ-XVIᵉ s.)", img: "erasme.jpg",
+      cours: "<p>L'<strong>Humanisme</strong> place l'<strong>être humain</strong>, le <strong>savoir</strong> et la <strong>raison</strong> au centre. Les humanistes redécouvrent les textes de l'Antiquité.</p>",
+      exam: "<ul><li>À distinguer de la <strong>Renaissance</strong> (mouvement artistique).</li><li>Humanistes : <strong>Érasme</strong>, Thomas More, Rabelais, Montaigne.</li></ul>"
+    },
+    "renaissance": {
+      title: "La Renaissance", sub: "mouvement artistique & culturel", img: "joconde.jpg",
+      cours: "<p>La <strong>Renaissance</strong> naît en <strong>Italie</strong> au XVᵉ siècle : un renouveau des <strong>arts</strong> et des sciences inspiré de l'Antiquité (perspective, réalisme, corps humain).</p>",
+      exam: "<ul><li>Née en <strong>Italie</strong> · financée par les <strong>mécènes</strong>.</li><li>Artistes : <strong>Léonard de Vinci</strong>, <strong>Michel-Ange</strong>, Raphaël.</li></ul>"
+    },
+    "reforme": {
+      title: "La Réforme (1517)", sub: "naissance du protestantisme", img: "luther.jpg",
+      cours: "<p>La <strong>Réforme</strong> est le mouvement lancé par <strong>Luther</strong> en <strong>1517</strong> qui crée le <strong>protestantisme</strong>, en réaction aux abus de l'Église (<strong>indulgences</strong>).</p>",
+      exam: "<ul><li>Principes : <strong>foi seule</strong> + <strong>Bible</strong> seule autorité.</li><li>Réaction catholique = <strong>Contre-Réforme</strong>.</li></ul>"
+    },
+    "contre-reforme": {
+      title: "La Contre-Réforme", sub: "la réaction catholique", img: "trente.jpg",
+      cours: "<p>La <strong>Contre-Réforme</strong> est la réponse de l'Église <strong>catholique</strong> à la Réforme. Elle réaffirme la foi catholique, surtout au <strong>Concile de Trente</strong> (1545-1563).</p>",
+      exam: "<ul><li>Outils : <strong>Concile de Trente</strong> + les <strong>Jésuites</strong>.</li><li>Ne pas confondre Réforme (protestante) / Contre-Réforme (catholique).</li></ul>"
+    },
+    "absolutisme": {
+      title: "L'absolutisme", sub: "la monarchie absolue", img: "louis14.jpg",
+      cours: "<p>L'<strong>absolutisme</strong> : le <strong>roi détient tous les pouvoirs</strong> (faire les lois, gouverner, juger), qu'il tient de Dieu (<strong>droit divin</strong>).</p>",
+      exam: "<ul><li>Modèle : <strong>Louis XIV</strong> (« L'État, c'est moi »), <strong>Versailles</strong>.</li><li>Contraire de la démocratie.</li></ul>"
+    },
+    "droit-divin": {
+      title: "La monarchie de droit divin", sub: "le pouvoir vient de Dieu", img: "louis14.jpg",
+      cours: "<p>Le roi affirme tenir son pouvoir <strong>directement de Dieu</strong> : personne ne peut donc contester son autorité.</p>",
+      exam: "<ul><li>Base de l'<strong>absolutisme</strong> de <strong>Louis XIV</strong>.</li></ul>"
+    },
+    "mercantilisme": {
+      title: "Le mercantilisme", sub: "la politique de Colbert", img: "versailles.jpg",
+      cours: "<p>Le <strong>mercantilisme</strong> est la politique économique de <strong>Colbert</strong> : <strong>enrichir l'État</strong> en exportant plus qu'on importe et en développant manufactures et commerce.</p>",
+      exam: "<ul><li>Lié à <strong>Colbert</strong> et à <strong>Louis XIV</strong>.</li></ul>"
+    },
+    "predestination": {
+      title: "La prédestination", sub: "l'idée de Calvin", img: "calvin.jpg",
+      cours: "<p>La <strong>prédestination</strong> : l'idée, défendue par <strong>Calvin</strong>, que <strong>Dieu a déjà décidé</strong> qui sera sauvé, avant la naissance.</p>",
+      exam: "<ul><li>Concept clé du calvinisme (Genève).</li></ul>"
+    },
+    "ancien-regime": {
+      title: "L'Ancien Régime", sub: "la société en 3 ordres", img: "versailles.jpg",
+      cours: "<p>L'<strong>Ancien Régime</strong> = la société avant 1789, divisée en <strong>3 ordres</strong> : <strong>clergé</strong>, <strong>noblesse</strong> (privilégiés) et <strong>tiers état</strong> (le reste, qui paie l'impôt).</p>",
+      exam: "<ul><li>3 ordres : clergé · noblesse · tiers état.</li><li>Seuls les privilégiés échappent à l'impôt.</li></ul>"
+    },
+    "saint-barthelemy": {
+      title: "Le massacre de la Saint-Barthélemy", sub: "1572 · guerres de religion", img: "saint_barthelemy.jpg",
+      cours: "<p>Le <strong>24 août 1572</strong>, des milliers de <strong>protestants</strong> sont massacrés à Paris et en France pendant les <strong>guerres de religion</strong>.</p>",
+      exam: "<ul><li><strong>1572</strong> · symbole de la violence catholiques / protestants.</li><li>Apaisé plus tard par l'<strong>Édit de Nantes</strong> (1598).</li></ul>"
+    },
+    "mecenes": {
+      title: "Les mécènes", sub: "protecteurs des artistes (les Médicis)", img: "medicis.jpg",
+      cours: "<p>Un <strong>mécène</strong> est un riche protecteur qui <strong>finance les artistes</strong>. À la <strong>Renaissance</strong>, la famille <strong>Médicis</strong> (Florence) en est l'exemple le plus célèbre.</p>",
+      exam: "<ul><li>Permettent l'essor de l'art de la <strong>Renaissance</strong>.</li></ul>"
+    },
+    "jesuites": {
+      title: "Les Jésuites", sub: "ordre de la Contre-Réforme", img: "trente.jpg",
+      cours: "<p>Les <strong>Jésuites</strong> sont un ordre religieux catholique du XVIᵉ s., très actif dans l'enseignement et les missions. Fer de lance de la <strong>Contre-Réforme</strong>.</p>",
+      exam: "<ul><li>Liés à la <strong>Contre-Réforme</strong> et au <strong>Concile de Trente</strong>.</li></ul>"
+    },
+    "imprimerie": {
+      title: "L'imprimerie", sub: "≈ 1450 · Gutenberg", img: "gutenberg.jpg",
+      cours: "<p>L'<strong>imprimerie</strong> à caractères mobiles, inventée par <strong>Gutenberg</strong> vers 1450, permet de produire des livres <strong>en série</strong>, plus vite et moins cher.</p>",
+      exam: "<ul><li>Conséquence majeure : <strong>diffusion rapide des idées</strong> (Humanisme, Réforme).</li></ul>"
+    },
+    "guerres-religion": {
+      title: "Les guerres de religion", sub: "XVIᵉ s. en France", img: "saint_barthelemy.jpg",
+      cours: "<p>Elles opposent <strong>catholiques</strong> et <strong>protestants</strong> en France au XVIᵉ siècle (ex. <strong>Saint-Barthélemy</strong>, 1572).</p>",
+      exam: "<ul><li>Fin avec l'<strong>Édit de Nantes</strong> (1598, <strong>Henri IV</strong>).</li></ul>"
+    },
+    "colbert": {
+      title: "Colbert", sub: "ministre de Louis XIV", img: "colbert.jpg",
+      cours: "<p><strong>Colbert</strong> est le grand ministre de <strong>Louis XIV</strong>. Il met en place le <strong>mercantilisme</strong> (manufactures, commerce, exportations).</p>",
+      exam: "<ul><li>Colbert ↔ <strong>mercantilisme</strong> ↔ <strong>Louis XIV</strong>.</li></ul>"
+    }
+  });
+
+  /* Mots cliquables → fiche (les plus longs sont traités en premier) */
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, {
+    "Léonard de Vinci": "vinci.jpg", "Michel-Ange": "michelange.jpg", "Martin Luther": "luther.jpg",
+    "Jean Calvin": "calvin.jpg", "Charles Quint": "charlesquint.jpg", "Henri IV": "henri4.jpg",
+    "Louis XIV": "louis14.jpg", "La Joconde": "joconde.jpg", "Gutenberg": "gutenberg.jpg",
+    "Érasme": "erasme.jpg", "Versailles": "versailles.jpg", "Luther": "luther.jpg", "Calvin": "calvin.jpg",
+    "Concile de Trente": "trente.jpg", "Colbert": "colbert", "mécènes": "mecenes", "Médicis": "mecenes",
+    "Édit de Nantes": "edit-de-nantes", "indulgences": "indulgences", "Humanisme": "humanisme",
+    "Renaissance": "renaissance", "Contre-Réforme": "contre-reforme", "Réforme": "reforme",
+    "absolutisme": "absolutisme", "droit divin": "droit-divin", "mercantilisme": "mercantilisme",
+    "prédestination": "predestination", "Ancien Régime": "ancien-regime", "Saint-Barthélemy": "saint-barthelemy",
+    "Jésuites": "jesuites", "imprimerie": "imprimerie", "guerres de religion": "guerres-religion",
+    "95 thèses": "europe_religions.jpg"
+  });
+
   /* helper image */
   function fig(src, cap, w) {
     return '<figure class="hfig" style="max-width:' + (w || 170) + 'px">' +

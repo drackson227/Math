@@ -16,6 +16,32 @@
     }
   });
 
+  /* Notions de génétique cliquables */
+  window.INFO_TOPICS = window.INFO_TOPICS || {};
+  Object.assign(window.INFO_TOPICS, {
+    "gene-allele": {
+      title: "Gène & allèle", sub: "les bases de l'hérédité", img: "mendel.jpg",
+      cours: "<p>Un <strong>gène</strong> est une portion d'ADN qui contrôle un caractère (ex. la couleur des yeux). Chaque gène existe en plusieurs versions appelées <strong>allèles</strong> (ex. « yeux bruns » ou « yeux bleus »). On a <strong>2 allèles</strong> par gène : un du père, un de la mère.</p>",
+      exam: "<ul><li>Gène = le caractère · allèle = une version du gène.</li><li>Voir <strong>dominant</strong> / <strong>récessif</strong> et <strong>génotype</strong> / <strong>phénotype</strong>.</li></ul>"
+    },
+    "dominance": {
+      title: "Dominant & récessif", sub: "qui l'emporte ?", img: "mendel.jpg",
+      cours: "<p>Un allèle <strong>dominant</strong> (noté en MAJUSCULE, ex. <strong>A</strong>) s'exprime toujours, même seul. Un allèle <strong>récessif</strong> (minuscule, <strong>a</strong>) ne s'exprime que s'il est <strong>en double</strong> (aa).</p>",
+      exam: "<ul><li>AA et Aa → caractère <strong>dominant</strong> · seul <strong>aa</strong> → caractère récessif.</li><li>Ex. yeux bruns (B) dominent sur bleus (b) : bleu seulement si <strong>bb</strong>.</li></ul>"
+    },
+    "genotype-phenotype": {
+      title: "Génotype & phénotype", sub: "les allèles vs ce qu'on voit", img: "mendel.jpg",
+      cours: "<p>Le <strong>génotype</strong> = les <strong>2 allèles</strong> que possède l'individu (ex. Bb). Le <strong>phénotype</strong> = le caractère <strong>visible</strong> (ex. yeux bruns).</p>",
+      exam: "<ul><li><strong>Bb</strong> et <strong>BB</strong> = même phénotype (bruns) mais génotype différent.</li><li>Génotype = « la recette » · phénotype = « le résultat ».</li></ul>"
+    }
+  });
+
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, {
+    "Mendel": "mendel.jpg", "génotype": "genotype-phenotype", "phénotype": "genotype-phenotype",
+    "dominant": "dominance", "récessif": "dominance", "allèle": "gene-allele", "gène": "gene-allele"
+  });
+
   // ---- Illustrations SVG « façon manuel scolaire » (fond sombre) ----
   var SVGSTYLE = 'max-width:100%;height:auto;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);';
 

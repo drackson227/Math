@@ -3955,43 +3955,104 @@ function markPremiumNav() {
 }
 document.addEventListener('DOMContentLoaded', markPremiumNav);
 
-/* ════════════ Images cliquables → fenêtre d'info (cours + examen) ════════════ */
-window.IMG_INFO = window.IMG_INFO || {};
+/* ════════════ Fiches d'info cliquables (cours + examen) + liens croisés ════════════ */
+window.IMG_INFO = window.IMG_INFO || {};   // images (clé = nom de fichier .jpg)
+window.INFO_TOPICS = window.INFO_TOPICS || {}; // notions/personnes sans image dédiée (clé = slug)
+window.TERM_MAP = window.TERM_MAP || {};   // mot affiché → clé de fiche (pour rendre cliquable)
+window._infoStack = [];
+window._infoCurrent = null;
 
-function openImgModal(key) {
-  var info = window.IMG_INFO[key];
+function infoLookup(key) { return window.IMG_INFO[key] || window.INFO_TOPICS[key] || null; }
+
+function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* Rend cliquables, dans un texte HTML, les mots connus de TERM_MAP (sauf la fiche courante).
+   Une seule occurrence par terme ; on évite de relier à l'intérieur d'un lien déjà posé. */
+function autolinkInfo(html, excludeKey) {
+  if (!html) return html;
+  var map = window.TERM_MAP;
+  var terms = Object.keys(map).sort(function (a, b) { return b.length - a.length; });
+  var store = [];
+  terms.forEach(function (term) {
+    var key = map[term];
+    if (key === excludeKey) return;
+    if (!infoLookup(key)) return;
+    var re = new RegExp('(?<![\\p{L}\\u00C0-\\u017F])(' + escapeRegExp(term) + ')(?![\\p{L}\\u00C0-\\u017F])', 'u');
+    var m = re.exec(html);
+    if (!m) return;
+    var token = '' + store.length + '';
+    store.push('<a class="info-link" data-info="' + key + '">' + m[1] + '</a>');
+    html = html.slice(0, m.index) + token + html.slice(m.index + m[1].length);
+  });
+  store.forEach(function (rep, i) { html = html.replace('' + i + '', rep); });
+  return html;
+}
+
+function openInfoCard(key, fromBack) {
+  var info = infoLookup(key);
   if (!info) return;
   var modal = document.getElementById('imgModal');
   var img = document.getElementById('imgModalImg');
   var body = document.getElementById('imgModalBody');
   if (!modal || !img || !body) return;
-  img.src = key;
-  img.alt = info.title || '';
-  var html = '<h3>' + (info.title || '') + '</h3>';
+  if (!fromBack && window._infoCurrent && window._infoCurrent !== key) window._infoStack.push(window._infoCurrent);
+  window._infoCurrent = key;
+
+  var imgSrc = info.img || (window.IMG_INFO[key] ? key : '');
+  if (imgSrc) { img.src = imgSrc; img.alt = info.title || ''; img.style.display = ''; }
+  else { img.removeAttribute('src'); img.style.display = 'none'; }
+
+  var html = '';
+  if (window._infoStack.length) html += '<button class="imd-back" type="button" onclick="infoBack()">↩ retour</button>';
+  html += '<h3>' + (info.title || '') + '</h3>';
   if (info.sub) html += '<p class="imd-sub">' + info.sub + '</p>';
-  if (info.cours) html += '<div class="imd-block imd-cours"><h4>📚 Le cours</h4>' + info.cours + '</div>';
-  if (info.exam) html += '<div class="imd-block imd-exam"><h4>🎯 Pour l\'examen / révision</h4>' + info.exam + '</div>';
+  if (info.cours) html += '<div class="imd-block imd-cours"><h4>📚 Le cours</h4>' + autolinkInfo(info.cours, key) + '</div>';
+  if (info.exam) html += '<div class="imd-block imd-exam"><h4>🎯 Pour l\'examen / révision</h4>' + autolinkInfo(info.exam, key) + '</div>';
   body.innerHTML = html;
+  body.scrollTop = 0;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+/* compat : ancien nom */
+function openImgModal(key) { window._infoStack = []; window._infoCurrent = null; openInfoCard(key); }
+
+function infoBack() {
+  var k = window._infoStack.pop();
+  if (k) openInfoCard(k, true);
 }
 
 function closeImgModal() {
   var modal = document.getElementById('imgModal');
   if (modal) modal.classList.remove('open');
   document.body.style.overflow = '';
+  window._infoStack = [];
+  window._infoCurrent = null;
 }
 
-/* Délégation : tout <img> dont le nom de fichier est connu devient cliquable */
+/* Délégation des clics */
 document.addEventListener('click', function (e) {
-  var img = e.target.closest ? e.target.closest('img') : null;
-  if (!img) return;
-  if (img.closest('#imgModal')) return; // pas l'image déjà ouverte
-  var src = img.getAttribute('src') || '';
-  var key = src.split('/').pop();
+  if (!e.target.closest) return;
+  // 1) lien interne dans une fiche → ouvre la fiche liée
+  var lk = e.target.closest('[data-info]');
+  if (lk) { e.preventDefault(); openInfoCard(lk.getAttribute('data-info')); return; }
+  // 2) carte de personnage → ouvre la personne (via son image)
+  var card = e.target.closest('.perso-card');
+  if (card && !card.closest('#imgModal')) {
+    var ci = card.querySelector('img');
+    var ck = ci && (ci.getAttribute('src') || '').split('/').pop();
+    if (ck && window.IMG_INFO[ck]) { openImgModal(ck); return; }
+  }
+  // 3) image connue n'importe où
+  var img = e.target.closest('img');
+  if (!img || img.closest('#imgModal')) return;
+  var key = (img.getAttribute('src') || '').split('/').pop();
   if (window.IMG_INFO[key]) { openImgModal(key); }
 });
 
 document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') closeImgModal();
+  if (e.key === 'Escape') {
+    if (window._infoStack.length) { infoBack(); }
+    else { closeImgModal(); }
+  }
 });

@@ -21,6 +21,32 @@
     }
   });
 
+  /* Notions de français cliquables */
+  window.INFO_TOPICS = window.INFO_TOPICS || {};
+  Object.assign(window.INFO_TOPICS, {
+    "mythe": {
+      title: "Le mythe", sub: "genre littéraire", img: "prometheus.jpg",
+      cours: "<p>Un <strong>mythe</strong> est un <strong>récit ancien</strong>, souvent anonyme, transmis d'abord à l'<strong>oral</strong>, mettant en scène des <strong>dieux</strong> et des <strong>héros</strong> (ex. <strong>Prométhée</strong>).</p>",
+      exam: "<ul><li><strong>Fonctions :</strong> expliquer le monde + transmettre des valeurs.</li><li>Ne pas confondre mythe (dieux/héros) et conte (merveilleux, « il était une fois »).</li></ul>"
+    },
+    "comedie": {
+      title: "La comédie", sub: "genre théâtral", img: "moliere.jpg",
+      cours: "<p>La <strong>comédie</strong> est une pièce de <strong>théâtre</strong> qui fait <strong>rire</strong> et <strong>finit bien</strong>. Maître du genre : <strong>Molière</strong>.</p>",
+      exam: "<ul><li>Comédie = rire / fin heureuse · <strong>tragédie</strong> = fin malheureuse.</li><li>Vocabulaire : acte, scène, tirade, <strong>didascalies</strong>, quiproquo.</li></ul>"
+    },
+    "tragedie": {
+      title: "La tragédie", sub: "genre théâtral",
+      cours: "<p>La <strong>tragédie</strong> met en scène des personnages <strong>nobles</strong> confrontés à la <strong>fatalité</strong> ; elle <strong>finit mal</strong> (souvent par la mort).</p>",
+      exam: "<ul><li>Opposée à la <strong>comédie</strong> (qui fait rire et finit bien).</li></ul>"
+    }
+  });
+
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, {
+    "Prométhée": "prometheus.jpg", "Molière": "moliere.jpg",
+    "comédie": "comedie", "tragédie": "tragedie", "mythe": "mythe"
+  });
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
