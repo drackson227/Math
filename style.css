@@ -1507,3 +1507,43 @@ textarea:focus-visible,
 /* Indice « clique pour la fiche » sous les cartes Personnages */
 .perso-more { display: block; margin-top: 0.5rem; font-size: 11px; font-weight: 600; color: var(--color-nav); opacity: 0.85; }
 .perso-card:hover .perso-more { opacity: 1; }
+
+/* ───────── Thèmes de fiche — version IMMERSIVE (toute la carte matche l'image) ───────── */
+.img-modal-box[class*="t-"] {
+  background:
+    radial-gradient(130% 75% at 50% 0%, color-mix(in srgb, var(--imd-accent) 30%, transparent), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--imd-accent) 13%, var(--bg-card)) 0%, var(--bg-card) 70%);
+  border: 1px solid color-mix(in srgb, var(--imd-accent) 45%, transparent);
+  border-top: 7px solid var(--imd-accent);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px color-mix(in srgb, var(--imd-accent) 28%, transparent), 0 0 70px color-mix(in srgb, var(--imd-accent) 22%, transparent);
+}
+/* Image : fond + cadre dans la couleur du thème pour qu'elle se fonde dans la carte */
+.img-modal-box[class*="t-"] #imgModalImg {
+  background: color-mix(in srgb, var(--imd-accent) 24%, #0c0a16);
+  border-bottom: 4px solid var(--imd-accent);
+  padding: 10px 10px 0;
+  max-height: 50vh;
+}
+/* Titre sur un mini-bandeau */
+.img-modal-box[class*="t-"] #imgModalBody h3 {
+  display: inline-block;
+  border-bottom: 3px solid color-mix(in srgb, var(--imd-accent) 55%, transparent);
+  padding-bottom: 3px;
+}
+/* Blocs cours / examen / anecdote assortis au thème */
+.img-modal-box[class*="t-"] .imd-cours {
+  background: color-mix(in srgb, var(--imd-accent) 13%, transparent);
+  border-color: color-mix(in srgb, var(--imd-accent) 40%, transparent);
+}
+.img-modal-box[class*="t-"] .imd-cours h4 { color: var(--imd-accent); }
+.img-modal-box[class*="t-"] .imd-exam {
+  background: color-mix(in srgb, var(--imd-accent2, var(--imd-accent)) 14%, transparent);
+  border-color: color-mix(in srgb, var(--imd-accent2, var(--imd-accent)) 42%, transparent);
+}
+.img-modal-box[class*="t-"] .imd-exam h4 { color: var(--imd-accent2, var(--imd-accent)); }
+.img-modal-box[class*="t-"] .imd-anecdote {
+  background: color-mix(in srgb, var(--imd-accent) 16%, transparent);
+  border-color: color-mix(in srgb, var(--imd-accent) 45%, transparent);
+}
+/* Croix de fermeture teintée */
+.img-modal-box[class*="t-"] .img-modal-close { background: color-mix(in srgb, var(--imd-accent) 35%, rgba(0,0,0,0.55)); }
