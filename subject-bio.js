@@ -14,13 +14,32 @@
       cours: "<p>Moine et botaniste, <strong>Mendel</strong> a découvert les <strong>lois de l'hérédité</strong> en croisant des <strong>petits pois</strong>. Il a montré que les caractères se transmettent par des « facteurs » (aujourd'hui les <strong>gènes</strong>) qui peuvent être <strong>dominants</strong> ou <strong>récessifs</strong>.</p>",
       exam: "<ul><li><strong>Vocabulaire :</strong> gène, allèle, <strong>dominant</strong> (A) / <strong>récessif</strong> (a), génotype (les allèles) / phénotype (ce qu'on voit).</li><li><strong>Règle :</strong> Aa × Aa → <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).</li><li>Ex. deux parents <strong>Bb</strong> (yeux bruns) peuvent avoir un enfant <strong>bb</strong> aux yeux bleus (1 chance sur 4).</li></ul>",
       anecdote: "Mendel a cultivé et observé près de <strong>28 000 plants de pois</strong> ! Ses découvertes (1865) sont restées <strong>ignorées de son vivant</strong> et n'ont été comprises que 35 ans plus tard."
+    },
+    "cellule-animale.png": {
+      title: "La cellule animale", sub: "cellule eucaryote",
+      cours: "<p>La <strong>cellule animale</strong> est <strong>eucaryote</strong> (elle a un <strong>noyau</strong>). Elle contient des <strong>organites</strong> : mitochondries (énergie), réticulum, appareil de Golgi, lysosomes… mais <strong>pas</strong> de paroi ni de chloroplastes.</p>",
+      exam: "<ul><li>Eucaryote : possède un <strong>noyau</strong>.</li><li>Vs végétale : <strong>pas de paroi, pas de chloroplaste, pas de grande vacuole</strong>.</li></ul>",
+      anecdote: "Une cellule mesure en moyenne quelques <strong>centièmes de millimètre</strong> : il en faudrait des milliers rien que pour couvrir ce point → •"
+    },
+    "cellule-vegetale.png": {
+      title: "La cellule végétale", sub: "cellule eucaryote",
+      cours: "<p>La <strong>cellule végétale</strong> est aussi <strong>eucaryote</strong>, mais elle a en plus : une <strong>paroi cellulaire</strong> (rigidité), des <strong>chloroplastes</strong> (photosynthèse) et une grande <strong>vacuole centrale</strong>.</p>",
+      exam: "<ul><li>3 éléments en plus : <strong>paroi · chloroplastes · vacuole centrale</strong>.</li><li>Les chloroplastes captent la lumière (photosynthèse).</li></ul>",
+      anecdote: "Grâce aux <strong>chloroplastes</strong> (chlorophylle verte), les plantes fabriquent leur nourriture à partir de la lumière : la <strong>photosynthèse</strong>, qui produit l'oxygène qu'on respire !"
+    },
+    "procaryote.png": {
+      title: "La cellule procaryote", sub: "une bactérie",
+      cours: "<p>Une cellule <strong>procaryote</strong> (ex. une <strong>bactérie</strong>) est plus simple : elle <strong>n'a pas de noyau</strong> (son ADN flotte dans le cytoplasme) ni d'organites entourés d'une membrane.</p>",
+      exam: "<ul><li><strong>Procaryote = sans noyau</strong> (≠ eucaryote).</li><li>Exemple : les bactéries.</li></ul>",
+      anecdote: "Les bactéries sont les êtres vivants les plus <strong>nombreux</strong> sur Terre. Ton corps en contient plus que de cellules humaines — et la plupart sont utiles (digestion) !"
     }
   });
 
   /* Thème visuel des fiches de bio */
   window.INFO_THEME = window.INFO_THEME || {};
   Object.assign(window.INFO_THEME, {
-    "mendel.jpg": "science", "gene-allele": "science", "dominance": "science", "genotype-phenotype": "science"
+    "mendel.jpg": "science", "gene-allele": "science", "dominance": "science", "genotype-phenotype": "science",
+    "cellule-animale.png": "science", "cellule-vegetale.png": "science", "procaryote.png": "science"
   });
 
   /* Notions de génétique cliquables */
@@ -666,7 +685,10 @@
     { q: "Un allèle récessif s'exprime seulement si :", opts: ["les 2 allèles sont récessifs (aa)", "il y a au moins un dominant", "on est hétérozygote", "jamais"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Récessif visible uniquement en aa ; le dominant masque le récessif." },
     { q: "Génotype vs phénotype ?", opts: ["génotype = les allèles ; phénotype = l'apparence", "l'inverse", "ce sont des synonymes", "génotype = la taille"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Génotype = les gènes (AA, Aa, aa) ; phénotype = ce qu'on voit." },
     { q: "Croisement Aa × Aa : quel rapport de phénotypes ?", opts: ["3 dominants : 1 récessif", "1 : 1", "tous identiques", "2 : 2"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Aa × Aa → 1 AA : 2 Aa : 1 aa → 3 dominants : 1 récessif." },
-    { q: "Deux parents aux yeux bruns porteurs (Bb) : un enfant aux yeux bleus (bb) est…", opts: ["possible (1 chance sur 4)", "impossible", "certain", "possible seulement si garçon"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Bb × Bb → 1/4 bb (bleus). L'enfant peut différer de ses parents." }
+    { q: "Deux parents aux yeux bruns porteurs (Bb) : un enfant aux yeux bleus (bb) est…", opts: ["possible (1 chance sur 4)", "impossible", "certain", "possible seulement si garçon"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Bb × Bb → 1/4 bb (bleus). L'enfant peut différer de ses parents." },
+    { q: "Une cellule SANS noyau s'appelle…", opts: ["procaryote (ex. bactérie)", "eucaryote", "végétale", "animale"], ans: 0, chapter: "cellule", difficulty: "intermediaire", exp: "Procaryote = sans noyau (bactéries). Eucaryote = avec noyau." },
+    { q: "Qu'a la cellule végétale en plus de l'animale ?", opts: ["paroi, chloroplastes, grande vacuole", "un noyau", "des mitochondries", "rien"], ans: 0, chapter: "cellule", difficulty: "intermediaire", exp: "Paroi cellulaire + chloroplastes (photosynthèse) + vacuole centrale." },
+    { q: "L'organite qui permet la photosynthèse est…", opts: ["le chloroplaste", "la mitochondrie", "le noyau", "le lysosome"], ans: 0, chapter: "cellule", difficulty: "facile", exp: "Le chloroplaste (chlorophylle verte) capte la lumière." }
   ];
 
   var flashcards = [
@@ -692,7 +714,9 @@
     { front: "Dominant vs récessif ?", back: "Dominant (A) s'exprime même seul. Récessif (a) seulement si les 2 allèles sont récessifs (aa).", chapter: "genetique" },
     { front: "Homozygote vs hétérozygote ?", back: "Homozygote = 2 allèles identiques (AA ou aa). Hétérozygote = 2 différents (Aa).", chapter: "genetique" },
     { front: "Génotype vs phénotype ?", back: "Génotype = les allèles (AA/Aa/aa). Phénotype = l'apparence visible.", chapter: "genetique" },
-    { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes 3 dominants : 1 récessif. (Échiquier de Punnett.)", chapter: "genetique" }
+    { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes 3 dominants : 1 récessif. (Échiquier de Punnett.)", chapter: "genetique" },
+    { front: "Procaryote vs eucaryote ?", back: "Procaryote = SANS noyau (bactéries). Eucaryote = AVEC noyau (cellules animale et végétale).", chapter: "cellule" },
+    { front: "Cellule végétale : 3 éléments en plus ?", back: "Paroi cellulaire (rigidité) + chloroplastes (photosynthèse) + grande vacuole centrale.", chapter: "cellule" }
   ];
 
   window.registerSubject('bio', {

@@ -6,6 +6,37 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Fiches cliquables (drapeaux des pays anglophones) */
+  window.IMG_INFO = window.IMG_INFO || {};
+  Object.assign(window.IMG_INFO, {
+    "flag_uk.png": {
+      title: "Royaume-Uni (UK)", sub: "United Kingdom · capitale Londres",
+      cours: "<p>Le <strong>Royaume-Uni</strong> regroupe l'<strong>Angleterre</strong>, l'<strong>Écosse</strong>, le <strong>Pays de Galles</strong> et l'<strong>Irlande du Nord</strong>. Capitale : <strong>Londres</strong>. C'est le berceau de la langue anglaise.</p>",
+      exam: "<ul><li>Drapeau = l'<strong>Union Jack</strong>.</li><li>4 nations · capitale <strong>Londres</strong>.</li></ul>",
+      anecdote: "Le drapeau s'appelle l'<strong>Union Jack</strong> : il superpose la croix de Saint-Georges (Angleterre), de Saint-André (Écosse) et de Saint-Patrick (Irlande)."
+    },
+    "flag_nz.png": {
+      title: "New Zealand (Nouvelle-Zélande)", sub: "Aotearoa · Unit 7 « Kia Ora »",
+      cours: "<p>La <strong>Nouvelle-Zélande</strong> est un pays anglophone du <strong>Pacifique</strong>, formé de deux grandes îles. Le peuple autochtone est le peuple <strong>maori</strong> ; « <strong>Kia Ora</strong> » = bonjour en maori.</p>",
+      exam: "<ul><li>« <strong>Kia Ora</strong> » = hello (maori).</li><li>Pays de l'<strong>Unit 7</strong> · capitale Wellington.</li></ul>",
+      anecdote: "Son nom maori est <strong>Aotearoa</strong> (« le pays du long nuage blanc »). Les All Blacks y exécutent le <strong>haka</strong>, une danse maori, avant chaque match de rugby !"
+    },
+    "flag_ireland.png": {
+      title: "Ireland (Irlande)", sub: "Éire · capitale Dublin",
+      cours: "<p>L'<strong>Irlande</strong> est une île à l'ouest du Royaume-Uni. Pays anglophone (on y parle aussi l'<strong>irlandais</strong>). Capitale : <strong>Dublin</strong>. Étudiée dans « Ireland and TIC ».</p>",
+      exam: "<ul><li>Drapeau <strong>vert-blanc-orange</strong> (vert = catholiques, orange = protestants, blanc = la paix).</li><li>Capitale : <strong>Dublin</strong>.</li></ul>",
+      anecdote: "Son symbole est le <strong>trèfle</strong> (shamrock) à 3 feuilles. Sa fête, la <strong>Saint-Patrick</strong> (17 mars), est célèbre dans le monde entier — tout en vert !"
+    }
+  });
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, { "flag_uk.png": "eng", "flag_nz.png": "eng", "flag_ireland.png": "eng" });
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, {
+    "Royaume-Uni": "flag_uk.png", "Union Jack": "flag_uk.png",
+    "New Zealand": "flag_nz.png", "Nouvelle-Zélande": "flag_nz.png", "Kia Ora": "flag_nz.png", "maori": "flag_nz.png",
+    "Ireland": "flag_ireland.png", "Irlande": "flag_ireland.png"
+  });
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
@@ -59,7 +90,13 @@
     </div>
 
     <div class="synth-section">
-      <h2>Culture — New Zealand &amp; Ireland</h2>
+      <h2>Culture — English-speaking countries 🌍</h2>
+      <p style="color:var(--text-secondary); margin-bottom:0.6rem;">Clique sur un drapeau pour sa fiche (cours + examen + anecdote).</p>
+      <div class="hfig-row">
+        <figure class="hfig" style="max-width:130px"><img src="flag_uk.png" alt="Royaume-Uni" loading="lazy"><figcaption>Royaume-Uni (UK)</figcaption></figure>
+        <figure class="hfig" style="max-width:130px"><img src="flag_nz.png" alt="New Zealand" loading="lazy"><figcaption>New Zealand</figcaption></figure>
+        <figure class="hfig" style="max-width:130px"><img src="flag_ireland.png" alt="Ireland" loading="lazy"><figcaption>Ireland</figcaption></figure>
+      </div>
       <p><strong>New Zealand</strong> (Nouvelle-Zélande) : pays anglophone du Pacifique. « <strong>Kia Ora</strong> » = « bonjour » en <strong>maori</strong> (langue du peuple maori). <strong>Ireland</strong> (Irlande) : autre pays anglophone étudié (« Ireland and TIC »).</p>
     </div>
   </div>`;
@@ -158,7 +195,15 @@
     { q: "Which is a BAD-luck superstition?", opts: ["a broken mirror", "a four-leaf clover", "a horseshoe", "touch wood"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "Broken mirror = 7 years bad luck. Four-leaf clover/horseshoe = good luck." },
     { q: "« Kia Ora » means « hello » in…", opts: ["Maori (New Zealand)", "Irish", "Spanish", "Latin"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Kia Ora = bonjour en maori (Nouvelle-Zélande)." },
     { q: "School rule: « We ___ wear a uniform. » (obligation)", opts: ["must / have to", "mustn't", "don't have to", "might"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "Obligation → must / have to." },
-    { q: "To give your opinion, you say…", opts: ["In my opinion… / I think…", "How much?", "Once upon a time", "The end"], ans: 0, chapter: "skills", difficulty: "facile", exp: "I think… / In my opinion… / I believe… puis justifier avec because." }
+    { q: "To give your opinion, you say…", opts: ["In my opinion… / I think…", "How much?", "Once upon a time", "The end"], ans: 0, chapter: "skills", difficulty: "facile", exp: "I think… / In my opinion… / I believe… puis justifier avec because." },
+    { q: "The UK flag is called…", opts: ["the Union Jack", "the Stars and Stripes", "the Tricolore", "the Maple Leaf"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "Union Jack = drapeau du Royaume-Uni." },
+    { q: "Which nations make up the UK?", opts: ["England, Scotland, Wales, N. Ireland", "England and France", "Ireland and Scotland only", "England only"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Angleterre, Écosse, Pays de Galles, Irlande du Nord. Capitale : Londres." },
+    { q: "The capital of Ireland is…", opts: ["Dublin", "London", "Wellington", "Edinburgh"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "Dublin (Irlande). Londres = UK, Wellington = NZ." },
+    { q: "The Irish national symbol is…", opts: ["the shamrock (clover)", "the rose", "the thistle", "the kiwi"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Le trèfle (shamrock) ; fête de la Saint-Patrick le 17 mars." },
+    { q: "The « haka » is…", opts: ["a Maori dance (rugby)", "an Irish dish", "a British holiday", "a card game"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Danse maori des All Blacks (Nouvelle-Zélande)." },
+    { q: "« I have lived here ___ 2015. »", opts: ["since", "for", "during", "ago"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "since + point de départ (2015)." },
+    { q: "« She has studied English ___ six years. »", opts: ["for", "since", "from", "during"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "for + durée (six years)." },
+    { q: "« Aotearoa » is the Maori name for…", opts: ["New Zealand", "Ireland", "Australia", "Scotland"], ans: 0, chapter: "vocab", difficulty: "difficile", exp: "Aotearoa = « le pays du long nuage blanc » = Nouvelle-Zélande." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -177,7 +222,13 @@
     { front: "2 superstitions (good luck) ?", back: "Four-leaf clover, horseshoe, touch wood, crossing your fingers.", chapter: "vocab" },
     { front: "School rules — utile vocab ?", back: "must / mustn't / have to / don't have to / be (not) allowed to + base verb.", chapter: "vocab" },
     { front: "Kia Ora ? New Zealand ?", back: "« Kia Ora » = hello en maori. New Zealand = pays anglophone du Pacifique (Unit 7).", chapter: "vocab" },
-    { front: "Donner / défendre son avis ?", back: "I think… / In my opinion… + because / for example. Agree: I agree. Disagree: I don't agree.", chapter: "skills" }
+    { front: "Donner / défendre son avis ?", back: "I think… / In my opinion… + because / for example. Agree: I agree. Disagree: I don't agree.", chapter: "skills" },
+    { front: "Le Royaume-Uni : les 4 nations ?", back: "Angleterre, Écosse, Pays de Galles, Irlande du Nord. Capitale : Londres. Drapeau : l'Union Jack.", chapter: "vocab" },
+    { front: "New Zealand : 3 faits ?", back: "Pays anglophone du Pacifique ; « Kia Ora » = hello en maori ; le haka (danse maori). Nom maori : Aotearoa.", chapter: "vocab" },
+    { front: "Ireland : drapeau & symboles ?", back: "Drapeau vert-blanc-orange ; capitale Dublin ; trèfle (shamrock) ; Saint-Patrick le 17 mars.", chapter: "vocab" },
+    { front: "L'Union Jack ?", back: "Le drapeau du Royaume-Uni : croix d'Angleterre + Écosse + Irlande superposées.", chapter: "vocab" },
+    { front: "Que veut dire « Saint Patrick's Day » ?", back: "La fête nationale irlandaise, le 17 mars — on s'habille en vert partout dans le monde.", chapter: "vocab" },
+    { front: "for vs since (rappel) ?", back: "for + durée (for 6 years) ; since + point de départ (since 2015).", chapter: "perfect" }
   ];
 
   window.registerSubject('anglais', {

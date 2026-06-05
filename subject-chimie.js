@@ -5,6 +5,36 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Fiches cliquables (tableau périodique, atome, Avogadro) */
+  window.IMG_INFO = window.IMG_INFO || {};
+  Object.assign(window.IMG_INFO, {
+    "tableau_periodique.png": {
+      title: "Le tableau périodique", sub: "les éléments chimiques",
+      cours: "<p>Le <strong>tableau périodique</strong> classe tous les <strong>éléments chimiques</strong> par numéro atomique. Pour chaque élément, on y lit son <strong>symbole</strong> et sa <strong>masse molaire M</strong> (en g/mol), indispensable pour les calculs.</p>",
+      exam: "<ul><li>On y lit la <strong>masse molaire M</strong> utilisée dans <strong>n = m/M</strong>.</li><li>Colonnes = familles · lignes = périodes.</li></ul>",
+      anecdote: "Il a été imaginé par le Russe <strong>Mendeleïev</strong> en 1869. Il avait même <strong>laissé des cases vides</strong> pour des éléments pas encore découverts… et il avait vu juste !"
+    },
+    "atome.png": {
+      title: "L'atome", sub: "la brique de la matière",
+      cours: "<p>L'<strong>atome</strong> est la plus petite particule d'un élément. Il a un <strong>noyau</strong> (protons + neutrons) entouré d'<strong>électrons</strong>. Les atomes se lient pour former des <strong>molécules</strong>.</p>",
+      exam: "<ul><li>Noyau (protons +, neutrons) + électrons (−).</li><li>Une <strong>molécule</strong> = plusieurs atomes liés (ex. H₂O).</li></ul>",
+      anecdote: "Le mot « atome » vient du grec <em>atomos</em> = « qu'on ne peut pas couper ». On a longtemps cru l'atome insécable… avant de découvrir qu'il contient lui-même des particules !"
+    },
+    "avogadro.jpg": {
+      title: "Amedeo Avogadro", sub: "1776–1856 · la mole",
+      cours: "<p><strong>Avogadro</strong> a donné son nom au <strong>nombre d'Avogadro</strong> N<sub>A</sub> ≈ <strong>6,02·10²³</strong> : c'est le nombre de particules dans <strong>une mole</strong>. La mole est « le paquet » du chimiste.</p>",
+      exam: "<ul><li><strong>N = n · N<sub>A</sub></strong> · N<sub>A</sub> ≈ 6,02·10²³ /mol.</li><li>1 mole = 6,02·10²³ particules (atomes, molécules…).</li></ul>",
+      anecdote: "Une mole, c'est gigantesque : 6,02·10²³. Avec une mole de grains de sable, on recouvrirait toute la surface de la Terre sur plusieurs mètres d'épaisseur !"
+    }
+  });
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, { "tableau_periodique.png": "chem", "atome.png": "chem", "avogadro.jpg": "chem" });
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, {
+    "tableau périodique": "tableau_periodique.png", "masse molaire": "tableau_periodique.png",
+    "Avogadro": "avogadro.jpg", "mole": "avogadro.jpg", "atome": "atome.png", "molécule": "atome.png"
+  });
+
   /* ---------- Sections (cours / formules / méthodes / exercices / erreurs) ---------- */
   var sections = {};
 
@@ -17,6 +47,7 @@
     <div class="synth-section">
       <h2>Introduction</h2>
       <p>La <strong>transformation chimique</strong> est le passage obligé pour produire des substances et des matériaux utiles dans la vie courante. Pour en obtenir les quantités voulues, les chimistes calculent les quantités de réactifs à mettre en œuvre : ils résolvent des <strong>problèmes stœchiométriques</strong>.</p>
+      <figure class="hfig" style="max-width:420px; display:block; margin:1rem auto;"><img src="tableau_periodique.png" alt="Tableau périodique des éléments" loading="lazy"><figcaption>Le tableau périodique : on y lit la masse molaire M de chaque élément (clique pour la fiche).</figcaption></figure>
     </div>
 
     <div class="synth-section">
@@ -61,6 +92,10 @@
 
     <div class="synth-section">
       <h2>Outils de calcul (mole & gaz)</h2>
+      <div class="hfig-row">
+        <figure class="hfig" style="max-width:150px"><img src="avogadro.jpg" alt="Amedeo Avogadro" loading="lazy"><figcaption>Avogadro & la mole (Nₐ ≈ 6,02·10²³)</figcaption></figure>
+        <figure class="hfig" style="max-width:150px"><img src="atome.png" alt="Atome" loading="lazy"><figcaption>L'atome (noyau + électrons)</figcaption></figure>
+      </div>
       <ul style="line-height:2.1;">
         <li><strong>Masse ↔ quantité de matière :</strong> m = n · M &nbsp;(m en g, n en mol, M = masse molaire en g/mol)</li>
         <li><strong>Nombre de particules :</strong> N = n · N<sub>A</sub> &nbsp;(N<sub>A</sub> ≈ 6,02 · 10²³ /mol)</li>
@@ -303,7 +338,11 @@
     { q: "n = m/M : si m = 100 g et M = 55,86 g/mol, alors n ≈", opts: ["1,79 mol", "5,59 mol", "0,56 mol", "155,9 mol"], ans: 0, chapter: "stoechio", difficulty: "intermediaire", exp: "n = 100 / 55,86 ≈ 1,79 mol." },
     { q: "Le réactif qui s'épuise en premier s'appelle :", opts: ["le réactif limitant", "le réactif en excès", "le catalyseur", "le produit"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "Le réactif limitant fixe la quantité maximale de produit ; l'autre est en excès." },
     { q: "La quantité de produit formé se calcule à partir :", opts: ["du réactif limitant", "du réactif en excès", "du produit le plus lourd", "de la température"], ans: 0, chapter: "stoechio", difficulty: "intermediaire", exp: "C'est le limitant qui détermine combien de produit on peut former." },
-    { q: "50 g Fe (0,895 mol) + 50 g S (1,56 mol), réaction 1:1. Le limitant est :", opts: ["le fer", "le soufre", "aucun", "les deux"], ans: 0, chapter: "stoechio", difficulty: "difficile", exp: "0,895 mol < 1,56 mol → le fer s'épuise le premier : il est limitant (0,665 mol de S en excès)." }
+    { q: "50 g Fe (0,895 mol) + 50 g S (1,56 mol), réaction 1:1. Le limitant est :", opts: ["le fer", "le soufre", "aucun", "les deux"], ans: 0, chapter: "stoechio", difficulty: "difficile", exp: "0,895 mol < 1,56 mol → le fer s'épuise le premier : il est limitant (0,665 mol de S en excès)." },
+    { q: "Où lit-on la masse molaire M d'un élément ?", opts: ["dans le tableau périodique", "dans l'énoncé seulement", "on l'invente", "sur la calculatrice"], ans: 0, chapter: "mole", difficulty: "facile", exp: "La masse molaire M (g/mol) se lit dans le tableau périodique." },
+    { q: "Le nombre d'Avogadro Nₐ vaut environ :", opts: ["6,02·10²³ /mol", "3,14", "9,81", "1000"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "Nₐ ≈ 6,02·10²³ : le nombre de particules dans une mole." },
+    { q: "Une molécule, c'est…", opts: ["plusieurs atomes liés", "un seul électron", "un noyau seul", "une mole"], ans: 0, chapter: "mole", difficulty: "facile", exp: "Une molécule = plusieurs atomes liés (ex. H₂O = 2 H + 1 O)." },
+    { q: "Qui a imaginé le tableau périodique ?", opts: ["Mendeleïev", "Avogadro", "Newton", "Lavoisier"], ans: 0, chapter: "mole", difficulty: "difficile", exp: "Dmitri Mendeleïev, en 1869 (avec des cases laissées vides)." }
   ];
 
   /* ---------- Flashcards ---------- */
@@ -326,7 +365,10 @@
     { front: "Étapes d'un problème stœchiométrique ?", back: "1) équation pondérée · 2) lecture molaire + données · 3) n = m/M · 4) proportions (n final) · 5) m = n·M.", chapter: "stoechio" },
     { front: "Réactif limitant ?", back: "Le réactif qui s'épuise en premier ; il fixe la quantité de produit formé.", chapter: "stoechio" },
     { front: "Réactif en excès ?", back: "Le réactif présent en trop : il en reste après la réaction.", chapter: "stoechio" },
-    { front: "Pourquoi passer en moles ?", back: "Parce que l'équation pondérée raisonne en moles (coefficients) : on ne peut pas comparer directement des grammes.", chapter: "stoechio" }
+    { front: "Pourquoi passer en moles ?", back: "Parce que l'équation pondérée raisonne en moles (coefficients) : on ne peut pas comparer directement des grammes.", chapter: "stoechio" },
+    { front: "Où trouver la masse molaire M ?", back: "Dans le tableau périodique (sous chaque élément).", chapter: "mole" },
+    { front: "Le nombre d'Avogadro ?", back: "Nₐ ≈ 6,02·10²³ : le nombre de particules contenues dans une mole.", chapter: "mole" },
+    { front: "Qu'est-ce qu'un atome ?", back: "La plus petite particule d'un élément : un noyau (protons + neutrons) entouré d'électrons.", chapter: "mole" }
   ];
 
   window.registerSubject('chimie', {

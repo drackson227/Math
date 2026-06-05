@@ -14,12 +14,26 @@
       cours: "<p>La Belgique compte <strong>10 provinces</strong> : <strong>5 en Flandre</strong> (nord, néerlandophone) et <strong>5 en Wallonie</strong> (sud, francophone). <strong>Bruxelles</strong> est une région à part (bilingue), elle n'est dans aucune province.</p>",
       exam: "<ul><li><strong>Flandre :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.</li><li><strong>Wallonie :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</li><li>Sache repérer ta province et la situer (nord/sud).</li></ul>",
       anecdote: "La flèche de la carte pointe vers la petite zone bleue = <strong>Bruxelles-Capitale</strong>. C'est la 3ᵉ région du pays (avec la Flandre et la Wallonie), mais elle n'est <strong>dans aucune province</strong> et elle est <strong>bilingue</strong>."
+    },
+    "belgique_relief.jpg": {
+      title: "Le relief de la Belgique", sub: "3 grands ensembles",
+      cours: "<p>Le relief belge <strong>monte du nord-ouest vers le sud-est</strong> : <strong>Basse Belgique</strong> (&lt; 100 m, près de la mer), <strong>Moyenne Belgique</strong> (100–200 m) et <strong>Haute Belgique</strong> (&gt; 200 m, l'<strong>Ardenne</strong>).</p>",
+      exam: "<ul><li>Basse → Moyenne → Haute (du NO vers le SE).</li><li>Point culminant : <strong>Signal de Botrange, 694 m</strong> (Hautes Fagnes).</li></ul>",
+      anecdote: "Le point le plus haut, le <strong>Signal de Botrange</strong> (694 m), est si « bas » qu'on y a construit en 1923 une butte de 6 m (la « baraque Michel ») pour atteindre symboliquement les 700 m !"
+    },
+    "meuse.jpg": {
+      title: "La Meuse", sub: "fleuve de Wallonie",
+      cours: "<p>La <strong>Meuse</strong> est l'un des deux grands fleuves belges. Elle traverse <strong>Namur</strong> puis <strong>Liège</strong> ; la <strong>Sambre</strong> la rejoint à Namur. Elle se jette dans la <strong>mer du Nord</strong>.</p>",
+      exam: "<ul><li>Meuse → Namur, Liège · la <strong>Sambre</strong> la rejoint à Namur.</li><li>L'autre fleuve : l'<strong>Escaut</strong> (Tournai, Gand, Anvers).</li></ul>",
+      anecdote: "La Meuse prend sa source en <strong>France</strong> et traverse 3 pays (France, Belgique, Pays-Bas) avant la mer. À Namur, sa rencontre avec la Sambre est dominée par la célèbre <strong>Citadelle</strong>."
     }
   });
 
   /* Thème visuel des fiches de géo */
   window.INFO_THEME = window.INFO_THEME || {};
-  Object.assign(window.INFO_THEME, { "belgique_carte.jpg": "geo" });
+  Object.assign(window.INFO_THEME, { "belgique_carte.jpg": "geo", "belgique_relief.jpg": "geo", "meuse.jpg": "geo" });
+  window.TERM_MAP = window.TERM_MAP || {};
+  Object.assign(window.TERM_MAP, { "Meuse": "meuse.jpg", "Escaut": "meuse.jpg", "relief": "belgique_relief.jpg", "Signal de Botrange": "belgique_relief.jpg" });
 
   var sections = {};
 
@@ -61,11 +75,13 @@
         <li><strong>La Moyenne Belgique</strong> (100–200 m) : plateaux fertiles (limons), région agricole.</li>
         <li><strong>La Haute Belgique</strong> (&gt; 200 m) : les plateaux de l'<strong>Ardenne</strong>. Point culminant : le <strong>Signal de Botrange</strong> (<strong>694 m</strong>, Hautes Fagnes).</li>
       </ul>
+      <figure class="hfig hfig-float" style="max-width:200px"><img src="belgique_relief.jpg" alt="Relief de la Belgique" loading="lazy"><figcaption>Le relief monte vers le sud-est (Ardenne). Clique pour la fiche.</figcaption></figure>
     </div>
 
     <div class="synth-section">
       <h2>4. L'hydrographie (les cours d'eau)</h2>
       <p>Deux grands fleuves drainent la Belgique vers la mer du Nord :</p>
+      <figure class="hfig hfig-float" style="max-width:180px"><img src="meuse.jpg" alt="La Meuse" loading="lazy"><figcaption>La Meuse (à Namur, Liège). Clique pour la fiche.</figcaption></figure>
       <ul style="line-height:1.9;">
         <li>La <strong>Meuse</strong> : traverse Namur et Liège (la Sambre la rejoint à Namur).</li>
         <li>L'<strong>Escaut</strong> : passe à Tournai, Gand et Anvers (la Lys le rejoint à Gand).</li>
@@ -189,7 +205,12 @@
     { q: "Un biocarburant est produit à partir de :", opts: ["biomasse (plantes, déchets organiques)", "pétrole brut", "charbon", "uranium"], ans: 0, chapter: "biocarburants", difficulty: "facile", exp: "Biomasse = matière organique renouvelable." },
     { q: "Le bioéthanol s'obtient par… et se mélange à…", opts: ["fermentation ; l'essence", "transestérification ; le diesel", "méthanisation ; le gaz", "distillation ; le kérosène"], ans: 0, chapter: "biocarburants", difficulty: "intermediaire", exp: "Bioéthanol = fermentation de plantes sucrées/amidon → mélangé à l'essence. Biodiesel = transestérification d'huiles → diesel." },
     { q: "Le principal reproche fait aux biocarburants de 1ʳᵉ génération :", opts: ["concurrence avec l'alimentation", "ils ne brûlent pas", "ils coûtent 0 €", "ils ne sont pas renouvelables"], ans: 0, chapter: "biocarburants", difficulty: "intermediaire", exp: "La 1ʳᵉ génération utilise des cultures alimentaires (champs détournés de la nourriture) + risque de déforestation." },
-    { q: "Les biocarburants de 2ᵉ génération utilisent :", opts: ["des résidus et du bois (non alimentaires)", "uniquement du maïs", "de l'eau de mer", "du pétrole"], ans: 0, chapter: "biocarburants", difficulty: "difficile", exp: "2ᵉ génération = résidus/lignocellulose (paille, déchets, bois) → pas de concurrence alimentaire." }
+    { q: "Les biocarburants de 2ᵉ génération utilisent :", opts: ["des résidus et du bois (non alimentaires)", "uniquement du maïs", "de l'eau de mer", "du pétrole"], ans: 0, chapter: "biocarburants", difficulty: "difficile", exp: "2ᵉ génération = résidus/lignocellulose (paille, déchets, bois) → pas de concurrence alimentaire." },
+    { q: "Bruxelles-Capitale appartient à quelle province ?", opts: ["aucune province", "le Brabant flamand", "le Brabant wallon", "Anvers"], ans: 0, chapter: "belgique", difficulty: "intermediaire", exp: "Bruxelles est une Région à part, dans aucune province, et bilingue." },
+    { q: "La Meuse se jette finalement dans…", opts: ["la mer du Nord", "la Méditerranée", "l'océan Atlantique", "un lac"], ans: 0, chapter: "hydro", difficulty: "facile", exp: "Comme l'Escaut, la Meuse rejoint la mer du Nord." },
+    { q: "La Sambre rejoint la Meuse dans quelle ville ?", opts: ["Namur", "Liège", "Gand", "Anvers"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "À Namur (la Citadelle domine le confluent)." },
+    { q: "En allant vers l'Ardenne, dans quelle Belgique es-tu ?", opts: ["la Haute Belgique (>200 m)", "la Basse Belgique", "la Moyenne Belgique", "les polders"], ans: 0, chapter: "relief", difficulty: "facile", exp: "L'Ardenne = Haute Belgique (>200 m), au sud-est." },
+    { q: "Les polders se trouvent dans…", opts: ["la Basse Belgique (côte)", "l'Ardenne", "la Moyenne Belgique", "le Luxembourg"], ans: 0, chapter: "relief", difficulty: "difficile", exp: "Les polders (terres gagnées sur la mer) sont en Basse Belgique, près de la côte." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -208,7 +229,10 @@
     { front: "Qu'est-ce qu'un biocarburant ?", back: "Un carburant produit à partir de biomasse (matière organique végétale/animale) : ressource renouvelable.", chapter: "biocarburants" },
     { front: "Bioéthanol vs biodiesel ?", back: "Bioéthanol = fermentation de plantes sucrées/amidon → essence. Biodiesel = transestérification d'huiles végétales → diesel.", chapter: "biocarburants" },
     { front: "1ʳᵉ vs 2ᵉ génération de biocarburants ?", back: "1ʳᵉ = cultures alimentaires (concurrence nourriture). 2ᵉ = résidus/bois non alimentaires. 3ᵉ = microalgues.", chapter: "biocarburants" },
-    { front: "2 avantages + 2 inconvénients des biocarburants ?", back: "✅ renouvelable, réduit la dépendance au pétrole. ❌ concurrence alimentaire, déforestation (huile de palme).", chapter: "biocarburants" }
+    { front: "2 avantages + 2 inconvénients des biocarburants ?", back: "✅ renouvelable, réduit la dépendance au pétrole. ❌ concurrence alimentaire, déforestation (huile de palme).", chapter: "biocarburants" },
+    { front: "Bruxelles : quelle particularité ?", back: "3ᵉ Région du pays, bilingue, qui n'appartient à aucune province.", chapter: "belgique" },
+    { front: "Où la Meuse se jette-t-elle ?", back: "Dans la mer du Nord (comme l'Escaut). Elle traverse France, Belgique, Pays-Bas.", chapter: "hydro" },
+    { front: "Que sont les polders ?", back: "Des terres gagnées sur la mer, en Basse Belgique (côte/plaine flamande).", chapter: "relief" }
   ];
 
   window.registerSubject('geo', {

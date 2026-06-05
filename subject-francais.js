@@ -20,6 +20,18 @@
       cours: "<p><strong>Molière</strong> est le plus grand auteur de <strong>comédies</strong> françaises. Le théâtre est un texte <strong>joué</strong> sur scène ; la comédie fait <strong>rire</strong> et finit bien (à l'inverse de la tragédie).</p>",
       exam: "<ul><li><strong>Vocabulaire théâtre :</strong> acte, scène, réplique, tirade, monologue, aparté, <strong>didascalies</strong>, quiproquo.</li><li>Comédie = fait rire / finit bien · Tragédie = finit mal (personnages nobles, fatalité).</li></ul>",
       anecdote: "Son vrai nom est <strong>Jean-Baptiste Poquelin</strong>. Il est mort presque sur scène, en jouant… « Le Malade imaginaire » ! Le théâtre français est d'ailleurs surnommé « la maison de Molière »."
+    },
+    "apollinaire.jpg": {
+      title: "Guillaume Apollinaire", sub: "1880–1918 · poète",
+      cours: "<p><strong>Apollinaire</strong> est un grand poète du début du XXᵉ siècle. Il a inventé les <strong>calligrammes</strong> : des poèmes dont la <strong>disposition des mots dessine une forme</strong> (un cœur, la pluie, la Tour Eiffel…).</p>",
+      exam: "<ul><li><strong>Calligramme</strong> = poème-dessin (mot à retenir).</li><li>Vocab poésie : vers, strophe, rime, <strong>alexandrin</strong> (12 syllabes).</li></ul>",
+      anecdote: "Il a <strong>supprimé toute la ponctuation</strong> dans son recueil « Alcools » (1913), pour laisser le rythme guider la lecture. C'est aussi lui qui a popularisé le mot « surréalisme »."
+    },
+    "lafontaine.jpg": {
+      title: "Jean de La Fontaine", sub: "1621–1695 · fabuliste",
+      cours: "<p><strong>La Fontaine</strong> est célèbre pour ses <strong>Fables</strong> : de courts récits, souvent avec des <strong>animaux</strong>, qui se terminent par une <strong>morale</strong>. C'est une façon d'<strong>argumenter</strong> de manière indirecte et plaisante.</p>",
+      exam: "<ul><li>La <strong>fable</strong> = récit + <strong>morale</strong> (argumentation indirecte).</li><li>Ex. « Le Corbeau et le Renard », « La Cigale et la Fourmi ».</li></ul>",
+      anecdote: "Beaucoup de ses morales sont devenues des expressions courantes : « <strong>Rien ne sert de courir, il faut partir à point</strong> » vient de « Le Lièvre et la Tortue » !"
     }
   });
 
@@ -27,7 +39,8 @@
   window.INFO_THEME = window.INFO_THEME || {};
   Object.assign(window.INFO_THEME, {
     "prometheus.jpg": "myth", "mythe": "myth",
-    "moliere.jpg": "theatre", "comedie": "theatre", "tragedie": "theatre"
+    "moliere.jpg": "theatre", "comedie": "theatre", "tragedie": "theatre",
+    "apollinaire.jpg": "lettres", "lafontaine.jpg": "lettres"
   });
 
   /* Notions de français cliquables */
@@ -53,7 +66,8 @@
   window.TERM_MAP = window.TERM_MAP || {};
   Object.assign(window.TERM_MAP, {
     "Prométhée": "prometheus.jpg", "Molière": "moliere.jpg",
-    "comédie": "comedie", "tragédie": "tragedie", "mythe": "mythe"
+    "comédie": "comedie", "tragédie": "tragedie", "mythe": "mythe",
+    "Apollinaire": "apollinaire.jpg", "La Fontaine": "lafontaine.jpg"
   });
 
   var sections = {};
@@ -98,6 +112,8 @@
         <li><strong>Persuader</strong> : faire adhérer par les <strong>émotions / sentiments</strong> (registre affectif).</li>
       </ul>
       <p>Structure : <strong>thèse</strong> (l'opinion défendue) → <strong>arguments</strong> (les idées qui la soutiennent) → <strong>exemples</strong> (qui illustrent) → reliés par des <strong>connecteurs logiques</strong> (car, donc, mais, en effet, cependant…).</p>
+      <figure class="hfig hfig-float" style="max-width:140px"><img src="lafontaine.jpg" alt="Jean de La Fontaine" loading="lazy"><figcaption>La Fontaine : argumenter par la fable (une morale)</figcaption></figure>
+      <p>💡 La <strong>fable</strong> (ex. <strong>La Fontaine</strong>) est une argumentation <em>indirecte</em> : un petit récit d'animaux qui débouche sur une <strong>morale</strong>.</p>
     </div>
 
     <div class="synth-section">
@@ -110,6 +126,7 @@
 
     <div class="synth-section">
       <h2>Séquence 8 — La poésie</h2>
+      <figure class="hfig hfig-float" style="max-width:150px"><img src="apollinaire.jpg" alt="Guillaume Apollinaire" loading="lazy"><figcaption>Apollinaire, le poète des calligrammes</figcaption></figure>
       <p>Vocabulaire : un <strong>vers</strong> (une ligne), une <strong>strophe</strong> (un groupe de vers), une <strong>rime</strong> (sons identiques à la fin des vers).</p>
       <ul style="line-height:1.9;">
         <li><strong>Compter les syllabes</strong> : <strong>alexandrin = 12</strong>, décasyllabe = 10, octosyllabe = 8.</li>
@@ -231,7 +248,10 @@
     { q: "« Il est rusé comme un renard » est…", opts: ["une comparaison", "une métaphore", "une hyperbole", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Comparaison : présence de l'outil « comme »." },
     { q: "« Cet homme est un lion » est…", opts: ["une métaphore", "une comparaison", "une personnification", "une assonance"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Métaphore : rapprochement sans outil de comparaison." },
     { q: "Des rimes disposées ABAB sont…", opts: ["croisées", "plates", "embrassées", "absentes"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Plates AABB · croisées ABAB · embrassées ABBA." },
-    { q: "Pour présenter une œuvre à l'oral, on termine par…", opts: ["un avis personnel argumenté", "le prix du livre", "rien", "une question au prof"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Présenter → résumer → analyser → avis argumenté." }
+    { q: "Pour présenter une œuvre à l'oral, on termine par…", opts: ["un avis personnel argumenté", "le prix du livre", "rien", "une question au prof"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Présenter → résumer → analyser → avis argumenté." },
+    { q: "Un calligramme, inventé par Apollinaire, est…", opts: ["un poème dont les mots dessinent une forme", "une longue tirade", "une fable", "un résumé"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Calligramme = poème-dessin (Guillaume Apollinaire)." },
+    { q: "Une fable de La Fontaine se termine toujours par…", opts: ["une morale", "une rime", "un quiproquo", "un acte"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La fable = court récit (souvent d'animaux) + une morale : une argumentation indirecte." },
+    { q: "« Convaincre » s'adresse surtout à…", opts: ["la raison", "les émotions", "la peur", "l'imagination"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Convaincre = la raison (arguments logiques) ; persuader = les émotions." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -251,7 +271,9 @@
     { front: "Rimes plates / croisées / embrassées ?", back: "Plates AABB · croisées ABAB · embrassées ABBA.", chapter: "poesie" },
     { front: "Comparaison vs métaphore ?", back: "Comparaison = avec outil (comme, tel). Métaphore = sans outil (« cet homme est un lion »).", chapter: "poesie" },
     { front: "Personnification / hyperbole / anaphore ?", back: "Personnification = traits humains à une chose. Hyperbole = exagération. Anaphore = répétition en début de vers.", chapter: "poesie" },
-    { front: "Plan pour présenter une œuvre à l'oral ?", back: "Présenter (auteur, titre) → résumer le thème → analyser (procédés) → avis personnel argumenté.", chapter: "oral" }
+    { front: "Plan pour présenter une œuvre à l'oral ?", back: "Présenter (auteur, titre) → résumer le thème → analyser (procédés) → avis personnel argumenté.", chapter: "oral" },
+    { front: "Qu'est-ce qu'un calligramme ? (qui ?)", back: "Un poème dont la disposition dessine une forme. Inventé par Guillaume Apollinaire.", chapter: "poesie" },
+    { front: "La fable (La Fontaine) ?", back: "Un court récit (souvent d'animaux) qui se termine par une morale : une argumentation indirecte.", chapter: "argumentation" }
   ];
 
   window.registerSubject('francais', {
