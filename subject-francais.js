@@ -29,7 +29,7 @@
 
     <div class="synth-section">
       <h2>Séquence 5 — Le mythe</h2>
-      <figure class="hfig hfig-float" style="max-width:160px"><img src="img/prometheus.jpg" alt="Prométhée" loading="lazy"><figcaption>Prométhée, qui vole le feu aux dieux</figcaption></figure>
+      <figure class="hfig hfig-float" style="max-width:160px"><img src="prometheus.jpg" alt="Prométhée" loading="lazy"><figcaption>Prométhée, qui vole le feu aux dieux</figcaption></figure>
       <p>Un <strong>mythe</strong> est un <strong>récit</strong> ancien, souvent <strong>anonyme</strong>, transmis d'abord <strong>oralement</strong>, qui met en scène des <strong>dieux</strong> et des <strong>héros</strong>.</p>
       <p>Ses <strong>fonctions</strong> :</p>
       <ul style="line-height:1.9;">
@@ -52,7 +52,7 @@
 
     <div class="synth-section">
       <h2>Séquence 7 — La comédie (théâtre)</h2>
-      <figure class="hfig hfig-float" style="max-width:150px"><img src="img/moliere.jpg" alt="Molière" loading="lazy"><figcaption>Molière, maître de la comédie</figcaption></figure>
+      <figure class="hfig hfig-float" style="max-width:150px"><img src="moliere.jpg" alt="Molière" loading="lazy"><figcaption>Molière, maître de la comédie</figcaption></figure>
       <p>Le <strong>théâtre</strong> est un texte <strong>joué</strong> sur scène. La <strong>comédie</strong> fait <strong>rire</strong> et finit bien ; la <strong>tragédie</strong> finit mal (personnages nobles, fatalité).</p>
       <p><strong>Vocabulaire :</strong> <strong>acte</strong> (grande partie), <strong>scène</strong> (sous-partie), <strong>réplique</strong> (ce que dit un personnage), <strong>tirade</strong> (longue réplique), <strong>monologue</strong> (seul en scène), <strong>aparté</strong> (au public, les autres « n'entendent pas »), <strong>didascalies</strong> (indications de mise en scène, en italique), <strong>quiproquo</strong> (malentendu, un pour un autre).</p>
       <p><strong>Les ressorts du comique :</strong> comique de <strong>mots</strong>, de <strong>gestes</strong>, de <strong>situation</strong>, de <strong>caractère</strong>, de <strong>répétition</strong>. Grand auteur : <strong>Molière</strong>.</p>

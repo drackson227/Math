@@ -10,7 +10,7 @@
   /* helper image */
   function fig(src, cap, w) {
     return '<figure class="hfig" style="max-width:' + (w || 170) + 'px">' +
-      '<img src="img/' + src + '" alt="' + cap.replace(/"/g, '') + '" loading="lazy">' +
+      '<img src="' + src + '" alt="' + cap.replace(/"/g, '') + '" loading="lazy">' +
       '<figcaption>' + cap + '</figcaption></figure>';
   }
 
@@ -217,7 +217,7 @@
 
   /* ---------------------- ONGLET BONUS : PERSONNAGES ---------------------- */
   function perso(img, name, dates, role) {
-    return '<div class="perso-card"><img src="img/' + img + '" alt="' + name + '" loading="lazy">' +
+    return '<div class="perso-card"><img src="' + img + '" alt="' + name + '" loading="lazy">' +
       '<h4>' + name + '</h4><div class="dates">' + dates + '</div><p>' + role + '</p></div>';
   }
   var PERSONNAGES = `
