@@ -2061,8 +2061,53 @@ document.addEventListener('keydown', (e) => {
 
 
 
+// Tableau de bord « À réviser aujourd'hui » — agrège TOUTES les matières.
+var DASH_ICONS = { maths: '📐', francais: '✍️', anglais: '🇬🇧', histoire: '🏛️', geo: '🗺️', chimie: '🧪', bio: '🧬' };
+var DASH_LABELS = { maths: 'Maths', francais: 'Français', anglais: 'Anglais', histoire: 'Histoire', geo: 'Géo', chimie: 'Chimie', bio: 'Bio' };
+function renderStudyDashboard() {
+  var el = document.getElementById('study-dashboard');
+  if (!el || !window.SUBJECTS) return;
+  var data = loadSavedData();
+  var fcData = data.flashcardData || {};
+  var mastered = data.masteredQuestions || {};
+  var examHist = data.examHistory || {};
+  var now = Date.now();
+  var order = ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'];
+  var rows = '', totalDue = 0;
+  order.forEach(function (key) {
+    var s = window.SUBJECTS[key];
+    if (!s || !s.ready || !s.content) return;
+    var c = s.content;
+    var cards = c.flashcards || [];
+    var due = cards.filter(function (card) { var r = fcData[card.front]; return !r || !r.due || new Date(r.due).getTime() <= now; }).length;
+    totalDue += due;
+    var qs = c.questions || [], chOrder = c.chapOrder || [], chLabels = c.chapLabels || {};
+    var weak = null, weakPct = 101;
+    chOrder.forEach(function (ch) {
+      var chq = qs.filter(function (q) { return q.chapter === ch; });
+      if (!chq.length) return;
+      var mas = chq.filter(function (q) { return (mastered[q.q] || 0) >= 2; }).length;
+      var pct = Math.round(mas / chq.length * 100);
+      if (pct < weakPct) { weakPct = pct; weak = ch; }
+    });
+    var examBest = (examHist[key] && examHist[key].length) ? examHist[key].reduce(function (m, h) { return Math.max(m, h.note); }, 0) : null;
+    var accent = (window.SUBJECT_ACCENTS && window.SUBJECT_ACCENTS[key]) || 'var(--color-nav)';
+    var dueBadge = due > 0 ? '<span style="color:#fbbf24; font-weight:700;">🔔 ' + due + ' carte' + (due > 1 ? 's' : '') + '</span>' : '<span style="color:#34d399;">✓ à jour</span>';
+    var weakTxt = (weak && weakPct < 100) ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span style="color:#34d399;">tout maîtrisé 🎉</span>';
+    var examTxt = examBest != null ? ' · 📝 record ' + examBest + '/20' : '';
+    rows += '<button type="button" onclick="setSubject(\'' + key + '\'); showSection(\'flashcards\');" style="display:block; width:100%; text-align:left; background:var(--bg-card); border:1px solid var(--border-subtle); border-left:5px solid ' + accent + '; border-radius:14px; padding:0.75rem 1rem; margin-bottom:0.55rem; cursor:pointer; color:var(--text-primary);">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:15px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' + dueBadge + '</div>' +
+      '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div></button>';
+  });
+  el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.3rem;">📅 À réviser aujourd\'hui</h3>' +
+    '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.9rem;">' +
+    (totalDue > 0 ? '🔔 <strong>' + totalDue + '</strong> carte' + (totalDue > 1 ? 's' : '') + ' à réviser au total. Clique une matière pour t\'y mettre.' : 'Tout est à jour, bravo ! Clique une matière pour t\'entraîner quand même.') +
+    '</p>' + rows;
+}
+
 function updateProfile() {
   const data = loadSavedData();
+  if (typeof renderStudyDashboard === 'function') renderStudyDashboard();
 
   // Clear dynamically added elements first
   document.querySelector('.stats-grid').innerHTML = '';
@@ -2434,6 +2479,7 @@ function rebuildFlashcardFilters() {
   const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
   let html = '<button type="button" class="fc-chip on" data-ch="all" onclick="filterFlashcards(\'all\')">Toutes</button>';
   html += '<button type="button" class="fc-chip fc-chip-due" data-ch="due" onclick="filterFlashcards(\'due\')">🔔 À réviser</button>';
+  html += '<button type="button" class="fc-chip fc-chip-fav" data-ch="fav" onclick="filterFlashcards(\'fav\')">⭐ Favoris</button>';
   order.forEach(function (ch) {
     html += '<button type="button" class="fc-chip" data-ch="' + ch + '" onclick="filterFlashcards(\'' + ch + '\')">' + (labels[ch] || ch) + '</button>';
   });
@@ -2448,6 +2494,9 @@ function _dueCards() {
 function filterFlashcards(chapter) {
   if (chapter === 'due') {
     filteredFlashcards = _dueCards();
+  } else if (chapter === 'fav') {
+    const favs = _favCards();
+    filteredFlashcards = flashcards.filter(c => favs.indexOf(c.front) >= 0);
   } else {
     filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
   }
@@ -2456,12 +2505,12 @@ function filterFlashcards(chapter) {
   document.querySelectorAll('#fc-filters .fc-chip').forEach(b => {
     b.classList.toggle('on', b.dataset.ch === chapter);
   });
-  // Filtre « à réviser » vide → message sympa au lieu d'une carte vide
-  if (chapter === 'due' && filteredFlashcards.length === 0) {
+  // Filtre vide (dues ou favoris) → message sympa au lieu d'une carte vide
+  if ((chapter === 'due' || chapter === 'fav') && filteredFlashcards.length === 0) {
     const c = document.getElementById('flashcard-content');
     const bc = document.getElementById('flashcard-back-content');
-    if (c) c.innerHTML = '🎉 Tout est à jour !';
-    if (bc) bc.innerHTML = 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».';
+    if (c) c.innerHTML = chapter === 'fav' ? '⭐ Aucun favori' : '🎉 Tout est à jour !';
+    if (bc) bc.innerHTML = chapter === 'fav' ? 'Touche « ☆ Favori » sur une carte pour la garder ici.' : 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».';
     const prog = document.getElementById('flashcard-progress'); if (prog) prog.textContent = '0 / 0';
     const ctrl = document.getElementById('flashcard-controls'); if (ctrl) ctrl.style.display = 'none';
     updateDueCount();
@@ -2510,6 +2559,8 @@ function updateDueCount() {
 function initFlashcards() {
   const data = loadSavedData();
   flashcardData = data.flashcardData || {};
+  fcWriteMode = localStorage.getItem('mathsgr2_fc_write') === '1';
+  const wb = document.getElementById('fc-write-btn'); if (wb) wb.classList.toggle('speaking', fcWriteMode);
   // B11 — reset filter to 'all' on every section entry so stale chapter filter clears
   if (filteredFlashcards !== null) { filterFlashcards('all'); }
   else { buildFlashcardQueue(); currentFlashcardIndex = 0; loadFlashcard(); }
@@ -2549,6 +2600,12 @@ function loadFlashcard() {
   }
   updateDueCount();
 
+  // Mode « écrire » + favori : reset à chaque carte
+  const _wi = document.getElementById('fc-write-input'); if (_wi) _wi.value = '';
+  const _wr = document.getElementById('fc-write-result'); if (_wr) _wr.innerHTML = '';
+  updateWriteUI();
+  updateFavStar(card.front);
+
   // Forcer MathJax à re-rendre après changement de innerHTML
   const fcFront = document.getElementById('flashcard-content');
   const fcBack = document.getElementById('flashcard-back-content');
@@ -2582,6 +2639,49 @@ function speakFlashcard() {
   window.speechSynthesis.speak(u);
 }
 
+// ── Mode « écrire la réponse » + favoris ──
+let fcWriteMode = false;
+function _favCards() { const d = loadSavedData(); return d.favoriteCards || []; }
+function toggleWriteMode() {
+  fcWriteMode = !fcWriteMode;
+  try { localStorage.setItem('mathsgr2_fc_write', fcWriteMode ? '1' : '0'); } catch (_) {}
+  const b = document.getElementById('fc-write-btn'); if (b) b.classList.toggle('speaking', fcWriteMode);
+  const wi = document.getElementById('fc-write-input'); if (wi && fcWriteMode) setTimeout(() => wi.focus(), 30);
+  updateWriteUI();
+}
+function updateWriteUI() {
+  const w = document.getElementById('fc-write');
+  if (w) w.style.display = (fcWriteMode && !isFlipped) ? 'block' : 'none';
+}
+function fcCheckWrite() {
+  const inp = document.getElementById('fc-write-input');
+  const res = document.getElementById('fc-write-result');
+  const val = inp ? inp.value.trim() : '';
+  if (res) res.innerHTML = val
+    ? '✍️ Ta réponse : <strong>' + val.replace(/</g, '&lt;') + '</strong> — compare avec la correction ci-dessous 👇'
+    : 'Voici la réponse 👇';
+  if (!isFlipped) flipCard();
+  updateWriteUI();
+}
+function toggleFavCard() {
+  const cards = getActiveFlashcards();
+  const card = cards[currentFlashcardIndex];
+  if (!card) return;
+  const d = loadSavedData();
+  d.favoriteCards = d.favoriteCards || [];
+  const idx = d.favoriteCards.indexOf(card.front);
+  if (idx >= 0) d.favoriteCards.splice(idx, 1); else d.favoriteCards.push(card.front);
+  saveData(d);
+  updateFavStar(card.front);
+}
+function updateFavStar(front) {
+  const b = document.getElementById('fc-fav-btn');
+  if (!b) return;
+  const fav = _favCards().indexOf(front) >= 0;
+  b.textContent = fav ? '⭐ Favori' : '☆ Favori';
+  b.classList.toggle('speaking', fav);
+}
+
 let hasFlippedOnce = false;
 function flipCard() {
   isFlipped = !isFlipped;
@@ -2602,6 +2702,7 @@ function flipCard() {
     inner.classList.remove('flipped');
     document.getElementById('flashcard-controls').style.display = 'none';
   }
+  updateWriteUI();
 }
 
 function rateCard(rating) {
@@ -2923,6 +3024,31 @@ function stopExamMode() {
   // Only show summary if quiz is still in progress (not already shown by answer()) (E2)
   const container = document.getElementById('quiz-container');
   if (container && !container.querySelector('.formula-box')) showQuizSummary();
+}
+
+// Quiz mixte : pioche des questions au hasard dans TOUTES les matières.
+function startMixedQuiz() {
+  var pool = [];
+  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (key) {
+    var s = window.SUBJECTS && window.SUBJECTS[key];
+    if (s && s.ready && s.content && s.content.questions) {
+      s.content.questions.forEach(function (q) { pool.push(q); });
+    }
+  });
+  if (!pool.length) return;
+  examActive = false;
+  window._examRun = false;
+  timerIds.forEach(function (id) { clearInterval(id); }); timerIds = [];
+  var ex = document.getElementById('exam-timer'); if (ex) ex.remove();
+  score = 0; answered = 0; skipped = 0; correctStreak = 0; currentActiveQuestion = 0; questionAnswered = [];
+  currentQuestions = shuffleArray([...pool]).slice(0, 10).map(function (q) {
+    var sh = shuffleOptions(q);
+    return Object.assign({}, q, { opts: sh.opts, ans: sh.ans });
+  });
+  showSection('quiz');
+  document.getElementById('quiz-start-screen').style.display = 'none';
+  document.getElementById('quiz-active-screen').style.display = 'block';
+  buildQuiz();
 }
 
 // ── SIDEBAR MOBILE ──

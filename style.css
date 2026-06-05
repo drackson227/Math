@@ -1587,3 +1587,7 @@ textarea:focus-visible,
 .fc-speak { background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-secondary); border-radius: 10px; padding: 5px 11px; font-size: 14px; cursor: pointer; transition: background .15s, color .15s; }
 .fc-speak:hover { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
 .fc-speak.speaking { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
+
+/* Puce Favoris (flashcards) */
+.fc-chip-fav { border-color: #fbbf24; color: #fbbf24; }
+.fc-chip-fav.on { background: #fbbf24; border-color: #fbbf24; color: #1a1407; }

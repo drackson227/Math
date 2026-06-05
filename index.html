@@ -316,7 +316,16 @@
     </div>
     <div id="fc-filters" style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; justify-content:center;"><!-- chips générés par rebuildFlashcardFilters() selon la matière --></div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
-    <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();" style="margin-bottom:0.7rem;">🔊 Écouter</button>
+    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:0.7rem;">
+      <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();">🔊 Écouter</button>
+      <button type="button" id="fc-write-btn" class="fc-speak" onclick="toggleWriteMode(); event.stopPropagation();">✏️ Écrire la réponse</button>
+      <button type="button" id="fc-fav-btn" class="fc-speak" onclick="toggleFavCard(); event.stopPropagation();">☆ Favori</button>
+    </div>
+    <div id="fc-write" style="display:none; max-width:480px; margin:0 auto 0.9rem;">
+      <input id="fc-write-input" type="text" placeholder="Tape ta réponse…" onkeydown="if(event.key==='Enter'){event.preventDefault();fcCheckWrite();} event.stopPropagation();" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px;">
+      <button type="button" onclick="fcCheckWrite(); event.stopPropagation();" class="nav-btn" style="margin-top:8px;">✅ Vérifier &amp; voir la réponse</button>
+      <p id="fc-write-result" style="margin-top:8px; font-size:14px;"></p>
+    </div>
     <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.75rem;">🔔 — à réviser aujourd'hui</p>
     <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
     <p style="text-align:center; font-size:11px; color:var(--text-secondary); opacity:0.55; margin-bottom:0.5rem;">
@@ -368,7 +377,8 @@
     <button id="daily-btn" onclick="startDailyChallenge()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(239,68,68,0.32);">🔥 Défi du jour — 5 questions</button>
     <button id="mp-launch-btn" onclick="openMultiplayer()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#22d3ee,#3b82f6); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(59,130,246,0.32);">🎮 Jouer à plusieurs</button>
     <button id="duel-launch-btn" onclick="openDuel()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#fb7185,#e11d48); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(225,29,72,0.32);">⚔️ Duel 1 contre 1</button>
-    <button id="missed-filter-btn" onclick="filterMissedOnly(); startQuiz();" style="display:block; margin:0 auto 1.5rem; padding:10px 20px; border-radius:8px; border:2px solid var(--color-droite); font-size:14px; cursor:pointer; background:var(--color-droite-light); color:var(--color-droite); font-weight:600;">⚠️ Réviser mes erreurs</button>
+    <button id="missed-filter-btn" onclick="filterMissedOnly(); startQuiz();" style="display:block; margin:0 auto 1rem; padding:10px 20px; border-radius:8px; border:2px solid var(--color-droite); font-size:14px; cursor:pointer; background:var(--color-droite-light); color:var(--color-droite); font-weight:600;">⚠️ Réviser mes erreurs</button>
+    <button id="mixed-quiz-btn" onclick="startMixedQuiz()" style="display:block; margin:0 auto 1.5rem; padding:10px 20px; border-radius:8px; border:2px solid var(--color-nav); font-size:14px; cursor:pointer; background:rgba(167,139,250,0.12); color:var(--color-nav); font-weight:600;">🎲 Quiz mixte — toutes les matières</button>
     <button onclick="startQuiz()" style="background:var(--color-nav); color:#fff; border:none; border-radius:12px; padding:16px 48px; font-size:18px; font-weight:700; cursor:pointer; box-shadow:var(--shadow-glow-nav);">▶ Commencer le quiz</button>
     <p id="best-score-display" style="margin-top:1.5rem; color:var(--text-secondary); font-size:14px;">Meilleur score : —</p>
 
@@ -534,6 +544,7 @@
   <div class="stats-grid">
     <!-- M8 — ces cartes sont générées dynamiquement par updateProfile() -->
   </div>
+  <div id="study-dashboard" style="margin:2rem 0;"></div>
   <h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">Historique des scores (7 dernières sessions)</h3>
   <canvas id="score-chart-canvas" width="600" height="200" style="width:100%; border-radius:12px; background:var(--bg-card); display:block;"></canvas>
 
