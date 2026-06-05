@@ -1316,6 +1316,18 @@ textarea:focus-visible,
 .perso-card p { font-size: 13px; margin: 6px 0 0; line-height: 1.4; }
 @media (max-width: 600px) { .perso-grid { grid-template-columns: repeat(2, 1fr); } .hfig-float { float: none; max-width: 100%; margin: 8px auto; } }
 
+/* ===== Échiquier de Punnett (génétique) ===== */
+.punnett { border-collapse: collapse; margin: 1rem auto; }
+.punnett th, .punnett td { border: 1px solid var(--color-nav); width: 66px; height: 56px; text-align: center; vertical-align: middle; }
+.punnett th { background: rgba(124,92,255,0.15); color: var(--color-nav); font-weight: 800; font-size: 18px; }
+.punnett th.corner { font-size: 13px; width: auto; padding: 0 10px; }
+.punnett input { width: 88%; height: 80%; box-sizing: border-box; border: none; background: transparent; text-align: center; font-size: 18px; font-weight: 800; color: var(--text-primary); outline: none; border-radius: 6px; }
+.punnett input:focus { box-shadow: inset 0 0 0 2px #7c3aed; }
+.punnett input.ok { background: #dcfce7; color: #15803d; }
+.punnett input.no { background: #fee2e2; color: #b91c1c; }
+.punnett-res { display: none; max-width: 520px; margin: 8px auto 0; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+.punnett-res.show { display: block; }
+
 /* ── Fiche de révision imprimable ── */
 #revision-sheet { display: none; }
 @media print {

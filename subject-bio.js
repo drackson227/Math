@@ -466,6 +466,26 @@
         <div class="simple-exp-content">Pense au cycle comme à la « vie » d'une cellule : elle <strong>grandit</strong>, elle <strong>photocopie</strong> son ADN (phase S), puis elle se <strong>coupe en deux</strong> (mitose). Avant de se diviser, chaque chromosome a été copié → il a 2 moitiés identiques (les <strong>chromatides-sœurs</strong>) collées au milieu (le <strong>centromère</strong>), d'où la forme en X. La mitose donne 2 cellules <strong>identiques</strong> à la cellule de départ : c'est comme ça que ton corps grandit et répare ses tissus.</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>6. La génétique : l'hérédité (Mendel)</h2>
+      <figure class="hfig hfig-float" style="max-width:140px"><img src="img/mendel.jpg" alt="Gregor Mendel" loading="lazy"><figcaption>Gregor Mendel (1822-1884), le père de la génétique</figcaption></figure>
+      <p><strong>L'hérédité</strong> = la <strong>transmission des caractères</strong> des parents aux enfants. <strong>Gregor Mendel</strong>, un moine, en a découvert les lois en croisant des <strong>petits pois</strong>.</p>
+      <p><strong>Vocabulaire essentiel :</strong></p>
+      <ul style="line-height:1.9;">
+        <li><strong>Gène</strong> : portion d'ADN qui code un caractère (ex. la couleur des yeux).</li>
+        <li><strong>Allèle</strong> : une version d'un gène. On en a <strong>2</strong> par gène (un de chaque parent).</li>
+        <li><strong>Dominant</strong> (lettre MAJUSCULE, ex. <em>A</em>) : s'exprime même seul. <strong>Récessif</strong> (minuscule, <em>a</em>) : ne s'exprime que si les <strong>2</strong> allèles sont récessifs.</li>
+        <li><strong>Homozygote</strong> : 2 allèles identiques (AA ou aa). <strong>Hétérozygote</strong> : 2 différents (Aa).</li>
+        <li><strong>Génotype</strong> : les allèles (AA, Aa, aa). <strong>Phénotype</strong> : ce qu'on voit (l'apparence).</li>
+      </ul>
+      <p>Exemple de Mendel : pois jaune pur (AA) × pois vert pur (aa) → en <strong>F1</strong> tous jaunes (<strong>Aa</strong>). On croise ensuite F1 × F1 → en <strong>F2</strong> le vert réapparaît !</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:16px;">Aa × Aa → 1 AA : 2 Aa : 1 aa (génotype) → 3 dominants : 1 récessif (phénotype)</div></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 L'exemple des yeux</button>
+        <div class="simple-exp-content">Les yeux <strong>bruns (B)</strong> sont dominants, les yeux <strong>bleus (b)</strong> récessifs. Deux parents aux yeux bruns mais <strong>porteurs</strong> (génotype <strong>Bb</strong> chacun) peuvent avoir un enfant aux <strong>yeux bleus</strong> : il faut qu'il reçoive un <strong>b</strong> du père ET un <strong>b</strong> de la mère (génotype <strong>bb</strong>). C'est <strong>1 chance sur 4</strong> ! On le visualise avec l'<strong>échiquier de Punnett</strong> → essaie-le dans l'onglet <strong>Exercices</strong>.</div>
+      </div>
+    </div>
   </div>`;
 
   sections.formules = `<div id="formules" class="section">
@@ -530,6 +550,18 @@
     ${labelExo('🐾', 'la cellule animale', 'cellule-animale-blank.png', ANIM_PTS)}
     ${labelExo('🌿', 'la cellule végétale', 'cellule-vegetale-blank.png', VEG_PTS)}
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 L'échiquier de Punnett — yeux bruns (B) × bleus (b)</h3>
+      <p style="color:var(--text-secondary); margin-bottom:0.8rem;">Deux parents aux yeux bruns sont <strong>porteurs</strong> (génotype <strong>Bb</strong>). Écris le génotype de chaque case (ex. « Bb »), puis clique sur <strong>Corriger</strong>.</p>
+      <table class="punnett">
+        <tr><th class="corner">Bb × Bb</th><th>B</th><th>b</th></tr>
+        <tr><th>B</th><td><input data-pa="BB" aria-label="case 1" autocomplete="off" spellcheck="false"></td><td><input data-pa="Bb" aria-label="case 2" autocomplete="off" spellcheck="false"></td></tr>
+        <tr><th>b</th><td><input data-pa="Bb" aria-label="case 3" autocomplete="off" spellcheck="false"></td><td><input data-pa="bb" aria-label="case 4" autocomplete="off" spellcheck="false"></td></tr>
+      </table>
+      <div class="lblexo-foot"><button class="step-btn" onclick="checkPunnett(this)">✓ Corriger</button>
+      <button class="step-btn" onclick="resetPunnett(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button></div>
+      <div class="punnett-res"></div>
+    </div>
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Quel type de cellule ?</h3>
       <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> une cellule possède un noyau, une paroi rigide, des chloroplastes et une grande vacuole. Quel type ?</p></div>
       <button class="step-btn" onclick="showExerciseStep(this, 301)">▶ Commencer</button>
@@ -584,7 +616,14 @@
     { q: "La mitose produit :", opts: ["2 cellules-filles identiques", "4 cellules différentes", "une seule grande cellule", "des gamètes"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "La mitose donne 2 cellules-filles identiques à la cellule-mère." },
     { q: "Les 2 moitiés identiques d'un chromosome dédoublé s'appellent :", opts: ["chromatides-sœurs", "nucléotides", "ribosomes", "centrioles"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Un chromosome en X = 2 chromatides-sœurs reliées par le centromère." },
     { q: "Qu'est-ce qui relie les deux chromatides-sœurs ?", opts: ["le centromère", "le noyau", "la membrane", "un ribosome"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Le centromère relie les 2 chromatides-sœurs (point de jonction de l'X)." },
-    { q: "Ordre correct des phases visibles de la mitose :", opts: ["Prophase → Métaphase → Anaphase → Télophase", "Anaphase → Prophase → Télophase → Métaphase", "Télophase → Anaphase → Métaphase → Prophase", "Métaphase → Prophase → Télophase → Anaphase"], ans: 0, chapter: "cycle", difficulty: "difficile", exp: "PMAT : Prophase, Métaphase, Anaphase, Télophase." }
+    { q: "Ordre correct des phases visibles de la mitose :", opts: ["Prophase → Métaphase → Anaphase → Télophase", "Anaphase → Prophase → Télophase → Métaphase", "Télophase → Anaphase → Métaphase → Prophase", "Métaphase → Prophase → Télophase → Anaphase"], ans: 0, chapter: "cycle", difficulty: "difficile", exp: "PMAT : Prophase, Métaphase, Anaphase, Télophase." },
+    { q: "Qui est considéré comme le père de la génétique ?", opts: ["Gregor Mendel", "Charles Darwin", "Louis Pasteur", "Isaac Newton"], ans: 0, chapter: "genetique", difficulty: "facile", exp: "Mendel a découvert les lois de l'hérédité avec ses petits pois." },
+    { q: "Une version d'un gène s'appelle :", opts: ["un allèle", "un organite", "un ribosome", "un tissu"], ans: 0, chapter: "genetique", difficulty: "facile", exp: "On a 2 allèles par gène (un de chaque parent)." },
+    { q: "Le génotype « Aa » est dit :", opts: ["hétérozygote", "homozygote", "récessif pur", "dominant pur"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Deux allèles différents → hétérozygote (AA ou aa = homozygote)." },
+    { q: "Un allèle récessif s'exprime seulement si :", opts: ["les 2 allèles sont récessifs (aa)", "il y a au moins un dominant", "on est hétérozygote", "jamais"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Récessif visible uniquement en aa ; le dominant masque le récessif." },
+    { q: "Génotype vs phénotype ?", opts: ["génotype = les allèles ; phénotype = l'apparence", "l'inverse", "ce sont des synonymes", "génotype = la taille"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Génotype = les gènes (AA, Aa, aa) ; phénotype = ce qu'on voit." },
+    { q: "Croisement Aa × Aa : quel rapport de phénotypes ?", opts: ["3 dominants : 1 récessif", "1 : 1", "tous identiques", "2 : 2"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Aa × Aa → 1 AA : 2 Aa : 1 aa → 3 dominants : 1 récessif." },
+    { q: "Deux parents aux yeux bruns porteurs (Bb) : un enfant aux yeux bleus (bb) est…", opts: ["possible (1 chance sur 4)", "impossible", "certain", "possible seulement si garçon"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Bb × Bb → 1/4 bb (bleus). L'enfant peut différer de ses parents." }
   ];
 
   var flashcards = [
@@ -604,7 +643,13 @@
     { front: "Quand l'ADN est-il répliqué ?", back: "Pendant la <strong>phase S</strong> de l'interphase.", chapter: "cycle" },
     { front: "Résultat de la mitose ?", back: "<strong>2 cellules-filles identiques</strong> à la cellule-mère (même ADN).", chapter: "cycle" },
     { front: "Phases visibles de la mitose ?", back: "Prophase → Métaphase → Anaphase → Télophase (PMAT).", chapter: "cycle" },
-    { front: "Chromatides-sœurs & centromère ?", back: "Un chromosome dédoublé (forme X) = 2 chromatides-sœurs identiques reliées par le <strong>centromère</strong>.", chapter: "cycle" }
+    { front: "Chromatides-sœurs & centromère ?", back: "Un chromosome dédoublé (forme X) = 2 chromatides-sœurs identiques reliées par le <strong>centromère</strong>.", chapter: "cycle" },
+    { front: "Qu'est-ce que l'hérédité ?", back: "La transmission des caractères des parents aux enfants. Étudiée par Mendel (petits pois).", chapter: "genetique" },
+    { front: "Gène vs allèle ?", back: "Gène = portion d'ADN codant un caractère. Allèle = une version du gène (on en a 2, un par parent).", chapter: "genetique" },
+    { front: "Dominant vs récessif ?", back: "Dominant (A) s'exprime même seul. Récessif (a) seulement si les 2 allèles sont récessifs (aa).", chapter: "genetique" },
+    { front: "Homozygote vs hétérozygote ?", back: "Homozygote = 2 allèles identiques (AA ou aa). Hétérozygote = 2 différents (Aa).", chapter: "genetique" },
+    { front: "Génotype vs phénotype ?", back: "Génotype = les allèles (AA/Aa/aa). Phénotype = l'apparence visible.", chapter: "genetique" },
+    { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes 3 dominants : 1 récessif. (Échiquier de Punnett.)", chapter: "genetique" }
   ];
 
   window.registerSubject('bio', {
@@ -615,8 +660,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '🧬 Notions clés', exercices: '🔬 Exercices' },
-      chapOrder: ['organisation', 'cellule', 'organites', 'adn', 'cycle'],
-      chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes', cycle: 'Cycle cellulaire & mitose' }
+      chapOrder: ['organisation', 'cellule', 'organites', 'adn', 'cycle', 'genetique'],
+      chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes', cycle: 'Cycle cellulaire & mitose', genetique: 'Génétique & hérédité' }
     }
   });
 })();

@@ -1096,6 +1096,34 @@ function resetLabelExo(btn) {
   if (corr) { corr.classList.remove('show'); corr.innerHTML = ''; }
 }
 
+function checkPunnett(btn) {
+  const card = btn.closest('.exercise-card');
+  if (!card) return;
+  const cells = card.querySelectorAll('.punnett input[data-pa]');
+  if (!cells.length) return;
+  let ok = 0;
+  cells.forEach((c) => {
+    const exp = c.getAttribute('data-pa').split('').sort().join('');
+    const val = (c.value || '').replace(/\s/g, '').split('').sort().join('');
+    const good = val === exp;
+    c.classList.remove('ok', 'no');
+    c.classList.add(good ? 'ok' : 'no');
+    if (good) ok++;
+  });
+  const res = card.querySelector('.punnett-res');
+  if (res) {
+    res.innerHTML = '<strong>' + ok + '/4</strong> — Génotypes : <strong>1 BB · 2 Bb · 1 bb</strong> → Phénotypes : <strong>3 bruns : 1 bleu</strong> (yeux bleus = bb, récessif → 1 chance sur 4). ' + (ok === 4 ? '🎉' : '');
+    res.classList.add('show');
+  }
+}
+function resetPunnett(btn) {
+  const card = btn.closest('.exercise-card');
+  if (!card) return;
+  card.querySelectorAll('.punnett input').forEach((c) => { c.value = ''; c.classList.remove('ok', 'no'); });
+  const res = card.querySelector('.punnett-res');
+  if (res) { res.classList.remove('show'); res.innerHTML = ''; }
+}
+
 function toggleWhyMethod(btn) {
   const content = btn.nextElementSibling;
   content.style.display = content.style.display === 'block' ? 'none' : 'block';
@@ -3699,9 +3727,43 @@ function isConceptMastered(chapter, concept, mastered) {
   return qs.some(q => (mastered[q.q] || 0) >= 2);
 }
 
+// Progression générique (toute matière sauf maths) : par chapitre, basée sur le Quiz.
+function renderProgressionGeneric(container) {
+  const data = loadSavedData();
+  const mastered = data.masteredQuestions || {};
+  const order = (typeof CHAP_ORDER !== 'undefined') ? CHAP_ORDER : [];
+  const labels = (typeof CHAP_LABELS !== 'undefined') ? CHAP_LABELS : {};
+  let totalQ = 0, totalMas = 0, html = '';
+  order.forEach((ch) => {
+    const qs = (typeof allQuestions !== 'undefined' ? allQuestions : []).filter((q) => q.chapter === ch);
+    if (!qs.length) return;
+    const mas = qs.filter((q) => (mastered[q.q] || 0) >= 2).length;
+    totalQ += qs.length; totalMas += mas;
+    const pct = Math.round(mas / qs.length * 100);
+    html += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.1rem 1.3rem; margin-bottom:1rem;">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.6rem;">' +
+      '<span style="font-size:17px; font-weight:700; color:var(--color-nav);">' + (labels[ch] || ch) + '</span>' +
+      '<span style="font-size:14px; color:var(--text-secondary);">' + mas + ' / ' + qs.length + ' questions maîtrisées</span></div>' +
+      '<div style="height:12px; background:var(--border-subtle); border-radius:8px; overflow:hidden;"><div style="height:100%; width:' + pct + '%; background:' + _statColor(pct) + '; border-radius:8px; transition:width .5s;"></div></div>' +
+      (mas < qs.length ? '<button class="nav-btn" style="margin-top:0.9rem; width:100%;" onclick="reviseChapter(\'' + ch + '\')">🎯 Réviser ce chapitre</button>' : '<p style="margin-top:0.8rem; text-align:center; color:var(--color-parabole); font-weight:600; font-size:14px;">🎉 Chapitre maîtrisé !</p>') +
+      '</div>';
+  });
+  container.innerHTML = html || '<p style="color:var(--text-secondary);">Réponds à quelques questions du <strong>Quiz</strong> pour suivre ta progression ici. 💪</p>';
+  const pct = totalQ ? Math.round(totalMas / totalQ * 100) : 0;
+  const pctEl = document.getElementById('prog-global-pct');
+  const barEl = document.getElementById('prog-global-bar');
+  const cntEl = document.getElementById('prog-global-count');
+  if (pctEl) pctEl.textContent = pct + ' %';
+  if (barEl) barEl.style.width = pct + '%';
+  if (cntEl) cntEl.textContent = totalMas + ' / ' + totalQ + ' questions maîtrisées';
+}
+
 function renderProgression() {
   const container = document.getElementById('prog-chapters');
-  if (!container || typeof learningConcepts === 'undefined') return;
+  if (!container) return;
+  // Hors maths : progression générique par chapitre (le détail « notions » est propre aux maths).
+  if (window.currentSubject && window.currentSubject !== 'maths') { renderProgressionGeneric(container); return; }
+  if (typeof learningConcepts === 'undefined') return;
   const data = loadSavedData();
   const mastered = data.masteredQuestions || {};
 
