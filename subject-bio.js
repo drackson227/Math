@@ -531,7 +531,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>6. La génétique : l'hérédité (Mendel)</h2>
+      <h2>7. La génétique : l'hérédité (Mendel)</h2>
       <figure class="hfig hfig-float" style="max-width:140px"><img src="mendel.jpg" alt="Gregor Mendel" loading="lazy"><figcaption>Gregor Mendel (1822-1884), le père de la génétique</figcaption></figure>
       <p><strong>L'hérédité</strong> = la <strong>transmission des caractères</strong> des parents aux enfants. <strong>Gregor Mendel</strong>, un moine, en a découvert les lois en croisant des <strong>petits pois</strong>.</p>
       <p><strong>Vocabulaire essentiel :</strong></p>
