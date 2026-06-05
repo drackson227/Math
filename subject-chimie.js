@@ -117,7 +117,8 @@
       </div>
       <div>
         <div class="formula-box"><h3>Réactions acide-base / métal</h3><div class="formula-main">acide + hydroxyde → sel + eau<br>acide + oxyde → sel + eau<br>acide + métal → sel + H₂</div></div>
-        <div class="formula-box"><h3>Mole, masse & gaz</h3><div class="formula-main">m = n · M<br>N = n · N<sub>A</sub><br>P · V = n · R · T</div><p class="note">N<sub>A</sub> ≈ 6,02·10²³ /mol · R ≈ 0,082 L·atm/(mol·K) · T en kelvins.</p></div>
+        <div class="formula-box"><h3>Mole, masse & gaz</h3><div class="formula-main">n = m / M &nbsp;↔&nbsp; m = n · M<br>N = n · N<sub>A</sub><br>P · V = n · R · T</div><p class="note">n en mol · m en g · M = masse molaire en g/mol · N<sub>A</sub> ≈ 6,02·10²³ /mol · R ≈ 0,082 L·atm/(mol·K) · T en kelvins.</p></div>
+        <div class="formula-box"><h3>Volume molaire des gaz (V<sub>m</sub>)</h3><div class="formula-main">n = V / V<sub>m</sub> &nbsp;↔&nbsp; V = n · V<sub>m</sub></div><p class="note">Pour un <strong>gaz</strong> : V en L, n en mol. <strong>V<sub>m</sub> = 22,4 L/mol</strong> aux <strong>CNTP</strong> (0 °C, 1 atm) · <strong>V<sub>m</sub> = 24,5 L/mol</strong> aux <strong>CSTP</strong> (25 °C, 1 atm).</p></div>
         <div class="formula-box"><h3>Concentration molaire</h3><div class="formula-main">C = n / V</div><p class="note">C en <strong>mol/L</strong> (mol·L⁻¹) · n en mol · V en <strong>litres</strong>. On note aussi [X] = concentration de l'espèce X.</p></div>
         <div class="formula-box"><h3>Concentration massique</h3><div class="formula-main">C<sub>m</sub> = m / V &nbsp;&nbsp;↔&nbsp;&nbsp; C<sub>m</sub> = C · M</div><p class="note">C<sub>m</sub> en <strong>g/L</strong> · m en g · V en L. Lien avec la molaire : on multiplie par la masse molaire M.</p></div>
         <div class="formula-box"><h3>Dilution</h3><div class="formula-main">C₁ · V₁ = C₂ · V₂</div><p class="note">La quantité de soluté ne change pas quand on dilue. (n = C·V conservé.) Facteur de dilution F = V₂/V₁ = C₁/C₂.</p></div>
@@ -295,6 +296,8 @@
     { q: "Le nombre de particules se calcule par :", opts: ["N = n · Nₐ", "N = n / Nₐ", "N = M · Nₐ", "N = n · M"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "N = n · Nₐ avec Nₐ ≈ 6,02·10²³ /mol." },
     { q: "La loi des gaz parfaits s'écrit :", opts: ["P·V = n·R·T", "P·V = n/R·T", "P/V = n·R·T", "P·V = R·T/n"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "PV = nRT, avec T en kelvins." },
     { q: "Dans PV = nRT, la température doit être exprimée en :", opts: ["kelvins (K)", "degrés Celsius", "degrés Fahrenheit", "joules"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "T en kelvins : T(K) = θ(°C) + 273." },
+    { q: "Le volume molaire d'un gaz aux CNTP (0 °C, 1 atm) vaut :", opts: ["22,4 L/mol", "24,5 L/mol", "1 L/mol", "6,02·10²³ L/mol"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "Vm = 22,4 L/mol aux CNTP ; 24,5 L/mol aux CSTP (25 °C). V = n · Vm." },
+    { q: "Pour un gaz, on relie volume et quantité de matière par :", opts: ["V = n · Vm", "V = n / Vm", "V = m · Vm", "V = Vm / n"], ans: 0, chapter: "mole", difficulty: "intermediaire", exp: "V = n · Vm (et n = V / Vm), avec Vm = 22,4 L/mol aux CNTP." },
     { q: "Quelle est la 1ʳᵉ étape d'un problème stœchiométrique ?", opts: ["Écrire l'équation pondérée", "Calculer la masse molaire", "Convertir en litres", "Mesurer la température"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "Sans équation pondérée, on ne connaît pas les proportions entre composés." },
     { q: "Pour comparer des réactifs, on convertit leurs masses en :", opts: ["moles (n = m/M)", "litres", "grammes par mole", "degrés"], ans: 0, chapter: "stoechio", difficulty: "facile", exp: "L'équation raisonne en moles : on passe des grammes aux moles avec n = m/M." },
     { q: "n = m/M : si m = 100 g et M = 55,86 g/mol, alors n ≈", opts: ["1,79 mol", "5,59 mol", "0,56 mol", "155,9 mol"], ans: 0, chapter: "stoechio", difficulty: "intermediaire", exp: "n = 100 / 55,86 ≈ 1,79 mol." },
@@ -317,6 +320,8 @@
     { front: "m = ? (masse)", back: "m = n · M (n = quantité de matière en mol, M = masse molaire g/mol)", chapter: "mole" },
     { front: "Nombre de particules N = ?", back: "N = n · Nₐ (Nₐ ≈ 6,02·10²³ /mol)", chapter: "mole" },
     { front: "Loi des gaz parfaits ?", back: "P·V = n·R·T (R ≈ 0,082 L·atm/mol·K, T en kelvins)", chapter: "mole" },
+    { front: "Volume molaire Vm d'un gaz ?", back: "V = n · Vm (et n = V / Vm). Vm = 22,4 L/mol aux CNTP (0 °C) · 24,5 L/mol aux CSTP (25 °C).", chapter: "mole" },
+    { front: "Concentration molaire C = ?", back: "C = n / V (mol/L). Donc n = C · V et V = n / C.", chapter: "mole" },
     { front: "n = ? (quantité de matière)", back: "n = m / M (m en g, M masse molaire en g/mol). Et m = n · M.", chapter: "stoechio" },
     { front: "Étapes d'un problème stœchiométrique ?", back: "1) équation pondérée · 2) lecture molaire + données · 3) n = m/M · 4) proportions (n final) · 5) m = n·M.", chapter: "stoechio" },
     { front: "Réactif limitant ?", back: "Le réactif qui s'épuise en premier ; il fixe la quantité de produit formé.", chapter: "stoechio" },

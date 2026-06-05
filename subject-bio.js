@@ -323,11 +323,11 @@
     { l: 11, t: 76.5, w: 17.5, a: 'Réticulum endoplasmique lisse' }, { l: 80, t: 88.5, w: 13, a: 'Membrane plasmique' }, { l: 12.3, t: 92.8, w: 15.5, a: 'Mitochondrie' }
   ];
   var VEG_PTS = [
-    { l: 24, t: 2.3, w: 17, a: 'Paroi cellulaire' }, { l: 42, t: 1, w: 20, a: 'Peroxysome' }, { l: 0.5, t: 14.4, w: 22, a: 'Membrane cellulaire' },
-    { l: 6, t: 21.7, w: 16, a: 'Chloroplaste' }, { l: 5, t: 28.8, w: 18, a: 'Ponctuation avec plasmodesme' },
-    { l: 5, t: 55, w: 22, a: 'Mitochondrie' }, { l: 1, t: 65, w: 20, a: 'Vacuole centrale' }, { l: 74, t: 21, w: 14, a: 'Cytosol' },
-    { l: 71, t: 28.5, w: 22, a: 'Réticulum endoplasmique rugueux' }, { l: 75, t: 47, w: 13, a: 'Noyau' }, { l: 75, t: 55, w: 15, a: 'Nucléole' },
-    { l: 70, t: 60, w: 23, a: 'Réticulum endoplasmique lisse' }, { l: 60, t: 75, w: 30, a: 'Appareil de Golgi' }
+    { l: 23, t: 2, w: 16, a: 'Paroi cellulaire' }, { l: 43, t: 2, w: 18, a: 'Peroxysome' }, { l: 0.5, t: 13, w: 22, a: 'Membrane cellulaire' },
+    { l: 4, t: 22, w: 17, a: 'Chloroplaste' }, { l: 3, t: 31, w: 20, a: 'Ponctuation avec plasmodesme' },
+    { l: 4, t: 52, w: 21, a: 'Mitochondrie' }, { l: 0.5, t: 64, w: 21, a: 'Vacuole centrale' }, { l: 74, t: 20, w: 15, a: 'Cytosol' },
+    { l: 72, t: 29, w: 23, a: 'Réticulum endoplasmique rugueux' }, { l: 76, t: 44, w: 13, a: 'Noyau' }, { l: 75, t: 54, w: 15, a: 'Nucléole' },
+    { l: 71, t: 63, w: 23, a: 'Réticulum endoplasmique lisse' }, { l: 58, t: 76, w: 30, a: 'Appareil de Golgi' }
   ];
 
   var sections = {};
