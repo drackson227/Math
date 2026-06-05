@@ -34,6 +34,7 @@
       <p>La Belgique compte <strong>10 provinces</strong> : 5 en Flandre, 5 en Wallonie. <strong>Bruxelles-Capitale</strong> n'appartient à aucune province.</p>
       <p><strong>Flandre (nord) :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.<br>
          <strong>Wallonie (sud) :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</p>
+      <figure class="hfig" style="max-width:440px; display:block; margin:1rem auto;"><img src="img/belgique_carte.jpg" alt="Carte des provinces de Belgique" loading="lazy"><figcaption>Les 10 provinces de Belgique (Flandre au nord, Wallonie au sud).</figcaption></figure>
       <div class="key-rule"><div class="formula-main">10 provinces = 5 (Flandre) + 5 (Wallonie) · Bruxelles = à part</div></div>
     </div>
 
@@ -202,6 +203,7 @@
       questions: questions,
       flashcards: flashcards,
       demos: {},
+      navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
       chapOrder: ['belgique', 'relief', 'hydro', 'biocarburants'],
       chapLabels: { belgique: 'La Belgique', relief: 'Relief', hydro: 'Hydrographie', biocarburants: 'Biocarburants' }
     }

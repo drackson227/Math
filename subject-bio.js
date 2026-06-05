@@ -298,14 +298,18 @@
 
   // ===== Exercice interactif « légende le schéma » (réutilisable) =====
   function labelExo(emoji, title, img, pts) {
-    var boxes = pts.map(function (p, i) {
-      return '<span class="lx" style="left:' + p.l + '%; top:' + p.t + '%; width:' + p.w + '%;">' +
-        '<input type="text" data-answer="' + p.a.replace(/"/g, '&quot;') + '" aria-label="structure ' + (i + 1) + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + (i + 1) + '"/></span>';
+    var marks = pts.map(function (p, i) {
+      return '<span class="lx-mark" style="left:' + p.l + '%; top:' + p.t + '%;">' + (i + 1) + '</span>';
+    }).join('');
+    var lis = pts.map(function (p, i) {
+      return '<li><span class="lx-num">' + (i + 1) + '</span>' +
+        '<input type="text" data-answer="' + p.a.replace(/"/g, '&quot;') + '" aria-label="structure ' + (i + 1) + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure ' + (i + 1) + '…"/></li>';
     }).join('');
     return '<div class="exercise-card">' +
       '<h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">' + emoji + ' Légende le schéma — ' + title + '</h3>' +
-      '<p style="color:var(--text-secondary); margin-bottom:1rem;">Écris le nom de chaque structure dans sa case (numérotée), puis clique sur <strong>Corriger</strong>.</p>' +
-      '<div class="lblexo"><img src="' + img + '" alt="Schéma à légender : ' + title + '" loading="lazy"/>' + boxes + '</div>' +
+      '<p style="color:var(--text-secondary); margin-bottom:1rem;">Repère chaque numéro sur le schéma (au bout de la flèche), écris la structure dans la liste, puis clique sur <strong>Corriger</strong>.</p>' +
+      '<div class="lblexo"><img src="' + img + '" alt="Schéma à légender : ' + title + '" loading="lazy"/>' + marks + '</div>' +
+      '<ol class="lblexo-list">' + lis + '</ol>' +
       '<div class="lblexo-foot"><button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>' +
       '<button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>' +
       '<span class="lblexo-score"></span></div><div class="lblexo-corr"></div></div>';
@@ -610,6 +614,7 @@
       questions: questions,
       flashcards: flashcards,
       demos: {},
+      navLabels: { formules: '🧬 Notions clés', exercices: '🔬 Exercices' },
       chapOrder: ['organisation', 'cellule', 'organites', 'adn', 'cycle'],
       chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes', cycle: 'Cycle cellulaire & mitose' }
     }

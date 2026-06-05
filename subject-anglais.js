@@ -187,6 +187,7 @@
       questions: questions,
       flashcards: flashcards,
       demos: {},
+      navLabels: { formules: '📌 Grammar', exercices: '🎯 Exercises' },
       chapOrder: ['perfect', 'modals', 'vocab', 'skills'],
       chapLabels: { perfect: 'Present perfect', modals: 'Modals', vocab: 'Vocabulary', skills: 'Skills & oral' }
     }

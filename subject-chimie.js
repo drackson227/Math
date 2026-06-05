@@ -336,6 +336,7 @@
       questions: questions,
       flashcards: flashcards,
       demos: {},
+      navLabels: { exercices: '🎯 Exercices' },
       chapOrder: ['ponderation', 'combustion', 'types', 'mole', 'stoechio'],
       chapLabels: { ponderation: 'Pondération', combustion: 'Combustions', types: 'Types de réactions', mole: 'Mole & gaz', stoechio: 'Stœchiométrie & réactif limitant' }
     }

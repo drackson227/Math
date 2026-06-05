@@ -208,19 +208,22 @@
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
   <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
   <button class="subj-btn" data-subj="anglais" onclick="setSubject('anglais')">🇬🇧 Anglais</button>
-  <button class="subj-btn" data-subj="histoire" onclick="setSubject('histoire')">🌍 Histoire-Géo</button>
+  <button class="subj-btn" data-subj="histoire" onclick="setSubject('histoire')">🏛️ Histoire</button>
+  <button class="subj-btn" data-subj="geo" onclick="setSubject('geo')">🗺️ Géo</button>
   <button class="subj-btn" data-subj="chimie" onclick="setSubject('chimie')">🧪 Chimie</button>
   <button class="subj-btn" data-subj="bio" onclick="setSubject('bio')">🧬 Bio</button>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
   <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
   <button class="nav-btn" onclick="openSearch()" style="border-color:var(--color-nav);">🔍 Rechercher</button>
-  <button class="nav-btn active" onclick="showSection(event,'synthese')">📚 Synthèse</button>
-  <button class="nav-btn" onclick="showSection(event,'formules')">🧮 Formules clés</button>
-  <button class="nav-btn" onclick="showSection(event,'methodes')">📝 Méthodes</button>
-  <button class="nav-btn" onclick="showSection(event,'exercices')">✏️ Exercices guidés</button>
+  <button class="nav-btn active" data-sec="synthese" onclick="showSection(event,'synthese')">📚 Synthèse</button>
+  <button class="nav-btn" data-sec="formules" onclick="showSection(event,'formules')">🧮 Formules clés</button>
+  <button class="nav-btn" data-sec="methodes" onclick="showSection(event,'methodes')">📝 Méthodes</button>
+  <button class="nav-btn" data-sec="exercices" onclick="showSection(event,'exercices')">✏️ Exercices guidés</button>
+  <button class="nav-btn" id="nav-extra1" data-extra style="display:none;" onclick="showSection(event,'extra1')">⭐ Extra 1</button>
+  <button class="nav-btn" id="nav-extra2" data-extra style="display:none;" onclick="showSection(event,'extra2')">⭐ Extra 2</button>
   <button class="nav-btn" data-math-only onclick="showSection(event,'graphiques')">📊 Graphiques</button>
-  <button class="nav-btn" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
+  <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
   <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
   <button class="nav-btn" onclick="showSection(event,'mesexos')">🛠️ Mes exercices</button>
   <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
@@ -466,6 +469,9 @@
 </div>
 
 <div id="erreurs" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="extra1" class="section"><!-- onglet bonus défini par la matière --></div>
+<div id="extra2" class="section"><!-- onglet bonus défini par la matière --></div>
 
 <div id="chat" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">💬 Chat Mondial</h2>

@@ -73,6 +73,37 @@
     sel.innerHTML = html;
   }
 
+  // Personnalisation des onglets par matière : renommer + ajouter des onglets bonus.
+  var NAV_DEFAULTS = null;
+  function applyNav(content) {
+    if (!NAV_DEFAULTS) {
+      NAV_DEFAULTS = {};
+      Array.prototype.forEach.call(document.querySelectorAll('.nav-btn[data-sec]'), function (b) {
+        NAV_DEFAULTS[b.getAttribute('data-sec')] = b.innerHTML;
+      });
+    }
+    var labels = (content && content.navLabels) || {};
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-btn[data-sec]'), function (b) {
+      var id = b.getAttribute('data-sec');
+      b.innerHTML = labels[id] || NAV_DEFAULTS[id];
+    });
+    // onglets bonus (max 2) : #nav-extra1/#extra1 et #nav-extra2/#extra2
+    var extras = (content && content.extraTabs) || [];
+    for (var i = 1; i <= 2; i++) {
+      var btn = document.getElementById('nav-extra' + i);
+      var sec = document.getElementById('extra' + i);
+      var def = extras[i - 1];
+      if (btn && sec && def) {
+        btn.innerHTML = def.label;
+        btn.style.display = '';
+        sec.innerHTML = def.html;
+      } else {
+        if (btn) btn.style.display = 'none';
+        if (sec) sec.innerHTML = '';
+      }
+    }
+  }
+
   function applyContent(c) {
     if (!c) return;
     if (c.questions)  allQuestions = c.questions;
@@ -134,14 +165,18 @@
     });
 
     // recharger le contenu seulement si la matière change (le DOM contient déjà le contenu chargé)
+    var content = (key === 'maths') ? mathsSnapshot : s.content;
     if (key !== loaded) {
-      applyContent(key === 'maths' ? mathsSnapshot : s.content);
+      applyContent(content);
+      applyNav(content);
       loaded = key;
       rebuildChapterFilter();
       try { if (typeof showSection === 'function') showSection('synthese'); } catch (_) {}
       resetEngine();
       try { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([document.body]); } catch (_) {}
       try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) {}
+    } else {
+      applyNav(content);
     }
     updateQuizHeader(key);
     // Reconstruit les éléments dépendant de la matière même au tout premier chargement

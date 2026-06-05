@@ -1059,9 +1059,9 @@ function _escHtml(s) { return (s || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;'
 function checkLabelExo(btn) {
   const card = btn.closest('.exercise-card') || btn.closest('.lblexo-wrap');
   if (!card) return;
-  const box = card.querySelector('.lblexo');
-  if (!box) return;
-  const inputs = box.querySelectorAll('input[data-answer]');
+  const inputs = card.querySelectorAll('input[data-answer]');
+  if (!inputs.length) return;
+  const marks = card.querySelectorAll('.lblexo .lx-mark');
   let ok = 0;
   const items = [];
   inputs.forEach((inp, idx) => {
@@ -1071,11 +1071,11 @@ function checkLabelExo(btn) {
     const good = val.length >= 3 && (val === ans || ans.indexOf(val) === 0 || val.indexOf(ans) === 0 || (' ' + ans + ' ').indexOf(' ' + val + ' ') >= 0 || (' ' + val + ' ').indexOf(' ' + ans + ' ') >= 0);
     inp.classList.remove('ok', 'no');
     inp.classList.add(good ? 'ok' : 'no');
+    if (marks[idx]) { marks[idx].classList.remove('ok', 'no'); marks[idx].classList.add(good ? 'ok' : 'no'); }
     if (good) ok++;
     const mine = good ? '' : '<span class="mine">' + (_escHtml(inp.value.trim()) || '(vide)') + '</span> → ';
     items.push('<li class="' + (good ? 'okk' : 'bad') + '"><span class="ico">' + (good ? '✅' : '❌') + '</span><span><strong>' + (idx + 1) + '.</strong> ' + mine + '<span class="good">' + _escHtml(answer) + '</span></span></li>');
   });
-  box.classList.add('corrected');
   const n = inputs.length;
   const sc = card.querySelector('.lblexo-score');
   if (sc) sc.textContent = ok + ' / ' + n + (ok === n ? '  🎉' : '');
@@ -1088,11 +1088,8 @@ function checkLabelExo(btn) {
 function resetLabelExo(btn) {
   const card = btn.closest('.exercise-card');
   if (!card) return;
-  const box = card.querySelector('.lblexo');
-  if (box) {
-    box.classList.remove('corrected');
-    box.querySelectorAll('input[data-answer]').forEach((inp) => { inp.value = ''; inp.classList.remove('ok', 'no'); });
-  }
+  card.querySelectorAll('input[data-answer]').forEach((inp) => { inp.value = ''; inp.classList.remove('ok', 'no'); });
+  card.querySelectorAll('.lblexo .lx-mark').forEach((m) => m.classList.remove('ok', 'no'));
   const sc = card.querySelector('.lblexo-score');
   if (sc) sc.textContent = '';
   const corr = card.querySelector('.lblexo-corr');
