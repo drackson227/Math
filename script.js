@@ -640,6 +640,11 @@ async function shareScore() {
 function printRevisionSheet() {
   var sheet = document.getElementById('revision-sheet');
   if (!sheet) return;
+  // Matières non-maths : fiche générée à partir des flashcards (Q → R), groupées par chapitre.
+  if (window.currentSubject && window.currentSubject !== 'maths') {
+    printRevisionSheetGeneric(sheet);
+    return;
+  }
   var section = function (title, color, items) {
     return '<div class="rs-block"><h2 style="color:' + color + '">' + title + '</h2>' +
       items.map(function (it) {
@@ -675,6 +680,37 @@ function printRevisionSheet() {
       ['Distance point-droite', 'd=\\tfrac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}']
     ]) +
     '</div>';
+  var doPrint = function () { setTimeout(function () { window.print(); }, 60); };
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([sheet]).then(doPrint).catch(doPrint);
+  } else { doPrint(); }
+}
+
+// Fiche de révision générique (toute matière) : bâtie depuis les flashcards, groupées par chapitre.
+function _stripTags(s) { return String(s).replace(/<[^>]+>/g, ''); }
+function printRevisionSheetGeneric(sheet) {
+  var cards = (typeof flashcards !== 'undefined' ? flashcards : []) || [];
+  var order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER && CHAP_ORDER.length) ? CHAP_ORDER : [];
+  var labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
+  var byChap = {};
+  cards.forEach(function (c) { var ch = c.chapter || 'autres'; (byChap[ch] = byChap[ch] || []).push(c); });
+  var chaps = order.filter(function (ch) { return byChap[ch]; });
+  Object.keys(byChap).forEach(function (ch) { if (chaps.indexOf(ch) < 0) chaps.push(ch); });
+  var palette = ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f472b6', '#22d3ee', '#fb7185', '#c084fc'];
+  var subEl = document.getElementById('app-subtitle');
+  var subtitle = subEl ? (subEl.textContent || '') : '';
+  var titleMain = subtitle.split('—')[0].trim() || 'Révision';
+  var blocks = chaps.map(function (ch, i) {
+    var color = palette[i % palette.length];
+    var items = byChap[ch].map(function (c) {
+      return '<div class="rs-item rs-qa"><span class="rs-label">' + _stripTags(c.front) + '</span><span class="rs-answer">' + c.back + '</span></div>';
+    }).join('');
+    return '<div class="rs-block"><h2 style="color:' + color + '">' + (labels[ch] || ch) + '</h2>' + items + '</div>';
+  }).join('');
+  sheet.innerHTML =
+    '<div class="rs-head"><h1>📄 Fiche de révision — ' + titleMain + '</h1>' +
+    '<p>' + subtitle + ' · drackson227.github.io/Math</p></div>' +
+    '<div class="rs-grid">' + (blocks || '<p>Pas encore de fiches pour cette matière.</p>') + '</div>';
   var doPrint = function () { setTimeout(function () { window.print(); }, 60); };
   if (window.MathJax && MathJax.typesetPromise) {
     MathJax.typesetPromise([sheet]).then(doPrint).catch(doPrint);
@@ -3750,7 +3786,8 @@ function renderProgressionGeneric(container) {
       (mas < qs.length ? '<button class="nav-btn" style="margin-top:0.9rem; width:100%;" onclick="reviseChapter(\'' + ch + '\')">🎯 Réviser ce chapitre</button>' : '<p style="margin-top:0.8rem; text-align:center; color:var(--color-parabole); font-weight:600; font-size:14px;">🎉 Chapitre maîtrisé !</p>') +
       '</div>';
   });
-  container.innerHTML = html || '<p style="color:var(--text-secondary);">Réponds à quelques questions du <strong>Quiz</strong> pour suivre ta progression ici. 💪</p>';
+  container.innerHTML = (html || '<p style="color:var(--text-secondary);">Réponds à quelques questions du <strong>Quiz</strong> pour suivre ta progression ici. 💪</p>') +
+    '<button type="button" onclick="printRevisionSheet()" style="display:block; width:100%; margin-top:0.6rem; padding:11px 16px; border-radius:14px; border:none; background:linear-gradient(135deg, var(--color-nav), #7c3aed); color:#fff; font-size:14px; font-weight:700; cursor:pointer;">📄 Fiche de révision (PDF) — tout l\'essentiel de la matière</button>';
   const pct = totalQ ? Math.round(totalMas / totalQ * 100) : 0;
   const pctEl = document.getElementById('prog-global-pct');
   const barEl = document.getElementById('prog-global-bar');
