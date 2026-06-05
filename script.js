@@ -58,7 +58,9 @@ function loadSavedData() {
     flashcardData: {},
     journalEntries: [],
     pomodorosCompleted: 0,
-    customExercises: []
+    customExercises: [],
+    ficheNotes: {},
+    badgeEarned: []
   };
 }
 
@@ -2216,27 +2218,8 @@ function updateProfile() {
   badgesSectionNew.innerHTML = `<h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">🏆 Badges</h3><div id="badges-container" style="display:flex; gap:10px; flex-wrap:wrap;"></div>`;
   document.getElementById('profil').appendChild(badgesSectionNew);
   
-  const badgesContainer = document.getElementById('badges-container');
-  const badgeIcons = {
-    'Expert GR2': '🌟',
-    'Analyste': '📊',
-    'Persévérance': '🔥',
-    'Quiz parfait': '💯',
-    'Chapitre maîtrisé': '🎯',
-    '10 bonnes d\'affilée': '🔥'
-  };
-  
-  if (data.badges && data.badges.length > 0) {
-    data.badges.forEach(badge => {
-      const badgeEl = document.createElement('div');
-      badgeEl.style.cssText = 'background:var(--color-nav); color:white; padding:8px 16px; border-radius:20px; font-size:14px; display:flex; align-items:center; gap:8px;';
-      badgeEl.innerHTML = `${badgeIcons[badge] || '🏅'} ${badge}`;
-      badgesContainer.appendChild(badgeEl);
-    });
-  } else {
-    badgesContainer.innerHTML = '<p style="color:var(--text-secondary);">Aucun badge encore débloqué. Continuez à pratiquer !</p>';
-  }
-  
+  if (typeof renderBadgeShowcase === 'function') renderBadgeShowcase();
+
   // Calendar heatmap
   const calendarSectionNew = document.createElement('div');
   calendarSectionNew.style.marginTop = '2rem';
@@ -2348,6 +2331,8 @@ function updateProfile() {
   }
   confSection.innerHTML = confInner;
   document.getElementById('profil').appendChild(confSection);
+
+  if (typeof renderProgressCharts === 'function') renderProgressCharts();
 
   const canvas = document.getElementById('score-chart-canvas');
   if (canvas) {
@@ -4270,6 +4255,12 @@ function openInfoCard(key, fromBack) {
   if (info.cours) html += '<div class="imd-block imd-cours"><h4>📚 Le cours</h4>' + autolinkInfo(info.cours, key) + '</div>';
   if (info.exam) html += '<div class="imd-block imd-exam"><h4>🎯 Pour l\'examen / révision</h4>' + autolinkInfo(info.exam, key) + '</div>';
   if (info.anecdote) html += '<div class="imd-anecdote"><h4>💡 Le sais-tu ?</h4>' + autolinkInfo(info.anecdote, key) + '</div>';
+  // Mes notes perso (sauvegardées en local, par fiche)
+  var _note = '';
+  try { _note = ((loadSavedData().ficheNotes) || {})[key] || ''; } catch (_) {}
+  html += '<div class="imd-block imd-notes"><h4>📝 Mes notes <span class="imd-notes-saved" id="fiche-note-saved"></span></h4>' +
+    '<textarea id="fiche-note-input" class="fiche-note-area" placeholder="Écris ici tes astuces, moyens mnémotechniques, points à retenir pour l\'examen…" oninput="saveFicheNote(\'' + key + '\', this.value)">' +
+    _note.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</textarea></div>';
   body.innerHTML = html;
   body.scrollTop = 0;
   modal.classList.add('open');
@@ -4423,6 +4414,7 @@ var DAILY_GOAL = 20;
 function _today() { return new Date().toISOString().slice(0, 10); }
 function _getStudy(data) {
   data.study = data.study || { totalSec: 0, day: _today(), daySec: 0, dayActions: 0 };
+  data.study.history = data.study.history || {};
   if (data.study.day !== _today()) { data.study.day = _today(); data.study.daySec = 0; data.study.dayActions = 0; }
   return data.study;
 }
@@ -4438,7 +4430,11 @@ function startStudyTimer() {
   if (_studyTick) return;
   _studyTick = setInterval(function () {
     if (document.visibilityState && document.visibilityState !== 'visible') return;
-    var d = loadSavedData(); var s = _getStudy(d); s.totalSec += 30; s.daySec += 30; saveData(d);
+    var d = loadSavedData(); var s = _getStudy(d); s.totalSec += 30; s.daySec += 30;
+    var t = _today(); s.history[t] = (s.history[t] || 0) + 30;
+    // garde au plus ~90 jours d'historique
+    var hk = Object.keys(s.history); if (hk.length > 90) { hk.sort().slice(0, hk.length - 90).forEach(function (k) { delete s.history[k]; }); }
+    saveData(d);
   }, 30000);
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(startStudyTimer, 1500); });
@@ -4478,3 +4474,157 @@ function showRevisionReminder() {
   } catch (_) {}
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(showRevisionReminder, 1800); });
+
+/* ════════════ Mes notes perso (par fiche) ════════════ */
+function saveFicheNote(key, val) {
+  try {
+    var d = loadSavedData(); d.ficheNotes = d.ficheNotes || {};
+    if (val && val.trim()) d.ficheNotes[key] = val; else delete d.ficheNotes[key];
+    saveData(d);
+  } catch (_) {}
+  var s = document.getElementById('fiche-note-saved');
+  if (s) { s.textContent = '✓ enregistré'; clearTimeout(window._fnT); window._fnT = setTimeout(function () { var e = document.getElementById('fiche-note-saved'); if (e) e.textContent = ''; }, 1500); }
+}
+
+/* ════════════ Badges & récompenses ════════════ */
+function _badgeCtx(data) {
+  var mastered = data.masteredQuestions || {};
+  var exam = data.examHistory || {};
+  var bestExam = 0, examCount = 0;
+  Object.keys(exam).forEach(function (k) { (exam[k] || []).forEach(function (h) { bestExam = Math.max(bestExam, h.note || 0); examCount++; }); });
+  var st = data.study || {};
+  var subjMastered = 0;
+  if (window.SUBJECTS) {
+    Object.keys(window.SUBJECTS).forEach(function (key) {
+      var s = window.SUBJECTS[key]; var qs = s && s.content && s.content.questions;
+      if (!s || !s.ready || !qs || !qs.length) return;
+      var done = qs.filter(function (q) { return (mastered[q.q] || 0) >= 1; }).length;
+      if (done === qs.length) subjMastered++;
+    });
+  }
+  return {
+    quizzes: data.totalQuizzes || 0,
+    mastered: Object.keys(mastered).length,
+    streak: data.streak || 0,
+    perfect: (data.scoreHistory || []).some(function (s) { return s >= 100; }) ? 1 : 0,
+    bestExam: bestExam,
+    examCount: examCount,
+    studySec: (st.totalSec || 0),
+    notes: Object.keys(data.ficheNotes || {}).length,
+    pomodoros: data.pomodorosCompleted || 0,
+    subjMastered: subjMastered
+  };
+}
+var BADGE_DEFS = [
+  { id: 'firststep', icon: '🐣', name: 'Premiers pas', desc: 'Termine ton 1er quiz', goal: 1, cur: function (c) { return c.quizzes; } },
+  { id: 'quiz10', icon: '🎮', name: 'Quiz addict', desc: 'Termine 10 quiz', goal: 10, cur: function (c) { return c.quizzes; } },
+  { id: 'mastered25', icon: '📈', name: 'Sur la bonne voie', desc: 'Maîtrise 25 questions', goal: 25, cur: function (c) { return c.mastered; } },
+  { id: 'mastered100', icon: '🧠', name: 'Cerveau en feu', desc: 'Maîtrise 100 questions', goal: 100, cur: function (c) { return c.mastered; } },
+  { id: 'streak3', icon: '📆', name: 'Régulier', desc: '3 jours d\'affilée', goal: 3, cur: function (c) { return c.streak; } },
+  { id: 'streak7', icon: '🔥', name: 'Une semaine !', desc: '7 jours d\'affilée', goal: 7, cur: function (c) { return c.streak; } },
+  { id: 'perfect', icon: '💯', name: 'Sans faute', desc: 'Un quiz à 100 %', goal: 1, cur: function (c) { return c.perfect; } },
+  { id: 'exam16', icon: '🎓', name: 'Prêt pour l\'exam', desc: 'Un examen blanc ≥ 16/20', goal: 16, cur: function (c) { return c.bestExam; } },
+  { id: 'exam20', icon: '🏆', name: 'Note parfaite', desc: 'Un examen blanc à 20/20', goal: 20, cur: function (c) { return c.bestExam; } },
+  { id: 'study1h', icon: '⏳', name: 'Studieux', desc: '1 h d\'étude au total', goal: 3600, cur: function (c) { return c.studySec; }, fmt: function (v) { return Math.round(v / 60) + ' min'; } },
+  { id: 'study5h', icon: '🏃', name: 'Marathonien', desc: '5 h d\'étude au total', goal: 18000, cur: function (c) { return c.studySec; }, fmt: function (v) { return Math.round(v / 60) + ' min'; } },
+  { id: 'notes5', icon: '✍️', name: 'Annotateur', desc: 'Écris des notes sur 5 fiches', goal: 5, cur: function (c) { return c.notes; } },
+  { id: 'pomodoro', icon: '🍅', name: 'Concentré', desc: 'Termine 4 pomodoros', goal: 4, cur: function (c) { return c.pomodoros; } },
+  { id: 'specialist', icon: '🌟', name: 'Spécialiste', desc: 'Maîtrise 100 % d\'une matière', goal: 1, cur: function (c) { return c.subjMastered; } }
+];
+function evaluateBadges(data, silent) {
+  data.badgeEarned = data.badgeEarned || [];
+  var c = _badgeCtx(data); var fresh = [];
+  BADGE_DEFS.forEach(function (b) {
+    if (b.cur(c) >= b.goal && data.badgeEarned.indexOf(b.id) < 0) { data.badgeEarned.push(b.id); fresh.push(b); }
+  });
+  if (fresh.length) {
+    saveData(data);
+    if (!silent && typeof showToast === 'function') {
+      fresh.forEach(function (b, i) { setTimeout(function () { showToast('🏆 Badge débloqué : ' + b.icon + ' ' + b.name, 'var(--color-parabole)'); }, i * 1400); });
+    }
+  }
+  return fresh;
+}
+function renderBadgeShowcase() {
+  var box = document.getElementById('badges-container');
+  if (!box) return;
+  var data = loadSavedData();
+  evaluateBadges(data, false);
+  var c = _badgeCtx(data);
+  var earned = data.badgeEarned || [];
+  var nb = earned.length;
+  box.innerHTML = '<p style="width:100%; color:var(--text-secondary); font-size:13px; margin:0 0 .4rem;">' + nb + ' / ' + BADGE_DEFS.length + ' badge' + (nb > 1 ? 's' : '') + ' débloqué' + (nb > 1 ? 's' : '') + '</p>' +
+    '<div class="badge-grid">' + BADGE_DEFS.map(function (b) {
+      var cur = b.cur(c), unlocked = cur >= b.goal;
+      var pct = Math.min(100, Math.round(cur / b.goal * 100));
+      var prog = b.goal > 1 ? (b.fmt ? b.fmt(Math.min(cur, b.goal)) + ' / ' + b.fmt(b.goal) : Math.min(cur, b.goal) + ' / ' + b.goal) : '';
+      return '<div class="badge-tile' + (unlocked ? ' on' : '') + '" title="' + b.desc + '">' +
+        '<div class="badge-ic">' + (unlocked ? b.icon : '🔒') + '</div>' +
+        '<div class="badge-nm">' + b.name + '</div>' +
+        '<div class="badge-ds">' + b.desc + '</div>' +
+        (!unlocked && b.goal > 1 ? '<div class="badge-bar"><div style="width:' + pct + '%;"></div></div><div class="badge-pr">' + prog + '</div>' : (unlocked ? '<div class="badge-pr badge-pr-ok">✓ obtenu</div>' : '')) +
+        '</div>';
+    }).join('') + '</div>';
+}
+
+/* ════════════ Graphiques de progression ════════════ */
+function renderProgressCharts() {
+  var host = document.getElementById('profil');
+  if (!host) return;
+  var old = document.getElementById('progress-charts'); if (old) old.remove();
+  var data = loadSavedData();
+  var sec = document.createElement('div');
+  sec.id = 'progress-charts';
+  sec.style.marginTop = '2rem';
+  var html = '<h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">📈 Mes progrès</h3>';
+
+  // — Temps d'étude, 7 derniers jours —
+  var hist = (data.study && data.study.history) || {};
+  var days = [], maxSec = 1;
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    var s = hist[key] || 0; if (s > maxSec) maxSec = s;
+    days.push({ lbl: ['D', 'L', 'M', 'M', 'J', 'V', 'S'][d.getDay()], sec: s });
+  }
+  var totalWeek = days.reduce(function (a, b) { return a + b.sec; }, 0);
+  html += '<div class="pc-card"><div class="pc-head"><span>⏱️ Temps d\'étude (7 jours)</span><span class="pc-sub">' + fmtDur(totalWeek) + ' au total</span></div>';
+  if (totalWeek === 0) {
+    html += '<p class="pc-empty">Étudie un peu et tes minutes s\'afficheront ici jour par jour.</p>';
+  } else {
+    html += '<div class="pc-bars">' + days.map(function (x) {
+      var h = Math.round(x.sec / maxSec * 100);
+      var lab = x.sec >= 60 ? Math.round(x.sec / 60) + 'm' : (x.sec > 0 ? '<1m' : '');
+      return '<div class="pc-col"><div class="pc-val">' + lab + '</div><div class="pc-bar-wrap"><div class="pc-bar" style="height:' + (x.sec ? Math.max(4, h) : 0) + '%;"></div></div><div class="pc-lbl">' + x.lbl + '</div></div>';
+    }).join('') + '</div>';
+  }
+  html += '</div>';
+
+  // — Évolution des notes d'examen blanc —
+  var exam = data.examHistory || {};
+  var subjKeys = Object.keys(exam).filter(function (k) { return (exam[k] || []).length; });
+  if (subjKeys.length) {
+    var order = ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'];
+    subjKeys.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
+    html += '<div class="pc-card" style="margin-top:1rem;"><div class="pc-head"><span>📝 Notes d\'examen blanc (/20)</span></div>';
+    subjKeys.forEach(function (k) {
+      var arr = (exam[k] || []).slice(-8);
+      var label = (window.SUBJECTS && window.SUBJECTS[k] && window.SUBJECTS[k].label) || k;
+      var accent = (window.SUBJECT_ACCENTS && window.SUBJECT_ACCENTS[k]) || 'var(--color-nav)';
+      var best = arr.reduce(function (m, h) { return Math.max(m, h.note || 0); }, 0);
+      html += '<div class="pc-exam"><div class="pc-exam-h"><span style="font-weight:600;">' + label + '</span><span class="pc-sub">record ' + best + '/20</span></div>' +
+        '<div class="pc-bars pc-bars-sm">' + arr.map(function (h) {
+          var pct = Math.round((h.note || 0) / 20 * 100);
+          var col = (h.note >= 16) ? '#34d399' : (h.note >= 10 ? accent : '#f87171');
+          return '<div class="pc-col"><div class="pc-val">' + (h.note || 0) + '</div><div class="pc-bar-wrap"><div class="pc-bar" style="height:' + Math.max(4, pct) + '%; background:' + col + ';"></div></div></div>';
+        }).join('') + '</div></div>';
+    });
+    html += '</div>';
+  }
+
+  sec.innerHTML = html;
+  // place juste après la répartition par matière si elle existe, sinon à la fin
+  var bd = document.getElementById('subject-breakdown');
+  if (bd && bd.parentNode) bd.parentNode.insertBefore(sec, bd.nextSibling);
+  else host.appendChild(sec);
+}
