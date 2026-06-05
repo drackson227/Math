@@ -934,6 +934,8 @@ function setTheme(theme) {
   document.querySelectorAll('.theme-btn[onclick^="setTheme"]').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.theme-btn[onclick="setTheme('${theme}')"]`);
   if (activeBtn) activeBtn.classList.add('active');
+  // Si le mode « couleur par matière » est actif, l'accent de la matière reprend le dessus
+  if (typeof applySubjectAccent === 'function') applySubjectAccent();
 }
 
 
@@ -3998,6 +4000,11 @@ function openInfoCard(key, fromBack) {
   if (!fromBack && window._infoCurrent && window._infoCurrent !== key) window._infoStack.push(window._infoCurrent);
   window._infoCurrent = key;
 
+  // Thème visuel de la fiche
+  var theme = info.theme || (window.INFO_THEME && window.INFO_THEME[key]) || '';
+  var box = modal.querySelector('.img-modal-box');
+  if (box) box.className = 'img-modal-box' + (theme ? ' t-' + theme : '');
+
   var imgSrc = info.img || (window.IMG_INFO[key] ? key : '');
   if (imgSrc) { img.src = imgSrc; img.alt = info.title || ''; img.style.display = ''; }
   else { img.removeAttribute('src'); img.style.display = 'none'; }
@@ -4006,12 +4013,25 @@ function openInfoCard(key, fromBack) {
   if (window._infoStack.length) html += '<button class="imd-back" type="button" onclick="infoBack()">↩ retour</button>';
   html += '<h3>' + (info.title || '') + '</h3>';
   if (info.sub) html += '<p class="imd-sub">' + info.sub + '</p>';
+  // Galerie d'œuvres (cliquable → agrandit dans l'image principale)
+  if (info.gallery && info.gallery.length) {
+    html += '<div class="imd-gallery">' + info.gallery.map(function (g) {
+      return '<figure onclick="infoSwapImg(\'' + g.src + '\')"><img src="' + g.src + '" alt="' + (g.cap || '').replace(/"/g, '') + '" loading="lazy"><figcaption>' + (g.cap || '') + '</figcaption></figure>';
+    }).join('') + '</div>';
+  }
   if (info.cours) html += '<div class="imd-block imd-cours"><h4>📚 Le cours</h4>' + autolinkInfo(info.cours, key) + '</div>';
   if (info.exam) html += '<div class="imd-block imd-exam"><h4>🎯 Pour l\'examen / révision</h4>' + autolinkInfo(info.exam, key) + '</div>';
+  if (info.anecdote) html += '<div class="imd-anecdote"><h4>💡 Le sais-tu ?</h4>' + autolinkInfo(info.anecdote, key) + '</div>';
   body.innerHTML = html;
   body.scrollTop = 0;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+/* Clic sur une miniature de la galerie → l'affiche en grand dans la fiche */
+function infoSwapImg(src) {
+  var img = document.getElementById('imgModalImg');
+  if (img) { img.src = src; img.style.display = ''; }
 }
 
 /* compat : ancien nom */
@@ -4055,4 +4075,44 @@ document.addEventListener('keydown', function (e) {
     if (window._infoStack.length) { infoBack(); }
     else { closeImgModal(); }
   }
+});
+
+/* ════════════ Couleur d'accent par matière (défaut, modifiable dans les paramètres) ════════════ */
+window.SUBJECT_ACCENTS = {
+  maths: '#a78bfa', histoire: '#fbbf24', bio: '#34d399', geo: '#2dd4bf',
+  francais: '#f472b6', anglais: '#818cf8', chimie: '#c084fc'
+};
+function hexToRgb(h) {
+  h = String(h).replace('#', '');
+  if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+  var n = parseInt(h, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+function getAccentMode() { return localStorage.getItem('mathsgr2_accentmode') || 'auto'; }
+function applySubjectAccent() {
+  if (getAccentMode() !== 'auto') return;
+  var subj = window.currentSubject || 'maths';
+  var c = window.SUBJECT_ACCENTS[subj];
+  if (!c) return;
+  var root = document.documentElement;
+  var rgb = hexToRgb(c);
+  root.style.setProperty('--color-nav', c);
+  root.style.setProperty('--color-nav-rgb', rgb.join(','));
+  root.style.setProperty('--shadow-glow-nav', '0 0 20px rgba(' + rgb.join(',') + ',0.25)');
+}
+function setAccentMode(mode) {
+  localStorage.setItem('mathsgr2_accentmode', mode);
+  if (mode === 'auto') applySubjectAccent();
+  else setTheme(localStorage.getItem('mathsgr2_theme') || 'default'); // l'accent suit le thème global choisi
+  document.querySelectorAll('.theme-btn[onclick^="setAccentMode"]').forEach(function (b) { b.classList.remove('active'); });
+  var ab = document.querySelector('.theme-btn[onclick="setAccentMode(\'' + mode + '\')"]');
+  if (ab) ab.classList.add('active');
+}
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    applySubjectAccent();
+    var mode = getAccentMode();
+    var ab = document.querySelector('.theme-btn[onclick="setAccentMode(\'' + mode + '\')"]');
+    if (ab) { document.querySelectorAll('.theme-btn[onclick^="setAccentMode"]').forEach(function (b) { b.classList.remove('active'); }); ab.classList.add('active'); }
+  }, 300);
 });

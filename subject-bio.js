@@ -12,8 +12,15 @@
     "mendel.jpg": {
       title: "Gregor Mendel", sub: "1822–1884 · le père de la génétique",
       cours: "<p>Moine et botaniste, <strong>Mendel</strong> a découvert les <strong>lois de l'hérédité</strong> en croisant des <strong>petits pois</strong>. Il a montré que les caractères se transmettent par des « facteurs » (aujourd'hui les <strong>gènes</strong>) qui peuvent être <strong>dominants</strong> ou <strong>récessifs</strong>.</p>",
-      exam: "<ul><li><strong>Vocabulaire :</strong> gène, allèle, <strong>dominant</strong> (A) / <strong>récessif</strong> (a), génotype (les allèles) / phénotype (ce qu'on voit).</li><li><strong>Règle :</strong> Aa × Aa → <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).</li><li>Ex. deux parents <strong>Bb</strong> (yeux bruns) peuvent avoir un enfant <strong>bb</strong> aux yeux bleus (1 chance sur 4).</li></ul>"
+      exam: "<ul><li><strong>Vocabulaire :</strong> gène, allèle, <strong>dominant</strong> (A) / <strong>récessif</strong> (a), génotype (les allèles) / phénotype (ce qu'on voit).</li><li><strong>Règle :</strong> Aa × Aa → <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).</li><li>Ex. deux parents <strong>Bb</strong> (yeux bruns) peuvent avoir un enfant <strong>bb</strong> aux yeux bleus (1 chance sur 4).</li></ul>",
+      anecdote: "Mendel a cultivé et observé près de <strong>28 000 plants de pois</strong> ! Ses découvertes (1865) sont restées <strong>ignorées de son vivant</strong> et n'ont été comprises que 35 ans plus tard."
     }
+  });
+
+  /* Thème visuel des fiches de bio */
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, {
+    "mendel.jpg": "science", "gene-allele": "science", "dominance": "science", "genotype-phenotype": "science"
   });
 
   /* Notions de génétique cliquables */

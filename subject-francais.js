@@ -12,13 +12,22 @@
     "prometheus.jpg": {
       title: "Prométhée", sub: "mythe grec",
       cours: "<p><strong>Prométhée</strong> est un Titan qui <strong>vole le feu</strong> aux dieux pour le donner aux humains. Zeus le punit (enchaîné, un aigle lui dévore le foie). C'est un <strong>mythe</strong> : un récit ancien qui explique le monde et transmet des valeurs.</p>",
-      exam: "<ul><li><strong>Définition du mythe :</strong> récit ancien, souvent anonyme, transmis à l'oral, avec dieux et héros.</li><li><strong>Fonctions :</strong> <em>expliquer</em> le monde (origine du feu) + transmettre des <em>valeurs</em> (courage, ruse).</li></ul>"
+      exam: "<ul><li><strong>Définition du mythe :</strong> récit ancien, souvent anonyme, transmis à l'oral, avec dieux et héros.</li><li><strong>Fonctions :</strong> <em>expliquer</em> le monde (origine du feu) + transmettre des <em>valeurs</em> (courage, ruse).</li></ul>",
+      anecdote: "Son nom signifie « le prévoyant ». Pour le punir d'avoir aidé les hommes, Zeus l'enchaîne à un rocher où un <strong>aigle lui dévore le foie chaque jour</strong>… qui repousse la nuit. Un supplice éternel !"
     },
     "moliere.jpg": {
       title: "Molière", sub: "1622–1673 · maître de la comédie",
       cours: "<p><strong>Molière</strong> est le plus grand auteur de <strong>comédies</strong> françaises. Le théâtre est un texte <strong>joué</strong> sur scène ; la comédie fait <strong>rire</strong> et finit bien (à l'inverse de la tragédie).</p>",
-      exam: "<ul><li><strong>Vocabulaire théâtre :</strong> acte, scène, réplique, tirade, monologue, aparté, <strong>didascalies</strong>, quiproquo.</li><li>Comédie = fait rire / finit bien · Tragédie = finit mal (personnages nobles, fatalité).</li></ul>"
+      exam: "<ul><li><strong>Vocabulaire théâtre :</strong> acte, scène, réplique, tirade, monologue, aparté, <strong>didascalies</strong>, quiproquo.</li><li>Comédie = fait rire / finit bien · Tragédie = finit mal (personnages nobles, fatalité).</li></ul>",
+      anecdote: "Son vrai nom est <strong>Jean-Baptiste Poquelin</strong>. Il est mort presque sur scène, en jouant… « Le Malade imaginaire » ! Le théâtre français est d'ailleurs surnommé « la maison de Molière »."
     }
+  });
+
+  /* Thème visuel des fiches de français */
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, {
+    "prometheus.jpg": "myth", "mythe": "myth",
+    "moliere.jpg": "theatre", "comedie": "theatre", "tragedie": "theatre"
   });
 
   /* Notions de français cliquables */

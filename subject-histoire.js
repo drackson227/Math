@@ -13,17 +13,21 @@
     "gutenberg.jpg": {
       title: "Gutenberg & l'imprimerie", sub: "≈ 1400–1468 · invention vers 1450",
       cours: "<p>Avant, les livres étaient <strong>copiés à la main</strong> (manuscrits) : rares, longs à produire et très chers. Vers <strong>1450</strong>, <strong>Johannes Gutenberg</strong> invente l'imprimerie à <strong>caractères mobiles</strong> (à Mayence, en Allemagne).</p>",
-      exam: "<ul><li><strong>Date :</strong> ≈ 1450 · <strong>Lieu :</strong> Mayence.</li><li><strong>2 conséquences à citer :</strong> livres moins chers et plus nombreux + <strong>diffusion rapide des idées</strong> (Humanisme, Réforme).</li><li>Piège : ce n'est <em>pas</em> Luther — Luther s'en servira pour diffuser ses idées.</li></ul>"
+      exam: "<ul><li><strong>Date :</strong> ≈ 1450 · <strong>Lieu :</strong> Mayence.</li><li><strong>2 conséquences à citer :</strong> livres moins chers et plus nombreux + <strong>diffusion rapide des idées</strong> (Humanisme, Réforme).</li><li>Piège : ce n'est <em>pas</em> Luther — Luther s'en servira pour diffuser ses idées.</li></ul>",
+      anecdote: "Sa célèbre <strong>Bible à 42 lignes</strong> (≈ 1455) est l'un des tout premiers livres imprimés d'Europe. Pourtant Gutenberg a fini <strong>ruiné</strong> : son associé Fust lui a fait un procès et a récupéré son atelier !"
     },
     "erasme.jpg": {
       title: "Érasme", sub: "1466–1536 · humaniste",
       cours: "<p><strong>Érasme</strong> de Rotterdam est le plus célèbre <strong>humaniste</strong>. Auteur de « <strong>L'Éloge de la folie</strong> », il défend le savoir, la raison et l'esprit critique.</p>",
-      exam: "<ul><li><strong>Mouvement :</strong> l'Humanisme (l'homme et la raison au centre).</li><li><strong>Œuvre :</strong> L'Éloge de la folie.</li><li>Autres humanistes : <strong>Thomas More</strong> (Utopia), Rabelais, Montaigne.</li></ul>"
+      exam: "<ul><li><strong>Mouvement :</strong> l'Humanisme (l'homme et la raison au centre).</li><li><strong>Œuvre :</strong> L'Éloge de la folie.</li><li>Autres humanistes : <strong>Thomas More</strong> (Utopia), Rabelais, Montaigne.</li></ul>",
+      anecdote: "Surnommé « le prince des humanistes », il écrivait en latin et parcourait toute l'Europe. Il critiquait les abus de l'Église… mais n'est <strong>jamais devenu protestant</strong>, contrairement à Luther."
     },
     "vinci.jpg": {
       title: "Léonard de Vinci", sub: "1452–1519 · artiste & savant",
       cours: "<p>Génie de la <strong>Renaissance</strong> : peintre (La Joconde, La Cène), mais aussi ingénieur, anatomiste, inventeur. Il incarne l'« homme universel » qui touche à tout.</p>",
-      exam: "<ul><li><strong>Période :</strong> Renaissance (née en <strong>Italie</strong>).</li><li><strong>Œuvre phare :</strong> La Joconde.</li><li>Avec <strong>Michel-Ange</strong> et Raphaël : perspective, réalisme, corps humain.</li></ul>"
+      exam: "<ul><li><strong>Période :</strong> Renaissance (née en <strong>Italie</strong>).</li><li><strong>Œuvre phare :</strong> La Joconde.</li><li>Avec <strong>Michel-Ange</strong> et Raphaël : perspective, réalisme, corps humain.</li></ul>",
+      gallery: [{ src: "joconde.jpg", cap: "La Joconde" }, { src: "cene.jpg", cap: "La Cène" }, { src: "vitruve.jpg", cap: "Homme de Vitruve" }],
+      anecdote: "Il écrivait à l'envers, en <strong>écriture miroir</strong> (lisible seulement dans un miroir). Il a aussi dessiné des <strong>machines volantes</strong> et un char d'assaut, des siècles avant leur invention !"
     },
     "joconde.jpg": {
       title: "La Joconde", sub: "≈ 1503–1519 · Léonard de Vinci",
@@ -33,12 +37,15 @@
     "michelange.jpg": {
       title: "Michel-Ange", sub: "1475–1564 · artiste",
       cours: "<p>Grand artiste de la <strong>Renaissance</strong> italienne : sculpteur (le <strong>David</strong>) et peintre (le plafond de la <strong>chapelle Sixtine</strong>, au Vatican).</p>",
-      exam: "<ul><li><strong>2 œuvres :</strong> le David (sculpture) · le plafond de la chapelle Sixtine (peinture).</li><li>À ne pas confondre avec Léonard de Vinci.</li></ul>"
+      exam: "<ul><li><strong>2 œuvres :</strong> le David (sculpture) · le plafond de la chapelle Sixtine (peinture).</li><li>À ne pas confondre avec Léonard de Vinci.</li></ul>",
+      gallery: [{ src: "david.jpg", cap: "Le David" }, { src: "sixtine.jpg", cap: "Chapelle Sixtine" }],
+      anecdote: "Il a peint le <strong>plafond de la chapelle Sixtine</strong> allongé sur un échafaudage pendant ≈ 4 ans, la peinture lui tombant sur le visage. Il se voyait avant tout <strong>sculpteur</strong>, pas peintre."
     },
     "luther.jpg": {
       title: "Martin Luther", sub: "1483–1546 · la Réforme",
       cours: "<p>Moine allemand qui, en <strong>1517</strong>, affiche ses <strong>95 thèses</strong> (à Wittenberg) contre les abus de l'Église, surtout la vente des <strong>indulgences</strong>. Il lance le <strong>protestantisme</strong>.</p>",
-      exam: "<ul><li><strong>Date clé : 1517</strong> (début de la Réforme).</li><li><strong>2 principes :</strong> le <strong>salut par la foi seule</strong> + la <strong>Bible</strong> comme seule autorité.</li><li>Conséquence : <strong>division de la chrétienté</strong> (catholiques / protestants).</li></ul>"
+      exam: "<ul><li><strong>Date clé : 1517</strong> (début de la Réforme).</li><li><strong>2 principes :</strong> le <strong>salut par la foi seule</strong> + la <strong>Bible</strong> comme seule autorité.</li><li>Conséquence : <strong>division de la chrétienté</strong> (catholiques / protestants).</li></ul>",
+      anecdote: "Pour échapper à ses ennemis, il s'est caché au château de la <strong>Wartburg</strong> sous le faux nom de « chevalier Georges » — et en a profité pour <strong>traduire la Bible en allemand</strong>, lue par le peuple grâce à l'imprimerie."
     },
     "europe_religions.jpg": {
       title: "Les 95 thèses (1517)", sub: "document imprimé · Luther",
@@ -48,7 +55,8 @@
     "calvin.jpg": {
       title: "Jean Calvin", sub: "1509–1564 · réformateur",
       cours: "<p>Réformateur français installé à <strong>Genève</strong>. Il développe une branche du protestantisme, le <strong>calvinisme</strong>, avec l'idée de la <strong>prédestination</strong> (Dieu a déjà choisi qui sera sauvé).</p>",
-      exam: "<ul><li><strong>Ville :</strong> Genève · <strong>idée :</strong> prédestination.</li><li>Après Luther, c'est le 2ᵉ grand réformateur à retenir.</li></ul>"
+      exam: "<ul><li><strong>Ville :</strong> Genève · <strong>idée :</strong> prédestination.</li><li>Après Luther, c'est le 2ᵉ grand réformateur à retenir.</li></ul>",
+      anecdote: "Sous son influence, <strong>Genève</strong> est devenue une cité très stricte (surnommée la « Rome protestante ») où les jeux, la danse et le luxe étaient sévèrement encadrés."
     },
     "trente.jpg": {
       title: "Le Concile de Trente", sub: "1545–1563 · Contre-Réforme",
@@ -58,17 +66,20 @@
     "henri4.jpg": {
       title: "Henri IV", sub: "1553–1610 · Édit de Nantes",
       cours: "<p>Roi de France qui met fin aux <strong>guerres de religion</strong>. En <strong>1598</strong>, il signe l'<strong>Édit de Nantes</strong> : il accorde la <strong>tolérance</strong> religieuse aux protestants.</p>",
-      exam: "<ul><li><strong>1598 = Édit de Nantes</strong> (tolérance, signé par Henri IV).</li><li>Piège : <strong>Louis XIV le révoque en 1685</strong>. Ne pas confondre <em>signer</em> (1598) / <em>révoquer</em> (1685).</li></ul>"
+      exam: "<ul><li><strong>1598 = Édit de Nantes</strong> (tolérance, signé par Henri IV).</li><li>Piège : <strong>Louis XIV le révoque en 1685</strong>. Ne pas confondre <em>signer</em> (1598) / <em>révoquer</em> (1685).</li></ul>",
+      anecdote: "Protestant devenu catholique pour pouvoir régner, on lui prête la phrase « <strong>Paris vaut bien une messe</strong> ». Très populaire, il souhaitait « <strong>une poule au pot</strong> » le dimanche pour chaque paysan."
     },
     "charlesquint.jpg": {
       title: "Charles Quint", sub: "1500–1558 · empereur",
       cours: "<p>Puissant empereur <strong>catholique</strong> (Saint-Empire + Espagne). Il règne aussi sur les <strong>Pays-Bas espagnols</strong> (dont nos régions actuelles) et combat les idées protestantes de Luther.</p>",
-      exam: "<ul><li>Souverain <strong>catholique</strong> opposé à la Réforme.</li><li>Lien avec nos régions : les <strong>Pays-Bas espagnols</strong>.</li></ul>"
+      exam: "<ul><li>Souverain <strong>catholique</strong> opposé à la Réforme.</li><li>Lien avec nos régions : les <strong>Pays-Bas espagnols</strong>.</li></ul>",
+      anecdote: "On disait de son empire que « <strong>le soleil ne s'y couchait jamais</strong> ». Fatigué du pouvoir, il a fait une chose rarissime pour un empereur : il a <strong>abdiqué</strong> (1556) pour se retirer dans un monastère."
     },
     "louis14.jpg": {
       title: "Louis XIV, le Roi-Soleil", sub: "1638–1715 · absolutisme",
       cours: "<p>Le modèle de la <strong>monarchie absolue de droit divin</strong> : « <em>L'État, c'est moi</em> ». Il détient <strong>tous les pouvoirs</strong>, contrôle la noblesse à <strong>Versailles</strong> et s'appuie sur <strong>Colbert</strong> (mercantilisme).</p>",
-      exam: "<ul><li><strong>Absolutisme :</strong> le roi a tous les pouvoirs (qu'il tient de Dieu).</li><li><strong>3 actions :</strong> Versailles (contrôle la noblesse) · Colbert + mercantilisme · <strong>révoque l'Édit de Nantes (1685)</strong>.</li></ul>"
+      exam: "<ul><li><strong>Absolutisme :</strong> le roi a tous les pouvoirs (qu'il tient de Dieu).</li><li><strong>3 actions :</strong> Versailles (contrôle la noblesse) · Colbert + mercantilisme · <strong>révoque l'Édit de Nantes (1685)</strong>.</li></ul>",
+      anecdote: "Sa journée était un véritable spectacle réglé minute par minute (le lever, les repas…) que la noblesse se disputait l'honneur d'observer. Il a régné <strong>72 ans</strong>, un record en Europe."
     },
     "versailles.jpg": {
       title: "Le château de Versailles", sub: "résidence de Louis XIV",
@@ -181,6 +192,18 @@
     "prédestination": "predestination", "Ancien Régime": "ancien-regime", "Saint-Barthélemy": "saint-barthelemy",
     "Jésuites": "jesuites", "imprimerie": "imprimerie", "guerres de religion": "guerres-religion",
     "95 thèses": "europe_religions.jpg"
+  });
+
+  /* Thème visuel de chaque fiche */
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, {
+    "gutenberg.jpg": "print", "imprimerie": "print", "erasme.jpg": "print", "humanisme": "print",
+    "vinci.jpg": "art", "joconde.jpg": "art", "michelange.jpg": "art", "renaissance": "art", "mecenes": "art",
+    "luther.jpg": "reforme", "calvin.jpg": "reforme", "trente.jpg": "reforme", "europe_religions.jpg": "reforme",
+    "reforme": "reforme", "contre-reforme": "reforme", "indulgences": "reforme", "predestination": "reforme",
+    "jesuites": "reforme", "saint-barthelemy": "reforme", "guerres-religion": "reforme", "edit-de-nantes": "reforme",
+    "louis14.jpg": "royal", "henri4.jpg": "royal", "charlesquint.jpg": "royal", "versailles.jpg": "royal",
+    "absolutisme": "royal", "droit-divin": "royal", "mercantilisme": "royal", "ancien-regime": "royal", "colbert": "royal"
   });
 
   /* helper image */
@@ -411,21 +434,22 @@
   /* ---------------------- ONGLET BONUS : PERSONNAGES ---------------------- */
   function perso(img, name, dates, role) {
     return '<div class="perso-card"><img src="' + img + '" alt="' + name + '" loading="lazy">' +
-      '<h4>' + name + '</h4><div class="dates">' + dates + '</div><p>' + role + '</p></div>';
+      '<h4>' + name + '</h4><div class="dates">' + dates + '</div><p>' + role + '</p>' +
+      '<span class="perso-more">👆 Clique pour la fiche + anecdote</span></div>';
   }
   var PERSONNAGES = `
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">👑 Personnages importants</h2>
     <p style="color:var(--text-secondary); margin-bottom:0.6rem;">Les visages à reconnaître pour l'examen.</p>
     <div class="perso-grid">
-      ${perso('gutenberg.jpg', 'Gutenberg', '≈ 1400–1468', 'Invente l’imprimerie à caractères mobiles (≈ 1450).')}
-      ${perso('erasme.jpg', 'Érasme', '1466–1536', 'Grand humaniste, auteur de « L’Éloge de la folie ».')}
-      ${perso('vinci.jpg', 'Léonard de Vinci', '1452–1519', 'Artiste et savant de la Renaissance (La Joconde).')}
-      ${perso('michelange.jpg', 'Michel-Ange', '1475–1564', 'Sculpteur/peintre (David, plafond de la Sixtine).')}
-      ${perso('luther.jpg', 'Martin Luther', '1483–1546', '95 thèses (1517) : il lance la Réforme protestante.')}
-      ${perso('calvin.jpg', 'Jean Calvin', '1509–1564', 'Réformateur à Genève (prédestination).')}
-      ${perso('charlesquint.jpg', 'Charles Quint', '1500–1558', 'Empereur catholique ; les Pays-Bas espagnols.')}
-      ${perso('henri4.jpg', 'Henri IV', '1553–1610', 'Signe l’Édit de Nantes (1598) : tolérance.')}
-      ${perso('louis14.jpg', 'Louis XIV', '1638–1715', 'Le Roi-Soleil : modèle de la monarchie absolue.')}
+      ${perso('gutenberg.jpg', 'Gutenberg', '≈ 1400–1468', 'Invente l’imprimerie à caractères mobiles (≈ 1450) → diffusion des idées dans toute l’Europe.')}
+      ${perso('erasme.jpg', 'Érasme', '1466–1536', 'Le « prince des humanistes », auteur de « L’Éloge de la folie ». Savoir, raison et esprit critique.')}
+      ${perso('vinci.jpg', 'Léonard de Vinci', '1452–1519', 'Génie de la Renaissance : peintre (La Joconde, La Cène), ingénieur et inventeur.')}
+      ${perso('michelange.jpg', 'Michel-Ange', '1475–1564', 'Sculpteur et peintre de génie : le David et le plafond de la chapelle Sixtine.')}
+      ${perso('luther.jpg', 'Martin Luther', '1483–1546', 'Moine allemand : ses 95 thèses (1517) lancent la Réforme protestante (foi seule, Bible seule).')}
+      ${perso('calvin.jpg', 'Jean Calvin', '1509–1564', 'Réformateur à Genève, théoricien de la prédestination ; 2ᵉ grand nom du protestantisme.')}
+      ${perso('charlesquint.jpg', 'Charles Quint', '1500–1558', 'Empereur catholique d’un immense empire (dont les Pays-Bas espagnols) ; adversaire de la Réforme.')}
+      ${perso('henri4.jpg', 'Henri IV', '1553–1610', 'Roi de France ; signe l’Édit de Nantes (1598) pour mettre fin aux guerres de religion.')}
+      ${perso('louis14.jpg', 'Louis XIV', '1638–1715', 'Le Roi-Soleil, modèle de la monarchie absolue ; Versailles, Colbert, « L’État c’est moi ».')}
     </div>`;
 
   /* ---------------------- QUIZ ---------------------- */
@@ -454,7 +478,18 @@
     { q: "Colbert développe quelle politique économique ?", opts: ["le mercantilisme", "le communisme", "le libéralisme total", "la décroissance"], ans: 0, chapter: "absolutisme", difficulty: "difficile", exp: "Le mercantilisme : enrichir l'État (exporter plus qu'importer, manufactures)." },
     { q: "Les 3 ordres de l'Ancien Régime sont :", opts: ["clergé, noblesse, tiers état", "rois, reines, princes", "riches, classe moyenne, pauvres", "nord, centre, sud"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Clergé et noblesse (privilégiés) + tiers état (qui paie les impôts)." },
     { q: "Une source PRIMAIRE est :", opts: ["un document d'époque (témoin direct)", "un livre d'historien récent", "un résumé scolaire", "une opinion personnelle"], ans: 0, chapter: "methode", difficulty: "intermediaire", exp: "Primaire = produit à l'époque étudiée ; secondaire = analyse postérieure." },
-    { q: "Première étape de la carte d'identité d'un document ?", opts: ["la nature (texte, image, carte…)", "la problématique", "la conclusion", "l'avis personnel"], ans: 0, chapter: "methode", difficulty: "facile", exp: "On commence par : nature, auteur, date/lieu, source, sujet." }
+    { q: "Première étape de la carte d'identité d'un document ?", opts: ["la nature (texte, image, carte…)", "la problématique", "la conclusion", "l'avis personnel"], ans: 0, chapter: "methode", difficulty: "facile", exp: "On commence par : nature, auteur, date/lieu, source, sujet." },
+    { q: "Le premier grand livre imprimé par Gutenberg est…", opts: ["la Bible à 42 lignes", "L'Éloge de la folie", "Utopia", "le journal"], ans: 0, chapter: "livre", difficulty: "difficile", exp: "La Bible à 42 lignes (≈ 1455), un des premiers livres imprimés d'Europe." },
+    { q: "Qui a peint le plafond de la chapelle Sixtine ?", opts: ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Érasme"], ans: 0, chapter: "humanisme", difficulty: "intermediaire", exp: "Michel-Ange ; il a aussi sculpté le David." },
+    { q: "Quelle famille de mécènes finançait les artistes à Florence ?", opts: ["les Médicis", "les Bourbons", "les Habsbourg", "les Tudor"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Les Médicis, riches protecteurs de la Renaissance à Florence." },
+    { q: "« L'Éloge de la folie » est une œuvre de…", opts: ["Érasme", "Molière", "Calvin", "Colbert"], ans: 0, chapter: "humanisme", difficulty: "intermediaire", exp: "Érasme, le « prince des humanistes »." },
+    { q: "Qui a traduit la Bible en allemand pour qu'elle soit lue par tous ?", opts: ["Luther", "Gutenberg", "Charles Quint", "Henri IV"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "Luther, réfugié à la Wartburg, grâce à l'imprimerie." },
+    { q: "Le Concile de Trente (1545-1563) fait partie de…", opts: ["la Contre-Réforme", "la Renaissance", "l'Humanisme", "l'absolutisme"], ans: 0, chapter: "reforme", difficulty: "difficile", exp: "La Contre-Réforme : réaction catholique, avec les Jésuites." },
+    { q: "Qui révoque l'Édit de Nantes en 1685 ?", opts: ["Louis XIV", "Henri IV", "Charles Quint", "Calvin"], ans: 0, chapter: "absolutisme", difficulty: "difficile", exp: "Louis XIV en 1685 → persécution des protestants (Henri IV l'avait signé en 1598)." },
+    { q: "Charles Quint était un empereur…", opts: ["catholique, opposé à la Réforme", "protestant", "athée", "orthodoxe"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "Empereur catholique ; il régnait sur les Pays-Bas espagnols." },
+    { q: "« L'État, c'est moi » est attribué à…", opts: ["Louis XIV", "Colbert", "Henri IV", "Louis XIII"], ans: 0, chapter: "absolutisme", difficulty: "facile", exp: "Louis XIV, symbole de l'absolutisme." },
+    { q: "Sous l'Ancien Régime, qui paie les impôts ?", opts: ["le tiers état", "le clergé", "la noblesse", "le roi"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Le tiers état ; clergé et noblesse sont des privilégiés exemptés." },
+    { q: "L'Homme de Vitruve et La Cène sont des œuvres de…", opts: ["Léonard de Vinci", "Michel-Ange", "Raphaël", "Botticelli"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Léonard de Vinci, génie complet de la Renaissance." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -474,6 +509,15 @@
     { front: "Louis XIV : 3 choses à retenir ?", back: "Roi-Soleil (1638-1715), Versailles (contrôle la noblesse), Colbert + mercantilisme. Révoque l'Édit de Nantes (1685).", chapter: "absolutisme" },
     { front: "Les 3 ordres de l'Ancien Régime ?", back: "Clergé · Noblesse (privilégiés) · Tiers état (paie les impôts).", chapter: "absolutisme" },
     { front: "Carte d'identité d'un document ?", back: "Nature · Auteur · Date/lieu · Source/destinataire · Sujet.", chapter: "methode" },
+    { front: "La « Bible à 42 lignes » ?", back: "Le premier grand livre imprimé par Gutenberg (≈ 1455).", chapter: "livre" },
+    { front: "Œuvres de Léonard de Vinci ?", back: "La Joconde, La Cène, l'Homme de Vitruve. (Il écrivait en écriture miroir !)", chapter: "humanisme" },
+    { front: "Œuvres de Michel-Ange ?", back: "Le David (sculpture) et le plafond de la chapelle Sixtine (peinture).", chapter: "humanisme" },
+    { front: "Qui sont les Médicis ?", back: "Une famille de mécènes de Florence qui finançait les artistes de la Renaissance.", chapter: "humanisme" },
+    { front: "Qui révoque l'Édit de Nantes et quand ?", back: "Louis XIV, en 1685 (Henri IV l'avait signé en 1598).", chapter: "absolutisme" },
+    { front: "Charles Quint, un fait marquant ?", back: "Empereur catholique d'un immense empire ; il abdique (1556) pour finir dans un monastère.", chapter: "reforme" },
+    { front: "Qui est Colbert ?", back: "Le ministre de Louis XIV, créateur du mercantilisme.", chapter: "absolutisme" },
+    { front: "Henri IV : phrase et acte célèbres ?", back: "« Paris vaut bien une messe » ; il signe l'Édit de Nantes (1598).", chapter: "reforme" },
+    { front: "Les Jésuites ?", back: "Un ordre catholique, fer de lance de la Contre-Réforme (enseignement, missions).", chapter: "reforme" },
     { front: "Source primaire vs secondaire ?", back: "Primaire = document d'époque (témoin direct). Secondaire = analyse écrite plus tard par un historien.", chapter: "methode" }
   ];
 

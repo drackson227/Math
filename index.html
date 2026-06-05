@@ -79,6 +79,15 @@
   </div>
 
   <div class="settings-row">
+    <label>🌈 Couleur par matière</label>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px;">
+      <button class="theme-btn active" id="accent-btn-auto" onclick="setAccentMode('auto')" style="padding:8px 4px; font-size:11px;">🎯 Auto (par matière)</button>
+      <button class="theme-btn" id="accent-btn-fixed" onclick="setAccentMode('fixed')" style="padding:8px 4px; font-size:11px;">🎨 Suivre le thème</button>
+    </div>
+    <p style="font-size:11px; color:var(--text-secondary); margin:6px 0 0;">Auto : chaque matière a sa couleur (Histoire = or, Bio = vert…).</p>
+  </div>
+
+  <div class="settings-row">
     <label>🌌 Fond</label>
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
       <button class="theme-btn" id="bg-btn-normal"     onclick="setBgEffect('normal')"    style="padding:8px 4px; font-size:11px;">Normal</button>

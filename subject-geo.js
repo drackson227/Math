@@ -12,9 +12,14 @@
     "belgique_carte.jpg": {
       title: "Les provinces de Belgique", sub: "10 provinces + Bruxelles",
       cours: "<p>La Belgique compte <strong>10 provinces</strong> : <strong>5 en Flandre</strong> (nord, néerlandophone) et <strong>5 en Wallonie</strong> (sud, francophone). <strong>Bruxelles</strong> est une région à part (bilingue), elle n'est dans aucune province.</p>",
-      exam: "<ul><li><strong>Flandre :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.</li><li><strong>Wallonie :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</li><li>Sache repérer ta province et la situer (nord/sud).</li></ul>"
+      exam: "<ul><li><strong>Flandre :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.</li><li><strong>Wallonie :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</li><li>Sache repérer ta province et la situer (nord/sud).</li></ul>",
+      anecdote: "La flèche de la carte pointe vers la petite zone bleue = <strong>Bruxelles-Capitale</strong>. C'est la 3ᵉ région du pays (avec la Flandre et la Wallonie), mais elle n'est <strong>dans aucune province</strong> et elle est <strong>bilingue</strong>."
     }
   });
+
+  /* Thème visuel des fiches de géo */
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, { "belgique_carte.jpg": "geo" });
 
   var sections = {};
 
@@ -44,7 +49,7 @@
       <p>La Belgique compte <strong>10 provinces</strong> : 5 en Flandre, 5 en Wallonie. <strong>Bruxelles-Capitale</strong> n'appartient à aucune province.</p>
       <p><strong>Flandre (nord) :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.<br>
          <strong>Wallonie (sud) :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</p>
-      <figure class="hfig" style="max-width:440px; display:block; margin:1rem auto;"><img src="belgique_carte.jpg" alt="Carte des provinces de Belgique" loading="lazy"><figcaption>Les 10 provinces de Belgique (Flandre au nord, Wallonie au sud).</figcaption></figure>
+      <figure class="hfig" style="max-width:440px; display:block; margin:1rem auto;"><img src="belgique_carte.jpg" alt="Carte des provinces de Belgique" loading="lazy"><figcaption>Les 10 provinces de Belgique (Flandre au nord, Wallonie au sud). La <strong>flèche</strong> pointe la petite zone bleue au centre = <strong>Bruxelles-Capitale</strong>, qui n'appartient à aucune province.</figcaption></figure>
       <div class="key-rule"><div class="formula-main">10 provinces = 5 (Flandre) + 5 (Wallonie) · Bruxelles = à part</div></div>
     </div>
 

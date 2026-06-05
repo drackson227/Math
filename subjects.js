@@ -179,6 +179,7 @@
       applyNav(content);
     }
     updateQuizHeader(key);
+    try { if (typeof applySubjectAccent === 'function') applySubjectAccent(); } catch (_) {}
     // Reconstruit les éléments dépendant de la matière même au tout premier chargement
     // (resetEngine n'est appelé que lors d'un changement de matière).
     try { if (typeof rebuildFlashcardFilters === 'function') rebuildFlashcardFilters(); } catch (_) {}
