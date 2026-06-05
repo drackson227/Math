@@ -3954,3 +3954,44 @@ function markPremiumNav() {
   });
 }
 document.addEventListener('DOMContentLoaded', markPremiumNav);
+
+/* ════════════ Images cliquables → fenêtre d'info (cours + examen) ════════════ */
+window.IMG_INFO = window.IMG_INFO || {};
+
+function openImgModal(key) {
+  var info = window.IMG_INFO[key];
+  if (!info) return;
+  var modal = document.getElementById('imgModal');
+  var img = document.getElementById('imgModalImg');
+  var body = document.getElementById('imgModalBody');
+  if (!modal || !img || !body) return;
+  img.src = key;
+  img.alt = info.title || '';
+  var html = '<h3>' + (info.title || '') + '</h3>';
+  if (info.sub) html += '<p class="imd-sub">' + info.sub + '</p>';
+  if (info.cours) html += '<div class="imd-block imd-cours"><h4>📚 Le cours</h4>' + info.cours + '</div>';
+  if (info.exam) html += '<div class="imd-block imd-exam"><h4>🎯 Pour l\'examen / révision</h4>' + info.exam + '</div>';
+  body.innerHTML = html;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeImgModal() {
+  var modal = document.getElementById('imgModal');
+  if (modal) modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* Délégation : tout <img> dont le nom de fichier est connu devient cliquable */
+document.addEventListener('click', function (e) {
+  var img = e.target.closest ? e.target.closest('img') : null;
+  if (!img) return;
+  if (img.closest('#imgModal')) return; // pas l'image déjà ouverte
+  var src = img.getAttribute('src') || '';
+  var key = src.split('/').pop();
+  if (window.IMG_INFO[key]) { openImgModal(key); }
+});
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeImgModal();
+});

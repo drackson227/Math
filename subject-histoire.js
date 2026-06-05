@@ -7,6 +7,76 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Infos affichées quand on clique sur une image (cours + examen) */
+  window.IMG_INFO = window.IMG_INFO || {};
+  Object.assign(window.IMG_INFO, {
+    "gutenberg.jpg": {
+      title: "Gutenberg & l'imprimerie", sub: "≈ 1400–1468 · invention vers 1450",
+      cours: "<p>Avant, les livres étaient <strong>copiés à la main</strong> (manuscrits) : rares, longs à produire et très chers. Vers <strong>1450</strong>, <strong>Johannes Gutenberg</strong> invente l'imprimerie à <strong>caractères mobiles</strong> (à Mayence, en Allemagne).</p>",
+      exam: "<ul><li><strong>Date :</strong> ≈ 1450 · <strong>Lieu :</strong> Mayence.</li><li><strong>2 conséquences à citer :</strong> livres moins chers et plus nombreux + <strong>diffusion rapide des idées</strong> (Humanisme, Réforme).</li><li>Piège : ce n'est <em>pas</em> Luther — Luther s'en servira pour diffuser ses idées.</li></ul>"
+    },
+    "erasme.jpg": {
+      title: "Érasme", sub: "1466–1536 · humaniste",
+      cours: "<p><strong>Érasme</strong> de Rotterdam est le plus célèbre <strong>humaniste</strong>. Auteur de « <strong>L'Éloge de la folie</strong> », il défend le savoir, la raison et l'esprit critique.</p>",
+      exam: "<ul><li><strong>Mouvement :</strong> l'Humanisme (l'homme et la raison au centre).</li><li><strong>Œuvre :</strong> L'Éloge de la folie.</li><li>Autres humanistes : <strong>Thomas More</strong> (Utopia), Rabelais, Montaigne.</li></ul>"
+    },
+    "vinci.jpg": {
+      title: "Léonard de Vinci", sub: "1452–1519 · artiste & savant",
+      cours: "<p>Génie de la <strong>Renaissance</strong> : peintre (La Joconde, La Cène), mais aussi ingénieur, anatomiste, inventeur. Il incarne l'« homme universel » qui touche à tout.</p>",
+      exam: "<ul><li><strong>Période :</strong> Renaissance (née en <strong>Italie</strong>).</li><li><strong>Œuvre phare :</strong> La Joconde.</li><li>Avec <strong>Michel-Ange</strong> et Raphaël : perspective, réalisme, corps humain.</li></ul>"
+    },
+    "joconde.jpg": {
+      title: "La Joconde", sub: "≈ 1503–1519 · Léonard de Vinci",
+      cours: "<p>Le tableau le plus célèbre du monde, peint par <strong>Léonard de Vinci</strong>. Il illustre les progrès de la Renaissance : <strong>réalisme</strong>, jeu d'ombre et de lumière (sfumato), perspective.</p>",
+      exam: "<ul><li>Savoir dire <strong>qui</strong> l'a peinte (Vinci) et de <strong>quelle période</strong> (Renaissance).</li><li>Exemple parfait pour illustrer « l'art de la Renaissance ».</li></ul>"
+    },
+    "michelange.jpg": {
+      title: "Michel-Ange", sub: "1475–1564 · artiste",
+      cours: "<p>Grand artiste de la <strong>Renaissance</strong> italienne : sculpteur (le <strong>David</strong>) et peintre (le plafond de la <strong>chapelle Sixtine</strong>, au Vatican).</p>",
+      exam: "<ul><li><strong>2 œuvres :</strong> le David (sculpture) · le plafond de la chapelle Sixtine (peinture).</li><li>À ne pas confondre avec Léonard de Vinci.</li></ul>"
+    },
+    "luther.jpg": {
+      title: "Martin Luther", sub: "1483–1546 · la Réforme",
+      cours: "<p>Moine allemand qui, en <strong>1517</strong>, affiche ses <strong>95 thèses</strong> (à Wittenberg) contre les abus de l'Église, surtout la vente des <strong>indulgences</strong>. Il lance le <strong>protestantisme</strong>.</p>",
+      exam: "<ul><li><strong>Date clé : 1517</strong> (début de la Réforme).</li><li><strong>2 principes :</strong> le <strong>salut par la foi seule</strong> + la <strong>Bible</strong> comme seule autorité.</li><li>Conséquence : <strong>division de la chrétienté</strong> (catholiques / protestants).</li></ul>"
+    },
+    "europe_religions.jpg": {
+      title: "Les 95 thèses (1517)", sub: "document imprimé · Luther",
+      cours: "<p>Les <strong>95 thèses</strong> de Luther, diffusées grâce à l'<strong>imprimerie</strong>, dénoncent les abus de l'Église. Elles se répandent très vite dans toute l'Europe et déclenchent la Réforme.</p>",
+      exam: "<ul><li>Montre bien le lien <strong>imprimerie → diffusion des idées → Réforme</strong>.</li><li><strong>1517</strong>, Wittenberg, contre les indulgences.</li></ul>"
+    },
+    "calvin.jpg": {
+      title: "Jean Calvin", sub: "1509–1564 · réformateur",
+      cours: "<p>Réformateur français installé à <strong>Genève</strong>. Il développe une branche du protestantisme, le <strong>calvinisme</strong>, avec l'idée de la <strong>prédestination</strong> (Dieu a déjà choisi qui sera sauvé).</p>",
+      exam: "<ul><li><strong>Ville :</strong> Genève · <strong>idée :</strong> prédestination.</li><li>Après Luther, c'est le 2ᵉ grand réformateur à retenir.</li></ul>"
+    },
+    "trente.jpg": {
+      title: "Le Concile de Trente", sub: "1545–1563 · Contre-Réforme",
+      cours: "<p>Face à la Réforme protestante, l'Église catholique réagit : c'est la <strong>Contre-Réforme</strong>. Le <strong>Concile de Trente</strong> (1545-1563) réaffirme les dogmes catholiques et corrige certains abus. Les <strong>Jésuites</strong> en sont le fer de lance.</p>",
+      exam: "<ul><li><strong>Mot-clé :</strong> Contre-Réforme (= réaction catholique).</li><li><strong>Dates : 1545-1563</strong> · + les <strong>Jésuites</strong>.</li></ul>"
+    },
+    "henri4.jpg": {
+      title: "Henri IV", sub: "1553–1610 · Édit de Nantes",
+      cours: "<p>Roi de France qui met fin aux <strong>guerres de religion</strong>. En <strong>1598</strong>, il signe l'<strong>Édit de Nantes</strong> : il accorde la <strong>tolérance</strong> religieuse aux protestants.</p>",
+      exam: "<ul><li><strong>1598 = Édit de Nantes</strong> (tolérance, signé par Henri IV).</li><li>Piège : <strong>Louis XIV le révoque en 1685</strong>. Ne pas confondre <em>signer</em> (1598) / <em>révoquer</em> (1685).</li></ul>"
+    },
+    "charlesquint.jpg": {
+      title: "Charles Quint", sub: "1500–1558 · empereur",
+      cours: "<p>Puissant empereur <strong>catholique</strong> (Saint-Empire + Espagne). Il règne aussi sur les <strong>Pays-Bas espagnols</strong> (dont nos régions actuelles) et combat les idées protestantes de Luther.</p>",
+      exam: "<ul><li>Souverain <strong>catholique</strong> opposé à la Réforme.</li><li>Lien avec nos régions : les <strong>Pays-Bas espagnols</strong>.</li></ul>"
+    },
+    "louis14.jpg": {
+      title: "Louis XIV, le Roi-Soleil", sub: "1638–1715 · absolutisme",
+      cours: "<p>Le modèle de la <strong>monarchie absolue de droit divin</strong> : « <em>L'État, c'est moi</em> ». Il détient <strong>tous les pouvoirs</strong>, contrôle la noblesse à <strong>Versailles</strong> et s'appuie sur <strong>Colbert</strong> (mercantilisme).</p>",
+      exam: "<ul><li><strong>Absolutisme :</strong> le roi a tous les pouvoirs (qu'il tient de Dieu).</li><li><strong>3 actions :</strong> Versailles (contrôle la noblesse) · Colbert + mercantilisme · <strong>révoque l'Édit de Nantes (1685)</strong>.</li></ul>"
+    },
+    "versailles.jpg": {
+      title: "Le château de Versailles", sub: "résidence de Louis XIV",
+      cours: "<p>Immense château construit par <strong>Louis XIV</strong>. Il y attire la <strong>noblesse</strong> pour la <strong>surveiller</strong> et l'occuper (fêtes, étiquette) : ainsi elle ne peut plus se révolter. C'est un véritable outil de l'<strong>absolutisme</strong>.</p>",
+      exam: "<ul><li>Versailles = <strong>instrument de pouvoir</strong> (contrôler la noblesse), pas qu'un beau château.</li><li>Symbole de la grandeur du Roi-Soleil.</li></ul>"
+    }
+  });
+
   /* helper image */
   function fig(src, cap, w) {
     return '<figure class="hfig" style="max-width:' + (w || 170) + 'px">' +
@@ -115,6 +185,23 @@
         ${fig('henri4.jpg', 'Henri IV (Édit de Nantes, 1598)', 125)}
       </div>
       <p>L'Église catholique réagit : c'est la <strong>Contre-Réforme</strong> (Concile de <strong>Trente</strong>, 1545–1563 ; les Jésuites). En France, des <strong>guerres de religion</strong> éclatent (massacre de la <strong>Saint-Barthélemy, 1572</strong>) ; elles s'apaisent avec l'<strong>Édit de Nantes (1598)</strong> d'Henri IV (tolérance pour les protestants).</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1.2rem;">⚔️ Catholiques vs Protestants — le tableau à connaître</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Critère</th><th class="cat">⛪ Catholiques</th><th class="pro">📖 Protestants</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Chef / autorité</th><td class="cat">Le <strong>pape</strong> (à Rome)</td><td class="pro">Pas de pape ; la <strong>Bible</strong> est la seule autorité</td></tr>
+          <tr><th>Comment être sauvé ?</th><td class="cat">Par la <strong>foi + les œuvres</strong> (bonnes actions, sacrements)</td><td class="pro">Par la <strong>foi seule</strong> (pas par l'argent ni les œuvres)</td></tr>
+          <tr><th>La Bible</th><td class="cat">Lue et interprétée par le <strong>clergé</strong>, en latin</td><td class="pro">Lue par <strong>tous</strong>, traduite en langue courante (≈ imprimerie)</td></tr>
+          <tr><th>Les indulgences</th><td class="cat">Acceptées (« payer pour le pardon »)</td><td class="pro"><strong>Rejetées</strong> (c'est ce que Luther dénonce)</td></tr>
+          <tr><th>Le clergé</th><td class="cat">Prêtres, moines ; <strong>célibat</strong> obligatoire</td><td class="pro">Pasteurs ; peuvent <strong>se marier</strong></td></tr>
+          <tr><th>Sacrements</th><td class="cat"><strong>7</strong> sacrements</td><td class="pro">Surtout <strong>2</strong> (baptême, communion)</td></tr>
+          <tr><th>Figures clés</th><td class="cat">Le pape · Concile de <strong>Trente</strong> · Charles Quint</td><td class="pro"><strong>Luther</strong> (1517) · <strong>Calvin</strong> (Genève)</td></tr>
+        </tbody>
+      </table>
+      <div class="key-rule"><div class="formula-main" style="font-size:16px;">À retenir : Protestants = <strong>foi seule + Bible pour tous + pas de pape</strong> · Catholiques = <strong>pape + foi & œuvres + 7 sacrements</strong></div></div>
     </div>
 
     <div class="synth-section">

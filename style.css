@@ -1422,3 +1422,51 @@ textarea:focus-visible,
 /* ── Boutons de chapitre du Mode Focus (générés par matière) ── */
 .focus-chap-btn { background: rgba(167,139,250,0.12); border: 2px solid var(--color-nav); border-radius: 16px; padding: 1.3rem 1rem; cursor: pointer; color: var(--color-nav); text-align: center; transition: transform 0.15s ease, background 0.2s ease; }
 .focus-chap-btn:hover { background: rgba(167,139,250,0.22); transform: translateY(-2px); }
+
+/* ───────── Images cliquables + fenêtre d'info (modale) ───────── */
+.hfig img, .perso-card img { cursor: zoom-in; transition: filter 0.15s ease, transform 0.15s ease; }
+.hfig img:hover, .perso-card img:hover { filter: brightness(1.08); }
+.perso-card { cursor: pointer; }
+.perso-card:hover { transform: translateY(-3px); }
+.img-clickable { cursor: zoom-in; }
+.img-hint { position: relative; }
+
+.img-modal {
+  display: none; position: fixed; inset: 0; z-index: 4000;
+  background: rgba(8, 6, 20, 0.82); backdrop-filter: blur(4px);
+  padding: 1.2rem; overflow-y: auto;
+}
+.img-modal.open { display: flex; align-items: flex-start; justify-content: center; }
+.img-modal-box {
+  background: var(--bg-card, #15131f); border: 1px solid var(--border-subtle, #2a2740);
+  border-radius: 20px; max-width: 620px; width: 100%; margin: auto;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; position: relative;
+  animation: imgModalIn 0.22s ease;
+}
+@keyframes imgModalIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+.img-modal-close {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(0,0,0,0.55); color: #fff; font-size: 18px; line-height: 1;
+}
+.img-modal-close:hover { background: rgba(0,0,0,0.8); }
+#imgModalImg { display: block; width: 100%; max-height: 46vh; object-fit: contain; background: #0c0a16; }
+#imgModalBody { padding: 1.1rem 1.3rem 1.5rem; }
+#imgModalBody h3 { font-size: 22px; font-weight: 800; color: var(--color-nav); margin: 0 0 0.2rem; }
+#imgModalBody .imd-sub { color: var(--text-secondary); font-size: 13px; margin: 0 0 0.9rem; }
+.imd-block { border-radius: 14px; padding: 0.85rem 1rem; margin-bottom: 0.8rem; line-height: 1.65; }
+.imd-cours { background: rgba(96,165,250,0.10); border: 1px solid rgba(96,165,250,0.30); }
+.imd-exam { background: rgba(248,180,90,0.10); border: 1px solid rgba(248,180,90,0.32); }
+.imd-block h4 { margin: 0 0 0.4rem; font-size: 15px; font-weight: 700; }
+.imd-cours h4 { color: #60a5fa; }
+.imd-exam h4 { color: #f8b45a; }
+.imd-block ul { margin: 0.3rem 0 0; padding-left: 1.2rem; line-height: 1.7; }
+
+/* Tableau comparatif (ex. Protestants vs Catholiques) */
+.compare-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+.compare-table th, .compare-table td { border: 1px solid var(--border-subtle, #2a2740); padding: 0.6rem 0.7rem; text-align: left; vertical-align: top; }
+.compare-table thead th { background: rgba(167,139,250,0.16); color: var(--color-nav); font-weight: 700; }
+.compare-table tbody th { background: rgba(255,255,255,0.04); font-weight: 600; width: 30%; }
+.compare-table .cat { background: rgba(96,165,250,0.07); }
+.compare-table .pro { background: rgba(248,180,90,0.07); }
+@media (max-width: 600px) { .compare-table { font-size: 12.5px; } .compare-table th, .compare-table td { padding: 0.45rem 0.5rem; } }

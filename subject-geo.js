@@ -6,6 +6,16 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Infos affichées quand on clique sur une image (cours + examen) */
+  window.IMG_INFO = window.IMG_INFO || {};
+  Object.assign(window.IMG_INFO, {
+    "belgique_carte.jpg": {
+      title: "Les provinces de Belgique", sub: "10 provinces + Bruxelles",
+      cours: "<p>La Belgique compte <strong>10 provinces</strong> : <strong>5 en Flandre</strong> (nord, néerlandophone) et <strong>5 en Wallonie</strong> (sud, francophone). <strong>Bruxelles</strong> est une région à part (bilingue), elle n'est dans aucune province.</p>",
+      exam: "<ul><li><strong>Flandre :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.</li><li><strong>Wallonie :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</li><li>Sache repérer ta province et la situer (nord/sud).</li></ul>"
+    }
+  });
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */

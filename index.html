@@ -547,6 +547,15 @@
   <p style="margin:0; font-size:12px; color:var(--text-secondary); opacity:0.8;">💜 100% gratuit — bonne révision !</p>
 </footer>
 
+<!-- Fenêtre d'info sur les images (cliquables) -->
+<div id="imgModal" class="img-modal" onclick="if(event.target===this)closeImgModal()">
+  <div class="img-modal-box">
+    <button class="img-modal-close" type="button" onclick="closeImgModal()" aria-label="Fermer">✕</button>
+    <img id="imgModalImg" src="" alt="">
+    <div id="imgModalBody"></div>
+  </div>
+</div>
+
 <div class="focus-mode-overlay" id="focus-overlay">
   <button class="focus-close" onclick="toggleFocusMode()">✕</button>
   <div class="focus-card" id="focus-content">
