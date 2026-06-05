@@ -83,7 +83,7 @@
         <li><strong>n final</strong> : on fait réagir en respectant les proportions de l'équation (le réactif s'épuise, le produit apparaît).</li>
         <li><strong>Résolution</strong> : m = n · M pour la grandeur cherchée.</li>
       </ol>
-      <div class="key-rule"><div class="formula-main">n = m / M &nbsp;&nbsp;↔&nbsp;&nbsp; m = n · M</div></div>
+      <div class="key-rule"><div class="formula-main">\\(n = \\dfrac{m}{M}\\) &nbsp;&nbsp;↔&nbsp;&nbsp; \\(m = n \\cdot M\\)</div></div>
       <p><strong>Exemple — Fe + S → FeS (1 : 1 : 1).</strong> Pour <strong>100 g de fer</strong> (M = 55,86) : n = 100 / 55,86 = <strong>1,79 mol</strong>. Proportions 1:1 → 1,79 mol de soufre nécessaire → m = 1,79 · 32,06 = <strong>57,4 g de S</strong> ; et 1,79 mol de FeS se forment → m = 1,79 · 87,91 = <strong>157 g de FeS</strong>.</p>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
@@ -117,11 +117,11 @@
       </div>
       <div>
         <div class="formula-box"><h3>Réactions acide-base / métal</h3><div class="formula-main">acide + hydroxyde → sel + eau<br>acide + oxyde → sel + eau<br>acide + métal → sel + H₂</div></div>
-        <div class="formula-box"><h3>Mole, masse & gaz</h3><div class="formula-main">n = m / M &nbsp;↔&nbsp; m = n · M<br>N = n · N<sub>A</sub><br>P · V = n · R · T</div><p class="note">n en mol · m en g · M = masse molaire en g/mol · N<sub>A</sub> ≈ 6,02·10²³ /mol · R ≈ 0,082 L·atm/(mol·K) · T en kelvins.</p></div>
-        <div class="formula-box"><h3>Volume molaire des gaz (V<sub>m</sub>)</h3><div class="formula-main">n = V / V<sub>m</sub> &nbsp;↔&nbsp; V = n · V<sub>m</sub></div><p class="note">Pour un <strong>gaz</strong> : V en L, n en mol. <strong>V<sub>m</sub> = 22,4 L/mol</strong> aux <strong>CNTP</strong> (0 °C, 1 atm) · <strong>V<sub>m</sub> = 24,5 L/mol</strong> aux <strong>CSTP</strong> (25 °C, 1 atm).</p></div>
-        <div class="formula-box"><h3>Concentration molaire</h3><div class="formula-main">C = n / V</div><p class="note">C en <strong>mol/L</strong> (mol·L⁻¹) · n en mol · V en <strong>litres</strong>. On note aussi [X] = concentration de l'espèce X.</p></div>
-        <div class="formula-box"><h3>Concentration massique</h3><div class="formula-main">C<sub>m</sub> = m / V &nbsp;&nbsp;↔&nbsp;&nbsp; C<sub>m</sub> = C · M</div><p class="note">C<sub>m</sub> en <strong>g/L</strong> · m en g · V en L. Lien avec la molaire : on multiplie par la masse molaire M.</p></div>
-        <div class="formula-box"><h3>Dilution</h3><div class="formula-main">C₁ · V₁ = C₂ · V₂</div><p class="note">La quantité de soluté ne change pas quand on dilue. (n = C·V conservé.) Facteur de dilution F = V₂/V₁ = C₁/C₂.</p></div>
+        <div class="formula-box"><h3>Mole, masse & gaz</h3><div class="formula-main">\\(n = \\dfrac{m}{M}\\) &nbsp;↔&nbsp; \\(m = n \\cdot M\\)<br>\\(N = n \\cdot N_A\\)<br>\\(P \\cdot V = n \\cdot R \\cdot T\\)</div><p class="note">n en mol · m en g · M = masse molaire en g/mol · N<sub>A</sub> ≈ 6,02·10²³ /mol · R ≈ 0,082 L·atm/(mol·K) · T en kelvins.</p></div>
+        <div class="formula-box"><h3>Volume molaire des gaz (V<sub>m</sub>)</h3><div class="formula-main">\\(n = \\dfrac{V}{V_m}\\) &nbsp;↔&nbsp; \\(V = n \\cdot V_m\\)</div><p class="note">Pour un <strong>gaz</strong> : V en L, n en mol. <strong>V<sub>m</sub> = 22,4 L/mol</strong> aux <strong>CNTP</strong> (0 °C, 1 atm) · <strong>V<sub>m</sub> = 24,5 L/mol</strong> aux <strong>CSTP</strong> (25 °C, 1 atm).</p></div>
+        <div class="formula-box"><h3>Concentration molaire</h3><div class="formula-main">\\(C = \\dfrac{n}{V}\\)</div><p class="note">C en <strong>mol/L</strong> (mol·L⁻¹) · n en mol · V en <strong>litres</strong>. On note aussi [X] = concentration de l'espèce X.</p></div>
+        <div class="formula-box"><h3>Concentration massique</h3><div class="formula-main">\\(C_m = \\dfrac{m}{V}\\) &nbsp;&nbsp;↔&nbsp;&nbsp; \\(C_m = C \\cdot M\\)</div><p class="note">C<sub>m</sub> en <strong>g/L</strong> · m en g · V en L. Lien avec la molaire : on multiplie par la masse molaire M.</p></div>
+        <div class="formula-box"><h3>Dilution</h3><div class="formula-main">\\(C_1 \\cdot V_1 = C_2 \\cdot V_2\\)</div><p class="note">La quantité de soluté ne change pas quand on dilue. (n = C·V conservé.) Facteur de dilution \\(F = \\dfrac{V_2}{V_1} = \\dfrac{C_1}{C_2}\\).</p></div>
       </div>
     </div>
   </div>`;

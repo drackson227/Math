@@ -10,7 +10,8 @@
     maths:    { label: 'Maths',        icon: '📐', subtitle: 'Maths — Géométrie analytique plane · Vecteurs · Cercle · Droites', ready: true,  mathTools: true },
     francais: { label: 'Français',     icon: '✍️', subtitle: 'Français — grammaire, conjugaison, littérature', ready: false, mathTools: false },
     anglais:  { label: 'Anglais',      icon: '🇬🇧', subtitle: 'Anglais — vocabulaire, grammaire, temps', ready: false, mathTools: false },
-    histoire: { label: 'Histoire-Géo', icon: '🌍', subtitle: 'Histoire-Géo — repères, événements, cartes', ready: false, mathTools: false },
+    histoire: { label: 'Histoire',     icon: '🏛️', subtitle: 'Histoire — repères, événements, sources', ready: false, mathTools: false },
+    geo:      { label: 'Géo',          icon: '🗺️', subtitle: 'Géographie — la Belgique, biocarburants', ready: false, mathTools: false },
     chimie:   { label: 'Chimie',       icon: '🧪', subtitle: 'Chimie — réactions, pondération, mole & gaz', ready: false, mathTools: false },
     bio:      { label: 'Bio',          icon: '🧬', subtitle: 'Biologie — le vivant, cellules, systèmes', ready: false, mathTools: false }
   };
