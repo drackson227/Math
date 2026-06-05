@@ -1579,3 +1579,11 @@ textarea:focus-visible,
 /* Léger relief au survol des cartes de cours */
 .formula-box, .exercise-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
 .formula-box:hover, .exercise-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+
+/* Puce « cartes à réviser » (dues) */
+.fc-chip-due { border-color: var(--color-droite); color: var(--color-droite); }
+.fc-chip-due.on { background: var(--color-droite); border-color: var(--color-droite); color: #1a1407; }
+/* Bouton lecture audio des flashcards */
+.fc-speak { background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-secondary); border-radius: 10px; padding: 5px 11px; font-size: 14px; cursor: pointer; transition: background .15s, color .15s; }
+.fc-speak:hover { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
+.fc-speak.speaking { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }

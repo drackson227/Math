@@ -316,6 +316,7 @@
     </div>
     <div id="fc-filters" style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; justify-content:center;"><!-- chips générés par rebuildFlashcardFilters() selon la matière --></div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
+    <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();" style="margin-bottom:0.7rem;">🔊 Écouter</button>
     <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.75rem;">🔔 — à réviser aujourd'hui</p>
     <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
     <p style="text-align:center; font-size:11px; color:var(--text-secondary); opacity:0.55; margin-bottom:0.5rem;">
@@ -386,7 +387,7 @@
         <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
       </div>
       <br>
-      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
+      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
   </div>
   <!-- Écran quiz actif -->
   <div id="quiz-active-screen" style="display:none;">

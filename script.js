@@ -500,6 +500,30 @@ function showQuizSummary() {
   data.wrongQuestions = [];
   saveData(data);
 
+  // ── Examen blanc : note /20 + historique par matière ──
+  var examBanner = '';
+  if (window._examRun) {
+    window._examRun = false;
+    var note = currentQuestions.length > 0 ? Math.round(score / currentQuestions.length * 20) : 0;
+    var subj = window.currentSubject || 'maths';
+    var d2 = loadSavedData();
+    d2.examHistory = d2.examHistory || {};
+    d2.examHistory[subj] = d2.examHistory[subj] || [];
+    d2.examHistory[subj].push({ date: new Date().toISOString().slice(0, 10), note: note, total: currentQuestions.length });
+    if (d2.examHistory[subj].length > 20) d2.examHistory[subj] = d2.examHistory[subj].slice(-20);
+    saveData(d2);
+    var hist = d2.examHistory[subj];
+    var best = hist.reduce(function (m, h) { return Math.max(m, h.note); }, 0);
+    var mention = note >= 16 ? '🏆 Excellent !' : (note >= 12 ? '👍 Bien' : (note >= 10 ? '🙂 Passable' : '💪 À retravailler'));
+    var last = hist.slice(-5).reverse().map(function (h) { return '<span style="display:inline-block; background:rgba(255,255,255,0.06); border-radius:8px; padding:2px 8px; margin:2px; font-size:12px;">' + h.date + ' : <strong>' + h.note + '/20</strong></span>'; }).join('');
+    examBanner = '<div class="formula-box" style="text-align:center; border:2px solid var(--color-nav);">' +
+      '<h3 style="font-size:22px; font-weight:800; margin-bottom:0.3rem; color:var(--color-nav);">📝 Examen blanc terminé</h3>' +
+      '<div class="score-num" style="font-size:52px;">' + note + '<span style="font-size:24px; color:var(--text-secondary);">/20</span></div>' +
+      '<p style="font-size:16px; margin:0.3rem 0;">' + mention + ' &nbsp;·&nbsp; Record : <strong>' + best + '/20</strong></p>' +
+      '<p style="font-size:13px; color:var(--text-secondary); margin-top:0.6rem;">Tes derniers examens :<br>' + last + '</p>' +
+      '</div>';
+  }
+
   // Check for perfect quiz badge — exiger au moins 1 question pour éviter le badge sur quiz vide
   const isPerfect = currentQuestions.length > 0 && score === currentQuestions.length;
   if (isPerfect && !data.badges.includes('Quiz parfait')) {
@@ -508,7 +532,7 @@ function showQuizSummary() {
   }
   if (isPerfect) showRewardAnimation('perfect');
   
-  let summaryHTML = `
+  let summaryHTML = examBanner + `
     <div class="formula-box" style="text-align:center;">
       <h3 style="font-size:24px; font-weight:700; margin-bottom:1rem;">📊 Quiz terminé !</h3>
       <div class="score-num" style="font-size:48px;">${score}/${currentQuestions.length}</div>
@@ -2409,19 +2433,40 @@ function rebuildFlashcardFilters() {
   const order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER) ? CHAP_ORDER : [];
   const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
   let html = '<button type="button" class="fc-chip on" data-ch="all" onclick="filterFlashcards(\'all\')">Toutes</button>';
+  html += '<button type="button" class="fc-chip fc-chip-due" data-ch="due" onclick="filterFlashcards(\'due\')">🔔 À réviser</button>';
   order.forEach(function (ch) {
     html += '<button type="button" class="fc-chip" data-ch="' + ch + '" onclick="filterFlashcards(\'' + ch + '\')">' + (labels[ch] || ch) + '</button>';
   });
   wrap.innerHTML = html;
 }
 
+function _dueCards() {
+  const now = Date.now();
+  return flashcards.filter(c => { const r = flashcardData[c.front]; return !r || !r.due || new Date(r.due).getTime() <= now; });
+}
+
 function filterFlashcards(chapter) {
-  filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
+  if (chapter === 'due') {
+    filteredFlashcards = _dueCards();
+  } else {
+    filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
+  }
   buildFlashcardQueue();           // re-trie la file par échéance pour le nouveau filtre
   currentFlashcardIndex = 0;
   document.querySelectorAll('#fc-filters .fc-chip').forEach(b => {
     b.classList.toggle('on', b.dataset.ch === chapter);
   });
+  // Filtre « à réviser » vide → message sympa au lieu d'une carte vide
+  if (chapter === 'due' && filteredFlashcards.length === 0) {
+    const c = document.getElementById('flashcard-content');
+    const bc = document.getElementById('flashcard-back-content');
+    if (c) c.innerHTML = '🎉 Tout est à jour !';
+    if (bc) bc.innerHTML = 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».';
+    const prog = document.getElementById('flashcard-progress'); if (prog) prog.textContent = '0 / 0';
+    const ctrl = document.getElementById('flashcard-controls'); if (ctrl) ctrl.style.display = 'none';
+    updateDueCount();
+    return;
+  }
   loadFlashcard();
 }
 // ── RÉPÉTITION ESPACÉE ──
@@ -2472,6 +2517,7 @@ function initFlashcards() {
 
 function loadFlashcard() {
   hasFlippedOnce = false;
+  try { if (window.speechSynthesis) { window.speechSynthesis.cancel(); var sb = document.getElementById('fc-speak-btn'); if (sb) sb.classList.remove('speaking'); } } catch (_) {}
   document.getElementById('flashcard').classList.remove('instant');
   const cards = getActiveFlashcards();
   if (!cards.length) return;
@@ -2510,6 +2556,30 @@ function loadFlashcard() {
     MathJax.typesetClear([fcFront, fcBack]);
   }
   safeMathJax([fcFront, fcBack]);
+}
+
+// Lecture audio (synthèse vocale) du côté visible de la flashcard.
+function speakFlashcard() {
+  if (!('speechSynthesis' in window)) { if (typeof showToast === 'function') showToast('Lecture audio non disponible sur ce navigateur', '#f87171'); return; }
+  const cards = getActiveFlashcards();
+  const card = cards[currentFlashcardIndex];
+  if (!card) return;
+  const raw = isFlipped ? card.back : card.front;
+  const txt = _stripTags(raw).replace(/\s+/g, ' ').trim();
+  if (!txt) return;
+  const btn = document.getElementById('fc-speak-btn');
+  // Re-clic pendant la lecture → on coupe
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (btn) btn.classList.remove('speaking');
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = (window.currentSubject === 'anglais') ? 'en-US' : 'fr-FR';
+  u.rate = 0.95;
+  if (btn) btn.classList.add('speaking');
+  u.onend = u.onerror = function () { if (btn) btn.classList.remove('speaking'); };
+  window.speechSynthesis.speak(u);
 }
 
 let hasFlippedOnce = false;
@@ -2797,6 +2867,7 @@ function toggleExamMode() {
 
 function startExamMode() {
   examActive = true;
+  window._examRun = true; // marque la session comme « examen blanc » (pour la note /20)
   const btn = document.getElementById('exam-toggle-btn');
   if (btn) btn.textContent = '⏹ Arrêter l\'examen';
 
