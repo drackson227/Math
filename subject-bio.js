@@ -383,7 +383,7 @@
   ];
   var ANIM_PTS = [
     { l: 11.5, t: 6.5, w: 18, a: 'Réticulum endoplasmique rugueux' }, { l: 11.5, t: 15.8, w: 12, a: 'Ribosome' },
-    { l: 63.5, t: 1.2, w: 17, a: 'Pore nucléaire' }, { l: 63.5, t: 7.3, w: 11, a: 'Nucléole' }, { l: 63.5, t: 14.3, w: 22.5, a: 'Membrane nucléaire' },
+    { l: 54, t: 1.5, w: 17, a: 'Pore nucléaire' }, { l: 64, t: 8, w: 11, a: 'Nucléole' }, { l: 73.5, t: 15, w: 22.5, a: 'Membrane nucléaire' },
     { l: 87.5, t: 10.8, w: 9.5, a: 'Noyau' }, { l: 64.5, t: 24.3, w: 19, a: 'Appareil de Golgi' }, { l: 80, t: 31.3, w: 11, a: 'Centriole' },
     { l: 79.5, t: 37.3, w: 11.5, a: 'Lysosome' }, { l: 80, t: 71, w: 13.5, a: 'Cytoplasme' },
     { l: 11, t: 76.5, w: 17.5, a: 'Réticulum endoplasmique lisse' }, { l: 80, t: 88.5, w: 13, a: 'Membrane plasmique' }, { l: 12.3, t: 92.8, w: 15.5, a: 'Mitochondrie' }

@@ -1275,7 +1275,8 @@ textarea:focus-visible,
 .lblexo { position: relative; max-width: 520px; margin: 1rem auto; border-radius: 12px; }
 .lblexo > img { width: 100%; display: block; border-radius: 12px; background: #fff; border: 1px solid var(--border-subtle); }
 /* pastilles numérotées posées sur le schéma (au bout des flèches) */
-.lblexo .lx-mark { position: absolute; transform: translate(-50%, -50%); min-width: 22px; height: 22px; padding: 0 5px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--color-nav); color: #fff; font: 800 12px/1 inherit; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,0.35); z-index: 2; }
+.lblexo .lx-mark { position: absolute; transform: translate(-50%, -50%); min-width: clamp(14px, 4vw, 22px); height: clamp(14px, 4vw, 22px); padding: 0 4px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--color-nav); color: #fff; font-weight: 800; font-size: clamp(8.5px, 2.4vw, 12px); line-height: 1; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,0.35); z-index: 2; }
+.lblexo .lx-mark:active, .lblexo .lx-mark:hover { z-index: 3; transform: translate(-50%, -50%) scale(1.25); }
 .lblexo .lx-mark.ok { background: #16a34a; }
 .lblexo .lx-mark.no { background: #dc2626; }
 /* liste de saisie SOUS le schéma (lisible sur mobile) */
@@ -1287,7 +1288,13 @@ textarea:focus-visible,
 .lblexo-list input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.25); }
 .lblexo-list input.ok { border-color: #16a34a; background: #dcfce7; color: #15803d; }
 .lblexo-list input.no { border-color: #dc2626; background: #fee2e2; color: #b91c1c; }
-@media (max-width: 600px) { .lblexo, .lblexo-list { max-width: 100%; } .lblexo .lx-mark { min-width: 20px; height: 20px; font-size: 11px; } .lblexo-list input { font-size: 16px; } }
+@media (max-width: 600px) {
+  .lblexo, .lblexo-list { max-width: 100%; }
+  .lblexo-list input { font-size: 16px; }
+  /* Donne plus de largeur au schéma sur petit écran → les repères ne se chevauchent plus */
+  .exercise-card { padding: 1rem; }
+  .lblexo { margin: 0.8rem -0.3rem; }
+}
 .lblexo-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 14px 0 2px; }
 .lblexo-score { font-weight: 800; color: var(--color-nav); font-size: 16px; }
 /* panneau de correction (sous le schéma, propre, sans débordement) */

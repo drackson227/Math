@@ -330,7 +330,9 @@
       <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();">🔊 Écouter</button>
       <button type="button" id="fc-write-btn" class="fc-speak" onclick="toggleWriteMode(); event.stopPropagation();">✏️ Écrire la réponse</button>
       <button type="button" id="fc-fav-btn" class="fc-speak" onclick="toggleFavCard(); event.stopPropagation();">☆ Favori</button>
+      <button type="button" id="fc-shuffle-btn" class="fc-speak" onclick="shuffleFlashcards(); event.stopPropagation();">🔀 Mélanger</button>
     </div>
+    <p id="fc-session" style="display:none; color:var(--color-parabole); font-weight:600; font-size:13px; margin-bottom:0.5rem;"></p>
     <div id="fc-write" style="display:none; max-width:480px; margin:0 auto 0.9rem;">
       <input id="fc-write-input" type="text" placeholder="Tape ta réponse…" onkeydown="if(event.key==='Enter'){event.preventDefault();fcCheckWrite();} event.stopPropagation();" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px;">
       <button type="button" onclick="fcCheckWrite(); event.stopPropagation();" class="nav-btn" style="margin-top:8px;">✅ Vérifier &amp; voir la réponse</button>
@@ -407,7 +409,7 @@
         <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
       </div>
       <br>
-      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.favoriteCards=[]; d.study={}; d.badgeEarned=[]; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
+      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.favoriteCards=[]; d.study={}; d.badgeEarned=[]; d.examDates={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
   </div>
   <!-- Écran quiz actif -->
   <div id="quiz-active-screen" style="display:none;">

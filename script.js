@@ -60,7 +60,8 @@ function loadSavedData() {
     pomodorosCompleted: 0,
     customExercises: [],
     ficheNotes: {},
-    badgeEarned: []
+    badgeEarned: [],
+    examDates: {}
   };
 }
 
@@ -303,8 +304,18 @@ function buildQuiz() {
 // Champs optionnels par question (data.js) :
 //   q.formula → encadré « Formule utilisée »  ·  q.demo → bouton « Voir l'animation »
 //   q.simple  → panneau « explique simplement »  ·  q.deep → panneau « de A à Z »
+// Rend cliquables les termes connus (fiches) dans une explication de quiz.
+// Évité en maths (formules MathJax) ; sûr si TERM_MAP vide.
+function _autolinkExp(html) {
+  try {
+    if (!html || window.currentSubject === 'maths') return html;
+    if (typeof autolinkInfo !== 'function' || !window.TERM_MAP || !Object.keys(window.TERM_MAP).length) return html;
+    return autolinkInfo(html, null);
+  } catch (_) { return html; }
+}
+
 function buildExplanation(q, i) {
-  let html = '<div class="exp-main">' + (q.exp || '') + '</div>';
+  let html = '<div class="exp-main">' + _autolinkExp(q.exp || '') + '</div>';
   if (q.formula) {
     html += '<div class="exp-formula"><span class="exp-formula-label">📐 Formule utilisée</span>' + q.formula + '</div>';
   }
@@ -557,7 +568,7 @@ function showQuizSummary() {
           <div class="question" style="font-size:16px;">${i+1}. ${wq.q}</div>
           <p style="color:#dc3545; font-size:14px; margin:0.5rem 0;">❌ Ta réponse : ${wq.chosen}</p>
           <p style="color:#28a745; font-size:14px; margin:0.5rem 0;">✅ Bonne réponse : ${wq.correct}</p>
-          <p style="color:var(--text-secondary); font-size:14px; margin:0.5rem 0;">${wq.exp}</p>
+          <p style="color:var(--text-secondary); font-size:14px; margin:0.5rem 0;">${_autolinkExp(wq.exp || '')}</p>
         </div>
       `;
     });
@@ -2068,6 +2079,14 @@ document.addEventListener('keydown', (e) => {
 // Tableau de bord « À réviser aujourd'hui » — agrège TOUTES les matières.
 var DASH_ICONS = { maths: '📐', francais: '✍️', anglais: '🇬🇧', histoire: '🏛️', geo: '🗺️', chimie: '🧪', bio: '🧬' };
 var DASH_LABELS = { maths: 'Maths', francais: 'Français', anglais: 'Anglais', histoire: 'Histoire', geo: 'Géo', chimie: 'Chimie', bio: 'Bio' };
+// Planning d'examen : enregistre/efface une date d'examen par matière
+function setExamDate(key, val) {
+  var d = loadSavedData(); d.examDates = d.examDates || {};
+  if (val) d.examDates[key] = val; else delete d.examDates[key];
+  saveData(d);
+  if (typeof renderStudyDashboard === 'function') renderStudyDashboard();
+}
+
 function renderStudyDashboard() {
   var el = document.getElementById('study-dashboard');
   if (!el || !window.SUBJECTS) return;
@@ -2114,7 +2133,33 @@ function renderStudyDashboard() {
     '<div style="height:12px; background:var(--border-subtle); border-radius:8px; overflow:hidden; margin-top:.5rem;"><div style="height:100%; width:' + goalPct + '%; background:' + (goalDone ? '#34d399' : 'var(--color-nav)') + '; border-radius:8px; transition:width .5s;"></div></div>' +
     '<p style="font-size:12.5px; color:var(--text-secondary); margin-top:.6rem;">⏱️ Aujourd\'hui : <strong>' + fmtDur(st.daySec) + '</strong> &nbsp;·&nbsp; Total : <strong>' + fmtDur(st.totalSec) + '</strong></p>' +
     '</div>';
-  el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.7rem;">📅 À réviser aujourd\'hui</h3>' + goalCard +
+  // Carte « planning d'examen » (compte à rebours + cartes/jour conseillées)
+  var examDates = d0.examDates || {};
+  var anyDate = Object.keys(examDates).length;
+  var planRows = order.map(function (key) {
+    var s = window.SUBJECTS[key]; if (!s || !s.ready || !s.content) return '';
+    var total = (s.content.flashcards || []).length;
+    var dateVal = examDates[key] || '';
+    var info = '<span style="color:var(--text-secondary); font-size:12px;">pas de date</span>';
+    if (dateVal) {
+      var dleft = Math.ceil((new Date(dateVal + 'T23:59:59').getTime() - Date.now()) / 86400000);
+      if (dleft < 0) info = '<span style="color:var(--text-secondary);">examen passé</span>';
+      else if (dleft === 0) info = '<span style="color:#f87171; font-weight:700;">C\'est aujourd\'hui ! 💪</span>';
+      else {
+        var perDay = total > 0 ? Math.max(1, Math.ceil(total / dleft)) : 0;
+        info = '<span style="color:' + (dleft <= 3 ? '#f87171' : 'var(--color-nav)') + '; font-weight:700;">J-' + dleft + '</span>' + (perDay ? ' <span style="color:var(--text-secondary); font-size:12px;">· ~' + perDay + ' carte' + (perDay > 1 ? 's' : '') + '/jour</span>' : '');
+      }
+    }
+    return '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:.45rem 0; border-bottom:1px solid var(--border-subtle);">' +
+      '<span style="font-weight:600; min-width:96px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' +
+      '<input type="date" value="' + dateVal + '" onchange="setExamDate(\'' + key + '\', this.value)" style="background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-subtle); border-radius:8px; padding:4px 8px; font-size:12px;">' +
+      '<span style="font-size:13px;">' + info + '</span></div>';
+  }).join('');
+  var planningCard = '<details class="dash-plan" ' + (anyDate ? 'open' : '') + ' style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:.8rem 1.1rem; margin-bottom:1rem;">' +
+    '<summary style="cursor:pointer; font-weight:700;">⏳ Planning d\'examen</summary>' +
+    '<p style="font-size:12px; color:var(--text-secondary); margin:.5rem 0 .3rem;">Mets la date de chaque examen → jours restants + cartes/jour conseillées pour tout réviser à temps.</p>' +
+    planRows + '</details>';
+  el.innerHTML = '<h3 style="font-size:22px; font-weight:700; margin-bottom:0.7rem;">📅 À réviser aujourd\'hui</h3>' + goalCard + planningCard +
     '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.9rem;">' +
     (totalDue > 0 ? '🔔 <strong>' + totalDue + '</strong> carte' + (totalDue > 1 ? 's' : '') + ' à réviser au total. Clique une matière pour t\'y mettre.' : 'Tout est à jour, bravo ! Clique une matière pour t\'entraîner quand même.') +
     '</p>' + rows;
@@ -2557,6 +2602,8 @@ function updateDueCount() {
 function initFlashcards() {
   const data = loadSavedData();
   flashcardData = data.flashcardData || {};
+  fcSessionCount = 0;
+  const _se = document.getElementById('fc-session'); if (_se) { _se.style.display = 'none'; _se.textContent = ''; }
   fcWriteMode = localStorage.getItem('mathsgr2_fc_write') === '1';
   const wb = document.getElementById('fc-write-btn'); if (wb) wb.classList.toggle('speaking', fcWriteMode);
   // B11 — reset filter to 'all' on every section entry so stale chapter filter clears
@@ -2728,10 +2775,50 @@ function rateCard(rating) {
   flashcardData = data.flashcardData;
   recordStudyAction();
 
+  // Compteur de session + retour visuel « prochain rappel »
+  fcSessionCount++;
+  const sEl = document.getElementById('fc-session');
+  if (sEl) { sEl.style.display = ''; sEl.textContent = '✅ ' + fcSessionCount + ' carte' + (fcSessionCount > 1 ? 's' : '') + ' révisée' + (fcSessionCount > 1 ? 's' : '') + ' cette session'; }
+  if (typeof showToast === 'function') {
+    const emo = rating === 'easy' ? '😊' : (rating === 'medium' ? '🤔' : '😓');
+    showToast(emo + ' Revu — prochain rappel dans ' + interval + ' jour' + (interval > 1 ? 's' : ''), rating === 'hard' ? '#f87171' : 'var(--color-parabole)');
+  }
+
   if (cards.length === 0) return;
   // Avance dans la file de session (déjà triée par échéance), sans la re-trier
   currentFlashcardIndex = (currentFlashcardIndex + 1) % cards.length;
   loadFlashcard();
+}
+
+// Compteur de cartes révisées dans la session courante
+let fcSessionCount = 0;
+
+// Mélange la file de cartes en cours et repart du début
+function shuffleFlashcards() {
+  const cards = getActiveFlashcards();
+  if (!cards || cards.length < 2) { if (typeof showToast === 'function') showToast('Pas assez de cartes à mélanger', '#f87171'); return; }
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = cards[i]; cards[i] = cards[j]; cards[j] = t;
+  }
+  currentFlashcardIndex = 0;
+  loadFlashcard();
+  if (typeof showToast === 'function') showToast('🔀 Cartes mélangées', 'var(--color-nav)');
+}
+
+// Saut direct vers une carte précise (utilisé par la recherche globale)
+function jumpToFlashcard(front) {
+  try {
+    const cards = getActiveFlashcards();
+    let idx = -1;
+    for (let i = 0; i < cards.length; i++) { if (cards[i].front === front) { idx = i; break; } }
+    if (idx >= 0) {
+      currentFlashcardIndex = idx;
+      loadFlashcard();
+      const el = document.getElementById('flashcards');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  } catch (_) {}
 }
 
 // Journal functionality

@@ -24,6 +24,14 @@
     c.querySelectorAll('mjx-container, .MathJax, script, style, button').forEach(function (n) { n.remove(); });
     return c.textContent.replace(/\s+/g, ' ').trim();
   }
+  // Texte brut depuis une chaîne HTML (pour fiches / flashcards)
+  function plain(html) {
+    if (!html) return '';
+    var d = document.createElement('div');
+    d.innerHTML = html;
+    d.querySelectorAll('mjx-container, .MathJax, script, style').forEach(function (n) { n.remove(); });
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
 
   function buildIndex() {
     index = [];
@@ -44,6 +52,8 @@
       var mc = box.closest('.method-content');
       index.push({
         id: id,
+        type: 'box',
+        secLabel: SECTION_LABELS[sec.id] || sec.id,
         title: title,
         snippet: snippet.slice(0, 130),
         section: sec.id,
@@ -52,6 +62,42 @@
         ns: norm(snippet)
       });
     });
+
+    // ── Fiches (personnages + notions), fusionnées toutes matières ──
+    function addFiches(map) {
+      if (!map) return;
+      Object.keys(map).forEach(function (k) {
+        var info = map[k];
+        if (!info || !info.title) return;
+        if (index.some(function (x) { return x.type === 'fiche' && x.key === k; })) return;
+        var snip = [info.sub, plain(info.cours), plain(info.exam), plain(info.anecdote)].filter(Boolean).join(' ');
+        index.push({
+          type: 'fiche', key: k, secLabel: '📖 Fiche',
+          title: info.title, snippet: snip.slice(0, 130), section: 'fiche',
+          nt: norm(info.title), ns: norm(info.title + ' ' + snip)
+        });
+      });
+    }
+    addFiches(window.IMG_INFO);
+    addFiches(window.INFO_TOPICS);
+
+    // ── Flashcards de toutes les matières prêtes ──
+    if (window.SUBJECTS) {
+      Object.keys(window.SUBJECTS).forEach(function (sk) {
+        var s = window.SUBJECTS[sk];
+        if (!s || !s.ready || !s.content || !s.content.flashcards) return;
+        var lbl = s.label || sk;
+        s.content.flashcards.forEach(function (c) {
+          var f = plain(c.front), bk = plain(c.back);
+          if (!f) return;
+          index.push({
+            type: 'card', subject: sk, front: c.front, secLabel: '🎴 Carte · ' + lbl,
+            title: f.slice(0, 80), snippet: bk.slice(0, 130), section: 'flashcards',
+            nt: norm(f), ns: norm(f + ' ' + bk)
+          });
+        });
+      });
+    }
     return index;
   }
 
@@ -93,7 +139,7 @@
     results = doSearch(q);
     sel = results.length ? 0 : -1;
     if (!q.trim()) {
-      box.innerHTML = '<div class="search-empty">Tape un mot : <em>rayon, pente, milieu, centre, distance, vecteur…</em></div>';
+      box.innerHTML = '<div class="search-empty">Cherche dans tout le site — <em>fiches, flashcards, formules, notions</em> : Luther, mole, rayon, pente, Réforme…</div>';
       return;
     }
     if (!results.length) {
@@ -103,7 +149,7 @@
     var words = norm(q).split(/\s+/).filter(Boolean);
     box.innerHTML = results.map(function (it, idx) {
       return '<button type="button" class="search-result' + (idx === 0 ? ' is-sel' : '') + '" data-idx="' + idx + '">' +
-        '<span class="search-sec">' + (SECTION_LABELS[it.section] || it.section) + '</span>' +
+        '<span class="search-sec">' + (it.secLabel || SECTION_LABELS[it.section] || it.section) + '</span>' +
         '<span class="search-title">' + highlight(it.title, words) + '</span>' +
         '<span class="search-snip">' + highlight(it.snippet, words) + '</span>' +
       '</button>';
@@ -116,6 +162,20 @@
   function goTo(it) {
     if (!it) return;
     closeSearch();
+    // Fiche → ouvre la fenêtre d'info
+    if (it.type === 'fiche') {
+      if (typeof openInfoCard === 'function') openInfoCard(it.key);
+      return;
+    }
+    // Flashcard → bonne matière + section flashcards + saut sur la carte
+    if (it.type === 'card') {
+      if (it.subject && typeof setSubject === 'function' && window.currentSubject !== it.subject) {
+        try { setSubject(it.subject); } catch (e) {}
+      }
+      if (typeof showSection === 'function') showSection('flashcards');
+      setTimeout(function () { if (typeof jumpToFlashcard === 'function') jumpToFlashcard(it.front); }, 420);
+      return;
+    }
     if (typeof showSection === 'function') showSection(it.section);
     setTimeout(function () {
       if (it.methodId && typeof showMethod === 'function') {
@@ -150,7 +210,7 @@
       '<div class="search-modal">' +
         '<div class="search-bar">' +
           '<span aria-hidden="true">🔍</span>' +
-          '<input id="search-input" type="text" autocomplete="off" placeholder="Rechercher une formule, une notion…" aria-label="Rechercher">' +
+          '<input id="search-input" type="text" autocomplete="off" placeholder="Rechercher : fiche, flashcard, formule, notion…" aria-label="Rechercher">' +
           '<button type="button" class="search-close" aria-label="Fermer">✕</button>' +
         '</div>' +
         '<div id="search-results" class="search-results"></div>' +
@@ -171,7 +231,7 @@
 
   window.openSearch = function () {
     ensureUI();
-    if (!index.length) buildIndex();
+    buildIndex(); // reconstruit à chaque ouverture (fiches/cartes/sections à jour selon la matière)
     var ov = document.getElementById('search-overlay');
     ov.classList.add('show');
     var input = document.getElementById('search-input');
