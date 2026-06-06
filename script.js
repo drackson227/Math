@@ -303,6 +303,9 @@ function buildQuiz() {
   const container = document.getElementById('quiz-container');
   container.innerHTML = '';
   quizResults = [];
+  // Repart d'une liste d'erreurs vide à CHAQUE quiz : évite que les erreurs d'un quiz
+  // abandonné (ex. chimie) ne « fuient » dans le récap d'un autre quiz (ex. histoire).
+  try { const _d = loadSavedData(); _d.wrongQuestions = []; saveData(_d); } catch (e) {}
   if (currentQuestions.length === 0) {
     container.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--text-secondary);">Aucune question ne correspond aux filtres.</p>';
     return;
@@ -823,14 +826,14 @@ var DIFFS = [
 ];
 function _statColor(p) { return p >= 75 ? '#22c55e' : (p >= 50 ? '#f59e0b' : '#ef4444'); }
 // Maîtrise d'un chapitre : on regarde TOUTES les questions du chapitre (pas seulement celles tentées).
-// Une question est « maîtrisée » si réussie au moins une fois. Les difficiles pèsent plus.
-function _chapterMastery(ch, mastered) {
+// Une question est « maîtrisée » si réussie AU MOINS 2 FOIS et pas en cours d'erreur. Les difficiles pèsent plus.
+function _chapterMastery(ch, mastered, missedSet) {
   var per = {}; DIFFS.forEach(function (d) { per[d.key] = { tot: 0, mas: 0 }; });
   (typeof allQuestions !== 'undefined' ? allQuestions : []).forEach(function (q) {
     if (q.chapter !== ch) return;
     var dk = per[q.difficulty] ? q.difficulty : 'facile';
     per[dk].tot++;
-    if (mastered[q.q]) per[dk].mas++;
+    if ((mastered[q.q] || 0) >= 2 && !(missedSet && missedSet[q.q])) per[dk].mas++;
   });
   var totW = 0, masW = 0;
   DIFFS.forEach(function (d) { totW += per[d.key].tot * d.w; masW += per[d.key].mas * d.w; });
@@ -842,6 +845,7 @@ function renderChapterStats() {
   var data = loadSavedData();
   var cs = data.chapterStats || {};
   var mastered = data.masteredQuestions || {};
+  var missedSet = {}; (data.missedQuestions || []).forEach(function (m) { missedSet[m] = true; });
   var done = CHAP_ORDER.filter(function (c) { return cs[c] && cs[c].total > 0; });
   if (!done.length) {
     box.innerHTML = '<div class="chap-card"><div class="chap-title">📊 Tes stats par chapitre</div>' +
@@ -851,7 +855,7 @@ function renderChapterStats() {
   var weakest = null, weakPct = 101;
   var rows = CHAP_ORDER.map(function (ch) {
     if (!cs[ch] || !cs[ch].total) return '';
-    var st = _chapterMastery(ch, mastered);
+    var st = _chapterMastery(ch, mastered, missedSet);
     if (st.pct < weakPct) { weakPct = st.pct; weakest = ch; }
     var subs = DIFFS.map(function (d) {
       var p = st.per[d.key];
@@ -1399,7 +1403,9 @@ let formulaBookmarksReady = false;
 const DEMO_FOR_FORMULA = [
   { match: 'développée', id: 'cercle_carre' },
   { match: 'pente', id: 'pente' },
-  { match: 'distance point', id: 'distance' }
+  { match: 'distance point à droite', id: 'distance' },
+  { match: 'milieu', id: 'milieu' },
+  { match: 'distance entre deux points', id: 'distance_pts' }
 ];
 function initFormulaBookmarks() {
   const boxes = document.querySelectorAll('#formules .formula-box');
@@ -2291,7 +2297,7 @@ function updateProfile() {
   const statsData = [
     { id: 'total-quizzes', value: data.totalQuizzes || 0, label: 'Quiz complétés' },
     { id: 'avg-score', value: (data.totalQuizzes > 0 ? Math.round(data.totalScore / data.totalQuizzes) : 0) + '%', label: 'Score moyen' },
-    { id: 'mastered-questions', value: Object.keys(data.masteredQuestions || {}).length, label: 'Questions maîtrisées' },
+    { id: 'mastered-questions', value: (function () { var m = data.masteredQuestions || {}; var mi = data.missedQuestions || []; return Object.keys(m).filter(function (k) { return m[k] >= 2 && mi.indexOf(k) === -1; }).length; })(), label: 'Questions maîtrisées' },
     { id: 'current-streak', value: data.streak || 0, label: 'Jours consécutifs' },
     { id: 'xp-total', value: data.xp || 0, label: 'XP Total' },
     { id: 'level-display', value: data.level || 'Apprenti', label: 'Niveau' },
@@ -2325,8 +2331,11 @@ function updateProfile() {
   `;
   document.querySelector('.stats-grid').after(xpSection);
 
-  // Progression par matière (les questions de chaque matière réussies au moins une fois)
+  // Progression par matière : une question compte comme « maîtrisée » seulement si elle a été
+  // réussie AU MOINS 2 FOIS et qu'elle n'est pas en cours d'erreur (sinon le % grimpe à 100 %
+  // après quelques questions faciles — ça ne reflète pas la vraie maîtrise).
   const mastered = data.masteredQuestions || {};
+  const missedArr = data.missedQuestions || [];
   const subjRows = [];
   if (window.SUBJECTS) {
     Object.keys(window.SUBJECTS).forEach(key => {
@@ -2334,7 +2343,7 @@ function updateProfile() {
       const qs = s && s.content && s.content.questions;
       if (!s.ready || !qs || !qs.length) return;
       let done = 0;
-      qs.forEach(q => { if ((mastered[q.q] || 0) >= 1) done++; });
+      qs.forEach(q => { if ((mastered[q.q] || 0) >= 2 && missedArr.indexOf(q.q) === -1) done++; });
       subjRows.push({ key: key, icon: s.icon || '📘', label: s.label || key, done, total: qs.length });
     });
   }
@@ -2889,6 +2898,14 @@ function rateCard(rating) {
   if (cards.length === 0) return;
   // Avance dans la file de session (déjà triée par échéance), sans la re-trier
   currentFlashcardIndex = (currentFlashcardIndex + 1) % cards.length;
+  loadFlashcard();
+}
+
+// Revenir à la carte précédente de la session (navigation seule, ne touche pas à la répétition espacée)
+function prevFlashcard() {
+  const cards = getActiveFlashcards();
+  if (!cards || cards.length < 2) { if (typeof showToast === 'function') showToast('Pas de carte précédente', '#f87171'); return; }
+  currentFlashcardIndex = (currentFlashcardIndex - 1 + cards.length) % cards.length;
   loadFlashcard();
 }
 

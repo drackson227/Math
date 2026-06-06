@@ -63,7 +63,7 @@ let allQuestions = [
   {q: "Pour déterminer si un point est sur un cercle, on calcule :", opts: ["La distance du point au centre", "L'aire du cercle", "Le périmètre", "Le diamètre"], ans: 0, chapter: "cercle", difficulty: "facile", exp: "On calcule \\(d(P,C) = \\sqrt{(x_P-x_0)^2 + (y_P-y_0)^2}\\) : la distance entre le point P et le centre C."},
   {q: "Si d(P,C) < R, le point P est :", opts: ["À l'intérieur du cercle", "Sur le cercle", "À l'extérieur du cercle", "Au centre"], ans: 0, chapter: "cercle", difficulty: "facile",
     exp: "\\(d(P,C)\\) est la distance entre le point P et le centre C. Si elle est <strong>plus petite que le rayon</strong>, P est plus proche du centre que le bord : il est à l'<strong>intérieur</strong>.",
-    formula: "\\(d(P,C)<R\\) : intérieur · \\(=R\\) : sur le cercle · \\(>R\\) : extérieur",
+    formula: "\\(d(P,C)&lt;R\\) : intérieur · \\(=R\\) : sur le cercle · \\(&gt;R\\) : extérieur",
     simple: "Compare la distance du point au centre avec le rayon. Plus petite → dedans. Pile égale → sur le bord. Plus grande → dehors. C'est comme se demander si tu es plus près du centre que la clôture du jardin."},
   {q: "Le cercle de diamètre [AB] a pour centre :", opts: ["Le milieu de [AB]", "Le point A", "Le point B", "L'origine"], ans: 0, chapter: "cercle", difficulty: "facile",
     exp: "Le diamètre traverse le cercle en passant par le centre. Donc le <strong>centre est le milieu</strong> du diamètre [AB] : \\(C\\!\\begin{pmatrix}\\frac{x_A+x_B}{2}\\\\\\frac{y_A+y_B}{2}\\end{pmatrix}\\).",
@@ -151,8 +151,8 @@ let allQuestions = [
     formula: "\\(m=-\\dfrac{a}{b}\\)  (pour une droite écrite \\(ax+by+c=0\\))",
     simple: "💡 <strong>Astuce</strong> : la pente, c'est presque le vecteur directeur \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\), mais écrit en <strong>fraction</strong> (le bas divise le haut) au lieu d'une colonne : \\(m=\\dfrac{a}{-b}=-\\dfrac{a}{b}\\). Donc si tu connais le vecteur directeur, tu connais la pente : tu mets juste le bas du vecteur sous le haut. Attention au signe — il y a bien un moins."},
   {q: "Un point P est à l'extérieur d'un cercle si :", opts: ["d(P,C) > R","d(P,C) < R","d(P,C) = R","d(P,C) = 0"], ans: 0, chapter: "cercle", difficulty: "facile",
-    exp: "On compare la distance \\(d(P,C)\\) (point → centre) au rayon. P est <strong>à l'extérieur</strong> quand il est plus loin que le bord : \\(d(P,C)>R\\).",
-    formula: "\\(d(P,C)>R\\) : extérieur · \\(=R\\) : dessus · \\(<R\\) : intérieur",
+    exp: "On compare la distance \\(d(P,C)\\) (point → centre) au rayon. P est <strong>à l'extérieur</strong> quand il est plus loin que le bord : \\(d(P,C)&gt;R\\).",
+    formula: "\\(d(P,C)&gt;R\\) : extérieur · \\(=R\\) : dessus · \\(&lt;R\\) : intérieur",
     simple: "Si le point est plus loin du centre que la clôture (le rayon), il est dehors. Plus loin = distance plus grande que R."},
   {q: "La distance de M(2;1) à la droite 3x+4y−5=0 est :", opts: ["1","\\(\\dfrac{1}{5}\\)","3","2"], ans: 0, chapter: "droite", difficulty: "avance",
     exp: "On met les coordonnées de M(2;1) dans la formule :<br>\\(d=\\dfrac{|a x_M+b y_M+c|}{\\sqrt{a^2+b^2}}\\)<br>\\(d=\\dfrac{|3(2)+4(1)-5|}{\\sqrt{3^2+4^2}}\\)<br>\\(d=\\dfrac{|6+4-5|}{\\sqrt{25}}=\\dfrac{5}{5}=1\\)",
@@ -174,7 +174,7 @@ let allQuestions = [
     simple: "« Tangent » veut dire que la droite <strong>frôle</strong> le cercle : elle le touche juste en un point. À ce moment-là, le rayon est exactement la distance la plus courte entre le centre et la droite. Donc : 1) tu calcules cette distance (= le rayon), 2) tu écris l'équation du cercle. Attention : dans l'équation on met \\(R^2\\), pas R — d'où le \\(\\dfrac{144}{25}\\) (c'est \\(\\dfrac{12}{5}\\) au carré). 🧮 Brouillon utile ici."},
   {q: "Deux cercles de rayon 2, centrés en O(0;0) et en (5;0), sont :", opts: ["Extérieurs l'un à l'autre","Tangents extérieurement","Sécants","Tangents intérieurement"], ans: 0, chapter: "cercle", difficulty: "difficile",
     exp: "On compare la <strong>distance entre les centres</strong> à la <strong>somme des rayons</strong>.<br>Distance des centres : \\(d=5\\)<br>Somme des rayons : \\(R_1+R_2=2+2=4\\)<br>Comme \\(d>R_1+R_2\\) (\\(5>4\\)), les deux cercles ne se touchent pas : ils sont <strong>extérieurs</strong> l'un à l'autre.",
-    formula: "\\(d>R_1+R_2\\) : extérieurs  ·  \\(d=R_1+R_2\\) : tangents (1 point)  ·  \\(d<R_1+R_2\\) : sécants (2 points)",
+    formula: "\\(d&gt;R_1+R_2\\) : extérieurs  ·  \\(d=R_1+R_2\\) : tangents (1 point)  ·  \\(d&lt;R_1+R_2\\) : sécants (2 points)",
     deep: "Imagine deux ronds. Pour savoir comment ils se placent, tu compares 2 nombres :<br>• <strong>d</strong> = la distance entre leurs centres (ici les centres sont en (0;0) et (5;0), donc \\(d=5\\)).<br>• <strong>la somme des rayons</strong> = \\(2+2=4\\) : c'est la portée maximale pour qu'ils se touchent.<br>Si d est <strong>plus grand</strong> que cette somme, les ronds sont trop loin → ils ne se touchent pas du tout = <strong>extérieurs</strong>. S'ils sont à égalité, ils se touchent juste (tangents). Si d est plus petit, ils se chevauchent (sécants, 2 points communs). Ici \\(5>4\\) → extérieurs."},
   {q: "La distance du point P(3;4) à la droite 2x−y+1=0 vaut :", opts: ["\\(\\dfrac{3}{\\sqrt5}=\\dfrac{3\\sqrt5}{5}\\)","\\(\\dfrac{3}{5}\\)","\\(\\sqrt5\\)","3"], ans: 0, chapter: "droite", difficulty: "difficile",
     exp: "On remplace P(3;4) dans la formule (a=2, b=−1, c=1) :<br>\\(d=\\dfrac{|2(3)-4+1|}{\\sqrt{2^2+(-1)^2}}\\)<br>\\(d=\\dfrac{|6-4+1|}{\\sqrt{5}}=\\dfrac{3}{\\sqrt5}=\\dfrac{3\\sqrt5}{5}\\)",
@@ -282,21 +282,21 @@ const learningConcepts = {
 };
 
 let flashcards = [
-  {front: "Qu'est-ce qu'un vecteur \\(\\vec{AB}\\) ?", back: "La <strong>translation</strong> qui amène A sur B. C'est un segment <em>orienté</em> : direction, sens et longueur.", chapter: "vecteur"},
+  {front: "Qu'est-ce qu'un vecteur \\(\\vec{AB}\\) ?", back: "La <strong>translation</strong> qui amène A sur B. C'est un segment <em>orienté</em> : il a une <strong>direction</strong>, un <strong>sens</strong> et une <strong>norme</strong> (sa longueur).", chapter: "vecteur"},
   {front: "Les 3 caractéristiques d'un vecteur ?", back: "<strong>Direction</strong> (droite AB), <strong>sens</strong> (de A vers B), <strong>norme</strong> \\(\\|\\vec{AB}\\|\\) (longueur du segment [AB]).", chapter: "vecteur"},
   {front: "Quand deux vecteurs sont-ils égaux ?", back: "Quand ils ont la <strong>même direction</strong>, le <strong>même sens</strong> et la <strong>même norme</strong> (ils définissent la même translation).", chapter: "vecteur"},
   {front: "Qu'est-ce que le vecteur nul \\(\\vec{0}\\) ?", back: "Un vecteur dont l'origine = l'extrémité : \\(\\vec{AA}=\\vec{0}\\). Il n'a ni direction ni sens.", chapter: "vecteur"},
   {front: "Qu'est-ce que le vecteur opposé \\(-\\vec{u}\\) ?", back: "Même direction, même norme, <strong>sens opposé</strong>. On a \\(-\\vec{AB}=\\vec{BA}\\).", chapter: "vecteur"},
-  {front: "Relation de Chasles ?", back: "$$\\vec{AB}+\\vec{BC}=\\vec{AC}$$ (s'étend bout à bout : \\(\\vec{AB}+\\vec{BC}+\\vec{CD}=\\vec{AD}\\)).", chapter: "vecteur"},
-  {front: "Règle du parallélogramme ?", back: "$$\\vec{OA}+\\vec{OB}=\\vec{OC}$$ si et seulement si OACB est un parallélogramme.", chapter: "vecteur"},
-  {front: "Comment calcule-t-on une différence de vecteurs ?", back: "$$\\vec{u}-\\vec{v}=\\vec{u}+(-\\vec{v})$$ (on ajoute l'opposé).", chapter: "vecteur"},
-  {front: "Norme et sens de \\(k\\,\\vec{v}\\) (k réel) ?", back: "$$\\|k\\,\\vec{v}\\|=|k|\\cdot\\|\\vec{v}\\|$$ Même direction que \\(\\vec{v}\\) ; même sens si \\(k>0\\), sens opposé si \\(k<0\\).", chapter: "vecteur"},
+  {front: "Relation de Chasles ?", back: "$$\\vec{AB}+\\vec{BC}=\\vec{AC}$$ On met les vecteurs <strong>bout à bout</strong> : l'extrémité du 1er est l'origine du 2e. On garde la 1re origine et la dernière extrémité (s'étend : \\(\\vec{AB}+\\vec{BC}+\\vec{CD}=\\vec{AD}\\)).<br><svg viewBox='0 0 210 115' width='200' style='max-width:100%;height:auto;margin-top:6px'><defs><marker id='chA' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#e2e8f0'/></marker><marker id='chB' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#a78bfa'/></marker></defs><line x1='18' y1='98' x2='108' y2='66' stroke='#34d399' stroke-width='2.5' marker-end='url(#chA)'/><line x1='108' y1='66' x2='192' y2='30' stroke='#fbbf24' stroke-width='2.5' marker-end='url(#chA)'/><line x1='18' y1='98' x2='192' y2='30' stroke='#a78bfa' stroke-width='2.5' stroke-dasharray='6 4' marker-end='url(#chB)'/><text x='6' y='106' fill='#fff' font-size='13' font-weight='bold'>A</text><text x='104' y='60' fill='#fff' font-size='13' font-weight='bold'>B</text><text x='190' y='24' fill='#fff' font-size='13' font-weight='bold'>C</text></svg><br><em>Chasles = un chemin (B est une étape entre A et C).</em>", chapter: "vecteur"},
+  {front: "Règle du parallélogramme ?", back: "$$\\vec{OA}+\\vec{OB}=\\vec{OC}$$ Ici les deux vecteurs partent du <strong>même point O</strong>. On complète le <strong>parallélogramme</strong> OACB : la somme \\(\\vec{OC}\\) est la <strong>diagonale</strong> (C est le coin opposé à O).<br><svg viewBox='0 0 200 115' width='200' style='max-width:100%;height:auto;margin-top:6px'><defs><marker id='paA' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#e2e8f0'/></marker><marker id='paB' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#a78bfa'/></marker></defs><line x1='120' y1='92' x2='162' y2='24' stroke='#94a3b8' stroke-width='1.2' stroke-dasharray='3 3'/><line x1='60' y1='30' x2='162' y2='24' stroke='#94a3b8' stroke-width='1.2' stroke-dasharray='3 3'/><line x1='18' y1='98' x2='120' y2='92' stroke='#34d399' stroke-width='2.5' marker-end='url(#paA)'/><line x1='18' y1='98' x2='60' y2='30' stroke='#fbbf24' stroke-width='2.5' marker-end='url(#paA)'/><line x1='18' y1='98' x2='162' y2='24' stroke='#a78bfa' stroke-width='2.5' stroke-dasharray='6 4' marker-end='url(#paB)'/><text x='4' y='106' fill='#fff' font-size='13' font-weight='bold'>O</text><text x='124' y='98' fill='#fff' font-size='13' font-weight='bold'>A</text><text x='44' y='28' fill='#fff' font-size='13' font-weight='bold'>B</text><text x='166' y='20' fill='#fff' font-size='13' font-weight='bold'>C</text></svg><br><em>Différence avec Chasles : ici les 2 vecteurs ont la <strong>même origine</strong> O (pas bout à bout).</em>", chapter: "vecteur"},
+  {front: "Comment calcule-t-on une différence de vecteurs ?", back: "$$\\vec{u}-\\vec{v}=\\vec{u}+(-\\vec{v})$$ On ajoute l'<strong>opposé</strong> de \\(\\vec{v}\\). En coordonnées : \\(\\vec{u}-\\vec{v}=\\begin{pmatrix}x_u-x_v\\\\y_u-y_v\\end{pmatrix}\\).<br><strong>À quoi ça sert :</strong> si \\(\\vec{u}=\\vec{OA}\\) et \\(\\vec{v}=\\vec{OB}\\) (même origine O), alors \\(\\vec{u}-\\vec{v}=\\vec{BA}\\) — le vecteur qui va de l'extrémité de \\(\\vec{v}\\) vers celle de \\(\\vec{u}\\). C'est ce qui donne les composantes : \\(\\vec{AB}=\\vec{OB}-\\vec{OA}\\) = arrivée − départ.<br><svg viewBox='0 0 200 115' width='190' style='max-width:100%;height:auto;margin-top:6px'><defs><marker id='diA' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#e2e8f0'/></marker><marker id='diB' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#a78bfa'/></marker></defs><line x1='18' y1='98' x2='150' y2='48' stroke='#34d399' stroke-width='2.5' marker-end='url(#diA)'/><line x1='18' y1='98' x2='58' y2='30' stroke='#fbbf24' stroke-width='2.5' marker-end='url(#diA)'/><line x1='58' y1='30' x2='150' y2='48' stroke='#a78bfa' stroke-width='2.5' stroke-dasharray='6 4' marker-end='url(#diB)'/><text x='4' y='106' fill='#fff' font-size='13' font-weight='bold'>O</text><text x='154' y='48' fill='#fff' font-size='13' font-weight='bold'>A</text><text x='44' y='28' fill='#fff' font-size='13' font-weight='bold'>B</text><text x='86' y='84' fill='#34d399' font-size='11'>u</text><text x='24' y='58' fill='#fbbf24' font-size='11'>v</text><text x='96' y='30' fill='#a78bfa' font-size='11'>u−v</text></svg>", chapter: "vecteur"},
+  {front: "Norme et sens de \\(k\\,\\vec{v}\\) (k réel) ?", back: "\\(k\\,\\vec{v}\\) est un <strong>vecteur</strong> : on multiplie le vecteur \\(\\vec{v}\\) par le nombre réel \\(k\\).<br>• <strong>Longueur (norme)</strong> : $$\\|k\\,\\vec{v}\\|=|k|\\times\\|\\vec{v}\\|$$ elle est multipliée par \\(|k|\\) (\\(k=2\\) → 2× plus long ; \\(k=\\tfrac12\\) → 2× plus court).<br>• <strong>Direction</strong> : la même que \\(\\vec{v}\\).<br>• <strong>Sens</strong> : le même si \\(k>0\\), <strong>opposé</strong> si \\(k<0\\).<br><em>Rappel des notations : \\(\\|\\vec{v}\\|\\) = la norme = la longueur du vecteur ; \\(|k|\\) = la valeur absolue de \\(k\\).</em>", chapter: "vecteur"},
   {front: "Quand deux vecteurs sont-ils colinéaires ?", back: "S'il existe un réel non nul \\(k\\) tel que $$\\vec{u}=k\\,\\vec{v}$$ (ils ont alors la même direction).", chapter: "vecteur"},
   {front: "Comment montrer que A, B, C sont alignés ?", back: "Montrer que \\(\\vec{AB}\\) et \\(\\vec{AC}\\) sont colinéaires : \\(\\vec{AB}=k\\,\\vec{AC}\\).", chapter: "vecteur"},
   {front: "Quand les droites (AB) et (CD) sont-elles parallèles ?", back: "Quand \\(\\vec{AB}\\) et \\(\\vec{CD}\\) sont colinéaires : \\(\\vec{AB}=k\\,\\vec{CD}\\).", chapter: "vecteur"},
-  {front: "Comment caractériser le milieu M de [AB] ?", back: "$$\\vec{AM}=\\tfrac{1}{2}\\,\\vec{AB}$$", chapter: "vecteur"},
-  {front: "Qu'est-ce qu'une combinaison linéaire de \\(\\vec{u}\\) et \\(\\vec{v}\\) ?", back: "Un vecteur de la forme $$\\vec{w}=a\\,\\vec{u}+b\\,\\vec{v}$$ (a, b non tous les deux nuls).", chapter: "vecteur"},
-  {front: "Composantes du vecteur \\(\\vec{AB}\\) dans un repère ?", back: "$$\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)$$", chapter: "vecteur"},
+  {front: "Comment caractériser le milieu M de [AB] ?", back: "Avec les <strong>vecteurs</strong> : $$\\vec{AM}=\\tfrac{1}{2}\\,\\vec{AB}$$ (le chemin de A à M = la moitié du chemin de A à B).<br>Avec les <strong>coordonnées</strong> (la moyenne) : $$M\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)$$", chapter: "vecteur"},
+  {front: "Qu'est-ce qu'une combinaison linéaire de \\(\\vec{u}\\) et \\(\\vec{v}\\) ?", back: "C'est un vecteur \\(\\vec{w}\\) qu'on <strong>fabrique en mélangeant</strong> \\(\\vec{u}\\) et \\(\\vec{v}\\) : un peu de l'un, un peu de l'autre. $$\\vec{w}=a\\,\\vec{u}+b\\,\\vec{v}$$ où a et b sont des nombres réels (pas tous les deux nuls).<br><strong>Exemple :</strong> \\(\\vec{w}=2\\,\\vec{u}-3\\,\\vec{v}\\). Si \\(\\vec{u}\\) et \\(\\vec{v}\\) ne sont pas colinéaires, on peut écrire <em>n'importe quel</em> vecteur du plan de cette façon.", chapter: "vecteur"},
+  {front: "Composantes du vecteur \\(\\vec{AB}\\) dans un repère ?", back: "$$\\vec{AB}=\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$$ Composantes = <strong>arrivée − départ</strong> : la différence des x en haut, la différence des y en bas.", chapter: "vecteur"},
   {front: "Quelle est la forme canonique d'un cercle ?", back: "$$(x - x_0)^2 + (y - y_0)^2 = R^2$$", chapter: "cercle"},
   {front: "Quelle est la forme développée d'un cercle ?", back: "$$x^2 + y^2 + ax + by + c = 0$$", chapter: "cercle"},
   {front: "Comment trouver le centre d'un cercle en forme développée ?", back: "$$C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)$$", chapter: "cercle"},
@@ -307,25 +307,26 @@ let flashcards = [
   {front: "Comment calculer le rayon depuis la forme développée x²+y²+ax+by+c=0 ?", back: "$$R = \\frac{\\sqrt{a^2 + b^2 - 4c}}{2}$$", chapter: "cercle"},
   {front: "Que se passe-t-il si a²+b²−4c = 0 ?", back: "Un seul point : $C\\left(-\\dfrac{a}{2} ; -\\dfrac{b}{2}\\right)$. Pas de cercle.", chapter: "cercle"},
   {front: "Que se passe-t-il si a²+b²−4c &lt; 0 ?", back: "Impossible — aucun point ne satisfait l'équation.", chapter: "cercle"},
-  {front: "Comment passer de la forme développée à la forme canonique ?", back: "Compléter le carré pour x et pour y séparément.", chapter: "cercle"},
+  {front: "Comment passer de la forme développée à la forme canonique ?", back: "On regroupe les x ensemble et les y ensemble, puis on <strong>complète le carré</strong> pour x et pour y séparément.<br><strong>Ex :</strong> \\(x^2+8x \\to (x+4)^2-16\\) (on ajoute \\((\\tfrac{8}{2})^2=16\\) puis on le retire). Pareil pour y.<br>On obtient \\((x-x_0)^2+(y-y_0)^2=R^2\\), qui donne directement le centre et le rayon.", chapter: "cercle"},
   {front: "Un cercle de diamètre [AB] : comment trouver centre et rayon ?", back: "Centre = milieu de [AB] ; $R = \\dfrac{|AB|}{2}$", chapter: "cercle"},
+  {front: "Qu'est-ce que le discriminant \\(\\Delta\\) d'une équation du 2nd degré \\(ax^2+bx+c=0\\) ?", back: "$$\\Delta = b^2 - 4ac$$ Il donne le nombre de solutions :<br>• \\(\\Delta>0\\) → <strong>2 solutions</strong><br>• \\(\\Delta=0\\) → <strong>1 solution</strong> (double)<br>• \\(\\Delta<0\\) → <strong>aucune solution réelle</strong>.<br><em>Utile pour l'intersection droite–cercle : 2 → sécante, 1 → tangente, 0 → pas de point commun.</em>", chapter: "cercle"},
+  {front: "Formule des solutions de \\(ax^2+bx+c=0\\) (quand \\(\\Delta>0\\)) ?", back: "$$x=\\dfrac{-b\\pm\\sqrt{\\Delta}}{2a}\\qquad(\\Delta=b^2-4ac)$$", chapter: "cercle"},
   {front: "Vecteur directeur de d ≡ ax+by+c=0 ?", back: "$$\\vec{u} = \\begin{pmatrix} -b \\\\ a \\end{pmatrix}$$", chapter: "droite"},
   {front: "Vecteur normal de d ≡ ax+by+c=0 ?", back: "$$\\vec{n} = \\begin{pmatrix} a \\\\ b \\end{pmatrix}$$", chapter: "droite"},
   {front: "Pente d'une droite ax+by+c=0 ?", back: "$$m = -\\dfrac{a}{b}$$", chapter: "droite"},
-  {front: "Équation d'une droite passant par \\(A(x_A\\,;y_A)\\) avec pente m ?", back: "$$y - y_A = m(x - x_A)$$", chapter: "droite"},
+  {front: "Équation d'une droite passant par un point \\(A(x_A\\,;y_A)\\) avec une pente m ?", back: "On part de \\(y=mx+p\\). On connaît déjà <strong>m</strong> ; on trouve <strong>p</strong> en remplaçant x et y par les coordonnées de A.<br><strong>Ex :</strong> A(1 ; 2), m = 3 → \\(2=3\\times1+p\\) → \\(p=-1\\) → \\(y=3x-1\\).<br><em>(Raccourci pour les plus à l'aise : \\(y-y_A=m(x-x_A)\\).)</em>", chapter: "droite"},
   {front: "Distance du point P(xₚ;yₚ) à la droite ax+by+c=0 ?", back: "$$d = \\frac{|ax_P + by_P + c|}{\\sqrt{a^2 + b^2}}$$", chapter: "droite"},
-  {front: "Condition pour deux droites parallèles ?", back: "Mêmes pentes $m_1 = m_2$ et ordonnées à l'origine différentes.", chapter: "droite"},
-  {front: "Condition pour deux droites perpendiculaires ?", back: "$$m_1 \\times m_2 = -1$$", chapter: "droite"},
   {front: "Comment trouver l'intersection de deux droites ?", back: "Résoudre le système $y = m_1 x + p_1$ et $y = m_2 x + p_2$.", chapter: "droite"},
-  {front: "Comment vérifier qu'un point appartient à un cercle ?", back: "Substituer $(x,y)$ dans l'équation : $(x-h)^2+(y-k)^2=R^2$ doit être vérifié.", chapter: "cercle"},
+  {front: "Comment vérifier qu'un point appartient à un cercle ?", back: "On remplace x et y par les coordonnées du point dans \\((x-x_0)^2+(y-y_0)^2\\) et on regarde le résultat :<br>• <strong>= R²</strong> → le point est <strong>sur</strong> le cercle ✅<br>• <strong>&lt; R²</strong> → à l'intérieur<br>• <strong>&gt; R²</strong> → à l'extérieur", chapter: "cercle"},
   {front: "Distance entre A(x₁,y₁) et B(x₂,y₂) ?", back: "$$d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$$", chapter: "cercle"},
   {front: "Équation d'un cercle passant par 3 points ?", back: "Substituer les 3 points dans $x^2+y^2+ax+by+c=0$ → système 3×3.", chapter: "cercle"},
-  {front: "Norme d'un vecteur \\(\\vec{u}=(x\\,;\\,y)\\) ?", back: "$$\\|\\vec{u}\\|=\\sqrt{x^2+y^2}$$ (c'est Pythagore sur les composantes).", chapter: "vecteur"},
+  {front: "Norme d'un vecteur \\(\\vec{u}=\\begin{pmatrix}x\\\\y\\end{pmatrix}\\) ?", back: "$$\\|\\vec{u}\\|=\\sqrt{x^2+y^2}$$ Les composantes \\(x\\) et \\(y\\) = de combien le vecteur avance horizontalement et verticalement. Elles forment un <strong>triangle rectangle</strong> dont le vecteur est l'<strong>hypoténuse</strong> → Pythagore : longueur² = \\(x^2+y^2\\).<br><svg viewBox='0 0 190 110' width='185' style='max-width:100%;height:auto;margin-top:6px'><defs><marker id='nmA' markerWidth='7' markerHeight='7' refX='5' refY='3' orient='auto'><path d='M0,0L6,3L0,6z' fill='#a78bfa'/></marker></defs><line x1='22' y1='90' x2='150' y2='90' stroke='#34d399' stroke-width='2.5'/><line x1='150' y1='90' x2='150' y2='28' stroke='#fbbf24' stroke-width='2.5'/><line x1='22' y1='90' x2='150' y2='28' stroke='#a78bfa' stroke-width='2.5' marker-end='url(#nmA)'/><rect x='138' y='78' width='12' height='12' fill='none' stroke='#94a3b8' stroke-width='1'/><text x='80' y='104' fill='#34d399' font-size='12'>x</text><text x='156' y='62' fill='#fbbf24' font-size='12'>y</text><text x='70' y='52' fill='#a78bfa' font-size='12'>‖u‖</text></svg>", chapter: "vecteur"},
   {front: "Distance entre deux points A et B (point à point) ?", back: "$$AB=\\|\\vec{AB}\\|=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}$$", chapter: "vecteur"},
-  {front: "Coordonnées du milieu M de [AB] ?", back: "$$M\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)$$ (la moyenne des coordonnées).", chapter: "vecteur"},
-  {front: "Test de colinéarité de \\(\\vec{u}=(x\\,;\\,y)\\) et \\(\\vec{v}=(x'\\,;\\,y')\\) ?", back: "Le déterminant est nul : $$x\\,y' - y\\,x' = 0$$", chapter: "vecteur"},
-  {front: "Vecteur normal et vecteur directeur de \\(ax+by+c=0\\) ?", back: "Normal \\(\\vec{n}=(a\\,;\\,b)\\). Directeur \\(\\vec{u}=(-b\\,;\\,a)\\) (perpendiculaire au normal).", chapter: "droite"},
-  {front: "Comment savoir si un point est dans / sur / hors d'un cercle ?", back: "Compare \\(d(P,C)\\) au rayon R : si \\(<R\\) intérieur, \\(=R\\) sur le cercle, \\(>R\\) extérieur.", chapter: "cercle"},
+  {front: "Test de colinéarité de \\(\\vec{u}=\\begin{pmatrix}x\\\\y\\end{pmatrix}\\) et \\(\\vec{v}=\\begin{pmatrix}x'\\\\y'\\end{pmatrix}\\) ?", back: "Le <strong>déterminant</strong> (ou « produit en croix ») est nul : $$x\\,y' - y\\,x' = 0$$ S'il est nul, les vecteurs sont colinéaires (même direction).", chapter: "vecteur"},
+  {front: "Produit scalaire de \\(\\vec{u}=\\begin{pmatrix}x\\\\y\\end{pmatrix}\\) et \\(\\vec{v}=\\begin{pmatrix}x'\\\\y'\\end{pmatrix}\\) ?", back: "$$\\vec{u}\\cdot\\vec{v}=x\\,x'+y\\,y'$$ On multiplie les x entre eux, les y entre eux, puis on additionne (le résultat est un <strong>nombre</strong>, pas un vecteur).", chapter: "vecteur"},
+  {front: "Quand deux vecteurs sont-ils orthogonaux (perpendiculaires) ?", back: "Quand leur <strong>produit scalaire est nul</strong> : $$\\vec{u}\\cdot\\vec{v}=x\\,x'+y\\,y'=0$$", chapter: "vecteur"},
+  {front: "Vecteur normal et vecteur directeur de \\(ax+by+c=0\\) ?", back: "Normal \\(\\vec{n}=\\begin{pmatrix}a\\\\b\\end{pmatrix}\\). Directeur \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\) (perpendiculaire au normal).", chapter: "droite"},
+  {front: "Comment savoir si un point est dans / sur / hors d'un cercle ?", back: "On calcule \\(d(P,C)\\) = la <strong>distance entre le point P et le centre C</strong> (avec la formule de distance), puis on la compare au rayon R :<br>• \\(d(P,C) &lt; R\\) → <strong>à l'intérieur</strong> (plus près du centre que le bord)<br>• \\(d(P,C) = R\\) → <strong>sur le cercle</strong><br>• \\(d(P,C) &gt; R\\) → <strong>à l'extérieur</strong>", chapter: "cercle"},
   {front: "Pente d'une droite à partir de deux points ?", back: "$$m=\\dfrac{y_B-y_A}{x_B-x_A}$$ (variation des y sur variation des x).", chapter: "droite"}
 ];
 
@@ -361,7 +362,7 @@ const focusContent = {
     {title: "Vecteur directeur", content: "$$\\vec{u} = \\begin{pmatrix} -b \\\\ a \\end{pmatrix}$$", note: "Pour ax+by+c=0"},
     {title: "Vecteur normal", content: "$$\\vec{n} = \\begin{pmatrix} a \\\\ b \\end{pmatrix}$$", note: "Pour ax+by+c=0"},
     {title: "Pente depuis implicite", content: "$$m = -\\frac{a}{b}$$", note: "Pour ax+by+c=0"},
-    {title: "Droite par un point", content: "$$y - y_A = m(x - x_A)$$", note: "Exemple : M(1;2), $m=\\dfrac{4}{3}$. On écrit $y-2=\\dfrac{4}{3}(x-1)$ → $y=\\dfrac{4}{3}x+\\dfrac{2}{3}$. Vérification : pour $x=1$, $y=\\dfrac{4}{3}+\\dfrac{2}{3}=2$ ✓"},
+    {title: "Droite par un point", content: "$$y = mx + p$$", note: "On connaît m ; on trouve p en remplaçant x et y par les coordonnées du point. Ex : A(1;2), m=3 → 2=3·1+p → p=−1 → $y=3x-1$. (Raccourci : $y-y_A=m(x-x_A)$.)"},
     {title: "Distance point-droite", content: "$$d = \\frac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}$$", note: "Valeur absolue indispensable !"}
   ]
 };
@@ -408,6 +409,196 @@ let DEMOS = {
         more: "Une pente de 3 signifie : quand on avance de 1 vers la droite, la droite monte de 3.",
         eq: T('m', 'm') + T('eq', '=') + T('res', '3', 'atok-result'),
         merge: [{ from: ['n6', 'bar', 'd2'], to: 'res' }]
+      }
+    ]
+  },
+
+  milieu: {
+    title: "Coordonnées du milieu d'un segment",
+    subtitle: "Exemple avec A(2 ; 6) et B(4 ; 2)",
+    scenes: [
+      {
+        brief: "Le milieu M = la moyenne des coordonnées : (xA + xB)/2 pour le x, (yA + yB)/2 pour le y.",
+        eq: T('M', 'M') + T('eq', '=') + T('lp', '(') +
+          T('lp1', '(') + T('xa', 'x<sub>A</sub>') + T('p1', '+') + T('xb', 'x<sub>B</sub>') + T('rp1', ')') + T('sl1', '/') + T('da', '2') +
+          T('sc', ' ; ') +
+          T('lp2', '(') + T('ya', 'y<sub>A</sub>') + T('p2', '+') + T('yb', 'y<sub>B</sub>') + T('rp2', ')') + T('sl2', '/') + T('db', '2') +
+          T('rp', ')')
+      },
+      {
+        brief: "On remplace par les valeurs : A(2 ; 6) et B(4 ; 2).",
+        more: "xA = 2, xB = 4 ; yA = 6, yB = 2. Chaque lettre devient son nombre, à la même place.",
+        eq: T('M', 'M') + T('eq', '=') + T('lp', '(') +
+          T('lp1', '(') + T('xa', '2') + T('p1', '+') + T('xb', '4') + T('rp1', ')') + T('sl1', '/') + T('da', '2') +
+          T('sc', ' ; ') +
+          T('lp2', '(') + T('ya', '6') + T('p2', '+') + T('yb', '2') + T('rp2', ')') + T('sl2', '/') + T('db', '2') +
+          T('rp', ')')
+      },
+      {
+        brief: "On additionne en haut : 2 + 4 = 6 et 6 + 2 = 8.",
+        eq: T('M', 'M') + T('eq', '=') + T('lp', '(') +
+          T('s1', '6') + T('sl1', '/') + T('da', '2') +
+          T('sc', ' ; ') +
+          T('s2', '8') + T('sl2', '/') + T('db', '2') +
+          T('rp', ')'),
+        merge: [{ from: ['lp1', 'xa', 'p1', 'xb', 'rp1'], to: 's1' }, { from: ['lp2', 'ya', 'p2', 'yb', 'rp2'], to: 's2' }]
+      },
+      {
+        brief: "On divise : 6 ÷ 2 = 3 et 8 ÷ 2 = 4. Le milieu est M(3 ; 4) !",
+        more: "Le milieu est pile au centre du segment [AB].",
+        eq: T('M', 'M') + T('eq', '=') + T('lp', '(') +
+          T('rx', '3', 'atok-result') + T('sc', ' ; ') + T('ry', '4', 'atok-result') + T('rp', ')'),
+        merge: [{ from: ['s1', 'sl1', 'da'], to: 'rx' }, { from: ['s2', 'sl2', 'db'], to: 'ry' }]
+      }
+    ]
+  },
+
+  distance_pts: {
+    title: "Distance entre deux points",
+    subtitle: "Exemple avec A(1 ; 2) et B(4 ; 6)",
+    scenes: [
+      {
+        brief: "La distance AB = la racine de (différence des x)² + (différence des y)². C'est Pythagore.",
+        eq: T('d', 'd') + T('eq', '=') + ROOT('r',
+          T('lp1', '(') + T('xb', 'x<sub>B</sub>') + T('o1', '−') + T('xa', 'x<sub>A</sub>') + T('rp1', ')') + T('sq1', '²') +
+          T('pl', '+') +
+          T('lp2', '(') + T('yb', 'y<sub>B</sub>') + T('o2', '−') + T('ya', 'y<sub>A</sub>') + T('rp2', ')') + T('sq2', '²'))
+      },
+      {
+        brief: "On remplace : A(1 ; 2) et B(4 ; 6). Donc xB = 4, xA = 1, yB = 6, yA = 2.",
+        more: "Composantes = arrivée − départ. Regarde chaque lettre devenir son nombre.",
+        eq: T('d', 'd') + T('eq', '=') + ROOT('r',
+          T('lp1', '(') + T('xb', '4') + T('o1', '−') + T('xa', '1') + T('rp1', ')') + T('sq1', '²') +
+          T('pl', '+') +
+          T('lp2', '(') + T('yb', '6') + T('o2', '−') + T('ya', '2') + T('rp2', ')') + T('sq2', '²'))
+      },
+      {
+        brief: "On calcule les parenthèses : 4 − 1 = 3 et 6 − 2 = 4.",
+        eq: T('d', 'd') + T('eq', '=') + ROOT('r',
+          T('t3', '3') + T('sq1', '²') + T('pl', '+') + T('t4', '4') + T('sq2', '²')),
+        merge: [{ from: ['lp1', 'xb', 'o1', 'xa', 'rp1'], to: 't3' }, { from: ['lp2', 'yb', 'o2', 'ya', 'rp2'], to: 't4' }]
+      },
+      {
+        brief: "On élève au carré : 3² = 9 et 4² = 16.",
+        eq: T('d', 'd') + T('eq', '=') + ROOT('r', T('n9', '9') + T('pl', '+') + T('n16', '16')),
+        merge: [{ from: ['t3', 'sq1'], to: 'n9' }, { from: ['t4', 'sq2'], to: 'n16' }]
+      },
+      {
+        brief: "On additionne sous la racine : 9 + 16 = 25.",
+        eq: T('d', 'd') + T('eq', '=') + ROOT('r', T('n25', '25')),
+        merge: [{ from: ['n9', 'pl', 'n16'], to: 'n25' }]
+      },
+      {
+        brief: "Enfin √25 = 5. La distance AB vaut 5 !",
+        more: "On cherche le nombre qui, au carré, donne 25 : c'est 5 (car 5 × 5 = 25).",
+        eq: T('d', 'd') + T('eq', '=') + T('res', '5', 'atok-result'),
+        merge: [{ from: ['rrt', 'n25'], to: 'res' }]
+      }
+    ]
+  },
+
+  colinearite: {
+    title: "Colinéarité : le produit en croix",
+    subtitle: "u(2 ; 3) et v(4 ; 6) : sont-ils colinéaires ?",
+    scenes: [
+      {
+        brief: "On calcule le « produit en croix » x·y′ − y·x′. S'il vaut 0, les vecteurs sont colinéaires.",
+        eq: T('x', 'x') + T('m1', '·') + T('yp', 'y′') + T('o', '−') + T('y', 'y') + T('m2', '·') + T('xp', 'x′')
+      },
+      {
+        brief: "On remplace par les composantes : u(2 ; 3) donne x=2, y=3 ; v(4 ; 6) donne x′=4, y′=6.",
+        eq: T('x', '2') + T('m1', '·') + T('yp', '6') + T('o', '−') + T('y', '3') + T('m2', '·') + T('xp', '4')
+      },
+      {
+        brief: "On calcule les produits : 2·6 = 12 et 3·4 = 12.",
+        eq: T('p1', '12') + T('o', '−') + T('p2', '12'),
+        merge: [{ from: ['x', 'm1', 'yp'], to: 'p1' }, { from: ['y', 'm2', 'xp'], to: 'p2' }]
+      },
+      {
+        brief: "12 − 12 = 0. Le produit en croix est nul → u et v sont COLINÉAIRES (même direction).",
+        eq: T('res', '0', 'atok-result'),
+        merge: [{ from: ['p1', 'o', 'p2'], to: 'res' }]
+      }
+    ]
+  },
+
+  produit_scalaire: {
+    title: "Produit scalaire de deux vecteurs",
+    subtitle: "u(3 ; 4) et v(2 ; −1)",
+    scenes: [
+      {
+        brief: "Le produit scalaire = x·x′ + y·y′ (on multiplie les x entre eux, les y entre eux, puis on additionne).",
+        eq: T('x', 'x') + T('m1', '·') + T('xp', 'x′') + T('o', '+') + T('y', 'y') + T('m2', '·') + T('yp', 'y′')
+      },
+      {
+        brief: "On remplace : u(3 ; 4) et v(2 ; −1).",
+        eq: T('x', '3') + T('m1', '·') + T('xp', '2') + T('o', '+') + T('y', '4') + T('m2', '·') + T('yp', '(−1)')
+      },
+      {
+        brief: "On calcule les produits : 3·2 = 6 et 4·(−1) = −4.",
+        eq: T('p1', '6') + T('o', '+') + T('p2', '(−4)'),
+        merge: [{ from: ['x', 'm1', 'xp'], to: 'p1' }, { from: ['y', 'm2', 'yp'], to: 'p2' }]
+      },
+      {
+        brief: "6 + (−4) = 2. Le produit scalaire vaut 2. (S'il valait 0, les vecteurs seraient perpendiculaires.)",
+        eq: T('res', '2', 'atok-result'),
+        merge: [{ from: ['p1', 'o', 'p2'], to: 'res' }]
+      }
+    ]
+  },
+
+  discriminant: {
+    title: "Le discriminant Δ",
+    subtitle: "Exemple : 2x² + 5x + 3 = 0",
+    scenes: [
+      {
+        brief: "Le discriminant Δ = b² − 4·a·c. Il indique le nombre de solutions.",
+        eq: T('D', 'Δ') + T('eq', '=') + T('b2', 'b²') + T('o', '−') + T('four', '4') + T('m1', '·') + T('a', 'a') + T('m2', '·') + T('c', 'c')
+      },
+      {
+        brief: "On lit a = 2, b = 5, c = 3 dans 2x² + 5x + 3.",
+        eq: T('D', 'Δ') + T('eq', '=') + T('b2', '5²') + T('o', '−') + T('four', '4') + T('m1', '·') + T('a', '2') + T('m2', '·') + T('c', '3')
+      },
+      {
+        brief: "On calcule : 5² = 25 et 4·2·3 = 24.",
+        eq: T('D', 'Δ') + T('eq', '=') + T('n25', '25') + T('o', '−') + T('n24', '24'),
+        merge: [{ from: ['b2'], to: 'n25' }, { from: ['four', 'm1', 'a', 'm2', 'c'], to: 'n24' }]
+      },
+      {
+        brief: "Δ = 25 − 24 = 1. Comme Δ > 0, l'équation a DEUX solutions (la parabole coupe l'axe x en 2 points).",
+        eq: T('D', 'Δ') + T('eq', '=') + T('res', '1', 'atok-result'),
+        merge: [{ from: ['n25', 'o', 'n24'], to: 'res' }]
+      }
+    ]
+  },
+
+  combinaison: {
+    title: "Combinaison linéaire : w = a·u + b·v",
+    subtitle: "a = 2, b = 3, u(1 ; 2), v(2 ; 1)",
+    scenes: [
+      {
+        brief: "Une combinaison linéaire fabrique un vecteur w = a·u + b·v (un peu de u, un peu de v).",
+        eq: T('w', 'w') + T('eq', '=') + T('a', '2') + T('m1', '·') + T('u', 'u') + T('pl', '+') + T('bb', '3') + T('m2', '·') + T('v', 'v')
+      },
+      {
+        brief: "On calcule composante par composante. u(1 ; 2), v(2 ; 1).",
+        more: "Pour le x : 2·(x de u) + 3·(x de v). Pareil pour le y.",
+        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') +
+          T('ax1', '2') + T('mx1', '·') + T('ux', '1') + T('px', '+') + T('bx1', '3') + T('mx2', '·') + T('vx', '2') +
+          T('sc', ' ; ') +
+          T('ay1', '2') + T('my1', '·') + T('uy', '2') + T('py', '+') + T('by1', '3') + T('my2', '·') + T('vy', '1') +
+          T('rp', ')')
+      },
+      {
+        brief: "On calcule les produits : (2 + 6 ; 4 + 3).",
+        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') +
+          T('cx1', '2') + T('px', '+') + T('cx2', '6') + T('sc', ' ; ') + T('cy1', '4') + T('py', '+') + T('cy2', '3') + T('rp', ')'),
+        merge: [{ from: ['ax1', 'mx1', 'ux'], to: 'cx1' }, { from: ['bx1', 'mx2', 'vx'], to: 'cx2' }, { from: ['ay1', 'my1', 'uy'], to: 'cy1' }, { from: ['by1', 'my2', 'vy'], to: 'cy2' }]
+      },
+      {
+        brief: "On additionne : (8 ; 7). Le vecteur w a pour composantes 8 et 7.",
+        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') + T('rx', '8', 'atok-result') + T('sc', ' ; ') + T('ry', '7', 'atok-result') + T('rp', ')'),
+        merge: [{ from: ['cx1', 'px', 'cx2'], to: 'rx' }, { from: ['cy1', 'py', 'cy2'], to: 'ry' }]
       }
     ]
   },

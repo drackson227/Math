@@ -587,12 +587,21 @@ const SECTIONS_CONTENT = {
         </div>
       </div>
       <div class="formula-box vecteur">
-        <h3><span class="tag tag-vecteur">Vecteurs</span> Milieu &amp; composantes</h3>
+        <h3><span class="tag tag-vecteur">Vecteurs</span> Milieu d'un segment</h3>
         <div class="formula-main vecteur">$$\\vec{AM} = \\tfrac{1}{2}\\,\\vec{AB}$$</div>
-        <div class="formula-main vecteur">$$\\vec{AB} = \\begin{pmatrix} x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$$</div>
+        <p class="note">M est au milieu de [AB] : le vecteur de A à M vaut la <strong>moitié</strong> du vecteur de A à B. En coordonnées : \\(M\\!\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)\\) (la moyenne des coordonnées).</p>
         <div class="simple-exp-box">
           <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-          <div class="simple-exp-content">Le milieu M est « à mi-chemin » : on parcourt la moitié de \\(\\vec{AB}\\). Dans un repère, les composantes d'un vecteur, c'est juste « de combien on se déplace » en x et en y entre le départ et l'arrivée.</div>
+          <div class="simple-exp-content">Le milieu M est « à mi-chemin » : on parcourt la moitié de \\(\\vec{AB}\\). Pour le trouver avec des nombres, on prend la moyenne des x et la moyenne des y des deux points.</div>
+        </div>
+      </div>
+      <div class="formula-box vecteur">
+        <h3><span class="tag tag-vecteur">Vecteurs</span> Composantes d'un vecteur</h3>
+        <div class="formula-main vecteur">$$\\vec{AB} = \\begin{pmatrix} x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$$</div>
+        <p class="note">Les composantes = <strong>arrivée − départ</strong> : la différence des x en haut, la différence des y en bas.</p>
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">Les composantes d'un vecteur, c'est « de combien on se déplace » en x et en y entre le départ et l'arrivée.</div>
         </div>
       </div>
       <div class="formula-box vecteur">
@@ -740,6 +749,12 @@ const SECTIONS_CONTENT = {
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <button onclick="openDemo('pente')" class="demo-launch">▶ Pente (2 points)</button>
+      <button onclick="openDemo('milieu')" class="demo-launch">▶ Milieu d'un segment</button>
+      <button onclick="openDemo('distance_pts')" class="demo-launch">▶ Distance entre 2 points</button>
+      <button onclick="openDemo('colinearite')" class="demo-launch">▶ Colinéarité (produit en croix)</button>
+      <button onclick="openDemo('produit_scalaire')" class="demo-launch">▶ Produit scalaire</button>
+      <button onclick="openDemo('combinaison')" class="demo-launch">▶ Combinaison linéaire</button>
+      <button onclick="openDemo('discriminant')" class="demo-launch">▶ Discriminant Δ</button>
       <button onclick="openDemo('cercle_carre_combo')" class="demo-launch">▶ Compléter le carré (calcul + dessin)</button>
       <button onclick="openDemo('cercle_carre_geo')" class="demo-launch">▶ Compléter le carré (en images)</button>
       <button onclick="openDemo('cercle_carre')" class="demo-launch">▶ Compléter le carré (calcul)</button>

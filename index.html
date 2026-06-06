@@ -343,6 +343,7 @@
     <div id="fc-filters" style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; justify-content:center;"><!-- chips générés par rebuildFlashcardFilters() selon la matière --></div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
     <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:0.7rem;">
+      <button type="button" id="fc-prev-btn" class="fc-speak" onclick="prevFlashcard(); event.stopPropagation();">◀ Précédent</button>
       <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();">🔊 Écouter</button>
       <button type="button" id="fc-write-btn" class="fc-speak" onclick="toggleWriteMode(); event.stopPropagation();">✏️ Écrire la réponse</button>
       <button type="button" id="fc-fav-btn" class="fc-speak" onclick="toggleFavCard(); event.stopPropagation();">☆ Favori</button>

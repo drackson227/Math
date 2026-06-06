@@ -1804,3 +1804,67 @@ body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { li
 .help-item { display: flex; flex-direction: column; gap: 2px; padding: 0.5rem 0.7rem; margin-bottom: 0.4rem; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
 .help-item strong { font-size: 13.5px; color: var(--color-nav); }
 .help-item span { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+
+/* ════════ Micro-interactions raffinées ════════ */
+
+/* 1 — Dégradé qui ondule lentement sur les boutons actifs */
+@keyframes gradShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.nav-btn.active {
+  background: linear-gradient(120deg, var(--color-nav), #7c3aed, #60a5fa, var(--color-nav));
+  background-size: 230% 230%;
+  animation: gradShift 6s ease-in-out infinite;
+}
+.subj-btn.on {
+  background: linear-gradient(120deg, #a78bfa, #60a5fa, #34d399, #a78bfa);
+  background-size: 240% 240%;
+  animation: gradShift 7s ease-in-out infinite;
+}
+.subject-prep-btn {
+  background: linear-gradient(120deg, #a78bfa, #60a5fa, #a78bfa);
+  background-size: 200% 200%;
+  animation: gradShift 6s ease-in-out infinite;
+}
+
+/* 2 — Reflet qui glisse en diagonale sur les cartes au survol */
+.card { position: relative; overflow: hidden; }
+.card::after {
+  content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.10), transparent);
+  transform: skewX(-18deg); pointer-events: none; opacity: 0; z-index: 1;
+}
+.card:hover::after { animation: cardSheen 0.85s ease; }
+@keyframes cardSheen {
+  0% { left: -80%; opacity: 0; }
+  18% { opacity: 1; }
+  100% { left: 130%; opacity: 0; }
+}
+
+/* 3 — Soulignement qui grandit du centre au survol des onglets de nav */
+.nav-btn { position: relative; }
+.nav-btn::after {
+  content: ''; position: absolute; left: 50%; bottom: 5px; height: 2px; width: 0;
+  background: var(--color-nav); border-radius: 2px;
+  transform: translateX(-50%); transition: width 0.25s ease;
+}
+.nav-btn:hover::after { width: 52%; }
+.nav-btn.active::after { width: 0; }
+
+/* 4 — Apparition en cascade des cartes quand une section s'ouvre */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.section.active .grid2 > .card { animation: cardIn 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.section.active .grid2 > .card:nth-child(2) { animation-delay: 0.07s; }
+.section.active .grid2 > .card:nth-child(3) { animation-delay: 0.14s; }
+.section.active .grid2 > .card:nth-child(4) { animation-delay: 0.21s; }
+.section.active .grid2 > .card:nth-child(5) { animation-delay: 0.28s; }
+.section.active .grid2 > .card:nth-child(6) { animation-delay: 0.34s; }
+.section.active .grid2 > .card:nth-child(n+7) { animation-delay: 0.38s; }
+
+/* Respect de « réduire les animations » : on coupe les boucles et reflets */
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn.active, .subj-btn.on, .subject-prep-btn { animation: none !important; }
+  .card:hover::after { animation: none !important; }
+  .section.active .grid2 > .card { animation: none !important; }
+}
