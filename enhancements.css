@@ -1,0 +1,432 @@
+/* ════════════════════════════════════════════════════════════════
+   GR2 Study — Couche d'améliorations visuelles & UX (additive)
+   100 micro-améliorations. Aucune logique JS touchée : que du style.
+   Chargé APRÈS style.css → peut peaufiner sans rien casser.
+   Tout est désactivable via « réduire les animations » (bloc final).
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─────────── A. POLISH GLOBAL ─────────── */
+
+/* 1 — Défilement doux quand on change d'ancre/section */
+html { scroll-behavior: smooth; }
+
+/* 2 — Barre de défilement personnalisée (WebKit) */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-nav), #7c3aed);
+  border-radius: 999px; border: 2px solid var(--bg-main);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(#7c3aed, var(--color-nav)); }
+
+/* 3 — Barre de défilement Firefox */
+* { scrollbar-width: thin; scrollbar-color: var(--color-nav) var(--bg-main); }
+
+/* 4 — Couleur de surlignage du texte sélectionné */
+::selection { background: color-mix(in srgb, var(--color-nav) 45%, transparent); color: #fff; }
+
+/* 5 — Plus de flash gris au tap sur mobile */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* 6 — Anneau de focus clavier net et accessible (sans gêner la souris) */
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--color-nav);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* 7 — Le conteneur principal apparaît en douceur au chargement */
+@keyframes ehFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.container { animation: ehFadeUp 0.5s ease both; }
+
+/* 8 — Images jamais débordantes + coins doux par défaut */
+img { max-width: 100%; height: auto; }
+
+/* 9 — Liens : transition de couleur douce */
+a { transition: color 0.18s ease, opacity 0.18s ease; }
+a:hover { opacity: 0.85; }
+
+/* 10 — Curseur « pointer » garanti sur tout ce qui est cliquable */
+button, [onclick], [role="button"], .nav-btn, .subj-btn, label[for] { cursor: pointer; }
+
+/* ─────────── B. BOUTONS & INTERACTIONS ─────────── */
+
+/* 11 — Enfoncement tactile sur tous les boutons de nav */
+.nav-btn:active { transform: scale(0.95) translateY(0); }
+
+/* 12 — Halo coloré au survol des onglets de nav */
+.nav-btn:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+
+/* 13 — Boutons de matière : léger grossissement au survol */
+.subj-btn:hover { transform: translateY(-2px); }
+
+/* 14 — Reflet animé sur le bouton de matière actif */
+.subj-btn.on { position: relative; overflow: hidden; }
+.subj-btn.on::after {
+  content: ''; position: absolute; inset: 0; left: -60%; width: 50%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.28), transparent);
+  transform: skewX(-18deg);
+  animation: ehShine 3.2s ease-in-out infinite;
+}
+@keyframes ehShine { 0% { left: -60%; } 55%, 100% { left: 140%; } }
+
+/* 15 — Boutons « .fc-speak » (contrôles flashcards) plus vivants */
+.fc-speak { transition: transform 0.12s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease; }
+.fc-speak:hover { transform: translateY(-1px); }
+.fc-speak:active { transform: scale(0.94); }
+
+/* 16 — Boutons de thème (panneau réglages) : retour tactile */
+.theme-btn { transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease; }
+.theme-btn:hover { transform: translateY(-1px); border-color: var(--color-nav); }
+.theme-btn:active { transform: scale(0.95); }
+.theme-btn.active { box-shadow: inset 0 0 0 1px var(--color-nav); }
+
+/* 17 — Effet d'enfoncement générique pour les boutons « inline » des sections */
+.section button:active { transform: scale(0.97); }
+
+/* 18 — Transition douce ajoutée aux boutons sans transition explicite */
+.subject-prep-btn, .chat-send-btn, .chat-tool { transition: transform 0.12s ease, box-shadow 0.18s ease, background 0.18s ease; }
+
+/* 19 — Bouton d'envoi du chat : zoom au survol */
+.chat-send-btn:hover { transform: scale(1.08) rotate(2deg); }
+.chat-send-btn:active { transform: scale(0.92); }
+
+/* 20 — Outils du chat (√, x², fractions…) : surbrillance au survol */
+.chat-tool:hover { transform: translateY(-1px); color: var(--color-nav); }
+
+/* ─────────── C. CHAMPS DE SAISIE & FORMULAIRES ─────────── */
+
+/* 21 — Halo de focus uniforme sur tous les champs texte */
+input[type="text"]:focus, input[type="number"]:focus,
+textarea:focus, select:focus, .chat-input:focus {
+  outline: none;
+  border-color: var(--color-nav) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nav) 22%, transparent);
+}
+
+/* 22 — Transition douce sur tous les champs */
+input, textarea, select { transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease; }
+
+/* 23 — Survol des champs : bordure qui s'éclaire */
+input:hover, textarea:hover, select:hover { border-color: color-mix(in srgb, var(--color-nav) 45%, var(--border-subtle)); }
+
+/* 24 — Placeholders un peu plus lisibles */
+::placeholder { color: var(--text-secondary); opacity: 0.7; }
+
+/* 25 — Curseur de réglage (range) coloré selon le thème */
+input[type="range"] { accent-color: var(--color-nav); }
+
+/* 26 — Cases à cocher / radios colorées selon le thème */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--color-nav); cursor: pointer; }
+
+/* 27 — Les <select> ont une flèche qui réagit au focus */
+select { cursor: pointer; }
+select:focus { color: var(--text-primary); }
+
+/* 28 — Zone de texte du journal : redimensionnable verticalement seulement */
+.journal-textarea { resize: vertical; min-height: 120px; transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+
+/* 29 — Champ de recherche (glossaire) : loupe qui « respire » au focus */
+#glossaire-search:focus, #chapter-filter:focus { transform: translateZ(0); }
+
+/* 30 — Composer du chat : halo quand on écrit dedans */
+.chat-composer:focus-within { box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-nav) 30%, transparent); border-radius: 14px; }
+
+/* ─────────── D. CARTES & SECTIONS ─────────── */
+
+/* 31 — Toutes les cartes : transition d'ombre/translation douce */
+.card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+
+/* 32 — Survol de carte : légère élévation */
+.card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.32); }
+
+/* 33 — Bordure de carte qui s'éclaire au survol */
+.card:hover { border-color: color-mix(in srgb, var(--color-nav) 35%, var(--border-subtle)); }
+
+/* 34 — Apparition douce de chaque section affichée */
+@keyframes ehSectionIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.section.active { animation: ehSectionIn 0.35s ease both; }
+
+/* 35 — Titres de section : petite barre d'accent qui glisse */
+.section > h2 { position: relative; }
+
+/* 36 — Blocs de formules : ombre interne subtile + survol */
+.formula-box, .formula-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.formula-box:hover, .formula-card:hover { transform: translateY(-2px); }
+
+/* 37 — Cartes du dashboard de stats : élévation au survol */
+.stat-card, .stats-grid > * { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.stat-card:hover, .stats-grid > *:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,0.3); }
+
+/* 38 — Le canvas des graphiques s'arrondit joliment au survol */
+canvas { transition: box-shadow 0.2s ease; }
+
+/* 39 — Séparateurs (hr) discrets et dégradés */
+hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, var(--border-subtle), transparent); margin: 1.2rem 0; }
+
+/* 40 — Code inline (<code>) mis en valeur */
+code { background: color-mix(in srgb, var(--color-nav) 14%, transparent); color: var(--color-nav); padding: 1px 6px; border-radius: 6px; font-size: 0.92em; }
+
+/* ─────────── E. FLASHCARDS ─────────── */
+
+/* 41 — Ombre plus profonde et douce sur la flashcard */
+.flashcard-inner { box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+
+/* 42 — Survol de la flashcard : elle « flotte » légèrement */
+.flashcard-wrapper { transition: transform 0.2s ease; }
+.flashcard-wrapper:hover { transform: translateY(-4px); }
+
+/* 43 — Barre de progression des flashcards avec un léger éclat */
+#flashcard-prog-bar { box-shadow: 0 0 8px color-mix(in srgb, var(--color-nav) 60%, transparent); }
+
+/* 44 — Compteur « à réviser aujourd'hui » qui attire l'œil */
+#flashcard-due-count { transition: color 0.2s ease; }
+
+/* 45 — Bouton favori actif : étoile dorée */
+#fc-fav-btn.on, #fc-fav-btn[aria-pressed="true"] { color: var(--color-droite); border-color: var(--color-droite); }
+
+/* 46 — Boutons de notation (savais / hésité / pas su) : couleur au survol */
+#flashcard-controls button:hover { transform: translateY(-2px); color: var(--text-primary); border-color: var(--color-nav); }
+#flashcard-controls button:active { transform: scale(0.95); }
+
+/* 47 — Champ « écrire la réponse » : focus marqué */
+#fc-write-input:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-parabole) 25%, transparent); border-color: var(--color-parabole) !important; }
+
+/* 48 — Message de session de flashcards : petite pulsation */
+#fc-session { animation: ehPulse 2.4s ease-in-out infinite; }
+@keyframes ehPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* 49 — Puces de filtre de flashcards (chips) : retour tactile */
+#fc-filters > * { transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease; }
+#fc-filters > *:active { transform: scale(0.94); }
+
+/* 50 — Reflet doux qui traverse la face avant au survol */
+.flashcard-front { position: relative; overflow: hidden; }
+
+/* 50b — Flashcards avec schéma : défilement vertical si le contenu dépasse les 300px
+   (sinon le bas — souvent le dessin — était coupé). « safe center » garde le centrage
+   pour les cartes courtes mais évite de couper le haut quand ça déborde. */
+.flashcard-front, .flashcard-back { overflow-y: auto; overflow-x: hidden; justify-content: safe center; }
+
+/* ─────────── F. QUIZ ─────────── */
+
+/* 51 — Boutons de réponse du quiz : élévation au survol */
+#quiz-container button, .quiz-option, .answer-btn {
+  transition: transform 0.14s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+#quiz-container button:hover, .quiz-option:hover, .answer-btn:hover {
+  transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+#quiz-container button:active, .quiz-option:active, .answer-btn:active { transform: scale(0.98); }
+
+/* 52 — Gros boutons de l'accueil quiz : pulsation d'invitation sur « Commencer » */
+#quiz-start-screen > button:last-of-type { transition: transform 0.15s ease, box-shadow 0.2s ease; }
+
+/* 53 — Défi du jour : léger battement pour donner envie */
+#daily-btn { animation: ehHeartbeat 3.5s ease-in-out infinite; }
+@keyframes ehHeartbeat { 0%, 92%, 100% { transform: none; } 96% { transform: scale(1.03); } }
+
+/* 54 — Boutons multijoueur / duel : grossissent au survol */
+#mp-launch-btn:hover, #duel-launch-btn:hover, #daily-btn:hover { transform: translateY(-2px) scale(1.02); }
+#mp-launch-btn:active, #duel-launch-btn:active, #daily-btn:active { transform: scale(0.97); }
+
+/* 55 — Barre de progression du quiz : transition fluide */
+#prog-fill { transition: width 0.4s ease; }
+
+/* 56 — Carte de classement (leaderboard) : lignes qui réagissent */
+#leaderboard-list > * { transition: background 0.15s ease, transform 0.12s ease; border-radius: 8px; }
+#leaderboard-list > *:hover { background: var(--bg-main); transform: translateX(2px); }
+
+/* 57 — Stats par chapitre : barres avec transition douce */
+.chap-stats [style*="width"] { transition: width 0.5s ease; }
+
+/* 58 — Sélecteurs de chapitre/difficulté : focus marqué */
+#chapter-filter:focus, #difficulty-filter:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nav) 22%, transparent); }
+
+/* 59 — Anneau de résultat du quiz : apparition en pop */
+.quiz-result-ring { animation: ehPop 0.5s cubic-bezier(.2,1.4,.5,1) both; }
+@keyframes ehPop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* 60 — Barre supérieure du quiz : reste lisible et compacte */
+.quiz-topbar { gap: 8px; }
+
+/* ─────────── G. PANNEAU RÉGLAGES & MODALES ─────────── */
+
+/* 61 — Le panneau réglages glisse depuis la droite */
+@keyframes ehSlideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+.settings-panel.show { animation: ehSlideInRight 0.25s ease both; }
+
+/* 62 — Bouton ⚙️ qui tourne légèrement au survol */
+.settings-toggle { transition: transform 0.3s ease; }
+.settings-toggle:hover { transform: rotate(45deg); }
+
+/* 63 — Bouton ☰ (menu mobile) : retour tactile */
+.sidebar-toggle { transition: transform 0.15s ease; }
+.sidebar-toggle:active { transform: scale(0.9); }
+
+/* 64 — Lignes de réglages séparées plus nettement */
+.settings-row { transition: opacity 0.2s ease; }
+
+/* 65 — Modales (aide, image, exos) : apparition en fondu zoom */
+.help-modal.open .help-box { animation: ehModalIn 0.24s cubic-bezier(.2,1,.4,1) both; }
+@keyframes ehModalIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+/* 66 — Boutons de fermeture (✕) : rotation au survol */
+.help-close:hover, [onclick*="close"]:hover, [onclick*="toggle"]:hover { transform: scale(1.06); }
+
+/* 67 — Overlay Pomodoro : fond légèrement flouté */
+.pomodoro-overlay { backdrop-filter: blur(3px); }
+
+/* 68 — Anneau du Pomodoro : couleur qui suit le thème (déjà var) + lueur */
+#pomodoro-ring { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-nav) 50%, transparent)); }
+
+/* 69 — Points de progression Pomodoro : transition de remplissage */
+[id^="pomo-"] { transition: background 0.3s ease, transform 0.2s ease; }
+
+/* 70 — Overlay de révision des exos : fondu d'entrée */
+#exo-review-overlay[style*="flex"] > div { animation: ehModalIn 0.24s ease both; }
+
+/* ─────────── H. PROFIL / PROGRESSION / DIVERS ─────────── */
+
+/* 71 — Barre de progression générale : éclat lumineux */
+#prog-global-bar { box-shadow: 0 0 10px color-mix(in srgb, var(--color-nav) 50%, transparent); }
+
+/* 72 — Pourcentage global : transition de couleur */
+#prog-global-pct { transition: color 0.3s ease; }
+
+/* 73 — Cartes de chapitres de progression : élévation */
+#prog-chapters > * { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+#prog-chapters > *:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+
+/* 74 — Entrées du journal : apparition + survol */
+#journal-history > * { transition: transform 0.15s ease, border-color 0.18s ease; }
+#journal-history > *:hover { transform: translateX(3px); border-color: color-mix(in srgb, var(--color-nav) 30%, var(--border-subtle)); }
+
+/* 75 — Liste de mes exercices : cartes interactives */
+#exo-list > * { transition: transform 0.15s ease, box-shadow 0.18s ease; }
+#exo-list > *:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.22); }
+
+/* 76 — Fiches du glossaire : retour tactile au clic */
+#glossaire-list [onclick]:active { transform: scale(0.97); }
+
+/* 77 — Badge « Validé par prof » : légère pulsation de fierté */
+#app-validated { transition: transform 0.2s ease; }
+#app-validated:hover { transform: scale(1.04); }
+
+/* 78 — Sous-titre de l'app : transition douce au changement de matière */
+#app-subtitle { transition: opacity 0.3s ease; }
+
+/* 79 — Footer : liens réseaux qui réagissent */
+footer a { transition: transform 0.15s ease, opacity 0.15s ease; display: inline-block; }
+footer a:hover { transform: translateY(-2px); opacity: 1; }
+
+/* 80 — Logo d'en-tête : léger flottement permanent */
+@keyframes ehFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.container h1 + p, header svg, [aria-hidden="true"] rect { /* placeholder neutre, voir 81 */ }
+
+/* ─────────── I. CHAT ─────────── */
+
+/* 81 — Bulles de messages : apparition douce */
+#chat-messages > * { animation: ehFadeUp 0.3s ease both; }
+
+/* 82 — Aperçu d'image du chat : coins doux + ombre */
+.chat-preview { transition: box-shadow 0.2s ease; }
+
+/* 83 — Zone de messages : défilement doux */
+.chat-messages { scroll-behavior: smooth; }
+
+/* 84 — Séparateur d'outils du chat plus discret */
+.chat-tool-sep { opacity: 0.5; }
+
+/* 85 — Placeholder du composer (contenteditable vide) bien visible */
+.chat-input:empty:before { content: attr(data-ph); color: var(--text-secondary); opacity: 0.6; pointer-events: none; }
+
+/* 86 — Panneau emoji/GIF : apparition en fondu */
+#chat-panel[style*="block"] { animation: ehFadeUp 0.2s ease both; }
+
+/* ─────────── J. ACCESSIBILITÉ & CONFORT ─────────── */
+
+/* 87 — Cibles tactiles minimales sur mobile (boutons pas trop petits) */
+@media (max-width: 600px) {
+  .nav-btn, .subj-btn, .theme-btn, .fc-speak { min-height: 40px; }
+  .container { padding: 1.3rem; }
+}
+
+/* 88 — Sur très petit écran, titres un peu réduits pour éviter le débordement */
+@media (max-width: 420px) {
+  .section > h2 { font-size: 24px !important; }
+  h1 { font-size: 24px !important; }
+}
+
+/* 89 — Espacement de lecture confortable pour les paragraphes de cours */
+.section p { line-height: 1.6; }
+
+/* 90 — Texte jamais coupé brutalement (césure propre des longs mots) */
+.section p, .card, .help-item span { overflow-wrap: break-word; }
+
+/* 91 — Focus visible renforcé sur les flashcards (navigation clavier) */
+.flashcard-wrapper:focus-visible { outline: 2px solid var(--color-nav); outline-offset: 4px; border-radius: 18px; }
+
+/* 92 — Indicateur de chargement réutilisable (.eh-skeleton) */
+@keyframes ehSkeleton { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.eh-skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%; animation: ehSkeleton 1.3s linear infinite; border-radius: 10px;
+}
+
+/* ─────────── K. FINITIONS ─────────── */
+
+/* 93 — Boutons désactivés clairement grisés */
+button:disabled, input:disabled, select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* 94 — Détails (<details>) : flèche et transition propres */
+details summary { cursor: pointer; transition: color 0.18s ease; }
+details summary:hover { color: var(--color-nav); }
+
+/* 95 — Tableaux éventuels : lignes alternées lisibles */
+table { border-collapse: collapse; width: 100%; }
+table th, table td { padding: 8px 10px; border-bottom: 1px solid var(--border-subtle); }
+table tr:hover td { background: var(--bg-card); }
+
+/* 96 — Texte en gras des consignes mieux contrasté */
+.section strong { color: var(--text-primary); }
+
+/* 97 — Émojis alignés verticalement avec le texte */
+button, .nav-btn, .subj-btn { font-variant-emoji: text; }
+
+/* 98 — Le bouton actif de la barre de matière reste bien net (pas de flou) */
+.subj-btn.on { will-change: transform; }
+
+/* 99 — Petit « retour en haut » plus doux s'il existe */
+#back-to-top, .back-to-top { transition: opacity 0.25s ease, transform 0.2s ease; }
+#back-to-top:hover, .back-to-top:hover { transform: translateY(-3px); }
+
+/* 100 — Transitions de couleur globales lors d'un changement de thème
+   (on garde transform + box-shadow pour ne pas annuler les effets de survol) */
+body, .container, .nav, .settings-panel {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.card, .nav-btn, .subj-btn, input, textarea, select {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.2s ease,
+              transform 0.18s ease, box-shadow 0.2s ease;
+}
+
+/* ─────────── RESPECT DE « RÉDUIRE LES ANIMATIONS » ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .container, .section.active, #chat-messages > *, .quiz-result-ring,
+  .settings-panel.show, .help-modal.open .help-box, #exo-review-overlay[style*="flex"] > div,
+  #chat-panel[style*="block"] { animation: none !important; }
+  #daily-btn, #fc-session, .subj-btn.on::after { animation: none !important; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+/* ─────────── IMPRESSION (PDF / papier) ─────────── */
+@media print {
+  .nav, .subject-bar, .settings-toggle, .sidebar-toggle, #particle-canvas,
+  .settings-panel, .chat-tools, .chat-composer, footer a { display: none !important; }
+  body { background: #fff; color: #000; padding: 0; }
+  .container { box-shadow: none; border: none; max-width: 100%; }
+  .section { display: block !important; page-break-inside: avoid; }
+}

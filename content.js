@@ -102,7 +102,7 @@ const SECTIONS_CONTENT = {
     </div>
   </div>
   <div class="synth-section droite">
-    <h2>Chapitre I — Équations de droites</h2>
+    <h2>Chapitre 2 — Équations de droites</h2>
     <p>Une <strong>droite</strong> peut être exprimée de 3 façons différentes selon le contexte.</p>
     
     <div style="text-align:center; margin:1.5rem 0;">
@@ -297,7 +297,7 @@ const SECTIONS_CONTENT = {
     <ul>
       <li>Trouver l'équation d'une droite perpendiculaire</li>
       <li>Calculer la distance d'un point à la droite</li>
-      <li>Vérifier si deux droites sont perpendiculaires (leurs vecteurs normaux sont colinéaires)</li>
+      <li>Vérifier si deux droites sont parallèles (leurs vecteurs normaux sont colinéaires)</li>
     </ul>
     
     <div class="simple-exp-box">
@@ -309,7 +309,7 @@ const SECTIONS_CONTENT = {
   </div>
 
   <div class="synth-section cercle">
-    <h2>Chapitre II — Cercle</h2>
+    <h2>Chapitre 3 — Cercle</h2>
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:2rem;">
       <div style="background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.3); border-radius:12px; padding:1rem; text-align:center;">
         <div style="font-size:28px; margin-bottom:0.5rem;">📍</div>

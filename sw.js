@@ -4,13 +4,12 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v62';
+const CACHE = 'mathsgr2-v67';
 const CORE = [
-  './', './index.html', './style.css',
+  './', './index.html', './style.css', './enhancements.css',
   './data.js', './content.js', './script.js',
   './auth.js', './chat.js', './multiplayer.js', './search.js', './generator.js', './subjects.js', './subject-chimie.js', './subject-bio.js', './subject-geo.js', './subject-histoire.js', './subject-francais.js', './subject-anglais.js', './answersheet.js', './gestures.js', './bat.js', './shortcuts.js', './backtotop.js',
-  './manifest.json', './logo.svg', './icon-192.png', './icon-512.png',
-  './cellule-animale.png', './cellule-vegetale.png', './procaryote.png', './procaryote-blank.png', './cellule-animale-blank.png', './cellule-vegetale-blank.png'
+  './manifest.json', './logo.svg', './icon-192.png', './icon-512.png'
 ];
 // Librairies CDN à précharger pour le HORS-LIGNE (MathJax SVG = auto-contenu, pas de polices séparées)
 const CDN_PRECACHE = [

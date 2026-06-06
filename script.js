@@ -443,6 +443,24 @@ function answer(qi, chosen) {
   });
   document.getElementById(`exp-${qi}`).classList.add('show');
 
+  // Amélioration — réponse fausse : bandeau « pourquoi » + ouverture auto de
+  // l'explication « en clair » pour comprendre l'erreur tout de suite.
+  if (chosen !== q.ans) {
+    const _expEl = document.getElementById(`exp-${qi}`);
+    if (_expEl && !_expEl.querySelector('.exp-wrong-banner')) {
+      const _bn = document.createElement('div');
+      _bn.className = 'exp-wrong-banner';
+      _bn.style.cssText = 'background:rgba(248,113,113,0.12);border-left:3px solid #f87171;border-radius:0 8px 8px 0;padding:8px 12px;margin-bottom:10px;font-size:14px;color:var(--text-primary);';
+      _bn.innerHTML = "❌ <strong>Ta réponse n'était pas la bonne.</strong> La bonne réponse est <strong style=\"color:#34d399;\">" + ['A','B','C','D'][q.ans] + "</strong>. Voici pourquoi 👇";
+      _expEl.insertBefore(_bn, _expEl.firstChild);
+    }
+    const _simple = document.getElementById(`simple-${qi}`);
+    if (_simple && _simple.style.display === 'none') {
+      _simple.style.display = 'block';
+      if (typeof safeMathJax === 'function') safeMathJax([_simple]);
+    }
+  }
+
   const correctBtn = document.getElementById(`opt-${qi}-${q.ans}`);
   if (correctBtn) correctBtn.style.transform = 'scale(1.02)';
   setTimeout(() => { if (correctBtn) correctBtn.style.transform = ''; }, 500);
@@ -609,6 +627,7 @@ function showQuizSummary() {
       <p style="font-size:15px; color:var(--text-secondary);">⚡ XP gagné : +${xpGained}</p>
       <div style="display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-top:1rem;">
         <button class="nav-btn" onclick="shareScore()" style="background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; border:none;">📲 Partager</button>
+        ${sessionWrongQuestions && sessionWrongQuestions.length ? '<button class="nav-btn" onclick="filterMissedOnly(); startQuiz();" style="background:rgba(248,113,113,0.14); border:1px solid #f87171; color:#f87171;">🔁 Rejouer mes erreurs</button>' : ''}
         <button class="nav-btn" onclick="resetQuiz()">🔄 Rejouer</button>
         <button class="nav-btn" onclick="backToQuizStart()">🏠 Accueil quiz</button>
       </div>

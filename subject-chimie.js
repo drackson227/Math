@@ -406,7 +406,7 @@
     { front: "Pourquoi passer en moles ?", back: "Parce que l'équation pondérée raisonne en moles (coefficients) : on ne peut pas comparer directement des grammes.", chapter: "stoechio" },
     { front: "Où trouver la masse molaire M ?", back: "Dans le tableau périodique (sous chaque élément).", chapter: "mole" },
     { front: "Le nombre d'Avogadro ?", back: "Nₐ ≈ 6,02·10²³ : le nombre de particules contenues dans une mole.", chapter: "mole" },
-    { front: "Qu'est-ce qu'un atome ?", back: "La plus petite particule d'un élément : un noyau (protons + neutrons) entouré d'électrons.", chapter: "mole" }
+    { front: "Qu'est-ce qu'un atome ?", back: "La plus petite particule d'un élément : un <strong>noyau</strong> (protons + neutrons) entouré d'<strong>électrons</strong>.<br><svg viewBox='0 0 210 162' width='180' style='max-width:100%;height:auto;margin-top:8px'><ellipse cx='105' cy='82' rx='95' ry='34' fill='none' stroke='#60a5fa' stroke-width='1.5'/><ellipse cx='105' cy='82' rx='34' ry='72' fill='none' stroke='#a78bfa' stroke-width='1.5'/><circle cx='99' cy='76' r='8' fill='#f87171'/><circle cx='112' cy='79' r='8' fill='#f87171'/><circle cx='100' cy='90' r='8' fill='#94a3b8'/><circle cx='113' cy='68' r='8' fill='#94a3b8'/><circle cx='11' cy='82' r='5' fill='#fbbf24'/><circle cx='199' cy='82' r='5' fill='#fbbf24'/><circle cx='105' cy='11' r='5' fill='#fbbf24'/><circle cx='105' cy='153' r='5' fill='#fbbf24'/><text x='150' y='44' fill='#f87171' font-size='10'>noyau</text><text x='150' y='140' fill='#fbbf24' font-size='10'>électrons</text></svg><br><em>Protons (rouges) + neutrons (gris) au centre ; électrons (jaunes) en orbite.</em>", chapter: "mole" }
   ];
 
   window.registerSubject('chimie', {
