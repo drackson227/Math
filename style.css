@@ -1464,7 +1464,7 @@ textarea:focus-visible,
 .img-modal {
   display: none; position: fixed; inset: 0; z-index: 4000;
   background: rgba(8, 6, 20, 0.82); backdrop-filter: blur(4px);
-  padding: 1.2rem; overflow-y: auto;
+  padding: 1.2rem; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
 }
 .img-modal.open { display: flex; align-items: flex-start; justify-content: center; }
 .img-modal-box {
@@ -1687,3 +1687,120 @@ body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { li
 .pc-lbl { font-size:11px; color:var(--text-secondary); margin-top:5px; }
 .pc-exam { margin-top:1rem; }
 .pc-exam-h { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:.35rem; font-size:13.5px; color:var(--text-primary); }
+
+/* ════════ Frise d'histoire interactive (HTML responsive) ════════ */
+.htl { margin: 1rem 0; }
+.htl-head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 0.6rem; text-align: center; }
+.htl-title { font-size: 17px; font-weight: 800; color: #9b8cff; }
+.htl-sub { font-size: 11.5px; color: var(--text-secondary); }
+.htl-track { display: flex; gap: 6px; }
+.htl-seg {
+  flex: 1 1 0; min-width: 0; border: none; cursor: pointer; border-radius: 10px;
+  padding: 0.55rem 0.4rem; color: #fff; text-align: center;
+  display: flex; flex-direction: column; gap: 3px; align-items: center; justify-content: center;
+  background: var(--c); transition: transform 0.12s, filter 0.12s; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.htl-seg:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.htl-name { font-weight: 800; font-size: 12.5px; line-height: 1.15; }
+.htl-date { font-size: 10.5px; opacity: 0.92; line-height: 1.1; white-space: nowrap; }
+.htl-star { outline: 2px solid #fff; outline-offset: -2px; }
+@media (max-width: 560px) {
+  .htl-track { flex-wrap: wrap; }
+  .htl-seg { flex: 1 1 28%; }
+}
+
+/* ════════ Titres de section plus nets sur petit écran ════════ */
+@media (max-width: 460px) {
+  .section > h2 { font-size: 24px !important; line-height: 1.2 !important; }
+  .section > div[style*="text-align"] h2 { font-size: 25px !important; line-height: 1.18 !important; }
+}
+
+/* ════════ Carte de Belgique interactive (Géo) ════════ */
+.bemap { position: relative; max-width: 440px; margin: 1rem auto 0; }
+.bemap > img { width: 100%; display: block; border-radius: 12px; }
+.bemap-dot {
+  position: absolute; transform: translate(-50%, -50%);
+  width: clamp(20px, 6vw, 26px); height: clamp(20px, 6vw, 26px);
+  border-radius: 50%; background: var(--color-nav); color: #fff; border: 2px solid #fff;
+  font-weight: 800; font-size: clamp(10px, 3vw, 13px); line-height: 1;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+  cursor: pointer; box-shadow: 0 1px 5px rgba(0,0,0,.45); transition: transform .12s;
+}
+.bemap-dot:hover, .bemap-dot:active { transform: translate(-50%, -50%) scale(1.18); z-index: 3; }
+.bemap-dot.sel { background: #fbbf24; color: #1a1a1a; }
+.bemap-dot.ok { background: #16a34a; }
+.bemap-dot.no { background: #dc2626; }
+.bemap-panel { max-width: 440px; margin: .6rem auto 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: .8rem 1rem; text-align: center; font-size: 14px; line-height: 1.5; color: var(--text-primary); }
+.bemap-foot { max-width: 440px; margin: .6rem auto 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.bemap-quiz { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+
+/* ════════ Quiz : barre du haut + écran de fin ════════ */
+.quiz-topbar { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.quiz-topbar .nav-btn { width: auto; flex: 0 0 auto; padding: 8px 16px; font-size: 14px; }
+.quiz-result-ring {
+  width: 132px; height: 132px; border-radius: 50%; margin: 0.5rem auto 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.quiz-result-inner {
+  width: 104px; height: 104px; border-radius: 50%; background: var(--bg-card);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* ════════ Glossaire : puces de filtre par matière ════════ */
+.gloss-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 0.8rem; }
+.gloss-chip {
+  border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary);
+  border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s;
+}
+.gloss-chip:hover { border-color: var(--chip, var(--color-nav)); color: var(--text-primary); }
+.gloss-chip.on {
+  background: var(--chip, var(--color-nav)); border-color: var(--chip, var(--color-nav));
+  color: #fff;
+}
+
+/* ════════ Fiches : compteur de caractères des notes ════════ */
+.fiche-note-count { text-align: right; font-size: 11px; color: var(--text-secondary); margin-top: 3px; opacity: 0.8; }
+
+/* ════════ Calculatrice maths (milieu/distance/pente) ════════ */
+.gc-inputs { display: flex; flex-direction: column; gap: 10px; }
+.gc-pt { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--text-primary); flex-wrap: wrap; }
+.gc-pt .gc-lab { min-width: 30px; }
+.gc-pt input { width: 72px; padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--color-nav); background: var(--bg-main); color: var(--text-primary); font-size: 15px; text-align: center; }
+.gc-pt input:focus { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-nav) 25%, transparent); }
+.gc-result { display: none; margin-top: 1rem; }
+.gc-result.show { display: block; }
+.gc-block { background: var(--bg-main); border: 1px solid var(--border-subtle); border-left: 4px solid var(--color-nav); border-radius: 10px; padding: 0.8rem 1rem; margin-bottom: 0.7rem; overflow-x: auto; }
+.gc-block h4 { font-size: 14px; font-weight: 700; color: var(--color-nav); margin: 0 0 0.4rem; }
+.gc-final { margin-top: 0.5rem; font-weight: 800; font-size: 16px; color: var(--text-primary); background: color-mix(in srgb, var(--color-nav) 14%, transparent); display: inline-block; padding: 4px 12px; border-radius: 8px; }
+.gc-warn { color: var(--color-droite, #fbbf24); font-size: 14px; }
+
+/* ════════ Célébrations (confettis + bannière) ════════ */
+@keyframes confettiDrop {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.9; }
+}
+.celebrate-banner {
+  position: fixed; left: 50%; top: 38%; transform: translate(-50%, -50%) scale(0.6);
+  z-index: 9999; pointer-events: none;
+  background: linear-gradient(135deg, var(--color-nav), var(--color-parabole, #60a5fa));
+  color: #fff; font-weight: 800; font-size: 20px; padding: 14px 26px; border-radius: 16px;
+  box-shadow: 0 16px 50px rgba(0,0,0,0.45); white-space: nowrap;
+  animation: celebPop 0.4s cubic-bezier(.2,1.4,.5,1) forwards;
+}
+@keyframes celebPop { to { transform: translate(-50%, -50%) scale(1); } }
+.celebrate-banner.out { transition: opacity 0.5s, transform 0.5s; opacity: 0; transform: translate(-50%, -90%) scale(0.9); }
+
+/* ════════ Guide des fonctionnalités (modal) ════════ */
+.help-modal { display: none; position: fixed; inset: 0; z-index: 4200; background: rgba(8,6,20,0.82); backdrop-filter: blur(4px); padding: 1.2rem; overflow-y: auto; }
+.help-modal.open { display: flex; align-items: flex-start; justify-content: center; }
+.help-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; max-width: 600px; width: 100%; margin: auto; padding: 1.4rem 1.4rem 1.8rem; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.55); animation: imgModalIn 0.22s ease; }
+.help-close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; background: rgba(0,0,0,0.4); color: #fff; font-size: 17px; }
+.help-box h3 { font-size: 22px; font-weight: 800; color: var(--color-nav); margin: 0 0 0.3rem; }
+.help-intro { color: var(--text-secondary); font-size: 13.5px; margin: 0 0 1rem; }
+.help-group { margin-bottom: 1.1rem; }
+.help-group h4 { font-size: 15px; font-weight: 800; color: var(--text-primary); margin: 0 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border-subtle); }
+.help-item { display: flex; flex-direction: column; gap: 2px; padding: 0.5rem 0.7rem; margin-bottom: 0.4rem; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.help-item strong { font-size: 13.5px; color: var(--color-nav); }
+.help-item span { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }

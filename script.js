@@ -42,6 +42,9 @@ function updateQuizProgress() {
   const n = currentQuestions.length;
   if (!n) { el.innerHTML = ''; return; }
   const done = quizResults.filter(function (r) { return r !== undefined && r !== null; }).length;
+  const okN = quizResults.filter(function (r) { return r === true; }).length;
+  const noN = quizResults.filter(function (r) { return r === false; }).length;
+  const skN = quizResults.filter(function (r) { return r === 'skip'; }).length;
   const cur = Math.min(currentActiveQuestion + 1, n);
   let dots = '';
   for (let i = 0; i < n; i++) {
@@ -53,8 +56,10 @@ function updateQuizProgress() {
     dots += '<span class="' + cls + '"></span>';
   }
   const pct = Math.round(done / n * 100);
-  el.innerHTML = '<div class="qp-row"><span class="qp-label">Question ' + cur + ' / ' + n + '</span>' +
-    '<span class="qp-count">' + done + '/' + n + ' répondues</span></div>' +
+  const tally = done > 0
+    ? '<span class="qp-count"><span style="color:#34d399;">✅ ' + okN + '</span> · <span style="color:#f87171;">❌ ' + noN + '</span>' + (skN ? ' · <span style="color:#fbbf24;">⏭ ' + skN + '</span>' : '') + '</span>'
+    : '<span class="qp-count">' + n + ' questions</span>';
+  el.innerHTML = '<div class="qp-row"><span class="qp-label">Question ' + cur + ' / ' + n + '</span>' + tally + '</div>' +
     '<div class="qp-dots">' + dots + '</div>' +
     '<div class="qp-bar"><div style="width:' + pct + '%;"></div></div>';
 }
@@ -551,8 +556,10 @@ function showQuizSummary() {
 
   // ── Examen blanc : note /20 + historique par matière ──
   var examBanner = '';
+  var _wasExam = false;
   if (window._examRun) {
     window._examRun = false;
+    _wasExam = true;
     var note = currentQuestions.length > 0 ? Math.round(score / currentQuestions.length * 20) : 0;
     var subj = window.currentSubject || 'maths';
     var d2 = loadSavedData();
@@ -571,6 +578,7 @@ function showQuizSummary() {
       '<p style="font-size:16px; margin:0.3rem 0;">' + mention + ' &nbsp;·&nbsp; Record : <strong>' + best + '/20</strong></p>' +
       '<p style="font-size:13px; color:var(--text-secondary); margin-top:0.6rem;">Tes derniers examens :<br>' + last + '</p>' +
       '</div>';
+    if (note >= 16 && typeof celebrate === 'function') setTimeout(function () { celebrate(note >= 20 ? '🏆 20/20 — Parfait !' : '🎓 ' + note + '/20 — Excellent !'); }, 250);
   }
 
   // Check for perfect quiz badge — exiger au moins 1 question pour éviter le badge sur quiz vide
@@ -579,17 +587,28 @@ function showQuizSummary() {
     data.badges.push('Quiz parfait');
     saveData(data);
   }
-  if (isPerfect) showRewardAnimation('perfect');
-  
+  if (isPerfect) { showRewardAnimation('perfect'); if (typeof celebrate === 'function' && !_wasExam) setTimeout(function () { celebrate('💯 Quiz parfait !'); }, 200); }
+
+  var _pct = currentQuestions.length > 0 ? Math.round(score / currentQuestions.length * 100) : 0;
+  var _vc = _pct >= 80 ? '#34d399' : (_pct >= 50 ? 'var(--color-nav)' : '#f87171');
+  var _vTxt = _pct >= 90 ? '🏆 Excellent !' : (_pct >= 70 ? '💪 Bien joué !' : (_pct >= 50 ? '🙂 Pas mal, continue !' : '📚 À retravailler — courage !'));
+  var _ring = 'background:conic-gradient(' + _vc + ' ' + (_pct * 3.6) + 'deg, var(--border-subtle) 0deg);';
   let summaryHTML = examBanner + `
     <div class="formula-box" style="text-align:center;">
       <h3 style="font-size:24px; font-weight:700; margin-bottom:1rem;">📊 Quiz terminé !</h3>
-      <div class="score-num" style="font-size:48px;">${score}/${currentQuestions.length}</div>
-      <p style="font-size:18px; color:var(--text-secondary); margin-bottom:1rem;">Score : ${currentQuestions.length > 0 ? Math.round(score / currentQuestions.length * 100) : 0}%</p>
-      <p style="font-size:16px; color:var(--text-secondary);">XP gagné : +${xpGained}</p>
-      <button class="nav-btn" onclick="shareScore()" style="margin-top:1rem; background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; border:none;">📲 Partager mon score</button>
-      <button class="nav-btn" onclick="resetQuiz()" style="margin-top:1rem;">🔄 Rejouer</button>
-      <button class="nav-btn" onclick="backToQuizStart()" style="margin-top:1rem; margin-left:0.5rem;">🏠 Accueil quiz</button>
+      <div class="quiz-result-ring" style="${_ring}">
+        <div class="quiz-result-inner">
+          <div style="font-size:30px; font-weight:800; color:${_vc};">${_pct}%</div>
+          <div style="font-size:13px; color:var(--text-secondary);">${score}/${currentQuestions.length}</div>
+        </div>
+      </div>
+      <p style="font-size:18px; font-weight:700; margin:0.8rem 0 0.3rem; color:${_vc};">${_vTxt}</p>
+      <p style="font-size:15px; color:var(--text-secondary);">⚡ XP gagné : +${xpGained}</p>
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-top:1rem;">
+        <button class="nav-btn" onclick="shareScore()" style="background:linear-gradient(135deg,#a78bfa,#60a5fa); color:#fff; border:none;">📲 Partager</button>
+        <button class="nav-btn" onclick="resetQuiz()">🔄 Rejouer</button>
+        <button class="nav-btn" onclick="backToQuizStart()">🏠 Accueil quiz</button>
+      </div>
     </div>
   `;
   
@@ -2124,6 +2143,41 @@ document.addEventListener('keydown', (e) => {
 // Tableau de bord « À réviser aujourd'hui » — agrège TOUTES les matières.
 var DASH_ICONS = { maths: '📐', francais: '✍️', anglais: '🇬🇧', histoire: '🏛️', geo: '🗺️', chimie: '🧪', bio: '🧬' };
 var DASH_LABELS = { maths: 'Maths', francais: 'Français', anglais: 'Anglais', histoire: 'Histoire', geo: 'Géo', chimie: 'Chimie', bio: 'Bio' };
+/* ════════════ Carte de Belgique interactive (Géo) ════════════ */
+window._geoQuiz = null;
+function geoPick(i) {
+  if (window._geoQuiz != null) { geoMapCheck(i); return; }
+  var p = (window.BE_PROVINCES || [])[i]; if (!p) return;
+  document.querySelectorAll('#bemap .bemap-dot').forEach(function (d, k) { d.classList.remove('ok', 'no'); d.classList.toggle('sel', k === i); });
+  var panel = document.getElementById('bemap-panel');
+  if (panel) panel.innerHTML = '<strong style="font-size:16px;">' + (i + 1) + '. ' + p.n + '</strong><br>Région : <strong>' + p.r + '</strong> · Chef-lieu : <strong>' + p.c + '</strong>';
+}
+function geoMapQuiz() {
+  var ps = window.BE_PROVINCES; if (!ps || !ps.length) return;
+  var i = Math.floor(Math.random() * ps.length);
+  window._geoQuiz = i;
+  var p = ps[i];
+  var hasChef = p.c && /^[A-ZÉ]/.test(p.c) && p.c.indexOf('commune') < 0;
+  var byChef = hasChef && Math.random() < 0.5;
+  var q = byChef ? 'Clique sur la province dont le chef-lieu est <strong>' + p.c + '</strong>' : 'Clique sur : <strong>' + p.n + '</strong>';
+  var el = document.getElementById('bemap-quiz'); if (el) el.innerHTML = '🎯 ' + q;
+  document.querySelectorAll('#bemap .bemap-dot').forEach(function (d) { d.classList.remove('sel', 'ok', 'no'); });
+  var panel = document.getElementById('bemap-panel'); if (panel) panel.innerHTML = '🎯 <strong>Quiz carte</strong> en cours — clique la bonne pastille !';
+}
+function geoMapCheck(i) {
+  var t = window._geoQuiz; var ps = window.BE_PROVINCES;
+  var dots = document.querySelectorAll('#bemap .bemap-dot');
+  var good = (i === t);
+  if (dots[i]) dots[i].classList.add(good ? 'ok' : 'no');
+  if (!good && dots[t]) dots[t].classList.add('ok');
+  var el = document.getElementById('bemap-quiz');
+  if (el) el.innerHTML = good
+    ? '✅ Bravo ! <strong>' + ps[t].n + '</strong> (chef-lieu : ' + ps[t].c + ')'
+    : '❌ C\'était <strong>' + ps[t].n + '</strong>. <button type="button" class="step-btn" onclick="geoMapQuiz()">↻ Rejouer</button>';
+  window._geoQuiz = null;
+  if (good) { if (typeof showToast === 'function') showToast('✅ Bien joué !', 'var(--color-parabole)'); setTimeout(geoMapQuiz, 1200); }
+}
+
 // Planning d'examen : enregistre/efface une date d'examen par matière
 function setExamDate(key, val) {
   var d = loadSavedData(); d.examDates = d.examDates || {};
@@ -2281,7 +2335,7 @@ function updateProfile() {
       if (!s.ready || !qs || !qs.length) return;
       let done = 0;
       qs.forEach(q => { if ((mastered[q.q] || 0) >= 1) done++; });
-      subjRows.push({ icon: s.icon || '📘', label: s.label || key, done, total: qs.length });
+      subjRows.push({ key: key, icon: s.icon || '📘', label: s.label || key, done, total: qs.length });
     });
   }
   if (subjRows.length) {
@@ -2291,13 +2345,15 @@ function updateProfile() {
     bd.innerHTML = '<h3 style="font-size:20px; font-weight:700; margin-bottom:1rem;">📚 Progression par matière</h3>' +
       subjRows.map(r => {
         const pct = r.total ? Math.round(r.done / r.total * 100) : 0;
+        const accent = (window.SUBJECT_ACCENTS && window.SUBJECT_ACCENTS[r.key]) || 'var(--color-nav)';
+        const done = pct >= 100;
         return '<div style="margin-bottom:0.85rem;">' +
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:14px;">' +
-            '<span style="font-weight:600; color:var(--text-primary);">' + r.icon + ' ' + r.label + '</span>' +
-            '<span style="color:var(--text-secondary); font-size:13px;">' + r.done + ' / ' + r.total + ' · ' + pct + '%</span>' +
+            '<span style="font-weight:600; color:var(--text-primary);">' + r.icon + ' ' + r.label + (done ? ' ✅' : '') + '</span>' +
+            '<span style="font-size:13px;"><span style="font-weight:800; color:' + accent + ';">' + pct + '%</span> <span style="color:var(--text-secondary);">· ' + r.done + '/' + r.total + '</span></span>' +
           '</div>' +
-          '<div style="height:9px; background:var(--border-subtle); border-radius:5px; overflow:hidden;">' +
-            '<div style="width:' + pct + '%; height:100%; background:linear-gradient(90deg, var(--color-cercle), var(--color-nav)); border-radius:5px; transition:width 0.6s ease;"></div>' +
+          '<div style="height:10px; background:var(--border-subtle); border-radius:6px; overflow:hidden;">' +
+            '<div style="width:' + pct + '%; height:100%; background:linear-gradient(90deg, ' + accent + ', color-mix(in srgb, ' + accent + ' 55%, #ffffff)); border-radius:6px; transition:width 0.6s ease;"></div>' +
           '</div></div>';
       }).join('');
     xpSection.after(bd);
@@ -4418,11 +4474,13 @@ function openInfoCard(key, fromBack) {
   var _note = '';
   try { _note = ((loadSavedData().ficheNotes) || {})[key] || ''; } catch (_) {}
   html += '<div class="imd-block imd-notes"><h4>📝 Mes notes <span class="imd-notes-saved" id="fiche-note-saved"></span></h4>' +
-    '<textarea id="fiche-note-input" class="fiche-note-area" placeholder="Écris ici tes astuces, moyens mnémotechniques, points à retenir pour l\'examen…" oninput="saveFicheNote(\'' + key + '\', this.value)">' +
-    _note.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</textarea></div>';
+    '<textarea id="fiche-note-input" class="fiche-note-area" maxlength="600" placeholder="Écris ici tes astuces, moyens mnémotechniques, points à retenir pour l\'examen…" oninput="saveFicheNote(\'' + key + '\', this.value)">' +
+    _note.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</textarea>' +
+    '<div class="fiche-note-count" id="fiche-note-count">' + _note.length + ' / 600</div></div>';
   body.innerHTML = html;
   body.scrollTop = 0;
   modal.classList.add('open');
+  modal.scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
 
@@ -4537,39 +4595,76 @@ var GLOSS_META = {
   science: ['Bio', '#34d399'], eng: ['Anglais', '#818cf8'], chem: ['Chimie', '#c084fc'],
   myth: ['Français', '#d4a017'], theatre: ['Français', '#fb5b78'], lettres: ['Français', '#f472b6'], geo: ['Géo', '#2dd4bf']
 };
+window._glossSubj = '';
 function renderGlossaire() {
   var box = document.getElementById('glossaire-list');
   if (!box) return;
   var entries = _glossaireEntries();
+  var subjCount = {};
   var cards = entries.map(function (e) {
     var m = GLOSS_META[e.theme] || ['', 'var(--color-nav)'];
+    if (m[0]) subjCount[m[0]] = (subjCount[m[0]] || 0) + 1;
     var search = (e.title + ' ' + e.sub + ' ' + m[0]).toLowerCase().replace(/"/g, '');
-    return '<button type="button" class="gloss-card" data-search="' + search + '" onclick="openInfoCard(\'' + e.key + '\')" style="border-left:4px solid ' + m[1] + ';">' +
+    return '<button type="button" class="gloss-card" data-search="' + search + '" data-subj="' + m[0] + '" onclick="openInfoCard(\'' + e.key + '\')" style="border-left:4px solid ' + m[1] + ';">' +
       '<span class="gloss-title">' + e.title + '</span>' +
       (e.sub ? '<span class="gloss-sub">' + e.sub + '</span>' : '') +
       (m[0] ? '<span class="gloss-tag" style="color:' + m[1] + ';">' + m[0] + '</span>' : '') +
       '</button>';
   }).join('');
-  box.innerHTML = '<p style="color:var(--text-secondary); font-size:13px; margin-bottom:0.6rem;">' + entries.length + ' fiches</p>' +
+  // Puces de filtre par matière (couleur = celle de la matière)
+  var subjColor = {};
+  Object.keys(GLOSS_META).forEach(function (th) { subjColor[GLOSS_META[th][0]] = GLOSS_META[th][1]; });
+  var order = ['Histoire', 'Géo', 'Bio', 'Chimie', 'Français', 'Anglais'];
+  var chips = '<button type="button" class="gloss-chip on" data-subj="" onclick="glossFilterSubject(\'\', this)">Tout (' + entries.length + ')</button>';
+  order.forEach(function (sj) {
+    if (!subjCount[sj]) return;
+    chips += '<button type="button" class="gloss-chip" data-subj="' + sj + '" onclick="glossFilterSubject(\'' + sj + '\', this)" style="--chip:' + (subjColor[sj] || 'var(--color-nav)') + ';">' + sj + ' (' + subjCount[sj] + ')</button>';
+  });
+  window._glossSubj = '';
+  box.innerHTML = '<div class="gloss-chips">' + chips + '</div>' +
+    '<p id="gloss-count" style="color:var(--text-secondary); font-size:13px; margin-bottom:0.6rem;">' + entries.length + ' fiches</p>' +
     '<div class="gloss-grid">' + cards + '</div>' +
     '<p id="gloss-empty" style="display:none; color:var(--text-secondary); margin-top:1rem;">Aucune fiche trouvée.</p>';
+}
+function glossFilterSubject(subj, btn) {
+  window._glossSubj = subj;
+  document.querySelectorAll('#glossaire-list .gloss-chip').forEach(function (c) { c.classList.toggle('on', c === btn); });
+  filterGlossaire();
 }
 function filterGlossaire() {
   var inp = document.getElementById('glossaire-search');
   var q = (inp ? inp.value : '').toLowerCase().trim();
+  var subj = window._glossSubj || '';
   var cards = document.querySelectorAll('#glossaire-list .gloss-card');
   var shown = 0;
   cards.forEach(function (c) {
-    var match = !q || c.dataset.search.indexOf(q) >= 0;
+    var match = (!q || c.dataset.search.indexOf(q) >= 0) && (!subj || c.dataset.subj === subj);
     c.style.display = match ? '' : 'none';
     if (match) shown++;
   });
   var empty = document.getElementById('gloss-empty');
   if (empty) empty.style.display = shown ? 'none' : 'block';
+  var cnt = document.getElementById('gloss-count');
+  if (cnt) cnt.textContent = shown + ' fiche' + (shown > 1 ? 's' : '') + (subj ? ' · ' + subj : '');
 }
 
 /* ════════════ Objectif quotidien + temps d'étude ════════════ */
-var DAILY_GOAL = 20;
+var DAILY_GOAL = parseInt(localStorage.getItem('mathsgr2_goal'), 10) || 20;
+function setDailyGoal(n) {
+  DAILY_GOAL = n;
+  try { localStorage.setItem('mathsgr2_goal', n); } catch (_) {}
+  document.querySelectorAll('.theme-btn[onclick^="setDailyGoal"]').forEach(function (b) { b.classList.remove('active'); });
+  var ab = document.querySelector('.theme-btn[onclick="setDailyGoal(' + n + ')"]');
+  if (ab) ab.classList.add('active');
+  if (typeof renderStudyDashboard === 'function') renderStudyDashboard();
+  if (typeof showToast === 'function') showToast('🎯 Objectif du jour : ' + n + ' actions', 'var(--color-nav)');
+}
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    var ab = document.querySelector('.theme-btn[onclick="setDailyGoal(' + DAILY_GOAL + ')"]');
+    if (ab) ab.classList.add('active');
+  }, 300);
+});
 function _today() { return new Date().toISOString().slice(0, 10); }
 function _getStudy(data) {
   data.study = data.study || { totalSec: 0, day: _today(), daySec: 0, dayActions: 0 };
@@ -4634,6 +4729,132 @@ function showRevisionReminder() {
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(showRevisionReminder, 1800); });
 
+/* ════════════ Calculatrice maths : milieu, distance, pente ════════════ */
+function _gcNum(id) {
+  var el = document.getElementById(id);
+  if (!el) return NaN;
+  var v = (el.value || '').trim().replace(',', '.');
+  return v === '' ? NaN : parseFloat(v);
+}
+function _gcFmt(n) {
+  if (!isFinite(n)) return '?';
+  var r = Math.round(n * 1000) / 1000;
+  return ('' + r).replace('.', ',');
+}
+function calcGeoExample() {
+  var ex = [[-2, 1, 4, 5], [1, 3, 7, -1], [0, 0, 6, 8], [-3, -2, 2, 4]][Math.floor(Math.random() * 4)];
+  ['gc-xa', 'gc-ya', 'gc-xb', 'gc-yb'].forEach(function (id, i) { var el = document.getElementById(id); if (el) el.value = ex[i]; });
+  calcGeo();
+}
+function calcGeo() {
+  var res = document.getElementById('gc-result'); if (!res) return;
+  var xa = _gcNum('gc-xa'), ya = _gcNum('gc-ya'), xb = _gcNum('gc-xb'), yb = _gcNum('gc-yb');
+  if ([xa, ya, xb, yb].some(function (n) { return isNaN(n); })) {
+    res.innerHTML = '<p class="gc-warn">✏️ Remplis les <strong>4 coordonnées</strong> (A et B).</p>';
+    res.classList.add('show'); return;
+  }
+  var mx = (xa + xb) / 2, my = (ya + yb) / 2;
+  var dx = xb - xa, dy = yb - ya;
+  var d2 = dx * dx + dy * dy, dist = Math.sqrt(d2);
+  var html = '';
+  // Milieu
+  html += '<div class="gc-block"><h4>📍 Milieu de [AB]</h4>' +
+    '\\( M\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)=M\\left(\\dfrac{' + _t(xa) + '+' + _t(xb) + '}{2}\\,;\\,\\dfrac{' + _t(ya) + '+' + _t(yb) + '}{2}\\right) \\)' +
+    '<div class="gc-final">M( ' + _gcFmt(mx) + ' ; ' + _gcFmt(my) + ' )</div></div>';
+  // Distance
+  html += '<div class="gc-block"><h4>📏 Distance AB</h4>' +
+    '\\( AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}=\\sqrt{(' + _t(dx) + ')^2+(' + _t(dy) + ')^2}=\\sqrt{' + _t(d2) + '} \\)' +
+    '<div class="gc-final">AB = ' + _gcFmt(dist) + (Math.abs(dist - Math.round(dist)) > 1e-9 ? ' (≈)' : '') + '</div></div>';
+  // Pente
+  html += '<div class="gc-block"><h4>📈 Pente de (AB)</h4>';
+  if (dx === 0) {
+    html += '<p>Comme \\(x_A=x_B\\), la droite est <strong>verticale</strong> : la pente n\'existe pas (division par 0).</p>';
+  } else {
+    var m = dy / dx;
+    html += '\\( m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{' + _t(dy) + '}{' + _t(dx) + '} \\)' +
+      '<div class="gc-final">m = ' + _gcFmt(m) + (m > 0 ? ' (monte ↗)' : (m < 0 ? ' (descend ↘)' : ' (horizontale →)')) + '</div>';
+  }
+  html += '</div>';
+  res.innerHTML = html;
+  res.classList.add('show');
+  if (typeof safeMathJax === 'function') safeMathJax([res]);
+}
+// petit util : nombre → texte mathjax (parenthèses pour négatifs gérées à l'appel)
+function _t(n) { var r = Math.round(n * 1000) / 1000; return '' + r; }
+
+/* ════════════ Célébrations (confettis + bannière) ════════════ */
+function celebrate(message) {
+  try {
+    var colors = ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171', '#f472b6'];
+    for (var i = 0; i < 70; i++) {
+      var el = document.createElement('div');
+      var left = Math.random() * 100;
+      var size = 6 + Math.random() * 8;
+      el.style.cssText = 'position:fixed; top:-20px; left:' + left + 'vw; width:' + size + 'px; height:' + (size * 0.5) + 'px; background:' + colors[i % colors.length] + '; z-index:9998; pointer-events:none; border-radius:2px; opacity:0.95; transform:rotate(' + (Math.random() * 360) + 'deg); animation:confettiDrop ' + (1.4 + Math.random() * 1.4) + 's cubic-bezier(.3,.7,.5,1) ' + (Math.random() * 0.4) + 's forwards;';
+      document.body.appendChild(el);
+      (function (node) { setTimeout(function () { node.remove(); }, 3400); })(el);
+    }
+    if (message) {
+      var banner = document.createElement('div');
+      banner.className = 'celebrate-banner';
+      banner.textContent = message;
+      document.body.appendChild(banner);
+      setTimeout(function () { banner.classList.add('out'); }, 1700);
+      setTimeout(function () { banner.remove(); }, 2300);
+    }
+  } catch (_) {}
+}
+
+/* ════════════ Guide des fonctionnalités ════════════ */
+function openHelp() {
+  var ov = document.getElementById('helpModal');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'helpModal';
+    ov.className = 'help-modal';
+    var groups = [
+      ['📚 Réviser', [
+        ['🎴 Flashcards', 'Clique la carte pour la retourner, note « Je savais / hésité / je ne savais pas ». La répétition espacée te re-montre les cartes au bon moment. Boutons : 🔊 écouter, ✏️ écrire, ⭐ favori, 🔀 mélanger.'],
+        ['❓ Quiz', 'Réponds aux questions ; une explication apparaît (avec lien vers la fiche). Barre de progression en haut. « Quiz mixte » = toutes matières.'],
+        ['📝 Examen blanc', 'Dans le quiz : 5 questions chronométrées, note sur /20 enregistrée dans ton historique.'],
+        ['🔀 Tout réviser', 'Sur le profil : une session mélangée des cartes dues de toutes les matières.']
+      ]],
+      ['🗂️ Trouver & comprendre', [
+        ['🔍 Recherche', 'Bouton « Rechercher » (ou touche /) : cherche dans les fiches, flashcards et formules.'],
+        ['📖 Index des fiches', 'Toutes les fiches cliquables, filtrables par matière.'],
+        ['🖼️ Fiches détaillées', 'Clique une image/un nom souligné : cours, examen, anecdote, galerie + « Mes notes » perso.'],
+        ['🗺️ Carte & 🕰️ frise', 'En Géo : carte cliquable + quiz. En Histoire : frise cliquable des périodes.']
+      ]],
+      ['📈 Suivre mes progrès', [
+        ['👤 Profil', '« À réviser aujourd\'hui », objectif du jour, progression par matière, régularité (séries), graphiques.'],
+        ['🏆 Badges', 'Débloque des badges en pratiquant (séries, examens, cartes…).'],
+        ['⏳ Planning d\'examen', 'Mets tes dates d\'examen → jours restants + cartes/jour conseillées.']
+      ]],
+      ['⚙️ Personnaliser', [
+        ['🎨 Paramètres', 'Thème, couleur par matière, confort de lecture (dyslexie), objectif quotidien, taille du texte, musique, Pomodoro.']
+      ]]
+    ];
+    var inner = '<div class="help-box"><button class="help-close" onclick="closeHelp()" aria-label="Fermer">✕</button>' +
+      '<h3>❓ Guide du site</h3><p class="help-intro">Toutes les fonctions, et comment les utiliser :</p>';
+    groups.forEach(function (g) {
+      inner += '<div class="help-group"><h4>' + g[0] + '</h4>';
+      g[1].forEach(function (it) { inner += '<div class="help-item"><strong>' + it[0] + '</strong><span>' + it[1] + '</span></div>'; });
+      inner += '</div>';
+    });
+    inner += '</div>';
+    ov.innerHTML = inner;
+    ov.addEventListener('mousedown', function (e) { if (e.target === ov) closeHelp(); });
+    document.body.appendChild(ov);
+  }
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp() {
+  var ov = document.getElementById('helpModal');
+  if (ov) ov.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 /* ════════════ Mes notes perso (par fiche) ════════════ */
 function saveFicheNote(key, val) {
   try {
@@ -4641,6 +4862,8 @@ function saveFicheNote(key, val) {
     if (val && val.trim()) d.ficheNotes[key] = val; else delete d.ficheNotes[key];
     saveData(d);
   } catch (_) {}
+  var cnt = document.getElementById('fiche-note-count');
+  if (cnt) cnt.textContent = (val ? val.length : 0) + ' / 600';
   var s = document.getElementById('fiche-note-saved');
   if (s) { s.textContent = '✓ enregistré'; clearTimeout(window._fnT); window._fnT = setTimeout(function () { var e = document.getElementById('fiche-note-saved'); if (e) e.textContent = ''; }, 1500); }
 }
@@ -4737,6 +4960,39 @@ function renderProgressCharts() {
   sec.style.marginTop = '2rem';
   var html = '<h3 style="font-size:24px; font-weight:600; margin-bottom:1rem;">📈 Mes progrès</h3>';
 
+  // — Régularité (jours actifs, meilleure série, moyenne/semaine) —
+  var cal = data.calendar || {};
+  var days = Object.keys(cal).filter(function (k) { return (cal[k] || 0) > 0; }).sort();
+  var activeDays = days.length;
+  var bestStreak = 0, run = 0, prev = null;
+  days.forEach(function (k) {
+    if (prev) {
+      var diff = Math.round((new Date(k) - new Date(prev)) / 86400000);
+      run = (diff === 1) ? run + 1 : 1;
+    } else run = 1;
+    if (run > bestStreak) bestStreak = run;
+    prev = k;
+  });
+  // moyenne par semaine = jours actifs ÷ nb de semaines depuis le 1er jour actif
+  var weeks = 1;
+  if (days.length) { weeks = Math.max(1, Math.ceil((Date.now() - new Date(days[0]).getTime()) / (7 * 86400000))); }
+  var perWeek = Math.round(activeDays / weeks * 10) / 10;
+  var nowStreak = data.streak || 0;
+  function regCell(val, lbl, emo) {
+    return '<div style="flex:1; min-width:84px; background:var(--bg-main); border:1px solid var(--border-subtle); border-radius:12px; padding:.7rem .4rem; text-align:center;">' +
+      '<div style="font-size:22px; font-weight:800; color:var(--color-nav);">' + emo + ' ' + val + '</div>' +
+      '<div style="font-size:11.5px; color:var(--text-secondary); margin-top:2px;">' + lbl + '</div></div>';
+  }
+  html += '<div class="pc-card" style="margin-bottom:1rem;"><div class="pc-head"><span>🔥 Ma régularité</span></div>' +
+    '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
+    regCell(nowStreak + ' j', 'Série en cours', '🔥') +
+    regCell(bestStreak + ' j', 'Meilleure série', '🏅') +
+    regCell(activeDays, 'Jours actifs', '📆') +
+    regCell(perWeek, 'Jours / semaine', '📊') +
+    '</div>' +
+    (activeDays === 0 ? '<p class="pc-empty" style="margin-top:.7rem;">Réponds à des questions ou révise des cartes : ta régularité s\'affichera ici.</p>' : '') +
+    '</div>';
+
   // — Temps d'étude, 7 derniers jours —
   var hist = (data.study && data.study.history) || {};
   var days = [], maxSec = 1;
@@ -4775,7 +5031,9 @@ function renderProgressCharts() {
         '<div class="pc-bars pc-bars-sm">' + arr.map(function (h) {
           var pct = Math.round((h.note || 0) / 20 * 100);
           var col = (h.note >= 16) ? '#34d399' : (h.note >= 10 ? accent : '#f87171');
-          return '<div class="pc-col"><div class="pc-val">' + (h.note || 0) + '</div><div class="pc-bar-wrap"><div class="pc-bar" style="height:' + Math.max(4, pct) + '%; background:' + col + ';"></div></div></div>';
+          var dlbl = '';
+          if (h.date) { var dp = ('' + h.date).split('-'); if (dp.length === 3) dlbl = dp[2] + '/' + dp[1]; }
+          return '<div class="pc-col"><div class="pc-val">' + (h.note || 0) + '</div><div class="pc-bar-wrap"><div class="pc-bar" style="height:' + Math.max(4, pct) + '%; background:' + col + ';"></div></div><div class="pc-lbl">' + dlbl + '</div></div>';
         }).join('') + '</div></div>';
     });
     html += '</div>';

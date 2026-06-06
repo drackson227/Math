@@ -203,7 +203,15 @@
     { q: "The « haka » is…", opts: ["a Maori dance (rugby)", "an Irish dish", "a British holiday", "a card game"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Danse maori des All Blacks (Nouvelle-Zélande)." },
     { q: "« I have lived here ___ 2015. »", opts: ["since", "for", "during", "ago"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "since + point de départ (2015)." },
     { q: "« She has studied English ___ six years. »", opts: ["for", "since", "from", "during"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "for + durée (six years)." },
-    { q: "« Aotearoa » is the Maori name for…", opts: ["New Zealand", "Ireland", "Australia", "Scotland"], ans: 0, chapter: "vocab", difficulty: "difficile", exp: "Aotearoa = « le pays du long nuage blanc » = Nouvelle-Zélande." }
+    { q: "« Aotearoa » is the Maori name for…", opts: ["New Zealand", "Ireland", "Australia", "Scotland"], ans: 0, chapter: "vocab", difficulty: "difficile", exp: "Aotearoa = « le pays du long nuage blanc » = Nouvelle-Zélande." },
+    { q: "« Have you ___ been to London? » (un jour dans ta vie)", opts: ["ever", "never", "yet", "since"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "ever = « déjà, à un moment » dans les questions." },
+    { q: "« I haven't finished my homework ___. »", opts: ["yet", "already", "ever", "since"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "yet = « pas encore » dans les phrases négatives (en fin de phrase)." },
+    { q: "« I've ___ seen this film, let's watch another. »", opts: ["already", "yet", "never", "for"], ans: 0, chapter: "perfect", difficulty: "intermediaire", exp: "already = « déjà » (action faite plus tôt que prévu)." },
+    { q: "The capital of Scotland is…", opts: ["Edinburgh", "Cardiff", "Dublin", "London"], ans: 0, chapter: "vocab", difficulty: "intermediaire", exp: "Édimbourg (Scotland). Cardiff = Wales, Dublin = Ireland." },
+    { q: "The capital of Wales is…", opts: ["Cardiff", "Edinburgh", "Belfast", "Dublin"], ans: 0, chapter: "vocab", difficulty: "difficile", exp: "Cardiff (pays de Galles)." },
+    { q: "« We ___ to wear a uniform at home. » (aucune obligation)", opts: ["don't have", "mustn't", "must", "have"], ans: 0, chapter: "modals", difficulty: "intermediaire", exp: "don't have to = pas obligé (≠ mustn't = interdit)." },
+    { q: "The All Blacks (rugby + haka) are from…", opts: ["New Zealand", "Ireland", "Wales", "England"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "L'équipe de Nouvelle-Zélande ; le haka est une danse maori." },
+    { q: "To DISAGREE politely, you say…", opts: ["I don't agree / That's true, but…", "I think so too", "Exactly!", "You're right"], ans: 0, chapter: "skills", difficulty: "intermediaire", exp: "I don't agree / I'm not sure / That's true, but… pour nuancer." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -228,7 +236,13 @@
     { front: "Ireland : drapeau & symboles ?", back: "Drapeau vert-blanc-orange ; capitale Dublin ; trèfle (shamrock) ; Saint-Patrick le 17 mars.", chapter: "vocab" },
     { front: "L'Union Jack ?", back: "Le drapeau du Royaume-Uni : croix d'Angleterre + Écosse + Irlande superposées.", chapter: "vocab" },
     { front: "Que veut dire « Saint Patrick's Day » ?", back: "La fête nationale irlandaise, le 17 mars — on s'habille en vert partout dans le monde.", chapter: "vocab" },
-    { front: "for vs since (rappel) ?", back: "for + durée (for 6 years) ; since + point de départ (since 2015).", chapter: "perfect" }
+    { front: "for vs since (rappel) ?", back: "for + durée (for 6 years) ; since + point de départ (since 2015).", chapter: "perfect" },
+    { front: "already / yet / just ?", back: "already = déjà (affirmatif) · yet = pas encore / déjà ? (négatif & questions, en fin) · just = à l'instant.", chapter: "perfect" },
+    { front: "ever / never ?", back: "ever = « déjà » dans les questions (Have you ever…?) · never = ne… jamais.", chapter: "perfect" },
+    { front: "be (not) allowed to ?", back: "être (in)autorisé à. Ex: We are not allowed to eat in class.", chapter: "modals" },
+    { front: "Capitales des 4 nations du UK ?", back: "England → London · Scotland → Edinburgh · Wales → Cardiff · Northern Ireland → Belfast.", chapter: "vocab" },
+    { front: "Le haka ?", back: "Une danse maori (Nouvelle-Zélande), célèbre avant les matchs des All Blacks.", chapter: "vocab" },
+    { front: "Phrases pour un débat (oral) ?", back: "Avis : I think… / In my opinion… · D'accord : I agree · Pas d'accord : I don't agree, that's true but… · Justifier : because.", chapter: "skills" }
   ];
 
   window.registerSubject('anglais', {

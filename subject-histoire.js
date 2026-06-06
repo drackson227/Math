@@ -91,6 +91,31 @@
   /* Notions cliquables (fiches sans portrait dédié — image réutilisée) + mots → fiche */
   window.INFO_TOPICS = window.INFO_TOPICS || {};
   Object.assign(window.INFO_TOPICS, {
+    "periode-prehistoire": {
+      title: "La Préhistoire", sub: "des origines à ≈ −3300", theme: "print",
+      cours: "<p>La <strong>Préhistoire</strong> va de l'apparition de l'être humain jusqu'à l'<strong>invention de l'écriture</strong> (≈ −3300). On ne dispose d'aucun texte : on l'étudie grâce aux <strong>objets, outils et peintures</strong>.</p>",
+      exam: "<ul><li>Borne de fin : l'<strong>écriture</strong> (≈ −3300).</li><li>Suivie de l'<strong>Antiquité</strong>.</li></ul>"
+    },
+    "periode-antiquite": {
+      title: "L'Antiquité", sub: "≈ −3300 → 476", theme: "print",
+      cours: "<p>L'<strong>Antiquité</strong> s'étend de l'invention de l'<strong>écriture</strong> à la <strong>chute de l'Empire romain d'Occident</strong> en <strong>476</strong>. C'est l'époque des grandes civilisations (Égypte, Grèce, Rome).</p>",
+      exam: "<ul><li>Début : écriture (≈ −3300). Fin : <strong>476</strong> (chute de Rome).</li></ul>"
+    },
+    "periode-moyenage": {
+      title: "Le Moyen Âge", sub: "476 → 1492", theme: "royal",
+      cours: "<p>Le <strong>Moyen Âge</strong> va de la chute de Rome (<strong>476</strong>) à la <strong>découverte de l'Amérique</strong> (<strong>1492</strong>). Société féodale, châteaux, importance de l'Église.</p>",
+      exam: "<ul><li>Bornes : <strong>476</strong> → <strong>1492</strong>.</li><li>Vient juste avant <strong>notre programme</strong> (Temps modernes).</li></ul>"
+    },
+    "periode-modernes": {
+      title: "Les Temps modernes", sub: "1492 → 1789 · ⭐ notre programme", theme: "royal",
+      cours: "<p>Les <strong>Temps modernes</strong> vont de <strong>1492</strong> (Amérique) à la <strong>Révolution française</strong> (<strong>1789</strong>). C'est <strong>notre programme</strong> : imprimerie, Renaissance, Réforme, Absolutisme.</p>",
+      exam: "<ul><li>Bornes : <strong>1492</strong> → <strong>1789</strong>.</li><li>Mots-clés : imprimerie · Humanisme/Renaissance · Réforme · Louis XIV.</li></ul>"
+    },
+    "periode-contemporaine": {
+      title: "L'Époque contemporaine", sub: "1789 → aujourd'hui", theme: "print",
+      cours: "<p>L'<strong>Époque contemporaine</strong> commence à la <strong>Révolution française</strong> (<strong>1789</strong>) et va jusqu'à <strong>aujourd'hui</strong>.</p>",
+      exam: "<ul><li>Début : <strong>1789</strong> (Révolution française).</li></ul>"
+    },
     "edit-de-nantes": {
       title: "L'Édit de Nantes (1598)", sub: "tolérance religieuse", img: "henri4.jpg",
       cours: "<p>Signé en <strong>1598</strong> par le roi <strong>Henri IV</strong>, l'Édit de Nantes met fin aux <strong>guerres de religion</strong> en France. Il accorde aux <strong>protestants</strong> la liberté de culte (la <strong>tolérance</strong>).</p>",
@@ -214,33 +239,23 @@
   }
 
   /* frise chronologique (SVG) */
+  // Segment cliquable de la frise (HTML responsive : s'adapte au mobile, jamais coupé)
+  function tlSeg(key, name, dates, color, star) {
+    return '<button type="button" class="htl-seg' + (star ? ' htl-star' : '') + '" style="--c:' + color + ';" onclick="openInfoCard(\'' + key + '\')">' +
+      '<span class="htl-name">' + name + (star ? ' ⭐' : '') + '</span>' +
+      '<span class="htl-date">' + dates + '</span></button>';
+  }
   var TIMELINE =
-    '<div style="overflow-x:auto; margin:1rem 0;"><svg viewBox="0 0 920 180" style="width:100%; min-width:560px; height:auto; font-family:inherit;">' +
-    '<text x="460" y="22" text-anchor="middle" font-size="17" font-weight="800" fill="#9b8cff">🕰️ La frise du temps</text>' +
-    // segments
-    '<rect x="10"  y="60" width="232" height="48" rx="6" fill="#8d6e63"/>' +
-    '<rect x="248" y="60" width="156" height="48" rx="6" fill="#c79a3b"/>' +
-    '<rect x="410" y="60" width="164" height="48" rx="6" fill="#6d8c4a"/>' +
-    '<rect x="580" y="56" width="186" height="56" rx="6" fill="#7c5cff" stroke="#fff" stroke-width="2"/>' +
-    '<rect x="772" y="60" width="138" height="48" rx="6" fill="#4a8cc7"/>' +
-    // segment names
-    '<text x="126" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Préhistoire</text>' +
-    '<text x="326" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Antiquité</text>' +
-    '<text x="492" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Moyen Âge</text>' +
-    '<text x="673" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Temps</text>' +
-    '<text x="673" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">modernes</text>' +
-    '<text x="841" y="89" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Contemp.</text>' +
-    // boundary dates
-    '<text x="245" y="130" text-anchor="middle" font-size="12" fill="#cfc6ff">≈ −3300</text>' +
-    '<text x="407" y="130" text-anchor="middle" font-size="12" fill="#cfc6ff">476</text>' +
-    '<text x="577" y="130" text-anchor="middle" font-size="12" fill="#cfc6ff">1492</text>' +
-    '<text x="769" y="130" text-anchor="middle" font-size="12" fill="#cfc6ff">1789</text>' +
-    '<text x="245" y="146" text-anchor="middle" font-size="10" fill="#8a86a8">écriture</text>' +
-    '<text x="407" y="146" text-anchor="middle" font-size="10" fill="#8a86a8">chute Rome</text>' +
-    '<text x="577" y="146" text-anchor="middle" font-size="10" fill="#8a86a8">Amérique</text>' +
-    '<text x="769" y="146" text-anchor="middle" font-size="10" fill="#8a86a8">Révolution</text>' +
-    '<text x="673" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#9b8cff">⭐ notre programme</text>' +
-    '</svg></div>';
+    '<div class="htl">' +
+    '<div class="htl-head"><span class="htl-title">🕰️ La frise du temps</span>' +
+    '<span class="htl-sub">👆 Clique une période pour ses dates &amp; explications</span></div>' +
+    '<div class="htl-track">' +
+    tlSeg('periode-prehistoire', 'Préhistoire', 'jusqu\'à ≈ −3300', '#8d6e63', false) +
+    tlSeg('periode-antiquite', 'Antiquité', '−3300 → 476', '#c79a3b', false) +
+    tlSeg('periode-moyenage', 'Moyen Âge', '476 → 1492', '#6d8c4a', false) +
+    tlSeg('periode-modernes', 'Temps modernes', '1492 → 1789', '#7c5cff', true) +
+    tlSeg('periode-contemporaine', 'Époque contemp.', '1789 → ...', '#4a8cc7', false) +
+    '</div></div>';
 
   var sections = {};
 

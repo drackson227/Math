@@ -35,6 +35,29 @@
   window.TERM_MAP = window.TERM_MAP || {};
   Object.assign(window.TERM_MAP, { "Meuse": "meuse.jpg", "Escaut": "meuse.jpg", "relief": "belgique_relief.jpg", "Signal de Botrange": "belgique_relief.jpg" });
 
+  /* Carte interactive : provinces cliquables (positions en % sur belgique_carte.jpg) */
+  window.BE_PROVINCES = [
+    { n: 'Flandre-Occidentale', r: 'Flandre', c: 'Bruges', l: 11, t: 31 },
+    { n: 'Flandre-Orientale', r: 'Flandre', c: 'Gand', l: 29, t: 27 },
+    { n: 'Anvers', r: 'Flandre', c: 'Anvers', l: 50, t: 13 },
+    { n: 'Limbourg', r: 'Flandre', c: 'Hasselt', l: 72, t: 27 },
+    { n: 'Brabant flamand', r: 'Flandre', c: 'Louvain', l: 52, t: 36 },
+    { n: 'Bruxelles-Capitale', r: 'Région à part (bilingue)', c: '19 communes', l: 43, t: 30 },
+    { n: 'Brabant wallon', r: 'Wallonie', c: 'Wavre', l: 47, t: 47 },
+    { n: 'Hainaut', r: 'Wallonie', c: 'Mons', l: 27, t: 56 },
+    { n: 'Liège', r: 'Wallonie', c: 'Liège', l: 73, t: 48 },
+    { n: 'Namur', r: 'Wallonie', c: 'Namur', l: 51, t: 62 },
+    { n: 'Luxembourg', r: 'Wallonie', c: 'Arlon', l: 67, t: 78 }
+  ];
+  var MAP_HTML = '<div class="bemap-wrap">' +
+    '<div class="bemap" id="bemap"><img src="belgique_carte.jpg" alt="Carte cliquable des provinces de Belgique" loading="lazy">' +
+    window.BE_PROVINCES.map(function (p, i) {
+      return '<button type="button" class="bemap-dot" style="left:' + p.l + '%; top:' + p.t + '%;" onclick="geoPick(' + i + '); event.stopPropagation();">' + (i + 1) + '</button>';
+    }).join('') + '</div>' +
+    '<div class="bemap-panel" id="bemap-panel">👆 Clique une pastille : sa <strong>province</strong>, sa <strong>région</strong> et son <strong>chef-lieu</strong> s\'affichent ici.</div>' +
+    '<div class="bemap-foot"><button type="button" class="step-btn" onclick="geoMapQuiz()">🎯 Quiz carte</button><span class="bemap-quiz" id="bemap-quiz"></span></div>' +
+    '</div>';
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
@@ -63,7 +86,8 @@
       <p>La Belgique compte <strong>10 provinces</strong> : 5 en Flandre, 5 en Wallonie. <strong>Bruxelles-Capitale</strong> n'appartient à aucune province.</p>
       <p><strong>Flandre (nord) :</strong> Anvers, Limbourg, Flandre-Orientale, Flandre-Occidentale, Brabant flamand.<br>
          <strong>Wallonie (sud) :</strong> Brabant wallon, Hainaut, Liège, Namur, Luxembourg (belge).</p>
-      <figure class="hfig" style="max-width:440px; display:block; margin:1rem auto;"><img src="belgique_carte.jpg" alt="Carte des provinces de Belgique" loading="lazy"><figcaption>Les 10 provinces de Belgique (Flandre au nord, Wallonie au sud). La <strong>flèche</strong> pointe la petite zone bleue au centre = <strong>Bruxelles-Capitale</strong>, qui n'appartient à aucune province.</figcaption></figure>
+      ${MAP_HTML}
+      <p style="text-align:center; color:var(--text-secondary); font-size:13px; margin-top:.4rem;">🗺️ Carte interactive : clique une pastille (région + chef-lieu), ou lance le <strong>Quiz carte</strong>.</p>
       <div class="key-rule"><div class="formula-main">10 provinces = 5 (Flandre) + 5 (Wallonie) · Bruxelles = à part</div></div>
     </div>
 
@@ -210,7 +234,13 @@
     { q: "La Meuse se jette finalement dans…", opts: ["la mer du Nord", "la Méditerranée", "l'océan Atlantique", "un lac"], ans: 0, chapter: "hydro", difficulty: "facile", exp: "Comme l'Escaut, la Meuse rejoint la mer du Nord." },
     { q: "La Sambre rejoint la Meuse dans quelle ville ?", opts: ["Namur", "Liège", "Gand", "Anvers"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "À Namur (la Citadelle domine le confluent)." },
     { q: "En allant vers l'Ardenne, dans quelle Belgique es-tu ?", opts: ["la Haute Belgique (>200 m)", "la Basse Belgique", "la Moyenne Belgique", "les polders"], ans: 0, chapter: "relief", difficulty: "facile", exp: "L'Ardenne = Haute Belgique (>200 m), au sud-est." },
-    { q: "Les polders se trouvent dans…", opts: ["la Basse Belgique (côte)", "l'Ardenne", "la Moyenne Belgique", "le Luxembourg"], ans: 0, chapter: "relief", difficulty: "difficile", exp: "Les polders (terres gagnées sur la mer) sont en Basse Belgique, près de la côte." }
+    { q: "Les polders se trouvent dans…", opts: ["la Basse Belgique (côte)", "l'Ardenne", "la Moyenne Belgique", "le Luxembourg"], ans: 0, chapter: "relief", difficulty: "difficile", exp: "Les polders (terres gagnées sur la mer) sont en Basse Belgique, près de la côte." },
+    { q: "Le chef-lieu de la Flandre-Occidentale est :", opts: ["Bruges", "Gand", "Anvers", "Hasselt"], ans: 0, chapter: "belgique", difficulty: "difficile", exp: "Flandre-Occidentale → Bruges ; Flandre-Orientale → Gand." },
+    { q: "Le chef-lieu du Brabant wallon est :", opts: ["Wavre", "Mons", "Namur", "Arlon"], ans: 0, chapter: "belgique", difficulty: "difficile", exp: "Brabant wallon → Wavre." },
+    { q: "La Communauté germanophone se situe surtout…", opts: ["dans les cantons de l'Est (région d'Eupen)", "à la côte", "autour de Bruxelles", "en Flandre-Occidentale"], ans: 0, chapter: "belgique", difficulty: "difficile", exp: "À l'est de la Wallonie (cantons de l'Est, Eupen), frontière allemande." },
+    { q: "La Région de Bruxelles-Capitale compte…", opts: ["19 communes", "10 communes", "1 commune", "100 communes"], ans: 0, chapter: "belgique", difficulty: "intermediaire", exp: "19 communes ; Région bilingue (français + néerlandais)." },
+    { q: "Le biogaz est produit par…", opts: ["méthanisation de déchets organiques", "fermentation de betteraves", "transestérification d'huiles", "raffinage du pétrole"], ans: 0, chapter: "biocarburants", difficulty: "intermediaire", exp: "Biogaz = méthane issu de la méthanisation (déchets organiques)." },
+    { q: "L'Escaut passe par quelles villes ?", opts: ["Tournai, Gand, Anvers", "Namur, Liège", "Arlon, Bastogne", "Bruges, Ostende"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "L'Escaut : Tournai → Gand (la Lys le rejoint) → Anvers → mer du Nord." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -232,7 +262,11 @@
     { front: "2 avantages + 2 inconvénients des biocarburants ?", back: "✅ renouvelable, réduit la dépendance au pétrole. ❌ concurrence alimentaire, déforestation (huile de palme).", chapter: "biocarburants" },
     { front: "Bruxelles : quelle particularité ?", back: "3ᵉ Région du pays, bilingue, qui n'appartient à aucune province.", chapter: "belgique" },
     { front: "Où la Meuse se jette-t-elle ?", back: "Dans la mer du Nord (comme l'Escaut). Elle traverse France, Belgique, Pays-Bas.", chapter: "hydro" },
-    { front: "Que sont les polders ?", back: "Des terres gagnées sur la mer, en Basse Belgique (côte/plaine flamande).", chapter: "relief" }
+    { front: "Que sont les polders ?", back: "Des terres gagnées sur la mer, en Basse Belgique (côte/plaine flamande).", chapter: "relief" },
+    { front: "Belgique : capitale, superficie, population ?", back: "Capitale : Bruxelles · ≈ 30 700 km² · ≈ 11,7 millions d'habitants.", chapter: "belgique" },
+    { front: "Où est la Communauté germanophone ?", back: "À l'est de la Wallonie : les cantons de l'Est (région d'Eupen), à la frontière allemande.", chapter: "belgique" },
+    { front: "Combien de communes à Bruxelles ?", back: "19 communes ; Région bilingue (français + néerlandais).", chapter: "belgique" },
+    { front: "Le biogaz ?", back: "Du méthane produit par méthanisation de déchets organiques (3ᵉ type de biocarburant avec bioéthanol et biodiesel).", chapter: "biocarburants" }
   ];
 
   window.registerSubject('geo', {

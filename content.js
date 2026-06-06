@@ -918,6 +918,21 @@ const SECTIONS_CONTENT = {
 
   exercices: `<div id="exercices" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">✏️ Exercices guidés par étapes</h2>
+
+  <div class="exercise-card" id="geo-calc">
+    <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.4rem;">🧮 Calculatrice : milieu, distance & pente</h3>
+    <p style="color:var(--text-secondary); margin-bottom:0.9rem; font-size:14px;">Entre les coordonnées de 2 points → le milieu de [AB], la distance AB et la pente, <strong>avec les étapes</strong>.</p>
+    <div class="gc-inputs">
+      <div class="gc-pt"><span class="gc-lab">A (</span><input id="gc-xa" type="text" inputmode="decimal" placeholder="xₐ" aria-label="x de A"><span>;</span><input id="gc-ya" type="text" inputmode="decimal" placeholder="yₐ" aria-label="y de A"><span>)</span></div>
+      <div class="gc-pt"><span class="gc-lab">B (</span><input id="gc-xb" type="text" inputmode="decimal" placeholder="x_B" aria-label="x de B"><span>;</span><input id="gc-yb" type="text" inputmode="decimal" placeholder="y_B" aria-label="y de B"><span>)</span></div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:0.8rem;">
+      <button class="step-btn" onclick="calcGeo()">✓ Calculer</button>
+      <button class="step-btn" onclick="calcGeoExample()" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">🎲 Exemple</button>
+    </div>
+    <div id="gc-result" class="gc-result"></div>
+  </div>
+
   <div style="background:linear-gradient(135deg,rgba(96,165,250,0.07),rgba(167,139,250,0.07)); border:1px solid rgba(167,139,250,0.2); border-radius:16px; padding:1.5rem; margin-bottom:2rem;">
     <h3 style="font-size:16px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">⚡ Aide-mémoire rapide</h3>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;">

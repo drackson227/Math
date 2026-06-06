@@ -251,7 +251,13 @@
     { q: "Pour présenter une œuvre à l'oral, on termine par…", opts: ["un avis personnel argumenté", "le prix du livre", "rien", "une question au prof"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Présenter → résumer → analyser → avis argumenté." },
     { q: "Un calligramme, inventé par Apollinaire, est…", opts: ["un poème dont les mots dessinent une forme", "une longue tirade", "une fable", "un résumé"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Calligramme = poème-dessin (Guillaume Apollinaire)." },
     { q: "Une fable de La Fontaine se termine toujours par…", opts: ["une morale", "une rime", "un quiproquo", "un acte"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La fable = court récit (souvent d'animaux) + une morale : une argumentation indirecte." },
-    { q: "« Convaincre » s'adresse surtout à…", opts: ["la raison", "les émotions", "la peur", "l'imagination"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Convaincre = la raison (arguments logiques) ; persuader = les émotions." }
+    { q: "« Convaincre » s'adresse surtout à…", opts: ["la raison", "les émotions", "la peur", "l'imagination"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Convaincre = la raison (arguments logiques) ; persuader = les émotions." },
+    { q: "« Paris a gagné le match » (= l'équipe) est…", opts: ["une métonymie", "une métaphore", "une comparaison", "une hyperbole"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Métonymie : on désigne une chose par une autre liée (la ville pour l'équipe)." },
+    { q: "« Le vent hurlait dans la nuit » est…", opts: ["une personnification", "une comparaison", "une métonymie", "un quiproquo"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Personnification : donner un comportement humain à une chose." },
+    { q: "« Je te l'ai dit mille fois ! » est…", opts: ["une hyperbole", "une litote", "une comparaison", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Hyperbole : exagération volontaire." },
+    { q: "Répéter un même mot en début de plusieurs vers, c'est…", opts: ["une anaphore", "une allitération", "une métaphore", "une rime"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Anaphore = répétition en tête de vers/phrase." },
+    { q: "Une strophe de 3 vers s'appelle…", opts: ["un tercet", "un distique", "un quatrain", "un sonnet"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Distique 2 · tercet 3 · quatrain 4." },
+    { q: "Quand le même mot/geste revient pour faire rire, c'est le comique de…", opts: ["répétition", "caractère", "situation", "mots"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les 5 comiques : mots, gestes, situation, caractère, répétition." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -273,7 +279,12 @@
     { front: "Personnification / hyperbole / anaphore ?", back: "Personnification = traits humains à une chose. Hyperbole = exagération. Anaphore = répétition en début de vers.", chapter: "poesie" },
     { front: "Plan pour présenter une œuvre à l'oral ?", back: "Présenter (auteur, titre) → résumer le thème → analyser (procédés) → avis personnel argumenté.", chapter: "oral" },
     { front: "Qu'est-ce qu'un calligramme ? (qui ?)", back: "Un poème dont la disposition dessine une forme. Inventé par Guillaume Apollinaire.", chapter: "poesie" },
-    { front: "La fable (La Fontaine) ?", back: "Un court récit (souvent d'animaux) qui se termine par une morale : une argumentation indirecte.", chapter: "argumentation" }
+    { front: "La fable (La Fontaine) ?", back: "Un court récit (souvent d'animaux) qui se termine par une morale : une argumentation indirecte.", chapter: "argumentation" },
+    { front: "Qu'est-ce qu'une métonymie ?", back: "Désigner une chose par une autre qui lui est liée (« boire un verre » = le contenu ; « Paris a gagné » = l'équipe).", chapter: "poesie" },
+    { front: "Allitération vs assonance ?", back: "Allitération = répétition de consonnes · Assonance = répétition de voyelles.", chapter: "poesie" },
+    { front: "Distique / tercet / quatrain ?", back: "Strophes de 2 / 3 / 4 vers.", chapter: "poesie" },
+    { front: "La règle du « e » muet (syllabes) ?", back: "Le « e » muet en fin de vers ne se compte pas ; à l'intérieur, il compte souvent. Un alexandrin = 12 syllabes.", chapter: "poesie" },
+    { front: "Tragédie : 3 traits ?", back: "Fin malheureuse, personnages nobles, poids de la fatalité/destin.", chapter: "comedie" }
   ];
 
   window.registerSubject('francais', {

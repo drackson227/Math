@@ -716,7 +716,7 @@
     { front: "Homozygote vs hétérozygote ?", back: "Homozygote = 2 allèles identiques (AA ou aa). Hétérozygote = 2 différents (Aa).", chapter: "genetique" },
     { front: "Génotype vs phénotype ?", back: "Génotype = les allèles (AA/Aa/aa). Phénotype = l'apparence visible.", chapter: "genetique" },
     { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes 3 dominants : 1 récessif. (Échiquier de Punnett.)", chapter: "genetique" },
-    { front: "Procaryote vs eucaryote ?", back: "Procaryote = SANS noyau (bactéries). Eucaryote = AVEC noyau (cellules animale et végétale).", chapter: "cellule" },
+    { front: "Taille : procaryote vs eucaryote ?", back: "La cellule procaryote est bien plus petite (bactérie ≈ 2 µm) que la cellule eucaryote (≈ 10 à 100 µm).", chapter: "cellule" },
     { front: "Cellule végétale : 3 éléments en plus ?", back: "Paroi cellulaire (rigidité) + chloroplastes (photosynthèse) + grande vacuole centrale.", chapter: "cellule" }
   ];
 
