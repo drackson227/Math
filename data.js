@@ -377,6 +377,8 @@ const FRAC = (num, den) => `<span class="afrac"><span class="anum">${num}</span>
 // Vraie racine carrée : symbole √ + contenu surmonté d'une barre (vinculum).
 // Les tokens passés dans `content` restent animables (chacun garde son data-tid).
 const ROOT = (id, content) => `<span class="aroot" data-tid="${id}rt" data-flip-id="${id}rt"><span class="arad"><svg viewBox="0 0 14 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.8 14 L4 22.5 L7 1.2 L13.5 1.2" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="arootc">${content}</span></span>`;
+// Vecteur colonne (vertical) : deux composantes empilées entre parenthèses. Les tokens passés restent animables.
+const VEC = (top, bot) => `<span class="avec"><span class="avecp">(</span><span class="aveccol"><span class="avecrow">${top}</span><span class="avecrow">${bot}</span></span><span class="avecp">)</span></span>`;
 
 let DEMOS = {
   pente: {
@@ -578,26 +580,25 @@ let DEMOS = {
     scenes: [
       {
         brief: "Une combinaison linéaire fabrique un vecteur w = a·u + b·v (un peu de u, un peu de v).",
-        eq: T('w', 'w') + T('eq', '=') + T('a', '2') + T('m1', '·') + T('u', 'u') + T('pl', '+') + T('bb', '3') + T('m2', '·') + T('v', 'v')
+        eq: T('w', 'w') + T('eq', '=') + T('a', '2') + T('m1', '·') + VEC(T('ux', '1'), T('uy', '2')) + T('pl', '+') + T('bb', '3') + T('m2', '·') + VEC(T('vx', '2'), T('vy', '1'))
       },
       {
-        brief: "On calcule composante par composante. u(1 ; 2), v(2 ; 1).",
-        more: "Pour le x : 2·(x de u) + 3·(x de v). Pareil pour le y.",
-        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') +
-          T('ax1', '2') + T('mx1', '·') + T('ux', '1') + T('px', '+') + T('bx1', '3') + T('mx2', '·') + T('vx', '2') +
-          T('sc', ' ; ') +
-          T('ay1', '2') + T('my1', '·') + T('uy', '2') + T('py', '+') + T('by1', '3') + T('my2', '·') + T('vy', '1') +
-          T('rp', ')')
+        brief: "On multiplie chaque vecteur par son nombre, composante par composante.",
+        more: "Ligne du haut (x) : 2·1 et 3·2. Ligne du bas (y) : 2·2 et 3·1.",
+        eq: T('w', 'w') + T('eq', '=') + VEC(
+          T('ax', '2') + T('mx1', '·') + T('uxx', '1') + T('px', '+') + T('bx', '3') + T('mx2', '·') + T('vxx', '2'),
+          T('ay', '2') + T('my1', '·') + T('uyy', '2') + T('py', '+') + T('by', '3') + T('my2', '·') + T('vyy', '1'))
       },
       {
-        brief: "On calcule les produits : (2 + 6 ; 4 + 3).",
-        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') +
-          T('cx1', '2') + T('px', '+') + T('cx2', '6') + T('sc', ' ; ') + T('cy1', '4') + T('py', '+') + T('cy2', '3') + T('rp', ')'),
-        merge: [{ from: ['ax1', 'mx1', 'ux'], to: 'cx1' }, { from: ['bx1', 'mx2', 'vx'], to: 'cx2' }, { from: ['ay1', 'my1', 'uy'], to: 'cy1' }, { from: ['by1', 'my2', 'vy'], to: 'cy2' }]
+        brief: "On calcule les produits : en haut 2 et 6, en bas 4 et 3.",
+        eq: T('w', 'w') + T('eq', '=') + VEC(
+          T('cx1', '2') + T('px', '+') + T('cx2', '6'),
+          T('cy1', '4') + T('py', '+') + T('cy2', '3')),
+        merge: [{ from: ['ax', 'mx1', 'uxx'], to: 'cx1' }, { from: ['bx', 'mx2', 'vxx'], to: 'cx2' }, { from: ['ay', 'my1', 'uyy'], to: 'cy1' }, { from: ['by', 'my2', 'vyy'], to: 'cy2' }]
       },
       {
-        brief: "On additionne : (8 ; 7). Le vecteur w a pour composantes 8 et 7.",
-        eq: T('w', 'w') + T('eq', '=') + T('lp', '(') + T('rx', '8', 'atok-result') + T('sc', ' ; ') + T('ry', '7', 'atok-result') + T('rp', ')'),
+        brief: "On additionne chaque ligne : 2+6 = 8 (haut) et 4+3 = 7 (bas). Le vecteur w est trouvé !",
+        eq: T('w', 'w') + T('eq', '=') + VEC(T('rx', '8', 'atok-result'), T('ry', '7', 'atok-result')),
         merge: [{ from: ['cx1', 'px', 'cx2'], to: 'rx' }, { from: ['cy1', 'py', 'cy2'], to: 'ry' }]
       }
     ]

@@ -1,6 +1,6 @@
-/* GR2 Study — Contenu BIOLOGIE
-   L'organisation du vivant · la cellule (procaryote / eucaryote) · les organites ·
-   cellule animale / végétale · ADN & chromosomes. Avec illustrations (SVG du thème).
+/* GR2 Study — Contenu BIOLOGIE (programme pages 12 à 24)
+   La division cellulaire (cycle cellulaire & réplication de l'ADN, mitose),
+   le caryotype & la ploïdie, la méiose, la fécondation, et le monohybridisme (Mendel).
    S'enregistre via window.registerSubject. */
 (function () {
   'use strict';
@@ -11,27 +11,9 @@
   Object.assign(window.IMG_INFO, {
     "mendel.jpg": {
       title: "Gregor Mendel", sub: "1822–1884 · le père de la génétique",
-      cours: "<p>Moine et botaniste, <strong>Mendel</strong> a découvert les <strong>lois de l'hérédité</strong> en croisant des <strong>petits pois</strong>. Il a montré que les caractères se transmettent par des « facteurs » (aujourd'hui les <strong>gènes</strong>) qui peuvent être <strong>dominants</strong> ou <strong>récessifs</strong>.</p>",
-      exam: "<ul><li><strong>Vocabulaire :</strong> gène, allèle, <strong>dominant</strong> (A) / <strong>récessif</strong> (a), génotype (les allèles) / phénotype (ce qu'on voit).</li><li><strong>Règle :</strong> Aa × Aa → <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).</li><li>Ex. deux parents <strong>Bb</strong> (yeux bruns) peuvent avoir un enfant <strong>bb</strong> aux yeux bleus (1 chance sur 4).</li></ul>",
-      anecdote: "Mendel a cultivé et observé près de <strong>28 000 plants de pois</strong> ! Ses découvertes (1865) sont restées <strong>ignorées de son vivant</strong> et n'ont été comprises que 35 ans plus tard."
-    },
-    "cellule-animale.png": {
-      title: "La cellule animale", sub: "cellule eucaryote",
-      cours: "<p>La <strong>cellule animale</strong> est <strong>eucaryote</strong> (elle a un <strong>noyau</strong>). Elle contient des <strong>organites</strong> : mitochondries (énergie), réticulum, appareil de Golgi, lysosomes… mais <strong>pas</strong> de paroi ni de chloroplastes.</p>",
-      exam: "<ul><li>Eucaryote : possède un <strong>noyau</strong>.</li><li>Vs végétale : <strong>pas de paroi, pas de chloroplaste, pas de grande vacuole</strong>.</li></ul>",
-      anecdote: "Une cellule mesure en moyenne quelques <strong>centièmes de millimètre</strong> : il en faudrait des milliers rien que pour couvrir ce point → •"
-    },
-    "cellule-vegetale.png": {
-      title: "La cellule végétale", sub: "cellule eucaryote",
-      cours: "<p>La <strong>cellule végétale</strong> est aussi <strong>eucaryote</strong>, mais elle a en plus : une <strong>paroi cellulaire</strong> (rigidité), des <strong>chloroplastes</strong> (photosynthèse) et une grande <strong>vacuole centrale</strong>.</p>",
-      exam: "<ul><li>3 éléments en plus : <strong>paroi · chloroplastes · vacuole centrale</strong>.</li><li>Les chloroplastes captent la lumière (photosynthèse).</li></ul>",
-      anecdote: "Grâce aux <strong>chloroplastes</strong> (chlorophylle verte), les plantes fabriquent leur nourriture à partir de la lumière : la <strong>photosynthèse</strong>, qui produit l'oxygène qu'on respire !"
-    },
-    "procaryote.png": {
-      title: "La cellule procaryote", sub: "une bactérie",
-      cours: "<p>Une cellule <strong>procaryote</strong> (ex. une <strong>bactérie</strong>) est plus simple : elle <strong>n'a pas de noyau</strong> (son ADN flotte dans le cytoplasme) ni d'organites entourés d'une membrane.</p>",
-      exam: "<ul><li><strong>Procaryote = sans noyau</strong> (≠ eucaryote).</li><li>Exemple : les bactéries.</li></ul>",
-      anecdote: "Les bactéries sont les êtres vivants les plus <strong>nombreux</strong> sur Terre. Ton corps en contient plus que de cellules humaines — et la plupart sont utiles (digestion) !"
+      cours: "<p>Moine et botaniste, <strong>Gregor Johann Mendel</strong> a découvert les <strong>lois de l'hérédité</strong> en croisant des <strong>petits pois</strong> (<em>Pisum sativum</em>). Il a montré que les caractères se transmettent par des « facteurs » (aujourd'hui les <strong>gènes</strong>) qui peuvent être <strong>dominants</strong> ou <strong>récessifs</strong>.</p>",
+      exam: "<ul><li><strong>Vocabulaire :</strong> gène, allèle, <strong>dominant</strong> (A) / <strong>récessif</strong> (a), génotype (les allèles) / phénotype (ce qu'on voit).</li><li><strong>Règle :</strong> Aa × Aa → <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).</li><li>Lignées pures : AA × aa → en <strong>F1</strong> tous Aa (dominants) ; F1 × F1 → en <strong>F2</strong> le récessif réapparaît.</li></ul>",
+      anecdote: "Mendel a cultivé et observé près de <strong>28 000 plants de pois</strong> ! Ses découvertes (1865) sont restées <strong>ignorées de son vivant</strong> et n'ont été comprises que ~35 ans plus tard."
     }
   });
 
@@ -39,201 +21,76 @@
   window.INFO_THEME = window.INFO_THEME || {};
   Object.assign(window.INFO_THEME, {
     "mendel.jpg": "science", "gene-allele": "science", "dominance": "science", "genotype-phenotype": "science",
-    "cellule-animale.png": "science", "cellule-vegetale.png": "science", "procaryote.png": "science"
+    "replication": "science", "mitose": "science", "meiose": "science", "caryotype": "science", "fecondation": "science"
   });
 
-  /* Notions de génétique cliquables */
+  /* Notions cliquables (cours + examen) */
   window.INFO_TOPICS = window.INFO_TOPICS || {};
   Object.assign(window.INFO_TOPICS, {
+    "replication": {
+      title: "La réplication de l'ADN", sub: "phase S du cycle",
+      cours: "<p>Pendant la <strong>phase S</strong>, l'ADN est <strong>copié</strong>. L'<strong>ADN polymérase</strong> ouvre la double hélice : chaque brin sert de <strong>modèle</strong>. Des <strong>nucléotides libres</strong> viennent se placer en face par <strong>complémentarité des bases</strong> (A–T, C–G). On obtient <strong>2 molécules d'ADN filles identiques</strong> à la molécule de départ.</p>",
+      exam: "<ul><li>A s'apparie avec <strong>T</strong>, C avec <strong>G</strong> (toujours).</li><li>Quantité d'ADN : elle <strong>double</strong> (passe de 1 à 2) pendant la phase S.</li><li>But : que les 2 cellules filles aient le <strong>même</strong> ADN après la mitose.</li></ul>"
+    },
+    "mitose": {
+      title: "La mitose", sub: "division en 2 cellules identiques",
+      cours: "<p>La <strong>mitose</strong> divise une cellule en <strong>2 cellules filles identiques</strong> à la cellule mère (même ADN). Ses 4 étapes : <strong>Prophase → Métaphase → Anaphase → Télophase</strong> (PMAT), puis le partage du cytoplasme (<strong>cytodiérèse</strong>).</p>",
+      exam: "<ul><li>Sert à la <strong>croissance</strong> et à la <strong>réparation</strong> des tissus.</li><li>2n → 2n (le nombre de chromosomes ne change pas).</li><li>À l'anaphase, ce sont les <strong>chromatides-sœurs</strong> qui se séparent.</li></ul>"
+    },
+    "meiose": {
+      title: "La méiose", sub: "fabrication des gamètes",
+      cours: "<p>La <strong>méiose</strong> fabrique les <strong>gamètes</strong> (spermatozoïdes, ovules). À partir d'<strong>1</strong> cellule (2n), elle fait <strong>2 divisions</strong> successives → <strong>4 cellules</strong> à <strong>n</strong> chromosomes (moitié moins).</p>",
+      exam: "<ul><li>2n → <strong>n</strong> : c'est une division <strong>réductionnelle</strong>.</li><li>À l'anaphase 1, on sépare les <strong>chromosomes homologues</strong> (≠ mitose).</li><li>C'est une grande source de <strong>variabilité</strong> (brassage).</li></ul>"
+    },
+    "caryotype": {
+      title: "Caryotype & ploïdie", sub: "les chromosomes classés",
+      cours: "<p>Le <strong>caryotype</strong> est la photo des chromosomes d'une cellule, <strong>classés par paires</strong>. On distingue les <strong>autosomes</strong> (paires 1 à 22) et les <strong>gonosomes</strong> (chromosomes sexuels : XX ou XY).</p>",
+      exam: "<ul><li>Humain : <strong>23 paires</strong> = 46 chromosomes (2n = 46).</li><li><strong>2n</strong> = diploïde (par paires) · <strong>n</strong> = haploïde (gamètes).</li><li>Femme = <strong>XX</strong>, homme = <strong>XY</strong>.</li></ul>"
+    },
+    "fecondation": {
+      title: "La fécondation", sub: "n + n → 2n",
+      cours: "<p>La <strong>fécondation</strong> est la <strong>fusion</strong> d'un gamète mâle (n) et d'un gamète femelle (n). Elle forme la <strong>cellule-œuf</strong> (zygote) à <strong>2n</strong> chromosomes, qui redonne un nouvel individu par mitoses.</p>",
+      exam: "<ul><li>n + n → <strong>2n</strong> : la fécondation <strong>rétablit</strong> le nombre de chromosomes de l'espèce.</li><li>Fécondation <strong>au hasard</strong> → grande variété d'individus possibles.</li></ul>"
+    },
     "gene-allele": {
       title: "Gène & allèle", sub: "les bases de l'hérédité", img: "mendel.jpg",
-      cours: "<p>Un <strong>gène</strong> est une portion d'ADN qui contrôle un caractère (ex. la couleur des yeux). Chaque gène existe en plusieurs versions appelées <strong>allèles</strong> (ex. « yeux bruns » ou « yeux bleus »). On a <strong>2 allèles</strong> par gène : un du père, un de la mère.</p>",
+      cours: "<p>Un <strong>gène</strong> est une portion d'ADN qui détermine un caractère (ex. la forme du pois). Chaque gène existe en plusieurs versions appelées <strong>allèles</strong>. On a <strong>2 allèles</strong> par gène : un du père, un de la mère.</p>",
       exam: "<ul><li>Gène = le caractère · allèle = une version du gène.</li><li>Voir <strong>dominant</strong> / <strong>récessif</strong> et <strong>génotype</strong> / <strong>phénotype</strong>.</li></ul>"
     },
     "dominance": {
       title: "Dominant & récessif", sub: "qui l'emporte ?", img: "mendel.jpg",
-      cours: "<p>Un allèle <strong>dominant</strong> (noté en MAJUSCULE, ex. <strong>A</strong>) s'exprime toujours, même seul. Un allèle <strong>récessif</strong> (minuscule, <strong>a</strong>) ne s'exprime que s'il est <strong>en double</strong> (aa).</p>",
-      exam: "<ul><li>AA et Aa → caractère <strong>dominant</strong> · seul <strong>aa</strong> → caractère récessif.</li><li>Ex. yeux bruns (B) dominent sur bleus (b) : bleu seulement si <strong>bb</strong>.</li></ul>"
+      cours: "<p>Un allèle <strong>dominant</strong> (MAJUSCULE, ex. <strong>A</strong>) s'exprime toujours, même seul. Un allèle <strong>récessif</strong> (minuscule, <strong>a</strong>) ne s'exprime que s'il est <strong>en double</strong> (aa).</p>",
+      exam: "<ul><li>AA et Aa → caractère <strong>dominant</strong> · seul <strong>aa</strong> → caractère récessif.</li></ul>"
     },
     "genotype-phenotype": {
       title: "Génotype & phénotype", sub: "les allèles vs ce qu'on voit", img: "mendel.jpg",
-      cours: "<p>Le <strong>génotype</strong> = les <strong>2 allèles</strong> que possède l'individu (ex. Bb). Le <strong>phénotype</strong> = le caractère <strong>visible</strong> (ex. yeux bruns).</p>",
-      exam: "<ul><li><strong>Bb</strong> et <strong>BB</strong> = même phénotype (bruns) mais génotype différent.</li><li>Génotype = « la recette » · phénotype = « le résultat ».</li></ul>"
+      cours: "<p>Le <strong>génotype</strong> = les <strong>2 allèles</strong> que possède l'individu (ex. Aa). Le <strong>phénotype</strong> = le caractère <strong>visible</strong> (l'apparence).</p>",
+      exam: "<ul><li><strong>Aa</strong> et <strong>AA</strong> = même phénotype mais génotype différent.</li><li>Homozygote = AA ou aa · Hétérozygote = Aa.</li></ul>"
     }
   });
 
   window.TERM_MAP = window.TERM_MAP || {};
   Object.assign(window.TERM_MAP, {
     "Mendel": "mendel.jpg", "génotype": "genotype-phenotype", "phénotype": "genotype-phenotype",
-    "dominant": "dominance", "récessif": "dominance", "allèle": "gene-allele", "gène": "gene-allele"
+    "dominant": "dominance", "récessif": "dominance", "allèle": "gene-allele", "gène": "gene-allele",
+    "réplication": "replication", "mitose": "mitose", "méiose": "meiose", "caryotype": "caryotype",
+    "fécondation": "fecondation", "gamètes": "fecondation", "autosomes": "caryotype", "gonosomes": "caryotype"
   });
 
-  // ---- Illustrations SVG « façon manuel scolaire » (fond sombre) ----
-  var SVGSTYLE = 'max-width:100%;height:auto;background:var(--bg-main);border-radius:12px;border:2px solid var(--border-subtle);';
-
-  // ---- Style « planche de manuel » : papier crème + dessin à l'encre (cellules) ----
-  var PAPER = 'max-width:100%;height:auto;background:#f4f1e6;border-radius:12px;border:2px solid var(--border-subtle);box-shadow:inset 0 0 40px rgba(60,50,20,0.06);';
-  var INK = '#2b2b2b';   // trait principal (encre)
-  var INK2 = '#7a756a';  // lignes de rappel (plus claire)
-  // Étiquette « manuel » : texte encre (multi-lignes via \n) + ligne de rappel + point sur l'organite.
-  function tlbl(tx, ty, text, anchor, px, py) {
-    var lines = String(text).split('\n');
-    var tsp = lines.map(function (l, i) { return '<tspan x="' + tx + '" dy="' + (i === 0 ? 0 : 13) + '">' + l + '</tspan>'; }).join('');
-    var lx = anchor === 'end' ? tx + 3 : tx - 3;
-    return '<line x1="' + lx + '" y1="' + (ty - 3) + '" x2="' + px + '" y2="' + py + '" stroke="' + INK2 + '" stroke-width="1"/>' +
-      '<circle cx="' + px + '" cy="' + py + '" r="2.2" fill="' + INK + '"/>' +
-      '<text x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '" font-family="Georgia,\'Times New Roman\',serif" font-size="12.5" fill="' + INK + '">' + tsp + '</text>';
-  }
-  // points (ribosomes libres) à l'encre
-  function ink_dots(coords) {
-    return '<g fill="' + INK + '">' + coords.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + (c[2] || 1.8) + '"/>'; }).join('') + '</g>';
-  }
-
-  // pastille numérotée posée sur un organite
-  function badge(n, x, y) {
-    return '<g><circle cx="' + x + '" cy="' + y + '" r="10.5" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.6"/>' +
-      '<text x="' + x + '" y="' + (y + 3.8) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e8f0" font-family="inherit">' + n + '</text></g>';
-  }
-  // légende numérotée (1,2,3…) sous le schéma
-  function numLegend(items) {
-    return '<div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin-top:12px;font-size:13px;color:var(--text-secondary);">' +
-      items.map(function (t, i) {
-        return '<span style="display:inline-flex;align-items:center;gap:6px;">' +
-          '<span style="display:inline-flex;width:19px;height:19px;border-radius:50%;background:#0f172a;border:1.6px solid #e2e8f0;color:#e2e8f0;font-size:11px;font-weight:700;align-items:center;justify-content:center;flex:0 0 auto;">' + (i + 1) + '</span>' + t + '</span>';
-      }).join('') + '</div>';
-  }
-  // légende à pastilles de couleur
-  function colorLegend(items) {
-    return '<div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin-top:12px;font-size:13px;color:var(--text-secondary);">' +
-      items.map(function (it) {
-        return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:4px;background:' + it[0] + ';display:inline-block;flex:0 0 auto;"></span>' + it[1] + '</span>';
-      }).join('') + '</div>';
-  }
   function wrap(svg, leg) { return '<div style="text-align:center;">' + svg + leg + '</div>'; }
-  // image scannée du cours (schéma exact, nettoyé fond blanc)
-  function cellImg(src, alt) {
-    return '<img src="' + src + '" alt="' + alt + '" loading="lazy" style="max-width:100%;height:auto;display:block;margin:0 auto;background:#fff;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 10px rgba(0,0,0,0.18);"/>';
-  }
 
-  // mitochondrie « manuel » : haricot à double membrane, crêtes en doigts vers l'intérieur
-  function mito(x, y, rot, sc) {
-    sc = sc || 1;
-    var cr = '';
-    // crêtes : petits replis depuis le bord supérieur et inférieur
-    for (var k = -20; k <= 20; k += 8) {
-      cr += '<path d="M' + k + ' -13 q' + (k < 0 ? 5 : -5) + ' 10 0 20" fill="none" stroke="' + INK + '" stroke-width="1.1"/>';
-    }
-    return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ') scale(' + sc + ')">' +
-      '<ellipse rx="30" ry="15" fill="#f3d2cf" stroke="' + INK + '" stroke-width="1.8"/>' +
-      '<ellipse rx="26" ry="11.5" fill="none" stroke="' + INK + '" stroke-width="0.9"/>' +
-      cr +
-      '</g>';
-  }
-  // chloroplaste « manuel » : ovale vert clair + grana (piles de thylakoïdes) reliés par lamelles
-  function chloro(x, y, rot) {
-    var grana = '';
-    [-15, -2, 11].forEach(function (gx) {
-      for (var k = 0; k < 3; k++) {
-        grana += '<line x1="' + (gx - 4) + '" y1="' + (-4 + k * 4) + '" x2="' + (gx + 4) + '" y2="' + (-4 + k * 4) + '" stroke="#166534" stroke-width="2.6"/>';
-      }
-    });
-    return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')">' +
-      '<ellipse rx="29" ry="15" fill="#cdeac0" stroke="' + INK + '" stroke-width="1.8"/>' +
-      '<path d="M-17 0 H13" stroke="#166534" stroke-width="1.1"/>' +
-      grana +
-      '</g>';
-  }
-  // appareil de Golgi « manuel » : pile de citernes incurvées (sacs aplatis) + vésicules
-  function golgi(x, y, sc) {
-    sc = sc || 1;
-    var s = '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')"><g fill="#f6e2bd" stroke="' + INK + '" stroke-width="1.5">';
-    for (var i = 0; i < 4; i++) { var w = 26 - i * 4; s += '<path d="M' + (-w) + ' ' + (i * 8) + ' q' + w + ' -13 ' + (2 * w) + ' 0 q-' + w + ' 6 -' + (2 * w) + ' 0 Z"/>'; }
-    s += '</g><g fill="#f6e2bd" stroke="' + INK + '" stroke-width="1.1"><circle cx="-8" cy="40" r="4"/><circle cx="36" cy="37" r="3.4"/><circle cx="16" cy="44" r="3"/></g></g>';
-    return s;
-  }
-  // centriole « manuel » : deux barillets perpendiculaires (paire)
-  function centriole(x, y) {
-    return '<g stroke="' + INK + '" stroke-width="1.2" fill="#e7e2d4">' +
-      '<rect x="' + (x - 10) + '" y="' + (y - 4.5) + '" width="20" height="9" rx="2"/>' +
-      '<line x1="' + (x - 5) + '" y1="' + (y - 4.5) + '" x2="' + (x - 5) + '" y2="' + (y + 4.5) + '"/><line x1="' + x + '" y1="' + (y - 4.5) + '" x2="' + x + '" y2="' + (y + 4.5) + '"/><line x1="' + (x + 5) + '" y1="' + (y - 4.5) + '" x2="' + (x + 5) + '" y2="' + (y + 4.5) + '"/>' +
-      '<rect x="' + (x + 9) + '" y="' + (y - 10) + '" width="9" height="20" rx="2"/>' +
-      '<line x1="' + (x + 9) + '" y1="' + (y - 5) + '" x2="' + (x + 18) + '" y2="' + (y - 5) + '"/><line x1="' + (x + 9) + '" y1="' + y + '" x2="' + (x + 18) + '" y2="' + y + '"/><line x1="' + (x + 9) + '" y1="' + (y + 5) + '" x2="' + (x + 18) + '" y2="' + (y + 5) + '"/>' +
-      '</g>';
-  }
-  // réticulum endoplasmique « manuel » : sacs aplatis empilés. rough=true → ribosomes (points) sur les bords.
-  function reticulum(x, y, rot, rough) {
-    var s = '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')">';
-    var fill = rough ? '#e9d9c0' : '#dfe6d4';
-    s += '<g fill="' + fill + '" stroke="' + INK + '" stroke-width="1.4">';
-    for (var i = 0; i < 3; i++) { s += '<path d="M0 ' + (i * 9) + ' q26 -11 52 0 q-26 5 -52 0 Z"/>'; }
-    s += '</g>';
-    if (rough) {
-      var rib = '';
-      for (var i = 0; i < 3; i++) { for (var j = 2; j <= 50; j += 7) { rib += '<circle cx="' + j + '" cy="' + (i * 9 + (j % 14 < 7 ? -2.5 : 2.5)) + '" r="1.5"/>'; } }
-      s += '<g fill="' + INK + '">' + rib + '</g>';
-    }
-    return s + '</g>';
-  }
-  function dots(coords) { return ink_dots(coords); }
-  // Étiquette posée directement sur le schéma : texte + ligne de rappel + point sur l'organite.
-  // anchor 'end' = étiquette à gauche (le texte finit en tx) ; 'start' = à droite.
-  function lbl(tx, ty, text, anchor, px, py) {
-    var lx = anchor === 'end' ? tx + 4 : tx - 4;
-    return '<line x1="' + lx + '" y1="' + (ty - 3.5) + '" x2="' + px + '" y2="' + py + '" stroke="#9aa4b8" stroke-width="1" opacity="0.7"/>' +
-      '<circle cx="' + px + '" cy="' + py + '" r="2.7" fill="#f1f5f9"/>' +
-      '<text x="' + tx + '" y="' + ty + '" text-anchor="' + anchor + '" font-family="inherit" font-size="12.5" font-weight="600" fill="#f1f5f9">' + text + '</text>';
-  }
-
-  // ===== CELLULE ANIMALE — IMAGE EXACTE DU COURS (photo scannée + nettoyée) =====
-  var SVG_ANIMAL = wrap(cellImg('cellule-animale.png',
-    'Schéma du cours — cellule animale (eucaryote) : réticulum endoplasmique rugueux, ribosome, pore nucléaire, nucléole, membrane nucléaire, noyau, appareil de Golgi, centriole, lysosome, membrane plasmique, cytoplasme, mitochondries.'), '');
-
-  // ===== CELLULE VÉGÉTALE — IMAGE EXACTE DU COURS (photo scannée + nettoyée) =====
-  var SVG_PLANT = wrap(cellImg('cellule-vegetale.png',
-    'Schéma du cours — cellule végétale : paroi cellulaire, peroxysome, membrane cellulaire, chloroplaste, cytosol, ponctuation avec plasmodesme, réticulum endoplasmique rugueux et lisse, noyau, nucléole, mitochondrie, vacuole centrale, appareil de Golgi.'), '');
-
-  // ===== BACTÉRIE / procaryote — planche façon manuel =====
-  var _bactSvg =
-    '<svg viewBox="0 0 480 220" width="480" height="220" style="' + PAPER + '">' +
-      // flagelle (ondulé)
-      '<path d="M340 110 q18 -16 34 0 t34 0 t30 0" fill="none" stroke="' + INK + '" stroke-width="2.2"/>' +
-      // paroi cellulaire (épaisse) + membrane
-      '<rect x="150" y="64" width="190" height="92" rx="46" fill="#e9d9c0" stroke="' + INK + '" stroke-width="2.4"/>' +
-      '<rect x="160" y="74" width="170" height="72" rx="36" fill="#fdf6e3" stroke="' + INK + '" stroke-width="1.3"/>' +
-      // nucléoïde (ADN circulaire libre, pelote)
-      '<path d="M205 110 q16 -22 36 -8 q22 14 42 -3 q-8 26 -36 16 q-28 -8 -42 -5 Z" fill="#dfe6d4" stroke="' + INK + '" stroke-width="1.8"/>' +
-      // plasmides (petits anneaux d\'ADN)
-      '<circle cx="202" cy="92" r="8" fill="none" stroke="' + INK + '" stroke-width="2"/>' +
-      '<circle cx="302" cy="128" r="6.5" fill="none" stroke="' + INK + '" stroke-width="2"/>' +
-      // ribosomes (points)
-      ink_dots([[232, 88], [266, 132], [292, 98], [248, 126], [214, 126]]) +
-      // étiquettes (gauche)
-      tlbl(140, 60, 'Paroi + membrane', 'end', 170, 78) +
-      tlbl(140, 116, 'Nucléoïde (ADN)', 'end', 225, 110) +
-      tlbl(140, 158, 'Plasmide', 'end', 200, 94) +
-      // étiquettes (droite)
-      tlbl(352, 74, 'Ribosomes', 'start', 292, 98) +
-      tlbl(352, 140, 'Flagelle', 'start', 420, 110) +
-    '</svg>';
-  // Procaryote — IMAGE EXACTE DU COURS (bactérie : Pili, Capsule, Ribosomes, Paroi, Membrane, Région nucléoïde/ADN, Mésosome, Flagelles)
-  var SVG_BACT = wrap(cellImg('procaryote.png',
-    'Schéma du cours — structure d\'une bactérie (procaryote) : pili, capsule, ribosomes, paroi cellulaire, membrane plasmique, région nucléoïde contenant l\'ADN, mésosome, flagelles.'), '');
-
-  // ===== ADN — schéma redessiné (échelle de bases nette + double hélice) =====
+  // ===== ADN — schéma (bases appariées + double hélice) =====
   var SVG_DNA = (function () {
     var FIG = 'max-width:720px;width:100%;height:auto;background:#fff;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15);';
     var OR = '#f59e0b', PH = '#7c3aed', INK = '#1f2937', LEAD = '#9aa4b8';
     var COL = { A: '#ef4444', T: '#22c55e', G: '#3b82f6', C: '#eab308' };
     function txt(x, y, t, s, w, f, a) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-family="inherit" font-size="' + (s || 12) + '" font-weight="' + (w || 500) + '" fill="' + (f || INK) + '">' + t + '</text>'; }
-    var s = '<svg viewBox="0 0 760 360" width="760" height="360" style="' + FIG + '" role="img" aria-label="La structure de l\'ADN : deux brins (désoxyribose + phosphate) reliés par les bases azotées appariées A-T et C-G, formant une double hélice.">';
+    var s = '<svg viewBox="0 0 760 360" width="760" height="360" style="' + FIG + '" role="img" aria-label="La structure de l\'ADN : deux brins reliés par les bases azotées appariées A-T et C-G, formant une double hélice.">';
     s += txt(380, 26, "La structure de l'ADN", 16, 800, '#7c3aed');
     var x0 = 80, x1 = 400, yt = 138, yb = 246;
-    // brins (rails sucre-phosphate)
     s += '<line x1="' + x0 + '" y1="' + yt + '" x2="' + x1 + '" y2="' + yt + '" stroke="' + OR + '" stroke-width="9" stroke-linecap="round"/>';
     s += '<line x1="' + x0 + '" y1="' + yb + '" x2="' + x1 + '" y2="' + yb + '" stroke="' + OR + '" stroke-width="9" stroke-linecap="round"/>';
-    // phosphates (cercles violets) sur les brins
     [100, 160, 220, 280, 340, 400].forEach(function (nx) { s += '<circle cx="' + nx + '" cy="' + yt + '" r="5.5" fill="' + PH + '"/><circle cx="' + nx + '" cy="' + yb + '" r="5.5" fill="' + PH + '"/>'; });
-    // rungs = paires de bases (couleur + lettre) + étiquettes
     var rungs = [[120, 'T', 'A', 'Thymine', 'Adénine'], [200, 'G', 'C', 'Guanine', 'Cytosine'], [280, 'C', 'G', 'Cytosine', 'Guanine'], [360, 'A', 'T', 'Adénine', 'Thymine']];
     rungs.forEach(function (r) {
       var rx = r[0];
@@ -242,15 +99,12 @@
       s += '<line x1="' + rx + '" y1="' + (yt - 5) + '" x2="' + rx + '" y2="104" stroke="' + LEAD + '" stroke-width="1"/>' + txt(rx, 96, r[3], 10.5, 600, INK);
       s += '<line x1="' + rx + '" y1="' + (yb + 5) + '" x2="' + rx + '" y2="286" stroke="' + LEAD + '" stroke-width="1"/>' + txt(rx, 297, r[4], 10.5, 600, INK);
     });
-    // étiquettes Désoxyribose (brin orange) & Phosphate (cercle violet)
     s += '<line x1="400" y1="' + yb + '" x2="436" y2="' + (yb + 14) + '" stroke="' + LEAD + '" stroke-width="1"/>' + txt(440, yb + 18, 'Désoxyribose', 11, 600, INK, 'start');
     s += '<line x1="400" y1="' + yt + '" x2="436" y2="' + (yt - 14) + '" stroke="' + LEAD + '" stroke-width="1"/>' + txt(440, yt - 14, 'Phosphate', 11, 600, INK, 'start');
-    // ---- double hélice (à droite) ----
     var hx0 = 470, hx1 = 720, cyH = 192, amp = 46, n = 60, turns = 1.8, i, ph, a;
     var top = [], bot = [];
     for (i = 0; i <= n; i++) { a = i / n; ph = a * Math.PI * 2 * turns; var x = hx0 + a * (hx1 - hx0); top.push([x.toFixed(1), (cyH + amp * Math.sin(ph)).toFixed(1)]); bot.push([x.toFixed(1), (cyH - amp * Math.sin(ph)).toFixed(1)]); }
     function poly(p) { return p.map(function (q, k) { return (k ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join(' '); }
-    // barreaux de l'hélice (colorés)
     var bcol = [COL.T, COL.G, COL.C, COL.A, COL.T, COL.G, COL.C, COL.A];
     for (i = 4; i < n; i += 6) { s += '<line x1="' + top[i][0] + '" y1="' + top[i][1] + '" x2="' + bot[i][0] + '" y2="' + bot[i][1] + '" stroke="' + bcol[(i / 6) % bcol.length | 0] + '" stroke-width="4" stroke-linecap="round" opacity="0.9"/>'; }
     s += '<path d="' + poly(top) + '" fill="none" stroke="' + OR + '" stroke-width="6" stroke-linecap="round"/>';
@@ -261,36 +115,28 @@
       '<span>· Appariement : <strong>A–T</strong> et <strong>C–G</strong></span></div>');
   })();
 
-  // ===== CYCLE CELLULAIRE & MITOSE — schéma redessiné (séquence + graphe quantité d'ADN) =====
+  // ===== CYCLE CELLULAIRE & MITOSE — séquence + graphe quantité d'ADN =====
   var SVG_MITOSE = (function () {
     var FIG = 'max-width:700px;width:100%;height:auto;background:#f8fafc;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.18);';
     var INKG = '#1f2937', AX = '#475569', GRID = '#dbe2ec', CURVE = '#7c3aed', B = '#2563eb', R = '#dc2626', CEN = '#f59e0b';
     function txt(x, y, t, s, w, f, a) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-family="inherit" font-size="' + (s || 13) + '" font-weight="' + (w || 500) + '" fill="' + (f || INKG) + '">' + t + '</text>'; }
-    // chromosome dédoublé (en X) : 2 chromatides + centromère
     function chromX(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
       '<path d="M-8 -13 Q4 0 -8 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/>' +
       '<path d="M8 -13 Q-4 0 8 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/>' +
       '<circle r="2.6" fill="' + CEN + '"/></g>'; }
-    // chromosome simple (1 chromatide)
     function chromI(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')">' +
       '<path d="M0 -13 Q5 0 0 13" fill="none" stroke="' + c + '" stroke-width="4.2" stroke-linecap="round"/></g>'; }
     function cell(cx, cy, r) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>'; }
     function arrow(x1, x2, y) { return '<line x1="' + x1 + '" y1="' + y + '" x2="' + (x2 - 8) + '" y2="' + y + '" stroke="' + AX + '" stroke-width="2.2"/>' +
       '<path d="M' + (x2 - 9) + ' ' + (y - 5) + ' L' + x2 + ' ' + y + ' L' + (x2 - 9) + ' ' + (y + 5) + ' Z" fill="' + AX + '"/>'; }
-
     var s = '<svg viewBox="0 0 820 580" width="820" height="580" style="' + FIG + '" role="img" aria-label="Le cycle cellulaire et la mitose : séquence de division et graphe de la quantité d\'ADN au cours du temps.">';
     s += txt(410, 26, 'Le cycle cellulaire et la mitose', 17, 800, CURVE);
-
-    // ---------- SÉQUENCE DE MITOSE (haut) ----------
     var cy = 100;
-    // A — cellule de départ (2 chromosomes simples : 1 long bleu, 1 court rouge)
     s += cell(72, cy, 32) + chromI(64, cy - 2, 1, B) + chromI(84, cy + 4, 0.7, R);
     s += arrow(108, 168, cy) + txt(138, cy + 30, 'Réplication', 10.5, 600, AX) + txt(138, cy + 42, "de l'ADN", 10.5, 600, AX);
-    // B — après réplication (2 chromosomes dédoublés en X)
     s += cell(200, cy, 32) + chromX(192, cy - 2, 1, B) + chromX(212, cy + 4, 0.72, R);
     s += arrow(236, 300, cy);
     s += txt(432, 48, 'Mitose', 13, 800, CURVE);
-    // C — métaphase (fuseau + chromosomes alignés à l'équateur)
     s += cell(352, cy, 48);
     s += '<g stroke="' + AX + '" stroke-width="1" opacity="0.6" fill="none">' +
       '<path d="M308 100 Q352 58 396 100"/><path d="M308 100 Q352 142 396 100"/>' +
@@ -300,53 +146,38 @@
     s += chromX(352, 82, 0.9, B) + chromX(352, 118, 0.75, R);
     s += txt(352, 162, 'Métaphase', 10.5, 600, AX);
     s += arrow(404, 462, cy);
-    // D — anaphase/télophase (cellule qui se pince, chromatides vers les pôles)
     s += '<path d="M512 53 a47 47 0 0 1 0 94 q-16 -10 -16 -47 q0 -37 16 -47 Z" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>';
     s += '<path d="M512 53 a47 47 0 0 0 0 94 q16 -10 16 -47 q0 -37 -16 -47 Z" fill="#eef3f9" stroke="' + INKG + '" stroke-width="2"/>';
     s += chromI(490, 86, 0.8, B) + chromI(498, 116, 0.62, R) + chromI(534, 86, 0.8, B) + chromI(526, 116, 0.62, R);
     s += txt(512, 162, 'Anaphase', 10.5, 600, AX);
     s += arrow(566, 636, cy);
-    s += txt(752, 94, 'Deux cellules', 11, 700, INKG) + txt(752, 108, 'diploïdes', 11, 700, INKG);
-    // E & F — 2 cellules-filles
+    s += txt(752, 94, 'Deux cellules', 11, 700, INKG) + txt(752, 108, 'identiques', 11, 700, INKG);
     s += cell(665, 74, 26) + chromI(659, 72, 0.78, B) + chromI(673, 78, 0.55, R);
     s += cell(665, 132, 26) + chromI(659, 130, 0.78, B) + chromI(673, 136, 0.55, R);
-
-    // séparateur
     s += '<line x1="40" y1="196" x2="780" y2="196" stroke="' + GRID + '" stroke-width="1.5"/>';
-
-    // ---------- GRAPHE QUANTITÉ D'ADN = f(temps) (bas) ----------
-    var ox = 92, base = 462, u = 86; // base = ADN 0 ; u = px par unité d'ADN
+    var ox = 92, base = 462, u = 86;
     function tx(h) { return ox + h * (680 / 24); }
     function vy(v) { return base - v * u; }
-    // grille horizontale (1 et 2)
     s += '<line x1="' + ox + '" y1="' + vy(1) + '" x2="' + tx(24) + '" y2="' + vy(1) + '" stroke="' + GRID + '" stroke-width="1" stroke-dasharray="4 4"/>';
     s += '<line x1="' + ox + '" y1="' + vy(2) + '" x2="' + tx(24) + '" y2="' + vy(2) + '" stroke="' + GRID + '" stroke-width="1" stroke-dasharray="4 4"/>';
-    // axes
     s += '<line x1="' + ox + '" y1="248" x2="' + ox + '" y2="' + base + '" stroke="' + AX + '" stroke-width="2"/>';
     s += '<line x1="' + ox + '" y1="' + base + '" x2="' + (tx(24) + 14) + '" y2="' + base + '" stroke="' + AX + '" stroke-width="2"/>';
     s += '<path d="M' + (tx(24) + 14) + ' ' + (base - 4) + ' L' + (tx(24) + 22) + ' ' + base + ' L' + (tx(24) + 14) + ' ' + (base + 4) + ' Z" fill="' + AX + '"/>';
     s += '<path d="M' + (ox - 4) + ' 252 L' + ox + ' 244 L' + (ox + 4) + ' 252 Z" fill="' + AX + '"/>';
-    // graduations Y
     s += txt(ox - 12, base + 4, '0', 12, 500, AX, 'end') + txt(ox - 12, vy(1) + 4, '1', 12, 600, AX, 'end') + txt(ox - 12, vy(2) + 4, '2', 12, 600, AX, 'end');
-    // titre Y (vertical)
     s += '<text transform="translate(34 ' + (vy(1)) + ') rotate(-90)" text-anchor="middle" font-family="inherit" font-size="12.5" font-weight="700" fill="' + INKG + '">Quantité d\'ADN (UA)</text>';
-    // graduations X (toutes les 2 h)
     var h, gx;
     for (h = 0; h <= 24; h += 2) { gx = tx(h); s += '<line x1="' + gx + '" y1="' + base + '" x2="' + gx + '" y2="' + (base + 4) + '" stroke="' + AX + '" stroke-width="1.5"/>' + txt(gx, base + 17, h, 10.5, 500, AX); }
     s += txt(tx(24) + 6, base + 34, 'Temps (heures)', 12, 700, INKG, 'end');
-    // courbe d'ADN
     var pts = [[0, 2], [1.5, 2], [2.5, 1], [9, 1], [15, 2], [20, 2], [21, 2], [22, 1], [24, 1]];
     var dpath = pts.map(function (p, i) { return (i ? 'L' : 'M') + tx(p[0]).toFixed(1) + ' ' + vy(p[1]).toFixed(1); }).join(' ');
     s += '<path d="' + dpath + '" fill="none" stroke="' + CURVE + '" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>';
-    // chromosomes au-dessus de la courbe (états successifs)
-    s += chromX(tx(1), vy(2) - 26, 0.82, B);        // M : dédoublé
-    s += chromI(tx(5.6), vy(1) - 24, 0.82, B);       // G1 : simple
-    s += chromI(tx(11), vy(1.45) - 20, 0.82, B) + chromI(tx(12.4), vy(1.45) - 20, 0.5, R); // S : réplication en cours
-    s += chromX(tx(17.5), vy(2) - 26, 0.82, B);      // G2 : dédoublé
-    s += chromX(tx(21), vy(2) - 26, 0.82, B);        // M : dédoublé
-    // étiquettes des phases (sous la courbe, près de l'axe)
+    s += chromX(tx(1), vy(2) - 26, 0.82, B);
+    s += chromI(tx(5.6), vy(1) - 24, 0.82, B);
+    s += chromI(tx(11), vy(1.45) - 20, 0.82, B) + chromI(tx(12.4), vy(1.45) - 20, 0.5, R);
+    s += chromX(tx(17.5), vy(2) - 26, 0.82, B);
+    s += chromX(tx(21), vy(2) - 26, 0.82, B);
     s += txt(tx(1), base - 8, 'M', 13, 800, INKG) + txt(tx(5.6), base - 8, 'G₁', 13, 800, INKG) + txt(tx(12), base - 8, 'S', 13, 800, INKG) + txt(tx(17.5), base - 8, 'G₂', 13, 800, INKG) + txt(tx(21), base - 8, 'M', 13, 800, INKG);
-    // accolades Cycle cellulaire & Interphase
     function span(x1, x2, y, label, col) { return '<line x1="' + x1 + '" y1="' + y + '" x2="' + x2 + '" y2="' + y + '" stroke="' + col + '" stroke-width="1.6"/>' +
       '<line x1="' + x1 + '" y1="' + (y - 4) + '" x2="' + x1 + '" y2="' + (y + 4) + '" stroke="' + col + '" stroke-width="1.6"/>' +
       '<line x1="' + x2 + '" y1="' + (y - 4) + '" x2="' + x2 + '" y2="' + (y + 4) + '" stroke="' + col + '" stroke-width="1.6"/>' +
@@ -354,199 +185,151 @@
       txt((x1 + x2) / 2, y + 4, label, 12, 700, col); }
     s += span(tx(2.5), tx(22), base + 50, 'Cycle cellulaire', CURVE);
     s += span(tx(2.5), tx(20), base + 78, 'Interphase', AX);
-
     return wrap(s, '<p style="text-align:center;font-size:12.5px;color:var(--text-secondary);margin-top:8px;">Pendant la phase <strong>S</strong>, l\'ADN est répliqué (quantité 1 → 2) ; la <strong>mitose (M)</strong> sépare les chromatides-sœurs → 2 cellules filles identiques (retour à 1).</p>');
   })();
 
-  // ===== Exercice interactif « légende le schéma » (réutilisable) =====
-  function labelExo(emoji, title, img, pts) {
-    var marks = pts.map(function (p, i) {
-      return '<span class="lx-mark" style="left:' + p.l + '%; top:' + p.t + '%;">' + (i + 1) + '</span>';
-    }).join('');
-    var lis = pts.map(function (p, i) {
-      return '<li><span class="lx-num">' + (i + 1) + '</span>' +
-        '<input type="text" data-answer="' + p.a.replace(/"/g, '&quot;') + '" aria-label="structure ' + (i + 1) + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Structure ' + (i + 1) + '…"/></li>';
-    }).join('');
-    return '<div class="exercise-card">' +
-      '<h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">' + emoji + ' Légende le schéma — ' + title + '</h3>' +
-      '<p style="color:var(--text-secondary); margin-bottom:1rem;">Repère chaque numéro sur le schéma (au bout de la flèche), écris la structure dans la liste, puis clique sur <strong>Corriger</strong>.</p>' +
-      '<div class="lblexo"><img src="' + img + '" alt="Schéma à légender : ' + title + '" loading="lazy"/>' + marks + '</div>' +
-      '<ol class="lblexo-list">' + lis + '</ol>' +
-      '<div class="lblexo-foot"><button class="step-btn" onclick="checkLabelExo(this)">✓ Corriger</button>' +
-      '<button class="step-btn" onclick="resetLabelExo(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button>' +
-      '<button class="step-btn" onclick="toggleMarks(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">🙈 Cacher les n°</button>' +
-      '<span class="lblexo-score"></span></div><div class="lblexo-corr"></div></div>';
-  }
-  var PROCA_PTS = [
-    { l: 30.7, t: 5.5, w: 14, a: 'Pili' }, { l: 45, t: 26, w: 17, a: 'Ribosomes' }, { l: 47, t: 33, w: 15, a: 'Capsule' },
-    { l: 48.5, t: 38.5, w: 24, a: 'Paroi cellulaire' }, { l: 56.5, t: 46, w: 23, a: 'Membrane plasmique' },
-    { l: 56.5, t: 56, w: 32, a: 'Région nucléoïde' }, { l: 67, t: 66, w: 17, a: 'Mésosome' }, { l: 70, t: 73, w: 18, a: 'Flagelles' }
-  ];
-  var ANIM_PTS = [
-    { l: 11.5, t: 6.5, w: 18, a: 'Réticulum endoplasmique rugueux' }, { l: 11.5, t: 15.8, w: 12, a: 'Ribosome' },
-    { l: 54, t: 1.5, w: 17, a: 'Pore nucléaire' }, { l: 64, t: 8, w: 11, a: 'Nucléole' }, { l: 73.5, t: 15, w: 22.5, a: 'Membrane nucléaire' },
-    { l: 87.5, t: 10.8, w: 9.5, a: 'Noyau' }, { l: 64.5, t: 24.3, w: 19, a: 'Appareil de Golgi' }, { l: 80, t: 31.3, w: 11, a: 'Centriole' },
-    { l: 79.5, t: 37.3, w: 11.5, a: 'Lysosome' }, { l: 80, t: 71, w: 13.5, a: 'Cytoplasme' },
-    { l: 11, t: 76.5, w: 17.5, a: 'Réticulum endoplasmique lisse' }, { l: 80, t: 88.5, w: 13, a: 'Membrane plasmique' }, { l: 12.3, t: 92.8, w: 15.5, a: 'Mitochondrie' }
-  ];
-  var VEG_PTS = [
-    { l: 23, t: 2, w: 16, a: 'Paroi cellulaire' }, { l: 43, t: 2, w: 18, a: 'Peroxysome' }, { l: 0.5, t: 13, w: 22, a: 'Membrane cellulaire' },
-    { l: 4, t: 22, w: 17, a: 'Chloroplaste' }, { l: 3, t: 31, w: 20, a: 'Ponctuation avec plasmodesme' },
-    { l: 4, t: 52, w: 21, a: 'Mitochondrie' }, { l: 0.5, t: 64, w: 21, a: 'Vacuole centrale' }, { l: 74, t: 20, w: 15, a: 'Cytosol' },
-    { l: 72, t: 29, w: 23, a: 'Réticulum endoplasmique rugueux' }, { l: 76, t: 44, w: 13, a: 'Noyau' }, { l: 75, t: 54, w: 15, a: 'Nucléole' },
-    { l: 71, t: 63, w: 23, a: 'Réticulum endoplasmique lisse' }, { l: 58, t: 76, w: 30, a: 'Appareil de Golgi' }
-  ];
+  // ===== MÉIOSE — 1 cellule (2n) → 2 divisions → 4 gamètes (n) =====
+  var SVG_MEIOSE = (function () {
+    var FIG = 'max-width:680px;width:100%;height:auto;background:#f8fafc;border-radius:12px;border:2px solid var(--border-subtle);padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.18);';
+    var INKG = '#1f2937', AX = '#475569', CURVE = '#7c3aed', B = '#2563eb', R = '#dc2626', CEN = '#f59e0b';
+    function txt(x, y, t, s, w, f, a) { return '<text x="' + x + '" y="' + y + '" text-anchor="' + (a || 'middle') + '" font-family="inherit" font-size="' + (s || 12) + '" font-weight="' + (w || 500) + '" fill="' + (f || INKG) + '">' + t + '</text>'; }
+    function chromX(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')"><path d="M-7 -12 Q4 0 -7 12" fill="none" stroke="' + c + '" stroke-width="4" stroke-linecap="round"/><path d="M7 -12 Q-4 0 7 12" fill="none" stroke="' + c + '" stroke-width="4" stroke-linecap="round"/><circle r="2.3" fill="' + CEN + '"/></g>'; }
+    function chromI(x, y, sc, c) { c = c || B; return '<g transform="translate(' + x + ',' + y + ') scale(' + sc + ')"><path d="M0 -12 Q5 0 0 12" fill="none" stroke="' + c + '" stroke-width="4" stroke-linecap="round"/></g>'; }
+    function cell(cx, cy, r) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#eef3f9" stroke="' + INKG + '" stroke-width="1.8"/>'; }
+    function arr(x1, y1, x2, y2) { var ang = Math.atan2(y2 - y1, x2 - x1); var hx = x2 - 7 * Math.cos(ang), hy = y2 - 7 * Math.sin(ang); return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + hx + '" y2="' + hy + '" stroke="' + AX + '" stroke-width="2"/><circle cx="' + x2 + '" cy="' + y2 + '" r="2.2" fill="' + AX + '"/>'; }
+    var s = '<svg viewBox="0 0 660 470" width="660" height="470" style="' + FIG + '" role="img" aria-label="La méiose : une cellule diploïde 2n subit deux divisions et donne quatre gamètes haploïdes n.">';
+    s += txt(330, 24, 'La méiose : 2n → 4 gamètes (n)', 16, 800, CURVE);
+    // cellule mère 2n (2 paires d'homologues dédoublés)
+    s += cell(330, 80, 34) + chromX(316, 76, 0.9, B) + chromX(344, 76, 0.9, B) + chromX(322, 92, 0.7, R) + chromX(338, 92, 0.7, R);
+    s += txt(398, 84, '2n', 13, 800, INKG, 'start');
+    s += txt(330, 122, '1ʳᵉ division (réductionnelle)', 11, 700, CURVE);
+    // → 2 cellules n (homologues séparés)
+    s += arr(312, 110, 215, 150) + arr(348, 110, 445, 150);
+    s += cell(190, 185, 28) + chromX(182, 182, 0.85, B) + chromX(196, 192, 0.62, R);
+    s += cell(470, 185, 28) + chromX(462, 182, 0.85, B) + chromX(476, 192, 0.62, R);
+    s += txt(190, 226, 'n', 12, 800, INKG) + txt(470, 226, 'n', 12, 800, INKG);
+    s += txt(330, 250, '2ᵉ division (comme une mitose)', 11, 700, CURVE);
+    // → 4 gamètes n (chromatides séparées)
+    s += arr(176, 213, 110, 300) + arr(206, 213, 270, 300) + arr(456, 213, 392, 300) + arr(486, 213, 552, 300);
+    [110, 270, 392, 552].forEach(function (gx, i) {
+      s += cell(gx, 335, 24) + chromI(gx - 6, 332, 0.8, B) + chromI(gx + 6, 340, 0.58, R);
+      s += txt(gx, 372, 'n', 12, 800, INKG);
+    });
+    s += txt(330, 410, '4 cellules filles = gamètes (spermatozoïdes ou ovules)', 12, 700, INKG);
+    s += txt(330, 432, 'Chaque gamète a moitié moins de chromosomes (n)', 11, 500, AX);
+    return wrap(s + '</svg>', '');
+  })();
 
   var sections = {};
 
   sections.synthese = `<div id="synthese" class="section active">
     <div style="text-align:center; margin-bottom:1.5rem;">
       <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">🧬 Biologie</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">L'organisation du vivant & la cellule</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">La division cellulaire & la génétique (pages 12 → 24)</p>
     </div>
 
     <div class="synth-section">
-      <h2>1. Les niveaux d'organisation du vivant</h2>
-      <p>Le vivant s'organise en une <strong>hiérarchie</strong> de niveaux, du plus petit au plus grand. Chaque niveau est construit à partir du précédent : « la vie repose sur l'intégrité de ces niveaux ».</p>
+      <h2>1. Le cycle cellulaire & la réplication de l'ADN</h2>
+      <p>Une cellule passe par un <strong>cycle</strong> : elle grandit, <strong>copie son ADN</strong>, puis se divise. Les phases se suivent toujours dans le même ordre : <strong>G1, S, G2</strong> (l'<strong>interphase</strong>) puis <strong>M</strong> (la <strong>mitose</strong>).</p>
       <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:1rem 0; font-size:13px;">
-        ${['Atome','Molécule','Organite','Cellule','Tissu','Organe','Système','Organisme','Population','Communauté','Écosystème'].map(function (n, i, a) {
+        ${['G1 (croissance)', 'S (copie de l\'ADN)', 'G2 (préparation)', 'Mitose (M)'].map(function (n, i, a) {
           return '<span style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 10px; font-weight:600; color:var(--text-primary);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
         }).join('')}
       </div>
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Imagine des « poupées russes » : des <strong>atomes</strong> s'assemblent en <strong>molécules</strong>, qui forment des <strong>organites</strong>, qui composent une <strong>cellule</strong>. Plein de cellules identiques = un <strong>tissu</strong>, plusieurs tissus = un <strong>organe</strong> (ex. le cœur), des organes qui travaillent ensemble = un <strong>système</strong>, et tous les systèmes = un <strong>organisme</strong> (toi !). Au-delà : les organismes forment des populations, des communautés, et l'écosystème.</div>
-      </div>
-    </div>
-
-    <div class="synth-section">
-      <h2>2. La cellule : l'unité du vivant</h2>
-      <p>La <strong>cellule</strong> est la plus petite unité capable de vivre. On distingue deux grands types selon la présence (ou non) d'un noyau :</p>
-      <div class="grid2" style="margin-top:1rem;">
-        <div class="card">
-          <h3>🦠 Cellule procaryote</h3>
-          <div style="text-align:center;">${SVG_BACT}</div>
-          <ul style="font-size:14px; color:var(--text-secondary); line-height:1.9;">
-            <li><strong>Pas de noyau</strong> : l'ADN est <em>libre</em> dans le cytoplasme (région nucléoïde).</li>
-            <li>Pas d'organites entourés d'une membrane.</li>
-            <li>Petite et simple. Ex. : <strong>bactérie</strong> (≈ 2 µm).</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>🔬 Cellule eucaryote</h3>
-          <div style="text-align:center;">${SVG_ANIMAL}</div>
-          <ul style="font-size:14px; color:var(--text-secondary); line-height:1.9;">
-            <li><strong>Un vrai noyau</strong> qui enferme l'ADN.</li>
-            <li>De nombreux <strong>organites</strong> entourés d'une membrane.</li>
-            <li>Plus grande et complexe. Ex. : cellule animale, végétale, levure.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">La différence n°1 = <strong>le noyau</strong>. « Pro-caryote » veut dire « avant le noyau » (pas de noyau, ADN qui flotte), « eu-caryote » = « vrai noyau » (ADN bien rangé dans un coffre, le noyau). Les bactéries sont procaryotes ; les animaux, plantes et champignons sont eucaryotes.</div>
-      </div>
-    </div>
-
-    <div class="synth-section">
-      <h2>3. Les organites et leurs rôles</h2>
-      <p>Chaque organite a une fonction précise (comme les organes d'un corps, mais à l'échelle de la cellule) :</p>
-      <ul style="line-height:2.1;">
-        <li><strong>Noyau</strong> : contient l'<strong>ADN</strong> (l'information génétique) ; chef d'orchestre de la cellule.</li>
-        <li><strong>Membrane plasmique</strong> : enveloppe la cellule, contrôle les entrées/sorties.</li>
-        <li><strong>Cytoplasme</strong> : le « gel » qui remplit la cellule, où baignent les organites.</li>
-        <li><strong>Mitochondrie</strong> : produit l'<strong>énergie</strong> (respiration cellulaire) ⚡.</li>
-        <li><strong>Ribosomes</strong> : fabriquent les <strong>protéines</strong>.</li>
-        <li><strong>Réticulum endoplasmique</strong> : transporte/fabrique (rugueux = avec ribosomes ; lisse = sans).</li>
-        <li><strong>Appareil de Golgi</strong> : emballe et expédie les molécules.</li>
-        <li><strong>Lysosome</strong> : « poubelle/recyclage », digère les déchets.</li>
-      </ul>
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Pense à la cellule comme une <strong>usine</strong> : le <strong>noyau</strong> = le bureau du patron (les plans/ADN), les <strong>ribosomes</strong> = les ouvriers qui fabriquent (protéines), les <strong>mitochondries</strong> = la centrale électrique (énergie), le <strong>Golgi</strong> = le service d'emballage/expédition, les <strong>lysosomes</strong> = le recyclage, et la <strong>membrane</strong> = la clôture avec ses portes.</div>
-      </div>
-    </div>
-
-    <div class="synth-section">
-      <h2>4. Cellule animale vs cellule végétale</h2>
-      <div class="grid2" style="margin-top:0.5rem;">
-        <div class="card"><h3>🐾 Cellule animale</h3><div style="text-align:center;">${SVG_ANIMAL}</div></div>
-        <div class="card"><h3>🌿 Cellule végétale</h3><div style="text-align:center;">${SVG_PLANT}</div></div>
-      </div>
-      <p style="margin-top:1rem;">La cellule <strong>végétale</strong> possède 3 choses en plus :</p>
       <ul style="line-height:2;">
-        <li><strong>Paroi</strong> (rigide, autour de la membrane) → soutient la plante.</li>
-        <li><strong>Chloroplastes</strong> (verts) → font la <strong>photosynthèse</strong> (fabriquent du sucre avec la lumière).</li>
-        <li><strong>Grande vacuole</strong> centrale → réserve d'eau, maintient la cellule « gonflée ».</li>
+        <li><strong>Interphase</strong> (G1 + S + G2) : la phase la plus longue ; la cellule grandit et <strong>réplique son ADN</strong> (pendant la phase S, la quantité d'ADN passe de 1 à 2).</li>
+        <li><strong>G0</strong> : une cellule peut sortir du cycle et se mettre « au repos » (pas de division).</li>
       </ul>
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Pour différencier : si la cellule a une <strong>paroi rigide</strong>, des parties <strong>vertes</strong> (chloroplastes) et une <strong>grosse bulle d'eau</strong> (vacuole) → c'est une cellule <strong>végétale</strong>. Sinon, c'est une cellule <strong>animale</strong> (forme plus souple et arrondie).</div>
-      </div>
-    </div>
-
-    <div class="synth-section">
-      <h2>5. L'ADN & les chromosomes</h2>
+      <div style="text-align:center; margin:0.8rem 0;">${SVG_MITOSE}</div>
+      <p style="margin-top:1rem;"><strong>La réplication de l'ADN</strong> (phase S) : l'<strong>ADN polymérase</strong> ouvre la double hélice. Chaque brin sert de <strong>modèle</strong> ; des <strong>nucléotides libres</strong> se placent en face par <strong>complémentarité</strong> des bases (A–T, C–G). On obtient <strong>2 molécules d'ADN identiques</strong>.</p>
       <div style="text-align:center; margin:0.5rem 0;">${SVG_DNA}</div>
-      <ul style="line-height:2.1;">
-        <li>L'<strong>ADN</strong> est une molécule en forme de <strong>double hélice</strong> (2 brins enroulés).</li>
-        <li>Il est fait de <strong>nucléotides</strong> = sucre (désoxyribose) + phosphate + une <strong>base azotée</strong>.</li>
-        <li>4 bases : <strong>A</strong>, <strong>T</strong>, <strong>C</strong>, <strong>G</strong>. Elles s'apparient toujours : <strong>A–T</strong> et <strong>C–G</strong>.</li>
-        <li>L'ADN est le <strong>support de l'hérédité</strong> : il porte l'information transmise des parents aux enfants.</li>
-        <li>Chez l'humain : <strong>23 paires</strong> de chromosomes (dont 1 paire sexuelle : XX = femme, XY = homme).</li>
-      </ul>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">L'ADN, c'est le <strong>mode d'emploi</strong> qui fabrique et fait fonctionner ton corps. Il ressemble à une <strong>échelle torsadée</strong> : les deux montants sont les brins, et les barreaux sont les paires de bases (A avec T, C avec G — toujours ces couples). Quand l'ADN est très condensé, il forme les <strong>chromosomes</strong> : on en a 46 (23 paires).</div>
+        <div class="simple-exp-content">Avant de se couper en deux, la cellule <strong>photocopie</strong> tout son ADN (phase S) pour que les 2 futures cellules aient chacune la copie complète. La machine qui photocopie, c'est l'<strong>ADN polymérase</strong>, et elle respecte toujours les paires A–T et C–G.</div>
       </div>
     </div>
 
     <div class="synth-section">
-      <h2>6. Le cycle cellulaire & la mitose</h2>
-      <p>Une cellule passe par un <strong>cycle</strong> : elle grandit, copie son ADN, puis se divise. Les phases se succèdent toujours dans le même ordre : <strong>G1, S, G2</strong> (l'<strong>interphase</strong>) puis <strong>M</strong> (la <strong>mitose</strong>).</p>
-      <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:1rem 0; font-size:13px;">
-        ${['G1','S — copie de l\'ADN','G2','Mitose (M)'].map(function (n, i, a) {
-          return '<span style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 10px; font-weight:600; color:var(--text-primary);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
-        }).join('')}
-      </div>
-      <ul style="line-height:2;">
-        <li><strong>Interphase</strong> (G1 + S + G2) : la phase la plus longue ; la cellule grandit et <strong>réplique son ADN</strong> (pendant la phase S).</li>
-        <li><strong>Mitose (M)</strong> : division du <strong>noyau</strong> → <strong>2 cellules-filles identiques</strong> (même information génétique que la cellule-mère).</li>
-        <li>Après la mitose : la cellule repart en G1, ou entre en <strong>G0</strong> (repos, sans division).</li>
-      </ul>
-      <p style="margin-top:1rem;"><strong>Les étapes visibles de la mitose :</strong></p>
+      <h2>2. La mitose</h2>
+      <p>La <strong>mitose</strong> divise une cellule en <strong>2 cellules filles identiques</strong> à la cellule mère (même ADN). Elle sert à la <strong>croissance</strong> et à la <strong>réparation</strong> des tissus. Quand l'ADN se condense, chaque chromosome dédoublé a une forme en <strong>X</strong> : 2 <strong>chromatides-sœurs</strong> reliées par le <strong>centromère</strong>.</p>
       <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0.6rem 0 1rem; font-size:13px;">
-        ${['Interphase','Prophase','Métaphase','Anaphase','Télophase'].map(function (n, i, a) {
+        ${['Prophase', 'Métaphase', 'Anaphase', 'Télophase'].map(function (n, i, a) {
           return '<span style="background:rgba(167,139,250,0.12); border:1px solid var(--color-nav); border-radius:8px; padding:6px 10px; font-weight:600; color:var(--color-nav);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
         }).join('')}
       </div>
-      <p>Quand l'ADN se condense au maximum, il prend une forme en <strong>X</strong> : c'est un chromosome <strong>dédoublé</strong>, fait de 2 <strong>chromatides-sœurs</strong> identiques reliées par le <strong>centromère</strong>.</p>
-      <div style="text-align:center; margin:0.8rem 0;">
-        ${SVG_MITOSE}
-      </div>
+      <ul style="line-height:2;">
+        <li><strong>Prophase</strong> : les chromosomes se condensent (deviennent visibles), l'enveloppe du noyau disparaît, le fuseau se forme.</li>
+        <li><strong>Métaphase</strong> : les chromosomes s'<strong>alignent au milieu</strong> de la cellule (plaque équatoriale).</li>
+        <li><strong>Anaphase</strong> : les <strong>chromatides-sœurs se séparent</strong> et partent vers les deux pôles opposés.</li>
+        <li><strong>Télophase</strong> : deux nouveaux noyaux se forment ; la cellule se prépare à se couper.</li>
+        <li>Puis le <strong>partage du cytoplasme</strong> (<strong>cytodiérèse</strong>) → 2 cellules filles.</li>
+      </ul>
       <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Pense au cycle comme à la « vie » d'une cellule : elle <strong>grandit</strong>, elle <strong>photocopie</strong> son ADN (phase S), puis elle se <strong>coupe en deux</strong> (mitose). Avant de se diviser, chaque chromosome a été copié → il a 2 moitiés identiques (les <strong>chromatides-sœurs</strong>) collées au milieu (le <strong>centromère</strong>), d'où la forme en X. La mitose donne 2 cellules <strong>identiques</strong> à la cellule de départ : c'est comme ça que ton corps grandit et répare ses tissus.</div>
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Moyen mnémo</button>
+        <div class="simple-exp-content"><strong>P-M-A-T</strong> : la cellule <strong>P</strong>répare, <strong>M</strong> met au milieu, <strong>A</strong> sépare, <strong>T</strong> termine. Résultat : 2 cellules <strong>identiques</strong> (2n → 2n, le nombre de chromosomes ne change pas).</div>
       </div>
     </div>
 
     <div class="synth-section">
-      <h2>7. La génétique : l'hérédité (Mendel)</h2>
+      <h2>3. Le caryotype & la ploïdie</h2>
+      <p>Le <strong>caryotype</strong> est la « photo » des chromosomes d'une cellule, <strong>classés par paires</strong> (du plus grand au plus petit). Chez l'humain : <strong>23 paires</strong> = <strong>46 chromosomes</strong>.</p>
+      <ul style="line-height:2;">
+        <li><strong>Autosomes</strong> : les 22 premières paires (chromosomes « ordinaires »).</li>
+        <li><strong>Gonosomes</strong> : la paire sexuelle → <strong>XX</strong> (femme) ou <strong>XY</strong> (homme).</li>
+        <li><strong>2n (diploïde)</strong> : les chromosomes vont par <strong>paires</strong> (cellules du corps). <strong>n (haploïde)</strong> : un seul de chaque paire (les <strong>gamètes</strong>).</li>
+      </ul>
+      <div class="key-rule"><p class="note">Humain : <strong>2n = 46</strong> · gamètes <strong>n = 23</strong>. Le chimpanzé a 2n = 48 : des espèces proches ont des caryotypes ressemblants.</p></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">« 2n » veut dire que tu as <strong>2 exemplaires</strong> de chaque chromosome (un du père, un de la mère). Les gamètes (spermatozoïde, ovule) n'en ont qu'<strong>un seul</strong> exemplaire : ils sont « n ». Comme ça, à la fécondation, n + n redonne 2n.</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>4. La méiose</h2>
+      <p>La <strong>méiose</strong> fabrique les <strong>gamètes</strong> (spermatozoïdes, ovules). À partir d'<strong>une</strong> cellule (2n), elle réalise <strong>2 divisions successives</strong> et donne <strong>4 cellules</strong> à <strong>n</strong> chromosomes (deux fois moins).</p>
+      <div style="text-align:center; margin:0.8rem 0;">${SVG_MEIOSE}</div>
+      <ul style="line-height:2;">
+        <li><strong>1ʳᵉ division (réductionnelle)</strong> : on sépare les <strong>chromosomes homologues</strong> → on passe de <strong>2n à n</strong>.</li>
+        <li><strong>2ᵉ division</strong> : comme une mitose, on sépare les <strong>chromatides</strong> → 4 cellules à n.</li>
+        <li>La méiose est une grande source de <strong>variabilité</strong> (brassage) : chaque gamète est unique.</li>
+      </ul>
+      <div class="formula-box vecteur">
+        <h3>Mitose vs méiose</h3>
+        <p class="note"><strong>Mitose</strong> : 1 cellule → <strong>2</strong> cellules <strong>identiques</strong> (2n → 2n), pour la croissance. <br><strong>Méiose</strong> : 1 cellule → <strong>4</strong> cellules <strong>différentes</strong> (2n → n), pour fabriquer les gamètes.</p>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>5. La fécondation</h2>
+      <p>La <strong>fécondation</strong> est la <strong>fusion</strong> d'un gamète mâle (spermatozoïde, n) et d'un gamète femelle (ovule, n). Elle forme la <strong>cellule-œuf</strong> (zygote) à <strong>2n</strong> chromosomes.</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:18px;">gamète (n) + gamète (n) → cellule-œuf (2n)</div></div>
+      <ul style="line-height:2;">
+        <li>La fécondation <strong>rétablit</strong> le nombre de chromosomes de l'espèce (2n).</li>
+        <li>Comme la rencontre des gamètes se fait <strong>au hasard</strong>, chaque enfant est <strong>unique</strong>.</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">La méiose <strong>divise par 2</strong> (2n → n) pour faire les gamètes, et la fécondation <strong>remet ×2</strong> (n + n → 2n). C'est l'équilibre : sinon le nombre de chromosomes doublerait à chaque génération !</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>6. Le monohybridisme (Mendel)</h2>
       <figure class="hfig hfig-float" style="max-width:140px"><img src="mendel.jpg" alt="Gregor Mendel" loading="lazy"><figcaption>Gregor Mendel (1822-1884), le père de la génétique</figcaption></figure>
-      <p><strong>L'hérédité</strong> = la <strong>transmission des caractères</strong> des parents aux enfants. <strong>Gregor Mendel</strong>, un moine, en a découvert les lois en croisant des <strong>petits pois</strong>.</p>
+      <p>Le <strong>monohybridisme</strong> = l'étude de la transmission d'<strong>un seul</strong> caractère. <strong>Mendel</strong> l'a étudié en croisant des <strong>petits pois</strong>.</p>
       <p><strong>Vocabulaire essentiel :</strong></p>
       <ul style="line-height:1.9;">
-        <li><strong>Gène</strong> : portion d'ADN qui code un caractère (ex. la couleur des yeux).</li>
-        <li><strong>Allèle</strong> : une version d'un gène. On en a <strong>2</strong> par gène (un de chaque parent).</li>
-        <li><strong>Dominant</strong> (lettre MAJUSCULE, ex. <em>A</em>) : s'exprime même seul. <strong>Récessif</strong> (minuscule, <em>a</em>) : ne s'exprime que si les <strong>2</strong> allèles sont récessifs.</li>
-        <li><strong>Homozygote</strong> : 2 allèles identiques (AA ou aa). <strong>Hétérozygote</strong> : 2 différents (Aa).</li>
-        <li><strong>Génotype</strong> : les allèles (AA, Aa, aa). <strong>Phénotype</strong> : ce qu'on voit (l'apparence).</li>
+        <li><strong>Gène</strong> : portion d'ADN qui détermine un caractère. <strong>Allèle</strong> : une version d'un gène (on en a 2, un par parent).</li>
+        <li><strong>Dominant</strong> (MAJUSCULE, A) : s'exprime même seul. <strong>Récessif</strong> (minuscule, a) : seulement si <strong>aa</strong>.</li>
+        <li><strong>Homozygote</strong> : 2 allèles identiques (AA ou aa) = <strong>lignée pure</strong>. <strong>Hétérozygote</strong> : 2 différents (Aa).</li>
+        <li><strong>Génotype</strong> : les allèles (AA, Aa, aa). <strong>Phénotype</strong> : ce qu'on voit.</li>
       </ul>
-      <p>Exemple de Mendel : pois jaune pur (AA) × pois vert pur (aa) → en <strong>F1</strong> tous jaunes (<strong>Aa</strong>). On croise ensuite F1 × F1 → en <strong>F2</strong> le vert réapparaît !</p>
+      <p>Expérience de Mendel : pois lisse pur (AA) × pois ridé pur (aa) → en <strong>F1</strong> tous lisses (<strong>Aa</strong>). On croise F1 × F1 → en <strong>F2</strong> le ridé réapparaît !</p>
       <div class="key-rule"><div class="formula-main" style="font-size:16px;">Aa × Aa → 1 AA : 2 Aa : 1 aa (génotype) → 3 dominants : 1 récessif (phénotype)</div></div>
       <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 L'exemple des yeux</button>
-        <div class="simple-exp-content">Les yeux <strong>bruns (B)</strong> sont dominants, les yeux <strong>bleus (b)</strong> récessifs. Deux parents aux yeux bruns mais <strong>porteurs</strong> (génotype <strong>Bb</strong> chacun) peuvent avoir un enfant aux <strong>yeux bleus</strong> : il faut qu'il reçoive un <strong>b</strong> du père ET un <strong>b</strong> de la mère (génotype <strong>bb</strong>). C'est <strong>1 chance sur 4</strong> ! On le visualise avec l'<strong>échiquier de Punnett</strong> → essaie-le dans l'onglet <strong>Exercices</strong>.</div>
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 L'échiquier de Punnett</button>
+        <div class="simple-exp-content">Pour trouver les enfants possibles, on croise les allèles dans un tableau (échiquier de Punnett). Aa × Aa donne 1 AA, 2 Aa et 1 aa → on voit <strong>3</strong> individus au caractère dominant pour <strong>1</strong> au caractère récessif. Essaie-le dans l'onglet <strong>Exercices</strong> !</div>
       </div>
     </div>
   </div>`;
@@ -555,14 +338,14 @@
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:1.2rem;">📌 À retenir — l'essentiel</h2>
     <div class="grid2">
       <div>
-        <div class="formula-box"><h3>Niveaux du vivant</h3><p class="note">Atome → Molécule → Organite → Cellule → Tissu → Organe → Système → Organisme → Population → Communauté → Écosystème.</p></div>
-        <div class="formula-box"><h3>Procaryote vs Eucaryote</h3><p class="note"><strong>Procaryote</strong> : pas de noyau, ADN libre (bactérie). <strong>Eucaryote</strong> : vrai noyau + organites (animal, végétal, champignon).</p></div>
-        <div class="formula-box"><h3>Animale vs Végétale</h3><p class="note">La <strong>végétale</strong> a en plus : paroi, chloroplastes, grande vacuole.</p></div>
+        <div class="formula-box"><h3>Cycle cellulaire</h3><p class="note">Interphase (<strong>G1 → S → G2</strong>) puis <strong>mitose (M)</strong>. L'ADN est copié en <strong>phase S</strong> (quantité 1 → 2).</p></div>
+        <div class="formula-box"><h3>Réplication de l'ADN</h3><p class="note"><strong>ADN polymérase</strong> · chaque brin sert de modèle · complémentarité <strong>A–T</strong> et <strong>C–G</strong> · 2 molécules identiques.</p></div>
+        <div class="formula-box"><h3>Mitose</h3><p class="note"><strong>P-M-A-T</strong> → <strong>2 cellules identiques</strong> (2n → 2n). Croissance & réparation. Cytodiérèse = partage du cytoplasme.</p></div>
       </div>
       <div>
-        <div class="formula-box"><h3>Rôle des organites</h3><p class="note">Noyau = ADN · Mitochondrie = énergie · Ribosome = protéines · Golgi = emballage · Lysosome = recyclage · Membrane = échanges.</p></div>
-        <div class="formula-box"><h3>ADN</h3><p class="note">Double hélice · nucléotides (sucre + phosphate + base) · bases A–T et C–G · support de l'hérédité.</p></div>
-        <div class="formula-box"><h3>Chromosomes (humain)</h3><p class="note">23 paires (46 au total) · paire sexuelle : XX (femme), XY (homme).</p></div>
+        <div class="formula-box"><h3>Caryotype & ploïdie</h3><p class="note">Humain : <strong>23 paires = 46</strong> (2n). Autosomes (22 paires) + gonosomes (<strong>XX</strong>/<strong>XY</strong>). Gamètes = <strong>n = 23</strong>.</p></div>
+        <div class="formula-box"><h3>Méiose</h3><p class="note">1 cellule (2n) → <strong>2 divisions</strong> → <strong>4 gamètes (n)</strong>. Réduit de moitié (2n → n) + brassage.</p></div>
+        <div class="formula-box"><h3>Fécondation & Mendel</h3><p class="note">n + n → <strong>2n</strong> (cellule-œuf). Aa × Aa → <strong>3 dominants : 1 récessif</strong>.</p></div>
       </div>
     </div>
   </div>`;
@@ -570,36 +353,40 @@
   sections.methodes = `<div id="methodes" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:1rem;">📝 Méthodes</h2>
     <div class="methods-tabs">
-      <button class="mtab on" onclick="showMethod('bm1', this)">Reconnaître une cellule</button>
-      <button class="mtab" onclick="showMethod('bm2', this)">Associer organite & rôle</button>
+      <button class="mtab on" onclick="showMethod('bm1', this)">Mitose ou méiose ?</button>
+      <button class="mtab" onclick="showMethod('bm2', this)">Faire un échiquier de Punnett</button>
     </div>
     <div id="bm1" class="method-content on">
-      <div class="formula-box"><h3>Méthode — Identifier le type de cellule</h3></div>
+      <div class="formula-box"><h3>Méthode — Reconnaître mitose ou méiose</h3></div>
       <div class="step-list">
-        <div class="step-item"><div class="step-num">1</div><div class="step-text">Y a-t-il un <strong>noyau</strong> ? Non → <strong>procaryote</strong> (bactérie). Oui → eucaryote, passe à l'étape 2.
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">Combien de cellules filles à la fin ? <strong>2</strong> → mitose · <strong>4</strong> → méiose.
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-          <div class="why-content">Le noyau est le critère n°1 : il sépare les deux grands mondes du vivant. Sans noyau = procaryote ; avec noyau = eucaryote.</div>
+          <div class="why-content">La méiose enchaîne 2 divisions, donc elle donne 4 cellules ; la mitose n'en fait qu'une, donc 2 cellules.</div>
         </div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-text">Y a-t-il une <strong>paroi</strong>, des <strong>chloroplastes</strong> (verts) et une <strong>grande vacuole</strong> ? Oui → <strong>végétale</strong>.
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">Le nombre de chromosomes change-t-il ? <strong>Non</strong> (2n → 2n) → mitose · <strong>Oui</strong>, divisé par 2 (2n → n) → méiose.
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-          <div class="why-content">Ces 3 éléments n'existent que chez les végétaux : ce sont les indices décisifs pour une cellule végétale.</div>
+          <div class="why-content">Seule la méiose est « réductionnelle » : elle sépare les chromosomes homologues pour faire des gamètes à n.</div>
         </div></div>
-        <div class="step-item"><div class="step-num">3</div><div class="step-text">Sinon (pas de paroi ni chloroplaste, forme souple) → <strong>animale</strong>.
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">Cellules identiques (croissance) → mitose · gamètes différents (reproduction) → méiose.
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-          <div class="why-content">Par élimination : une cellule eucaryote sans paroi ni chloroplaste est une cellule animale.</div>
+          <div class="why-content">La mitose copie à l'identique ; la méiose brasse les chromosomes → chaque gamète est unique.</div>
         </div></div>
       </div>
     </div>
     <div id="bm2" class="method-content">
-      <div class="formula-box"><h3>Méthode — Retenir le rôle des organites</h3></div>
+      <div class="formula-box"><h3>Méthode — L'échiquier de Punnett (Aa × Aa)</h3></div>
       <div class="step-list">
-        <div class="step-item"><div class="step-num">1</div><div class="step-text">Associe chaque organite à une image d'<strong>usine</strong> : noyau = bureau (plans), ribosome = ouvrier, mitochondrie = centrale électrique.
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">Écris les <strong>gamètes</strong> de chaque parent : Aa donne deux gamètes possibles, <strong>A</strong> et <strong>a</strong>.
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-          <div class="why-content">Une analogie concrète aide à mémoriser durablement : chaque organite « fait un métier » dans l'usine-cellule.</div>
+          <div class="why-content">À la méiose, les 2 allèles se séparent : chaque gamète n'en reçoit qu'un seul.</div>
         </div></div>
-        <div class="step-item"><div class="step-num">2</div><div class="step-text">Golgi = emballage/expédition · Lysosome = recyclage · Membrane = clôture avec portes.
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">Croise les gamètes dans le tableau : tu obtiens <strong>AA, Aa, Aa, aa</strong>.
           <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-          <div class="why-content">Regrouper les organites « logistiques » ensemble facilite la révision : ils gèrent le tri, l'envoi et le nettoyage.</div>
+          <div class="why-content">Chaque case = un allèle du père + un de la mère → le génotype de l'enfant possible.</div>
+        </div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">Compte les phénotypes : <strong>3 dominants</strong> (AA + 2 Aa) pour <strong>1 récessif</strong> (aa).
+          <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
+          <div class="why-content">AA et Aa montrent le caractère dominant ; seul aa montre le caractère récessif → rapport 3 : 1.</div>
         </div></div>
       </div>
     </div>
@@ -608,128 +395,133 @@
   sections.exercices = `<div id="exercices" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.5rem;">✏️ Exercices guidés</h2>
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
-    <p style="color:var(--text-secondary); margin:-0.6rem 0 1rem; font-size:14px;">🧩 <strong>Légende les schémas</strong> : remplis chaque case numérotée, puis « Corriger » (la correction s'affiche dessous).</p>
-    ${labelExo('🦠', 'la bactérie (procaryote)', 'procaryote-blank.png', PROCA_PTS)}
-    ${labelExo('🐾', 'la cellule animale', 'cellule-animale-blank.png', ANIM_PTS)}
-    ${labelExo('🌿', 'la cellule végétale', 'cellule-vegetale-blank.png', VEG_PTS)}
     <div class="exercise-card">
-      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 L'échiquier de Punnett — yeux bruns (B) × bleus (b)</h3>
-      <p style="color:var(--text-secondary); margin-bottom:0.8rem;">Deux parents aux yeux bruns sont <strong>porteurs</strong> (génotype <strong>Bb</strong>). Écris le génotype de chaque case (ex. « Bb »), puis clique sur <strong>Corriger</strong>.</p>
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 L'échiquier de Punnett — pois lisse (A) × ridé (a)</h3>
+      <p style="color:var(--text-secondary); margin-bottom:0.8rem;">On croise deux pois hétérozygotes (génotype <strong>Aa</strong>). Écris le génotype de chaque case (ex. « Aa »), puis clique sur <strong>Corriger</strong>.</p>
       <table class="punnett">
-        <tr><th class="corner">Bb × Bb</th><th>B</th><th>b</th></tr>
-        <tr><th>B</th><td><input data-pa="BB" aria-label="case 1" autocomplete="off" spellcheck="false"></td><td><input data-pa="Bb" aria-label="case 2" autocomplete="off" spellcheck="false"></td></tr>
-        <tr><th>b</th><td><input data-pa="Bb" aria-label="case 3" autocomplete="off" spellcheck="false"></td><td><input data-pa="bb" aria-label="case 4" autocomplete="off" spellcheck="false"></td></tr>
+        <tr><th class="corner">Aa × Aa</th><th>A</th><th>a</th></tr>
+        <tr><th>A</th><td><input data-pa="AA" aria-label="case 1" autocomplete="off" spellcheck="false"></td><td><input data-pa="Aa" aria-label="case 2" autocomplete="off" spellcheck="false"></td></tr>
+        <tr><th>a</th><td><input data-pa="Aa" aria-label="case 3" autocomplete="off" spellcheck="false"></td><td><input data-pa="aa" aria-label="case 4" autocomplete="off" spellcheck="false"></td></tr>
       </table>
       <div class="lblexo-foot"><button class="step-btn" onclick="checkPunnett(this)">✓ Corriger</button>
       <button class="step-btn" onclick="resetPunnett(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button></div>
       <div class="punnett-res"></div>
     </div>
     <div class="exercise-card">
-      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Quel type de cellule ?</h3>
-      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> une cellule possède un noyau, une paroi rigide, des chloroplastes et une grande vacuole. Quel type ?</p></div>
-      <button class="step-btn" onclick="showExerciseStep(this, 301)">▶ Commencer</button>
-      <div class="exercise-step" data-step="301"><span class="step-badge">Étape 1 sur 2</span><p>Elle a un <strong>noyau</strong> → c'est une cellule <strong>eucaryote</strong> (pas une bactérie).</p><button class="step-btn" onclick="showExerciseStep(this, 302)">▶ Conclusion</button></div>
-      <div class="exercise-step" data-step="302"><span class="step-badge">Conclusion</span><p>Paroi + chloroplastes + grande vacuole → <strong>cellule végétale</strong>. ✅</p></div>
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Mitose : remettre les phases dans l'ordre</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> dans quel ordre se déroulent ces phases : Anaphase, Prophase, Télophase, Métaphase ?</p></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 321)">▶ Indice</button>
+      <div class="exercise-step" data-step="321"><span class="step-badge">Indice</span><p>Moyen mnémo : <strong>P-M-A-T</strong>. La cellule prépare (P), aligne (M), sépare (A), puis termine (T).</p><button class="step-btn" onclick="showExerciseStep(this, 322)">▶ Réponse</button></div>
+      <div class="exercise-step" data-step="322"><span class="step-badge">Réponse</span><p><strong>Prophase → Métaphase → Anaphase → Télophase</strong> → 2 cellules filles identiques. ✅</p></div>
+    </div>
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧪 Mitose ou méiose ?</h3>
+      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> une cellule (2n = 46) donne 4 cellules à 23 chromosomes. Mitose ou méiose ?</p></div>
+      <button class="step-btn" onclick="showExerciseStep(this, 331)">▶ Étape 1</button>
+      <div class="exercise-step" data-step="331"><span class="step-badge">Étape 1 sur 2</span><p>4 cellules filles + le nombre de chromosomes a été <strong>divisé par 2</strong> (46 → 23).</p><button class="step-btn" onclick="showExerciseStep(this, 332)">▶ Conclusion</button></div>
+      <div class="exercise-step" data-step="332"><span class="step-badge">Conclusion</span><p>C'est la <strong>méiose</strong> (elle fabrique les gamètes : 2n → n). ✅</p></div>
     </div>
     <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 Quelle base s'apparie avec A ?</h3>
       <button class="step-btn" onclick="showExerciseStep(this, 311)">▶ Voir la réponse</button>
-      <div class="exercise-step" data-step="311"><span class="step-badge">Réponse</span><p>Dans l'ADN, l'adénine (<strong>A</strong>) s'apparie toujours avec la <strong>thymine (T)</strong>. (Et C avec G.) ✅</p></div>
-    </div>
-    <div class="exercise-card">
-      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Cycle cellulaire : remettre dans l'ordre</h3>
-      <div style="background:rgba(167,139,250,0.06); border-radius:8px; padding:1rem; margin-bottom:1rem;"><p><strong>Énoncé :</strong> dans quel ordre se déroulent ces phases de la mitose : Anaphase, Prophase, Télophase, Métaphase ?</p></div>
-      <button class="step-btn" onclick="showExerciseStep(this, 321)">▶ Indice</button>
-      <div class="exercise-step" data-step="321"><span class="step-badge">Indice</span><p>Moyen mnémo : <strong>P-M-A-T</strong>. La cellule prépare (P), aligne (M), sépare (A), puis termine (T).</p><button class="step-btn" onclick="showExerciseStep(this, 322)">▶ Réponse</button></div>
-      <div class="exercise-step" data-step="322"><span class="step-badge">Réponse</span><p><strong>Prophase → Métaphase → Anaphase → Télophase</strong> → 2 cellules-filles identiques. ✅</p></div>
+      <div class="exercise-step" data-step="311"><span class="step-badge">Réponse</span><p>Lors de la réplication, l'adénine (<strong>A</strong>) s'apparie toujours avec la <strong>thymine (T)</strong>. (Et C avec G.) ✅</p></div>
     </div>
   </div>`;
 
   sections.erreurs = `<div id="erreurs" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:1.5rem;">⚠️ Erreurs fréquentes</h2>
     <div class="synth-section">
-      <div class="formula-box"><h3>❌ Croire que la bactérie a un noyau</h3><p><strong>Correction :</strong> la bactérie est <strong>procaryote</strong> : son ADN est libre dans le cytoplasme, il n'y a <strong>pas de noyau</strong>.</p></div>
-      <div class="formula-box"><h3>❌ Confondre paroi et membrane</h3><p><strong>Correction :</strong> toutes les cellules ont une <strong>membrane plasmique</strong> ; seule la cellule végétale (et la bactérie) a en plus une <strong>paroi</strong> rigide par-dessus.</p></div>
-      <div class="formula-box"><h3>❌ Donner le mauvais appariement des bases</h3><p><strong>Correction :</strong> c'est toujours <strong>A–T</strong> et <strong>C–G</strong> (jamais A–C ou A–G).</p></div>
-      <div class="formula-box"><h3>❌ Confondre rôle des organites</h3><p><strong>Correction :</strong> l'énergie = <strong>mitochondrie</strong> (pas le noyau) ; les protéines = <strong>ribosomes</strong> ; l'ADN = <strong>noyau</strong>.</p></div>
+      <div class="formula-box"><h3>❌ Confondre mitose et méiose</h3><p><strong>Correction :</strong> la <strong>mitose</strong> donne 2 cellules identiques (2n → 2n) ; la <strong>méiose</strong> donne 4 gamètes (2n → n).</p></div>
+      <div class="formula-box"><h3>❌ Croire que la méiose sépare les chromatides dès le début</h3><p><strong>Correction :</strong> à la <strong>1ʳᵉ division</strong> de méiose, on sépare les <strong>chromosomes homologues</strong> (réduction 2n → n) ; les chromatides ne se séparent qu'à la 2ᵉ division.</p></div>
+      <div class="formula-box"><h3>❌ Se tromper d'appariement des bases</h3><p><strong>Correction :</strong> c'est toujours <strong>A–T</strong> et <strong>C–G</strong> (jamais A–C ou A–G).</p></div>
+      <div class="formula-box"><h3>❌ Confondre génotype et phénotype</h3><p><strong>Correction :</strong> le <strong>génotype</strong> = les allèles (Aa) ; le <strong>phénotype</strong> = l'apparence visible. AA et Aa ont le même phénotype.</p></div>
+      <div class="formula-box"><h3>❌ Oublier que la quantité d'ADN double en phase S</h3><p><strong>Correction :</strong> pendant la <strong>phase S</strong>, l'ADN est répliqué : la quantité passe de <strong>1 à 2</strong> avant la division.</p></div>
     </div>
   </div>`;
 
   var questions = [
-    { q: "Range du plus petit au plus grand :", opts: ["Atome → Cellule → Tissu → Organe", "Cellule → Atome → Organe → Tissu", "Organe → Tissu → Cellule → Atome", "Tissu → Cellule → Organe → Atome"], ans: 0, chapter: "organisation", difficulty: "facile", exp: "Du plus petit au plus grand : atome, (molécule, organite,) cellule, tissu, organe…" },
-    { q: "Un ensemble de cellules identiques forme :", opts: ["un tissu", "un organe", "un système", "un organisme"], ans: 0, chapter: "organisation", difficulty: "facile", exp: "Des cellules semblables qui travaillent ensemble = un tissu." },
-    { q: "Plusieurs organes qui coopèrent forment :", opts: ["un système", "un tissu", "une cellule", "une population"], ans: 0, chapter: "organisation", difficulty: "intermediaire", exp: "Ex. : le système digestif = estomac + intestin + foie…" },
-    { q: "La différence principale entre procaryote et eucaryote est :", opts: ["la présence d'un noyau", "la taille uniquement", "la couleur", "le nombre de mitochondries"], ans: 0, chapter: "cellule", difficulty: "facile", exp: "Eucaryote = vrai noyau ; procaryote = pas de noyau (ADN libre)." },
-    { q: "Une bactérie est une cellule :", opts: ["procaryote", "eucaryote", "végétale", "animale"], ans: 0, chapter: "cellule", difficulty: "facile", exp: "La bactérie n'a pas de noyau : c'est une procaryote." },
-    { q: "Chez une cellule procaryote, l'ADN est :", opts: ["libre dans le cytoplasme", "dans le noyau", "dans une mitochondrie", "dans la paroi"], ans: 0, chapter: "cellule", difficulty: "intermediaire", exp: "Pas de noyau → l'ADN flotte dans le cytoplasme (région nucléoïde)." },
-    { q: "Les animaux, plantes et champignons sont faits de cellules :", opts: ["eucaryotes", "procaryotes", "sans ADN", "sans membrane"], ans: 0, chapter: "cellule", difficulty: "facile", exp: "Tous ont un vrai noyau : ce sont des eucaryotes." },
-    { q: "Quel organite produit l'énergie de la cellule ?", opts: ["la mitochondrie", "le noyau", "le ribosome", "le lysosome"], ans: 0, chapter: "organites", difficulty: "facile", exp: "La mitochondrie réalise la respiration cellulaire → énergie." },
-    { q: "Quel organite contient l'ADN ?", opts: ["le noyau", "la mitochondrie", "le Golgi", "la membrane"], ans: 0, chapter: "organites", difficulty: "facile", exp: "Le noyau enferme l'ADN (information génétique)." },
-    { q: "Les ribosomes servent à :", opts: ["fabriquer les protéines", "produire l'énergie", "digérer les déchets", "stocker l'eau"], ans: 0, chapter: "organites", difficulty: "intermediaire", exp: "Les ribosomes assemblent les protéines." },
-    { q: "Quel organite digère/recycle les déchets ?", opts: ["le lysosome", "le ribosome", "le noyau", "le chloroplaste"], ans: 0, chapter: "organites", difficulty: "intermediaire", exp: "Le lysosome est la « poubelle/recyclage » de la cellule." },
-    { q: "Quelle structure contrôle les entrées et sorties de la cellule ?", opts: ["la membrane plasmique", "le cytoplasme", "le noyau", "le ribosome"], ans: 0, chapter: "organites", difficulty: "facile", exp: "La membrane plasmique enveloppe la cellule et filtre les échanges." },
-    { q: "Quelles structures n'existent QUE chez la cellule végétale ?", opts: ["paroi, chloroplastes, grande vacuole", "noyau, mitochondrie, ribosome", "membrane, cytoplasme, ADN", "Golgi, lysosome, noyau"], ans: 0, chapter: "organites", difficulty: "intermediaire", exp: "La cellule végétale a en plus : paroi, chloroplastes et grande vacuole." },
-    { q: "Les chloroplastes servent à :", opts: ["la photosynthèse", "la digestion", "la respiration", "la division"], ans: 0, chapter: "organites", difficulty: "intermediaire", exp: "Les chloroplastes (verts) captent la lumière pour fabriquer du sucre : photosynthèse." },
-    { q: "La forme de l'ADN est :", opts: ["une double hélice", "une sphère", "un cube", "une ligne droite"], ans: 0, chapter: "adn", difficulty: "facile", exp: "L'ADN est une double hélice (2 brins enroulés)." },
-    { q: "Dans l'ADN, l'adénine (A) s'apparie avec :", opts: ["la thymine (T)", "la cytosine (C)", "la guanine (G)", "l'adénine (A)"], ans: 0, chapter: "adn", difficulty: "intermediaire", exp: "Appariement : A–T et C–G." },
-    { q: "Combien de paires de chromosomes chez l'humain ?", opts: ["23", "46", "12", "2"], ans: 0, chapter: "adn", difficulty: "intermediaire", exp: "23 paires (46 chromosomes au total)." },
-    { q: "Le caryotype d'une femme contient la paire sexuelle :", opts: ["XX", "XY", "YY", "XO"], ans: 0, chapter: "adn", difficulty: "facile", exp: "Femme = XX, homme = XY." },
     { q: "Le cycle cellulaire comprend l'interphase et :", opts: ["la mitose", "la respiration", "la photosynthèse", "la digestion"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Cycle = interphase (G1, S, G2) + mitose (M)." },
-    { q: "L'ADN est copié (répliqué) pendant la phase :", opts: ["S", "G1", "G2", "M"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "La réplication de l'ADN a lieu en phase S de l'interphase." },
-    { q: "La mitose produit :", opts: ["2 cellules-filles identiques", "4 cellules différentes", "une seule grande cellule", "des gamètes"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "La mitose donne 2 cellules-filles identiques à la cellule-mère." },
-    { q: "Les 2 moitiés identiques d'un chromosome dédoublé s'appellent :", opts: ["chromatides-sœurs", "nucléotides", "ribosomes", "centrioles"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Un chromosome en X = 2 chromatides-sœurs reliées par le centromère." },
-    { q: "Qu'est-ce qui relie les deux chromatides-sœurs ?", opts: ["le centromère", "le noyau", "la membrane", "un ribosome"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "Le centromère relie les 2 chromatides-sœurs (point de jonction de l'X)." },
-    { q: "Ordre correct des phases visibles de la mitose :", opts: ["Prophase → Métaphase → Anaphase → Télophase", "Anaphase → Prophase → Télophase → Métaphase", "Télophase → Anaphase → Métaphase → Prophase", "Métaphase → Prophase → Télophase → Anaphase"], ans: 0, chapter: "cycle", difficulty: "difficile", exp: "PMAT : Prophase, Métaphase, Anaphase, Télophase." },
-    { q: "Qui est considéré comme le père de la génétique ?", opts: ["Gregor Mendel", "Charles Darwin", "Louis Pasteur", "Isaac Newton"], ans: 0, chapter: "genetique", difficulty: "facile", exp: "Mendel a découvert les lois de l'hérédité avec ses petits pois." },
-    { q: "Une version d'un gène s'appelle :", opts: ["un allèle", "un organite", "un ribosome", "un tissu"], ans: 0, chapter: "genetique", difficulty: "facile", exp: "On a 2 allèles par gène (un de chaque parent)." },
-    { q: "Le génotype « Aa » est dit :", opts: ["hétérozygote", "homozygote", "récessif pur", "dominant pur"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Deux allèles différents → hétérozygote (AA ou aa = homozygote)." },
-    { q: "Un allèle récessif s'exprime seulement si :", opts: ["les 2 allèles sont récessifs (aa)", "il y a au moins un dominant", "on est hétérozygote", "jamais"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Récessif visible uniquement en aa ; le dominant masque le récessif." },
-    { q: "Génotype vs phénotype ?", opts: ["génotype = les allèles ; phénotype = l'apparence", "l'inverse", "ce sont des synonymes", "génotype = la taille"], ans: 0, chapter: "genetique", difficulty: "intermediaire", exp: "Génotype = les gènes (AA, Aa, aa) ; phénotype = ce qu'on voit." },
-    { q: "Croisement Aa × Aa : quel rapport de phénotypes ?", opts: ["3 dominants : 1 récessif", "1 : 1", "tous identiques", "2 : 2"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Aa × Aa → 1 AA : 2 Aa : 1 aa → 3 dominants : 1 récessif." },
-    { q: "Deux parents aux yeux bruns porteurs (Bb) : un enfant aux yeux bleus (bb) est…", opts: ["possible (1 chance sur 4)", "impossible", "certain", "possible seulement si garçon"], ans: 0, chapter: "genetique", difficulty: "difficile", exp: "Bb × Bb → 1/4 bb (bleus). L'enfant peut différer de ses parents." },
-    { q: "Une cellule SANS noyau s'appelle…", opts: ["procaryote (ex. bactérie)", "eucaryote", "végétale", "animale"], ans: 0, chapter: "cellule", difficulty: "intermediaire", exp: "Procaryote = sans noyau (bactéries). Eucaryote = avec noyau." },
-    { q: "Qu'a la cellule végétale en plus de l'animale ?", opts: ["paroi, chloroplastes, grande vacuole", "un noyau", "des mitochondries", "rien"], ans: 0, chapter: "cellule", difficulty: "intermediaire", exp: "Paroi cellulaire + chloroplastes (photosynthèse) + vacuole centrale." },
-    { q: "L'organite qui permet la photosynthèse est…", opts: ["le chloroplaste", "la mitochondrie", "le noyau", "le lysosome"], ans: 0, chapter: "cellule", difficulty: "facile", exp: "Le chloroplaste (chlorophylle verte) capte la lumière." }
+    { q: "Dans quel ordre se déroule l'interphase ?", opts: ["G1 → S → G2", "S → G1 → G2", "G2 → S → G1", "M → S → G1"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Interphase : G1 (croissance), S (copie ADN), G2 (préparation)." },
+    { q: "L'ADN est copié (répliqué) pendant la phase :", opts: ["S", "G1", "G2", "M"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "La réplication de l'ADN a lieu en phase S." },
+    { q: "Pendant la phase S, la quantité d'ADN :", opts: ["double (passe de 1 à 2)", "diminue de moitié", "ne change pas", "devient nulle"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "L'ADN est répliqué : la quantité passe de 1 à 2." },
+    { q: "Quelle enzyme réalise la réplication de l'ADN ?", opts: ["l'ADN polymérase", "la mitochondrie", "le ribosome", "la lipase"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "L'ADN polymérase copie chaque brin de l'ADN." },
+    { q: "Lors de la réplication, l'adénine (A) s'apparie avec :", opts: ["la thymine (T)", "la cytosine (C)", "la guanine (G)", "l'adénine (A)"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Complémentarité des bases : A–T et C–G." },
+    { q: "Une cellule « au repos », sortie du cycle, est en phase :", opts: ["G0", "S", "M", "G2"], ans: 0, chapter: "cycle", difficulty: "intermediaire", exp: "G0 = phase de repos, hors cycle (pas de division)." },
+
+    { q: "La mitose produit :", opts: ["2 cellules filles identiques", "4 cellules différentes", "une seule grande cellule", "des gamètes"], ans: 0, chapter: "mitose", difficulty: "facile", exp: "La mitose donne 2 cellules filles identiques à la cellule mère." },
+    { q: "Ordre correct des phases de la mitose :", opts: ["Prophase → Métaphase → Anaphase → Télophase", "Anaphase → Prophase → Télophase → Métaphase", "Télophase → Anaphase → Métaphase → Prophase", "Métaphase → Prophase → Télophase → Anaphase"], ans: 0, chapter: "mitose", difficulty: "intermediaire", exp: "P-M-A-T : Prophase, Métaphase, Anaphase, Télophase." },
+    { q: "À la métaphase, les chromosomes :", opts: ["s'alignent au milieu de la cellule", "se séparent vers les pôles", "disparaissent", "se collent à la membrane"], ans: 0, chapter: "mitose", difficulty: "intermediaire", exp: "Métaphase = alignement sur la plaque équatoriale (au milieu)." },
+    { q: "À l'anaphase de la mitose, on sépare :", opts: ["les chromatides-sœurs", "les chromosomes homologues", "les noyaux", "les ribosomes"], ans: 0, chapter: "mitose", difficulty: "difficile", exp: "Anaphase de mitose : les chromatides-sœurs partent vers les pôles." },
+    { q: "Le partage du cytoplasme en fin de division s'appelle :", opts: ["la cytodiérèse", "la réplication", "la photosynthèse", "la méiose"], ans: 0, chapter: "mitose", difficulty: "intermediaire", exp: "Cytodiérèse = séparation du cytoplasme → 2 cellules." },
+    { q: "Les 2 moitiés identiques d'un chromosome dédoublé s'appellent :", opts: ["chromatides-sœurs", "nucléotides", "ribosomes", "gamètes"], ans: 0, chapter: "mitose", difficulty: "intermediaire", exp: "Un chromosome en X = 2 chromatides-sœurs reliées par le centromère." },
+    { q: "Qu'est-ce qui relie les deux chromatides-sœurs ?", opts: ["le centromère", "le noyau", "la membrane", "un ribosome"], ans: 0, chapter: "mitose", difficulty: "intermediaire", exp: "Le centromère relie les 2 chromatides-sœurs (point de jonction de l'X)." },
+
+    { q: "Combien de paires de chromosomes chez l'humain ?", opts: ["23", "46", "12", "2"], ans: 0, chapter: "caryotype", difficulty: "facile", exp: "23 paires = 46 chromosomes (2n = 46)." },
+    { q: "Le caryotype, c'est :", opts: ["les chromosomes classés par paires", "la liste des organites", "une molécule d'ADN", "un type de cellule"], ans: 0, chapter: "caryotype", difficulty: "facile", exp: "Caryotype = photo des chromosomes classés par paires." },
+    { q: "Les chromosomes non sexuels s'appellent :", opts: ["les autosomes", "les gonosomes", "les gamètes", "les centromères"], ans: 0, chapter: "caryotype", difficulty: "intermediaire", exp: "Autosomes = paires 1 à 22 ; gonosomes = paire sexuelle." },
+    { q: "Le caryotype d'un homme contient la paire sexuelle :", opts: ["XY", "XX", "YY", "XO"], ans: 0, chapter: "caryotype", difficulty: "facile", exp: "Homme = XY, femme = XX." },
+    { q: "« 2n » signifie qu'une cellule est :", opts: ["diploïde (chromosomes par paires)", "haploïde", "sans noyau", "morte"], ans: 0, chapter: "caryotype", difficulty: "intermediaire", exp: "2n = diploïde (2 exemplaires de chaque chromosome)." },
+    { q: "Les gamètes (spermatozoïde, ovule) sont :", opts: ["haploïdes (n)", "diploïdes (2n)", "sans ADN", "des bactéries"], ans: 0, chapter: "caryotype", difficulty: "intermediaire", exp: "Un gamète n'a qu'un exemplaire de chaque chromosome : il est n." },
+
+    { q: "La méiose produit :", opts: ["4 cellules (gamètes) à n chromosomes", "2 cellules identiques", "une seule cellule", "des bactéries"], ans: 0, chapter: "meiose", difficulty: "facile", exp: "Méiose = 2 divisions → 4 gamètes haploïdes (n)." },
+    { q: "La méiose comporte :", opts: ["2 divisions successives", "1 seule division", "3 divisions", "aucune division"], ans: 0, chapter: "meiose", difficulty: "intermediaire", exp: "2 divisions : la 1ʳᵉ réductionnelle, la 2ᵉ comme une mitose." },
+    { q: "La méiose fait passer la cellule de :", opts: ["2n à n (réduction de moitié)", "n à 2n", "2n à 2n", "n à 4n"], ans: 0, chapter: "meiose", difficulty: "intermediaire", exp: "C'est une division réductionnelle : 2n → n." },
+    { q: "À l'anaphase de la 1ʳᵉ division de méiose, on sépare :", opts: ["les chromosomes homologues", "les chromatides-sœurs", "les noyaux", "les gamètes"], ans: 0, chapter: "meiose", difficulty: "difficile", exp: "1ʳᵉ division : séparation des homologues (≠ mitose qui sépare les chromatides)." },
+    { q: "La méiose est surtout une source de :", opts: ["variabilité (brassage)", "énergie", "déchets", "protéines"], ans: 0, chapter: "meiose", difficulty: "intermediaire", exp: "Le brassage des chromosomes rend chaque gamète unique." },
+
+    { q: "La fécondation, c'est :", opts: ["la fusion d'un gamète mâle et d'un gamète femelle", "la division d'une cellule", "la copie de l'ADN", "la mort cellulaire"], ans: 0, chapter: "fecondation", difficulty: "facile", exp: "Fécondation = fusion de 2 gamètes (n + n)." },
+    { q: "La cellule-œuf (zygote) est :", opts: ["diploïde (2n)", "haploïde (n)", "sans ADN", "une bactérie"], ans: 0, chapter: "fecondation", difficulty: "intermediaire", exp: "n + n → 2n : la cellule-œuf est diploïde." },
+    { q: "La fécondation permet de :", opts: ["rétablir le nombre 2n de chromosomes", "diviser par 2 les chromosomes", "supprimer l'ADN", "créer des bactéries"], ans: 0, chapter: "fecondation", difficulty: "intermediaire", exp: "La méiose divise (2n→n), la fécondation rétablit (n+n→2n)." },
+
+    { q: "Qui est considéré comme le père de la génétique ?", opts: ["Gregor Mendel", "Charles Darwin", "Louis Pasteur", "Isaac Newton"], ans: 0, chapter: "monohybridisme", difficulty: "facile", exp: "Mendel a découvert les lois de l'hérédité avec ses petits pois." },
+    { q: "Une version d'un gène s'appelle :", opts: ["un allèle", "un organite", "un gamète", "un autosome"], ans: 0, chapter: "monohybridisme", difficulty: "facile", exp: "On a 2 allèles par gène (un de chaque parent)." },
+    { q: "Le génotype « Aa » est dit :", opts: ["hétérozygote", "homozygote", "récessif pur", "dominant pur"], ans: 0, chapter: "monohybridisme", difficulty: "intermediaire", exp: "Deux allèles différents → hétérozygote (AA ou aa = homozygote)." },
+    { q: "Un allèle récessif s'exprime seulement si :", opts: ["les 2 allèles sont récessifs (aa)", "il y a au moins un dominant", "on est hétérozygote", "jamais"], ans: 0, chapter: "monohybridisme", difficulty: "intermediaire", exp: "Récessif visible uniquement en aa ; le dominant masque le récessif." },
+    { q: "Une lignée pure correspond à un individu :", opts: ["homozygote (AA ou aa)", "hétérozygote (Aa)", "sans gène", "stérile"], ans: 0, chapter: "monohybridisme", difficulty: "intermediaire", exp: "Lignée pure = 2 allèles identiques (homozygote)." },
+    { q: "Croisement de lignées pures AA × aa : la F1 est :", opts: ["100 % Aa (tous dominants)", "3 dominants : 1 récessif", "100 % aa", "50 % AA : 50 % aa"], ans: 0, chapter: "monohybridisme", difficulty: "difficile", exp: "AA × aa → tous les enfants reçoivent A et a → Aa (dominants)." },
+    { q: "Croisement Aa × Aa : quel rapport de phénotypes ?", opts: ["3 dominants : 1 récessif", "1 : 1", "tous identiques", "2 : 2"], ans: 0, chapter: "monohybridisme", difficulty: "difficile", exp: "Aa × Aa → 1 AA : 2 Aa : 1 aa → 3 dominants : 1 récessif." },
+    { q: "Génotype vs phénotype ?", opts: ["génotype = les allèles ; phénotype = l'apparence", "l'inverse", "ce sont des synonymes", "génotype = la taille"], ans: 0, chapter: "monohybridisme", difficulty: "intermediaire", exp: "Génotype = les gènes (AA, Aa, aa) ; phénotype = ce qu'on voit." }
   ];
 
   var flashcards = [
-    { front: "Les niveaux d'organisation du vivant ?", back: "Atome → Molécule → Organite → Cellule → Tissu → Organe → Système → Organisme → Population → Communauté → Écosystème.", chapter: "organisation" },
-    { front: "Qu'est-ce qu'un tissu ?", back: "Un ensemble de cellules semblables assurant une même fonction.", chapter: "organisation" },
-    { front: "Procaryote vs eucaryote ?", back: "Procaryote = <strong>pas de noyau</strong> (ADN libre, ex. bactérie). Eucaryote = <strong>noyau</strong> + organites (animal, végétal, champignon).", chapter: "cellule" },
-    { front: "Où est l'ADN dans une bactérie ?", back: "Libre dans le cytoplasme (région nucléoïde) — pas de noyau.", chapter: "cellule" },
-    { front: "Rôle du noyau ?", back: "Contenir l'ADN (information génétique) ; il dirige la cellule.", chapter: "organites" },
-    { front: "Rôle de la mitochondrie ?", back: "Produire l'énergie (respiration cellulaire) ⚡.", chapter: "organites" },
-    { front: "Rôle des ribosomes ?", back: "Fabriquer les protéines.", chapter: "organites" },
-    { front: "Rôle du lysosome ?", back: "Digérer/recycler les déchets de la cellule.", chapter: "organites" },
-    { front: "Ce que la cellule végétale a en plus ?", back: "Paroi rigide, chloroplastes (photosynthèse), grande vacuole.", chapter: "organites" },
-    { front: "Forme et composition de l'ADN ?", back: "Double hélice de nucléotides (sucre + phosphate + base azotée).", chapter: "adn" },
-    { front: "Appariement des bases de l'ADN ?", back: "A–T et C–G (toujours).", chapter: "adn" },
-    { front: "Chromosomes chez l'humain ?", back: "23 paires (46 au total) ; paire sexuelle XX (femme) ou XY (homme).", chapter: "adn" },
-    { front: "Les deux grandes parties du cycle cellulaire ?", back: "L'<strong>interphase</strong> (G1, S, G2) puis la <strong>mitose</strong> (M).", chapter: "cycle" },
-    { front: "Quand l'ADN est-il répliqué ?", back: "Pendant la <strong>phase S</strong> de l'interphase.", chapter: "cycle" },
-    { front: "Résultat de la mitose ?", back: "<strong>2 cellules-filles identiques</strong> à la cellule-mère (même ADN).", chapter: "cycle" },
-    { front: "Phases visibles de la mitose ?", back: "Prophase → Métaphase → Anaphase → Télophase (PMAT).", chapter: "cycle" },
-    { front: "Chromatides-sœurs & centromère ?", back: "Un chromosome dédoublé (forme X) = 2 chromatides-sœurs identiques reliées par le <strong>centromère</strong>.", chapter: "cycle" },
-    { front: "Qu'est-ce que l'hérédité ?", back: "La transmission des caractères des parents aux enfants. Étudiée par Mendel (petits pois).", chapter: "genetique" },
-    { front: "Gène vs allèle ?", back: "Gène = portion d'ADN codant un caractère. Allèle = une version du gène (on en a 2, un par parent).", chapter: "genetique" },
-    { front: "Dominant vs récessif ?", back: "Dominant (A) s'exprime même seul. Récessif (a) seulement si les 2 allèles sont récessifs (aa).", chapter: "genetique" },
-    { front: "Homozygote vs hétérozygote ?", back: "Homozygote = 2 allèles identiques (AA ou aa). Hétérozygote = 2 différents (Aa).", chapter: "genetique" },
-    { front: "Génotype vs phénotype ?", back: "Génotype = les allèles (AA/Aa/aa). Phénotype = l'apparence visible.", chapter: "genetique" },
-    { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes 3 dominants : 1 récessif. (Échiquier de Punnett.)", chapter: "genetique" },
-    { front: "Taille : procaryote vs eucaryote ?", back: "La cellule procaryote est bien plus petite (bactérie ≈ 2 µm) que la cellule eucaryote (≈ 10 à 100 µm).", chapter: "cellule" },
-    { front: "Cellule végétale : 3 éléments en plus ?", back: "Paroi cellulaire (rigidité) + chloroplastes (photosynthèse) + grande vacuole centrale.", chapter: "cellule" }
+    { front: "Les deux grandes parties du cycle cellulaire ?", back: "L'<strong>interphase</strong> (G1 → S → G2) puis la <strong>mitose</strong> (M).", chapter: "cycle" },
+    { front: "Quand l'ADN est-il répliqué ?", back: "Pendant la <strong>phase S</strong> : la quantité d'ADN passe de 1 à 2.", chapter: "cycle" },
+    { front: "Comment se passe la réplication de l'ADN ?", back: "L'<strong>ADN polymérase</strong> ouvre la double hélice ; chaque brin sert de modèle ; les nucléotides s'apparient (<strong>A–T, C–G</strong>) → 2 molécules identiques.", chapter: "cycle" },
+    { front: "Qu'est-ce que la phase G0 ?", back: "Une phase de <strong>repos</strong>, hors du cycle : la cellule ne se divise pas.", chapter: "cycle" },
+    { front: "Résultat de la mitose ?", back: "<strong>2 cellules filles identiques</strong> à la cellule mère (2n → 2n). Sert à la croissance et à la réparation.", chapter: "mitose" },
+    { front: "Phases de la mitose ?", back: "Prophase → Métaphase → Anaphase → Télophase (<strong>P-M-A-T</strong>), puis cytodiérèse.", chapter: "mitose" },
+    { front: "Que se passe-t-il à la métaphase ?", back: "Les chromosomes s'<strong>alignent au milieu</strong> de la cellule (plaque équatoriale).", chapter: "mitose" },
+    { front: "Que se passe-t-il à l'anaphase (mitose) ?", back: "Les <strong>chromatides-sœurs se séparent</strong> et partent vers les deux pôles.", chapter: "mitose" },
+    { front: "Qu'est-ce que la cytodiérèse ?", back: "Le <strong>partage du cytoplasme</strong> en fin de division → 2 cellules séparées.", chapter: "mitose" },
+    { front: "Chromatides-sœurs & centromère ?", back: "Un chromosome dédoublé (forme X) = 2 chromatides-sœurs identiques reliées par le <strong>centromère</strong>.", chapter: "mitose" },
+    { front: "Qu'est-ce qu'un caryotype ?", back: "La <strong>photo des chromosomes</strong> d'une cellule, classés par paires (taille décroissante).", chapter: "caryotype" },
+    { front: "Combien de chromosomes chez l'humain ?", back: "<strong>23 paires = 46</strong> chromosomes (2n = 46). Gamètes : n = 23.", chapter: "caryotype" },
+    { front: "Autosomes vs gonosomes ?", back: "<strong>Autosomes</strong> = paires 1 à 22. <strong>Gonosomes</strong> = paire sexuelle (XX femme, XY homme).", chapter: "caryotype" },
+    { front: "Diploïde (2n) vs haploïde (n) ?", back: "<strong>2n</strong> = chromosomes par paires (cellules du corps). <strong>n</strong> = un seul de chaque paire (gamètes).", chapter: "caryotype" },
+    { front: "Que produit la méiose ?", back: "<strong>4 gamètes</strong> (spermatozoïdes ou ovules), chacun à <strong>n</strong> chromosomes.", chapter: "meiose" },
+    { front: "Combien de divisions dans la méiose ?", back: "<strong>2 divisions</strong> successives : la 1ʳᵉ réductionnelle (2n → n), la 2ᵉ comme une mitose.", chapter: "meiose" },
+    { front: "Que sépare-t-on à la 1ʳᵉ division de méiose ?", back: "Les <strong>chromosomes homologues</strong> (≠ mitose, qui sépare les chromatides). C'est ce qui réduit 2n → n.", chapter: "meiose" },
+    { front: "Mitose vs méiose ?", back: "Mitose : 2 cellules <strong>identiques</strong> (2n → 2n). Méiose : 4 gamètes <strong>différents</strong> (2n → n).", chapter: "meiose" },
+    { front: "Qu'est-ce que la fécondation ?", back: "La <strong>fusion</strong> d'un gamète mâle (n) et d'un gamète femelle (n) → cellule-œuf (zygote) à <strong>2n</strong>.", chapter: "fecondation" },
+    { front: "Pourquoi méiose + fécondation s'équilibrent ?", back: "La méiose divise par 2 (2n → n), la fécondation remet ×2 (n + n → 2n). Le nombre de chromosomes reste stable.", chapter: "fecondation" },
+    { front: "Gène vs allèle ?", back: "Gène = portion d'ADN codant un caractère. Allèle = une version du gène (on en a 2, un par parent).", chapter: "monohybridisme" },
+    { front: "Dominant vs récessif ?", back: "Dominant (A) s'exprime même seul. Récessif (a) seulement si les 2 allèles sont récessifs (aa).", chapter: "monohybridisme" },
+    { front: "Homozygote vs hétérozygote ?", back: "Homozygote = 2 allèles identiques (AA ou aa) = lignée pure. Hétérozygote = 2 différents (Aa).", chapter: "monohybridisme" },
+    { front: "Génotype vs phénotype ?", back: "Génotype = les allèles (AA/Aa/aa). Phénotype = l'apparence visible.", chapter: "monohybridisme" },
+    { front: "Croisement Aa × Aa ?", back: "Génotypes 1 AA : 2 Aa : 1 aa → Phénotypes <strong>3 dominants : 1 récessif</strong> (échiquier de Punnett).", chapter: "monohybridisme" },
+    { front: "Croisement de lignées pures AA × aa ?", back: "En <strong>F1</strong>, tous les enfants sont <strong>Aa</strong> (caractère dominant).", chapter: "monohybridisme" }
   ];
 
   window.registerSubject('bio', {
-    subtitle: 'Biologie — le vivant, cellule, organites, ADN, cycle cellulaire',
+    subtitle: 'Biologie — division cellulaire (mitose, méiose), caryotype & génétique (Mendel)',
     content: {
       sections: sections,
       questions: questions,
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '🧬 Notions clés', exercices: '🔬 Exercices' },
-      chapOrder: ['organisation', 'cellule', 'organites', 'adn', 'cycle', 'genetique'],
-      chapLabels: { organisation: 'Organisation du vivant', cellule: 'Type de cellule', organites: 'Organites & rôles', adn: 'ADN & chromosomes', cycle: 'Cycle cellulaire & mitose', genetique: 'Génétique & hérédité' }
+      chapOrder: ['cycle', 'mitose', 'caryotype', 'meiose', 'fecondation', 'monohybridisme'],
+      chapLabels: { cycle: 'Cycle cellulaire & ADN', mitose: 'La mitose', caryotype: 'Caryotype & ploïdie', meiose: 'La méiose', fecondation: 'La fécondation', monohybridisme: 'Monohybridisme (Mendel)' }
     }
   });
 })();

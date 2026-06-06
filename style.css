@@ -1868,3 +1868,9 @@ body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { li
   .card:hover::after { animation: none !important; }
   .section.active .grid2 > .card { animation: none !important; }
 }
+
+/* ════════ Vecteur colonne dans les animations (démo) ════════ */
+.avec { display: inline-flex; align-items: center; vertical-align: middle; }
+.avecp { font-size: 2em; line-height: 0.85; opacity: 0.7; font-weight: 300; }
+.aveccol { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.2; padding: 0 3px; gap: 3px; }
+.avecrow { display: inline-flex; align-items: center; white-space: nowrap; }
