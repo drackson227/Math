@@ -212,7 +212,12 @@ code { background: color-mix(in srgb, var(--color-nav) 14%, transparent); color:
 /* 50b — Flashcards avec schéma : défilement vertical si le contenu dépasse les 300px
    (sinon le bas — souvent le dessin — était coupé). « safe center » garde le centrage
    pour les cartes courtes mais évite de couper le haut quand ça déborde. */
-.flashcard-front, .flashcard-back { overflow-y: auto; overflow-x: hidden; justify-content: safe center; }
+.flashcard-front, .flashcard-back { overflow-y: auto; overflow-x: hidden; justify-content: safe center; scrollbar-width: none; -ms-overflow-style: none; }
+/* 50c — On MASQUE la barre de défilement sur les flashcards (et la fiche-image) :
+   le défilement reste possible (molette / doigt) mais sans la barre colorée disgracieuse. */
+.flashcard-front::-webkit-scrollbar, .flashcard-back::-webkit-scrollbar { width: 0; height: 0; display: none; }
+.img-modal { scrollbar-width: none; -ms-overflow-style: none; }
+.img-modal::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 /* ─────────── F. QUIZ ─────────── */
 
