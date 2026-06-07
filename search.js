@@ -244,8 +244,19 @@
     if (ov) ov.classList.remove('show');
   };
 
-  // Raccourci clavier "/" (sauf si on écrit déjà quelque part)
+  // Raccourcis clavier d'ouverture :
+  //  • "/"           → quand on n'écrit pas (rapide une main)
+  //  • Ctrl/Cmd + K  → standard universel, marche MÊME si on est dans un champ
   document.addEventListener('keydown', function (e) {
+    // Ctrl/Cmd + K : ouvre/ferme la recherche, partout
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      var ov = document.getElementById('search-overlay');
+      if (ov && ov.classList.contains('show')) window.closeSearch();
+      else window.openSearch();
+      return;
+    }
+    // "/" : seulement si on n'est pas déjà en train d'écrire
     if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
     var t = e.target;
     var typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);

@@ -285,8 +285,10 @@ code { background: color-mix(in srgb, var(--color-nav) 14%, transparent); color:
 .help-modal.open .help-box { animation: ehModalIn 0.24s cubic-bezier(.2,1,.4,1) both; }
 @keyframes ehModalIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
 
-/* 66 — Boutons de fermeture (✕) : rotation au survol */
-.help-close:hover, [onclick*="close"]:hover, [onclick*="toggle"]:hover { transform: scale(1.06); }
+/* 66 — Boutons de fermeture (✕) : léger zoom au survol.
+   Scopé aux <button> uniquement : l'ancien sélecteur [onclick*="toggle"] visait
+   AUSSI les grandes cartes/divs cliquables et les faisait grossir au survol. */
+.help-close:hover, button[onclick*="close"]:hover, button[onclick*="toggle"]:hover { transform: scale(1.06); }
 
 /* 67 — Overlay Pomodoro : fond légèrement flouté */
 .pomodoro-overlay { backdrop-filter: blur(3px); }
@@ -492,6 +494,25 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust
   .opt { padding-top: 12px; padding-bottom: 12px; }
 }
 
+/* Accessibilité clavier : anneau de focus NET quand on navigue au clavier (Tab),
+   invisible à la souris (:focus-visible). Indispensable pour se repérer sans souris.
+   On ne le montre QUE pour le focus clavier afin de ne pas alourdir les clics. */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+.nav-btn:focus-visible,
+.subj-btn:focus-visible,
+.opt:focus-visible,
+.fc-chip:focus-visible,
+.flashcard-wrapper:focus-visible {
+  outline: 3px solid var(--color-nav);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 /* Accessibilité & batterie : si l'utilisateur demande « moins d'animations » dans son
    système, on coupe transitions et animations (le site reste 100% fonctionnel, juste sobre). */
 @media (prefers-reduced-motion: reduce) {
@@ -503,3 +524,28 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust
   }
   #particle-canvas { display: none !important; }
 }
+
+/* ═══════════ Schémas visuels — Sciences éco ═══════════
+   Diagrammes en flux (chaîne de l'iPhone, conditions de la responsabilité) et
+   pôles de la Triade. 100% HTML/CSS (aucune image externe), thémés via variables. */
+.eco-flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 8px; margin: 1.1rem 0; }
+.eco-step {
+  flex: 1 1 120px; min-width: 110px; max-width: 210px;
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--color-nav); border-radius: 12px;
+  padding: 10px 12px; text-align: center;
+}
+.eco-step .eco-ico { font-size: 26px; display: block; margin-bottom: 4px; line-height: 1; }
+.eco-step strong { display: block; color: var(--color-nav); font-size: 14px; }
+.eco-step span { font-size: 12px; color: var(--text-secondary); }
+.eco-arrow { align-self: center; font-size: 22px; font-weight: 800; color: var(--color-nav); }
+.eco-poles { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 1rem 0 0.4rem; }
+.eco-pole {
+  flex: 1 1 130px; min-width: 120px; max-width: 220px; text-align: center;
+  background: color-mix(in srgb, var(--color-nav) 10%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--color-nav) 30%, var(--border-subtle));
+  border-radius: 14px; padding: 12px;
+}
+.eco-pole .eco-ico { font-size: 30px; display: block; line-height: 1; }
+.eco-pole strong { display: block; color: var(--text-primary); font-size: 14px; margin-top: 4px; }
+@media (max-width: 600px) { .eco-arrow { transform: rotate(90deg); } }

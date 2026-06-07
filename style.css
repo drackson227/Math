@@ -1335,9 +1335,12 @@ textarea:focus-visible,
 /* ===== Images de cours (figures, portraits, frise) ===== */
 .hfig { display: inline-block; margin: 6px; vertical-align: top; text-align: center; }
 .hfig img { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--border-subtle); background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.28); }
-.hfig figcaption { margin-top: 5px; font-size: 12px; color: var(--text-secondary); line-height: 1.3; }
+.hfig figcaption { margin-top: 5px; font-size: 12px; color: var(--text-secondary); line-height: 1.3; max-width: 100%; overflow-wrap: break-word; word-break: break-word; }
 .hfig-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: flex-start; margin: 1.1rem 0; }
 .hfig-float { float: right; max-width: 160px; margin: 0 0 10px 16px; }
+/* Une image flottante ne doit JAMAIS déborder sur le titre de la séquence suivante :
+   chaque grand titre de cours repart sous les flottants précédents. */
+.section h2 { clear: both; }
 .perso-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-top: 1rem; }
 .perso-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px; text-align: center; }
 .perso-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: top center; border-radius: 10px; background: #fff; }
@@ -1828,18 +1831,24 @@ body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { li
   animation: gradShift 6s ease-in-out infinite;
 }
 
-/* 2 — Reflet qui glisse en diagonale sur les cartes au survol */
-.card { position: relative; overflow: hidden; }
+/* 2 — Reflet qui glisse en diagonale sur les cartes au survol.
+   IMPORTANT : on N'utilise PAS overflow:hidden sur .card. La combinaison
+   overflow:hidden + border-radius + transform (survol) fait « clignoter »/disparaître
+   la bordure des coins arrondis (bug de compositing Chrome). À la place, le reflet
+   se découpe lui-même : il couvre exactement la carte (inset:0 + border-radius hérité)
+   et glisse via background-position → il ne dépasse jamais, sans rogner la bordure. */
+.card { position: relative; }
 .card::after {
-  content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.10), transparent);
-  transform: skewX(-18deg); pointer-events: none; opacity: 0; z-index: 1;
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(100deg, transparent 32%, rgba(255,255,255,0.10) 50%, transparent 68%);
+  background-size: 250% 100%; background-position: 160% 0;
+  pointer-events: none; opacity: 0; z-index: 1;
 }
 .card:hover::after { animation: cardSheen 0.85s ease; }
 @keyframes cardSheen {
-  0% { left: -80%; opacity: 0; }
+  0% { background-position: 160% 0; opacity: 0; }
   18% { opacity: 1; }
-  100% { left: 130%; opacity: 0; }
+  100% { background-position: -160% 0; opacity: 0; }
 }
 
 /* 3 — Soulignement qui grandit du centre au survol des onglets de nav */

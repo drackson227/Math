@@ -7,6 +7,8 @@
   var GROUPS = [
     ['Général', [
       ['?', 'Afficher cette aide'],
+      ['Ctrl / K', 'Ouvrir la recherche'],
+      ['/', 'Ouvrir la recherche (rapide)'],
       ['Échap', 'Fermer une fenêtre / l\'aide']
     ]],
     ['Quiz', [

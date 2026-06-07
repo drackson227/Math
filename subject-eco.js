@@ -48,6 +48,12 @@
         <li>l'<strong>Asie de l'Est</strong> (Japon, et de plus en plus la Chine).</li>
       </ul>
       <p>À eux seuls, ces trois pôles réalisent environ les <strong>¾ du commerce mondial</strong>. Une grande partie des échanges se fait même <strong>à l'intérieur</strong> de chaque pôle (commerce <strong>intra-régional</strong>).</p>
+      <div class="eco-poles">
+        <div class="eco-pole"><span class="eco-ico">🌎</span><strong>Amérique du Nord</strong></div>
+        <div class="eco-pole"><span class="eco-ico">🌍</span><strong>Europe (de l'Ouest)</strong></div>
+        <div class="eco-pole"><span class="eco-ico">🌏</span><strong>Asie de l'Est</strong></div>
+      </div>
+      <p style="text-align:center; font-size:13px; color:var(--text-secondary); margin:0;">≈ <strong>¾ du commerce mondial</strong> à eux trois</p>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Pourquoi « triade » ?</button>
         <div class="simple-exp-content">« Triade » veut dire « groupe de trois ». Ce sont les trois régions les plus riches et les plus connectées : elles dominent les échanges mondiaux. Le reste du monde échange beaucoup moins (même si la Chine et d'autres pays montent très vite).</div>
@@ -58,6 +64,13 @@
       <h2>4. Les acteurs et un exemple : l'iPhone</h2>
       <p>Les grands acteurs de la mondialisation sont les <strong>firmes multinationales</strong> (FMN, aussi appelées firmes transnationales / FTN) : des entreprises présentes dans plusieurs pays (Apple, Samsung, Nike…).</p>
       <p>Pour produire moins cher, elles répartissent les étapes de fabrication entre plusieurs pays : c'est la <strong>chaîne de valeur mondiale</strong>. Exemple de l'<strong>iPhone</strong> : <strong>conçu</strong> en Californie, ses <strong>composants</strong> viennent de nombreux pays, et il est <strong>assemblé</strong> en Chine.</p>
+      <div class="eco-flow">
+        <div class="eco-step"><span class="eco-ico">🎨</span><strong>Conçu</strong><span>Californie 🇺🇸</span></div>
+        <div class="eco-arrow">→</div>
+        <div class="eco-step"><span class="eco-ico">🔧</span><strong>Composants</strong><span>plusieurs pays 🌍</span></div>
+        <div class="eco-arrow">→</div>
+        <div class="eco-step"><span class="eco-ico">🏭</span><strong>Assemblé</strong><span>Chine 🇨🇳</span></div>
+      </div>
       <p>La mondialisation est aussi <strong>à notre porte</strong> : le <strong>port d'Anvers</strong> (Belgique), l'un des plus grands ports d'Europe, a vu transiter environ <strong>278 millions de tonnes</strong> de marchandises en 2024.</p>
     </div>
 
@@ -81,6 +94,15 @@
         <li>un <strong>dommage</strong> (un préjudice subi par la victime) ;</li>
         <li>un <strong>lien de causalité</strong> entre les deux (la faute a bien <em>causé</em> le dommage).</li>
       </ul>
+      <div class="eco-flow">
+        <div class="eco-step"><span class="eco-ico">⚠️</span><strong>Faute</strong><span>(ou un fait)</span></div>
+        <div class="eco-arrow">+</div>
+        <div class="eco-step"><span class="eco-ico">💥</span><strong>Dommage</strong><span>(préjudice subi)</span></div>
+        <div class="eco-arrow">+</div>
+        <div class="eco-step"><span class="eco-ico">🔗</span><strong>Lien de causalité</strong><span>la faute cause le dommage</span></div>
+        <div class="eco-arrow">→</div>
+        <div class="eco-step" style="border-left-color:var(--color-parabole);"><span class="eco-ico">⚖️</span><strong style="color:var(--color-parabole);">Réparation</strong><span>dommages-intérêts</span></div>
+      </div>
       <p>On distingue plusieurs cas :</p>
       <ul style="line-height:1.9;">
         <li><strong>Du fait personnel</strong> : on répond de ses propres actes.</li>

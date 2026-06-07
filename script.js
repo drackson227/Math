@@ -3077,6 +3077,8 @@ function showToast(message, color = 'var(--color-nav)') {
   if (existing) existing.remove();
   const toast = document.createElement('div');
   toast.id = 'toast-notification';
+  toast.setAttribute('role', 'status');       // annoncé par les lecteurs d'écran
+  toast.setAttribute('aria-live', 'polite');
   toast.textContent = message;
   toast.style.cssText = `position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
     background:${color}; color:#fff; padding:12px 24px; border-radius:12px;
@@ -5151,3 +5153,46 @@ function renderProgressCharts() {
   if (bd && bd.parentNode) bd.parentNode.insertBefore(sec, bd.nextSibling);
   else host.appendChild(sec);
 }
+
+// ── INDICATEUR HORS-LIGNE (PWA) ──
+// Prévient l'élève quand la connexion tombe : les révisions (cours, quiz, flashcards)
+// marchent hors-ligne, mais le Chat et le Classement, eux, ont besoin d'Internet.
+// 100% autonome, n'interfère avec rien d'autre.
+(function () {
+  'use strict';
+  function ensureBanner() {
+    var el = document.getElementById('offline-banner');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'offline-banner';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.style.cssText = 'position:fixed; left:50%; bottom:14px; transform:translateX(-50%) translateY(140%);' +
+      'max-width:92vw; z-index:9998; padding:10px 18px; border-radius:12px; font-size:14px; font-weight:600;' +
+      'box-shadow:0 6px 24px rgba(0,0,0,0.35); transition:transform 0.35s ease, background 0.3s ease;' +
+      'display:flex; align-items:center; gap:8px; color:#fff;';
+    document.body.appendChild(el);
+    return el;
+  }
+  var hideTimer = null;
+  function setState(online) {
+    var el = ensureBanner();
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    if (online) {
+      el.style.background = 'var(--color-parabole, #34d399)';
+      el.textContent = '✅ De retour en ligne — Chat et Classement réactivés.';
+      el.style.transform = 'translateX(-50%) translateY(0)';
+      hideTimer = setTimeout(function () { el.style.transform = 'translateX(-50%) translateY(140%)'; }, 2600);
+    } else {
+      el.style.background = '#ef4444';
+      el.textContent = '📴 Hors-ligne — tes révisions marchent toujours (le Chat reviendra avec Internet).';
+      el.style.transform = 'translateX(-50%) translateY(0)';
+    }
+  }
+  window.addEventListener('offline', function () { setState(false); });
+  window.addEventListener('online', function () { setState(true); });
+  // À l'ouverture : si déjà hors-ligne, le signaler discrètement
+  document.addEventListener('DOMContentLoaded', function () {
+    if (navigator.onLine === false) setTimeout(function () { setState(false); }, 1200);
+  });
+})();
