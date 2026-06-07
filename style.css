@@ -427,9 +427,7 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
 
 @media (max-width: 768px) {
   body { padding: 0.5rem; }
-  .container { padding: 1rem; border-radius: 16px; }
-  .nav { gap: 6px; padding: 0.75rem; overflow-x: auto; flex-wrap: nowrap; scroll-snap-type: x mandatory; }
-  .nav-btn { padding: 8px 14px; font-size: 12px; flex-shrink: 0; scroll-snap-align: start; }
+  .container { padding: 1rem; border-radius: 16px; padding-top: 3.5rem; }
   .synth-section h2 { font-size: 26px; }
   .formula-main { font-size: 14px; padding: 1rem; }
   .grid2 { grid-template-columns: 1fr; }
@@ -438,14 +436,29 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
   .stat-card { padding: 1rem 0.75rem; }
   .settings-panel { width: 90vw; right: 5%; }
   .flashcard-front, .flashcard-back { padding: 1.5rem; }
-  /* Onglets mobiles : barre horizontale TOUJOURS visible et tactile.
-     (Avant : un menu coulissant masqué hors écran à left:-280px gagnait la
-     cascade → les onglets étaient invisibles et impossibles à toucher.)
-     Le tiroir par glissement depuis le bord gauche (gestures.js) reste
-     disponible en complément. Le hamburger ☰ et son voile ne servent plus. */
-  .sidebar-toggle, .sidebar-overlay { display: none !important; }
-  .nav { -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-  .nav-btn { scroll-snap-align: start; }
+  /* Onglets mobiles : MENU COULISSANT depuis la GAUCHE, ouvert par le bouton ☰.
+     Fonctionne de nouveau car .container n'a plus de transform (un position:fixed
+     est bien relatif à l'écran). z-index élevés pour passer au-dessus des boutons
+     flottants (fiche, retour-haut, paramètres…). */
+  .sidebar-toggle {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 14px; left: 14px; z-index: 2650;
+    background: var(--color-nav); color: #fff; border: none;
+    border-radius: 10px; width: 44px; height: 44px;
+    cursor: pointer; font-size: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 2600; }
+  .sidebar-overlay.show { display: block; }
+  .nav {
+    position: fixed; left: -300px; top: 0; height: 100vh; width: 270px; max-width: 82vw;
+    flex-direction: column; flex-wrap: nowrap; gap: 6px; z-index: 2620;
+    transition: left 0.3s ease; border-radius: 0 20px 20px 0;
+    padding: 4.5rem 1rem 1rem; overflow-y: auto; margin-bottom: 0;
+    box-shadow: 6px 0 30px rgba(0,0,0,0.5); -webkit-overflow-scrolling: touch;
+  }
+  .nav.open { left: 0; }
+  .nav-btn { width: 100%; text-align: left; flex-shrink: 0; font-size: 13px; padding: 11px 14px; }
   .settings-toggle {
     top: auto;
     bottom: 20px;

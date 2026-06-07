@@ -41,7 +41,10 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
    en ferait le bloc conteneur des éléments position:fixed (modale des fiches,
    panneaux…) qui apparaîtraient alors « en bas du site » au lieu de l'écran. */
 @keyframes ehFadeUp { from { opacity: 0; } to { opacity: 1; } }
-.container { animation: ehFadeUp 0.45s ease both; }
+/* fill-mode « backwards » (et non « both ») : sinon l'animation d'opacité reste « en
+   cours » indéfiniment et fait de .container un CONTEXTE D'EMPILEMENT permanent qui
+   « piège » le z-index du menu mobile (l'overlay passait alors au-dessus du menu). */
+.container { animation: ehFadeUp 0.45s ease backwards; }
 
 /* 8 — Images jamais débordantes + coins doux par défaut */
 img { max-width: 100%; height: auto; }
