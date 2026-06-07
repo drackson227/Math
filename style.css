@@ -427,7 +427,7 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
 
 @media (max-width: 768px) {
   body { padding: 0.5rem; }
-  .container { padding: 1rem; border-radius: 16px; padding-top: 3.5rem; }
+  .container { padding: 1rem; border-radius: 16px; }
   .nav { gap: 6px; padding: 0.75rem; overflow-x: auto; flex-wrap: nowrap; scroll-snap-type: x mandatory; }
   .nav-btn { padding: 8px 14px; font-size: 12px; flex-shrink: 0; scroll-snap-align: start; }
   .synth-section h2 { font-size: 26px; }
@@ -438,24 +438,14 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
   .stat-card { padding: 1rem 0.75rem; }
   .settings-panel { width: 90vw; right: 5%; }
   .flashcard-front, .flashcard-back { padding: 1.5rem; }
-  .sidebar-toggle {
-    display: flex; align-items: center; justify-content: center;
-    position: fixed; top: 14px; left: 14px; z-index: 600;
-    background: var(--color-nav); color: white; border: none;
-    border-radius: 10px; width: 42px; height: 42px;
-    cursor: pointer; font-size: 18px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-  .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:499; }
-  .sidebar-overlay.show { display:block; }
-  .nav {
-    position: fixed; left: -280px; top: 0; height: 100vh; width: 260px;
-    flex-direction: column; flex-wrap: nowrap; z-index: 500;
-    transition: left 0.3s ease; border-radius: 0 20px 20px 0;
-    padding: 4.5rem 1rem 1rem; overflow-y: auto; margin-bottom: 0;
-  }
-  .nav.open { left: 0; }
-  .nav-btn { width: 100%; text-align: left; flex-shrink: 0; }
+  /* Onglets mobiles : barre horizontale TOUJOURS visible et tactile.
+     (Avant : un menu coulissant masqué hors écran à left:-280px gagnait la
+     cascade → les onglets étaient invisibles et impossibles à toucher.)
+     Le tiroir par glissement depuis le bord gauche (gestures.js) reste
+     disponible en complément. Le hamburger ☰ et son voile ne servent plus. */
+  .sidebar-toggle, .sidebar-overlay { display: none !important; }
+  .nav { -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
+  .nav-btn { scroll-snap-align: start; }
   .settings-toggle {
     top: auto;
     bottom: 20px;

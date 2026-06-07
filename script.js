@@ -2653,6 +2653,7 @@ function rebuildFlashcardFilters() {
   let html = '<button type="button" class="fc-chip on" data-ch="all" onclick="filterFlashcards(\'all\')">Toutes</button>';
   html += '<button type="button" class="fc-chip fc-chip-due" data-ch="due" onclick="filterFlashcards(\'due\')">🔔 À réviser</button>';
   html += '<button type="button" class="fc-chip fc-chip-fav" data-ch="fav" onclick="filterFlashcards(\'fav\')">⭐ Favoris</button>';
+  html += '<button type="button" class="fc-chip fc-chip-hard" data-ch="hard" onclick="filterFlashcards(\'hard\')">😓 Difficiles</button>';
   order.forEach(function (ch) {
     html += '<button type="button" class="fc-chip" data-ch="' + ch + '" onclick="filterFlashcards(\'' + ch + '\')">' + (labels[ch] || ch) + '</button>';
   });
@@ -2670,6 +2671,8 @@ function filterFlashcards(chapter) {
   } else if (chapter === 'fav') {
     const favs = _favCards();
     filteredFlashcards = flashcards.filter(c => favs.indexOf(c.front) >= 0);
+  } else if (chapter === 'hard') {
+    filteredFlashcards = flashcards.filter(c => { const r = flashcardData[c.front]; return r && r.rating === 'hard'; });
   } else {
     filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
   }
@@ -2679,11 +2682,11 @@ function filterFlashcards(chapter) {
     b.classList.toggle('on', b.dataset.ch === chapter);
   });
   // Filtre vide (dues ou favoris) → message sympa au lieu d'une carte vide
-  if ((chapter === 'due' || chapter === 'fav') && filteredFlashcards.length === 0) {
+  if ((chapter === 'due' || chapter === 'fav' || chapter === 'hard') && filteredFlashcards.length === 0) {
     const c = document.getElementById('flashcard-content');
     const bc = document.getElementById('flashcard-back-content');
-    if (c) c.innerHTML = chapter === 'fav' ? '⭐ Aucun favori' : '🎉 Tout est à jour !';
-    if (bc) bc.innerHTML = chapter === 'fav' ? 'Touche « ☆ Favori » sur une carte pour la garder ici.' : 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».';
+    if (c) c.innerHTML = chapter === 'fav' ? '⭐ Aucun favori' : (chapter === 'hard' ? '💪 Aucune carte difficile' : '🎉 Tout est à jour !');
+    if (bc) bc.innerHTML = chapter === 'fav' ? 'Touche « ☆ Favori » sur une carte pour la garder ici.' : (chapter === 'hard' ? 'Une carte arrive ici quand tu réponds « 😓 Je ne savais pas ». Rien pour l\'instant, bravo !' : 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».');
     const prog = document.getElementById('flashcard-progress'); if (prog) prog.textContent = '0 / 0';
     const ctrl = document.getElementById('flashcard-controls'); if (ctrl) ctrl.style.display = 'none';
     updateDueCount();
@@ -2727,6 +2730,34 @@ function updateDueCount() {
     ? `🔔 ${n} carte${n > 1 ? 's' : ''} à réviser aujourd'hui`
     : '✓ Tout est à jour — révision en avance';
   el.style.color = n > 0 ? 'var(--color-droite)' : 'var(--color-parabole)';
+  updateFcStats();
+}
+
+// Mini-bilan de progression sur TOUTE la matière : cartes sues / en cours / nouvelles
+// (« sue » = intervalle ≥ 7 jours = bien ancrée en mémoire). Barre + texte sous le compteur.
+function updateFcStats() {
+  const el = document.getElementById('flashcard-stats');
+  if (!el) return;
+  const all = (typeof flashcards !== 'undefined' && flashcards) ? flashcards : [];
+  const total = all.length;
+  if (!total) { el.innerHTML = ''; return; }
+  let known = 0, learning = 0, fresh = 0, hard = 0;
+  all.forEach(c => {
+    const r = flashcardData[c.front];
+    if (!r) { fresh++; return; }
+    if (r.rating === 'hard') hard++;
+    if ((r.interval || 0) >= 7) known++; else learning++;
+  });
+  const pct = x => Math.round(x / total * 100);
+  el.innerHTML =
+    '<div style="height:8px; border-radius:5px; overflow:hidden; display:flex; background:var(--border-subtle);">' +
+      '<div style="width:' + pct(known) + '%; background:var(--color-parabole);"></div>' +
+      '<div style="width:' + pct(learning) + '%; background:var(--color-nav);"></div>' +
+    '</div>' +
+    '<p style="font-size:12px; color:var(--text-secondary); margin:5px 0 0;">' +
+      '✅ ' + known + ' sue' + (known > 1 ? 's' : '') + ' · 📘 ' + learning + ' en cours · 🆕 ' + fresh + ' nouvelle' + (fresh > 1 ? 's' : '') +
+      (hard ? ' · <span style="color:#f87171;">😓 ' + hard + ' difficile' + (hard > 1 ? 's' : '') + '</span>' : '') +
+    '</p>';
 }
 
 function initFlashcards() {
@@ -2899,7 +2930,8 @@ function rateCard(rating) {
   data.flashcardData[card.front] = {
     interval: interval,
     lastReviewed: new Date().toISOString(),
-    due: due.toISOString()
+    due: due.toISOString(),
+    rating: rating            // mémorise la dernière auto-évaluation (pour le filtre « Difficiles »)
   };
   saveData(data);
   flashcardData = data.flashcardData;
@@ -2948,7 +2980,7 @@ function shuffleFlashcards() {
 function startMixedRevision() {
   const data = loadSavedData(); const fc = data.flashcardData || {}; const now = Date.now();
   const pool = [];
-  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (k) {
+  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (k) {
     const s = window.SUBJECTS && window.SUBJECTS[k];
     if (!s || !s.ready || !s.content || !s.content.flashcards) return;
     s.content.flashcards.forEach(function (c) {

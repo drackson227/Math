@@ -247,6 +247,7 @@
   <button class="subj-btn" data-subj="geo" onclick="setSubject('geo')">🗺️ Géo</button>
   <button class="subj-btn" data-subj="chimie" onclick="setSubject('chimie')">🧪 Chimie</button>
   <button class="subj-btn" data-subj="bio" onclick="setSubject('bio')">🧬 Bio</button>
+  <button class="subj-btn" data-subj="eco" onclick="setSubject('eco')">💶 Sciences éco</button>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
   <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
@@ -357,7 +358,8 @@
       <button type="button" onclick="fcCheckWrite(); event.stopPropagation();" class="nav-btn" style="margin-top:8px;">✅ Vérifier &amp; voir la réponse</button>
       <p id="fc-write-result" style="margin-top:8px; font-size:14px;"></p>
     </div>
-    <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.75rem;">🔔 — à réviser aujourd'hui</p>
+    <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.5rem;">🔔 — à réviser aujourd'hui</p>
+    <div id="flashcard-stats"></div>
     <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
     <p style="text-align:center; font-size:11px; color:var(--text-secondary); opacity:0.55; margin-bottom:0.5rem;">
       ␣/↵ Retourner &nbsp;·&nbsp; ← Difficile &nbsp;·&nbsp; → Facile
@@ -690,6 +692,7 @@
   <script src="subject-chimie.js"></script>
   <script src="subject-bio.js"></script>
   <script src="subject-geo.js"></script>
+  <script src="subject-eco.js"></script>
   <script src="subject-histoire.js"></script>
   <script src="subject-francais.js"></script>
   <script src="subject-anglais.js"></script>
