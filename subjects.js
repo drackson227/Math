@@ -147,7 +147,9 @@
     var s = window.SUBJECTS[key];
     if (!s) return;
     Array.prototype.forEach.call(document.querySelectorAll('.subj-btn'), function (b) {
-      b.classList.toggle('on', b.dataset.subj === key);
+      var on = b.dataset.subj === key;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
 
     // matière sans contenu → écran « en préparation »

@@ -12,7 +12,8 @@
       ['Échap', 'Fermer une fenêtre / l\'aide']
     ]],
     ['Quiz', [
-      ['1 – 4', 'Choisir une réponse']
+      ['1 – 4', 'Choisir une réponse'],
+      ['A – D', 'Choisir une réponse (lettres)']
     ]],
     ['Flashcards', [
       ['Espace / Entrée', 'Retourner la carte'],

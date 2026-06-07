@@ -64,11 +64,12 @@ function updateQuizProgress() {
     '<div class="qp-bar"><div style="width:' + pct + '%;"></div></div>';
 }
 
-function loadSavedData() {
-  try {
-    const saved = localStorage.getItem('mathsgr2_data');
-    if (saved) return JSON.parse(saved);
-  } catch(e) { console.warn('localStorage non disponible:', e); }
+// Valeurs par défaut d'une sauvegarde. Toute clé manquante DOIT figurer ici :
+// loadSavedData fusionne les données stockées par-dessus ces défauts, afin qu'une
+// vieille sauvegarde (version antérieure) ou un import partiel n'arrive jamais avec
+// une clé absente — sinon des accès comme data.calendar[...] / data.badges.includes(...)
+// planteraient (« Cannot read properties of undefined »).
+function _defaultData() {
   return {
     totalQuizzes: 0,
     totalScore: 0,
@@ -92,7 +93,24 @@ function loadSavedData() {
     ficheNotes: {},
     badgeEarned: [],
     examDates: {}
+    // NB : on n'ajoute PAS ici study / examHistory / chapterStats / favoriteCards.
+    // Leurs consommateurs les initialisent eux-mêmes avec la BONNE forme via « x || {…} ».
+    // Les mettre à {} ici (objet vide mais truthy) casserait ce fallback (ex. study.dayActions → NaN).
   };
+}
+function loadSavedData() {
+  try {
+    const saved = localStorage.getItem('mathsgr2_data');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Fusion défensive : les défauts garantissent la présence de toutes les clés,
+      // les données stockées (parsed) ont la priorité sur celles-ci.
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return Object.assign(_defaultData(), parsed);
+      }
+    }
+  } catch(e) { console.warn('localStorage non disponible:', e); }
+  return _defaultData();
 }
 
 function saveData(data) {
@@ -1331,7 +1349,7 @@ function showSection(evtOrId, id) {
     return;
   }
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>{ b.classList.remove('active'); b.removeAttribute('aria-current'); });
   // I30 — Stopper l'examen si on quitte la section quiz
   if (sectionId !== 'quiz' && examActive) {
     examActive = false;
@@ -1342,7 +1360,7 @@ function showSection(evtOrId, id) {
     if (examBtn) examBtn.textContent = '5 questions, 5 min →';
   }
   document.getElementById(sectionId).classList.add('active');
-  if (btn) btn.classList.add('active');
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-current', 'page'); }
   // Revenir en haut de la page quand on change d'onglet
   try { window.scrollTo(0, 0); } catch (e) {}
   // Re-render formulas in newly visible section
@@ -3785,17 +3803,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const volLabel = document.getElementById('volume-value');
   if (volLabel) volLabel.textContent = ambientVolumePct + ' %';
 
-  // Quiz keyboard shortcuts: 1-4 to answer current question
+  // Quiz : répondre au clavier — chiffres 1-4 OU lettres A-D (les options sont
+  // libellées A. B. C. D., donc les deux sont naturels). Ignoré si on tape dans un champ.
   document.addEventListener('keydown', (e) => {
     const quizActive = document.getElementById('quiz').classList.contains('active');
     const activeScreen = document.getElementById('quiz-active-screen');
     if (!quizActive || !activeScreen || activeScreen.style.display === 'none') return;
-    const key = e.key;
-    if (['1','2','3','4'].includes(key)) {
-      const idx = parseInt(key) - 1;
-      const opts = document.querySelectorAll(`#opts-${currentActiveQuestion} .opt`);
-      if (opts[idx] && !opts[idx].classList.contains('disabled')) opts[idx].click();
-    }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    const map = { '1':0, '2':1, '3':2, '4':3, 'a':0, 'b':1, 'c':2, 'd':3 };
+    const idx = map[e.key.toLowerCase()];
+    if (idx === undefined) return;
+    const opts = document.querySelectorAll(`#opts-${currentActiveQuestion} .opt`);
+    if (opts[idx] && !opts[idx].classList.contains('disabled')) opts[idx].click();
   });
 
   // Keyboard shortcuts for flashcards
@@ -4775,10 +4796,17 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function _today() { return new Date().toISOString().slice(0, 10); }
 function _getStudy(data) {
-  data.study = data.study || { totalSec: 0, day: _today(), daySec: 0, dayActions: 0 };
-  data.study.history = data.study.history || {};
-  if (data.study.day !== _today()) { data.study.day = _today(); data.study.daySec = 0; data.study.dayActions = 0; }
-  return data.study;
+  // Robuste contre un objet study vide / partiel (ex. import) : on garantit chaque
+  // champ numérique, sinon les calculs du tableau de bord donneraient NaN.
+  var s = (data.study && typeof data.study === 'object') ? data.study : {};
+  if (typeof s.totalSec !== 'number') s.totalSec = 0;
+  if (typeof s.daySec !== 'number') s.daySec = 0;
+  if (typeof s.dayActions !== 'number') s.dayActions = 0;
+  if (!s.day) s.day = _today();
+  s.history = s.history || {};
+  if (s.day !== _today()) { s.day = _today(); s.daySec = 0; s.dayActions = 0; }
+  data.study = s;
+  return s;
 }
 function recordStudyAction() {
   var d = loadSavedData(); var s = _getStudy(d); s.dayActions++; saveData(d);
