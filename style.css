@@ -537,7 +537,7 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
 
 /* Dynamique — effets prononcés sur hover */
 .anim-dynamic .card { transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1) !important; }
-.anim-dynamic .card:hover { transform: translateY(-12px) scale(1.03) rotate(0.3deg) !important; box-shadow: 0 24px 48px rgba(0,0,0,0.5) !important; }
+.anim-dynamic .card:hover { transform: translateY(-12px) !important; box-shadow: 0 24px 48px rgba(0,0,0,0.5) !important; }
 .anim-dynamic .nav-btn:hover { transform: translateY(-4px) scale(1.08) !important; }
 .anim-dynamic .opt:hover { transform: translateX(12px) !important; }
 .anim-dynamic .step-btn:hover { transform: translateY(-4px) scale(1.06) !important; }
@@ -568,7 +568,7 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
 }
 .anim-intense .section.active { animation: intenseSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) !important; }
 .anim-intense .card { animation: intensePulse 2s ease-in-out infinite; }
-.anim-intense .card:hover { transform: translateY(-14px) scale(1.04) !important; animation: none !important; box-shadow: 0 0 50px rgba(167,139,250,0.7) !important; }
+.anim-intense .card:hover { transform: translateY(-14px) !important; animation: none !important; box-shadow: 0 0 50px rgba(167,139,250,0.7) !important; }
 .anim-intense .nav-btn:hover { transform: translateY(-6px) scale(1.1) !important; }
 .anim-intense .formula-main { animation: intensePulse 2.5s ease-in-out infinite; }
 .anim-intense .opt:hover { transform: translateX(16px) !important; animation: intenseShake 0.3s ease; }
@@ -1844,7 +1844,7 @@ body.reading-comfort .flashcard-front, body.reading-comfort .flashcard-back { li
   from { opacity: 0; transform: translateY(18px) scale(0.985); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.section.active .grid2 > .card { animation: cardIn 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.section.active .grid2 > .card { animation: cardIn 0.5s cubic-bezier(0.4,0,0.2,1) backwards; }
 .section.active .grid2 > .card:nth-child(2) { animation-delay: 0.07s; }
 .section.active .grid2 > .card:nth-child(3) { animation-delay: 0.14s; }
 .section.active .grid2 > .card:nth-child(4) { animation-delay: 0.21s; }

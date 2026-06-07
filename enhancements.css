@@ -204,8 +204,10 @@ code { background: color-mix(in srgb, var(--color-nav) 14%, transparent); color:
 #fc-filters > * { transition: transform 0.12s ease, background 0.18s ease, border-color 0.18s ease; }
 #fc-filters > *:active { transform: scale(0.94); }
 
-/* 50 — Reflet doux qui traverse la face avant au survol */
-.flashcard-front { position: relative; overflow: hidden; }
+/* 50 — (Retiré) NE PAS mettre .flashcard-front en position:relative : les deux faces
+   doivent rester en position:absolute (définies dans style.css) pour que le retournement
+   3D les superpose. En relative, la face avant prenait de la place et la face arrière
+   tombait EN DESSOUS (carte « détachée » sous la flashcard). */
 
 /* 50b — Flashcards avec schéma : défilement vertical si le contenu dépasse les 300px
    (sinon le bas — souvent le dessin — était coupé). « safe center » garde le centrage
@@ -448,6 +450,17 @@ body, .container, .nav, .settings-panel {
 
 /* 103 — Mini-barre de progression « cartes sues / en cours » */
 #flashcard-stats { max-width: 600px; margin: 0 auto 0.6rem; }
+
+/* 104 — Emoji des onglets TOUJOURS en couleur.
+   Le stack par défaut « Poppins, Inter, Segoe UI » laissait « Segoe UI » (regular)
+   fournir des emoji NOIR & BLANC pour les plus courants (📚 📝 📊 📖 📈 📓 🔍 👤…),
+   alors que les plus récents (🧠 ✏️ ⚠️) passaient à la police d'emoji couleur.
+   On place les polices d'emoji COULEUR en tête : elles n'ont pas de lettres latines,
+   donc le texte reste en Poppins, mais les emoji passent en couleur.
+   Scopé aux onglets (pas de flèches « → » à perturber dans le cours). */
+.nav-btn, .subj-btn, .drawer-link {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Poppins", "Inter", "Segoe UI", sans-serif;
+}
 
 /* ─────────── IMPRESSION (PDF / papier) ─────────── */
 @media print {
