@@ -269,6 +269,20 @@ function filterQuiz() {
     const _extra = (_fullCount > _n) ? ' (sur ' + _fullCount + ')' : '';
     countEl.textContent = _n + ' question' + (_n !== 1 ? 's' : '') + _extra;
   }
+  // Mémorise les PRÉFÉRENCES (difficulté + longueur) pour les retrouver la prochaine
+  // fois. Le chapitre n'est pas mémorisé : il dépend de la matière en cours.
+  try { localStorage.setItem('mathsgr2_quizprefs', JSON.stringify({ df: difficultyFilter, len: _lim })); } catch (e) {}
+}
+
+// Restaure les préférences de quiz (difficulté + longueur) dans les menus déroulants.
+// Appelé à l'entrée de la section quiz, AVANT filterQuiz (qui lit ces menus).
+function restoreQuizPrefs() {
+  let prefs; try { prefs = JSON.parse(localStorage.getItem('mathsgr2_quizprefs') || '{}'); } catch (e) { return; }
+  if (!prefs) return;
+  const df = document.getElementById('difficulty-filter');
+  if (df && prefs.df && [...df.options].some(o => o.value === prefs.df)) df.value = prefs.df;
+  const len = document.getElementById('quiz-length');
+  if (len && prefs.len && [...len.options].some(o => o.value === prefs.len)) len.value = prefs.len;
 }
 
 let missedOnlyMode = false;
@@ -1367,6 +1381,7 @@ function showSection(evtOrId, id) {
   safeMathJax([document.getElementById(sectionId)]);
   if (typeof updateScratchVisibility === 'function') updateScratchVisibility();
   if (sectionId === 'quiz') {
+    if (typeof restoreQuizPrefs === 'function') restoreQuizPrefs();
     const startScreen = document.getElementById('quiz-start-screen');
     const activeScreen = document.getElementById('quiz-active-screen');
     // G7 — Si le résumé est affiché (formula-box présente), revenir à l'accueil quiz
@@ -2993,8 +3008,15 @@ function rateCard(rating) {
   }
 
   if (cards.length === 0) return;
+  // A-t-on rendu la DERNIÈRE carte de la file ? Si oui, on a bouclé un tour complet.
+  const _wasLast = currentFlashcardIndex >= cards.length - 1;
   // Avance dans la file de session (déjà triée par échéance), sans la re-trier
   currentFlashcardIndex = (currentFlashcardIndex + 1) % cards.length;
+  // Tour terminé : petite récompense motivante (cartes multiples seulement).
+  if (_wasLast && cards.length > 1) {
+    if (typeof celebrate === 'function') celebrate('🎉 Tour terminé — ' + fcSessionCount + ' carte' + (fcSessionCount > 1 ? 's' : '') + ' revue' + (fcSessionCount > 1 ? 's' : '') + ' !');
+    else if (typeof showToast === 'function') showToast('🎉 Tour terminé — ' + fcSessionCount + ' cartes revues !', 'var(--color-parabole)');
+  }
   loadFlashcard();
 }
 
@@ -3848,6 +3870,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft'  && document.getElementById('focus-cards').style.display !== 'none') prevFocusCard();
   });
 
+  restoreQuizPrefs(); // restaurer les préférences AVANT filterQuiz (sinon il sauverait les valeurs par défaut)
   filterQuiz(); // Initialiser le compteur de questions dès le chargement
   updateMissedBtn();
   // Quiz se charge uniquement quand on clique 'Commencer'
@@ -5222,5 +5245,52 @@ function renderProgressCharts() {
   // À l'ouverture : si déjà hors-ligne, le signaler discrètement
   document.addEventListener('DOMContentLoaded', function () {
     if (navigator.onLine === false) setTimeout(function () { setState(false); }, 1200);
+  });
+})();
+
+// ── BOUTON « INSTALLER L'APP » (PWA) ──
+// Quand le navigateur juge l'app installable, il émet « beforeinstallprompt ».
+// On capture l'événement et on propose un bouton discret pour ajouter l'app à
+// l'écran d'accueil (révisions hors-ligne, plein écran). Caché si déjà installée.
+// 100% autonome, n'interfère avec rien.
+(function () {
+  'use strict';
+  var deferred = null;
+  function alreadyInstalled() {
+    try { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch (_) { return false; }
+  }
+  function makeBtn() {
+    var b = document.getElementById('install-btn');
+    if (b) return b;
+    b = document.createElement('button');
+    b.id = 'install-btn'; b.type = 'button';
+    b.setAttribute('aria-label', "Installer l'application");
+    b.textContent = '📲 Installer l\'app';
+    b.style.cssText = 'position:fixed; left:14px; bottom:14px; z-index:2400; padding:10px 16px;' +
+      'border:none; border-radius:12px; cursor:pointer; font-size:14px; font-weight:700; color:#fff;' +
+      'background:linear-gradient(135deg,var(--color-nav),#7c3aed); box-shadow:0 6px 20px rgba(0,0,0,0.4);' +
+      'transition:transform 0.2s ease, opacity 0.25s ease;';
+    b.addEventListener('mouseenter', function () { b.style.transform = 'translateY(-2px)'; });
+    b.addEventListener('mouseleave', function () { b.style.transform = ''; });
+    b.addEventListener('click', function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function (c) {
+        if (c && c.outcome === 'accepted' && typeof showToast === 'function') showToast('✅ App installée — retrouve-la sur ton écran d\'accueil !', 'var(--color-parabole)');
+        deferred = null; b.remove();
+      });
+    });
+    document.body.appendChild(b);
+    return b;
+  }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();          // on gère nous-mêmes le moment d'afficher
+    if (alreadyInstalled()) return;
+    deferred = e;
+    makeBtn();
+  });
+  window.addEventListener('appinstalled', function () {
+    deferred = null;
+    var b = document.getElementById('install-btn'); if (b) b.remove();
   });
 })();
