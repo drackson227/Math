@@ -406,6 +406,12 @@
         <option value="difficile">Difficile</option>
         <option value="avance">Avancé</option>
       </select>
+      <select id="quiz-length" onchange="filterQuiz()" title="Nombre de questions par session" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+        <option value="10">10 questions</option>
+        <option value="15">15 questions</option>
+        <option value="20">20 questions</option>
+        <option value="all">Toutes</option>
+      </select>
     </div>
     <button id="daily-btn" onclick="startDailyChallenge()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(239,68,68,0.32);">🔥 Défi du jour — 5 questions</button>
     <button id="mp-launch-btn" onclick="openMultiplayer()" style="display:block; margin:0 auto 1rem; padding:13px 30px; border-radius:12px; border:none; font-size:15px; cursor:pointer; background:linear-gradient(135deg,#22d3ee,#3b82f6); color:#fff; font-weight:800; box-shadow:0 6px 22px rgba(59,130,246,0.32);">🎮 Jouer à plusieurs</button>

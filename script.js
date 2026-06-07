@@ -229,6 +229,14 @@ function filterQuiz() {
     const shuffled = shuffleOptions(q);
     return {...q, opts: shuffled.opts, ans: shuffled.ans};
   });
+  // Quiz plus court & varié : on ne garde qu'un nombre limité de questions par
+  // session (10 par défaut). Comme les ratées sont déjà placées en tête, ce
+  // découpage garde la priorité aux questions à revoir.
+  const _fullCount = currentQuestions.length;
+  const _limEl = document.getElementById('quiz-length');
+  const _lim = _limEl ? _limEl.value : '10';
+  if (_lim !== 'all' && _fullCount > +_lim) currentQuestions = currentQuestions.slice(0, +_lim);
+  window._quizFullCount = _fullCount; // mémorisé pour l'affichage « X sur Y »
   // resetQuiz() sera appelé via startQuiz()
   score = 0; answered = 0; skipped = 0; correctStreak = 0;
   currentActiveQuestion = 0; questionAnswered = [];
@@ -238,7 +246,11 @@ function filterQuiz() {
   updateDailyBtn();
 
   const countEl = document.getElementById('quiz-count-display');
-  if (countEl) countEl.textContent = currentQuestions.length + ' question' + (currentQuestions.length !== 1 ? 's' : '');
+  if (countEl) {
+    const _n = currentQuestions.length;
+    const _extra = (_fullCount > _n) ? ' (sur ' + _fullCount + ')' : '';
+    countEl.textContent = _n + ' question' + (_n !== 1 ? 's' : '') + _extra;
+  }
 }
 
 let missedOnlyMode = false;
@@ -2317,6 +2329,7 @@ function updateProfile() {
     { id: 'total-quizzes', value: data.totalQuizzes || 0, label: 'Quiz complétés' },
     { id: 'avg-score', value: (data.totalQuizzes > 0 ? Math.round(data.totalScore / data.totalQuizzes) : 0) + '%', label: 'Score moyen' },
     { id: 'mastered-questions', value: (function () { var m = data.masteredQuestions || {}; var mi = data.missedQuestions || []; return Object.keys(m).filter(function (k) { return m[k] >= 2 && mi.indexOf(k) === -1; }).length; })(), label: 'Questions maîtrisées' },
+    { id: 'mastered-cards', value: (function () { var fc = data.flashcardData || {}; return Object.keys(fc).filter(function (k) { return (fc[k].interval || 0) >= 7; }).length; })(), label: 'Cartes maîtrisées' },
     { id: 'current-streak', value: data.streak || 0, label: 'Jours consécutifs' },
     { id: 'xp-total', value: data.xp || 0, label: 'XP Total' },
     { id: 'level-display', value: data.level || 'Apprenti', label: 'Niveau' },
@@ -2703,11 +2716,26 @@ function dueTimestamp(front) {
   if (!rec || !rec.due) return 0;
   return new Date(rec.due).getTime();
 }
-// File de session triée par échéance croissante (les cartes « dues » en premier).
-// Construite à l'ouverture / au changement de filtre, PAS re-triée en pleine session.
+// File de session triée « intelligemment ». Construite à l'ouverture / au changement
+// de filtre, PAS re-triée en pleine session. Priorité (révision espacée renforcée) :
+//   1) les cartes À RÉVISER aujourd'hui passent avant celles déjà à jour ;
+//   2) parmi les cartes dues, celles marquées « 😓 difficile » d'abord ;
+//   3) puis de la plus en retard à la plus récente (échéance croissante).
 function buildFlashcardQueue() {
   const base = filteredFlashcards || flashcards;
-  flashcardQueue = [...base].sort((a, b) => dueTimestamp(a.front) - dueTimestamp(b.front));
+  const now = Date.now();
+  flashcardQueue = [...base].sort((a, b) => {
+    const ra = flashcardData[a.front], rb = flashcardData[b.front];
+    const da = (!ra || !ra.due) ? 0 : new Date(ra.due).getTime();
+    const db = (!rb || !rb.due) ? 0 : new Date(rb.due).getTime();
+    const dueA = da <= now ? 0 : 1, dueB = db <= now ? 0 : 1;
+    if (dueA !== dueB) return dueA - dueB;                 // 1) dues avant non-dues
+    if (dueA === 0) {                                       // 2) parmi les dues : difficiles d'abord
+      const ha = ra && ra.rating === 'hard' ? 0 : 1, hb = rb && rb.rating === 'hard' ? 0 : 1;
+      if (ha !== hb) return ha - hb;
+    }
+    return da - db;                                         // 3) échéance croissante
+  });
   return flashcardQueue;
 }
 function getActiveFlashcards() {
@@ -3717,6 +3745,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.formula-legend-item').forEach(item => {
     item.addEventListener('click', () => toggleLegendItem(item));
   });
+
+  // Vitesse : chargement paresseux des images. Le navigateur ne télécharge/décode
+  // une image que lorsqu'elle approche de l'écran → page prête plus vite, surtout
+  // sur téléphone. Une seule passe ici plutôt que d'éditer chaque fichier matière.
+  try {
+    document.querySelectorAll('img:not([loading])').forEach(img => {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+    });
+  } catch (_) {}
 
   const savedTheme   = localStorage.getItem('mathsgr2_theme')   || 'default';
   const savedAnim    = localStorage.getItem('mathsgr2_anim')    || 'normal';

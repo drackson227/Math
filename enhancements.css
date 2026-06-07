@@ -478,3 +478,28 @@ body, .container, .nav, .settings-panel {
   .container { box-shadow: none; border: none; max-width: 100%; }
   .section { display: block !important; page-break-inside: avoid; }
 }
+
+/* ═══════════ 105 — VITESSE & CONFORT ═══════════ */
+
+/* Défilement plus doux + pas de zoom auto du texte sur téléphone (iOS/Android). */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Confort tactile : sur écran tactile, les boutons/onglets font au moins 44px de haut
+   (recommandation d'accessibilité) → plus faciles à viser au doigt, moins de fautes de clic. */
+@media (hover: none) and (pointer: coarse) {
+  .nav-btn, .subj-btn, .opt, .fc-chip, .exp-btn,
+  button[onclick] { min-height: 44px; }
+  .opt { padding-top: 12px; padding-bottom: 12px; }
+}
+
+/* Accessibilité & batterie : si l'utilisateur demande « moins d'animations » dans son
+   système, on coupe transitions et animations (le site reste 100% fonctionnel, juste sobre). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  #particle-canvas { display: none !important; }
+}
