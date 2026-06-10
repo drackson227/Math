@@ -208,7 +208,25 @@
     { q: "« L'addition, s'il vous plaît » se dit :", opts: ["Mag ik de rekening, alstublieft?", "Mag ik het menu?", "Hebt u gereserveerd?", "Gaat u zitten!"], ans: 0, chapter: "tafel", difficulty: "intermediaire", exp: "Mag ik de rekening, a.u.b.? (modal mogen). de rekening = l'addition." },
     { q: "« het voorgerecht », c'est :", opts: ["l'entrée", "le plat principal", "le dessert", "la boisson"], ans: 0, chapter: "tafel", difficulty: "intermediaire", exp: "het voorgerecht = l'entrée · het hoofdgerecht = le plat principal · het nagerecht = le dessert." },
     { q: "« de wortel », c'est :", opts: ["la carotte", "la tomate", "l'oignon", "le poireau"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de wortel = la carotte. (de tomaat = la tomate, de ui/ajuin = l'oignon, de prei = le poireau)." },
-    { q: "Quel adjectif signifie « salé » ?", opts: ["zout", "zoet", "koud", "vers"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "zout = salé · zoet = sucré · koud = froid · vers = frais." }
+    { q: "Quel adjectif signifie « salé » ?", opts: ["zout", "zoet", "koud", "vers"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "zout = salé · zoet = sucré · koud = froid · vers = frais." },
+    // ── Vocabulaire des feuilles de cours (De woning) ──
+    { q: "« de koelkast », c'est :", opts: ["le frigo", "le four", "l'évier", "le tiroir"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de koelkast = le frigo · de oven = le four · de gootsteen = l'évier · de lade = le tiroir." },
+    { q: "Comment dit-on « le grenier » ?", opts: ["de zolder", "de kelder", "de keuken", "de gang"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de zolder = le grenier · de kelder = la cave." },
+    { q: "« de wastafel » se trouve dans :", opts: ["la salle de bain", "la cuisine", "le grenier", "le garage"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de wastafel = le lavabo, dans de badkamer (la salle de bain)." },
+    { q: "« le canapé » se dit :", opts: ["de sofa", "het bed", "de kast", "de stoel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de sofa = le canapé · het bed = le lit · de kast = l'armoire/le placard." },
+    { q: "« de gootsteen », c'est :", opts: ["l'évier", "le robinet", "la poubelle", "le four"], ans: 0, chapter: "woning", difficulty: "intermediaire", exp: "de gootsteen = l'évier · de waterkraan = le robinet · de vuilnisbak = la poubelle." },
+    { q: "Où ranges-tu tes vêtements ?", opts: ["de kleerkast", "de nachttafel", "de koelkast", "de wastafel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de kleerkast = l'armoire (à vêtements)." },
+    { q: "« het dak », c'est :", opts: ["le toit", "le mur", "le sol", "la porte"], ans: 0, chapter: "woning", difficulty: "facile", exp: "het dak = le toit · de voordeur = la porte d'entrée." },
+    { q: "« la cave » se dit :", opts: ["de kelder", "de zolder", "de garage", "de gevel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de kelder = la cave · de gevel = la façade." },
+    // ── Vocabulaire des feuilles de cours (Aan tafel!) ──
+    { q: "« de lepel », c'est :", opts: ["la cuillère", "la fourchette", "le couteau", "l'assiette"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de lepel = la cuillère · de vork = la fourchette · het mes = le couteau · het bord = l'assiette." },
+    { q: "Pour couper la viande, tu utilises :", opts: ["het mes", "de lepel", "de vork", "het glas"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "het mes = le couteau." },
+    { q: "« la pomme » se dit :", opts: ["de appel", "de peer", "de banaan", "de kers"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de appel = la pomme · de peer = la poire · de banaan = la banane · de kers = la cerise." },
+    { q: "« de ui », c'est :", opts: ["l'oignon", "l'ail", "le poireau", "le céleri"], ans: 0, chapter: "tafel", difficulty: "intermediaire", exp: "de ui = l'oignon · de look = l'ail · de prei = le poireau · de selder = le céleri." },
+    { q: "« une bouteille de vin » se dit :", opts: ["een fles wijn", "een glas wijn", "een pot wijn", "een blik wijn"], ans: 0, chapter: "tafel", difficulty: "intermediaire", exp: "een fles = une bouteille · een glas = un verre · een pot = un pot · een blik = une boîte (de conserve)." },
+    { q: "« het nagerecht », c'est :", opts: ["le dessert", "l'entrée", "le plat principal", "la boisson"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "het nagerecht = le dessert · het voorgerecht = l'entrée · het hoofdgerecht = le plat principal." },
+    { q: "« la fraise » se dit :", opts: ["de aardbei", "de framboos", "de kers", "de druif"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de aardbei = la fraise · de framboos = la framboise · de kers = la cerise." },
+    { q: "« de komkommer », c'est :", opts: ["le concombre", "le chou-fleur", "la salade", "le maïs"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de komkommer = le concombre · de bloemkool = le chou-fleur · de sla = la salade · de mais = le maïs." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -277,9 +295,45 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
     var saved = ''; try { saved = nlReadData().nlMyText || ''; } catch (e) {}
     ta.value = saved || NL_TEXT_DEFAULT;
     nlMyCount(); nlTextStatus();
+    try { if (document.getElementById('nl-gap-host')) nlGapGen(); } catch (e) {}
   }
   window.nlMyCount = nlMyCount;
   window.nlTextLoad = nlTextLoad;
+
+  /* ---- Texte à trous : on s'entraîne sur les mots NOTÉS (auxiliaires, participes, modaux) ---- */
+  var NL_GAP = [
+    { t: '① De vakantie (VTT)', s: "Tijdens de zomervakantie {{ben}} ik naar Spanje {{gereisd}}. Mijn ouders {{hebben}} een hotel {{geboekt}}. We {{zijn}} vroeg {{vertrokken}}. Ik {{heb}} veel foto's {{gemaakt}} en ik {{heb}} in de zee {{gezwommen}}. We {{hebben}} in een restaurant {{gegeten}}." },
+    { t: '② Het huishouden', s: "Thuis {{moet}} ik ook {{helpen}}. Ik {{moet}} mijn kamer {{opruimen}}. Soms {{moet}} ik {{afwassen}} of {{stofzuigen}}. Mijn broer {{moet}} de hond {{uitlaten}}." },
+    { t: '③ Ziek zijn (de griep)', s: "Na de vakantie {{ben}} ik ziek {{geworden}}. Ik had {{koorts}} en moest veel {{hoesten}}. Ik had ook {{keelpijn}} en was heel {{moe}}. Ik {{ben}} in bed {{gebleven}} en ik {{heb}} medicijnen {{genomen}}." }
+  ];
+  function nlGapNorm(s) { return String(s == null ? '' : s).toLowerCase().replace(/\s+/g, ' ').trim(); }
+  window.nlGapGen = function () {
+    var host = document.getElementById('nl-gap-host'); if (!host) return;
+    host.innerHTML = NL_GAP.map(function (p) {
+      var body = p.s.replace(/\{\{(.*?)\}\}/g, function (_m, w) {
+        var len = Math.max(4, w.length + 1);
+        return '<input class="nl-gap-in" data-a="' + nlEsc(w) + '" size="' + len + '" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="mot manquant">';
+      });
+      return '<div class="nl-gap-part"><strong>' + nlEsc(p.t) + '</strong><div class="nl-gap-text" lang="nl">' + body + '</div></div>';
+    }).join('');
+    var sc = document.getElementById('nl-gap-score'); if (sc) sc.textContent = '';
+  };
+  window.nlGapCheck = function () {
+    var host = document.getElementById('nl-gap-host'); if (!host) return;
+    var ins = host.querySelectorAll('.nl-gap-in'), ok = 0;
+    ins.forEach(function (inp) {
+      var good = nlGapNorm(inp.value) === nlGapNorm(inp.getAttribute('data-a'));
+      inp.classList.toggle('good', good); inp.classList.toggle('bad', !good);
+      if (good) ok++;
+    });
+    var sc = document.getElementById('nl-gap-score');
+    if (sc) sc.textContent = '✅ ' + ok + ' / ' + ins.length;
+    if (typeof showToast === 'function' && ins.length) showToast(ok === ins.length ? '🎉 Parfait, tout juste !' : (ok + '/' + ins.length + ' correct'), 'var(--color-parabole)');
+  };
+  window.nlGapReveal = function () {
+    var host = document.getElementById('nl-gap-host'); if (!host) return;
+    host.querySelectorAll('.nl-gap-in').forEach(function (inp) { inp.value = inp.getAttribute('data-a'); inp.classList.add('good'); inp.classList.remove('bad'); });
+  };
   window.nlTextSave = function () {
     var ta = document.getElementById('nl-my-text'); if (!ta) return;
     try {
@@ -297,6 +351,14 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
   };
 
   var TEXT_HTML = `<div style="max-width:760px; margin:0 auto;">
+    <style>
+      .nl-gap-part{margin:.6rem 0;}
+      .nl-gap-text{line-height:2.5; font-size:15px;}
+      .nl-gap-in{border:none; border-bottom:2px solid var(--color-nav); background:transparent; color:var(--text-primary); font-size:15px; text-align:center; margin:0 2px; padding:2px 4px; font-family:inherit;}
+      .nl-gap-in:focus{outline:none; border-bottom-color:var(--color-parabole);}
+      .nl-gap-in.good{border-bottom-color:#34d399; color:#34d399; font-weight:700;}
+      .nl-gap-in.bad{border-bottom-color:#f87171; color:#f87171;}
+    </style>
     <div style="text-align:center; margin-bottom:1rem;">
       <h2 style="font-size:28px; font-weight:800; color:var(--color-nav); margin:0;">📝 Mon texte d'examen (±150 mots)</h2>
       <p style="color:var(--text-secondary); margin-top:6px;">Écris et enregistre <strong>ton propre</strong> texte — il est privé et sauvegardé sur ton compte. Thèmes : les vacances (VTT) · le ménage · les maladies.</p>
@@ -309,10 +371,22 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
         <button type="button" onclick="nlTextSave()" style="padding:9px 16px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">💾 Enregistrer</button>
       </div>
     </div>
-    <textarea id="nl-my-text" oninput="nlMyCount()" rows="16" placeholder="Écris ton texte ici…" style="width:100%; box-sizing:border-box; padding:14px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px; line-height:1.8; resize:vertical; font-family:inherit;"></textarea>
+    <textarea id="nl-my-text" lang="nl" spellcheck="true" oninput="nlMyCount()" rows="16" placeholder="Écris ton texte ici…" style="width:100%; box-sizing:border-box; padding:14px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px; line-height:1.8; resize:vertical; font-family:inherit;"></textarea>
     <p id="nl-my-status" style="font-size:12.5px; color:var(--text-secondary); margin:6px 2px 0;"></p>
 
-    <details class="fc-ex" style="margin-top:1.2rem;"><summary>📋 Voir un modèle (à copier / pour s'inspirer)</summary>
+    <details class="fc-ex" style="margin-top:1.2rem;" ontoggle="if(this.open)nlGapGen()"><summary>🧩 Texte à trous — s'entraîner sur les mots notés</summary>
+    <div class="fc-ex-body">
+      <p style="margin:.2rem 0 .6rem;">Complète les <strong>auxiliaires</strong> (ben/heb…), <strong>participes</strong> et <strong>modaux</strong>, puis vérifie.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:.6rem;">
+        <button type="button" onclick="nlGapGen()" style="padding:8px 13px; border-radius:9px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">🔄 Recommencer</button>
+        <button type="button" onclick="nlGapCheck()" style="padding:8px 14px; border-radius:9px; border:none; background:var(--color-parabole); color:#04130d; font-weight:700; cursor:pointer;">✅ Vérifier</button>
+        <button type="button" onclick="nlGapReveal()" style="padding:8px 13px; border-radius:9px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">👁️ Montrer</button>
+        <strong id="nl-gap-score" style="color:var(--color-parabole);"></strong>
+      </div>
+      <div id="nl-gap-host"></div>
+    </div></details>
+
+    <details class="fc-ex" style="margin-top:1rem;"><summary>📋 Voir un modèle (à copier / pour s'inspirer)</summary>
     <div class="fc-ex-body" style="line-height:1.9;">
       <strong>① De vakantie (VTT) :</strong> Tijdens de zomervakantie <strong>ben</strong> ik naar Spanje <strong>gereisd</strong>. Mijn ouders <strong>hebben</strong> een hotel aan zee <strong>geboekt</strong>. We <strong>zijn</strong> 's morgens vroeg <strong>vertrokken</strong>. Het weer was mooi en warm. Ik <strong>heb</strong> veel foto's <strong>gemaakt</strong> en ik <strong>heb</strong> in de zee <strong>gezwommen</strong>. We <strong>hebben</strong> in een leuk restaurant <strong>gegeten</strong>. Het was een fantastische vakantie.<br><br>
       <strong>② Het huishouden :</strong> Thuis <strong>moet</strong> ik ook <strong>helpen</strong>. Ik <strong>moet</strong> mijn kamer <strong>opruimen</strong> en de tafel <strong>afruimen</strong>. Soms <strong>moet</strong> ik <strong>afwassen</strong> of <strong>stofzuigen</strong>. Mijn broer <strong>moet</strong> de hond <strong>uitlaten</strong>. Ik vind het niet altijd leuk, maar het is belangrijk.<br><br>
@@ -356,7 +430,7 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
     });
     host.innerHTML = order.length ? order.map(function (c) {
       return '<h3 class="nl-voc-cat">' + nlEsc(c) + '</h3><div class="nl-voc-grid">' + groups[c].map(function (w) {
-        return '<div class="nl-voc-item"><span class="nl-voc-nl">' + nlEsc(w.nl) + '</span><span class="nl-voc-fr">' + nlEsc(w.fr) + '</span></div>';
+        return '<div class="nl-voc-item"><span class="nl-voc-nl" lang="nl">' + nlEsc(w.nl) + '</span><span class="nl-voc-fr">' + nlEsc(w.fr) + '</span></div>';
       }).join('') + '</div>';
     }).join('') : '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">Aucun mot trouvé.</p>';
     var cnt = document.getElementById('nl-voc-count'); if (cnt) cnt.textContent = q ? (shown + ' résultat' + (shown > 1 ? 's' : '')) : (NL_VOC.length + ' mots du cours');

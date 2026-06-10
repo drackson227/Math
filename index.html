@@ -54,6 +54,13 @@
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 </head>
 <body>
+<noscript>
+  <div style="max-width:560px; margin:14vh auto; padding:2rem; text-align:center; font-family:system-ui,sans-serif; color:#e5e7eb; background:#161922; border:1px solid #2a2f3a; border-radius:16px;">
+    <div style="font-size:44px;">📚</div>
+    <h1 style="font-size:22px; margin:.6rem 0;">GR2 Study</h1>
+    <p style="line-height:1.6; color:#9aa3b2;">Cette application a besoin de <strong>JavaScript</strong> pour fonctionner (cours animés, quiz, flashcards…). Active JavaScript dans ton navigateur puis recharge la page.</p>
+  </div>
+</noscript>
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <canvas id="particle-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;pointer-events:none;z-index:0;opacity:0.6;display:none;"></canvas>
@@ -149,7 +156,7 @@
 
   <div class="settings-row">
     <label>📏 Taille du texte</label>
-    <select onchange="setTextSize(this.value)">
+    <select onchange="setTextSize(this.value)" aria-label="Taille du texte">
       <option value="normal">Normal</option>
       <option value="small">Petit</option>
       <option value="large">Grand</option>
@@ -185,6 +192,14 @@
   <div class="settings-row">
     <label>⌨️ Raccourcis clavier</label>
     <button class="theme-btn" onclick="showShortcuts(); toggleSettings();" style="width:100%; padding:10px;">Voir les raccourcis (?) →</button>
+  </div>
+  <div class="settings-row">
+    <label>⏱️ Minuteur d'examen</label>
+    <button class="theme-btn" onclick="openExamTimer(); toggleSettings();" style="width:100%; padding:10px;">Lancer un chrono d'exam →</button>
+  </div>
+  <div class="settings-row">
+    <label>🖨️ Exporter le cours</label>
+    <button class="theme-btn" onclick="toggleSettings(); exportCoursePDF();" style="width:100%; padding:10px;">Imprimer / PDF de la matière →</button>
   </div>
   <div class="settings-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-subtle);">
     <button onclick="toggleSettings()" style="width:100%; padding:12px; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:white; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:600;">✕ Fermer les paramètres</button>
@@ -299,9 +314,9 @@
       <canvas id="graph-cercle" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
       <div id="cercle-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-cercle); font-family:'Courier New',monospace; text-align:center; background:rgba(96,165,250,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
       <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">h</label><input type="number" id="cercle-h" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">k</label><input type="number" id="cercle-k" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">R</label><input type="number" id="cercle-r" value="3" min="0.1" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label for="cercle-h" style="font-size:12px; color:var(--text-secondary); font-weight:600;">h</label><input type="number" id="cercle-h" aria-label="Centre du cercle, abscisse h" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label for="cercle-k" style="font-size:12px; color:var(--text-secondary); font-weight:600;">k</label><input type="number" id="cercle-k" aria-label="Centre du cercle, ordonnée k" value="0" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label for="cercle-r" style="font-size:12px; color:var(--text-secondary); font-weight:600;">R</label><input type="number" id="cercle-r" aria-label="Rayon du cercle R" value="3" min="0.1" step="0.5" oninput="drawCercle()" style="width:58px; padding:6px 8px; border:1px solid rgba(96,165,250,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
       </div>
     </div>
 
@@ -311,8 +326,8 @@
       <canvas id="graph-droite" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
       <div id="droite-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-droite); font-family:'Courier New',monospace; text-align:center; background:rgba(251,191,36,0.08); border-radius:8px; padding:7px; letter-spacing:0.5px;"></div>
       <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">m</label><input type="number" id="droite-m" value="1" step="0.25" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
-        <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:12px; color:var(--text-secondary); font-weight:600;">p</label><input type="number" id="droite-p" value="0" step="0.5" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label for="droite-m" style="font-size:12px; color:var(--text-secondary); font-weight:600;">m</label><input type="number" id="droite-m" aria-label="Pente m de la droite" value="1" step="0.25" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
+        <div style="display:flex; align-items:center; gap:5px;"><label for="droite-p" style="font-size:12px; color:var(--text-secondary); font-weight:600;">p</label><input type="number" id="droite-p" aria-label="Ordonnée à l'origine p de la droite" value="0" step="0.5" oninput="drawDroite()" style="width:58px; padding:6px 8px; border:1px solid rgba(251,191,36,0.3); border-radius:8px; background:var(--bg-main); color:var(--text-primary); font-size:13px; text-align:center;"></div>
       </div>
     </div>
 
@@ -394,20 +409,20 @@
     <h2 id="quiz-title" style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
     <p id="quiz-subtitle" style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur les vecteurs, le cercle et les droites.</p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:2rem;">
-      <select id="chapter-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+      <select id="chapter-filter" aria-label="Filtrer le quiz par chapitre" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
         <option value="all">Tous les chapitres</option>
         <option value="vecteur">Vecteurs</option>
         <option value="cercle">Cercle</option>
         <option value="droite">Droites</option>
       </select>
-      <select id="difficulty-filter" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+      <select id="difficulty-filter" aria-label="Filtrer le quiz par difficulté" onchange="filterQuiz()" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
         <option value="all">Toutes difficultés</option>
         <option value="facile">Facile</option>
         <option value="intermediaire">Intermédiaire</option>
         <option value="difficile">Difficile</option>
         <option value="avance">Avancé</option>
       </select>
-      <select id="quiz-length" onchange="filterQuiz()" title="Nombre de questions par session" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
+      <select id="quiz-length" onchange="filterQuiz()" aria-label="Nombre de questions par session" title="Nombre de questions par session" style="padding:10px 16px; border-radius:8px; border:2px solid var(--border-subtle); font-size:14px; cursor:pointer; background:var(--bg-main); color:var(--text-primary);">
         <option value="10">10 questions</option>
         <option value="15">15 questions</option>
         <option value="20">20 questions</option>
@@ -461,7 +476,7 @@
     <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
       <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">➕ Nouvelle question</h3>
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Thème</label>
-      <select id="exo-theme" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
+      <select id="exo-theme" aria-label="Choisir le thème de l'exercice généré" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
         <option value="vecteur">🧭 Vecteurs (thème 1)</option>
         <option value="cercle">🔵 Cercle</option>
         <option value="droite">🟡 Droites</option>
@@ -609,8 +624,8 @@
 <footer style="text-align:center; padding:2rem 1rem 3rem; margin-top:2rem; border-top:1px solid var(--border-subtle); color:var(--text-secondary); font-size:13px;">
   <p style="margin:0 0 0.5rem;">Créé par <strong style="color:var(--color-nav);">Drackson</strong></p>
   <p style="margin:0 0 0.75rem;">
-    <a href="https://instagram.com/drackson227" target="_blank" rel="noopener" style="color:var(--color-parabole); text-decoration:none; font-weight:600;">📸 @drackson227</a>
-    <a href="https://www.tiktok.com/@drackson227" target="_blank" rel="noopener" style="color:var(--color-nav); text-decoration:none; font-weight:600; margin-left:14px;">🎵 TikTok @Drackson227</a>
+    <a href="https://instagram.com/drackson227" target="_blank" rel="noopener" style="display:inline-block; padding:4px 2px; color:var(--color-parabole); text-decoration:none; font-weight:600;">📸 @drackson227</a>
+    <a href="https://www.tiktok.com/@drackson227" target="_blank" rel="noopener" style="display:inline-block; padding:4px 2px; color:var(--color-nav); text-decoration:none; font-weight:600; margin-left:14px;">🎵 TikTok @Drackson227</a>
   </p>
   <p style="margin:0; font-size:12px; color:var(--text-secondary); opacity:0.8;">💜 100% gratuit — bonne révision !</p>
 </footer>

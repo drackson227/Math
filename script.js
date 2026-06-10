@@ -1375,6 +1375,13 @@ function showSection(evtOrId, id) {
   }
   document.getElementById(sectionId).classList.add('active');
   if (btn) { btn.classList.add('active'); btn.setAttribute('aria-current', 'page'); }
+  // « Reprendre où j'étais » : on mémorise le dernier onglet de contenu consulté
+  // (on évite les sections premium / spéciales pour ne pas rouvrir une modale au lancement).
+  try {
+    if (['synthese', 'formules', 'methodes', 'exercices', 'erreurs', 'quiz', 'flashcards', 'extra1', 'extra2'].indexOf(sectionId) >= 0) {
+      localStorage.setItem('gr2_last_section', sectionId);
+    }
+  } catch (e) {}
   // Revenir en haut de la page quand on change d'onglet
   try { window.scrollTo(0, 0); } catch (e) {}
   // Re-render formulas in newly visible section
@@ -4856,6 +4863,90 @@ function startStudyTimer() {
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(startStudyTimer, 1500); });
 
+/* ════════════ Lien direct vers un onglet (?go=quiz ou #quiz) ════════════
+   Permet les raccourcis PWA (appui long sur l'icône) et le partage de liens
+   directs vers une section. S'exécute après l'init des matières (400 ms). */
+document.addEventListener('DOMContentLoaded', function () {
+  // On lit le dernier onglet MAINTENANT (avant que l'init des matières, à 400 ms,
+  // n'affiche 'synthese' et n'écrase la valeur mémorisée).
+  var savedLast = '';
+  try { savedLast = localStorage.getItem('gr2_last_section') || ''; } catch (_) {}
+  setTimeout(function () {
+    try {
+      var go = '';
+      try { go = new URLSearchParams(location.search).get('go') || ''; } catch (_) {}
+      if (!go && location.hash) go = location.hash.replace(/^#/, '');
+      go = (go || '').replace(/[^a-z0-9]/gi, '');
+      var fromLink = !!go;
+      // Pas de lien direct → « Reprendre où j'étais » : on rouvre le dernier onglet.
+      if (!go) go = (savedLast || '').replace(/[^a-z0-9]/gi, '');
+      if (!go || go === 'synthese') return; // synthese = déjà l'écran par défaut
+      var sec = document.getElementById(go);
+      if (sec && sec.classList.contains('section') && typeof showSection === 'function') {
+        showSection(go);
+        if (fromLink) { try { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (_) {} }
+      }
+    } catch (_) {}
+  }, 650);
+});
+
+/* ════════════ Minuteur d'examen (chrono « conditions réelles ») ════════════ */
+(function () {
+  var timer = null, remaining = 0, paused = false;
+  function fmt(s) { s = Math.max(0, s); var m = Math.floor(s / 60), x = s % 60; return m + ':' + (x < 10 ? '0' : '') + x; }
+  function render() { var d = document.getElementById('exam-clock'); if (d) d.textContent = fmt(remaining); }
+  function tick() { if (paused) return; remaining--; render(); if (remaining <= 0) finish(); }
+  function finish() {
+    if (timer) { clearInterval(timer); timer = null; }
+    var w = document.getElementById('exam-timer-widget'); if (w) w.classList.add('done');
+    if (typeof showToast === 'function') showToast('⏱️ Temps écoulé — pose ton stylo !', '#f87171');
+    try { if (navigator.vibrate) navigator.vibrate([250, 120, 250]); } catch (e) {}
+  }
+  window.startExamTimer = function (mins) {
+    mins = parseInt(mins, 10); if (!mins || mins < 1 || mins > 600) return;
+    remaining = mins * 60; paused = false;
+    var w = document.getElementById('exam-timer-widget');
+    if (!w) { w = document.createElement('div'); w.id = 'exam-timer-widget'; document.body.appendChild(w); }
+    w.className = '';
+    w.innerHTML = '<span class="etw-label">⏱️</span><span id="exam-clock">' + fmt(remaining) + '</span>' +
+      '<button type="button" id="etw-pause" aria-label="Pause ou reprendre">⏸️</button>' +
+      '<button type="button" id="etw-close" aria-label="Arrêter le minuteur">✕</button>';
+    w.querySelector('#etw-pause').onclick = function () { paused = !paused; this.textContent = paused ? '▶️' : '⏸️'; };
+    w.querySelector('#etw-close').onclick = function () { if (timer) { clearInterval(timer); timer = null; } w.remove(); };
+    if (timer) clearInterval(timer); timer = setInterval(tick, 1000); render();
+    var ov = document.getElementById('exam-timer-overlay'); if (ov) ov.remove();
+  };
+  window.openExamTimer = function () {
+    var ov = document.getElementById('exam-timer-overlay');
+    if (ov) { ov.style.display = 'flex'; return; }
+    ov = document.createElement('div'); ov.id = 'exam-timer-overlay';
+    ov.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:3600; display:flex; align-items:center; justify-content:center; padding:1rem;';
+    var presets = [20, 30, 50, 90];
+    ov.innerHTML = '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:20px; padding:1.8rem 1.5rem; max-width:360px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.5);">' +
+      '<div style="font-size:38px;">⏱️</div>' +
+      '<h3 style="font-size:20px; font-weight:800; color:var(--color-nav); margin:.2rem 0 .3rem;">Minuteur d\'examen</h3>' +
+      '<p style="color:var(--text-secondary); font-size:13px; margin:0 0 1.1rem;">Entraîne-toi en conditions réelles.</p>' +
+      '<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:.9rem;">' +
+        presets.map(function (m) { return '<button type="button" onclick="startExamTimer(' + m + ')" style="padding:12px; border-radius:10px; border:1px solid var(--color-nav); background:transparent; color:var(--color-nav); font-weight:700; cursor:pointer;">' + m + ' min</button>'; }).join('') +
+      '</div>' +
+      '<div style="display:flex; gap:8px;">' +
+        '<input id="exam-custom-min" type="number" min="1" max="600" placeholder="autre (min)" aria-label="Durée personnalisée en minutes" style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px;">' +
+        '<button type="button" onclick="startExamTimer(document.getElementById(\'exam-custom-min\').value)" style="padding:10px 16px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">Go</button>' +
+      '</div>' +
+      '<button type="button" onclick="var o=document.getElementById(\'exam-timer-overlay\'); if(o)o.remove();" style="margin-top:.9rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:13px;">✕ Annuler</button>' +
+    '</div>';
+    ov.addEventListener('click', function (e) { if (e.target === ov) ov.remove(); });
+    document.body.appendChild(ov);
+    var f = document.getElementById('exam-custom-min'); if (f) try { f.focus(); } catch (e) {}
+  };
+})();
+
+/* ════════════ Export du cours en PDF (impression) ════════════ */
+function exportCoursePDF() {
+  if (typeof showToast === 'function') showToast('🖨️ Préparation du cours…', 'var(--color-nav)');
+  setTimeout(function () { try { window.print(); } catch (e) {} }, 300);
+}
+
 /* ════════════ Confort de lecture (dyslexie) ════════════ */
 function setReadingMode(mode) {
   document.body.classList.toggle('reading-comfort', mode === 'comfort');
@@ -4885,7 +4976,7 @@ function showRevisionReminder() {
     bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:3000; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; gap:12px; max-width:92vw; animation:imgModalIn .25s ease;';
     bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
       '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:var(--color-nav); color:#fff; border:none; border-radius:9px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer;">📚 Réviser</button>' +
-      '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer;">✕</button>';
+      '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer; min-width:32px; min-height:32px; border-radius:8px;">✕</button>';
     document.body.appendChild(bar);
     setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 12000);
   } catch (_) {}

@@ -472,13 +472,20 @@ body, .container, .nav, .settings-panel {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Poppins", "Inter", "Segoe UI", sans-serif;
 }
 
-/* ─────────── IMPRESSION (PDF / papier) ─────────── */
+/* ─────────── IMPRESSION (PDF / papier) ───────────
+   Export « cours » propre : on n'imprime que la matière (synthèse, formules,
+   méthodes, exercices, erreurs) — pas le quiz, le profil, les flashcards, etc. */
 @media print {
   .nav, .subject-bar, .settings-toggle, .sidebar-toggle, #particle-canvas,
-  .settings-panel, .chat-tools, .chat-composer, footer a { display: none !important; }
+  .settings-panel, .chat-tools, .chat-composer, footer a,
+  #exam-timer-widget, #back-to-top, .sidebar-overlay, #toast-notification { display: none !important; }
   body { background: #fff; color: #000; padding: 0; }
   .container { box-shadow: none; border: none; max-width: 100%; }
-  .section { display: block !important; page-break-inside: avoid; }
+  .section { display: none !important; }
+  #synthese, #formules, #methodes, #exercices, #erreurs {
+    display: block !important; page-break-inside: avoid;
+  }
+  a[href]::after { content: ""; } /* pas d'URL imprimées en fin de lien */
 }
 
 /* ═══════════ 105 — VITESSE & CONFORT ═══════════ */
@@ -549,3 +556,55 @@ textarea:focus-visible,
 .eco-pole .eco-ico { font-size: 30px; display: block; line-height: 1; }
 .eco-pole strong { display: block; color: var(--text-primary); font-size: 14px; margin-top: 4px; }
 @media (max-width: 600px) { .eco-arrow { transform: rotate(90deg); } }
+
+/* ═══════════ 106 — POLISH VISUEL & CONFORT MOBILE ═══════════ */
+
+/* Rendu du texte plus net (anticrénelage) sur Mac/Windows. */
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+/* Tap mobile propre : on retire le flash gris bleuté du navigateur et on met
+   un retour tactile maison (léger enfoncement) → l'appui « répond » sans clignoter. */
+* { -webkit-tap-highlight-color: transparent; }
+.nav-btn, .subj-btn, .opt, .fc-chip, .theme-btn, .drawer-link {
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .08s ease;
+}
+@media (hover: none) and (pointer: coarse) {
+  .nav-btn:active, .subj-btn:active, .opt:active, .fc-chip:active, .theme-btn:active { transform: scale(0.97); }
+}
+
+/* PWA installée : empêche le « tirer pour rafraîchir » accidentel et le rebond
+   élastique qui fait croire à un bug pendant qu'on lit. */
+body { overscroll-behavior-y: contain; }
+
+/* Lien direct (?go=…) / retour en haut : la section visée ne se cache plus
+   sous les boutons fixes du haut. */
+.section { scroll-margin-top: 64px; }
+
+/* Sélection de texte aux couleurs du site (au lieu du bleu navigateur). */
+::selection { background: color-mix(in srgb, var(--color-nav) 35%, transparent); }
+
+/* Champs désactivés clairement « éteints » (ex. boutons en attente réseau). */
+button:disabled, input:disabled, select:disabled, textarea:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Images : jamais de débordement horizontal (cause n°1 de scroll latéral sur mobile). */
+img { max-width: 100%; height: auto; }
+
+/* ═══════════ Minuteur d'examen — pastille flottante ═══════════ */
+#exam-timer-widget {
+  position: fixed; right: 14px; bottom: 14px; z-index: 3200;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-card); border: 1px solid var(--color-nav);
+  border-radius: 14px; padding: 8px 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4); font-variant-numeric: tabular-nums;
+}
+#exam-timer-widget .etw-label { font-size: 16px; }
+#exam-timer-widget #exam-clock { font-size: 18px; font-weight: 800; color: var(--color-nav); min-width: 52px; text-align: center; }
+#exam-timer-widget button {
+  min-width: 32px; min-height: 32px; border: none; background: transparent;
+  color: var(--text-secondary); font-size: 15px; cursor: pointer; border-radius: 8px;
+}
+#exam-timer-widget button:hover { background: var(--border-subtle); }
+#exam-timer-widget.done { border-color: #f87171; animation: etwPulse 1s ease infinite; }
+#exam-timer-widget.done #exam-clock { color: #f87171; }
+@keyframes etwPulse { 0%,100% { box-shadow: 0 10px 30px rgba(248,113,113,.5); } 50% { box-shadow: 0 10px 40px rgba(248,113,113,.9); } }
+@media (max-width: 480px) { #exam-timer-widget { bottom: 70px; } }
