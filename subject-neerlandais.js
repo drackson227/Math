@@ -225,13 +225,13 @@
     { q: "« de wortel », c'est :", opts: ["la carotte", "la tomate", "l'oignon", "le poireau"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de wortel = la carotte. (de tomaat = la tomate, de ui/ajuin = l'oignon, de prei = le poireau)." },
     { q: "Quel adjectif signifie « salé » ?", opts: ["zout", "zoet", "koud", "vers"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "zout = salé · zoet = sucré · koud = froid · vers = frais." },
     // ── Vocabulaire des feuilles de cours (De woning) ──
-    { q: "« de koelkast », c'est :", opts: ["le frigo", "le four", "l'évier", "le tiroir"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de koelkast = le frigo · de oven = le four · de gootsteen = l'évier · de lade = le tiroir." },
+    { q: "« de koelkast » désigne :", opts: ["le frigo", "le four", "l'évier", "le tiroir"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de koelkast = le frigo · de oven = le four · de gootsteen = l'évier · de lade = le tiroir." },
     { q: "Comment dit-on « le grenier » ?", opts: ["de zolder", "de kelder", "de keuken", "de gang"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de zolder = le grenier · de kelder = la cave." },
     { q: "« de wastafel » se trouve dans :", opts: ["la salle de bain", "la cuisine", "le grenier", "le garage"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de wastafel = le lavabo, dans de badkamer (la salle de bain)." },
     { q: "« le canapé » se dit :", opts: ["de sofa", "het bed", "de kast", "de stoel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de sofa = le canapé · het bed = le lit · de kast = l'armoire/le placard." },
     { q: "« de gootsteen », c'est :", opts: ["l'évier", "le robinet", "la poubelle", "le four"], ans: 0, chapter: "woning", difficulty: "intermediaire", exp: "de gootsteen = l'évier · de waterkraan = le robinet · de vuilnisbak = la poubelle." },
     { q: "Où ranges-tu tes vêtements ?", opts: ["de kleerkast", "de nachttafel", "de koelkast", "de wastafel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de kleerkast = l'armoire (à vêtements)." },
-    { q: "« het dak », c'est :", opts: ["le toit", "le mur", "le sol", "la porte"], ans: 0, chapter: "woning", difficulty: "facile", exp: "het dak = le toit · de voordeur = la porte d'entrée." },
+    { q: "« het dak » désigne :", opts: ["le toit", "le mur", "le sol", "la porte"], ans: 0, chapter: "woning", difficulty: "facile", exp: "het dak = le toit · de voordeur = la porte d'entrée." },
     { q: "« la cave » se dit :", opts: ["de kelder", "de zolder", "de garage", "de gevel"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de kelder = la cave · de gevel = la façade." },
     // ── Vocabulaire des feuilles de cours (Aan tafel!) ──
     { q: "« de lepel », c'est :", opts: ["la cuillère", "la fourchette", "le couteau", "l'assiette"], ans: 0, chapter: "tafel", difficulty: "facile", exp: "de lepel = la cuillère · de vork = la fourchette · het mes = le couteau · het bord = l'assiette." },
