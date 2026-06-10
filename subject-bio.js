@@ -225,11 +225,58 @@
   sections.synthese = `<div id="synthese" class="section active">
     <div style="text-align:center; margin-bottom:1.5rem;">
       <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">🧬 Biologie</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">La division cellulaire & la génétique (pages 12 → 24)</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">La structure du vivant, les biomolécules, la division cellulaire & la génétique</p>
     </div>
 
     <div class="synth-section">
-      <h2>1. Le cycle cellulaire & la réplication de l'ADN</h2>
+      <h2>1. La structure du vivant</h2>
+      <p>Le vivant est organisé en <strong>niveaux emboîtés</strong>, du plus petit au plus grand. Chaque niveau est constitué de plusieurs éléments du niveau précédent :</p>
+      <div style="display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin:0.8rem 0; font-size:12.5px;">
+        ${['Atome', 'Molécule', 'Organite', 'Cellule', 'Tissu', 'Organe', 'Système', 'Organisme', 'Population', 'Communauté', 'Écosystème'].map(function (n, i, a) {
+          return '<span style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:5px 9px; font-weight:600; color:var(--text-primary);">' + n + '</span>' + (i < a.length - 1 ? '<span style="color:var(--color-nav); font-weight:800;">→</span>' : '');
+        }).join('')}
+      </div>
+      <p>La <strong>cellule</strong> est l'<strong>unité de base</strong> de tout être vivant. On distingue deux grands types :</p>
+      <ul style="line-height:2;">
+        <li><strong>Cellule procaryote</strong> (ex. une <strong>bactérie</strong>, ~2 µm) : <strong>pas de noyau</strong> ; l'ADN (information génétique) flotte <strong>librement</strong> dans le cytoplasme. Peu d'organites.</li>
+        <li><strong>Cellule eucaryote</strong> (cellule <strong>animale</strong>, <strong>végétale</strong>, de <strong>champignon</strong>) : possède un <strong>noyau</strong> et d'autres <strong>organites limités par une membrane</strong>.</li>
+      </ul>
+      <p style="margin-top:1rem;"><strong>Les organites de la cellule animale et leur fonction :</strong></p>
+      <ul style="line-height:2;">
+        <li><strong>Noyau</strong> : contient l'<strong>ADN</strong> ; entouré d'une membrane nucléaire percée de <strong>pores</strong>.</li>
+        <li><strong>Membrane plasmique</strong> : limite la cellule et contrôle les <strong>échanges</strong>.</li>
+        <li><strong>Cytoplasme</strong> : milieu où baignent les organites.</li>
+        <li><strong>Ribosomes</strong> : fabriquent les <strong>protéines</strong>.</li>
+        <li><strong>Réticulum endoplasmique</strong> : <strong>rugueux</strong> (couvert de ribosomes → protéines) ou <strong>lisse</strong> (lipides).</li>
+        <li><strong>Appareil de Golgi</strong> : <strong>modifie</strong> et <strong>expédie</strong> les protéines.</li>
+        <li><strong>Lysosomes</strong> : contiennent des <strong>enzymes</strong> qui <strong>digèrent</strong> (décomposent) les déchets.</li>
+        <li><strong>Mitochondries</strong> : produisent l'<strong>énergie</strong> (respiration cellulaire).</li>
+      </ul>
+      <p>La cellule <strong>végétale</strong> possède en plus : une <strong>paroi</strong>, des <strong>chloroplastes</strong> (photosynthèse) et une grande <strong>vacuole</strong>.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Imagine des poupées russes : un <strong>atome</strong> est minuscule, on les assemble en <strong>molécules</strong>, puis en <strong>organites</strong>, qui forment une <strong>cellule</strong>, et ainsi de suite jusqu'à l'<strong>écosystème</strong>. La cellule est la plus petite « brique » vivante. Une bactérie n'a pas de noyau (procaryote) ; nos cellules en ont un (eucaryote).</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>2. Les molécules du vivant (biomolécules)</h2>
+      <p>Le corps est fait de molécules <strong>inorganiques</strong> et <strong>organiques</strong> (à base de <strong>carbone</strong>).</p>
+      <ul style="line-height:2;">
+        <li><strong>L'eau</strong> (inorganique) : c'est la molécule la plus abondante du vivant. Elle est le <strong>solvant</strong> de la vie et sert au <strong>transport</strong> des substances. Sa proportion varie selon l'âge et le sexe.</li>
+        <li><strong>Les glucides</strong> (sucres, ex. le <strong>glucose</strong>) : principale source d'<strong>énergie rapide</strong>.</li>
+        <li><strong>Les lipides</strong> : <strong>réserve d'énergie</strong> et isolant. Un <strong>triglycéride</strong> = <strong>glycérol + 3 acides gras</strong>. Les <strong>phospholipides</strong> (tête <strong>hydrophile</strong> / queue <strong>hydrophobe</strong>) forment les <strong>membranes</strong>.</li>
+        <li><strong>Les protéines</strong> : les molécules organiques les plus complexes. Elles sont faites d'<strong>acides aminés</strong> (<strong>20 différents</strong>) reliés en une <strong>chaîne polypeptidique</strong>. Chaque acide aminé porte une fonction <strong>amine (–NH₂)</strong> et une fonction <strong>acide carboxylique (–COOH)</strong>. Rôles : structure, <strong>enzymes</strong>, transport.</li>
+        <li><strong>Les acides nucléiques</strong> (<strong>ADN</strong>, ARN) : portent l'<strong>information génétique</strong> (voir chapitre suivant).</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Les biomolécules sont les « ingrédients » du corps. L'<strong>eau</strong> mouille tout, les <strong>glucides</strong> donnent l'énergie tout de suite, les <strong>lipides</strong> stockent l'énergie, et les <strong>protéines</strong> (des colliers d'<strong>acides aminés</strong>) construisent et font travailler la cellule.</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>3. Le cycle cellulaire & la réplication de l'ADN</h2>
       <p>Une cellule passe par un <strong>cycle</strong> : elle grandit, <strong>copie son ADN</strong>, puis se divise. Les phases se suivent toujours dans le même ordre : <strong>G1, S, G2</strong> (l'<strong>interphase</strong>) puis <strong>M</strong> (la <strong>mitose</strong>).</p>
       <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:1rem 0; font-size:13px;">
         ${['G1 (croissance)', 'S (copie de l\'ADN)', 'G2 (préparation)', 'Mitose (M)'].map(function (n, i, a) {
@@ -250,7 +297,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>2. La mitose</h2>
+      <h2>4. La mitose</h2>
       <p>La <strong>mitose</strong> divise une cellule en <strong>2 cellules filles identiques</strong> à la cellule mère (même ADN). Elle sert à la <strong>croissance</strong> et à la <strong>réparation</strong> des tissus. Quand l'ADN se condense, chaque chromosome dédoublé a une forme en <strong>X</strong> : 2 <strong>chromatides-sœurs</strong> reliées par le <strong>centromère</strong>.</p>
       <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0.6rem 0 1rem; font-size:13px;">
         ${['Prophase', 'Métaphase', 'Anaphase', 'Télophase'].map(function (n, i, a) {
@@ -271,7 +318,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>3. Le caryotype & la ploïdie</h2>
+      <h2>5. Le caryotype & la ploïdie</h2>
       <p>Le <strong>caryotype</strong> est la « photo » des chromosomes d'une cellule, <strong>classés par paires</strong> (du plus grand au plus petit). Chez l'humain : <strong>23 paires</strong> = <strong>46 chromosomes</strong>.</p>
       <ul style="line-height:2;">
         <li><strong>Autosomes</strong> : les 22 premières paires (chromosomes « ordinaires »).</li>
@@ -286,7 +333,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>4. La méiose</h2>
+      <h2>6. La méiose</h2>
       <p>La <strong>méiose</strong> fabrique les <strong>gamètes</strong> (spermatozoïdes, ovules). À partir d'<strong>une</strong> cellule (2n), elle réalise <strong>2 divisions successives</strong> et donne <strong>4 cellules</strong> à <strong>n</strong> chromosomes (deux fois moins).</p>
       <div style="text-align:center; margin:0.8rem 0;">${SVG_MEIOSE}</div>
       <ul style="line-height:2;">
@@ -301,7 +348,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>5. La fécondation</h2>
+      <h2>7. La fécondation</h2>
       <p>La <strong>fécondation</strong> est la <strong>fusion</strong> d'un gamète mâle (spermatozoïde, n) et d'un gamète femelle (ovule, n). Elle forme la <strong>cellule-œuf</strong> (zygote) à <strong>2n</strong> chromosomes.</p>
       <div class="key-rule"><div class="formula-main" style="font-size:18px;">gamète (n) + gamète (n) → cellule-œuf (2n)</div></div>
       <ul style="line-height:2;">
@@ -315,7 +362,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>6. Le monohybridisme (Mendel)</h2>
+      <h2>8. Le monohybridisme (Mendel)</h2>
       <figure class="hfig hfig-float" style="max-width:140px"><img src="mendel.jpg" alt="Gregor Mendel" loading="lazy"><figcaption>Gregor Mendel (1822-1884), le père de la génétique</figcaption></figure>
       <p>Le <strong>monohybridisme</strong> = l'étude de la transmission d'<strong>un seul</strong> caractère. <strong>Mendel</strong> l'a étudié en croisant des <strong>petits pois</strong>.</p>
       <p><strong>Vocabulaire essentiel :</strong></p>
@@ -440,6 +487,22 @@
   </div>`;
 
   var questions = [
+    // ── Structure du vivant ──
+    { q: "Quel est le plus petit niveau d'organisation du vivant ?", opts: ["l'atome", "la cellule", "l'organe", "le tissu"], ans: 0, chapter: "structure", difficulty: "facile", exp: "Ordre : atome → molécule → organite → cellule → tissu → organe → système → organisme → … → écosystème." },
+    { q: "L'unité de base de tout être vivant est :", opts: ["la cellule", "l'atome", "la molécule", "l'organe"], ans: 0, chapter: "structure", difficulty: "facile", exp: "La cellule est la plus petite unité vivante." },
+    { q: "Une cellule SANS noyau est dite :", opts: ["procaryote", "eucaryote", "végétale", "animale"], ans: 0, chapter: "structure", difficulty: "facile", exp: "Procaryote (ex. bactérie) = pas de noyau, ADN libre. Eucaryote = noyau + organites." },
+    { q: "Quel organite contient l'ADN ?", opts: ["le noyau", "la mitochondrie", "le ribosome", "le lysosome"], ans: 0, chapter: "structure", difficulty: "facile", exp: "Le noyau renferme l'ADN (information génétique)." },
+    { q: "Quel organite produit l'énergie de la cellule ?", opts: ["la mitochondrie", "le noyau", "l'appareil de Golgi", "le ribosome"], ans: 0, chapter: "structure", difficulty: "facile", exp: "La mitochondrie produit l'énergie (respiration cellulaire)." },
+    { q: "Quel organite fabrique les protéines ?", opts: ["le ribosome", "le lysosome", "la vacuole", "la paroi"], ans: 0, chapter: "structure", difficulty: "intermediaire", exp: "Les ribosomes assemblent les protéines." },
+    { q: "Rôle de l'appareil de Golgi :", opts: ["modifier et expédier les protéines", "produire l'énergie", "stocker l'ADN", "digérer les déchets"], ans: 0, chapter: "structure", difficulty: "intermediaire", exp: "Le Golgi modifie puis expédie les protéines ; les lysosomes digèrent." },
+    { q: "Présent dans la cellule végétale mais PAS animale :", opts: ["le chloroplaste", "le noyau", "la mitochondrie", "le ribosome"], ans: 0, chapter: "structure", difficulty: "intermediaire", exp: "La cellule végétale a en plus : paroi, chloroplastes, grande vacuole." },
+    // ── Biomolécules ──
+    { q: "La molécule la plus abondante du vivant (solvant) est :", opts: ["l'eau", "le glucose", "une protéine", "un lipide"], ans: 0, chapter: "biomolecules", difficulty: "facile", exp: "L'eau est le solvant de la vie et sert au transport." },
+    { q: "Un triglycéride est formé de glycérol et de :", opts: ["3 acides gras", "2 acides aminés", "1 sucre", "4 bases azotées"], ans: 0, chapter: "biomolecules", difficulty: "intermediaire", exp: "Triglycéride = glycérol + 3 acides gras." },
+    { q: "Les protéines sont faites de :", opts: ["acides aminés", "acides gras", "nucléotides", "glucose"], ans: 0, chapter: "biomolecules", difficulty: "facile", exp: "Les protéines = chaîne d'acides aminés (chaîne polypeptidique)." },
+    { q: "Combien d'acides aminés différents composent les protéines ?", opts: ["20", "4", "8", "100"], ans: 0, chapter: "biomolecules", difficulty: "intermediaire", exp: "20 acides aminés différents." },
+    { q: "Dans un phospholipide, la tête est :", opts: ["hydrophile", "hydrophobe", "neutre", "acide"], ans: 0, chapter: "biomolecules", difficulty: "difficile", exp: "Tête hydrophile (aime l'eau) + queue hydrophobe → forme les membranes." },
+    { q: "La principale source d'énergie rapide est :", opts: ["les glucides", "les protéines", "l'eau", "les sels minéraux"], ans: 0, chapter: "biomolecules", difficulty: "facile", exp: "Les glucides (sucres, ex. glucose) = énergie rapide ; les lipides = réserve." },
     { q: "Le cycle cellulaire comprend l'interphase et :", opts: ["la mitose", "la respiration", "la photosynthèse", "la digestion"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Cycle = interphase (G1, S, G2) + mitose (M)." },
     { q: "Dans quel ordre se déroule l'interphase ?", opts: ["G1 → S → G2", "S → G1 → G2", "G2 → S → G1", "M → S → G1"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "Interphase : G1 (croissance), S (copie ADN), G2 (préparation)." },
     { q: "L'ADN est copié (répliqué) pendant la phase :", opts: ["S", "G1", "G2", "M"], ans: 0, chapter: "cycle", difficulty: "facile", exp: "La réplication de l'ADN a lieu en phase S." },
@@ -484,6 +547,13 @@
   ];
 
   var flashcards = [
+    { front: "Les niveaux d'organisation du vivant (ordre) ?", back: "<strong>Atome → Molécule → Organite → Cellule → Tissu → Organe → Système → Organisme → Population → Communauté → Écosystème.</strong>", chapter: "structure" },
+    { front: "Cellule procaryote vs eucaryote ?", back: "<strong>Procaryote</strong> (bactérie) : <strong>pas de noyau</strong>, ADN libre. <strong>Eucaryote</strong> (animale, végétale, champignon) : <strong>noyau + organites</strong> à membrane.", chapter: "structure" },
+    { front: "Rôle de la mitochondrie ? Du ribosome ?", back: "<strong>Mitochondrie</strong> = produit l'<strong>énergie</strong> (respiration). <strong>Ribosome</strong> = fabrique les <strong>protéines</strong>.", chapter: "structure" },
+    { front: "La cellule végétale a quoi en plus ?", back: "Une <strong>paroi</strong>, des <strong>chloroplastes</strong> (photosynthèse) et une grande <strong>vacuole</strong>.", chapter: "structure" },
+    { front: "Qu'est-ce qu'un triglycéride ?", back: "Un lipide = <strong>glycérol + 3 acides gras</strong>. Réserve d'énergie. (Phospholipide = tête hydrophile + queue hydrophobe → membranes.)", chapter: "biomolecules" },
+    { front: "De quoi sont faites les protéines ?", back: "D'<strong>acides aminés</strong> (<strong>20 différents</strong>) reliés en <strong>chaîne polypeptidique</strong>. Chacun a une fonction <strong>amine (–NH₂)</strong> et <strong>acide carboxylique (–COOH)</strong>.", chapter: "biomolecules" },
+    { front: "Les 4 grandes familles de molécules organiques ?", back: "<strong>Glucides</strong> (énergie rapide), <strong>lipides</strong> (réserve/membranes), <strong>protéines</strong> (structure/enzymes), <strong>acides nucléiques</strong> (ADN/ARN). + l'<strong>eau</strong> (inorganique, solvant).", chapter: "biomolecules" },
     { front: "Les deux grandes parties du cycle cellulaire ?", back: "L'<strong>interphase</strong> (G1 → S → G2) puis la <strong>mitose</strong> (M).<br><svg viewBox='0 0 200 178' width='168' style='max-width:100%;height:auto;margin-top:8px'><path d='M100,22 A58,58 0 0 1 158,80' fill='none' stroke='#f87171' stroke-width='8'/><path d='M158,80 A58,58 0 1 1 100,22' fill='none' stroke='#60a5fa' stroke-width='8'/><text x='124' y='44' fill='#f87171' font-size='12' font-weight='bold'>M</text><text x='120' y='116' fill='#bfdbfe' font-size='11'>G1</text><text x='62' y='118' fill='#bfdbfe' font-size='11'>S</text><text x='60' y='54' fill='#bfdbfe' font-size='11'>G2</text><text x='100' y='84' fill='#e5e7eb' font-size='9' text-anchor='middle'>cycle</text></svg><br><em>Interphase G1→S→G2 (bleu) puis mitose M (rouge), dans le sens horaire.</em>", chapter: "cycle" },
     { front: "Quand l'ADN est-il répliqué ?", back: "Pendant la <strong>phase S</strong> : la quantité d'ADN passe de 1 à 2.", chapter: "cycle" },
     { front: "Comment se passe la réplication de l'ADN ?", back: "L'<strong>ADN polymérase</strong> ouvre la double hélice ; chaque brin sert de modèle ; les nucléotides s'apparient (<strong>A–T, C–G</strong>) → 2 molécules identiques.", chapter: "cycle" },
@@ -520,8 +590,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '🧬 Notions clés', exercices: '🔬 Exercices' },
-      chapOrder: ['cycle', 'mitose', 'caryotype', 'meiose', 'fecondation', 'monohybridisme'],
-      chapLabels: { cycle: 'Cycle cellulaire & ADN', mitose: 'La mitose', caryotype: 'Caryotype & ploïdie', meiose: 'La méiose', fecondation: 'La fécondation', monohybridisme: 'Monohybridisme (Mendel)' }
+      chapOrder: ['structure', 'biomolecules', 'cycle', 'mitose', 'caryotype', 'meiose', 'fecondation', 'monohybridisme'],
+      chapLabels: { structure: 'Structure du vivant', biomolecules: 'Les biomolécules', cycle: 'Cycle cellulaire & ADN', mitose: 'La mitose', caryotype: 'Caryotype & ploïdie', meiose: 'La méiose', fecondation: 'La fécondation', monohybridisme: 'Monohybridisme (Mendel)' }
     }
   });
 })();

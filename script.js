@@ -945,14 +945,6 @@ function renderChapterStats() {
     '<p class="chap-help">Barre du haut = maîtrise globale (les questions difficiles comptent plus). En dessous, ta réussite niveau par niveau.</p>' +
     rows + reco + '</div>';
 }
-function reviseChapter(ch) {
-  var sel = document.getElementById('chapter-filter'); if (sel) sel.value = ch;
-  var dsel = document.getElementById('difficulty-filter'); if (dsel) dsel.value = 'all';
-  if (typeof filterQuiz === 'function') filterQuiz();
-  missedOnlyMode = false;
-  startQuiz();
-}
-
 function updateLevel(data) {
   if (data.xp >= 300) {
     data.level = 'Expert GR2';

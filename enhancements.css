@@ -572,10 +572,6 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   .nav-btn:active, .subj-btn:active, .opt:active, .fc-chip:active, .theme-btn:active { transform: scale(0.97); }
 }
 
-/* PWA installée : empêche le « tirer pour rafraîchir » accidentel et le rebond
-   élastique qui fait croire à un bug pendant qu'on lit. */
-body { overscroll-behavior-y: contain; }
-
 /* Lien direct (?go=…) / retour en haut : la section visée ne se cache plus
    sous les boutons fixes du haut. */
 .section { scroll-margin-top: 64px; }
