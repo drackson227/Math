@@ -300,23 +300,45 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
   window.nlMyCount = nlMyCount;
   window.nlTextLoad = nlTextLoad;
 
-  /* ---- Texte à trous : on s'entraîne sur les mots NOTÉS (auxiliaires, participes, modaux) ---- */
-  var NL_GAP = [
-    { t: '① De vakantie (VTT)', s: "Tijdens de zomervakantie {{ben}} ik naar Spanje {{gereisd}}. Mijn ouders {{hebben}} een hotel {{geboekt}}. We {{zijn}} vroeg {{vertrokken}}. Ik {{heb}} veel foto's {{gemaakt}} en ik {{heb}} in de zee {{gezwommen}}. We {{hebben}} in een restaurant {{gegeten}}." },
-    { t: '② Het huishouden', s: "Thuis {{moet}} ik ook {{helpen}}. Ik {{moet}} mijn kamer {{opruimen}}. Soms {{moet}} ik {{afwassen}} of {{stofzuigen}}. Mijn broer {{moet}} de hond {{uitlaten}}." },
-    { t: '③ Ziek zijn (de griep)', s: "Na de vakantie {{ben}} ik ziek {{geworden}}. Ik had {{koorts}} en moest veel {{hoesten}}. Ik had ook {{keelpijn}} en was heel {{moe}}. Ik {{ben}} in bed {{gebleven}} en ik {{heb}} medicijnen {{genomen}}." }
-  ];
+  /* ---- Texte à trous : généré À PARTIR DU TEXTE DE L'ÉLÈVE (pas un modèle figé).
+     On masque les mots NOTÉS : auxiliaires (ben/heb/zijn…), modaux (moet/mag/wil/kan…)
+     et participes passés (gereden, gegaan, gemaakt…). Les lignes-titres (sans point)
+     restent intactes. ---- */
   function nlGapNorm(s) { return String(s == null ? '' : s).toLowerCase().replace(/\s+/g, ' ').trim(); }
+  var NL_GAP_AUX = ['ben', 'bent', 'is', 'zijn', 'was', 'waren', 'heb', 'hebt', 'heeft', 'hebben', 'had', 'hadden', 'word', 'wordt', 'worden', 'werd', 'werden'];
+  var NL_GAP_MOD = ['moet', 'moeten', 'moest', 'moesten', 'mag', 'mogen', 'mocht', 'mochten', 'wil', 'wilt', 'willen', 'wilde', 'wou', 'wilden', 'kan', 'kun', 'kunt', 'kunnen', 'kon', 'konden', 'zal', 'zult', 'zullen', 'zou', 'zouden'];
+  var NL_GAP_PART = ['gereden', 'gegaan', 'gefietst', 'gemaakt', 'gegeten', 'geslapen', 'geworden', 'gebleven', 'genomen', 'gereisd', 'geboekt', 'gezwommen', 'gewerkt', 'gehad', 'geweest', 'gekomen', 'gezien', 'gedaan', 'gekocht', 'gevonden', 'gespeeld', 'gewassen', 'gehoest', 'gevallen', 'gedronken', 'geschreven', 'gelezen', 'geleerd', 'gewandeld', 'gelopen', 'gezegd', 'gevraagd', 'geantwoord', 'gebracht', 'gedacht', 'gekregen', 'gebeld', 'gegeven', 'gevoeld', 'geholpen', 'geluisterd', 'gewonnen', 'vertrokken', 'ontmoet', 'begonnen', 'verloren', 'vergeten', 'bezocht', 'gespeld'];
+  function nlGapIsTarget(w) {
+    if (!w) return false;
+    return NL_GAP_AUX.indexOf(w) >= 0 || NL_GAP_MOD.indexOf(w) >= 0 || NL_GAP_PART.indexOf(w) >= 0;
+  }
+  function nlGapLine(line) {
+    return line.split(/(\s+)/).map(function (tok) {
+      if (/^\s*$/.test(tok)) return tok;
+      var m = tok.match(/^([^A-Za-zÀ-ÿ'’]*)([A-Za-zÀ-ÿ'’]+)([^A-Za-zÀ-ÿ'’]*)$/);
+      if (!m) return nlEsc(tok);
+      var pre = m[1], core = m[2], post = m[3];
+      if (nlGapIsTarget(core.toLowerCase())) {
+        var len = Math.max(4, core.length + 1);
+        return nlEsc(pre) + '<input class="nl-gap-in" data-a="' + nlEsc(core) + '" size="' + len + '" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="mot manquant">' + nlEsc(post);
+      }
+      return nlEsc(tok);
+    }).join('');
+  }
   window.nlGapGen = function () {
     var host = document.getElementById('nl-gap-host'); if (!host) return;
-    host.innerHTML = NL_GAP.map(function (p) {
-      var body = p.s.replace(/\{\{(.*?)\}\}/g, function (_m, w) {
-        var len = Math.max(4, w.length + 1);
-        return '<input class="nl-gap-in" data-a="' + nlEsc(w) + '" size="' + len + '" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="mot manquant">';
-      });
-      return '<div class="nl-gap-part"><strong>' + nlEsc(p.t) + '</strong><div class="nl-gap-text" lang="nl">' + body + '</div></div>';
+    var txt = '';
+    try { txt = (nlReadData().nlMyText || '').trim(); } catch (e) {}
+    if (!txt) txt = NL_TEXT_DEFAULT;
+    var html = txt.split(/\r?\n/).map(function (line) {
+      if (!line.trim()) return '<div style="height:.45rem"></div>';
+      if (!/[.!?]/.test(line)) return '<div class="nl-gap-head"><strong>' + nlEsc(line) + '</strong></div>'; // titre
+      return '<div class="nl-gap-line" lang="nl">' + nlGapLine(line) + '</div>';
     }).join('');
-    var sc = document.getElementById('nl-gap-score'); if (sc) sc.textContent = '';
+    host.innerHTML = '<div class="nl-gap-text">' + html + '</div>';
+    var blanks = host.querySelectorAll('.nl-gap-in').length;
+    var sc = document.getElementById('nl-gap-score');
+    if (sc) sc.textContent = blanks ? '' : '(aucun mot noté détecté — écris des phrases dans ton texte)';
   };
   window.nlGapCheck = function () {
     var host = document.getElementById('nl-gap-host'); if (!host) return;
@@ -343,6 +365,7 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
       if (typeof showToast === 'function') showToast('💾 Ton texte est enregistré', 'var(--color-parabole)');
     } catch (e) { if (typeof showToast === 'function') showToast("Échec de l'enregistrement", '#f87171'); }
     nlTextStatus();
+    try { if (document.getElementById('nl-gap-host')) nlGapGen(); } catch (e) {} // le texte à trous suit TON texte
   };
   window.nlTextReset = function () {
     var ta = document.getElementById('nl-my-text'); if (!ta) return;
@@ -353,6 +376,8 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
   var TEXT_HTML = `<div style="max-width:760px; margin:0 auto;">
     <style>
       .nl-gap-part{margin:.6rem 0;}
+      .nl-gap-head{margin:.9rem 0 .15rem; color:var(--color-nav);}
+      .nl-gap-line{margin:.1rem 0;}
       .nl-gap-text{line-height:2.5; font-size:15px;}
       .nl-gap-in{border:none; border-bottom:2px solid var(--color-nav); background:transparent; color:var(--text-primary); font-size:15px; text-align:center; margin:0 2px; padding:2px 4px; font-family:inherit;}
       .nl-gap-in:focus{outline:none; border-bottom-color:var(--color-parabole);}
