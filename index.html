@@ -201,6 +201,11 @@
     <label>🖨️ Exporter le cours</label>
     <button class="theme-btn" onclick="toggleSettings(); exportCoursePDF();" style="width:100%; padding:10px;">Imprimer / PDF de la matière →</button>
   </div>
+  <div class="settings-row">
+    <label>📄 Anti-sèche imprimable</label>
+    <button class="theme-btn" onclick="toggleSettings(); openCheatSheet('formules');" style="width:100%; padding:10px; margin-bottom:6px;">Formules seules (~1 page) →</button>
+    <button class="theme-btn" onclick="toggleSettings(); openCheatSheet('full');" style="width:100%; padding:10px;">Complète (formules + définitions) →</button>
+  </div>
   <div class="settings-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-subtle);">
     <button onclick="toggleSettings()" style="width:100%; padding:12px; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:white; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:600;">✕ Fermer les paramètres</button>
   </div>

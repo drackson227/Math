@@ -43,7 +43,7 @@
   sections.synthese = `<div id="synthese" class="section active">
     <div style="text-align:center; margin-bottom:1.5rem;">
       <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">🇬🇧 Anglais — 4ᵉ</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">Unit 7 « Kia Ora » · present perfect · modals · superstitions &amp; school rules</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">Unit 7 « Kia Ora » · present perfect · past simple &amp; perfect · future · modals · superstitions &amp; school rules</p>
     </div>
 
     <div class="synth-section">
@@ -66,6 +66,41 @@
         <li><strong>must</strong> : obligation forte / certitude. <strong>mustn't</strong> = interdiction. <em>You must stop. / You mustn't smoke.</em></li>
         <li><strong>have to</strong> : obligation (extérieure). <strong>don't have to</strong> = pas obligé. <em>I have to wear a uniform.</em></li>
         <li><strong>should / ought to</strong> : conseil. <em>You should sleep more.</em></li>
+      </ul>
+    </div>
+
+    <div class="synth-section">
+      <h2>Grammar 3 — Past simple (le prétérit)</h2>
+      <p>On l'utilise pour une action <strong>terminée</strong> à un <strong>moment précis du passé</strong> (yesterday, last week, in 2020, two days ago).</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:16px;">+ : V-ed (réguliers) / V2 (irréguliers)<br>− : didn't + base verbale<br>? : Did + sujet + base verbale</div></div>
+      <ul style="line-height:1.9;">
+        <li><strong>Réguliers</strong> : verbe + <strong>-ed</strong>. <em>work → worked, play → played, watch → watched.</em></li>
+        <li><strong>Irréguliers</strong> (à apprendre par cœur) : go → <strong>went</strong>, see → <strong>saw</strong>, eat → <strong>ate</strong>, take → <strong>took</strong>, have → <strong>had</strong>, give → <strong>gave</strong>, find → <strong>found</strong>, write → <strong>wrote</strong>, drink → <strong>drank</strong>.</li>
+        <li><strong>Négatif</strong> : <em>I <strong>didn't go</strong></em> (jamais <s>didn't went</s> : la base verbale après did).</li>
+        <li><strong>Question</strong> : <em><strong>Did</strong> you <strong>see</strong> it?</em> (base verbale, pas de -ed).</li>
+      </ul>
+      <p><strong>Mots-clés :</strong> yesterday · last (night/week/year) · … ago · in 1990 · when.</p>
+    </div>
+
+    <div class="synth-section">
+      <h2>Grammar 4 — Past perfect (le plus-que-parfait)</h2>
+      <p>Il décrit une action <strong>encore plus ancienne</strong> qu'une autre action passée : le passé <strong>du</strong> passé.</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:17px;">had + participe passé (V-ed / V3)</div></div>
+      <ul style="line-height:1.9;">
+        <li>Même forme à <strong>toutes les personnes</strong> : <em>I/you/he <strong>had</strong> finished</em>.</li>
+        <li>Action <strong>1</strong> (la plus ancienne) → <strong>past perfect</strong> · action <strong>2</strong> (plus récente) → <strong>past simple</strong>.<br><em>When I <strong>arrived</strong> (2), the train <strong>had</strong> already <strong>left</strong> (1).</em> → le train est parti AVANT mon arrivée.</li>
+        <li><strong>Négatif</strong> : <em>hadn't + V3</em> (<em>I hadn't seen it before</em>).</li>
+      </ul>
+      <p><strong>Mots-clés :</strong> already, just, never, before, after, by the time, when.</p>
+    </div>
+
+    <div class="synth-section">
+      <h2>Grammar 5 — Talking about the future (parler du futur)</h2>
+      <p>Trois façons d'exprimer le futur, selon l'intention :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>be going to</strong> + base verbale → une <strong>intention</strong>, un <strong>projet décidé</strong>, ou une prédiction avec <strong>preuve</strong>. <em>I'<strong>m going to</strong> study tonight. / Look at those clouds — it'<strong>s going to</strong> rain.</em></li>
+        <li><strong>will / won't</strong> + base verbale → une <strong>prédiction sans preuve</strong>, une décision <strong>spontanée</strong>, une promesse. <em>I think it <strong>will</strong> rain. / OK, I'<strong>ll</strong> help you.</em></li>
+        <li><strong>present continuous</strong> (be + V-ing) → un <strong>rendez-vous fixé</strong>, noté dans l'agenda. <em>I'<strong>m meeting</strong> Anna at 5 p.m.</em></li>
       </ul>
     </div>
 
@@ -116,6 +151,18 @@
         <div class="formula-box"><h3>mustn't vs don't have to</h3><p style="line-height:1.9; margin:0;"><strong>mustn't</strong> = interdit (ne pas faire) · <strong>don't have to</strong> = pas obligé (mais tu peux).</p></div>
       </div>
     </div>
+
+    <h2 style="font-size:24px; font-weight:700; color:var(--color-nav); margin:1.6rem 0 1rem;">⏳ Past &amp; future</h2>
+    <div class="formula-grid">
+      <div>
+        <div class="formula-box"><h3>Past simple (prétérit)</h3><div class="formula-main" style="font-size:16px;">V-ed / V2 · didn't + base · Did…?</div><p class="note">Action finie, moment précis. <em>I went, I didn't go, Did you go?</em></p></div>
+        <div class="formula-box"><h3>Irréguliers fréquents</h3><p style="line-height:1.9; margin:0;">go→went · see→saw · eat→ate · take→took · have→had · give→gave · find→found · write→wrote.</p></div>
+      </div>
+      <div>
+        <div class="formula-box"><h3>Past perfect (plus-que-parfait)</h3><div class="formula-main" style="font-size:17px;">had + V-ed (ou V3)</div><p class="note">Le passé DU passé. <em>The train had left when I arrived.</em></p></div>
+        <div class="formula-box"><h3>Future (3 façons)</h3><p style="line-height:1.9; margin:0;"><strong>be going to</strong> (intention/projet) · <strong>will</strong> (prédiction, décision spontanée) · <strong>present continuous</strong> (rendez-vous fixé).</p></div>
+      </div>
+    </div>
   </div>`;
 
   /* ---------------------- MÉTHODE ---------------------- */
@@ -127,6 +174,20 @@
       <div class="step-item"><div class="step-num">1</div><div class="step-text">La phrase insiste sur la <strong>durée</strong> / « depuis combien de temps » ? → <strong>continuous</strong> (have been + -ing).</div></div>
       <div class="step-item"><div class="step-num">2</div><div class="step-text">La phrase insiste sur le <strong>résultat</strong> / une <strong>quantité</strong> (how many) ? → <strong>simple</strong> (have + V3).</div></div>
       <div class="step-item"><div class="step-num">3</div><div class="step-text">Verbes d'état (know, be, have…) → toujours <strong>simple</strong>.</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>Past simple ou past perfect ?</h2>
+      <div class="step-item"><div class="step-num">1</div><div class="step-text">Il y a <strong>deux actions passées</strong> ? Repère laquelle s'est passée <strong>en premier</strong>.</div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text">L'action la <strong>plus ancienne</strong> → <strong>past perfect</strong> (had + V3).</div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text">L'action la <strong>plus récente</strong> → <strong>past simple</strong>. <em>When she <strong>called</strong> (2), I <strong>had</strong> already <strong>left</strong> (1).</em></div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>Quel futur choisir ?</h2>
+      <div class="step-item"><div class="step-num">1</div><div class="step-text">Décision <strong>déjà prise</strong> / projet ? → <strong>be going to</strong>. <em>I'm going to travel.</em></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text">Décision prise <strong>maintenant</strong> / prédiction sans preuve / promesse ? → <strong>will</strong>. <em>I'll get it!</em></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text">Rendez-vous <strong>fixé</strong> (heure + lieu) ? → <strong>present continuous</strong>. <em>I'm seeing the doctor at 3.</em></div></div>
     </div>
 
     <div class="synth-section">
@@ -173,6 +234,10 @@
       <div class="formula-box"><h3>❌ for / since inversés</h3><p><strong>for</strong> + durée (for 3 years) · <strong>since</strong> + date/point de départ (since 2020).</p></div>
       <div class="formula-box"><h3>❌ continuous avec un verbe d'état</h3><p>On ne dit pas <s>I have been knowing</s>. Verbes d'état (know, be, like…) → present perfect <strong>simple</strong>.</p></div>
       <div class="formula-box"><h3>❌ participe passé irrégulier</h3><p>Attention aux V3 irréguliers : see→<strong>seen</strong>, write→<strong>written</strong>, do→<strong>done</strong>, go→<strong>gone</strong>.</p></div>
+      <div class="formula-box"><h3>❌ didn't + verbe au passé</h3><p>On dit <em>I <strong>didn't go</strong></em>, pas <s>I didn't went</s>. Après <strong>did/didn't</strong> → base verbale.</p></div>
+      <div class="formula-box"><h3>❌ Did you + verbe au passé</h3><p><em><strong>Did</strong> you <strong>see</strong> it?</em> (pas <s>Did you saw</s>). La marque du passé est déjà sur « did ».</p></div>
+      <div class="formula-box"><h3>❌ past perfect = was/were</h3><p>Le past perfect, c'est <strong>had + V3</strong> (<em>had left</em>), pas <s>was left</s>. « had » à toutes les personnes.</p></div>
+      <div class="formula-box"><h3>❌ will + to</h3><p>On dit <em>I <strong>will go</strong></em> / <em>I'<strong>m going to</strong> go</em>, jamais <s>I will to go</s> ni <s>I'm going to to go</s>.</p></div>
     </div>
   </div>`;
 
@@ -211,7 +276,22 @@
     { q: "The capital of Wales is…", opts: ["Cardiff", "Edinburgh", "Belfast", "Dublin"], ans: 0, chapter: "vocab", difficulty: "difficile", exp: "Cardiff (pays de Galles)." },
     { q: "« We ___ to wear a uniform at home. » (aucune obligation)", opts: ["don't have", "mustn't", "must", "have"], ans: 0, chapter: "modals", difficulty: "intermediaire", exp: "don't have to = pas obligé (≠ mustn't = interdit)." },
     { q: "The All Blacks (rugby + haka) are from…", opts: ["New Zealand", "Ireland", "Wales", "England"], ans: 0, chapter: "vocab", difficulty: "facile", exp: "L'équipe de Nouvelle-Zélande ; le haka est une danse maori." },
-    { q: "To DISAGREE politely, you say…", opts: ["I don't agree / That's true, but…", "I think so too", "Exactly!", "You're right"], ans: 0, chapter: "skills", difficulty: "intermediaire", exp: "I don't agree / I'm not sure / That's true, but… pour nuancer." }
+    { q: "To DISAGREE politely, you say…", opts: ["I don't agree / That's true, but…", "I think so too", "Exactly!", "You're right"], ans: 0, chapter: "skills", difficulty: "intermediaire", exp: "I don't agree / I'm not sure / That's true, but… pour nuancer." },
+    { q: "Past simple of « go »?", opts: ["went", "goed", "gone", "going"], ans: 0, chapter: "past", difficulty: "facile", exp: "go est irrégulier : go → went (prétérit). gone = participe passé (V3)." },
+    { q: "« I ___ to the cinema yesterday. »", opts: ["went", "have gone", "go", "had went"], ans: 0, chapter: "past", difficulty: "facile", exp: "yesterday = moment précis du passé → past simple : went." },
+    { q: "Negative past simple: « She ___ come. »", opts: ["didn't", "doesn't", "hadn't", "wasn't"], ans: 0, chapter: "past", difficulty: "facile", exp: "didn't + base verbale : She didn't come (pas « didn't came »)." },
+    { q: "« ___ you see the match last night? »", opts: ["Did", "Do", "Have", "Was"], ans: 0, chapter: "past", difficulty: "facile", exp: "Question au passé : Did + sujet + base verbale → Did you see…?" },
+    { q: "After « didn't », the verb is…", opts: ["the base form", "the -ed form", "the V3", "the -ing form"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "didn't go (pas « didn't went ») : base verbale après did/didn't." },
+    { q: "Past simple of « see »?", opts: ["saw", "seen", "seed", "sawed"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "Irrégulier : see → saw (prétérit) ; seen = participe passé." },
+    { q: "Past perfect form?", opts: ["had + past participle", "have + -ing", "did + verb", "was + -ed"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "had + V3 (participe passé), à toutes les personnes. Ex: I had finished." },
+    { q: "« When I arrived, the train ___ already left. »", opts: ["had", "has", "did", "was"], ans: 0, chapter: "past", difficulty: "difficile", exp: "L'action la plus ancienne (le train part) → past perfect : had left." },
+    { q: "Past perfect = …", opts: ["le passé du passé (action 1)", "le futur", "le présent", "une habitude"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "Action encore plus ancienne qu'une autre action passée." },
+    { q: "Past simple of « have »?", opts: ["had", "haved", "has", "having"], ans: 0, chapter: "past", difficulty: "facile", exp: "Irrégulier : have → had." },
+    { q: "« Look at those clouds! It ___ rain. » (preuve)", opts: ["is going to", "will", "would", "goes to"], ans: 0, chapter: "future", difficulty: "intermediaire", exp: "Prédiction avec PREUVE visible → be going to." },
+    { q: "Spontaneous decision: « The phone's ringing. I ___ get it. »", opts: ["'ll", "'m going to", "will to", "am get"], ans: 0, chapter: "future", difficulty: "intermediaire", exp: "Décision prise à l'instant → will ('ll)." },
+    { q: "Fixed arrangement: « I ___ Anna at 5 p.m. »", opts: ["'m meeting", "meet", "will meet", "meeted"], ans: 0, chapter: "future", difficulty: "difficile", exp: "Rendez-vous fixé (heure) → present continuous : I'm meeting…" },
+    { q: "« be going to » expresses…", opts: ["une intention / un projet", "une obligation", "une interdiction", "le passé"], ans: 0, chapter: "future", difficulty: "facile", exp: "be going to = intention, projet déjà décidé (ou prédiction avec preuve)." },
+    { q: "Which is correct?", opts: ["I will help you.", "I will to help you.", "I will helping you.", "I will helps you."], ans: 0, chapter: "future", difficulty: "facile", exp: "will + base verbale, jamais « will to »." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -242,19 +322,28 @@
     { front: "be (not) allowed to ?", back: "être (in)autorisé à. Ex: We are not allowed to eat in class.", chapter: "modals" },
     { front: "Capitales des 4 nations du UK ?", back: "England → London · Scotland → Edinburgh · Wales → Cardiff · Northern Ireland → Belfast.", chapter: "vocab" },
     { front: "Le haka ?", back: "Une danse maori (Nouvelle-Zélande), célèbre avant les matchs des All Blacks.", chapter: "vocab" },
-    { front: "Phrases pour un débat (oral) ?", back: "Avis : I think… / In my opinion… · D'accord : I agree · Pas d'accord : I don't agree, that's true but… · Justifier : because.", chapter: "skills" }
+    { front: "Phrases pour un débat (oral) ?", back: "Avis : I think… / In my opinion… · D'accord : I agree · Pas d'accord : I don't agree, that's true but… · Justifier : because.", chapter: "skills" },
+    { front: "Past simple : forme (+, −, ?) ?", back: "+ : V-ed (réguliers) ou V2 (irréguliers) · − : didn't + base verbale · ? : Did + sujet + base verbale.", chapter: "past" },
+    { front: "Past simple : quand l'utiliser ?", back: "Action terminée à un moment précis du passé : yesterday, last week, in 2020, … ago.", chapter: "past" },
+    { front: "8 verbes irréguliers (prétérit) ?", back: "go→went · see→saw · eat→ate · take→took · have→had · give→gave · find→found · write→wrote.", chapter: "past" },
+    { front: "Erreur classique au passé négatif/interrogatif ?", back: "Base verbale après did : « I didn't go », « Did you see? » (jamais didn't went / Did you saw).", chapter: "past" },
+    { front: "Past perfect : forme & emploi ?", back: "had + participe passé (V3), à toutes les personnes. Le passé DU passé : action 1 (la plus ancienne).", chapter: "past" },
+    { front: "Past simple vs past perfect dans une phrase ?", back: "Action la plus ancienne → past perfect (had + V3) ; action la plus récente → past simple. « The train had left when I arrived. »", chapter: "past" },
+    { front: "Les 3 façons de parler du futur ?", back: "be going to (intention/projet) · will (prédiction sans preuve, décision spontanée, promesse) · present continuous (rendez-vous fixé).", chapter: "future" },
+    { front: "be going to vs will ?", back: "be going to = décidé d'avance / preuve visible. will = décision sur le moment, prédiction sans preuve, promesse.", chapter: "future" },
+    { front: "Futur avec le present continuous ?", back: "be + V-ing pour un rendez-vous fixé : « I'm meeting Anna at 5 p.m. » (heure + lieu prévus).", chapter: "future" }
   ];
 
   window.registerSubject('anglais', {
-    subtitle: 'Anglais 4ᵉ — present perfect, modals, superstitions, school rules (Unit 7)',
+    subtitle: 'Anglais 4ᵉ — present perfect, past simple & perfect, future, modals, superstitions (Unit 7)',
     content: {
       sections: sections,
       questions: questions,
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Grammar', exercices: '🎯 Exercises' },
-      chapOrder: ['perfect', 'modals', 'vocab', 'skills'],
-      chapLabels: { perfect: 'Present perfect', modals: 'Modals', vocab: 'Vocabulary', skills: 'Skills & oral' }
+      chapOrder: ['perfect', 'past', 'future', 'modals', 'vocab', 'skills'],
+      chapLabels: { perfect: 'Present perfect', past: 'Past simple & perfect', future: 'Future', modals: 'Modals', vocab: 'Vocabulary', skills: 'Skills & oral' }
     }
   });
 })();

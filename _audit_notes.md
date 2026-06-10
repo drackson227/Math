@@ -61,7 +61,7 @@ FAIT (suite éco) — 2 nouveaux chapitres ajoutés au site :
 - 093752 : contrôle éco (flux commerciaux + responsabilité civile : parents/enfant) → ✓ couvert.
 - 102xxx (6) : éval « Modes de preuve en droit civil » → ✓ CHAPITRE AJOUTÉ (preuve).
 - 103xxx (5) : éval « Les contrats » (conditions de validité = capacité 18 ans + consentement ; vices erreur/dol/violence) → ✓ CHAPITRE AJOUTÉ (contrats).
-- 111xxx + 115xxx (~13) : contrôle MATHS « UAA6 Géométrie analytique plane » (droite : éq. vectorielle, paramétriques, cartésienne, vecteur directeur) → ✓ COUVERT par le site maths (vectorielle + paramétriques + vecteur directeur + ax+by + y=mx). Note : le mot exact « cartésienne » n'est pas écrit (concept présent en forme générale/réduite) — petit ajout terminologique possible plus tard, pas urgent.
+- 111xxx + 115xxx (~13) : contrôle MATHS « UAA6 Géométrie analytique plane » (droite : éq. vectorielle, paramétriques, cartésienne, vecteur directeur) → ✓ COUVERT par le site maths (vectorielle + paramétriques + vecteur directeur + ax+by + y=mx). Note : le mot exact « cartésienne » n'est pas écrit (concept présent en forme générale/réduite) — petit ajout terminologique possible plus tard, pas urgent. → ✅ FAIT (v96) : « 3a. Forme implicite (équation cartésienne) » dans content.js + 1 quiz + 1 flashcard (chapter 'droite') dans data.js.
 
 ## ✅ HISTOIRE (61 feuilles) — FAIT (via le programme d'exam)
 Feuille 1 (225016) = PROGRAMME D'EXAM DE JUIN. Savoirs testés : carte des religions, grandes périodes, chap5 Le livre, chap6 Humanisme/Renaissance, chap7 Réforme, chap8 Absolutisme + compétences méthode.
@@ -74,10 +74,35 @@ Feuilles vues : biocarburants (situation d'apprentissage 6, bilan carbone, GES) 
 AJOUTÉ : « Eaux de surface vs souterraines » (tableau avantages/inconvénients) + économiser l'eau, au chapitre hydro. +3 quiz +1 flashcard (chapter 'hydro'). 29 questions. cache v91.
 NB : photos géo sombres/manuscrites — contenu imprimé principal couvert ; si gap fin, re-vérifier feuilles claires.
 
-RESTE À FAIRE (gros morceaux) :
-- ANGLAIS (192 photos) — surtout voc + grammaire + temps.
-- FRANÇAIS (207 photos) — grammaire, conjugaison, littérature.
-- NL grammaire (36 photos du dossier néerlendais, déjà partiellement traité pour le voc).
+## ✅ ANGLAIS (192 photos) — FAIT (échantillon réparti : pages 1,7,9,11,14,18 + manuscrites)
+Unit 7 « Kia Ora » (Nouvelle-Zélande/maori) + Irlande + Afrique du Sud (Mandela). Le site couvrait : present perfect (simple/continuous), modals, vocab, skills.
+GAPS GRAMMAIRE repérés sur les feuilles (NON couverts) → AJOUTÉS :
+- « Grammar 3 — Past simple (prétérit) » : réguliers -ed / irréguliers (go→went…), négatif didn't+base, question Did+base, mots-clés (page 9 du cours).
+- « Grammar 4 — Past perfect » : had+V3, le passé du passé, contraste avec past simple (page « Past or Past Perfect — fill in »).
+- « Grammar 5 — Talking about the future » : be going to / will / present continuous (page 14 « SSFL — Future plans », tableau du cours).
++ grammar boxes (formules), 2 méthodes (past simple vs perfect ; quel futur), 5 erreurs (didn't+base, Did+base, had≠was, will+to…).
++ quiz : 35→49 (chapter 'past' ×10, 'future' ×5). + flashcards : 27→36 (past ×6, future ×3).
+chapOrder = perfect, past, future, modals, vocab, skills. cache v93. ✅
+NB : le reste des feuilles = vocab thématique (extreme sports, means of transport, superstitions) + listenings/readings (Mandela, TV) déjà couverts par les chapitres vocab/skills.
+
+## ✅ FRANÇAIS (207 photos) — FAIT (via le programme d'exam, pages 1-2 = 231238/231247)
+Programme exam 17 juin (5h) : Séq4 résumé · Séq5 mythe · Séq6 argumentation · Séq7 comédie (FO18/19/20) · Séq8 poésie (FO21 + FO22 Le Slam/Grand Corps Malade) · oral (présenter une œuvre poétique/chanson).
+Le site couvrait DÉJÀ très bien les 5 séquences + oral (résumé neutre, mythe/Prométhée, convaincre/persuader/thèse/connecteurs, théâtre vocab+5 comiques+Molière, poésie versification+figures+calligramme/Apollinaire).
+GAPS repérés (objectifs explicites du programme, NON couverts) → AJOUTÉS :
+- « Hyperonymes / hyponymes » (objectif Séq4) : hyperonyme = mot générique (fleur), hyponyme = mot précis (rose) ; utilité = condenser une liste dans un résumé. → synthèse Séq4 + 4 quiz + 2 flashcards (chapter 'resume').
+- « Le slam / Grand Corps Malade » (FO22, Séq8) : poésie orale déclamée, rythme/jeux de mots ; Grand Corps Malade = Fabien Marsaud, « Midi 20 ». → bloc dans synthèse Séq8 poésie + 3 quiz + 2 flashcards (chapter 'poesie').
+Quiz 28→36, flashcards 23→27. cache v94. ✅
+NB : reste des feuilles = fiches/exos d'application (Molière bio détaillée FO15, vocab amoureux, grille oral FO13, textes argumentatifs euthanasie/peine de mort) → notions déjà couvertes par les chapitres existants.
+
+## ✅ NL GRAMMAIRE (36 photos) — FAIT (échantillon : VTT exo, badkamer, woonkamer, zoet/zout/zuur, Waar staat Piet)
+Le site couvrait déjà : passé composé (VTT, hebben/zijn, 't kofschip, irréguliers), 4 verbes de position (liggen/zitten/staan/hangen), prépositions de lieu (10), modaux + négation (niet/geen, te+adj), omdat/want, présent.
+SEUL GAP repéré (dialogue « Wat eet je graag? ») → AJOUTÉ :
+- « 6. Graag · liever · het liefst » (exprimer une préférence) : graag = volontiers, liever = préférer (comparatif), het liefst = par-dessus tout. → synthèse + 3 quiz + 1 flashcard (chapter 'grammatica').
+Quiz 40→43, flashcards 21→22. cache v95. ✅
+NB : reste des feuilles = exos VTT + vocab woning/aan tafel (badkamer, woonkamer, zoet/zout/zuur) → déjà couvert (156 mots dans l'onglet vocabulaire).
+
+## 🏁 AUDIT DE JUIN — TERMINÉ POUR TOUTES LES MATIÈRES
+Bio · Chimie · Éco · Histoire · Géo · NL (voc + grammaire) · Anglais · Français · contrôles maths. Tout le contenu des feuilles est couvert sur le site (cache v95).
 
 ## ⏳ À FAIRE
 - Chimie : feuilles 7-35

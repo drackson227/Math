@@ -89,6 +89,12 @@
         <li>Respecter l'<strong>ordre des idées</strong> et le <strong>système d'énonciation</strong> de l'auteur.</li>
         <li>Supprimer les exemples, répétitions et détails ; garder les <strong>idées principales</strong>.</li>
       </ul>
+      <div class="key-rule"><div class="formula-main" style="font-size:17px;">Hyperonyme = mot général &nbsp;|&nbsp; Hyponyme = mot précis</div></div>
+      <ul style="line-height:1.9;">
+        <li>Un <strong>hyperonyme</strong> est un mot <strong>générique</strong> qui en englobe d'autres. Un <strong>hyponyme</strong> est un mot <strong>précis</strong> compris dans l'hyperonyme.</li>
+        <li>Ex : <strong>fleur</strong> (hyperonyme) → <em>rose, tulipe, marguerite</em> (hyponymes). <strong>félin</strong> → <em>chat, lion, tigre</em>.</li>
+        <li>💡 Très utile pour <strong>résumer</strong> : on remplace une <strong>liste</strong> d'hyponymes par un seul <strong>hyperonyme</strong>. <em>« des roses, des tulipes et des lys »</em> → <em>« des fleurs »</em>.</li>
+      </ul>
     </div>
 
     <div class="synth-section">
@@ -138,6 +144,12 @@
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Figures de style à connaître</button>
         <div class="simple-exp-content"><strong>Comparaison</strong> : rapproche 2 éléments avec un outil (<em>comme, tel, pareil à</em>). <strong>Métaphore</strong> : même idée mais <em>sans</em> outil (« cet homme est un lion »). <strong>Personnification</strong> : donner des traits humains à une chose. <strong>Hyperbole</strong> : exagération. <strong>Anaphore</strong> : répétition d'un mot en début de vers. <strong>Allitération</strong> (consonnes) / <strong>assonance</strong> (voyelles) : répétition de sons.</div>
       </div>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">🎤 Le slam (poésie contemporaine)</h3>
+      <p>Le <strong>slam</strong> est une <strong>poésie orale</strong>, <strong>déclamée</strong> en public, à l'origine <strong>sans musique</strong> ni décor. Il joue sur le <strong>rythme</strong>, les <strong>jeux de mots</strong>, les <strong>rimes</strong> et les <strong>figures de style</strong>, dans une langue souvent <strong>quotidienne</strong>.</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Grand Corps Malade</strong> (de son vrai nom <strong>Fabien Marsaud</strong>) est un <strong>artiste contemporain</strong> français, pionnier du slam (album « <em>Midi 20</em> »). Son nom de scène vient d'un grave accident qui a failli le laisser paralysé.</li>
+        <li>On <strong>analyse un slam</strong> comme un poème : thème, procédés (rimes, anaphores, métaphores), rythme, et message.</li>
+      </ul>
     </div>
 
     <div class="synth-section">
@@ -257,7 +269,14 @@
     { q: "« Je te l'ai dit mille fois ! » est…", opts: ["une hyperbole", "une litote", "une comparaison", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Hyperbole : exagération volontaire." },
     { q: "Répéter un même mot en début de plusieurs vers, c'est…", opts: ["une anaphore", "une allitération", "une métaphore", "une rime"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Anaphore = répétition en tête de vers/phrase." },
     { q: "Une strophe de 3 vers s'appelle…", opts: ["un tercet", "un distique", "un quatrain", "un sonnet"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Distique 2 · tercet 3 · quatrain 4." },
-    { q: "Quand le même mot/geste revient pour faire rire, c'est le comique de…", opts: ["répétition", "caractère", "situation", "mots"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les 5 comiques : mots, gestes, situation, caractère, répétition." }
+    { q: "Quand le même mot/geste revient pour faire rire, c'est le comique de…", opts: ["répétition", "caractère", "situation", "mots"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les 5 comiques : mots, gestes, situation, caractère, répétition." },
+    { q: "Un hyperonyme est un mot…", opts: ["général qui en englobe d'autres", "précis et particulier", "inventé", "interdit en résumé"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Hyperonyme = mot générique (fleur). Hyponyme = mot précis (rose, tulipe)." },
+    { q: "« rose, tulipe, marguerite » sont des hyponymes de…", opts: ["fleur", "jardin", "couleur", "parfum"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "« fleur » est l'hyperonyme ; rose/tulipe/marguerite en sont les hyponymes." },
+    { q: "Pourquoi l'hyperonyme est utile dans un résumé ?", opts: ["il remplace une liste par un seul mot", "il rallonge le texte", "il donne un avis", "il ajoute des exemples"], ans: 0, chapter: "resume", difficulty: "difficile", exp: "On condense : « des roses, des lys, des tulipes » → « des fleurs »." },
+    { q: "Le « chat » est un hyponyme de…", opts: ["félin", "chien", "meuble", "légume"], ans: 0, chapter: "resume", difficulty: "facile", exp: "félin (hyperonyme) englobe chat, lion, tigre (hyponymes)." },
+    { q: "Le slam est avant tout une poésie…", opts: ["orale, déclamée en public", "uniquement écrite et chantée", "sans rimes", "en latin"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Le slam = poésie orale, scandée en public, à l'origine sans musique." },
+    { q: "Artiste contemporain pionnier du slam en France :", opts: ["Grand Corps Malade", "Molière", "La Fontaine", "Apollinaire"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Grand Corps Malade (Fabien Marsaud), album « Midi 20 »." },
+    { q: "On analyse un slam…", opts: ["comme un poème (thème, procédés, rythme)", "comme un résumé neutre", "sans figures de style", "comme une pièce de théâtre"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Mêmes outils que la poésie : rimes, anaphores, métaphores, rythme, message." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -284,7 +303,11 @@
     { front: "Allitération vs assonance ?", back: "Allitération = répétition de consonnes · Assonance = répétition de voyelles.", chapter: "poesie" },
     { front: "Distique / tercet / quatrain ?", back: "Strophes de 2 / 3 / 4 vers.", chapter: "poesie" },
     { front: "La règle du « e » muet (syllabes) ?", back: "Le « e » muet en fin de vers ne se compte pas ; à l'intérieur, il compte souvent. Un alexandrin = 12 syllabes.", chapter: "poesie" },
-    { front: "Tragédie : 3 traits ?", back: "Fin malheureuse, personnages nobles, poids de la fatalité/destin.", chapter: "comedie" }
+    { front: "Tragédie : 3 traits ?", back: "Fin malheureuse, personnages nobles, poids de la fatalité/destin.", chapter: "comedie" },
+    { front: "Hyperonyme vs hyponyme ?", back: "Hyperonyme = mot général qui en englobe d'autres (fleur). Hyponyme = mot précis compris dedans (rose, tulipe).", chapter: "resume" },
+    { front: "À quoi servent les hyperonymes dans un résumé ?", back: "À condenser : on remplace une liste d'hyponymes par un seul mot générique. « roses, lys, tulipes » → « fleurs ».", chapter: "resume" },
+    { front: "Qu'est-ce que le slam ?", back: "Une poésie orale, déclamée en public, à l'origine sans musique. Joue sur le rythme, les jeux de mots, les rimes et les figures de style.", chapter: "poesie" },
+    { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" }
   ];
 
   window.registerSubject('francais', {

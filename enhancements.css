@@ -488,6 +488,34 @@ body, .container, .nav, .settings-panel {
   a[href]::after { content: ""; } /* pas d'URL imprimées en fin de lien */
 }
 
+/* ═══════════ Anti-sèche imprimable (1 page condensée, dans #revision-sheet) ═══════════
+   Mise en page dense activée quand #revision-sheet contient .cs-sheet (openCheatSheet). */
+@media print {
+  @page { margin: 7mm; }
+  #revision-sheet .cs-sheet { color: #000; font-size: 9.5px; line-height: 1.25; }
+  #revision-sheet .cs-head { display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 2px solid #000; padding-bottom: 3px; margin-bottom: 6px; }
+  #revision-sheet .cs-head h1 { font-size: 16px; font-weight: 800; margin: 0; }
+  #revision-sheet .cs-date { font-size: 9px; color: #444; }
+  #revision-sheet .cs-h { font-size: 12px; font-weight: 800; margin: 8px 0 4px; padding: 2px 6px;
+    background: #eee; border-left: 3px solid #000; break-after: avoid; }
+  #revision-sheet .cs-formules { column-count: 2; column-gap: 10px; }
+  #revision-sheet .cs-sheet .formula-grid { display: block !important; }
+  #revision-sheet .cs-sheet .formula-grid > div { display: block; }
+  #revision-sheet .cs-sheet .formula-box, #revision-sheet .cs-sheet .key-rule {
+    break-inside: avoid; border: 1px solid #bbb; border-radius: 5px; padding: 4px 6px; margin: 0 0 5px;
+    background: #fff; }
+  #revision-sheet .cs-sheet .formula-box h3 { font-size: 10.5px; font-weight: 800; margin: 0 0 2px; color: #000; }
+  #revision-sheet .cs-sheet .formula-box p, #revision-sheet .cs-sheet .formula-box .note { margin: 0; font-size: 10px; }
+  #revision-sheet .cs-sheet .formula-main { font-size: 11px; font-weight: 700; text-align: center; margin: 2px 0; }
+  #revision-sheet .cs-defs { column-count: 2; column-gap: 12px; margin: 0; padding: 0; list-style: none; }
+  #revision-sheet .cs-defs li { break-inside: avoid; margin: 0 0 3px; padding-left: 8px;
+    text-indent: -8px; font-size: 10px; }
+  #revision-sheet .cs-defs b { font-weight: 800; }
+  #revision-sheet .cs-sheet .simple-exp-box { display: none !important; }
+  #revision-sheet .cs-sheet svg, #revision-sheet .cs-sheet figure, #revision-sheet .cs-sheet img { display: none !important; }
+}
+
 /* ═══════════ 105 — VITESSE & CONFORT ═══════════ */
 
 /* Défilement plus doux + pas de zoom auto du texte sur téléphone (iOS/Android). */

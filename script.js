@@ -2260,6 +2260,21 @@ function setExamDate(key, val) {
   if (typeof renderStudyDashboard === 'function') renderStudyDashboard();
 }
 
+// Lance un quiz CIBLÉ sur le chapitre faible d'une matière (depuis le dashboard).
+function reviseWeakChapter(key, chapter) {
+  try { setSubject(key); } catch (e) {}
+  showSection('quiz');
+  // setSubject reconstruit #chapter-filter ; on attend que l'écran quiz soit prêt.
+  setTimeout(function () {
+    var sel = document.getElementById('chapter-filter');
+    if (sel && chapter && [].some.call(sel.options, function (o) { return o.value === chapter; })) {
+      sel.value = chapter;
+    }
+    var df = document.getElementById('difficulty-filter'); if (df) df.value = 'all';
+    if (typeof startQuiz === 'function') startQuiz();
+  }, 90);
+}
+
 function renderStudyDashboard() {
   var el = document.getElementById('study-dashboard');
   if (!el || !window.SUBJECTS) return;
@@ -2289,11 +2304,18 @@ function renderStudyDashboard() {
     var examBest = (examHist[key] && examHist[key].length) ? examHist[key].reduce(function (m, h) { return Math.max(m, h.note); }, 0) : null;
     var accent = (window.SUBJECT_ACCENTS && window.SUBJECT_ACCENTS[key]) || 'var(--color-nav)';
     var dueBadge = due > 0 ? '<span style="color:#fbbf24; font-weight:700;">🔔 ' + due + ' carte' + (due > 1 ? 's' : '') + '</span>' : '<span style="color:#34d399;">✓ à jour</span>';
-    var weakTxt = (weak && weakPct < 100) ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span style="color:#34d399;">tout maîtrisé 🎉</span>';
+    var hasWeak = (weak && weakPct < 100);
+    var weakTxt = hasWeak ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span style="color:#34d399;">tout maîtrisé 🎉</span>';
     var examTxt = examBest != null ? ' · 📝 record ' + examBest + '/20' : '';
-    rows += '<button type="button" onclick="setSubject(\'' + key + '\'); showSection(\'flashcards\');" style="display:block; width:100%; text-align:left; background:var(--bg-card); border:1px solid var(--border-subtle); border-left:5px solid ' + accent + '; border-radius:14px; padding:0.75rem 1rem; margin-bottom:0.55rem; cursor:pointer; color:var(--text-primary);">' +
+    var actBtn = 'font-size:12px; font-weight:700; border:none; border-radius:9px; padding:6px 11px; cursor:pointer;';
+    var quizBtn = hasWeak ? '<button type="button" onclick="reviseWeakChapter(\'' + key + '\',\'' + weak + '\')" style="' + actBtn + ' background:' + accent + '; color:#fff;">🎯 Quiz : ' + (chLabels[weak] || weak) + '</button>' : '';
+    rows += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-left:5px solid ' + accent + '; border-radius:14px; padding:0.75rem 1rem; margin-bottom:0.55rem; color:var(--text-primary);">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:15px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' + dueBadge + '</div>' +
-      '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div></button>';
+      '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div>' +
+      '<div style="display:flex; gap:7px; flex-wrap:wrap; margin-top:8px;">' +
+        '<button type="button" onclick="setSubject(\'' + key + '\'); showSection(\'flashcards\');" style="' + actBtn + ' background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-subtle);">🎴 Flashcards' + (due > 0 ? ' (' + due + ')' : '') + '</button>' +
+        quizBtn +
+      '</div></div>';
   });
   // Carte « objectif du jour + temps d'étude »
   var d0 = loadSavedData(); var st = _getStudy(d0); saveData(d0);
@@ -4836,7 +4858,22 @@ function _getStudy(data) {
   return s;
 }
 function recordStudyAction() {
-  var d = loadSavedData(); var s = _getStudy(d); s.dayActions++; saveData(d);
+  var d = loadSavedData(); var s = _getStudy(d);
+  var before = s.dayActions;
+  s.dayActions++;
+  // Petite célébration (une seule fois par jour) quand on atteint l'objectif quotidien.
+  var crossed = before < DAILY_GOAL && s.dayActions >= DAILY_GOAL && s.goalCelebratedDay !== _today();
+  if (crossed) s.goalCelebratedDay = _today();
+  saveData(d);
+  if (crossed) {
+    try {
+      if (typeof celebrate === 'function') celebrate('🎯 Objectif du jour atteint ! Bravo 👏');
+      else if (typeof showToast === 'function') showToast('🎯 Objectif du jour atteint ! 👏', 'var(--color-parabole)');
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+    } catch (e) {}
+    var prof = document.getElementById('profil');
+    if (prof && prof.classList.contains('active') && typeof renderStudyDashboard === 'function') renderStudyDashboard();
+  }
 }
 function fmtDur(sec) {
   var h = Math.floor(sec / 3600), m = Math.round((sec % 3600) / 60);
@@ -4938,6 +4975,79 @@ document.addEventListener('DOMContentLoaded', function () {
 function exportCoursePDF() {
   if (typeof showToast === 'function') showToast('🖨️ Préparation du cours…', 'var(--color-nav)');
   setTimeout(function () { try { window.print(); } catch (e) {} }, 300);
+}
+
+/* ════════════ Anti-sèche imprimable (1 page, condensée) ════════════
+   Génère une fiche dense pour la matière courante : formules/repères (section
+   « formules ») + définitions clés (recto → verso des flashcards), optimisée
+   pour l'impression. N'utilise QUE le contenu déjà présent (jamais inventé). */
+function openCheatSheet(mode) {
+  // mode : 'full' (formules + définitions, défaut) ou 'formules' (formules seules, ~1 page)
+  var withDefs = (mode !== 'formules');
+  var host = document.getElementById('revision-sheet');
+  if (!host) return;
+  var key = window.currentSubject || 'maths';
+  var subj = (window.SUBJECTS && window.SUBJECTS[key]) || {};
+  var content = subj.content || {};
+  var label = (key === 'maths') ? 'Maths GR2' : (subj.label || 'Révisions');
+  var icon = subj.icon || '📘';
+
+  // 1) Formules & repères : intérieur de la section « formules », sans le gros titre.
+  var formulesHtml = '';
+  try {
+    var src = content.sections && content.sections.formules;
+    if (src) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = src;
+      var h2 = tmp.querySelector('h2'); if (h2) h2.remove();
+      tmp.querySelectorAll('.simple-exp-toggle').forEach(function (b) { b.remove(); });
+      formulesHtml = (tmp.querySelector('.section') ? tmp.querySelector('.section').innerHTML : tmp.innerHTML);
+    }
+  } catch (e) {}
+
+  // 2) Définitions clés : flashcards (recto → verso nettoyé, schémas SVG retirés).
+  var defs = '';
+  try {
+    var cards = withDefs ? (content.flashcards || []).slice(0) : [];
+    var rows = [];
+    cards.forEach(function (c) {
+      if (!c || !c.front || !c.back) return;
+      var back = String(c.back);
+      var hadSvg = /<svg/i.test(back);
+      back = back.replace(/<svg[\s\S]*?<\/svg>/gi, '').replace(/<details[\s\S]*?<\/details>/gi, '');
+      back = back.replace(/<br\s*\/?>(\s*)/gi, ' ').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      var front = String(c.front).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      if (!back && hadSvg) return;     // carte purement visuelle → on saute
+      if (!back) return;
+      // On coupe les définitions très longues : une anti-sèche reste télégraphique.
+      back = back.replace(/\s*[—–-]\s*$/, '');
+      if (back.length > 150) back = back.slice(0, 148).replace(/\s+\S*$/, '') + '…';
+      rows.push('<li><b>' + front + '</b> — ' + back + '</li>');
+    });
+    if (rows.length) defs = '<ul class="cs-defs">' + rows.join('') + '</ul>';
+  } catch (e) {}
+
+  if (!formulesHtml && !defs) {
+    if (typeof showToast === 'function') showToast('Pas encore d\'anti-sèche pour cette matière', '#f87171');
+    return;
+  }
+
+  var today = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  // .cs-sheet déclenche la mise en page DENSE (CSS @media print). #revision-sheet
+  // est déjà isolé à l'impression (il masque tout le reste de la page).
+  host.innerHTML =
+    '<div class="cs-sheet">' +
+      '<div class="cs-head"><h1>' + icon + ' Anti-sèche — ' + label + '</h1>' +
+      '<span class="cs-date">Révisions · ' + today + '</span></div>' +
+      (formulesHtml ? '<h2 class="cs-h">Formules &amp; repères</h2><div class="cs-formules">' + formulesHtml + '</div>' : '') +
+      (defs ? '<h2 class="cs-h">Définitions clés</h2>' + defs : '') +
+    '</div>';
+
+  if (typeof showToast === 'function') showToast('📄 Anti-sèche prête à imprimer', 'var(--color-parabole)');
+  var doPrint = function () { setTimeout(function () { try { window.print(); } catch (e) {} }, 60); };
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([host]).then(doPrint).catch(doPrint);
+  } else { doPrint(); }
 }
 
 /* ════════════ Confort de lecture (dyslexie) ════════════ */

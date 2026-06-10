@@ -185,9 +185,9 @@ const SECTIONS_CONTENT = {
         </div>
       </div>
       <div class="card droite">
-        <h3>3a. Forme implicite</h3>
+        <h3>3a. Forme implicite (équation cartésienne)</h3>
         <div class="formula-main droite">$$ax + by + c = 0$$</div>
-        <p style="font-size:15px; color:var(--text-secondary); margin-top:1rem;"><em>Explication :</em> Cette forme est très utile car elle permet de trouver facilement :</p>
+        <p style="font-size:15px; color:var(--text-secondary); margin-top:1rem;"><em>Explication :</em> Cette forme \\(ax + by + c = 0\\) est aussi appelée l'<strong>équation cartésienne</strong> de la droite (le terme exact du contrôle). Elle est très utile car elle permet de trouver facilement :</p>
         <ul>
           <li><strong>Vecteur normal</strong> \\(\\vec{n} = \\begin{pmatrix} a \\\\ b \\end{pmatrix}\\) : perpendiculaire à la droite</li>
           <li><strong>Vecteur directeur</strong> \\(\\vec{u} = \\begin{pmatrix} -b \\\\ a \\end{pmatrix}\\) : parallèle à la droite (donne sa direction)</li>

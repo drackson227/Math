@@ -74,6 +74,18 @@
         <li><strong>want</strong> → ordre <strong>normal</strong> : <em>Ik ga vroeg slapen <strong>want ik ben moe</strong>.</em></li>
       </ul>
     </div>
+
+    <div class="synth-section">
+      <h2>6. Graag · liever · het liefst (exprimer une préférence)</h2>
+      <p>Pour dire qu'on aime faire quelque chose (très utile « <strong>aan tafel</strong> » et à l'oral) :</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:16px;">graag (volontiers) → liever (préférer) → het liefst (par-dessus tout)</div></div>
+      <ul style="line-height:1.9;">
+        <li><strong>graag</strong> = « volontiers / avec plaisir ». <em>Ik eet <strong>graag</strong> broodjes met kaas.</em> (J'aime manger des sandwiches au fromage.)</li>
+        <li><strong>liever</strong> = « plutôt / de préférence » (le comparatif). <em>Nee, ik eet <strong>liever</strong> broodjes met ham.</em> (Non, je préfère ceux au jambon.)</li>
+        <li><strong>het liefst</strong> = « ce que je préfère le plus » (le superlatif). <em>Ik drink <strong>het liefst</strong> fruitsap.</em></li>
+        <li>Question type : <em><strong>Eet</strong> je <strong>graag</strong> broodjes met ham?</em> → <em>Ja, heel graag</em> / <em>Nee, het is te zout, ik eet <strong>liever</strong>…</em></li>
+      </ul>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES (grammaire + verbes irréguliers) ---------------------- */
@@ -197,6 +209,9 @@
     { q: "Que veut dire la préposition « naast » ?", opts: ["à côté de", "en face de", "entre", "derrière"], ans: 0, chapter: "grammatica", difficulty: "facile", exp: "naast = à côté de. (tegenover = en face de, tussen = entre, achter = derrière)." },
     { q: "Au présent, « hij » (il) avec werken donne :", opts: ["hij werkt", "hij werk", "hij werken", "hij werkte"], ans: 0, chapter: "grammatica", difficulty: "facile", exp: "Présent : ik werk (radical), hij/zij/jij werk+t, wij/jullie/zij werken (infinitif)." },
     { q: "Participe passé irrégulier de « eten » (manger) ?", opts: ["gegeten", "geëet", "geet", "etende"], ans: 0, chapter: "grammatica", difficulty: "intermediaire", exp: "eten est irrégulier : gegeten (à apprendre par cœur)." },
+    { q: "« Ik eet ___ broodjes met kaas » (= j'aime / volontiers)", opts: ["graag", "liever", "te", "geen"], ans: 0, chapter: "grammatica", difficulty: "facile", exp: "graag = volontiers / avec plaisir. Ik eet graag… = j'aime manger…" },
+    { q: "« Nee, ik eet ___ broodjes met ham » (= je préfère)", opts: ["liever", "graag", "het liefst", "niet"], ans: 0, chapter: "grammatica", difficulty: "intermediaire", exp: "liever = « plutôt / de préférence » (le comparatif de graag)." },
+    { q: "Comment dit-on « ce que je préfère par-dessus tout » ?", opts: ["het liefst", "graag", "liever", "te veel"], ans: 0, chapter: "grammatica", difficulty: "difficile", exp: "Échelle : graag (volontiers) → liever (préférer) → het liefst (le plus)." },
     { q: "« de zolder », c'est :", opts: ["le grenier", "la cave", "la cuisine", "le toit"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de zolder = le grenier. (de kelder = la cave)." },
     { q: "« de kelder », c'est :", opts: ["la cave", "le grenier", "la chambre", "l'escalier"], ans: 0, chapter: "woning", difficulty: "facile", exp: "de kelder = la cave." },
     { q: "« het dak », c'est :", opts: ["le toit", "la façade", "la porte", "la fenêtre"], ans: 0, chapter: "woning", difficulty: "facile", exp: "het dak = le toit. (de gevel = la façade, de voordeur = la porte d'entrée, het raam = la fenêtre)." },
@@ -238,6 +253,7 @@
     { front: "Les verbes modaux (et leur sens) ?", back: "<strong>moeten</strong> (devoir) · <strong>willen</strong> (vouloir) · <strong>kunnen</strong> (pouvoir) · <strong>mogen</strong> (avoir le droit). Le 2ᵉ verbe part à l'<strong>infinitif en fin de phrase</strong>.", chapter: "grammatica" },
     { front: "niet ou geen ?", back: "<strong>geen</strong> devant un <strong>nom</strong> (geen erwten = pas de pois) · <strong>niet</strong> pour un <strong>verbe/adjectif</strong> (niet warm = pas chaud). « <strong>te</strong> » + adj = « trop ».", chapter: "grammatica" },
     { front: "Omdat vs Want ?", back: "Tous deux = « parce que / car ». <strong>omdat</strong> → verbe à la <strong>fin</strong> (…omdat ik moe ben). <strong>want</strong> → ordre <strong>normal</strong> (…want ik ben moe).", chapter: "grammatica" },
+    { front: "graag / liever / het liefst ?", back: "Exprimer une préférence : <strong>graag</strong> = volontiers · <strong>liever</strong> = préférer (plutôt) · <strong>het liefst</strong> = par-dessus tout. Ex. : Ik eet graag kaas, maar ik eet liever ham.", chapter: "grammatica" },
     { front: "Prépositions de lieu (les 10) ?", back: "in (dans) · op (sur) · boven (au-dessus) · onder (en dessous) · aan (à/contre) · voor (devant) · achter (derrière) · naast (à côté de) · tussen (entre) · tegenover (en face de).", chapter: "grammatica" },
     { front: "« il y a un tableau au mur »", back: "<strong>Er hangt een schilderij aan de muur.</strong> (accroché → hangen ; singulier → hangt).", chapter: "grammatica" },
     { front: "3 participes irréguliers fréquents ?", back: "eten → <strong>gegeten</strong> · zwemmen → <strong>gezwommen</strong> · bezoeken → <strong>bezocht</strong> · vertrekken → <strong>vertrokken</strong> · gaan → <strong>gegaan</strong> (zijn).", chapter: "grammatica" },
