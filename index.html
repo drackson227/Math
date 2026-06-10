@@ -284,6 +284,7 @@
   <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
   <button class="nav-btn" onclick="showSection(event,'journal')">📓 Journal</button>
   <button class="nav-btn" onclick="showSection(event,'profil')">👤 Mon profil</button>
+  <button class="nav-btn" id="nav-stats" onclick="showSection(event,'stats')" style="display:none; border-color:var(--color-parabole);">📊 Stats (admin)</button>
 </nav>
 
 <div id="subject-prep" class="subject-prep" style="display:none;">
@@ -601,6 +602,12 @@
   </div>
 </div>
 
+<div id="stats" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📊 Statistiques du site</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Espace privé : qui est connecté en direct, combien de personnes utilisent le site, et la dernière fois que chacun s'est connecté. 🔒 Toi seul vois cet onglet.</p>
+  <div id="stats-body"></div>
+</div>
+
 <div id="profil" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:2rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">👤 Mon profil</h2>
   <div id="study-dashboard" style="margin:0 0 2rem;"></div>
@@ -705,6 +712,7 @@
   <script src="auth.js"></script>
   <script src="chat.js"></script>
   <script src="multiplayer.js"></script>
+  <script src="stats.js"></script>
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>

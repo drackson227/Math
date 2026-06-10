@@ -52,7 +52,32 @@ NOTE pour l'élève : les interros de maths dans ce dossier pourraient resservir
   - Synthèse « 7. Les modes de preuve en droit civil belge » (5 modes : écrit/témoignage/présomptions/aveu/serment ; charge de la preuve art 8.4 ; acte authentique vs sous signature privée ; présomption légale vs de fait, indices sérieux/précis/concordants ; aveu judiciaire irrévocable vs extrajudiciaire ; règle des 3.500 € ; signature électronique qualifiée itsme/eID ; huissier constat électronique).
   - +10 quiz (chapter 'preuve', tirées des vraies QCM du contrôle) + 6 flashcards. chapLabels: preuve.
   - Pages lues : 102021,102023,102026,102028 (p1-4). Restent p5-6 (102030,102032) = questions ouvertes/cas pratique (déjà couvert par la synthèse).
-RESTE ÉCO : lire les feuilles « solidarité & indivisibilité des obligations » (cours 234440-234528) → encore un sous-chapitre droit civil à ajouter. + autres contrôles du dossier control (103xxx, 111xxx, 115xxx).
+FAIT (suite éco) — 2 nouveaux chapitres ajoutés au site :
+- « 8. Les modalités des obligations » (terme suspensif/extinctif, condition suspensive/résolutoire, divisibilité, solidarité active/passive, indivisibilité). Source : feuilles cours p.19-20 (234448, 234453). +7 quiz +4 flashcards (chapter 'obligations').
+- « 9. Le droit des contrats » (définition contrat, autonomie de la volonté, lois supplétives/impératives, capacité mineur/déficience, vices du consentement erreur/dol/violence). Source : contrôle « LES CONTRATS » (control/103008, 103012). +8 quiz +5 flashcards (chapter 'contrats').
+ÉCO MAINTENANT = 5 chapitres : mondialisation, responsabilité civile, modes de preuve, modalités des obligations, droit des contrats. 49 questions, 35 flashcards. cache v89.
+
+## ✅ DOSSIER CONTROL (25 fichiers) — AUDIT COMPLET
+- 093752 : contrôle éco (flux commerciaux + responsabilité civile : parents/enfant) → ✓ couvert.
+- 102xxx (6) : éval « Modes de preuve en droit civil » → ✓ CHAPITRE AJOUTÉ (preuve).
+- 103xxx (5) : éval « Les contrats » (conditions de validité = capacité 18 ans + consentement ; vices erreur/dol/violence) → ✓ CHAPITRE AJOUTÉ (contrats).
+- 111xxx + 115xxx (~13) : contrôle MATHS « UAA6 Géométrie analytique plane » (droite : éq. vectorielle, paramétriques, cartésienne, vecteur directeur) → ✓ COUVERT par le site maths (vectorielle + paramétriques + vecteur directeur + ax+by + y=mx). Note : le mot exact « cartésienne » n'est pas écrit (concept présent en forme générale/réduite) — petit ajout terminologique possible plus tard, pas urgent.
+
+## ✅ HISTOIRE (61 feuilles) — FAIT (via le programme d'exam)
+Feuille 1 (225016) = PROGRAMME D'EXAM DE JUIN. Savoirs testés : carte des religions, grandes périodes, chap5 Le livre, chap6 Humanisme/Renaissance, chap7 Réforme, chap8 Absolutisme + compétences méthode.
+Le site couvrait déjà 5 chapitres + méthode. SEUL MANQUE = « carte des religions » → AJOUTÉ (répartition vers 1600 : Nord protestant [luthérien Allemagne/Scandinavie, calviniste Suisse/Provinces-Unies/Écosse, anglican Angleterre], Sud catholique [Espagne/Italie/France/Pologne], Est orthodoxe). +4 quiz +1 flashcard (chapter 'reforme'). 40 questions. cache v90.
+Histoire = 100% aligné au programme. ✅
+
+## ✅ GÉO (42 feuilles) — FAIT (échantillon)
+Site couvrait : Belgique fédérale, 10 provinces, relief (3 ensembles), hydrographie (cours d'eau), biocarburants + méthode.
+Feuilles vues : biocarburants (situation d'apprentissage 6, bilan carbone, GES) ✓ ; eaux souterraines vs eaux de surface + gaspillage/économie de l'eau (manuscrit).
+AJOUTÉ : « Eaux de surface vs souterraines » (tableau avantages/inconvénients) + économiser l'eau, au chapitre hydro. +3 quiz +1 flashcard (chapter 'hydro'). 29 questions. cache v91.
+NB : photos géo sombres/manuscrites — contenu imprimé principal couvert ; si gap fin, re-vérifier feuilles claires.
+
+RESTE À FAIRE (gros morceaux) :
+- ANGLAIS (192 photos) — surtout voc + grammaire + temps.
+- FRANÇAIS (207 photos) — grammaire, conjugaison, littérature.
+- NL grammaire (36 photos du dossier néerlendais, déjà partiellement traité pour le voc).
 
 ## ⏳ À FAIRE
 - Chimie : feuilles 7-35

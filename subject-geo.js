@@ -111,6 +111,22 @@
         <li>L'<strong>Escaut</strong> : passe à Tournai, Gand et Anvers (la Lys le rejoint à Gand).</li>
         <li>Autres : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
       </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1.2rem;">💧 Eaux de surface vs eaux souterraines</h3>
+      <p>L'eau douce qu'on utilise vient de deux sources :</p>
+      <table class="compare-table">
+        <thead><tr><th>Critère</th><th>🌊 Eaux de surface</th><th>🕳️ Eaux souterraines (nappes)</th></tr></thead>
+        <tbody>
+          <tr><th>Où ?</th><td>rivières, fleuves, lacs, barrages</td><td>sous terre, dans les <strong>nappes phréatiques</strong></td></tr>
+          <tr><th>Avantage</th><td>faciles d'<strong>accès</strong> et abondantes</td><td>mieux <strong>protégées</strong>, plus <strong>pures</strong></td></tr>
+          <tr><th>Inconvénient</th><td>plus exposées à la <strong>pollution</strong></td><td>plus difficiles à exploiter, <strong>lentes</strong> à se renouveler</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.8rem;"><strong>Économiser l'eau (lutter contre le gaspillage)</strong> : fermer le robinet, <strong>réparer les fuites</strong>, préférer la <strong>douche au bain</strong>, <strong>récupérer l'eau de pluie</strong>, utiliser des appareils économes.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">L'eau qu'on boit vient soit du <strong>dessus</strong> (rivières, lacs = eaux de surface, faciles à prendre mais plus sales), soit du <strong>dessous</strong> (nappes souterraines = plus propres mais lentes à se remplir). Comme elle est précieuse, on évite de la <strong>gaspiller</strong>.</div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -215,6 +231,10 @@
 
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
+    // ── Eaux de surface / souterraines ──
+    { q: "Les eaux souterraines se trouvent :", opts: ["sous terre, dans les nappes phréatiques", "dans les fleuves et les lacs", "dans la mer du Nord", "dans les nuages"], ans: 0, chapter: "hydro", difficulty: "facile", exp: "Eaux souterraines = nappes phréatiques (sous terre). Eaux de surface = rivières, lacs, fleuves." },
+    { q: "Quel est un avantage des eaux souterraines par rapport aux eaux de surface ?", opts: ["elles sont mieux protégées et plus pures", "elles sont plus faciles à pomper", "elles ne servent à rien", "elles sont toujours salées"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "Souterraines = plus pures/protégées mais lentes à se renouveler. Surface = faciles d'accès mais plus polluées." },
+    { q: "Quel geste permet d'économiser l'eau ?", opts: ["réparer les fuites et préférer la douche au bain", "laisser couler le robinet", "arroser en plein soleil", "remplir la baignoire à ras bord"], ans: 0, chapter: "hydro", difficulty: "facile", exp: "Économiser l'eau : réparer les fuites, douche plutôt que bain, récupérer l'eau de pluie." },
     { q: "Combien la Belgique compte-t-elle de provinces ?", opts: ["10", "9", "12", "5"], ans: 0, chapter: "belgique", difficulty: "facile", exp: "10 provinces : 5 en Flandre, 5 en Wallonie." },
     { q: "Bruxelles-Capitale est…", opts: ["une Région à part (aucune province)", "une province wallonne", "une province flamande", "une Communauté"], ans: 0, chapter: "belgique", difficulty: "facile", exp: "Bruxelles est une des 3 Régions ; elle n'est dans aucune province." },
     { q: "Quelles sont les 3 Communautés ?", opts: ["française, flamande, germanophone", "flamande, wallonne, bruxelloise", "française, anglaise, allemande", "nord, centre, sud"], ans: 0, chapter: "belgique", difficulty: "intermediaire", exp: "Les Communautés sont définies par la langue : française, flamande (néerlandais), germanophone." },
@@ -245,6 +265,7 @@
 
   /* ---------------------- FLASHCARDS ---------------------- */
   var flashcards = [
+    { front: "Eaux de surface vs eaux souterraines ?", back: "<strong>Surface</strong> (rivières, lacs) : faciles d'accès mais plus <strong>polluées</strong>. <strong>Souterraines</strong> (nappes phréatiques) : plus <strong>pures/protégées</strong> mais <strong>lentes</strong> à se renouveler. → Il faut <strong>économiser l'eau</strong>.", chapter: "hydro" },
     { front: "Les 3 Régions de Belgique ?", back: "Région flamande (Flandre), Région wallonne (Wallonie), Région de Bruxelles-Capitale.", chapter: "belgique" },
     { front: "Les 3 Communautés ?", back: "Française, flamande (néerlandophone), germanophone.", chapter: "belgique" },
     { front: "Région vs Communauté ?", back: "Région = le <strong>territoire</strong> (économie, environnement) · Communauté = les <strong>personnes</strong> (langue, école, culture).", chapter: "belgique" },

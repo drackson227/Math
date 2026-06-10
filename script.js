@@ -1412,6 +1412,7 @@ function showSection(evtOrId, id) {
   if (sectionId === 'mesexos') renderCustomExoList();
   if (sectionId === 'progression') renderProgression();
   if (sectionId === 'chat' && typeof initChat === 'function') initChat();
+  if (sectionId === 'stats' && typeof initStats === 'function') initStats();
   // Onglets bonus (extraTabs) propres à une matière : on prévient le module concerné.
   if ((sectionId === 'extra1' || sectionId === 'extra2') && typeof window.onShowExtraTab === 'function') {
     try { window.onShowExtraTab(sectionId); } catch (e) {}

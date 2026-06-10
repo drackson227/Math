@@ -346,6 +346,20 @@
         </tbody>
       </table>
       <div class="key-rule"><div class="formula-main" style="font-size:16px;">À retenir : Protestants = <strong>foi seule + Bible pour tous + pas de pape</strong> · Catholiques = <strong>pape + foi & œuvres + 7 sacrements</strong></div></div>
+
+      <h3 style="color:var(--color-nav); margin-top:1.2rem;">🗺️ La carte des religions en Europe (vers 1600)</h3>
+      <p>Après la Réforme, l'Europe est <strong>divisée religieusement</strong> — en gros : le <strong>Nord</strong> devient protestant, le <strong>Sud</strong> reste catholique, l'<strong>Est</strong> est orthodoxe.</p>
+      <ul style="line-height:2;">
+        <li>⛪ <strong>Catholiques</strong> (Sud) : <strong>Espagne, Portugal, Italie, France</strong> (majorité), <strong>Pologne</strong>, sud de l'Allemagne, Pays-Bas du Sud (Belgique actuelle), Irlande.</li>
+        <li>📖 <strong>Luthériens</strong> (Nord) : <strong>nord de l'Allemagne</strong> et la <strong>Scandinavie</strong> (Danemark, Suède, Norvège, Finlande).</li>
+        <li>📖 <strong>Calvinistes</strong> : <strong>Suisse</strong> (Genève), <strong>Provinces-Unies</strong> (Pays-Bas du Nord), <strong>Écosse</strong> ; minorités en France (les <strong>huguenots</strong>) et en Hongrie.</li>
+        <li>📖 <strong>Anglicans</strong> : l'<strong>Angleterre</strong>.</li>
+        <li>☦️ <strong>Orthodoxes</strong> (Est) : <strong>Russie</strong>, Grèce, Balkans.</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Retiens la règle : <strong>Nord = protestant</strong> (luthérien en Allemagne/Scandinavie, calviniste en Suisse/Pays-Bas du Nord/Écosse, anglican en Angleterre) ; <strong>Sud = catholique</strong> (Espagne, Italie, France, Pologne) ; <strong>Est = orthodoxe</strong> (Russie, Grèce).</div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -469,6 +483,11 @@
 
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
+    // ── Carte des religions (fin chapitre Réforme) ──
+    { q: "Vers 1600, quelle religion domine dans le SUD de l'Europe (Espagne, Italie, France) ?", opts: ["le catholicisme", "le luthéranisme", "le calvinisme", "l'orthodoxie"], ans: 0, chapter: "reforme", difficulty: "facile", exp: "Le Sud reste catholique ; le Nord devient protestant ; l'Est est orthodoxe." },
+    { q: "Le luthéranisme s'implante surtout en :", opts: ["Allemagne du Nord et Scandinavie", "Espagne et Italie", "Russie et Grèce", "Angleterre seulement"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "Luthériens = nord de l'Allemagne + Scandinavie (Danemark, Suède, Norvège, Finlande)." },
+    { q: "L'anglicanisme est la religion de :", opts: ["l'Angleterre", "la Suisse", "la Pologne", "la Russie"], ans: 0, chapter: "reforme", difficulty: "facile", exp: "Henri VIII fonde l'anglicanisme → religion de l'Angleterre." },
+    { q: "À l'Est de l'Europe (Russie, Grèce, Balkans), la religion dominante est :", opts: ["l'orthodoxie", "le catholicisme", "le calvinisme", "l'anglicanisme"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "L'Est de l'Europe est majoritairement orthodoxe." },
     { q: "Quel événement marque la fin de l'Antiquité ?", opts: ["La chute de Rome (476)", "La découverte de l'Amérique (1492)", "La Révolution française (1789)", "L'invention de l'écriture"], ans: 0, chapter: "periodes", difficulty: "facile", exp: "L'Antiquité se termine à la chute de l'Empire romain d'Occident, en 476." },
     { q: "Les Temps modernes vont de…", opts: ["1492 à 1789", "476 à 1492", "1789 à aujourd'hui", "−3300 à 476"], ans: 0, chapter: "periodes", difficulty: "intermediaire", exp: "Des Grandes Découvertes (1492) à la Révolution française (1789)." },
     { q: "Dans l'ordre, les 5 périodes sont :", opts: ["Préhistoire, Antiquité, Moyen Âge, Temps modernes, Époque contemporaine", "Antiquité, Préhistoire, Moyen Âge, moderne, contemporaine", "Moyen Âge, Antiquité, Préhistoire, moderne, contemporaine", "Préhistoire, Moyen Âge, Antiquité, moderne, contemporaine"], ans: 0, chapter: "periodes", difficulty: "intermediaire", exp: "Préhistoire → Antiquité → Moyen Âge → Temps modernes → Époque contemporaine." },
@@ -509,6 +528,7 @@
 
   /* ---------------------- FLASHCARDS ---------------------- */
   var flashcards = [
+    { front: "Carte des religions en Europe (vers 1600) ?", back: "<strong>Nord = protestant</strong> : luthérien (Allemagne du Nord, Scandinavie), calviniste (Suisse, Provinces-Unies, Écosse), anglican (Angleterre). <strong>Sud = catholique</strong> (Espagne, Italie, France, Pologne). <strong>Est = orthodoxe</strong> (Russie, Grèce, Balkans).", chapter: "reforme" },
     { front: "Les 5 grandes périodes ?", back: "Préhistoire · Antiquité (→476) · Moyen Âge (476-1492) · Temps modernes (1492-1789) · Époque contemporaine (1789→).<br><svg viewBox='0 0 340 92' width='320' style='max-width:100%;height:auto;margin-top:8px'><rect x='6' y='34' width='40' height='20' fill='#94a3b8'/><rect x='46' y='34' width='70' height='20' fill='#fbbf24'/><rect x='116' y='34' width='84' height='20' fill='#34d399'/><rect x='200' y='34' width='70' height='20' fill='#60a5fa'/><rect x='270' y='34' width='64' height='20' fill='#a78bfa'/><text x='26' y='28' fill='#cbd5e1' font-size='8' text-anchor='middle'>Préhist.</text><text x='81' y='28' fill='#cbd5e1' font-size='8' text-anchor='middle'>Antiquité</text><text x='158' y='28' fill='#cbd5e1' font-size='8' text-anchor='middle'>Moyen Âge</text><text x='235' y='28' fill='#cbd5e1' font-size='8' text-anchor='middle'>T. modernes</text><text x='302' y='28' fill='#cbd5e1' font-size='8' text-anchor='middle'>Contemp.</text><line x1='116' y1='31' x2='116' y2='58' stroke='#e5e7eb' stroke-width='1'/><line x1='200' y1='31' x2='200' y2='58' stroke='#e5e7eb' stroke-width='1'/><line x1='270' y1='31' x2='270' y2='58' stroke='#e5e7eb' stroke-width='1'/><text x='116' y='70' fill='#e5e7eb' font-size='10' text-anchor='middle' font-weight='bold'>476</text><text x='200' y='70' fill='#e5e7eb' font-size='10' text-anchor='middle' font-weight='bold'>1492</text><text x='270' y='70' fill='#e5e7eb' font-size='10' text-anchor='middle' font-weight='bold'>1789</text></svg>", chapter: "periodes" },
     { front: "3 dates-bornes à retenir ?", back: "476 (chute de Rome) · 1492 (Amérique) · 1789 (Révolution française).", chapter: "periodes" },
     { front: "Qui invente l'imprimerie ? Quand ?", back: "Gutenberg, vers 1450 (caractères mobiles, à Mayence).", chapter: "livre" },

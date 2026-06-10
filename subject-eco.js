@@ -149,6 +149,68 @@
         <div class="simple-exp-content">Si tu veux gagner un procès, tu dois <strong>prouver</strong> ce que tu affirmes. Le plus solide, c'est l'<strong>écrit</strong> fait chez le notaire (acte authentique). Un <strong>SMS</strong> ou un aveu hors tribunal, c'est plus faible. Une <strong>présomption de fait</strong> = le juge déduit la vérité à partir d'indices <strong>sérieux, précis et concordants</strong>. Et pour tout ce qui vaut <strong>3.500 € ou plus</strong>, il faut un papier signé.</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>8. Les modalités des obligations (droit civil)</h2>
+      <p>Une <strong>obligation</strong> est un lien de droit entre un <strong>créancier</strong> (à qui on doit) et un <strong>débiteur</strong> (qui doit). Elle peut prendre plusieurs formes :</p>
+      <ul style="line-height:2;">
+        <li><strong>Obligation pure et simple</strong> : exigible immédiatement.</li>
+        <li><strong>Obligation à terme</strong> (un <strong>terme</strong> = événement <strong>futur et certain</strong>) :
+          <ul style="line-height:1.9;">
+            <li><strong>Terme suspensif</strong> : il <strong>suspend l'exigibilité</strong> (l'obligation existe, mais on ne peut l'exiger qu'à l'échéance). Ex. : achat d'une TV payable au 15 novembre.</li>
+            <li><strong>Terme extinctif</strong> : il <strong>éteint</strong> l'obligation à une date. Ex. : la fin d'un bail.</li>
+          </ul>
+        </li>
+        <li><strong>Obligation sous condition</strong> (une <strong>condition</strong> = événement <strong>futur et incertain</strong>) :
+          <ul style="line-height:1.9;">
+            <li><strong>Condition suspensive</strong> : elle <strong>suspend la naissance</strong> de l'obligation (elle ne naît que si l'événement se réalise). Ex. : « j'achète la maison <em>si</em> la banque m'accorde le prêt ».</li>
+            <li><strong>Condition résolutoire</strong> : sa réalisation <strong>annule</strong> l'obligation. Elle doit dépendre au moins en partie du <strong>hasard</strong> (sinon elle est nulle).</li>
+          </ul>
+        </li>
+      </ul>
+      <p style="margin-top:1rem;"><strong>Obligations à sujets multiples</strong> (plusieurs créanciers et/ou débiteurs) :</p>
+      <ul style="line-height:2;">
+        <li><strong>La divisibilité (principe)</strong> : la <strong>dette</strong> se divise en autant de parts qu'il y a de <strong>débiteurs</strong> ; la <strong>créance</strong> en autant de parts qu'il y a de <strong>créanciers</strong>. Ex. : X et Y prêtent 10.000 € à Z → chaque créancier ne peut réclamer que <strong>5.000 €</strong>.</li>
+        <li><strong>La solidarité</strong> (exception) :
+          <ul style="line-height:1.9;">
+            <li><strong>Solidarité active</strong> (plusieurs créanciers) : le débiteur peut payer la <strong>totalité</strong> à <strong>un seul</strong> des créanciers.</li>
+            <li><strong>Solidarité passive</strong> (plusieurs débiteurs) : le créancier peut réclamer <strong>toute la dette à un seul</strong> débiteur. Celui qui a tout payé peut ensuite réclamer leur part aux autres codébiteurs.</li>
+          </ul>
+        </li>
+        <li><strong>L'indivisibilité</strong> : l'obligation est indivisible si son <strong>objet</strong> est indivisible — <strong>par nature</strong> (ex. : livrer un bateau ne peut pas se faire « en deux moitiés ») ou <strong>en matière de prêt</strong> (les emprunteurs sont solidairement responsables).</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content"><strong>Terme</strong> = c'est sûr, mais plus tard (une date). <strong>Condition</strong> = ça arrivera peut-être (un « si »). Quand on est <strong>plusieurs</strong> à devoir : normalement chacun paie sa part (divisibilité) ; mais avec la <strong>solidarité</strong>, on peut réclamer <strong>tout à une seule personne</strong>. Et certaines choses (un bateau) ne se coupent pas en parts : c'est l'<strong>indivisibilité</strong>.</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>9. Le droit des contrats</h2>
+      <p>Un <strong>contrat</strong> est un <strong>accord entre deux ou plusieurs personnes</strong> ayant l'<strong>intention de produire des effets de droit</strong>.</p>
+      <ul style="line-height:2;">
+        <li><strong>L'autonomie de la volonté</strong> : chaque partie est <strong>libre</strong> de contracter, de <strong>choisir son cocontractant</strong> et de <strong>déterminer le contenu</strong> de l'accord (= la liberté contractuelle).</li>
+        <li><strong>Les restrictions</strong> à cette liberté : on ne peut pas tout prévoir. Ex. : interdiction de fixer un <strong>salaire inférieur au salaire minimum légal</strong>. Ces limites viennent des <strong>lois impératives</strong>.</li>
+        <li><strong>Loi supplétive vs loi impérative</strong> :
+          <ul style="line-height:1.9;">
+            <li><strong>Loi supplétive</strong> : elle <strong>complète</strong> le contrat là où il est muet, mais peut être <strong>écartée</strong> par les parties.</li>
+            <li><strong>Loi impérative</strong> : elle protège la <strong>partie faible</strong> et ne peut <strong>pas</strong> être écartée.</li>
+          </ul>
+        </li>
+        <li><strong>La capacité</strong> : il faut être <strong>capable</strong> de contracter. Sont <strong>incapables</strong> : les <strong>mineurs</strong> et les personnes atteintes de <strong>déficience mentale</strong>.</li>
+        <li><strong>Les vices du consentement</strong> (ils rendent le contrat <strong>annulable</strong>) :
+          <ul style="line-height:1.9;">
+            <li><strong>L'erreur</strong> : <strong>involontaire</strong> ; elle n'annule le contrat que si elle porte sur un <strong>élément fondamental</strong> (substantiel).</li>
+            <li><strong>Le dol</strong> : une <strong>machination volontaire</strong> (tromperie intentionnelle) pour pousser l'autre à contracter.</li>
+            <li><strong>La violence</strong> : consentement obtenu sous la <strong>menace, physique ou morale</strong>.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Un contrat = un accord pour créer des droits/obligations. En principe tu fais ce que tu veux (<strong>autonomie de la volonté</strong>), sauf interdits (lois impératives, ex. salaire minimum). Si ton « oui » est faussé — par une <strong>erreur</strong> grave, une <strong>tromperie (dol)</strong> ou une <strong>menace (violence)</strong> — le contrat peut être <strong>annulé</strong>. Et un <strong>mineur</strong> ne peut pas signer n'importe quoi.</div>
+      </div>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES ---------------------- */
@@ -247,6 +309,23 @@
 
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
+    // ── Le droit des contrats (QCM tirées de ton contrôle « Les Contrats ») ──
+    { q: "Un contrat est :", opts: ["un accord entre 2 ou plusieurs personnes ayant l'intention de produire des effets de droit", "une loi votée par le parlement", "une décision du juge", "une facture"], ans: 0, chapter: "contrats", difficulty: "facile", exp: "Contrat = accord de volontés destiné à produire des effets de droit." },
+    { q: "Le principe de l'autonomie de la volonté signifie que chaque partie est libre de :", opts: ["contracter, choisir son cocontractant et déterminer le contenu de l'accord", "signer n'importe quel contrat, même contraire à l'ordre public", "refuser les lois impératives", "contracter avec un mineur sans restriction"], ans: 0, chapter: "contrats", difficulty: "intermediaire", exp: "Autonomie de la volonté = liberté contractuelle (dans les limites des lois impératives et de l'ordre public)." },
+    { q: "Une loi supplétive est une loi qui :", opts: ["complète le contrat là où il est muet, mais peut être écartée par les parties", "s'impose obligatoirement, sans exception", "protège exclusivement les consommateurs", "s'applique seulement aux contrats de travail"], ans: 0, chapter: "contrats", difficulty: "intermediaire", exp: "Supplétive = écartable par les parties. Impérative = protège la partie faible, non écartable." },
+    { q: "Quelle est une restriction INCONTOURNABLE à la liberté contractuelle ?", opts: ["l'interdiction de prévoir un salaire inférieur au salaire minimum légal", "l'absence de mention du lieu de livraison", "des frais de transport non précisés", "l'omission de la date de signature"], ans: 0, chapter: "contrats", difficulty: "difficile", exp: "Les lois impératives (ex. salaire minimum) limitent la liberté contractuelle." },
+    { q: "Quand une personne est-elle incapable de contracter ?", opts: ["lorsqu'elle est mineure ou atteinte de déficience mentale", "lorsqu'elle n'a pas signé le contrat de sa propre main", "lorsqu'elle ne parle pas la langue du contrat", "lorsqu'elle est en déplacement"], ans: 0, chapter: "contrats", difficulty: "facile", exp: "Incapables : mineurs et personnes atteintes de déficience mentale." },
+    { q: "Différence entre l'erreur et le dol ?", opts: ["l'erreur est involontaire, le dol est une machination volontaire", "l'erreur est volontaire, le dol involontaire", "l'erreur porte sur le prix, le dol sur la qualité", "aucune différence"], ans: 0, chapter: "contrats", difficulty: "intermediaire", exp: "Erreur = involontaire ; dol = tromperie volontaire/intentionnelle." },
+    { q: "Pour que l'erreur entraîne l'annulation d'un contrat, elle doit :", opts: ["porter sur un élément fondamental du contrat", "avoir été commise par les deux parties", "avoir été signalée avant la signature", "concerner uniquement le prix"], ans: 0, chapter: "contrats", difficulty: "difficile", exp: "Seule une erreur sur un élément fondamental (substantiel) annule le contrat." },
+    { q: "La violence, comme vice de consentement, consiste à :", opts: ["obtenir le consentement sous la menace, physique ou morale", "constater qu'une partie a été blessée", "prouver que le contrat a été signé sans avocat", "établir que la partie était sous l'emprise de l'alcool"], ans: 0, chapter: "contrats", difficulty: "intermediaire", exp: "Violence = consentement extorqué sous menace physique OU morale." },
+    // ── Modalités des obligations (droit civil) ──
+    { q: "Un « terme » est un événement :", opts: ["futur et certain", "futur et incertain", "passé et certain", "présent"], ans: 0, chapter: "obligations", difficulty: "facile", exp: "Le terme = futur et CERTAIN (ex. une date). La condition = futur et INCERTAIN (un « si »)." },
+    { q: "Une « condition » est un événement :", opts: ["futur et incertain", "futur et certain", "toujours réalisé", "passé"], ans: 0, chapter: "obligations", difficulty: "facile", exp: "La condition = futur et incertain. Suspensive (suspend la naissance) ou résolutoire (annule)." },
+    { q: "Le terme suspensif :", opts: ["suspend l'exigibilité de l'obligation", "éteint l'obligation", "annule le contrat", "double la dette"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "Terme suspensif : l'obligation existe mais n'est exigible qu'à l'échéance (ex. payer au 15 novembre)." },
+    { q: "La condition suspensive :", opts: ["suspend la naissance de l'obligation", "éteint une obligation existante", "rend la dette solidaire", "divise la créance"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "L'obligation ne naît que si l'événement se réalise (ex. « j'achète si la banque prête »)." },
+    { q: "Principe de divisibilité : X et Y prêtent 10.000 € à Z. Chaque créancier peut réclamer :", opts: ["5.000 € (sa moitié)", "10.000 €", "0 €", "20.000 €"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "La créance se divise par le nombre de créanciers → chacun ne réclame que sa part (5.000 €)." },
+    { q: "La solidarité passive permet au créancier de :", opts: ["réclamer toute la dette à un seul des débiteurs", "ne rien réclamer", "réclamer uniquement la moitié", "diviser entre tous les débiteurs"], ans: 0, chapter: "obligations", difficulty: "difficile", exp: "Solidarité passive : le créancier réclame le tout à un seul débiteur ; celui-ci se retourne ensuite vers les autres." },
+    { q: "Une obligation est indivisible quand :", opts: ["son objet est indivisible (ex. livrer un bateau)", "il y a un seul débiteur", "la dette est inférieure à 3.500 €", "le terme est échu"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "Indivisibilité : l'objet ne peut pas être fractionné (par nature, ou en matière de prêt)." },
     // ── Modes de preuve en droit civil belge (QCM tirées de ton contrôle) ──
     { q: "La présomption, c'est :", opts: ["la déduction d'un fait inconnu à partir d'un ou plusieurs faits connus", "un procédé de preuve utilisé de manière légale", "la déduction d'un fait connu à partir de faits inconnus", "un procédé de preuve illégal"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "Présomption = on déduit un fait INCONNU à partir de faits CONNUS.", simple: "On ne voit pas le fait directement, mais des indices permettent de le deviner. Ex. : sol mouillé → il a plu." },
     { q: "Charge de la preuve (art. 8.4 du Code civil) : qui doit prouver ?", opts: ["celui qui réclame (qui allègue le fait)", "celui qui nie les faits", "le juge décide seul qui prouve", "la charge est toujours partagée"], ans: 0, chapter: "preuve", difficulty: "facile", exp: "Celui qui réclame un droit doit le prouver — pas celui qui nie." },
@@ -286,6 +365,15 @@
 
   /* ---------------------- FLASHCARDS ---------------------- */
   var flashcards = [
+    { front: "Définition d'un contrat ?", back: "Un <strong>accord entre 2 ou plusieurs personnes</strong> ayant l'<strong>intention de produire des effets de droit</strong>.", chapter: "contrats" },
+    { front: "L'autonomie de la volonté ?", back: "Chaque partie est <strong>libre</strong> de contracter, de <strong>choisir son cocontractant</strong> et de <strong>fixer le contenu</strong> du contrat — dans les limites des <strong>lois impératives</strong> et de l'ordre public.", chapter: "contrats" },
+    { front: "Loi supplétive vs loi impérative ?", back: "<strong>Supplétive</strong> : complète le contrat muet, <strong>écartable</strong> par les parties. <strong>Impérative</strong> : protège la <strong>partie faible</strong>, <strong>non écartable</strong>.", chapter: "contrats" },
+    { front: "Les 3 vices du consentement ?", back: "<strong>Erreur</strong> (involontaire, sur un élément fondamental) · <strong>Dol</strong> (machination volontaire/tromperie) · <strong>Violence</strong> (menace physique ou morale). Ils rendent le contrat <strong>annulable</strong>.", chapter: "contrats" },
+    { front: "Qui est incapable de contracter ?", back: "Les <strong>mineurs</strong> et les personnes atteintes de <strong>déficience mentale</strong>.", chapter: "contrats" },
+    { front: "Terme vs condition (obligations) ?", back: "<strong>Terme</strong> = événement futur et <strong>certain</strong> (suspensif / extinctif). <strong>Condition</strong> = futur et <strong>incertain</strong> (suspensive : suspend la naissance / résolutoire : annule).", chapter: "obligations" },
+    { front: "Divisibilité (principe des obligations) ?", back: "La <strong>dette</strong> se divise par le nombre de <strong>débiteurs</strong>, la <strong>créance</strong> par le nombre de <strong>créanciers</strong>. Ex. : X et Y prêtent 10.000 € à Z → chacun réclame <strong>5.000 €</strong>.", chapter: "obligations" },
+    { front: "Solidarité active vs passive ?", back: "<strong>Active</strong> (plusieurs créanciers) : le débiteur peut tout payer à un seul. <strong>Passive</strong> (plusieurs débiteurs) : le créancier peut réclamer <strong>tout à un seul</strong> débiteur (qui se retourne ensuite vers les autres).", chapter: "obligations" },
+    { front: "L'indivisibilité d'une obligation ?", back: "L'obligation est indivisible si son <strong>objet</strong> l'est : <strong>par nature</strong> (ex. livrer un bateau) ou <strong>en matière de prêt</strong> (emprunteurs solidairement responsables).", chapter: "obligations" },
     { front: "Les 5 modes de preuve en droit civil belge ?", back: "<strong>1. L'écrit</strong> (acte authentique / sous signature privée) · <strong>2. Le témoignage</strong> · <strong>3. Les présomptions</strong> · <strong>4. L'aveu</strong> · <strong>5. Le serment</strong>.", chapter: "preuve" },
     { front: "Charge de la preuve (art. 8.4 Code civil) ?", back: "<strong>Celui qui réclame</strong> (qui allègue un fait) doit le <strong>prouver</strong> — pas celui qui nie.", chapter: "preuve" },
     { front: "Acte authentique vs acte sous signature privée ?", back: "<strong>Authentique</strong> : reçu par un <strong>officier public</strong> (notaire, huissier) → force forte. <strong>Sous signature privée</strong> : signé par les parties seules → force <strong>moindre</strong>, contestable.", chapter: "preuve" },
@@ -322,8 +410,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
-      chapOrder: ['mondialisation', 'responsabilite', 'preuve'],
-      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)' }
+      chapOrder: ['mondialisation', 'responsabilite', 'preuve', 'obligations', 'contrats'],
+      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)', obligations: 'Modalités des obligations', contrats: 'Le droit des contrats' }
     }
   });
 })();

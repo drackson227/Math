@@ -604,3 +604,28 @@ img { max-width: 100%; height: auto; }
 #exam-timer-widget.done #exam-clock { color: #f87171; }
 @keyframes etwPulse { 0%,100% { box-shadow: 0 10px 30px rgba(248,113,113,.5); } 50% { box-shadow: 0 10px 40px rgba(248,113,113,.9); } }
 @media (max-width: 480px) { #exam-timer-widget { bottom: 70px; } }
+
+/* ============================================================
+   Tableau de bord STATS (créateur uniquement) — voir stats.js
+   ============================================================ */
+.stats-block { margin-bottom: 2rem; }
+.stats-h { font-size: 20px; font-weight: 700; color: var(--color-nav); margin: 0 0 1rem; }
+.stats-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.25rem; }
+.stats-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1rem 0.6rem; text-align: center; }
+.stats-card-ic { font-size: 24px; line-height: 1; margin-bottom: 4px; }
+.stats-card-val { font-size: 30px; font-weight: 800; color: var(--color-parabole); }
+.stats-card-lab { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stats-table-wrap { overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: 14px; }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 460px; }
+.stats-table th { text-align: left; padding: 10px 12px; background: var(--bg-main); color: var(--text-secondary); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; position: sticky; top: 0; }
+.stats-table td { padding: 10px 12px; border-top: 1px solid var(--border-subtle); color: var(--text-primary); }
+.stats-table tbody tr:hover { background: var(--bg-main); }
+.stats-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; vertical-align: middle; }
+.stats-tag-guest { background: rgba(148,163,184,.2); color: var(--text-secondary); }
+.stats-tag-admin { background: rgba(251,191,36,.18); color: #d97706; }
+.stats-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 6px; vertical-align: middle; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: statsDotPulse 1.6s ease-out infinite; }
+@keyframes statsDotPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.55); } 70% { box-shadow: 0 0 0 6px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+.stats-empty { text-align: center; color: var(--text-secondary); padding: 1.5rem; }
+.stats-note { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 1rem 1.1rem; color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+.stats-note code { background: var(--bg-main); padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+@media (max-width: 480px) { .stats-card-val { font-size: 24px; } .stats-cards { gap: 8px; } }
