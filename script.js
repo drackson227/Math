@@ -1413,6 +1413,10 @@ function showSection(evtOrId, id) {
   if (sectionId === 'mesexos') renderCustomExoList();
   if (sectionId === 'progression') renderProgression();
   if (sectionId === 'chat' && typeof initChat === 'function') initChat();
+  // Onglets bonus (extraTabs) propres à une matière : on prévient le module concerné.
+  if ((sectionId === 'extra1' || sectionId === 'extra2') && typeof window.onShowExtraTab === 'function') {
+    try { window.onShowExtraTab(sectionId); } catch (e) {}
+  }
   if (window.innerWidth <= 768 && document.querySelector('.nav').classList.contains('open')) {
     toggleSidebar();
   }
@@ -2211,8 +2215,8 @@ document.addEventListener('keydown', (e) => {
 
 
 // Tableau de bord « À réviser aujourd'hui » — agrège TOUTES les matières.
-var DASH_ICONS = { maths: '📐', francais: '✍️', anglais: '🇬🇧', histoire: '🏛️', geo: '🗺️', chimie: '🧪', bio: '🧬' };
-var DASH_LABELS = { maths: 'Maths', francais: 'Français', anglais: 'Anglais', histoire: 'Histoire', geo: 'Géo', chimie: 'Chimie', bio: 'Bio' };
+var DASH_ICONS = { maths: '📐', francais: '✍️', anglais: '🇬🇧', neerlandais: '🇳🇱', histoire: '🏛️', geo: '🗺️', chimie: '🧪', bio: '🧬', eco: '💶' };
+var DASH_LABELS = { maths: 'Maths', francais: 'Français', anglais: 'Anglais', neerlandais: 'Néerlandais', histoire: 'Histoire', geo: 'Géo', chimie: 'Chimie', bio: 'Bio', eco: 'Sciences éco' };
 /* ════════════ Carte de Belgique interactive (Géo) ════════════ */
 window._geoQuiz = null;
 function geoPick(i) {
@@ -2264,7 +2268,7 @@ function renderStudyDashboard() {
   var mastered = data.masteredQuestions || {};
   var examHist = data.examHistory || {};
   var now = Date.now();
-  var order = ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'];
+  var order = ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'];
   var rows = '', totalDue = 0;
   order.forEach(function (key) {
     var s = window.SUBJECTS[key];
@@ -3048,7 +3052,7 @@ function shuffleFlashcards() {
 function startMixedRevision() {
   const data = loadSavedData(); const fc = data.flashcardData || {}; const now = Date.now();
   const pool = [];
-  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (k) {
+  ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (k) {
     const s = window.SUBJECTS && window.SUBJECTS[k];
     if (!s || !s.ready || !s.content || !s.content.flashcards) return;
     s.content.flashcards.forEach(function (c) {
@@ -3381,7 +3385,7 @@ function stopExamMode() {
 // Quiz mixte : pioche des questions au hasard dans TOUTES les matières.
 function startMixedQuiz() {
   var pool = [];
-  ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (key) {
+  ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (key) {
     var s = window.SUBJECTS && window.SUBJECTS[key];
     if (s && s.ready && s.content && s.content.questions) {
       s.content.questions.forEach(function (q) { pool.push(q); });
@@ -4688,7 +4692,7 @@ document.addEventListener('keydown', function (e) {
 /* ════════════ Couleur d'accent par matière (défaut, modifiable dans les paramètres) ════════════ */
 window.SUBJECT_ACCENTS = {
   maths: '#a78bfa', histoire: '#fbbf24', bio: '#34d399', geo: '#2dd4bf',
-  francais: '#f472b6', anglais: '#818cf8', chimie: '#c084fc'
+  francais: '#f472b6', anglais: '#818cf8', chimie: '#c084fc', eco: '#fbbf24', neerlandais: '#fb923c'
 };
 function hexToRgb(h) {
   h = String(h).replace('#', '');
@@ -4870,7 +4874,7 @@ function showRevisionReminder() {
     if (sessionStorage.getItem('mathsgr2_reminded')) return;
     if (!window.SUBJECTS) return;
     var data = loadSavedData(); var fc = data.flashcardData || {}; var now = Date.now(); var total = 0;
-    ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'].forEach(function (key) {
+    ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (key) {
       var s = window.SUBJECTS[key]; if (!s || !s.ready || !s.content) return;
       (s.content.flashcards || []).forEach(function (c) { var r = fc[c.front]; if (!r || !r.due || new Date(r.due).getTime() <= now) total++; });
     });
@@ -5178,7 +5182,7 @@ function renderProgressCharts() {
   var exam = data.examHistory || {};
   var subjKeys = Object.keys(exam).filter(function (k) { return (exam[k] || []).length; });
   if (subjKeys.length) {
-    var order = ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio'];
+    var order = ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'];
     subjKeys.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
     html += '<div class="pc-card" style="margin-top:1rem;"><div class="pc-head"><span>📝 Notes d\'examen blanc (/20)</span></div>';
     subjKeys.forEach(function (k) {
