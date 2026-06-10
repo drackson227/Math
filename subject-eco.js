@@ -115,6 +115,40 @@
         <div class="simple-exp-content">La responsabilité <strong>civile</strong> sert à <em>réparer</em> le dommage de la victime (payer). La responsabilité <strong>pénale</strong> sert à <em>punir</em> une infraction au nom de la société (amende, prison). — En Belgique, il n'y a <strong>pas d'âge fixe</strong> pour être responsable civilement : ce qui compte est le <strong>discernement</strong> (être capable de comprendre la portée de ses actes), apprécié par le juge. Une <strong>assurance RC</strong> (ex. la RC familiale) sert justement à couvrir ces dommages.</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>7. Les modes de preuve en droit civil belge</h2>
+      <p>Pour faire valoir un droit en justice, il faut le <strong>prouver</strong>. La règle de base (<strong>article 8.4 du Code civil</strong>) : <strong>celui qui réclame</strong> (qui allègue un fait) <strong>doit le prouver</strong> — pas celui qui nie.</p>
+      <p>Le droit civil belge reconnaît officiellement <strong>5 modes de preuve</strong> :</p>
+      <ul style="line-height:2;">
+        <li><strong>1. La preuve écrite (l'écrit)</strong> — deux sortes :
+          <ul style="line-height:1.9;">
+            <li><strong>Acte authentique</strong> : reçu par un <strong>officier public</strong> compétent (notaire, huissier). <strong>Force probante très forte.</strong> Ex. : un acte notarié.</li>
+            <li><strong>Acte sous signature privée</strong> : signé par les parties <strong>seules</strong> (sans officier public). Force probante <strong>moindre</strong> (peut être contesté).</li>
+          </ul>
+        </li>
+        <li><strong>2. Le témoignage</strong> : la déclaration d'une personne sur des faits qu'elle a constatés.</li>
+        <li><strong>3. Les présomptions</strong> : on <strong>déduit un fait inconnu à partir de faits connus</strong>.
+          <ul style="line-height:1.9;">
+            <li><strong>Présomption légale</strong> : prévue par la loi → elle <strong>s'impose au juge</strong>.</li>
+            <li><strong>Présomption de fait</strong> : laissée à l'<strong>appréciation du juge</strong>. Les indices doivent être <strong>sérieux, précis et concordants</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>4. L'aveu</strong> : une partie reconnaît un fait.
+          <ul style="line-height:1.9;">
+            <li><strong>Aveu judiciaire</strong> (devant le juge) : <strong>irrévocable</strong>, force probante très forte.</li>
+            <li><strong>Aveu extrajudiciaire</strong> (SMS, e-mail) : force probante <strong>moindre</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>5. Le serment</strong> : très <strong>rarement</strong> utilisé dans les tribunaux belges.</li>
+      </ul>
+      <p style="margin-top:1rem;"><strong>La règle des 3.500 € :</strong> pour un acte juridique d'une valeur <strong>≥ 3.500 €</strong>, un <strong>écrit signé est obligatoire</strong>. En dessous de 3.500 €, la <strong>preuve est libre</strong> (tous les modes sont admis).</p>
+      <p><strong>Aujourd'hui :</strong> la <strong>signature électronique qualifiée</strong> (itsme, eID) a la <strong>même valeur juridique</strong> que la signature manuscrite. Un <strong>huissier</strong> peut établir un <strong>constat électronique</strong> ayant valeur d'acte authentique.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Si tu veux gagner un procès, tu dois <strong>prouver</strong> ce que tu affirmes. Le plus solide, c'est l'<strong>écrit</strong> fait chez le notaire (acte authentique). Un <strong>SMS</strong> ou un aveu hors tribunal, c'est plus faible. Une <strong>présomption de fait</strong> = le juge déduit la vérité à partir d'indices <strong>sérieux, précis et concordants</strong>. Et pour tout ce qui vaut <strong>3.500 € ou plus</strong>, il faut un papier signé.</div>
+      </div>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES ---------------------- */
@@ -213,6 +247,17 @@
 
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
+    // ── Modes de preuve en droit civil belge (QCM tirées de ton contrôle) ──
+    { q: "La présomption, c'est :", opts: ["la déduction d'un fait inconnu à partir d'un ou plusieurs faits connus", "un procédé de preuve utilisé de manière légale", "la déduction d'un fait connu à partir de faits inconnus", "un procédé de preuve illégal"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "Présomption = on déduit un fait INCONNU à partir de faits CONNUS.", simple: "On ne voit pas le fait directement, mais des indices permettent de le deviner. Ex. : sol mouillé → il a plu." },
+    { q: "Charge de la preuve (art. 8.4 du Code civil) : qui doit prouver ?", opts: ["celui qui réclame (qui allègue le fait)", "celui qui nie les faits", "le juge décide seul qui prouve", "la charge est toujours partagée"], ans: 0, chapter: "preuve", difficulty: "facile", exp: "Celui qui réclame un droit doit le prouver — pas celui qui nie." },
+    { q: "Qu'est-ce qu'un acte authentique ?", opts: ["un écrit reçu par un officier public compétent (notaire, huissier)", "un document signé par deux particuliers seulement", "un SMS confirmé par les deux parties", "un témoignage fait devant notaire"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "Acte authentique = reçu par un officier public (notaire, huissier) → force probante très forte." },
+    { q: "À partir de quel montant un écrit signé est-il obligatoire pour prouver un acte juridique ?", opts: ["3.500 €", "1.000 €", "2.500 €", "5.000 €"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "≥ 3.500 € : écrit signé obligatoire. En dessous : la preuve est libre." },
+    { q: "Pour qu'une présomption de fait soit valable, les indices doivent être :", opts: ["sérieux, précis et concordants", "nombreux, certains et anciens", "écrits, signés et notariés", "judiciaires, extrajudiciaires et légaux"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "Les indices doivent être sérieux, précis et concordants." },
+    { q: "L'aveu judiciaire est-il révocable ?", opts: ["non, il est irrévocable", "oui, à tout moment du procès", "oui, mais seulement dans les 30 jours", "cela dépend du juge"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "L'aveu judiciaire (fait devant le juge) est irrévocable et a une force probante très forte." },
+    { q: "Combien de modes de preuve le droit civil belge reconnaît-il officiellement ?", opts: ["5", "3", "4", "6"], ans: 0, chapter: "preuve", difficulty: "facile", exp: "5 modes : l'écrit, le témoignage, les présomptions, l'aveu, le serment." },
+    { q: "Un SMS peut constituer :", opts: ["un aveu extrajudiciaire ou une présomption de fait", "un acte authentique", "une preuve sans aucune valeur juridique", "exclusivement une présomption légale"], ans: 0, chapter: "preuve", difficulty: "difficile", exp: "Un SMS = aveu extrajudiciaire ou présomption de fait (force probante moindre qu'un aveu judiciaire)." },
+    { q: "La signature électronique qualifiée (itsme, eID) a :", opts: ["la même valeur juridique que la signature manuscrite", "aucune valeur juridique", "une valeur seulement entre commerçants", "valeur d'acte authentique automatiquement"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "La signature électronique qualifiée (itsme, eID) = même valeur que la signature manuscrite." },
+    { q: "Le serment, comme mode de preuve, est :", opts: ["très rarement utilisé dans les tribunaux belges", "le mode de preuve le plus fréquent", "réservé aux actes notariés", "interdit en droit belge"], ans: 0, chapter: "preuve", difficulty: "facile", exp: "Le serment est un mode de preuve qui existe mais est très rarement utilisé." },
     { q: "La mondialisation, c'est avant tout :", opts: ["l'intensification des échanges entre les parties du monde", "la fin du commerce international", "un pays qui se ferme aux autres", "une monnaie unique mondiale"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Mondialisation = mise en relation du monde par l'intensification des échanges (marchandises, services, capitaux, informations, personnes).", simple: "C'est l'idée que tout circule de plus en plus entre les pays : produits, argent, infos, gens. Le monde devient un seul grand marché connecté." },
     { q: "Lequel n'est PAS un type de flux mondial ?", opts: ["les flux de montagnes", "les flux de marchandises", "les flux de capitaux", "les flux d'informations"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Les flux = marchandises, services, capitaux, informations et personnes. « Montagnes » n'a aucun sens ici." },
     { q: "Le 1ᵉ⁰ exportateur mondial de marchandises est :", opts: ["la Chine", "la Belgique", "le Brésil", "la Russie"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "La Chine est le 1ᵉ⁰ exportateur de marchandises, devant les États-Unis et l'Allemagne." },
@@ -241,6 +286,12 @@
 
   /* ---------------------- FLASHCARDS ---------------------- */
   var flashcards = [
+    { front: "Les 5 modes de preuve en droit civil belge ?", back: "<strong>1. L'écrit</strong> (acte authentique / sous signature privée) · <strong>2. Le témoignage</strong> · <strong>3. Les présomptions</strong> · <strong>4. L'aveu</strong> · <strong>5. Le serment</strong>.", chapter: "preuve" },
+    { front: "Charge de la preuve (art. 8.4 Code civil) ?", back: "<strong>Celui qui réclame</strong> (qui allègue un fait) doit le <strong>prouver</strong> — pas celui qui nie.", chapter: "preuve" },
+    { front: "Acte authentique vs acte sous signature privée ?", back: "<strong>Authentique</strong> : reçu par un <strong>officier public</strong> (notaire, huissier) → force forte. <strong>Sous signature privée</strong> : signé par les parties seules → force <strong>moindre</strong>, contestable.", chapter: "preuve" },
+    { front: "Présomption légale vs présomption de fait ?", back: "<strong>Légale</strong> : prévue par la loi → <strong>s'impose au juge</strong>. <strong>De fait</strong> : <strong>appréciée par le juge</strong> ; indices <strong>sérieux, précis et concordants</strong>.", chapter: "preuve" },
+    { front: "Aveu judiciaire vs extrajudiciaire ?", back: "<strong>Judiciaire</strong> (devant le juge) : <strong>irrévocable</strong>, force très forte. <strong>Extrajudiciaire</strong> (SMS, e-mail) : force <strong>moindre</strong>.", chapter: "preuve" },
+    { front: "La règle des 3.500 € (preuve) ?", back: "Acte juridique <strong>≥ 3.500 €</strong> → <strong>écrit signé obligatoire</strong>. En dessous → <strong>preuve libre</strong> (tous modes admis). La signature électronique qualifiée (itsme, eID) = même valeur que la manuscrite.", chapter: "preuve" },
     { front: "Qu'est-ce que la mondialisation ?", back: "La mise en relation des parties du monde par l'<strong>intensification des échanges</strong> (marchandises, services, capitaux, informations, personnes) → <strong>interdépendance</strong> des pays.", chapter: "mondialisation" },
     { front: "Les 5 types de flux mondiaux ?", back: "<strong>Marchandises</strong>, <strong>services</strong>, <strong>capitaux</strong> (argent), <strong>informations</strong>, <strong>personnes</strong> (migrations).", chapter: "mondialisation" },
     { front: "Les 3 plus grands exportateurs de marchandises ?", back: "La <strong>Chine</strong> (1ᵉ⁰), les <strong>États-Unis</strong>, l'<strong>Allemagne</strong>.", chapter: "mondialisation" },
@@ -271,8 +322,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
-      chapOrder: ['mondialisation', 'responsabilite'],
-      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile' }
+      chapOrder: ['mondialisation', 'responsabilite', 'preuve'],
+      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)' }
     }
   });
 })();

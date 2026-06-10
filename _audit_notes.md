@@ -46,6 +46,14 @@ GAP PROBABLE : le site n'a PAS le détail « solidarité & indivisibilité des o
 À CONFIRMER : y a-t-il d'autres chapitres éco entre 234104 et 234453 ? (lire le milieu).
 NOTE pour l'élève : les interros de maths dans ce dossier pourraient resservir pour réviser les maths.
 
+### Dossier CONTROL (Bureau, 25 fichiers) — contrôles maths + éco
+- Contrôle éco (24/33) : flux commerciaux + responsabilité civile (parents responsables enfant). ✓ couvert.
+- ÉVALUATION « Les Modes de Preuve en Droit Civil Belge » (31/03/2026, 6 pages, note 19/46) → CHAPITRE MANQUANT, AJOUTÉ AU SITE :
+  - Synthèse « 7. Les modes de preuve en droit civil belge » (5 modes : écrit/témoignage/présomptions/aveu/serment ; charge de la preuve art 8.4 ; acte authentique vs sous signature privée ; présomption légale vs de fait, indices sérieux/précis/concordants ; aveu judiciaire irrévocable vs extrajudiciaire ; règle des 3.500 € ; signature électronique qualifiée itsme/eID ; huissier constat électronique).
+  - +10 quiz (chapter 'preuve', tirées des vraies QCM du contrôle) + 6 flashcards. chapLabels: preuve.
+  - Pages lues : 102021,102023,102026,102028 (p1-4). Restent p5-6 (102030,102032) = questions ouvertes/cas pratique (déjà couvert par la synthèse).
+RESTE ÉCO : lire les feuilles « solidarité & indivisibilité des obligations » (cours 234440-234528) → encore un sous-chapitre droit civil à ajouter. + autres contrôles du dossier control (103xxx, 111xxx, 115xxx).
+
 ## ⏳ À FAIRE
 - Chimie : feuilles 7-35
 - Sciences éco (73), Histoire (61), Géo (42), Anglais (192), Français (207), NL grammaire (36)
