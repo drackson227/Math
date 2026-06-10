@@ -239,38 +239,86 @@
   /* =================== MON TEXTE D'EXAMEN (±150 mots) ===================
      Texte modèle à apprendre par cœur : vacances (VTT) + ménage (moeten) +
      maladies (de griep). Vocabulaire simple. Mots en gras = points notés. */
+  /* =================== MON TEXTE (éditable + privé par compte) ===================
+     Chacun écrit SON texte. Il est rangé dans data.nlMyText, donc sauvegardé
+     localement ET poussé sur le compte Supabase (table progress, RLS = privé). */
+  var NL_TEXT_DEFAULT = `① De vakantie (VTT)
+In de vakantie ben ik met de mountainbike gereden. Ik ben met mijn vrienden naar de Ardennen gegaan. We hebben veel gefietst in het bos. Het weer was mooi en warm. Ik heb veel foto's gemaakt. 's Avonds hebben we frietjes gegeten. Ik heb goed geslapen in de tent. Het was een leuke vakantie.
+
+② Het huishouden
+Thuis moet ik ook helpen. Ik moet mijn kamer opruimen. Ik moet de afwas doen en stofzuigen. Mijn zus moet de tafel dekken. Mijn broer mag niet lui zijn. We moeten samen het huis schoonmaken. Ik wil graag helpen, maar ik kan niet alles alleen doen.
+
+③ Ziek zijn (de griep)
+Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn. Mijn keel doet pijn en ik moet veel hoesten. De dokter zegt dat ik in bed moet blijven. Ik moet medicijnen nemen en veel water drinken. Na een week ben ik weer helemaal gezond.`;
+
+  function nlReadData() {
+    try { return (typeof loadSavedData === 'function') ? loadSavedData() : JSON.parse(localStorage.getItem('mathsgr2_data') || '{}'); }
+    catch (e) { return {}; }
+  }
+  function nlMyCount() {
+    var ta = document.getElementById('nl-my-text'), c = document.getElementById('nl-my-count');
+    if (!ta || !c) return;
+    var n = (ta.value.trim().match(/\S+/g) || []).length;
+    c.textContent = n + ' mot' + (n > 1 ? 's' : '');
+    c.style.color = (n >= 140 && n <= 165) ? 'var(--color-parabole)' : 'var(--text-secondary)';
+  }
+  function nlTextStatus() {
+    var el = document.getElementById('nl-my-status'); if (!el) return;
+    var u = null; try { u = window.MGR2Auth && window.MGR2Auth.user && window.MGR2Auth.user(); } catch (e) {}
+    if (u) {
+      var p = ''; try { p = window.MGR2Auth.pseudo() || ''; } catch (e) {}
+      el.innerHTML = '☁️ Lié à ton compte <strong>' + nlEsc(p) + '</strong> — privé, retrouvé sur tous tes appareils.';
+    } else {
+      el.innerHTML = '📱 Enregistré sur cet appareil. <a href="#" onclick="if(window.MGR2Auth)window.MGR2Auth.openLogin();return false;" style="color:var(--color-nav); font-weight:600;">Connecte-toi</a> pour le retrouver partout et le garder privé.';
+    }
+  }
+  function nlTextLoad() {
+    var ta = document.getElementById('nl-my-text'); if (!ta) return;
+    var saved = ''; try { saved = nlReadData().nlMyText || ''; } catch (e) {}
+    ta.value = saved || NL_TEXT_DEFAULT;
+    nlMyCount(); nlTextStatus();
+  }
+  window.nlMyCount = nlMyCount;
+  window.nlTextLoad = nlTextLoad;
+  window.nlTextSave = function () {
+    var ta = document.getElementById('nl-my-text'); if (!ta) return;
+    try {
+      var d = nlReadData(); d.nlMyText = ta.value;
+      if (typeof saveData === 'function') saveData(d);
+      else { localStorage.setItem('mathsgr2_data', JSON.stringify(d)); if (typeof cloudPushDebounced === 'function') cloudPushDebounced(); }
+      if (typeof showToast === 'function') showToast('💾 Ton texte est enregistré', 'var(--color-parabole)');
+    } catch (e) { if (typeof showToast === 'function') showToast("Échec de l'enregistrement", '#f87171'); }
+    nlTextStatus();
+  };
+  window.nlTextReset = function () {
+    var ta = document.getElementById('nl-my-text'); if (!ta) return;
+    ta.value = NL_TEXT_DEFAULT; nlMyCount();
+    if (typeof showToast === 'function') showToast('↩️ Modèle remis (pense à enregistrer)', 'var(--color-nav)');
+  };
+
   var TEXT_HTML = `<div style="max-width:760px; margin:0 auto;">
     <div style="text-align:center; margin-bottom:1rem;">
       <h2 style="font-size:28px; font-weight:800; color:var(--color-nav); margin:0;">📝 Mon texte d'examen (±150 mots)</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">À apprendre par cœur. Thèmes : les vacances (VTT) · le ménage · les maladies.</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">Écris et enregistre <strong>ton propre</strong> texte — il est privé et sauvegardé sur ton compte. Thèmes : les vacances (VTT) · le ménage · les maladies.</p>
     </div>
 
-    <div class="synth-section">
-      <h2>① De vakantie (les vacances — VTT)</h2>
-      <div class="key-rule"><div class="formula-main" style="font-size:16px; line-height:1.95; text-align:left; font-weight:500;">
-        Tijdens de zomervakantie <strong>ben</strong> ik naar Spanje <strong>gereisd</strong>. Mijn ouders <strong>hebben</strong> een hotel aan zee <strong>geboekt</strong>. We <strong>zijn</strong> 's morgens vroeg <strong>vertrokken</strong>. Het weer was mooi en warm. Ik <strong>heb</strong> veel foto's <strong>gemaakt</strong> en ik <strong>heb</strong> in de zee <strong>gezwommen</strong>. We <strong>hebben</strong> in een leuk restaurant <strong>gegeten</strong>. Ik <strong>heb</strong> ook nieuwe vrienden <strong>ontmoet</strong>. Het was een fantastische vakantie.
-      </div></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+      <span style="font-size:13px; color:var(--text-secondary);">Objectif : ~150 mots — <strong id="nl-my-count">0 mot</strong></span>
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="nlTextReset()" style="padding:9px 14px; border-radius:10px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">↩️ Modèle</button>
+        <button type="button" onclick="nlTextSave()" style="padding:9px 16px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">💾 Enregistrer</button>
+      </div>
     </div>
+    <textarea id="nl-my-text" oninput="nlMyCount()" rows="16" placeholder="Écris ton texte ici…" style="width:100%; box-sizing:border-box; padding:14px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px; line-height:1.8; resize:vertical; font-family:inherit;"></textarea>
+    <p id="nl-my-status" style="font-size:12.5px; color:var(--text-secondary); margin:6px 2px 0;"></p>
 
-    <div class="synth-section">
-      <h2>② Het huishouden (le ménage — moeten)</h2>
-      <div class="key-rule"><div class="formula-main" style="font-size:16px; line-height:1.95; text-align:left; font-weight:500;">
-        Thuis <strong>moet</strong> ik ook <strong>helpen</strong>. Ik <strong>moet</strong> mijn kamer <strong>opruimen</strong> en de tafel <strong>afruimen</strong>. Soms <strong>moet</strong> ik <strong>afwassen</strong> of <strong>stofzuigen</strong>. Mijn broer <strong>moet</strong> de hond <strong>uitlaten</strong>. Ik vind het niet altijd leuk, maar het is belangrijk.
-      </div></div>
-    </div>
-
-    <div class="synth-section">
-      <h2>③ Ziek zijn (les maladies — de griep)</h2>
-      <div class="key-rule"><div class="formula-main" style="font-size:16px; line-height:1.95; text-align:left; font-weight:500;">
-        Na de vakantie <strong>ben</strong> ik ziek <strong>geworden</strong>. Ik had <strong>de griep</strong>. Ik had <strong>koorts</strong> en ik moest veel <strong>hoesten</strong>. Ik had ook <strong>keelpijn</strong> en ik was heel <strong>moe</strong>. Ik <strong>ben</strong> in bed <strong>gebleven</strong> en ik <strong>heb</strong> medicijnen <strong>genomen</strong>. Gelukkig ben ik nu weer gezond en blij.
-      </div></div>
-    </div>
-
-    <details class="fc-ex" style="margin-top:1rem;"><summary>🇫🇷 Voir la traduction française</summary>
-    <div class="fc-ex-body" style="line-height:1.8;">
-      <strong>① Les vacances :</strong> Pendant les vacances d'été, je suis allé en Espagne. Mes parents ont réservé un hôtel à la mer. Nous sommes partis tôt le matin. Le temps était beau et chaud. J'ai pris beaucoup de photos et j'ai nagé dans la mer. Nous avons mangé dans un restaurant sympa. J'ai aussi rencontré de nouveaux amis. C'étaient des vacances fantastiques.<br><br>
-      <strong>② Le ménage :</strong> À la maison, je dois aussi aider. Je dois ranger ma chambre et débarrasser la table. Parfois je dois faire la vaisselle ou passer l'aspirateur. Mon frère doit sortir le chien. Je n'aime pas toujours ça, mais c'est important.<br><br>
-      <strong>③ Être malade :</strong> Après les vacances, je suis tombé malade. J'avais la grippe. J'avais de la fièvre et je devais beaucoup tousser. J'avais aussi mal à la gorge et j'étais très fatigué. Je suis resté au lit et j'ai pris des médicaments. Heureusement, je vais de nouveau bien.
+    <details class="fc-ex" style="margin-top:1.2rem;"><summary>📋 Voir un modèle (à copier / pour s'inspirer)</summary>
+    <div class="fc-ex-body" style="line-height:1.9;">
+      <strong>① De vakantie (VTT) :</strong> Tijdens de zomervakantie <strong>ben</strong> ik naar Spanje <strong>gereisd</strong>. Mijn ouders <strong>hebben</strong> een hotel aan zee <strong>geboekt</strong>. We <strong>zijn</strong> 's morgens vroeg <strong>vertrokken</strong>. Het weer was mooi en warm. Ik <strong>heb</strong> veel foto's <strong>gemaakt</strong> en ik <strong>heb</strong> in de zee <strong>gezwommen</strong>. We <strong>hebben</strong> in een leuk restaurant <strong>gegeten</strong>. Het was een fantastische vakantie.<br><br>
+      <strong>② Het huishouden :</strong> Thuis <strong>moet</strong> ik ook <strong>helpen</strong>. Ik <strong>moet</strong> mijn kamer <strong>opruimen</strong> en de tafel <strong>afruimen</strong>. Soms <strong>moet</strong> ik <strong>afwassen</strong> of <strong>stofzuigen</strong>. Mijn broer <strong>moet</strong> de hond <strong>uitlaten</strong>. Ik vind het niet altijd leuk, maar het is belangrijk.<br><br>
+      <strong>③ Ziek zijn (de griep) :</strong> Na de vakantie <strong>ben</strong> ik ziek <strong>geworden</strong>. Ik had <strong>de griep</strong>. Ik had <strong>koorts</strong> en ik moest veel <strong>hoesten</strong>. Ik had ook <strong>keelpijn</strong> en ik was heel <strong>moe</strong>. Ik <strong>ben</strong> in bed <strong>gebleven</strong> en ik <strong>heb</strong> medicijnen <strong>genomen</strong>. Gelukkig ben ik nu weer gezond en blij.
+      <hr style="border:none; border-top:1px solid var(--border-subtle); margin:.8rem 0;">
+      <strong>🇫🇷 Traduction :</strong> ① Pendant les vacances d'été, je suis allé en Espagne. Mes parents ont réservé un hôtel à la mer. Nous sommes partis tôt le matin. Le temps était beau et chaud. J'ai pris beaucoup de photos et j'ai nagé dans la mer. Nous avons mangé dans un restaurant sympa. C'étaient des vacances fantastiques. ② À la maison, je dois aussi aider. Je dois ranger ma chambre et débarrasser la table. Parfois je dois faire la vaisselle ou passer l'aspirateur. Mon frère doit sortir le chien. ③ Après les vacances, je suis tombé malade. J'avais la grippe, de la fièvre, je devais tousser, j'avais mal à la gorge et j'étais fatigué. Je suis resté au lit et j'ai pris des médicaments. Heureusement, je vais de nouveau bien.
     </div></details>
 
     <div style="margin-top:1rem; background:var(--color-parabole-light); border:1px solid var(--color-parabole); border-radius:12px; padding:.9rem 1.1rem; font-size:14px; color:var(--text-primary);">
@@ -320,8 +368,27 @@
     try { if (navigator.clipboard) navigator.clipboard.writeText(txt); } catch (_) {}
     if (typeof showToast === 'function') showToast('📄 150 mots exportés (fichier + copiés)', 'var(--color-parabole)');
   };
-  // « Mes 150 mots » est le 2ᵉ onglet bonus → extra2.
-  window.onShowExtraTab = function (id) { if (window.currentSubject === 'neerlandais' && id === 'extra2') nlVocRender(); };
+  // Onglets bonus : « Mon texte » = extra1 (charge le texte du compte), « Mes 150 mots » = extra2.
+  window.onShowExtraTab = function (id) {
+    if (window.currentSubject !== 'neerlandais') return;
+    if (id === 'extra1') nlTextLoad();
+    if (id === 'extra2') nlVocRender();
+  };
+
+  // Connexion/déconnexion → recharge le texte du bon compte si l'onglet est ouvert
+  // (on chaîne le hook existant sans l'écraser, comme chat.js).
+  (function () {
+    var _prev = window.onAuthChanged;
+    window.onAuthChanged = function () {
+      if (typeof _prev === 'function') { try { _prev(); } catch (e) {} }
+      try {
+        var sec = document.getElementById('extra1');
+        if (window.currentSubject === 'neerlandais' && sec && sec.classList.contains('active')) {
+          setTimeout(nlTextLoad, 400); // laisse pullProgressFromCloud finir le téléchargement
+        } else { nlTextStatus(); }
+      } catch (e) {}
+    };
+  })();
 
   var VOC_HTML = `<div style="max-width:840px; margin:0 auto;">
     <style>
