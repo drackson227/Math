@@ -4,8 +4,21 @@
    ============================================================ */
 
 // Helper sécurisé : attend que MathJax soit prêt avant de typeset
-function safeMathJax(elements) {
+// Un élément contient-il du LaTeX PAS ENCORE rendu ? (délimiteurs bruts dans le texte).
+// Après rendu, MathJax remplace les délimiteurs par des <mjx-container> : plus rien à faire.
+function _hasUnrenderedMath(el) {
+  if (!el) return false;
+  var t = el.textContent || '';
+  return t.indexOf('\\(') >= 0 || t.indexOf('\\[') >= 0 || t.indexOf('$') >= 0;
+}
+function safeMathJax(elements, _tries) {
   if (!window.MathJax) return;
+  // Économie CPU : on ne typesette que les éléments qui ont du LaTeX brut.
+  // (changer d'onglet en histoire/géo/langues ne relance plus MathJax pour rien)
+  if (elements && elements.length) {
+    elements = elements.filter(_hasUnrenderedMath);
+    if (!elements.length) return;
+  }
   const doTypeset = () => {
     try {
       if (typeof MathJax.typesetPromise === 'function') {
@@ -18,7 +31,10 @@ function safeMathJax(elements) {
   if (typeof MathJax.typesetPromise === 'function' || typeof MathJax.typeset === 'function') {
     doTypeset();
   } else {
-    setTimeout(() => safeMathJax(elements), 200);
+    // MathJax pas encore prêt : on réessaie ~10 s max. Sans plafond, un CDN bloqué
+    // (réseau d'école) ferait tourner cette boucle pour toujours, à chaque appel.
+    var n = (_tries || 0) + 1;
+    if (n <= 50) setTimeout(() => safeMathJax(elements, n), 200);
   }
 }
 
@@ -2262,7 +2278,32 @@ function setExamDate(key, val) {
   if (val) d.examDates[key] = val; else delete d.examDates[key];
   saveData(d);
   if (typeof renderStudyDashboard === 'function') renderStudyDashboard();
+  renderExamChip();
 }
+
+// Badge « prochain examen » dans l'en-tête (⏳ J-X · Matière). Lit les dates du
+// planning (Mon profil) ; caché tant qu'aucune date n'est saisie. Clic → profil.
+function renderExamChip() {
+  var chip = document.getElementById('exam-chip');
+  if (!chip) return;
+  var dates = loadSavedData().examDates || {};
+  var best = null;
+  var today0 = new Date(); today0.setHours(0, 0, 0, 0);
+  Object.keys(dates).forEach(function (key) {
+    if (!dates[key]) return;
+    // Comparaison de DATES à minuit : aujourd'hui = 0, demain = 1 (pas de décalage d'un jour).
+    var dleft = Math.round((new Date(dates[key] + 'T00:00:00').getTime() - today0.getTime()) / 86400000);
+    if (dleft < 0) return; // examen passé
+    if (!best || dleft < best.dleft) best = { key: key, dleft: dleft };
+  });
+  if (!best) { chip.style.display = 'none'; return; }
+  var label = (DASH_ICONS[best.key] || '📘') + ' ' + (DASH_LABELS[best.key] || best.key);
+  chip.textContent = best.dleft === 0 ? ('🔥 Examen aujourd\'hui · ' + label)
+                                      : ('⏳ J-' + best.dleft + ' · ' + label);
+  chip.style.display = 'inline-flex';
+  if (best.dleft <= 3) { chip.style.color = '#f87171'; chip.style.borderColor = 'rgba(248,113,113,0.45)'; chip.style.background = 'rgba(248,113,113,0.12)'; }
+}
+document.addEventListener('DOMContentLoaded', function () { setTimeout(renderExamChip, 600); });
 
 // Lance un quiz CIBLÉ sur le chapitre faible d'une matière (depuis le dashboard).
 function reviseWeakChapter(key, chapter) {
@@ -2341,7 +2382,9 @@ function renderStudyDashboard() {
     var dateVal = examDates[key] || '';
     var info = '<span style="color:var(--text-secondary); font-size:12px;">pas de date</span>';
     if (dateVal) {
-      var dleft = Math.ceil((new Date(dateVal + 'T23:59:59').getTime() - Date.now()) / 86400000);
+      // Comparaison de DATES à minuit : aujourd'hui = 0, demain = 1 (sinon tout est décalé d'un jour).
+      var _t0 = new Date(); _t0.setHours(0, 0, 0, 0);
+      var dleft = Math.round((new Date(dateVal + 'T00:00:00').getTime() - _t0.getTime()) / 86400000);
       if (dleft < 0) info = '<span style="color:var(--text-secondary);">examen passé</span>';
       else if (dleft === 0) info = '<span style="color:#f87171; font-weight:700;">C\'est aujourd\'hui ! 💪</span>';
       else {
@@ -3578,15 +3621,17 @@ function setBgEffect(effect) {
     }));
     function animParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // M7 — couleur des particules adaptée au thème actif. Lue UNE fois par frame :
+      // getComputedStyle dans la boucle = 3 600 appels/s pour la même valeur.
+      const navHex = getThemeColor('--color-nav', '#a78bfa');
+      const hexOk = navHex.startsWith('#');
       particles.forEach(p => {
         p.x += p.dx; p.y += p.dy;
         if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        // M7 — couleur des particules adaptée au thème actif
-        const navHex = getThemeColor('--color-nav', '#a78bfa');
-        ctx.fillStyle = navHex.startsWith('#')
+        ctx.fillStyle = hexOk
           ? navHex + Math.round(p.op * 255).toString(16).padStart(2,'0')
           : `rgba(167,139,250,${p.op})`;
         ctx.fill();
@@ -4775,7 +4820,8 @@ function _glossaireEntries() {
 var GLOSS_META = {
   royal: ['Histoire', '#f5c542'], art: ['Histoire', '#e0a458'], reforme: ['Histoire', '#8aa0e0'], print: ['Histoire', '#c9a063'],
   science: ['Bio', '#34d399'], eng: ['Anglais', '#818cf8'], chem: ['Chimie', '#c084fc'],
-  myth: ['Français', '#d4a017'], theatre: ['Français', '#fb5b78'], lettres: ['Français', '#f472b6'], geo: ['Géo', '#2dd4bf']
+  myth: ['Français', '#d4a017'], theatre: ['Français', '#fb5b78'], lettres: ['Français', '#f472b6'], geo: ['Géo', '#2dd4bf'],
+  eco: ['Sciences éco', '#fbbf24'], nl: ['Néerlandais', '#fb923c']
 };
 window._glossSubj = '';
 function renderGlossaire() {
@@ -4796,7 +4842,7 @@ function renderGlossaire() {
   // Puces de filtre par matière (couleur = celle de la matière)
   var subjColor = {};
   Object.keys(GLOSS_META).forEach(function (th) { subjColor[GLOSS_META[th][0]] = GLOSS_META[th][1]; });
-  var order = ['Histoire', 'Géo', 'Bio', 'Chimie', 'Français', 'Anglais'];
+  var order = ['Histoire', 'Géo', 'Bio', 'Chimie', 'Français', 'Anglais', 'Néerlandais', 'Sciences éco'];
   var chips = '<button type="button" class="gloss-chip on" data-subj="" onclick="glossFilterSubject(\'\', this)">Tout (' + entries.length + ')</button>';
   order.forEach(function (sj) {
     if (!subjCount[sj]) return;
@@ -4884,6 +4930,7 @@ function fmtDur(sec) {
   return h > 0 ? (h + ' h ' + (m < 10 ? '0' : '') + m) : (m + ' min');
 }
 var _studyTick = null;
+var _studyCloudPushAt = 0;
 function startStudyTimer() {
   if (_studyTick) return;
   _studyTick = setInterval(function () {
@@ -4892,7 +4939,15 @@ function startStudyTimer() {
     var t = _today(); s.history[t] = (s.history[t] || 0) + 30;
     // garde au plus ~90 jours d'historique
     var hk = Object.keys(s.history); if (hk.length > 90) { hk.sort().slice(0, hk.length - 90).forEach(function (k) { delete s.history[k]; }); }
-    saveData(d);
+    // Sauvegarde LOCALE seulement : passer par saveData() pousserait vers Supabase
+    // (progress + leaderboard) toutes les 30 s pour de simples secondes de chrono
+    // → ~240 écritures/heure inutiles par utilisateur connecté. Les vraies actions
+    // (quiz, flashcards…) synchronisent déjà ; ici on limite le cloud à 1×/10 min.
+    try { localStorage.setItem('mathsgr2_data', JSON.stringify(d)); } catch (e) {}
+    if (Date.now() - _studyCloudPushAt > 600000) {
+      _studyCloudPushAt = Date.now();
+      if (typeof cloudPushDebounced === 'function') { try { cloudPushDebounced(); } catch (e) {} }
+    }
   }, 30000);
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(startStudyTimer, 1500); });

@@ -172,8 +172,17 @@ let _pushTimer = null;
 function cloudPushDebounced() {
   if (!_sb || !_authUser) return;
   clearTimeout(_pushTimer);
-  _pushTimer = setTimeout(function () { cloudPushNow(true); }, 2500);
+  _pushTimer = setTimeout(function () { _pushTimer = null; cloudPushNow(true); }, 2500);
 }
+// Si l'élève quitte l'onglet (change d'app sur téléphone, ferme…) alors qu'un push
+// différé est en attente, on l'envoie tout de suite — sinon la progression resterait
+// périmée dans le cloud et un autre appareil chargerait une vieille version.
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden && _pushTimer) {
+    clearTimeout(_pushTimer); _pushTimer = null;
+    cloudPushNow(true);
+  }
+});
 async function cloudPushNow(silent) {
   if (!_sb || !_authUser) { if (!silent && typeof showToast === 'function') showToast('Connecte-toi d\'abord', '#f87171'); return; }
   try {

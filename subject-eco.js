@@ -6,6 +6,41 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Fiches cliquables (notions d'éco) — apparaissent dans l'Index des fiches. */
+  window.INFO_TOPICS = window.INFO_TOPICS || {};
+  Object.assign(window.INFO_TOPICS, {
+    "mondialisation": {
+      title: "La mondialisation", sub: "échanges mondiaux · la Triade",
+      cours: "<p>Mise en relation des parties du monde par l'<strong>intensification des échanges</strong> : marchandises, services, capitaux, informations, personnes. Les pays deviennent <strong>interdépendants</strong>.</p>",
+      exam: "<ul><li>5 types de <strong>flux</strong> : marchandises, services, capitaux, informations, personnes.</li><li><strong>Triade</strong> = les 3 pôles dominants (Amérique du Nord, Europe, Asie de l'Est).</li></ul>"
+    },
+    "responsabilite-civile": {
+      title: "La responsabilité civile", sub: "réparer le dommage causé à autrui",
+      cours: "<p>Obligation de <strong>réparer le dommage</strong> causé à autrui. Trois <strong>conditions</strong> : une <strong>faute</strong>, un <strong>dommage</strong>, et un <strong>lien de causalité</strong> entre les deux.</p>",
+      exam: "<ul><li>3 conditions : faute + dommage + lien de causalité.</li><li>3 types de dommages : <strong>matériel</strong>, <strong>corporel</strong>, <strong>moral</strong>.</li><li>Civil (réparer, indemniser) ≠ pénal (punir).</li></ul>"
+    },
+    "modes-de-preuve": {
+      title: "Les modes de preuve", sub: "droit civil belge · art. 8.4",
+      cours: "<p>Comment prouver un droit devant un juge : <strong>écrit</strong> (acte authentique / sous signature privée), <strong>témoignage</strong>, <strong>présomptions</strong>, <strong>aveu</strong>, <strong>serment</strong>. La charge de la preuve pèse sur celui qui <strong>affirme</strong> (art. 8.4).</p>",
+      exam: "<ul><li>5 modes : écrit · témoignage · présomptions · aveu · serment.</li><li>Au-dessus de <strong>3 500 €</strong> : un écrit est exigé en principe.</li><li>Acte <strong>authentique</strong> (notaire) vs <strong>sous signature privée</strong>.</li></ul>"
+    },
+    "obligations-modalites": {
+      title: "Les modalités des obligations", sub: "terme · condition · solidarité",
+      cours: "<p>Une obligation peut être aménagée : <strong>terme</strong> (suspensif / extinctif — événement <em>certain</em>), <strong>condition</strong> (suspensive / résolutoire — événement <em>incertain</em>), <strong>solidarité</strong> (active / passive), <strong>indivisibilité</strong>.</p>",
+      exam: "<ul><li>Terme = certain · condition = incertain.</li><li>Solidarité <strong>passive</strong> : chaque débiteur peut être tenu du tout.</li></ul>"
+    },
+    "contrats": {
+      title: "Le droit des contrats", sub: "validité · vices du consentement",
+      cours: "<p>Le contrat repose sur l'<strong>autonomie de la volonté</strong>. Conditions de validité : <strong>capacité</strong> (18 ans) et <strong>consentement</strong> libre. Les <strong>vices du consentement</strong> : <strong>erreur</strong>, <strong>dol</strong> (tromperie), <strong>violence</strong>.</p>",
+      exam: "<ul><li>3 vices : erreur · dol · violence.</li><li>Lois <strong>impératives</strong> (on ne peut pas y déroger) vs <strong>supplétives</strong>.</li></ul>"
+    }
+  });
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, {
+    "mondialisation": "eco", "responsabilite-civile": "eco", "modes-de-preuve": "eco",
+    "obligations-modalites": "eco", "contrats": "eco"
+  });
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */

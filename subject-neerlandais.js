@@ -7,6 +7,35 @@
   'use strict';
   if (typeof window.registerSubject !== 'function') return;
 
+  /* Fiches cliquables (grammaire NL) — apparaissent dans l'Index des fiches. */
+  window.INFO_TOPICS = window.INFO_TOPICS || {};
+  Object.assign(window.INFO_TOPICS, {
+    "nl-vtt": {
+      title: "Le passé composé (VTT)", sub: "hebben/zijn + participe à la fin",
+      cours: "<p><strong>hebben</strong> ou <strong>zijn</strong> (conjugué) + … + <strong>participe passé à la FIN</strong>. <em>Ik heb een hotel geboekt.</em> <strong>zijn</strong> avec les verbes de déplacement (gaan, komen, reizen…) et de changement d'état.</p>",
+      exam: "<ul><li>Participe régulier : <strong>ge + radical + d/t</strong> (règle « <strong>'t kofschip</strong> » : finale t-k-f-s-ch-p → t, sinon d).</li><li>Irréguliers par cœur : eten→gegeten, gaan→gegaan…</li></ul>"
+    },
+    "nl-modaux": {
+      title: "Modaux & négation (NL)", sub: "moeten · willen · kunnen · mogen",
+      cours: "<p>Modal conjugué + … + <strong>infinitif à la fin</strong> : <em>Ik moet thuis helpen.</em> Négation : <strong>geen</strong> devant un nom, <strong>niet</strong> pour un verbe/adjectif ; <strong>te</strong> + adjectif = « trop ».</p>",
+      exam: "<ul><li>moeten = devoir · willen = vouloir · kunnen = pouvoir · mogen = avoir le droit.</li><li><em>Er zijn geen erwten</em> (pas de pois) · <em>het is te zout</em> (trop salé).</li></ul>"
+    },
+    "nl-omdat-want": {
+      title: "Omdat vs Want", sub: "parce que / car — l'ordre change",
+      cours: "<p>Les deux = « parce que / car », mais <strong>omdat</strong> envoie le verbe <strong>à la fin</strong> (<em>…omdat ik moe ben</em>) tandis que <strong>want</strong> garde l'ordre <strong>normal</strong> (<em>…want ik ben moe</em>).</p>",
+      exam: "<ul><li>omdat → verbe à la fin de la subordonnée.</li><li>want → ordre normal sujet-verbe.</li></ul>"
+    },
+    "nl-position": {
+      title: "Verbes de position (NL)", sub: "liggen · zitten · staan · hangen",
+      cours: "<p>Pour dire « il y a », le néerlandais choisit le verbe selon la <strong>position</strong> : <strong>liggen</strong> (couché/à plat), <strong>zitten</strong> (assis/dedans), <strong>staan</strong> (debout/posé), <strong>hangen</strong> (accroché).</p>",
+      exam: "<ul><li><em>Er hangt een schilderij aan de muur</em> (tableau accroché).</li><li>Prépositions : in, op, boven, onder, aan, voor, achter, naast, tussen, tegenover.</li></ul>"
+    }
+  });
+  window.INFO_THEME = window.INFO_THEME || {};
+  Object.assign(window.INFO_THEME, {
+    "nl-vtt": "nl", "nl-modaux": "nl", "nl-omdat-want": "nl", "nl-position": "nl"
+  });
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */

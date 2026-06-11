@@ -29,6 +29,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="GR2 Study">
+  <!-- Préconnexions CDN : la poignée de main (DNS+TLS) démarre tout de suite →
+       MathJax (604 Ko), GSAP et Supabase arrivent plus vite, surtout sur mobile. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="dns-prefetch" href="https://uaaxadnzquijquhiwkdf.supabase.co">
   <!-- Police Inter via CDN Google Fonts (compatible GitHub Pages) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -258,6 +263,7 @@
   </div>
   <p id="app-subtitle" style="font-size:13px; color:var(--text-secondary);">Maths — Géométrie analytique plane · Vecteurs · Cercle · Droites</p>
   <p id="app-validated" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
+  <button id="exam-chip" type="button" onclick="showSection('profil')" title="Voir mon planning d'examens" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.4); color:#fbbf24; font-size:12px; font-weight:700; cursor:pointer;"></button>
 </div>
 <div id="subject-bar" class="subject-bar" role="tablist" aria-label="Choisir une matière">
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
