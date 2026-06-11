@@ -1002,7 +1002,11 @@ function updateScore() {
 function startQuiz() {
   if (!missedOnlyMode) filterQuiz();
   missedOnlyMode = false; // Reset flag
-  if (currentQuestions.length === 0) return;
+  if (currentQuestions.length === 0) {
+    // Filtre (chapitre + difficulté) sans aucune question : on prévient au lieu de ne rien faire.
+    if (typeof showToast === 'function') showToast('Aucune question pour ce filtre — change de chapitre ou de difficulté.', '#fbbf24');
+    return;
+  }
   buildQuiz();
   document.getElementById('quiz-start-screen').style.display = 'none';
   document.getElementById('quiz-active-screen').style.display = 'block';
