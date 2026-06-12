@@ -778,8 +778,18 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
 .fx-minivec span:last-child { font-size: 11px; }
 
 /* ═══ Synthèse « façon Discord » : texte + dessin + blocs déplaçables SUPERPOSÉS ═══ */
-#cre-note-wrap { position: relative; max-height: 65vh; overflow-y: auto; border-radius: 14px; }
-#cre-note-wrap #cre-note-editor { max-height: none; overflow: visible; min-height: 320px; }
+#cre-note-wrap { position: relative; max-height: 70vh; overflow: auto; border-radius: 14px; }
+#cre-note-board { position: relative; min-height: 360px; }
+#cre-note-wrap #cre-note-editor { max-height: none; overflow: visible; min-height: 360px; }
+/* zoom : ➖ 100% ➕ ⛶ rangés à droite de la barre d'outils */
+.cre-zoom { display: inline-flex; gap: 4px; margin-left: auto; }
+.cre-zoom .nav-btn { padding: 8px 11px; font-size: 13px; }
+#cre-full-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
+/* ⛶ grand écran : le panneau entier (titre + outils + tableau) prend la fenêtre */
+#mesexos.cre-full-host { transform: none !important; animation: none !important; }
+#cre-note-edit.cre-full { position: fixed; inset: 0; z-index: 2900; background: var(--bg-main); padding: 14px 18px; overflow: auto; display: block !important; }
+#cre-note-edit.cre-full #cre-note-wrap { max-height: calc(100vh - 250px); }
+.nd-col.on { border-color: #fff; transform: scale(1.18); }
 #cre-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; touch-action: none; }
 #cre-note-wrap.inking { outline: 2px dashed var(--color-nav); outline-offset: 3px; }
 #cre-note-wrap.inking #cre-ink { cursor: crosshair; }

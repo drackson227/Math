@@ -241,11 +241,14 @@
     clearBoxes();
     validBoxes(boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html); });
     window._creLastEd = ed;
+    window.creZoom(0);            // on repart à 100%
+    window.creToggleFull(false);  // et en mode normal
     ensureInk();
     applyInkMode();
     if (t && !title) t.focus(); else if (ed) ed.focus();
   }
   function closeEditor() {
+    window.creToggleFull(false);
     var box = el('cre-note-edit'); if (box) box.style.display = 'none';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = '';
     var p = el('cre-chars'); if (p) p.style.display = 'none';
@@ -378,11 +381,11 @@
     return out;
   }
   function clearBoxes() {
-    var wrap = el('cre-note-wrap'); if (!wrap) return;
-    wrap.querySelectorAll('.cre-tbox').forEach(function (b) { b.remove(); });
+    var bd = board(); if (!bd) return;
+    bd.querySelectorAll('.cre-tbox').forEach(function (b) { b.remove(); });
   }
   window.creAddTextBox = function (x, y, html) {
-    var wrap = el('cre-note-wrap'); if (!wrap) return null;
+    var wrap = board(); if (!wrap) return null;
     var n = wrap.querySelectorAll('.cre-tbox').length;
     var box = document.createElement('div');
     box.className = 'cre-tbox';
@@ -404,9 +407,10 @@
       try { grip.setPointerCapture(e.pointerId); } catch (err) {}
       var startX = e.clientX, startY = e.clientY;
       var baseL = parseInt(box.style.left, 10) || 0, baseT = parseInt(box.style.top, 10) || 0;
+      var k = zScale(); // déplacement juste même quand le tableau est zoomé
       function mv(ev) {
-        box.style.left = Math.max(0, baseL + ev.clientX - startX) + 'px';
-        box.style.top = Math.max(0, baseT + ev.clientY - startY) + 'px';
+        box.style.left = Math.max(0, baseL + (ev.clientX - startX) / k) + 'px';
+        box.style.top = Math.max(0, baseT + (ev.clientY - startY) / k) + 'px';
       }
       function up() {
         grip.removeEventListener('pointermove', mv);
@@ -422,7 +426,7 @@
     return box;
   };
   function serializeBoxes() {
-    var wrap = el('cre-note-wrap'); if (!wrap) return [];
+    var wrap = board(); if (!wrap) return [];
     var out = [];
     wrap.querySelectorAll('.cre-tbox').forEach(function (b) {
       var body = b.querySelector('.cre-tbox-body');
@@ -483,14 +487,22 @@
     return out;
   }
 
+  function board() { return el('cre-note-board') || el('cre-note-wrap'); }
+  // facteur d'affichage réel (zoom) : auto-calibré → coordonnées toujours justes
+  function zScale() {
+    var cv = _ink.canvas;
+    if (!cv || !cv.width) return 1;
+    var r = cv.getBoundingClientRect();
+    return r.width ? r.width / cv.width : 1;
+  }
   function ensureInk() {
-    var wrap = el('cre-note-wrap'), ed = el('cre-note-editor');
-    if (!wrap || !ed) return null;
+    var wrap = el('cre-note-wrap'), bd = board(), ed = el('cre-note-editor');
+    if (!wrap || !bd || !ed) return null;
     var cv = el('cre-ink');
     if (!cv) {
       cv = document.createElement('canvas');
       cv.id = 'cre-ink';
-      wrap.appendChild(cv);
+      bd.appendChild(cv);
       _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
       cv.addEventListener('pointerdown', inkDown);
       cv.addEventListener('pointermove', inkMove);
@@ -498,6 +510,12 @@
       cv.addEventListener('pointercancel', inkUp);
       ed.addEventListener('input', inkResizeSoon);
       window.addEventListener('resize', inkResizeSoon);
+      // Ctrl + molette = zoom du tableau (comme un vrai tableau interactif)
+      wrap.addEventListener('wheel', function (e) {
+        if (!e.ctrlKey) return;
+        e.preventDefault();
+        window.creZoom(e.deltaY < 0 ? 1 : -1);
+      }, { passive: false });
     }
     _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
     inkResize();
@@ -506,10 +524,10 @@
   var _inkRz = null;
   function inkResizeSoon() { clearTimeout(_inkRz); _inkRz = setTimeout(inkResize, 120); }
   function inkResize() {
-    var wrap = el('cre-note-wrap'), cv = _ink.canvas, ed = el('cre-note-editor');
-    if (!wrap || !cv || !ed) return;
-    var w = wrap.clientWidth || 600;
-    var h = Math.max(ed.scrollHeight, wrap.clientHeight, 280);
+    var bd = board(), wrap = el('cre-note-wrap'), cv = _ink.canvas, ed = el('cre-note-editor');
+    if (!bd || !wrap || !cv || !ed) return;
+    var w = bd.clientWidth || wrap.clientWidth || 600;
+    var h = Math.max(ed.scrollHeight, bd.clientHeight, 340);
     if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
     cv.style.height = h + 'px';
     _ink.inkW = w;
@@ -517,7 +535,8 @@
   }
   function inkPos(e) {
     var r = _ink.canvas.getBoundingClientRect();
-    return [Math.round(e.clientX - r.left), Math.round(e.clientY - r.top)];
+    var k = zScale();
+    return [Math.round((e.clientX - r.left) / k), Math.round((e.clientY - r.top) / k)];
   }
   function inkDown(e) {
     if (!_ink.on) return;
@@ -539,6 +558,7 @@
     if (!_ink.cur) return;
     _ink.strokes.push(_ink.cur);
     _ink.cur = null;
+    inkRedraw(); // re-trace en version LISSÉE (courbes douces)
   }
   function drawSeg(st, a, b) {
     var c = _ink.ctx; if (!c) return;
@@ -555,8 +575,16 @@
     var pts = st.pts || []; if (!pts.length) return;
     c.beginPath();
     c.moveTo(pts[0][0] * k, pts[0][1] * k);
-    if (pts.length === 1) c.lineTo(pts[0][0] * k + 0.01, pts[0][1] * k + 0.01);
-    for (var i = 1; i < pts.length; i++) c.lineTo(pts[i][0] * k, pts[i][1] * k);
+    if (pts.length < 3) {
+      c.lineTo(pts[pts.length - 1][0] * k + 0.01, pts[pts.length - 1][1] * k + 0.01);
+    } else {
+      // courbes douces : chaque segment vise le MILIEU du suivant (lissage quadratique)
+      for (var i = 1; i < pts.length - 1; i++) {
+        var mx = (pts[i][0] + pts[i + 1][0]) / 2 * k, my = (pts[i][1] + pts[i + 1][1]) / 2 * k;
+        c.quadraticCurveTo(pts[i][0] * k, pts[i][1] * k, mx, my);
+      }
+      c.lineTo(pts[pts.length - 1][0] * k, pts[pts.length - 1][1] * k);
+    }
     c.stroke();
   }
   function inkRedraw() {
@@ -615,7 +643,42 @@
     var p = el('cre-ink-pen'), g = el('cre-ink-erase');
     if (p) p.classList.toggle('on', _ink.tool === 'pen');
     if (g) g.classList.toggle('on', _ink.tool === 'erase');
+    var t = el('cre-ink-tools');
+    if (t) t.querySelectorAll('.nd-col').forEach(function (b) {
+      b.classList.toggle('on', _ink.tool === 'pen' && b.dataset.c === _ink.color);
+    });
   }
+
+  /* ---------- 🔍 ZOOM du tableau (boutons ➖ 100% ➕ et Ctrl+molette) ---------- */
+  var _zoom = 1;
+  window.creZoom = function (dir) {
+    if (dir === 0) _zoom = 1;
+    else _zoom = Math.min(2.5, Math.max(0.4, _zoom * (dir > 0 ? 1.15 : 1 / 1.15)));
+    var bd = board(); if (!bd) return;
+    bd.style.zoom = _zoom;
+    // dézoomé → le tableau s'élargit : encore plus de place (tableau géant)
+    bd.style.width = (_zoom < 1) ? (100 / _zoom) + '%' : '';
+    var v = el('cre-zoom-val'); if (v) v.textContent = Math.round(_zoom * 100) + '%';
+    inkResizeSoon();
+  };
+
+  /* ---------- ⛶ GRAND ÉCRAN : le tableau prend toute la fenêtre ---------- */
+  window.creToggleFull = function (force) {
+    var panel = el('cre-note-edit'); if (!panel) return;
+    var on = (force !== undefined) ? !!force : !panel.classList.contains('cre-full');
+    panel.classList.toggle('cre-full', on);
+    // le transform d'animation de la section piégerait le position:fixed → neutralisé
+    var sec = el('mesexos'); if (sec) sec.classList.toggle('cre-full-host', on);
+    var b = el('cre-full-btn'); if (b) b.classList.toggle('active', on);
+    try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
+    inkResizeSoon();
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var panel = el('cre-note-edit');
+      if (panel && panel.classList.contains('cre-full')) window.creToggleFull(false);
+    }
+  });
 
   function wireEditor() {
     var ed = el('cre-note-editor');
