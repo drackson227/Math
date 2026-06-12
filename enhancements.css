@@ -755,6 +755,28 @@ img { max-width: 100%; height: auto; }
    (cliquer plusieurs fois vite ne surligne plus la page) */
 button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, .nd-tool { -webkit-user-select: none; user-select: none; }
 
+/* ═══ Navigation GROUPÉE : étiquettes de famille entre les boutons ═══
+   Desktop : étiquettes EN LIGNE (la nav garde sa hauteur compacte) ;
+   mobile (tiroir en colonne) : titres de groupe pleine largeur. */
+.nav-lab { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); opacity: 0.7; padding: 0 2px 0 10px; border-left: 2px solid var(--border-subtle); user-select: none; white-space: nowrap; }
+.nav-lab:first-child { border-left: none; padding-left: 2px; }
+@media (max-width: 768px) {
+  .nav-lab { flex-basis: 100%; align-self: auto; border-left: none; margin-top: 10px; padding: 0 4px 2px; border-bottom: 1px solid var(--border-subtle); font-size: 11px; }
+}
+
+/* ═══ Matières repliables sur mobile : un bouton « 📐 Maths ▾ » remplace les 4 rangées ═══ */
+.subj-fold { display: none; }
+@media (max-width: 640px) {
+  .subj-fold { display: block; margin: 0 auto 1rem; padding: 10px 22px; border-radius: 999px; border: 1px solid var(--color-nav); background: var(--bg-card); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
+  .subject-bar { display: none; }
+  .subject-bar.open { display: flex; }
+}
+
+/* mini-flèche du bouton « vecteur » de l'éditeur ƒ𝑥 (le caractère combiné s'affichait en carré) */
+.fx-minivec { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
+.fx-minivec span:first-child { font-size: 9px; margin-bottom: -2px; }
+.fx-minivec span:last-child { font-size: 11px; }
+
 /* 🎨 dessin INLINE des synthèses : la zone d'écriture devient la toile */
 #cre-draw { background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; }
 #cre-canvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-subtle); background: #11131f; touch-action: none; cursor: crosshair; display: block; }

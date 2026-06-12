@@ -265,6 +265,7 @@
   <p id="app-validated" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
   <button id="exam-chip" type="button" onclick="showSection('profil')" title="Voir mon planning d'examens" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.4); color:#fbbf24; font-size:12px; font-weight:700; cursor:pointer;"></button>
 </div>
+<button id="subj-fold" class="subj-fold" onclick="toggleSubjectBar()" aria-expanded="false" aria-controls="subject-bar">📚 Matière ▾</button>
 <div id="subject-bar" class="subject-bar" role="tablist" aria-label="Choisir une matière">
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
   <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
@@ -277,8 +278,7 @@
   <button class="subj-btn" data-subj="neerlandais" onclick="setSubject('neerlandais')">🇳🇱 Néerlandais</button>
 </div>
 <nav class="nav" role="navigation" aria-label="Sections de l'application">
-  <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
-  <button class="nav-btn" onclick="openSearch()" style="border-color:var(--color-nav);">🔍 Rechercher</button>
+  <span class="nav-lab">📖 Apprendre</span>
   <button class="nav-btn active" data-sec="synthese" onclick="showSection(event,'synthese')">📚 Synthèse</button>
   <button class="nav-btn" data-sec="formules" onclick="showSection(event,'formules')">🧮 Formules clés</button>
   <button class="nav-btn" data-sec="methodes" onclick="showSection(event,'methodes')">📝 Méthodes</button>
@@ -286,17 +286,23 @@
   <button class="nav-btn" id="nav-extra1" data-extra style="display:none;" onclick="showSection(event,'extra1')">⭐ Extra 1</button>
   <button class="nav-btn" id="nav-extra2" data-extra style="display:none;" onclick="showSection(event,'extra2')">⭐ Extra 2</button>
   <button class="nav-btn" data-math-only onclick="showSection(event,'graphiques')">📊 Graphiques</button>
-  <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
   <button class="nav-btn" onclick="showSection(event,'glossaire')">📖 Index des fiches</button>
+  <span class="nav-lab">🎯 S'entraîner</span>
   <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
+  <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
   <button class="nav-btn" onclick="showSection(event,'mesexos')">🎨 Mes créations</button>
-  <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
   <button class="nav-btn" onclick="showSection(event,'erreurs')">⚠️ Erreurs fréquentes</button>
-  <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
+  <span class="nav-lab">📊 Suivre</span>
+  <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
   <button class="nav-btn" onclick="showSection(event,'journal')">📓 Journal</button>
-  <button class="nav-btn" onclick="showSection(event,'notes')">📒 Bloc-notes</button>
   <button class="nav-btn" onclick="showSection(event,'profil')">👤 Mon profil</button>
   <button class="nav-btn" id="nav-stats" onclick="showSection(event,'stats')" style="display:none; border-color:var(--color-parabole);">📊 Stats (admin)</button>
+  <span class="nav-lab">💬 Partager</span>
+  <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
+  <button class="nav-btn" onclick="showSection(event,'notes')">📒 Bloc-notes</button>
+  <span class="nav-lab">⚙️ Compte & outils</span>
+  <button class="nav-btn" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-parabole);">👤 Connexion</button>
+  <button class="nav-btn" onclick="openSearch()" style="border-color:var(--color-nav);">🔍 Rechercher</button>
 </nav>
 
 <div id="subject-prep" class="subject-prep" style="display:none;">

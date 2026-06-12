@@ -1039,6 +1039,11 @@ function startQuiz() {
   buildQuiz();
   document.getElementById('quiz-start-screen').style.display = 'none';
   document.getElementById('quiz-active-screen').style.display = 'block';
+  // On amène l'écran sur la 1re question (sinon elle reste cachée sous la nav)
+  setTimeout(function () {
+    var s = document.getElementById('quiz-active-screen');
+    if (s && s.style.display !== 'none') { try { s.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (_) {} }
+  }, 80);
 }
 
 function backToQuizStart() {
@@ -5137,11 +5142,17 @@ document.addEventListener('DOMContentLoaded', function () {
   try { setReadingMode(localStorage.getItem('mathsgr2_reading') || 'normal'); } catch (_) {}
 });
 
-/* ════════════ Rappel de révision à l'ouverture ════════════ */
+/* ════════════ Rappel de révision à l'ouverture ════════════
+   - attend la fin de l'écran de bienvenue (jamais par-dessus l'onboarding)
+   - bandeau complet 6 s, puis se replie en petite pastille 🔔 N en haut à droite
+     (il ne recouvre plus jamais le contenu ni les boutons du quiz). */
 function showRevisionReminder() {
   try {
     if (sessionStorage.getItem('mathsgr2_reminded')) return;
     if (!window.SUBJECTS) return;
+    // L'écran de bienvenue est encore là → on repasse plus tard.
+    var wel = document.getElementById('welcome-overlay');
+    if (wel && wel.offsetParent !== null) { setTimeout(showRevisionReminder, 2500); return; }
     var data = loadSavedData(); var fc = data.flashcardData || {}; var now = Date.now(); var total = 0;
     ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (key) {
       var s = window.SUBJECTS[key]; if (!s || !s.ready || !s.content) return;
@@ -5151,12 +5162,21 @@ function showRevisionReminder() {
     sessionStorage.setItem('mathsgr2_reminded', '1');
     var bar = document.createElement('div');
     bar.id = 'revision-reminder';
-    bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:3000; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; gap:12px; max-width:92vw; animation:imgModalIn .25s ease;';
+    bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; max-width:min(92vw,560px); animation:imgModalIn .25s ease;';
     bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
       '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:var(--color-nav); color:#fff; border:none; border-radius:9px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer;">📚 Réviser</button>' +
       '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer; min-width:32px; min-height:32px; border-radius:8px;">✕</button>';
     document.body.appendChild(bar);
-    setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 12000);
+    // Après 6 s : repli en pastille discrète (clic = aller réviser)
+    setTimeout(function () {
+      var b = document.getElementById('revision-reminder'); if (!b) return;
+      b.style.cssText = 'position:fixed; top:72px; right:14px; left:auto; transform:none; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:999px; padding:7px 14px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer; font-size:13px; font-weight:700; color:var(--text-primary);';
+      b.innerHTML = '🔔 ' + total;
+      b.title = total + ' carte' + (total > 1 ? 's' : '') + ' à réviser — clique pour y aller';
+      b.onclick = function () { showSection('profil'); b.remove(); };
+    }, 6000);
+    // Et on range tout après 90 s si pas utilisé
+    setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 90000);
   } catch (_) {}
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(showRevisionReminder, 1800); });
@@ -5574,4 +5594,31 @@ function renderProgressCharts() {
 // (la page paraissait blanche). On bloque la sélection à partir du 2e clic.
 document.addEventListener('mousedown', function (e) {
   if (e.detail > 1 && e.target && e.target.closest && e.target.closest('button, .nav-btn')) e.preventDefault();
+});
+
+// ── Matières repliables (mobile) ─────────────────────────────
+// Sur petit écran, la rangée des 9 matières se replie en un seul bouton
+// « 📚 Maths ▾ » : fini les 4 rangées à scroller avant le contenu.
+function toggleSubjectBar(force) {
+  var bar = document.getElementById('subject-bar'), btn = document.getElementById('subj-fold');
+  if (!bar || !btn) return;
+  var open = (force !== undefined) ? !!force : !bar.classList.contains('open');
+  bar.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  updateSubjFoldLabel();
+}
+function updateSubjFoldLabel() {
+  var btn = document.getElementById('subj-fold'), bar = document.getElementById('subject-bar');
+  if (!btn || !bar) return;
+  var on = document.querySelector('.subj-btn.on');
+  var caret = bar.classList.contains('open') ? '▴' : '▾';
+  btn.textContent = (on ? on.textContent.trim() : '📚 Matière') + ' ' + caret;
+}
+document.addEventListener('DOMContentLoaded', function () {
+  var bar = document.getElementById('subject-bar');
+  if (bar) bar.addEventListener('click', function (e) {
+    // choisir une matière replie la rangée (après que setSubject ait posé la classe .on)
+    if (e.target.closest && e.target.closest('.subj-btn')) setTimeout(function () { toggleSubjectBar(false); }, 150);
+  });
+  setTimeout(updateSubjFoldLabel, 500);
 });

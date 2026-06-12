@@ -611,7 +611,7 @@
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'sqrt\')">√x racine</button>' +
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'pow\')">x² puissance</button>' +
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'sub\')">x₁ indice</button>' +
-          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'vec\')">AB⃗ vecteur</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'vec\')"><span class="fx-minivec"><span>→</span><span>AB</span></span> vecteur</button>' +
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'bar\')">x̄ barre dessus</button>' +
         '</div>' +
         '<div class="fx-row" id="fx-row"></div>' +
