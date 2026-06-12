@@ -130,9 +130,12 @@
     if (txt) document.execCommand('insertText', false, txt);
   }
 
-  /* ---------- DESSIN : petit atelier, le résultat devient une image de la note ---------- */
+  /* ---------- DESSIN : petit atelier, le résultat devient une image de la note ----------
+     Réutilisable ailleurs (Mes créations) : notesOpenDraw(callback) → le dessin
+     est passé au callback au lieu d'être inséré dans le bloc-notes. */
   var _draw = { canvas: null, ctx: null, drawing: false, color: '#a78bfa', size: 4, erase: false };
-  window.notesOpenDraw = function () {
+  window.notesOpenDraw = function (onImg) {
+    window._ndOnImg = (typeof onImg === 'function') ? onImg : null;
     var ov = el('note-draw-ov');
     if (!ov) {
       ov = document.createElement('div');
@@ -167,13 +170,14 @@
       el('nd-erase').addEventListener('click', function () { _draw.erase = !_draw.erase; this.classList.toggle('on', _draw.erase); });
       el('nd-size').addEventListener('input', function () { _draw.size = +this.value; });
       el('nd-clear').addEventListener('click', resetCanvas);
-      el('nd-cancel').addEventListener('click', function () { ov.style.display = 'none'; });
+      el('nd-cancel').addEventListener('click', function () { ov.style.display = 'none'; window._ndOnImg = null; });
       el('nd-add').addEventListener('click', function () {
         var img = document.createElement('img');
         img.src = _draw.canvas.toDataURL('image/png'); img.className = 'note-img';
         ov.style.display = 'none';
-        insertAtCaret(img);
-        toast('🎨 Dessin ajouté à la note');
+        var cb = window._ndOnImg; window._ndOnImg = null;
+        if (cb) cb(img); else insertAtCaret(img);
+        toast('🎨 Dessin ajouté');
       });
     }
     ov.style.display = 'flex';
@@ -204,6 +208,7 @@
     ['🔣 Grec', ['α','β','γ','δ','ε','θ','λ','μ','ρ','σ','φ','ω','Ω','Φ','Σ','Π']],
     ['✏️ Divers', ['✔','✘','★','☆','♥','⚠','❗','❓','•','◦','→','⇒','⇔','↦','—','№','§']]
   ];
+  window.NOTE_CHAR_GROUPS = CHAR_GROUPS; // réutilisée par 🎨 Mes créations (creations.js)
   window.notesToggleChars = function () {
     var p = el('note-chars');
     if (!p) return;

@@ -684,3 +684,69 @@ img { max-width: 100%; height: auto; }
 .nd-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
 .nd-btn { padding: 9px 18px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-weight: 700; cursor: pointer; }
 .nd-btn-ok { background: var(--color-nav); border-color: var(--color-nav); color: #fff; }
+
+/* ═══════════ 🎨 Mes créations — creations.js ═══════════ */
+.fx-mini { margin-left: 6px; padding: 2px 9px; border-radius: 7px; border: 1px solid var(--color-nav); background: transparent; color: var(--color-nav); font-size: 11px; font-weight: 700; cursor: pointer; vertical-align: middle; }
+.fx-mini:hover { background: var(--color-nav); color: #fff; }
+.cre-empty { background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: 14px; padding: 2rem; text-align: center; color: var(--text-secondary); line-height: 1.6; }
+.cre-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 0.85rem; }
+.cre-item-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cre-chip { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; color: var(--color-nav); border: 1px solid var(--color-nav); }
+.cre-del { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 15px; }
+.cre-del:hover { color: #f87171; }
+.cre-card-face { background: var(--bg-main); border-radius: 10px; padding: 0.65rem 0.85rem; margin-top: 0.6rem; font-size: 14px; color: var(--text-primary); line-height: 1.5; overflow-wrap: anywhere; }
+.cre-card-face img { max-width: min(100%, 300px); border-radius: 8px; display: block; margin: 6px 0; }
+.cre-facelab { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-nav); font-weight: 700; margin-bottom: 3px; }
+.cre-face-back .cre-facelab { color: var(--color-parabole); }
+.cre-note-title { font-size: 15px; color: var(--text-primary); }
+.cre-date { font-size: 12px; color: var(--text-secondary); }
+.cre-actions { display: flex; gap: 8px; margin-top: 0.7rem; flex-wrap: wrap; }
+.cre-btn { padding: 7px 14px; border-radius: 9px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 13px; font-weight: 600; cursor: pointer; }
+.cre-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
+.cre-btn-danger:hover { border-color: #f87171; color: #f87171; }
+.cre-imgchip { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 0.5rem; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 9px; padding: 4px 8px; }
+.cre-imgchip img { height: 36px; border-radius: 6px; }
+.cre-imgchip button { background: transparent; border: none; color: #f87171; cursor: pointer; font-size: 13px; }
+#cre-note-editor { min-height: 280px; }
+#cre-chars .note-chgrp { margin: 6px 0; }
+
+/* visionneuse de synthèse (👁 Lire) */
+#cre-view-ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; padding: 1rem; }
+.cre-view-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 2rem; max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+.cre-view-x { position: absolute; top: 0.9rem; right: 1rem; background: transparent; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; }
+.cre-view-x:hover { color: var(--text-primary); }
+.cre-view-box h3 { font-size: 22px; font-weight: 700; color: var(--color-nav); margin-bottom: 1rem; padding-right: 2.2rem; }
+.cre-view-body { font-size: 15px; line-height: 1.7; color: var(--text-primary); overflow-wrap: anywhere; }
+.cre-view-body img { max-width: min(100%, 460px); border-radius: 10px; display: block; margin: 8px 0; }
+
+/* ƒ𝑥 éditeur de formules visuel : on assemble des blocs, la barre de fraction
+   est déjà en place (bordure entre les deux cases) — aperçu MathJax en direct */
+#fx-ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3200; align-items: center; justify-content: center; padding: 1rem; }
+.fx-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 1.5rem; max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto; }
+.fx-head { display: flex; justify-content: space-between; align-items: center; font-size: 18px; color: var(--text-primary); margin-bottom: 0.4rem; }
+.fx-help { font-size: 12px; color: var(--text-secondary); margin-bottom: 0.9rem; line-height: 1.5; }
+.fx-add { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.fx-addbtn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px; border-radius: 9px; border: 1px solid var(--color-nav); background: transparent; color: var(--color-nav); font-size: 13px; font-weight: 700; cursor: pointer; }
+.fx-addbtn:hover { background: var(--color-nav); color: #fff; }
+.fx-minifrac { display: inline-flex; flex-direction: column; line-height: 1.1; font-size: 9px; text-align: center; }
+.fx-minifrac span:first-child { border-bottom: 1px solid currentColor; padding: 0 3px; }
+.fx-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 86px; background: var(--bg-main); border: 1px dashed var(--border-subtle); border-radius: 12px; padding: 12px; margin-bottom: 0.9rem; }
+.fx-item { display: inline-flex; align-items: center; gap: 3px; position: relative; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 20px 10px 10px; }
+.fx-in { width: 48px; min-width: 38px; max-width: 170px; padding: 5px 7px; border-radius: 7px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 15px; text-align: center; }
+.fx-in:focus { border-color: var(--color-nav); outline: none; }
+.fx-col { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
+.fx-num { border-bottom: 2px solid var(--text-primary); padding-bottom: 4px; } /* ← la barre de fraction */
+.fx-sqsign { font-size: 26px; color: var(--text-primary); }
+.fx-sqbox { border-top: 2px solid var(--text-primary); padding-top: 4px; }
+.fx-in.fx-sup { transform: translateY(-9px); font-size: 12px; width: 34px; min-width: 30px; }
+.fx-in.fx-subs { transform: translateY(9px); font-size: 12px; width: 34px; min-width: 30px; }
+.fx-over { font-size: 14px; color: var(--text-primary); line-height: 1; }
+.fx-x { position: absolute; top: 1px; right: 3px; background: transparent; border: none; color: var(--text-secondary); font-size: 10px; cursor: pointer; padding: 1px 2px; }
+.fx-x:hover { color: #f87171; }
+.fx-syms { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.fx-prevwrap { background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 14px; margin-bottom: 0.9rem; min-height: 58px; }
+.fx-prevlab { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-parabole); font-weight: 700; margin-bottom: 4px; }
+#fx-prev { font-size: 18px; color: var(--text-primary); min-height: 28px; overflow-x: auto; }
+.fx-prev-empty { font-size: 13px; color: var(--text-secondary); opacity: 0.7; }
+.fx-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+@media (max-width: 480px) { .fx-box { padding: 1rem; } .fx-in { max-width: 110px; } }

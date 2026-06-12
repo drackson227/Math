@@ -109,7 +109,13 @@
   function applyContent(c) {
     if (!c) return;
     if (c.questions)  allQuestions = c.questions;
-    if (c.flashcards) flashcards = c.flashcards;
+    if (c.flashcards) {
+      flashcards = c.flashcards;
+      // + les flashcards créées par l'élève dans 🎨 Mes créations (creations.js)
+      try {
+        if (typeof window.customCardsFor === 'function') flashcards = flashcards.concat(window.customCardsFor(window.currentSubject));
+      } catch (_) {}
+    }
     if (c.demos)      DEMOS = c.demos;
     if (c.chapOrder)  CHAP_ORDER = c.chapOrder;
     if (c.chapLabels) CHAP_LABELS = c.chapLabels;

@@ -1,0 +1,605 @@
+/* ============================================================
+   creations.js — 🎨 Mes créations
+   L'élève crée SES propres contenus, rangés par matière :
+   - ❓ Questions de quiz   (formulaire historique, logique dans script.js)
+   - 🎴 Flashcards persos   (recto/verso, texte + image) → fusionnées dans
+     le paquet de l'onglet Flashcards de la matière (répétition espacée incluse)
+   - 📜 Synthèses persos    (éditeur riche : gras/italique, images compressées,
+     dessin via l'atelier du bloc-notes, caractères spéciaux, formules)
+   - ƒ𝑥 Éditeur de formules VISUEL réutilisable partout : on assemble des blocs
+     (fraction avec la vraie barre au-dessus/au-dessous, racine, puissance,
+     indice, vecteur…), aperçu MathJax en direct, insertion en \( … \).
+   Stockage : data.customCards / data.customNotes via saveData()
+   (localStorage + cloud par compte). 100% défensif : tout est optionnel.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var MAX_NOTE_BYTES = 400000;  // ~400 Ko par synthèse (images comprises)
+  var IMG_MAX_SIDE = 800;       // images de synthèse
+  var CARD_IMG_SIDE = 520;      // images de flashcard (plus petites : la carte reste légère)
+
+  function el(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function subj() { return window.currentSubject || 'maths'; }
+  function toast(m, c) { if (typeof showToast === 'function') showToast(m, c || 'var(--color-nav)'); }
+  function chapName(ch) {
+    return (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS && CHAP_LABELS[ch]) ? CHAP_LABELS[ch] : (ch || '');
+  }
+
+  /* ---------- même nettoyage anti-XSS que le bloc-notes ---------- */
+  var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1 };
+  function sanitize(html) {
+    var root = document.createElement('div');
+    root.innerHTML = String(html || '');
+    (function walk(node) {
+      var children = [].slice.call(node.childNodes);
+      children.forEach(function (c) {
+        if (c.nodeType === 3) return;
+        if (c.nodeType !== 1 || !OK_TAGS[c.tagName]) {
+          var txt = document.createTextNode(c.textContent || '');
+          node.replaceChild(txt, c); return;
+        }
+        [].slice.call(c.attributes).forEach(function (a) {
+          if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
+          c.removeAttribute(a.name);
+        });
+        if (c.tagName === 'IMG') c.className = 'note-img';
+        walk(c);
+      });
+    })(root);
+    return root.innerHTML;
+  }
+
+  /* ---------- compression d'image (même recette que le bloc-notes) ---------- */
+  function compressImage(file, maxSide, cb) {
+    var img = new Image();
+    img.onload = function () {
+      var w = img.width, h = img.height;
+      var k = Math.min(1, maxSide / Math.max(w, h));
+      var cv = document.createElement('canvas');
+      cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      cb(cv.toDataURL('image/jpeg', 0.82));
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = function () { toast('Image illisible', '#f87171'); };
+    img.src = URL.createObjectURL(file);
+  }
+
+  /* ---------- onglets de la section ---------- */
+  window.creSwitch = function (tab) {
+    ['quiz', 'cards', 'notes'].forEach(function (t) {
+      var p = el('cre-pane-' + t); if (p) p.style.display = (t === tab) ? '' : 'none';
+      var b = el('cre-tab-' + t); if (b) b.classList.toggle('on', t === tab);
+    });
+    if (tab === 'cards') renderCustomCards();
+    if (tab === 'notes') { closeEditor(); renderCustomNotes(); }
+  };
+
+  /* ════════════════ 🎴 FLASHCARDS PERSOS ════════════════ */
+  var _cardImg = { front: null, back: null };
+  var _imgSide = 'front';
+
+  window.crePickCardImg = function (side) {
+    _imgSide = side;
+    var i = el('cre-card-file'); if (i) { i.value = ''; i.click(); }
+  };
+  window.creCardFile = function (input) {
+    var f = input.files && input.files[0];
+    if (!f || !/^image\//.test(f.type)) return;
+    compressImage(f, CARD_IMG_SIDE, function (dataUrl) {
+      _cardImg[_imgSide] = dataUrl;
+      updateImgChips();
+    });
+  };
+  window.creCardImgClear = function (side) { _cardImg[side] = null; updateImgChips(); };
+  function updateImgChips() {
+    ['front', 'back'].forEach(function (s) {
+      var chip = el('cre-img-' + s);
+      if (!chip) return;
+      var im = chip.querySelector('img');
+      if (_cardImg[s]) { chip.style.display = 'inline-flex'; if (im) im.src = _cardImg[s]; }
+      else chip.style.display = 'none';
+    });
+  }
+
+  // texte (échappé) + image éventuelle → HTML d'une face de carte
+  function sideHtml(text, img) {
+    var h = esc(text).replace(/\n/g, '<br>');
+    if (img) h += (h ? '<br>' : '') + '<img class="note-img" src="' + img + '" alt="">';
+    return h;
+  }
+
+  window.saveCustomCard = function () {
+    var sel = el('cre-card-theme');
+    var fEl = el('cre-card-front'), bEl = el('cre-card-back');
+    var front = fEl ? fEl.value.trim() : '';
+    var back = bEl ? bEl.value.trim() : '';
+    if ((!front && !_cardImg.front) || (!back && !_cardImg.back)) {
+      toast('⚠️ Remplis le recto ET le verso (texte ou image)', '#f87171'); return;
+    }
+    var d = loadSavedData();
+    d.customCards = d.customCards || [];
+    d.customCards.unshift({
+      id: Date.now(), subject: subj(), chapter: sel ? sel.value : '',
+      front: sideHtml(front, _cardImg.front), back: sideHtml(back, _cardImg.back),
+      created: new Date().toISOString()
+    });
+    saveData(d);
+    if (fEl) fEl.value = '';
+    if (bEl) bEl.value = '';
+    _cardImg = { front: null, back: null }; updateImgChips();
+    renderCustomCards();
+    refreshDeck();
+    toast('✅ Flashcard créée — retrouve-la dans l\'onglet 🎴 Flashcards');
+  };
+
+  window.deleteCustomCard = function (id) {
+    var d = loadSavedData();
+    d.customCards = (d.customCards || []).filter(function (c) { return c.id !== id; });
+    saveData(d);
+    renderCustomCards(); refreshDeck();
+    toast('🗑️ Flashcard supprimée', '#f87171');
+  };
+
+  function myCards() {
+    var cur = subj();
+    return (loadSavedData().customCards || []).filter(function (c) { return (c.subject || 'maths') === cur; });
+  }
+
+  function renderCustomCards() {
+    var list = el('cre-card-list'); if (!list) return;
+    var cards = myCards();
+    var goBtn = el('cre-cards-go'); if (goBtn) goBtn.style.display = cards.length ? '' : 'none';
+    if (!cards.length) {
+      list.innerHTML = '<div class="cre-empty">Aucune flashcard perso pour l\'instant.<br>Crée ta première carte avec le formulaire ! 👈</div>';
+      return;
+    }
+    list.innerHTML = cards.map(function (c) {
+      return '<div class="cre-item">' +
+        '<div class="cre-item-top"><span class="cre-chip">' + esc(chapName(c.chapter)) + '</span>' +
+        '<button class="cre-del" onclick="deleteCustomCard(' + c.id + ')" aria-label="Supprimer la carte">🗑️</button></div>' +
+        '<div class="cre-card-face"><span class="cre-facelab">Recto</span>' + sanitize(c.front) + '</div>' +
+        '<div class="cre-card-face cre-face-back"><span class="cre-facelab">Verso</span>' + sanitize(c.back) + '</div>' +
+      '</div>';
+    }).join('');
+    if (typeof safeMathJax === 'function') safeMathJax([list]);
+  }
+
+  /* Cartes persos de la matière, au format du paquet (appelé par subjects.js) */
+  window.customCardsFor = function (key) {
+    try {
+      return (loadSavedData().customCards || [])
+        .filter(function (c) { return (c.subject || 'maths') === (key || subj()); })
+        .map(function (c) { return { front: c.front, back: c.back, chapter: c.chapter, _custom: c.id }; });
+    } catch (e) { return []; }
+  };
+
+  // Reconstruit le paquet global de la matière active (contenu officiel + cartes persos)
+  function refreshDeck() {
+    try {
+      if (typeof flashcards === 'undefined') return;
+      var s = window.SUBJECTS && window.SUBJECTS[subj()];
+      var base = (s && s.content && s.content.flashcards)
+        ? s.content.flashcards
+        : flashcards.filter(function (c) { return !c._custom; });
+      flashcards = base.concat(window.customCardsFor(subj()));
+      if (typeof buildFlashcardQueue === 'function') buildFlashcardQueue();
+    } catch (e) {}
+  }
+
+  window.creGoFlashcards = function () { if (typeof showSection === 'function') showSection('flashcards'); };
+
+  /* ════════════════ 📜 SYNTHÈSES PERSOS ════════════════ */
+  var _editId = null;
+
+  function myNotes() {
+    var cur = subj();
+    return (loadSavedData().customNotes || []).filter(function (n) { return (n.subject || 'maths') === cur; });
+  }
+
+  function renderCustomNotes() {
+    var list = el('cre-note-list'); if (!list) return;
+    var notes = myNotes();
+    if (!notes.length) {
+      list.innerHTML = '<div class="cre-empty">Aucune synthèse perso.<br>Clique sur « ➕ Nouvelle synthèse » : texte, images, dessins, formules ƒ𝑥… tout est possible !</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function (n) {
+      var dt = new Date(n.updated || n.created);
+      return '<div class="cre-item">' +
+        '<div class="cre-item-top">' +
+          '<strong class="cre-note-title">📜 ' + esc(n.title) + '</strong>' +
+          '<span class="cre-date">' + dt.toLocaleDateString('fr-BE') + '</span>' +
+        '</div>' +
+        '<div class="cre-actions">' +
+          '<button class="cre-btn" onclick="creOpenNote(' + n.id + ')">👁 Lire</button>' +
+          '<button class="cre-btn" onclick="creEditNote(' + n.id + ')">✏️ Modifier</button>' +
+          '<button class="cre-btn cre-btn-danger" onclick="creDeleteNote(' + n.id + ')">🗑️ Supprimer</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  window.creNewNote = function () { _editId = null; openEditor('', ''); };
+  window.creEditNote = function (id) {
+    var n = (loadSavedData().customNotes || []).find(function (x) { return x.id === id; });
+    if (!n) return;
+    _editId = id; openEditor(n.title, n.html);
+  };
+  function openEditor(title, html) {
+    var t = el('cre-note-title'), ed = el('cre-note-editor');
+    if (t) t.value = title || '';
+    if (ed) ed.innerHTML = sanitize(html || '');
+    var box = el('cre-note-edit'); if (box) box.style.display = '';
+    var lw = el('cre-note-listwrap'); if (lw) lw.style.display = 'none';
+    wireEditor();
+    if (t && !title) t.focus(); else if (ed) ed.focus();
+  }
+  function closeEditor() {
+    var box = el('cre-note-edit'); if (box) box.style.display = 'none';
+    var lw = el('cre-note-listwrap'); if (lw) lw.style.display = '';
+    var p = el('cre-chars'); if (p) p.style.display = 'none';
+  }
+  window.creCloseEditor = closeEditor;
+
+  window.creSaveNote = function () {
+    var t = el('cre-note-title'), ed = el('cre-note-editor');
+    var title = t ? t.value.trim() : '';
+    if (!title) { toast('⚠️ Donne un titre à ta synthèse', '#f87171'); if (t) t.focus(); return; }
+    var html = sanitize(ed ? ed.innerHTML : '');
+    var hasContent = ed && (ed.textContent.trim() || ed.querySelector('img'));
+    if (!hasContent) { toast('⚠️ La synthèse est vide', '#f87171'); return; }
+    if (html.length > MAX_NOTE_BYTES) { toast('Synthèse trop lourde — enlève une image 🖼️', '#f87171'); return; }
+    var d = loadSavedData();
+    d.customNotes = d.customNotes || [];
+    var now = new Date().toISOString();
+    if (_editId) {
+      var n = d.customNotes.find(function (x) { return x.id === _editId; });
+      if (n) { n.title = title; n.html = html; n.updated = now; }
+    } else {
+      d.customNotes.unshift({ id: Date.now(), subject: subj(), title: title, html: html, created: now, updated: now });
+    }
+    saveData(d);
+    closeEditor(); renderCustomNotes();
+    toast('✅ Synthèse enregistrée');
+  };
+
+  window.creDeleteNote = function (id) {
+    var d = loadSavedData();
+    d.customNotes = (d.customNotes || []).filter(function (n) { return n.id !== id; });
+    saveData(d);
+    renderCustomNotes();
+    toast('🗑️ Synthèse supprimée', '#f87171');
+  };
+
+  window.creOpenNote = function (id) {
+    var n = (loadSavedData().customNotes || []).find(function (x) { return x.id === id; });
+    if (!n) return;
+    var ov = el('cre-view-ov');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'cre-view-ov';
+      ov.innerHTML = '<div class="cre-view-box"><button type="button" class="cre-view-x" onclick="creCloseView()" aria-label="Fermer">✕</button>' +
+        '<h3 id="cre-view-title"></h3><div id="cre-view-body" class="cre-view-body"></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) { if (e.target === ov) window.creCloseView(); });
+    }
+    el('cre-view-title').textContent = n.title;
+    el('cre-view-body').innerHTML = sanitize(n.html);
+    ov.style.display = 'flex';
+    if (typeof safeMathJax === 'function') safeMathJax([el('cre-view-body')]);
+  };
+  window.creCloseView = function () { var ov = el('cre-view-ov'); if (ov) ov.style.display = 'none'; };
+
+  /* ---------- éditeur de synthèse : caret, mise en forme, Ω, image, dessin, collage ---------- */
+  function edInsert(nodeOrText) {
+    var ed = el('cre-note-editor'); if (!ed) return;
+    ed.focus();
+    var sel = window.getSelection();
+    var range = (sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).commonAncestorContainer))
+      ? sel.getRangeAt(0)
+      : (function () { var r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); return r; })();
+    range.deleteContents();
+    var node = (typeof nodeOrText === 'string') ? document.createTextNode(nodeOrText) : nodeOrText;
+    range.insertNode(node);
+    range.setStartAfter(node); range.collapse(true);
+    if (sel) { sel.removeAllRanges(); sel.addRange(range); }
+  }
+
+  window.creFormat = function (cmd) {
+    var ed = el('cre-note-editor');
+    if (ed) { ed.focus(); try { document.execCommand(cmd); } catch (e) {} }
+  };
+  window.creInsertChar = function (ch) { edInsert(ch); };
+  window.creToggleChars = function () {
+    var p = el('cre-chars'); if (!p) return;
+    var open = p.style.display !== 'none';
+    p.style.display = open ? 'none' : 'block';
+    if (!open && !p.innerHTML) {
+      var groups = window.NOTE_CHAR_GROUPS || [['📐 Maths', ['√', '²', '³', 'π', '±', '×', '÷', '≤', '≥', '≠', '→', '°', 'Δ']]];
+      p.innerHTML = groups.map(function (g) {
+        return '<div class="note-chgrp"><span class="note-chlab">' + g[0] + '</span>' +
+          g[1].map(function (ch) {
+            return '<button type="button" class="note-ch" onmousedown="event.preventDefault()" onclick="creInsertChar(\'' + ch.replace(/'/g, "\\'") + '\')">' + ch + '</button>';
+          }).join('') + '</div>';
+      }).join('');
+    }
+  };
+  window.crePickNoteImg = function () { var i = el('cre-file'); if (i) { i.value = ''; i.click(); } };
+  window.creNoteFile = function (input) {
+    var f = input.files && input.files[0];
+    if (!f || !/^image\//.test(f.type)) return;
+    compressImage(f, IMG_MAX_SIDE, function (dataUrl) {
+      var img = document.createElement('img');
+      img.src = dataUrl; img.className = 'note-img';
+      edInsert(img);
+    });
+  };
+  window.creOpenDraw = function () {
+    if (typeof window.notesOpenDraw === 'function') window.notesOpenDraw(function (img) { edInsert(img); });
+    else toast('Atelier dessin indisponible', '#f87171');
+  };
+
+  function wireEditor() {
+    var ed = el('cre-note-editor');
+    if (!ed || ed._wired) return;
+    ed._wired = true;
+    // coller : image → compressée puis insérée ; texte → TEXTE PUR (anti-XSS, anti-style moche)
+    ed.addEventListener('paste', function (e) {
+      var cd = e.clipboardData || window.clipboardData || {};
+      var items = cd.items || [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type && items[i].type.indexOf('image/') === 0) {
+          e.preventDefault();
+          var f = items[i].getAsFile();
+          if (f) compressImage(f, IMG_MAX_SIDE, function (dataUrl) {
+            var img = document.createElement('img');
+            img.src = dataUrl; img.className = 'note-img';
+            edInsert(img);
+          });
+          return;
+        }
+      }
+      e.preventDefault();
+      var txt = cd.getData ? (cd.getData('text') || '') : '';
+      if (txt) document.execCommand('insertText', false, txt);
+    });
+  }
+
+  /* ════════════════ ƒ𝑥 ÉDITEUR DE FORMULES VISUEL ════════════════
+     L'idée de Drackson (« j'écris 1 plus 1 et je glisse une barre au-dessus »)
+     en mieux : on clique « fraction » → la barre est déjà là, avec une case
+     au-dessus et une case en dessous. Aperçu MathJax en direct. */
+  var _fx = { target: null, savedRange: null, items: [], lastInput: null, prevTimer: null };
+
+  var FX_SYMBOLS = ['+', '−', '=', '(', ')', '×', '÷', '±', '·', ',', 'π', '°', '%', '≈', '≤', '≥', '≠', '→', '∞', 'Δ', 'α', 'β', 'γ', 'θ', 'λ', 'μ', 'ω', 'Ω', '∈', '⊥'];
+
+  // caractères « jolis » → commandes LaTeX (le reste passe tel quel)
+  var FX_MAP = {
+    '×': '\\times ', '÷': '\\div ', '±': '\\pm ', '·': '\\cdot ',
+    'π': '\\pi ', '°': '^{\\circ}', '≈': '\\approx ', '≤': '\\le ', '≥': '\\ge ',
+    '≠': '\\neq ', '→': '\\to ', '∞': '\\infty ', 'Δ': '\\Delta ',
+    'α': '\\alpha ', 'β': '\\beta ', 'γ': '\\gamma ', 'θ': '\\theta ',
+    'λ': '\\lambda ', 'μ': '\\mu ', 'ρ': '\\rho ', 'ω': '\\omega ', 'Ω': '\\Omega ',
+    '∈': '\\in ', '∉': '\\notin ', '⊥': '\\perp ', '∥': '\\parallel ',
+    '−': '-', '%': '\\%', '√': '\\surd ', '²': '^{2}', '³': '^{3}',
+    '½': '\\frac{1}{2}', '⅓': '\\frac{1}{3}', '¼': '\\frac{1}{4}', '¾': '\\frac{3}{4}',
+    '∑': '\\sum ', '∫': '\\int ', '≡': '\\equiv ', '⇌': '\\rightleftharpoons ',
+    // caractères spéciaux LaTeX qu'un élève pourrait taper : on les neutralise
+    '{': '\\{', '}': '\\}', '#': '\\#', '$': '\\$', '&': '\\&', '_': '\\_',
+    '^': '\\wedge ', '~': '\\sim ', '\\': '\\backslash '
+  };
+  function txt2tex(s) {
+    var out = '';
+    for (var i = 0; i < s.length; i++) out += (FX_MAP[s[i]] !== undefined) ? FX_MAP[s[i]] : s[i];
+    return out;
+  }
+
+  function slotInput(ph, extraClass) {
+    var i = document.createElement('input');
+    i.type = 'text'; i.className = 'fx-in' + (extraClass ? ' ' + extraClass : '');
+    i.placeholder = ph || '';
+    i.addEventListener('input', function () {
+      i.style.width = Math.max(38, 14 + i.value.length * 10) + 'px';
+      schedPrev();
+    });
+    i.addEventListener('focus', function () { _fx.lastInput = i; });
+    return i;
+  }
+
+  window.fxAdd = function (type) {
+    var row = el('fx-row'); if (!row) return;
+    var item = { type: type, slots: [] };
+    var wrap = document.createElement('span');
+    wrap.className = 'fx-item fx-' + type;
+    if (type === 'text') {
+      var ti = slotInput('1+1');
+      item.slots = [ti]; wrap.appendChild(ti);
+    } else if (type === 'frac') {
+      var num = slotInput('haut'), den = slotInput('bas');
+      var top = document.createElement('span'); top.className = 'fx-num'; top.appendChild(num);
+      var bot = document.createElement('span'); bot.className = 'fx-den'; bot.appendChild(den);
+      var col = document.createElement('span'); col.className = 'fx-col'; col.appendChild(top); col.appendChild(bot);
+      item.slots = [num, den]; wrap.appendChild(col);
+    } else if (type === 'sqrt') {
+      var sq = slotInput('x');
+      var sign = document.createElement('span'); sign.className = 'fx-sqsign'; sign.textContent = '√';
+      var box = document.createElement('span'); box.className = 'fx-sqbox'; box.appendChild(sq);
+      item.slots = [sq]; wrap.appendChild(sign); wrap.appendChild(box);
+    } else if (type === 'pow' || type === 'sub') {
+      var base = slotInput('x');
+      var mini = slotInput(type === 'pow' ? '2' : '1', type === 'pow' ? 'fx-sup' : 'fx-subs');
+      item.slots = [base, mini]; wrap.appendChild(base); wrap.appendChild(mini);
+    } else if (type === 'vec' || type === 'bar') {
+      var v = slotInput(type === 'vec' ? 'AB' : 'x');
+      var over = document.createElement('span'); over.className = 'fx-over'; over.textContent = type === 'vec' ? '⟶' : '▔▔';
+      var colv = document.createElement('span'); colv.className = 'fx-col';
+      colv.appendChild(over); colv.appendChild(v);
+      item.slots = [v]; wrap.appendChild(colv);
+    } else return;
+    var x = document.createElement('button');
+    x.type = 'button'; x.className = 'fx-x'; x.textContent = '✕'; x.title = 'Retirer ce bloc';
+    x.addEventListener('click', function () {
+      var idx = _fx.items.indexOf(item);
+      if (idx >= 0) _fx.items.splice(idx, 1);
+      wrap.remove(); schedPrev();
+    });
+    wrap.appendChild(x);
+    item.el = wrap;
+    _fx.items.push(item);
+    row.appendChild(wrap);
+    item.slots[0].focus();
+    schedPrev();
+  };
+
+  function slotTex(input, emptyAs) {
+    var v = input.value.trim();
+    return v ? txt2tex(v) : (emptyAs !== undefined ? emptyAs : '\\square');
+  }
+  function fxToTex() {
+    return _fx.items.map(function (it) {
+      switch (it.type) {
+        case 'text': return slotTex(it.slots[0], '');
+        case 'frac': return '\\frac{' + slotTex(it.slots[0]) + '}{' + slotTex(it.slots[1]) + '}';
+        case 'sqrt': return '\\sqrt{' + slotTex(it.slots[0]) + '}';
+        case 'pow':  return '{' + slotTex(it.slots[0]) + '}^{' + slotTex(it.slots[1]) + '}';
+        case 'sub':  return '{' + slotTex(it.slots[0]) + '}_{' + slotTex(it.slots[1]) + '}';
+        case 'vec':  return (it.slots[0].value.trim().length > 1 ? '\\overrightarrow{' : '\\vec{') + slotTex(it.slots[0]) + '}';
+        case 'bar':  return '\\overline{' + slotTex(it.slots[0]) + '}';
+      }
+      return '';
+    }).join(' ').replace(/\s+/g, ' ').trim();
+  }
+
+  function schedPrev() {
+    clearTimeout(_fx.prevTimer);
+    _fx.prevTimer = setTimeout(renderPrev, 250);
+  }
+  function renderPrev() {
+    var prev = el('fx-prev'); if (!prev) return;
+    var tex = fxToTex();
+    if (!tex) { prev.innerHTML = '<span class="fx-prev-empty">Ajoute des blocs ci-dessus 👆 — l\'aperçu s\'affiche ici.</span>'; return; }
+    prev.innerHTML = esc('\\(\\displaystyle ' + tex + '\\)');
+    if (typeof safeMathJax === 'function') safeMathJax([prev]);
+  }
+
+  window.fxSym = function (ch) {
+    var i = _fx.lastInput;
+    if (!i || !document.body.contains(i)) {
+      window.fxAdd('text');
+      var last = _fx.items[_fx.items.length - 1];
+      i = last ? last.slots[0] : null;
+      if (!i) return;
+    }
+    var st = (i.selectionStart != null) ? i.selectionStart : i.value.length;
+    var en = (i.selectionEnd != null) ? i.selectionEnd : st;
+    i.value = i.value.slice(0, st) + ch + i.value.slice(en);
+    i.focus();
+    i.selectionStart = i.selectionEnd = st + ch.length;
+    i.style.width = Math.max(38, 14 + i.value.length * 10) + 'px';
+    schedPrev();
+  };
+
+  function buildFx() {
+    var ov = el('fx-ov');
+    if (ov) return;
+    ov = document.createElement('div'); ov.id = 'fx-ov';
+    ov.innerHTML =
+      '<div class="fx-box">' +
+        '<div class="fx-head"><b>ƒ𝑥 Créer une formule</b>' +
+          '<button type="button" class="cre-view-x" onclick="fxClose()" aria-label="Fermer" style="position:static;">✕</button></div>' +
+        '<p class="fx-help">Ajoute des blocs et remplis les cases — pour une fraction, la barre se place toute seule entre le haut et le bas 😉 Astuce : écris <b>1+1</b> plutôt que « 1 plus 1 ».</p>' +
+        '<div class="fx-add">' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'text\')">✏️ texte</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'frac\')"><span class="fx-minifrac"><span>a</span><span>b</span></span> fraction</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'sqrt\')">√x racine</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'pow\')">x² puissance</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'sub\')">x₁ indice</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'vec\')">AB⃗ vecteur</button>' +
+          '<button type="button" class="fx-addbtn" onclick="fxAdd(\'bar\')">x̄ barre dessus</button>' +
+        '</div>' +
+        '<div class="fx-row" id="fx-row"></div>' +
+        '<div class="fx-syms">' +
+          FX_SYMBOLS.map(function (s) {
+            return '<button type="button" class="note-ch" onmousedown="event.preventDefault()" onclick="fxSym(\'' + s + '\')">' + s + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="fx-prevwrap"><span class="fx-prevlab">Aperçu en direct</span><div id="fx-prev"></div></div>' +
+        '<div class="fx-actions">' +
+          '<button type="button" class="nd-btn" onclick="fxClear()">🗑️ Tout effacer</button>' +
+          '<button type="button" class="nd-btn nd-btn-ok" onclick="fxInsert()">✅ Insérer la formule</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function (e) { if (e.target === ov) window.fxClose(); });
+  }
+
+  window.fxClear = function () {
+    _fx.items = []; _fx.lastInput = null;
+    var row = el('fx-row'); if (row) row.innerHTML = '';
+    renderPrev();
+  };
+  window.fxClose = function () { var ov = el('fx-ov'); if (ov) ov.style.display = 'none'; };
+
+  /* Ouvre l'éditeur visuel. target = id d'un <input>/<textarea>, ou 'cre-note'
+     pour insérer dans l'éditeur de synthèse au niveau du curseur. */
+  window.openFormulaComposer = function (target) {
+    _fx.target = target || null;
+    _fx.savedRange = null;
+    if (target === 'cre-note') {
+      var sel = window.getSelection(), ed = el('cre-note-editor');
+      if (sel && sel.rangeCount && ed && ed.contains(sel.getRangeAt(0).commonAncestorContainer)) {
+        _fx.savedRange = sel.getRangeAt(0).cloneRange();
+      }
+    }
+    buildFx();
+    window.fxClear();
+    el('fx-ov').style.display = 'flex';
+    window.fxAdd('text'); // un bloc texte prêt à l'emploi
+  };
+
+  window.fxInsert = function () {
+    var tex = fxToTex();
+    if (!tex) { toast('⚠️ La formule est vide', '#f87171'); return; }
+    var str = '\\(' + tex + '\\)';
+    if (_fx.target === 'cre-note') {
+      var ed = el('cre-note-editor');
+      if (ed) {
+        ed.focus();
+        if (_fx.savedRange) {
+          var sel = window.getSelection();
+          if (sel) { sel.removeAllRanges(); sel.addRange(_fx.savedRange); }
+        }
+        edInsert(' ' + str + ' ');
+      }
+    } else {
+      var f = el(_fx.target);
+      if (f && typeof f.value === 'string' && f.selectionStart != null) {
+        var st = f.selectionStart, en = f.selectionEnd != null ? f.selectionEnd : st;
+        f.value = f.value.slice(0, st) + str + f.value.slice(en);
+        f.focus();
+        f.selectionStart = f.selectionEnd = st + str.length;
+      } else if (f) {
+        f.value = (f.value || '') + str;
+      }
+    }
+    window.fxClose();
+    toast('✅ Formule insérée — elle s\'affichera en beau rendu 🤩');
+  };
+
+  /* ════════════════ init ════════════════ */
+  window.initCreations = function () {
+    var sel = el('cre-card-theme');
+    if (sel && !sel.options.length && typeof rebuildExoThemes === 'function') {
+      try { rebuildExoThemes(); } catch (e) {}
+    }
+    renderCustomCards();
+    renderCustomNotes();
+  };
+
+  // Au chargement : les cartes persos rejoignent le paquet de la matière restaurée
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () { try { refreshDeck(); } catch (e) {} }, 0);
+  });
+})();

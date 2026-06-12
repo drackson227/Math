@@ -1383,7 +1383,7 @@ function showSection(evtOrId, id) {
   }
   // Verrou Premium : section payante et non débloquée → modale, on n'entre pas.
   if (typeof PREMIUM_SECTIONS !== 'undefined' && PREMIUM_SECTIONS.includes(sectionId) && !isPremium()) {
-    const labels = { mesexos: 'Mes exercices', progression: 'Progression', journal: 'Journal' };
+    const labels = { mesexos: 'Mes créations', progression: 'Progression', journal: 'Journal' };
     openPremiumModal(labels[sectionId] || sectionId);
     return;
   }
@@ -1442,7 +1442,7 @@ function showSection(evtOrId, id) {
   if (sectionId === 'formules') initFormulaBookmarks();
   if (sectionId === 'journal') loadJournalHistory();
   if (sectionId === 'graphiques') requestAnimationFrame(() => requestAnimationFrame(() => initGraphs()));
-  if (sectionId === 'mesexos') renderCustomExoList();
+  if (sectionId === 'mesexos') { renderCustomExoList(); if (typeof initCreations === 'function') initCreations(); }
   if (sectionId === 'progression') renderProgression();
   if (sectionId === 'chat' && typeof initChat === 'function') initChat();
   if (sectionId === 'stats' && typeof initStats === 'function') initStats();
@@ -4273,14 +4273,16 @@ function exoThemeInfo(e) {
   return { label: e.theme, color: 'var(--text-secondary)' };
 }
 
-// Remplit le menu « Thème » de Mes exercices avec les chapitres de la matière active
+// Remplit les menus « Thème / Chapitre » de Mes créations avec les chapitres de la matière active
 function rebuildExoThemes() {
-  const sel = document.getElementById('exo-theme');
-  if (!sel) return;
   const order = (typeof CHAP_ORDER !== 'undefined' && CHAP_ORDER) ? CHAP_ORDER : [];
   const labels = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS) ? CHAP_LABELS : {};
   if (!order.length) return;
-  sel.innerHTML = order.map(ch => '<option value="' + ch + '">' + (labels[ch] || ch) + '</option>').join('');
+  const html = order.map(ch => '<option value="' + ch + '">' + (labels[ch] || ch) + '</option>').join('');
+  const sel = document.getElementById('exo-theme');
+  if (sel) sel.innerHTML = html;
+  const sel2 = document.getElementById('cre-card-theme'); // flashcards persos (creations.js)
+  if (sel2) sel2.innerHTML = html;
 }
 
 function escapeHtmlExo(s) {

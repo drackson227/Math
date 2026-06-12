@@ -289,7 +289,7 @@
   <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
   <button class="nav-btn" onclick="showSection(event,'glossaire')">📖 Index des fiches</button>
   <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
-  <button class="nav-btn" onclick="showSection(event,'mesexos')">🛠️ Mes exercices</button>
+  <button class="nav-btn" onclick="showSection(event,'mesexos')">🎨 Mes créations</button>
   <button class="nav-btn" onclick="showSection(event,'progression')">📈 Progression</button>
   <button class="nav-btn" onclick="showSection(event,'erreurs')">⚠️ Erreurs fréquentes</button>
   <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
@@ -481,9 +481,17 @@
 </div>
 
 <div id="mesexos" class="section">
-  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🛠️ Mes exercices</h2>
-  <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:15px;">Crée tes propres questions (selon les chapitres de la matière choisie), avec ta réponse et une explication. Elles restent enregistrées sur cet appareil — par matière — et tu peux les réviser comme un mini-quiz.</p>
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🎨 Mes créations</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Crée tes propres contenus pour la matière active : <strong>questions de quiz</strong>, <strong>flashcards</strong> (avec images !) et <strong>synthèses illustrées</strong>. Tout est rangé par matière et enregistré dans ta progression. Le bouton <strong style="color:var(--color-nav);">ƒ𝑥</strong> construit les formules pour toi : fraction avec sa barre, racine, puissance… sans rien devoir connaître.</p>
 
+  <div style="display:flex; gap:10px; margin-bottom:1.5rem; flex-wrap:wrap;">
+    <button type="button" id="cre-tab-quiz" class="note-tab on" onclick="creSwitch('quiz')">❓ Questions de quiz</button>
+    <button type="button" id="cre-tab-cards" class="note-tab" onclick="creSwitch('cards')">🎴 Flashcards</button>
+    <button type="button" id="cre-tab-notes" class="note-tab" onclick="creSwitch('notes')">📜 Synthèses</button>
+  </div>
+
+  <!-- ════ ❓ ONGLET QUESTIONS DE QUIZ (formulaire historique) ════ -->
+  <div id="cre-pane-quiz">
   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
     <!-- Formulaire de création -->
     <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
@@ -494,13 +502,13 @@
         <option value="cercle">🔵 Cercle</option>
         <option value="droite">🟡 Droites</option>
       </select>
-      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Question</label>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Question <button type="button" class="fx-mini" title="Insérer une formule (fraction, racine…)" onclick="openFormulaComposer('exo-question')">ƒ𝑥 formule</button></label>
       <textarea id="exo-question" rows="2" placeholder="Écris ta question ici…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.9rem;"></textarea>
-      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Ta réponse</label>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Ta réponse <button type="button" class="fx-mini" title="Insérer une formule" onclick="openFormulaComposer('exo-answer')">ƒ𝑥 formule</button></label>
       <input id="exo-answer" type="text" placeholder="La bonne réponse…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;">
-      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Explication <span style="font-weight:400; opacity:0.7;">(facultatif)</span></label>
+      <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Explication <span style="font-weight:400; opacity:0.7;">(facultatif)</span> <button type="button" class="fx-mini" title="Insérer une formule" onclick="openFormulaComposer('exo-exp')">ƒ𝑥 formule</button></label>
       <textarea id="exo-exp" rows="2" placeholder="Comment on arrive au résultat…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.5rem;"></textarea>
-      <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin-bottom:1rem;">💡 Astuce : pour de vraies maths, écris entre <code>\\( … \\)</code> — ex. <code>\\(R=\\sqrt{9}=3\\)</code>.</p>
+      <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin-bottom:1rem;">💡 Le bouton <strong>ƒ𝑥</strong> construit la formule pour toi. (Ou écris entre <code>\\( … \\)</code> si tu connais le LaTeX.)</p>
       <button onclick="saveCustomExo()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la question</button>
     </div>
 
@@ -534,6 +542,60 @@
         <button id="exo-reveal-btn" onclick="revealExoAnswer()" style="padding:10px 20px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">👁 Voir la réponse</button>
         <button onclick="nextExoReview()" style="padding:10px 20px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-weight:600; cursor:pointer;">Suivante →</button>
       </div>
+    </div>
+  </div>
+  </div><!-- /cre-pane-quiz -->
+
+  <!-- ════ 🎴 ONGLET FLASHCARDS PERSOS ════ -->
+  <div id="cre-pane-cards" style="display:none;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
+      <!-- Formulaire -->
+      <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
+        <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">➕ Nouvelle flashcard</h3>
+        <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Chapitre</label>
+        <select id="cre-card-theme" aria-label="Chapitre de la flashcard" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.9rem;"></select>
+        <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Recto — la question <button type="button" class="fx-mini" title="Insérer une formule" onclick="openFormulaComposer('cre-card-front')">ƒ𝑥 formule</button> <button type="button" class="fx-mini" title="Ajouter une image" onclick="crePickCardImg('front')">🖼️ image</button></label>
+        <textarea id="cre-card-front" rows="2" placeholder="Ex. : Formule du discriminant ?" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.4rem;"></textarea>
+        <span id="cre-img-front" class="cre-imgchip" style="display:none;"><img alt="aperçu recto"><button type="button" onclick="creCardImgClear('front')" aria-label="Retirer l'image du recto">✕</button></span>
+        <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin:0.5rem 0 4px;">Verso — la réponse <button type="button" class="fx-mini" title="Insérer une formule" onclick="openFormulaComposer('cre-card-back')">ƒ𝑥 formule</button> <button type="button" class="fx-mini" title="Ajouter une image" onclick="crePickCardImg('back')">🖼️ image</button></label>
+        <textarea id="cre-card-back" rows="2" placeholder="Ex. : ce qu'il faut retenir…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.4rem;"></textarea>
+        <span id="cre-img-back" class="cre-imgchip" style="display:none;"><img alt="aperçu verso"><button type="button" onclick="creCardImgClear('back')" aria-label="Retirer l'image du verso">✕</button></span>
+        <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin:0.5rem 0 1rem;">💡 Ta carte rejoint le paquet de l'onglet 🎴 Flashcards, avec la répétition espacée et les filtres par chapitre.</p>
+        <button onclick="saveCustomCard()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Créer la flashcard</button>
+      </div>
+      <!-- Liste -->
+      <div>
+        <button id="cre-cards-go" onclick="creGoFlashcards()" style="display:none; width:100%; margin-bottom:1rem; padding:10px; border-radius:10px; border:1px solid var(--color-parabole); background:var(--color-parabole-light); color:var(--color-parabole); font-size:14px; font-weight:700; cursor:pointer;">🎴 Réviser mes cartes dans l'onglet Flashcards →</button>
+        <div id="cre-card-list"></div>
+      </div>
+    </div>
+    <input type="file" id="cre-card-file" accept="image/*" style="display:none;" onchange="creCardFile(this)">
+  </div>
+
+  <!-- ════ 📜 ONGLET SYNTHÈSES PERSOS ════ -->
+  <div id="cre-pane-notes" style="display:none;">
+    <div id="cre-note-listwrap">
+      <button onclick="creNewNote()" style="padding:11px 22px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">➕ Nouvelle synthèse</button>
+      <div id="cre-note-list" style="margin-top:1.25rem;"></div>
+    </div>
+    <div id="cre-note-edit" style="display:none;">
+      <input id="cre-note-title" type="text" placeholder="Titre de ta synthèse… (ex. : Chimie — les dosages)" aria-label="Titre de la synthèse" style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:16px; font-weight:700; margin-bottom:0.75rem;">
+      <div class="note-toolbar">
+        <button type="button" class="nav-btn" onclick="creFormat('bold')" title="Gras"><b>B</b></button>
+        <button type="button" class="nav-btn" onclick="creFormat('italic')" title="Italique"><i>I</i></button>
+        <button type="button" class="nav-btn" onclick="creFormat('underline')" title="Souligné"><u>U</u></button>
+        <button type="button" class="nav-btn" onclick="creToggleChars()" title="Caractères spéciaux de tous les cours">Ω Caractères</button>
+        <button type="button" class="nav-btn" onclick="crePickNoteImg()" title="Insérer une image (compressée automatiquement)">🖼️ Image</button>
+        <button type="button" class="nav-btn" onclick="creOpenDraw()" title="Dessiner — le dessin devient une image de la synthèse">🎨 Dessin</button>
+        <button type="button" class="nav-btn" onclick="openFormulaComposer('cre-note')" title="Insérer une formule (fraction, racine…)">ƒ𝑥 Formule</button>
+      </div>
+      <div id="cre-chars" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:10px 12px; margin-bottom:8px;"></div>
+      <div id="cre-note-editor" class="note-editor" contenteditable="true" data-ph="Écris ta synthèse ici… Texte, images (🖼️ ou Ctrl+V), dessins 🎨, caractères spéciaux Ω et formules ƒ𝑥. Les formules s'affichent en beau rendu dans 👁 Lire." aria-label="Contenu de la synthèse"></div>
+      <div style="display:flex; gap:10px; margin-top:0.9rem; flex-wrap:wrap;">
+        <button onclick="creSaveNote()" style="flex:1; min-width:180px; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la synthèse</button>
+        <button onclick="creCloseEditor()" style="padding:11px 20px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-weight:600; cursor:pointer;">✕ Annuler</button>
+      </div>
+      <input type="file" id="cre-file" accept="image/*" style="display:none;" onchange="creNoteFile(this)">
     </div>
   </div>
 </div>
@@ -757,6 +819,7 @@
   <script src="multiplayer.js"></script>
   <script src="stats.js"></script>
   <script src="notes.js"></script>
+  <script src="creations.js"></script>
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>
