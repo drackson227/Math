@@ -294,6 +294,7 @@
   <button class="nav-btn" onclick="showSection(event,'erreurs')">⚠️ Erreurs fréquentes</button>
   <button class="nav-btn" onclick="showSection(event,'chat')" style="border-color:var(--color-parabole);">💬 Chat Mondial</button>
   <button class="nav-btn" onclick="showSection(event,'journal')">📓 Journal</button>
+  <button class="nav-btn" onclick="showSection(event,'notes')">📒 Bloc-notes</button>
   <button class="nav-btn" onclick="showSection(event,'profil')">👤 Mon profil</button>
   <button class="nav-btn" id="nav-stats" onclick="showSection(event,'stats')" style="display:none; border-color:var(--color-parabole);">📊 Stats (admin)</button>
 </nav>
@@ -613,6 +614,37 @@
   </div>
 </div>
 
+<div id="notes" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📒 Bloc-notes</h2>
+  <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:15px;">Comme sur Discord : un bloc-notes <strong>privé</strong> (toi seul) et un <strong>collectif</strong> (tout le monde, en direct). Écris, <strong>dessine</strong> 🎨, colle des <strong>images</strong> 🖼️ et insère les <strong>caractères spéciaux</strong> de tous les cours.</p>
+
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0.8rem;">
+    <button type="button" id="note-tab-prive" class="note-tab on" onclick="notesSwitch('prive')">🔒 Privé</button>
+    <button type="button" id="note-tab-collab" class="note-tab" onclick="notesSwitch('collectif')">🌍 Collectif</button>
+    <span style="flex:1;"></span>
+    <span id="note-status" style="font-size:12px; color:var(--text-secondary); align-self:center;"></span>
+  </div>
+
+  <div class="note-toolbar">
+    <button type="button" class="note-tool" onclick="notesOpenDraw()" title="Dessiner">🎨 Dessiner</button>
+    <button type="button" class="note-tool" onclick="notesPickImage()" title="Insérer une image">🖼️ Image</button>
+    <button type="button" class="note-tool" onclick="notesToggleChars()" title="Caractères spéciaux">Ω Caractères</button>
+  </div>
+  <div id="note-chars" style="display:none;"></div>
+  <input id="note-file" type="file" accept="image/*" style="display:none;" onchange="notesHandleFile(this.files[0]); this.value='';" aria-label="Insérer une image">
+
+  <div id="note-wrap-prive">
+    <div id="note-priv" class="note-editor" contenteditable="true" role="textbox" aria-multiline="true" data-ph="Écris ta note privée ici… (texte, images collées, dessins)"></div>
+    <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">🔒 Sauvegarde automatique — synchronisée sur ton compte.</p>
+  </div>
+
+  <div id="note-wrap-collab" style="display:none;">
+    <div id="note-collab-gate" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; padding:1.2rem; text-align:center; font-size:14.5px;"></div>
+    <div id="note-collab" class="note-editor" contenteditable="true" role="textbox" aria-multiline="true" data-ph="Bloc-notes de tout le monde — écris ici, tes camarades voient en direct…" style="display:none;"></div>
+    <p style="font-size:12px; color:var(--text-secondary); margin-top:6px;">🌍 Visible et modifiable par tous les comptes connectés · <span id="note-collab-by"></span></p>
+  </div>
+</div>
+
 <div id="stats" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📊 Statistiques du site</h2>
   <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:15px;">Espace privé : qui est connecté en direct, combien de personnes utilisent le site, et la dernière fois que chacun s'est connecté. 🔒 Toi seul vois cet onglet.</p>
@@ -724,6 +756,7 @@
   <script src="chat.js"></script>
   <script src="multiplayer.js"></script>
   <script src="stats.js"></script>
+  <script src="notes.js"></script>
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>

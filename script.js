@@ -232,7 +232,15 @@ function shuffleOptions(question) {
   return { opts: newOpts, ans: newAns };
 }
 
-function filterQuiz() {
+function filterQuiz(force) {
+  // ⚠️ GARDE ANTI-DÉSYNCHRONISATION : ne JAMAIS re-mélanger currentQuestions pendant
+  // qu'un quiz est affiché. Sinon l'écran montre un mélange (A) et la correction en
+  // vérifie un autre (B) → la vraie bonne réponse est comptée fausse. Seuls
+  // startQuiz/resetQuiz (qui re-rendent le DOM juste après) passent force=true.
+  if (force !== true) {
+    const _as = document.getElementById('quiz-active-screen');
+    if (_as && _as.style.display !== 'none') return;
+  }
   const chapterFilter = document.getElementById('chapter-filter').value;
   const difficultyFilter = document.getElementById('difficulty-filter').value;
   const data = loadSavedData();
@@ -376,6 +384,11 @@ function buildQuiz() {
   progEl.className = 'quiz-progress';
   container.appendChild(progEl);
 
+  // Instantané des questions RENDUES : answer()/skipQuestion() liront cette liste.
+  // Même si un code re-mélange currentQuestions entre-temps, la correction reste
+  // alignée sur ce qui est affiché à l'écran.
+  window._renderedQuestions = currentQuestions;
+
   currentQuestions.forEach((q, i) => {
     const div = document.createElement('div');
     div.className = 'quiz-q';
@@ -493,7 +506,7 @@ function answer(qi, chosen) {
   questionAnswered[qi] = true;
 
   clearInterval(timerIds[qi]);
-  const q = currentQuestions[qi];
+  const q = (window._renderedQuestions || currentQuestions)[qi];
   quizResults[qi] = (chosen === q.ans);
   const opts = document.querySelectorAll(`#opts-${qi} .opt`);
   opts.forEach((o,j) => {
@@ -580,7 +593,7 @@ function skipQuestion(qi) {
 
   skipped++;
   correctStreak = 0;
-  const q = currentQuestions[qi];
+  const q = (window._renderedQuestions || currentQuestions)[qi];
   quizResults[qi] = 'skip';
   const opts = document.querySelectorAll(`#opts-${qi} .opt`);
   opts.forEach(o => o.classList.add('disabled'));
@@ -1016,7 +1029,7 @@ function updateScore() {
 }
 
 function startQuiz() {
-  if (!missedOnlyMode) filterQuiz();
+  if (!missedOnlyMode) filterQuiz(true);
   missedOnlyMode = false; // Reset flag
   if (currentQuestions.length === 0) {
     // Filtre (chapitre + difficulté) sans aucune question : on prévient au lieu de ne rien faire.
@@ -1060,7 +1073,7 @@ function resetQuiz() {
   // Si on est sur l'écran actif, rebuilder; sinon revenir à l'accueil
   const activeScreen = document.getElementById('quiz-active-screen');
   if (activeScreen && activeScreen.style.display !== 'none') {
-    filterQuiz();
+    filterQuiz(true);
     buildQuiz();
   } else {
     startQuiz();
@@ -1433,6 +1446,7 @@ function showSection(evtOrId, id) {
   if (sectionId === 'progression') renderProgression();
   if (sectionId === 'chat' && typeof initChat === 'function') initChat();
   if (sectionId === 'stats' && typeof initStats === 'function') initStats();
+  if (sectionId === 'notes' && typeof initNotes === 'function') initNotes();
   // Onglets bonus (extraTabs) propres à une matière : on prévient le module concerné.
   if ((sectionId === 'extra1' || sectionId === 'extra2') && typeof window.onShowExtraTab === 'function') {
     try { window.onShowExtraTab(sectionId); } catch (e) {}
