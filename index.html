@@ -434,7 +434,7 @@
 
 <div id="quiz" class="section">
   <!-- Écran d'accueil quiz -->
-  <div id="quiz-start-screen" style="text-align:center; padding:3rem 1rem;">
+  <div id="quiz-start-screen" style="text-align:center; padding:1.25rem 1rem 2rem;">
     <div style="font-size:64px; margin-bottom:1rem;">🧠</div>
     <h2 id="quiz-title" style="font-size:28px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem;">Quiz — Maths GR2</h2>
     <p id="quiz-subtitle" style="color:var(--text-secondary); margin-bottom:2rem;">Teste tes connaissances sur les vecteurs, le cercle et les droites.</p>
@@ -606,12 +606,14 @@
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creFormat('underline')" title="Souligné"><u>U</u></button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creFontSize(-1)" title="Texte plus petit (sélectionne d'abord le texte)">A−</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creFontSize(1)" title="Texte plus grand (sélectionne d'abord le texte)">A+</button>
+            <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creToggleColors()" title="Couleur du texte sélectionné">🎨</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creToggleChars()" title="Caractères spéciaux de tous les cours">Ω Caractères</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="crePickNoteImg()" title="Insérer une image (compressée automatiquement)">🖼️ Image</button>
             <button type="button" id="cre-draw-btn" class="nav-btn" onmousedown="event.preventDefault()" onclick="creOpenDraw()" title="Mode stylo : dessine PAR-DESSUS ton texte, au même endroit (comme le tableau Discord)">🖊️ Stylo</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creAddTextBox()" title="Un bloc de texte libre que tu attrapes et déplaces où tu veux sur la page">🔲 Texte libre</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="openFormulaComposer('cre-note')" title="Insérer une formule (fraction, racine…)">ƒ𝑥 Formule</button>
           </div>
+          <div id="cre-colors" style="display:none;"></div>
           <div id="cre-chars" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:10px 12px; margin-bottom:8px;"></div>
           <div id="cre-board-frame">
             <div id="cre-note-wrap">

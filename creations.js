@@ -44,8 +44,9 @@
           if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
           if (c.tagName === 'IMG' && a.name === 'alt') return; // garde la formule LaTeX d'origine
           if (c.tagName === 'IMG' && a.name === 'class' && a.value === 'cre-fx-img') return; // image-formule ƒ𝑥
-          // tailles de texte A− / A+ : seul style accepté, format strict
-          if (c.tagName === 'SPAN' && a.name === 'style' && /^font-size:\s*\d{1,2}px;?$/i.test(a.value.trim())) return;
+          // tailles A−/A+ et couleurs 🎨 du texte : seuls styles acceptés, format strict
+          // (#hex OU rgb(…) : les navigateurs normalisent les couleurs en rgb)
+          if (c.tagName === 'SPAN' && a.name === 'style' && /^(font-size:\s*\d{1,2}px|color:\s*(#[0-9a-f]{3,8}|rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)))\s*;?\s*$/i.test(a.value.trim())) return;
           c.removeAttribute(a.name);
         });
         if (c.tagName === 'IMG' && c.className !== 'cre-fx-img') c.className = 'note-img';
@@ -538,6 +539,40 @@
       idx = Math.min(FONT_STEPS.length - 1, Math.max(0, idx + (dir > 0 ? 1 : -1)));
       var span = document.createElement('span');
       span.style.fontSize = FONT_STEPS[idx] + 'px';
+      while (f.firstChild) span.appendChild(f.firstChild);
+      f.parentNode.replaceChild(span, f);
+    });
+    boardChanged();
+  };
+
+  /* ---------- 🎨 COULEUR DU TEXTE (comme Discord) ----------
+     Petit panneau de pastilles ; la couleur s'applique à la sélection,
+     dans l'éditeur principal OU dans un bloc déplaçable. */
+  var TEXT_COLORS = ['#e9e6ff', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171'];
+  window.creToggleColors = function () {
+    exitInk();
+    var p = el('cre-colors'); if (!p) return;
+    var open = p.style.display !== 'none';
+    p.style.display = open ? 'none' : 'flex';
+    if (!open && !p.innerHTML) {
+      p.innerHTML = '<span class="cre-colors-lab">Sélectionne du texte puis choisis :</span>' +
+        TEXT_COLORS.map(function (c) {
+          return '<button type="button" class="nd-col" style="background:' + c + '" onmousedown="event.preventDefault()" onclick="creTextColor(\'' + c + '\')" aria-label="Couleur du texte ' + c + '"></button>';
+        }).join('');
+    }
+    if (!open) { var ch = el('cre-chars'); if (ch) ch.style.display = 'none'; }
+  };
+  window.creTextColor = function (col) {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    try { document.execCommand('styleWithCSS', false, false); } catch (e) {}
+    try { document.execCommand('foreColor', false, col); } catch (e) { return; }
+    // le <font color> posé par le navigateur → <span style="color:…"> propre
+    var scope = el('cre-note-wrap') || document;
+    scope.querySelectorAll('font[color]').forEach(function (f) {
+      var span = document.createElement('span');
+      span.style.color = f.getAttribute('color');
       while (f.firstChild) span.appendChild(f.firstChild);
       f.parentNode.replaceChild(span, f);
     });
@@ -1194,7 +1229,9 @@
       var svg = holder.querySelector('svg');
       if (!svg) return null;
       var ref = activeEd() || document.body, cs = getComputedStyle(ref);
-      svg.setAttribute('color', cs.color || '#e9e6ff'); // la formule prend la couleur du texte
+      // couleur FIXE claire : lisible sur les thèmes sombres ; le thème Clair
+      // l'inverse en CSS (body.theme-light img.cre-fx-img → filter invert)
+      svg.setAttribute('color', '#e9e6ff');
       var exPx = (parseFloat(cs.fontSize) || 16) * 0.52;  // 1ex ≈ moitié de la taille du texte
       var w = Math.max(8, Math.ceil((parseFloat(svg.getAttribute('width')) || 4) * exPx));
       var h = Math.max(8, Math.ceil((parseFloat(svg.getAttribute('height')) || 2) * exPx));
