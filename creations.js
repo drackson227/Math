@@ -42,9 +42,13 @@
         }
         [].slice.call(c.attributes).forEach(function (a) {
           if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
+          if (c.tagName === 'IMG' && a.name === 'alt') return; // garde la formule LaTeX d'origine
+          if (c.tagName === 'IMG' && a.name === 'class' && a.value === 'cre-fx-img') return; // image-formule ƒ𝑥
+          // tailles de texte A− / A+ : seul style accepté, format strict
+          if (c.tagName === 'SPAN' && a.name === 'style' && /^font-size:\s*\d{1,2}px;?$/i.test(a.value.trim())) return;
           c.removeAttribute(a.name);
         });
-        if (c.tagName === 'IMG') c.className = 'note-img';
+        if (c.tagName === 'IMG' && c.className !== 'cre-fx-img') c.className = 'note-img';
         walk(c);
       });
     })(root);
@@ -229,24 +233,72 @@
     _editId = id; openEditor(n.title, n.html, n.strokes, n.boxes);
   };
   function openEditor(title, html, strokes, boxes) {
-    var t = el('cre-note-title'), ed = el('cre-note-editor');
+    var t = el('cre-note-title');
     if (t) t.value = title || '';
-    if (ed) ed.innerHTML = sanitize(html || '');
     var box = el('cre-note-edit'); if (box) box.style.display = '';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = 'none';
-    wireEditor();
-    // calque dessin + blocs de texte libres de cette synthèse
-    _ink.strokes = validStrokes(strokes);
-    _ink.redo = []; _ink.cur = null; _ink.on = false; _ink.pan = null;
-    clearBoxes();
-    validBoxes(boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html); });
-    window._creLastEd = ed;
-    window.creZoom(0);            // on repart à 100%
-    window.creToggleFull(false);  // et en mode normal
-    ensureInk();
-    applyInkMode();
+    // le studio (tableau Discord partagé) se monte ici, chargé avec cette synthèse
+    window.creBoardMount(el('cre-board-home'), { html: html, strokes: strokes, boxes: boxes }, {});
+    var ed = el('cre-note-editor');
     if (t && !title) t.focus(); else if (ed) ed.focus();
   }
+
+  /* ════════════════ 🧩 STUDIO PARTAGÉ (tableau Discord montable) ════════════════
+     Le même tableau (outils + zoom + stylo + blocs) sert à DEUX endroits :
+     l'éditeur de synthèses ET le Bloc-notes privé. creBoardMount() déplace le
+     studio dans son hôte et charge l'état ; onChange (si fourni) reçoit l'état
+     complet à chaque modification (avec un petit délai) → sauvegarde auto. */
+  var _boardOnChange = null, _boardChTimer = null;
+  function boardChanged() {
+    if (!_boardOnChange) return;
+    clearTimeout(_boardChTimer);
+    _boardChTimer = setTimeout(function () {
+      if (_boardOnChange) { try { _boardOnChange(window.creBoardState()); } catch (e) {} }
+    }, 600);
+  }
+  // largeur de référence SANS l'espace vide à droite (sinon la lecture rétrécit tout)
+  function trimInkW(strokes, boxes) {
+    var used = 0;
+    (strokes || []).forEach(function (st) {
+      if (st.a && st.b) { used = Math.max(used, st.a[0], st.b[0]); }
+      (st.pts || []).forEach(function (p) { used = Math.max(used, p[0]); });
+    });
+    (boxes || []).forEach(function (b) { used = Math.max(used, b.x + 240); });
+    var wrap = el('cre-note-wrap');
+    var baseW = (wrap && wrap.clientWidth) || 600;
+    return Math.max(320, Math.min(_ink.inkW || baseW, Math.max(baseW, used + 60)));
+  }
+  window.creBoardState = function () {
+    if (_ink.cur) inkUp(); // un trait encore « en cours » compte aussi
+    var ed = el('cre-note-editor');
+    var strokes = _ink.strokes || [], boxes = serializeBoxes();
+    return { html: sanitize(ed ? ed.innerHTML : ''), strokes: strokes, boxes: boxes, inkW: trimInkW(strokes, boxes) };
+  };
+  window.creBoardMount = function (host, state, opts) {
+    var studio = el('cre-studio');
+    if (!studio || !host) return false;
+    // l'hôte précédent sauve ses dernières modifs avant qu'on recharge le tableau
+    clearTimeout(_boardChTimer);
+    if (_boardOnChange) { try { _boardOnChange(window.creBoardState()); } catch (e) {} }
+    _boardOnChange = null;
+    window.creToggleFull(false);
+    if (studio.parentNode !== host) host.appendChild(studio);
+    var ed = el('cre-note-editor');
+    if (ed) ed.innerHTML = sanitize((state && state.html) || '');
+    wireEditor();
+    _ink.strokes = validStrokes(state && state.strokes);
+    _ink.redo = []; _ink.cur = null; _ink.on = false; _ink.pan = null;
+    _ink.ext = { w: 0, h: 0 };
+    _ink.tool = 'pen'; // nouveau tableau → on repart au stylo (pas la main ni la gomme)
+    clearBoxes();
+    validBoxes(state && state.boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html, true); });
+    window._creLastEd = ed;
+    window.creZoom(0);  // on repart à 100%
+    ensureInk();
+    applyInkMode();
+    _boardOnChange = (opts && opts.onChange) || null;
+    return true;
+  };
   function closeEditor() {
     window.creToggleFull(false);
     var box = el('cre-note-edit'); if (box) box.style.display = 'none';
@@ -273,11 +325,12 @@
     var d = loadSavedData();
     d.customNotes = d.customNotes || [];
     var now = new Date().toISOString();
+    var inkW = trimInkW(strokes, boxes);
     if (_editId) {
       var n = d.customNotes.find(function (x) { return x.id === _editId; });
-      if (n) { n.title = title; n.html = html; n.strokes = strokes; n.boxes = boxes; n.inkW = _ink.inkW; n.updated = now; }
+      if (n) { n.title = title; n.html = html; n.strokes = strokes; n.boxes = boxes; n.inkW = inkW; n.updated = now; }
     } else {
-      d.customNotes.unshift({ id: Date.now(), subject: subj(), title: title, html: html, strokes: strokes, boxes: boxes, inkW: _ink.inkW, created: now, updated: now });
+      d.customNotes.unshift({ id: Date.now(), subject: subj(), title: title, html: html, strokes: strokes, boxes: boxes, inkW: inkW, created: now, updated: now });
     }
     saveData(d);
     closeEditor(); renderCustomNotes();
@@ -366,6 +419,7 @@
     range.insertNode(node);
     range.setStartAfter(node); range.collapse(true);
     if (sel) { sel.removeAllRanges(); sel.addRange(range); }
+    boardChanged();
   }
 
   /* ---------- 🔲 TEXTE LIBRE : des blocs qu'on attrape et qu'on déplace ----------
@@ -384,26 +438,44 @@
     var bd = board(); if (!bd) return;
     bd.querySelectorAll('.cre-tbox').forEach(function (b) { b.remove(); });
   }
-  window.creAddTextBox = function (x, y, html) {
-    var wrap = board(); if (!wrap) return null;
-    var n = wrap.querySelectorAll('.cre-tbox').length;
+  window.creAddTextBox = function (x, y, html, quiet) {
+    var bd = board(); if (!bd) return null;
+    if (!quiet) exitInk(); // le stylo se désactive : on passe en mode texte
+    var n = bd.querySelectorAll('.cre-tbox').length;
+    if (x == null) {
+      // nouveau bloc au CENTRE de la vue actuelle (pas dans un coin)
+      var wrap = el('cre-note-wrap'), k0 = zScale();
+      if (wrap) {
+        x = Math.max(10, (wrap.scrollLeft + wrap.clientWidth / 2) / k0 - 80 + (n % 4) * 20);
+        y = Math.max(10, (wrap.scrollTop + wrap.clientHeight / 2) / k0 - 50 + (n % 4) * 20);
+      } else { x = 30; y = 30; }
+    }
     var box = document.createElement('div');
     box.className = 'cre-tbox';
-    box.style.left = (x != null ? x : 30 + (n % 6) * 26) + 'px';
-    box.style.top = (y != null ? y : 30 + (n % 6) * 26 + wrap.scrollTop) + 'px';
+    box.style.left = x + 'px';
+    box.style.top = y + 'px';
     box.innerHTML =
       '<span class="cre-tbox-grip" title="Attraper pour déplacer">⠿</span>' +
       '<button type="button" class="cre-tbox-x" title="Supprimer ce bloc">✕</button>' +
       '<div class="cre-tbox-body" contenteditable="true" data-ph="Écris ici…"></div>';
-    wrap.appendChild(box);
+    bd.appendChild(box); // sur le TABLEAU (positions relatives au tableau, pas au cadre)
     var body = box.querySelector('.cre-tbox-body');
     if (html) body.innerHTML = sanitize(html);
+    body.addEventListener('input', boardChanged);
     // cliquer n'importe où sur le bloc → focus (le cadre + poignée apparaissent)
     box.addEventListener('pointerdown', function (e) {
       if (e.target === box) { body.focus(); }
     });
+    // un bloc resté VIDE disparaît tout seul quand on clique ailleurs (comme Discord)
+    body.addEventListener('blur', function () {
+      setTimeout(function () {
+        if (!document.body.contains(box)) return;
+        var has = body.textContent.trim() || body.querySelector('img');
+        if (!has && !box.contains(document.activeElement)) box.remove();
+      }, 150);
+    });
     // suppression
-    box.querySelector('.cre-tbox-x').addEventListener('click', function () { box.remove(); });
+    box.querySelector('.cre-tbox-x').addEventListener('click', function () { box.remove(); boardChanged(); });
     // déplacement à la poignée (souris + tactile via Pointer Events)
     var grip = box.querySelector('.cre-tbox-grip');
     grip.addEventListener('pointerdown', function (e) {
@@ -420,13 +492,13 @@
         grip.removeEventListener('pointermove', mv);
         grip.removeEventListener('pointerup', up);
         grip.removeEventListener('pointercancel', up);
+        boardChanged(); // nouvelle position → sauvegarde auto (Bloc-notes)
       }
       grip.addEventListener('pointermove', mv);
       grip.addEventListener('pointerup', up);
       grip.addEventListener('pointercancel', up);
     });
-    body.focus();
-    window._creLastEd = body;
+    if (!quiet) { body.focus(); window._creLastEd = body; }
     return box;
   };
   function serializeBoxes() {
@@ -443,11 +515,37 @@
   }
 
   window.creFormat = function (cmd) {
-    var ed = el('cre-note-editor');
+    exitInk();
+    var ed = activeEd();
     if (ed) { ed.focus(); try { document.execCommand(cmd); } catch (e) {} }
+  };
+
+  /* ---------- 🔠 TAILLE DU TEXTE : A− / A+ sur la sélection ----------
+     Marche dans le texte principal ET dans les blocs déplaçables. */
+  var FONT_STEPS = [12, 15, 19, 24, 30];
+  window.creFontSize = function (dir) {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    try { document.execCommand('fontSize', false, '7'); } catch (e) { return; }
+    // l'astuce classique : le <font size=7> posé par le navigateur est converti
+    // en <span style="font-size:..px"> propre, une taille au-dessus/en-dessous
+    var scope = el('cre-note-wrap') || document;
+    scope.querySelectorAll('font[size="7"]').forEach(function (f) {
+      var cur = parseFloat(getComputedStyle(f.parentElement).fontSize) || 15;
+      var idx = 0, best = 99;
+      FONT_STEPS.forEach(function (s, i) { if (Math.abs(s - cur) < best) { best = Math.abs(s - cur); idx = i; } });
+      idx = Math.min(FONT_STEPS.length - 1, Math.max(0, idx + (dir > 0 ? 1 : -1)));
+      var span = document.createElement('span');
+      span.style.fontSize = FONT_STEPS[idx] + 'px';
+      while (f.firstChild) span.appendChild(f.firstChild);
+      f.parentNode.replaceChild(span, f);
+    });
+    boardChanged();
   };
   window.creInsertChar = function (ch) { edInsert(ch); };
   window.creToggleChars = function () {
+    exitInk();
     var p = el('cre-chars'); if (!p) return;
     var open = p.style.display !== 'none';
     p.style.display = open ? 'none' : 'block';
@@ -461,7 +559,7 @@
       }).join('');
     }
   };
-  window.crePickNoteImg = function () { var i = el('cre-file'); if (i) { i.value = ''; i.click(); } };
+  window.crePickNoteImg = function () { exitInk(); var i = el('cre-file'); if (i) { i.value = ''; i.click(); } };
   window.creNoteFile = function (input) {
     var f = input.files && input.files[0];
     if (!f || !/^image\//.test(f.type)) return;
@@ -477,7 +575,7 @@
      Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
      n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
      sauvegardés avec la synthèse et redessinés à l'identique. */
-  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null };
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 } };
   var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand'];
 
   // données de traits sûres (rechargées depuis la sauvegarde) — compatible anciens formats
@@ -525,6 +623,7 @@
       cv.addEventListener('pointerup', inkUp);
       cv.addEventListener('pointercancel', inkUp);
       ed.addEventListener('input', inkResizeSoon);
+      ed.addEventListener('input', boardChanged);
       window.addEventListener('resize', inkResizeSoon);
       // Ctrl + molette = zoom du tableau (comme un vrai tableau interactif)
       wrap.addEventListener('wheel', function (e) {
@@ -532,6 +631,20 @@
         e.preventDefault();
         window.creZoom(e.deltaY < 0 ? 1 : -1);
       }, { passive: false });
+      // 🤏 pincer à deux doigts = zoomer / dézoomer (mobile et tablette)
+      var pinch = null;
+      function pdist(t) { var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY; return Math.sqrt(dx * dx + dy * dy); }
+      wrap.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 2) pinch = pdist(e.touches);
+      }, { passive: true });
+      wrap.addEventListener('touchmove', function (e) {
+        if (pinch == null || e.touches.length !== 2) return;
+        e.preventDefault();
+        var d = pdist(e.touches);
+        if (d / pinch > 1.12) { window.creZoom(1); pinch = d; }
+        else if (d / pinch < 0.89) { window.creZoom(-1); pinch = d; }
+      }, { passive: false });
+      wrap.addEventListener('touchend', function () { pinch = null; });
       // double-clic sur le FOND du tableau → nouveau bloc de texte à cet endroit (comme Discord)
       bd.addEventListener('dblclick', function (e) {
         if (e.target !== bd || _ink.on) return;
@@ -554,10 +667,12 @@
     // barre horizontale parasite. Zoomé → on navigue dedans (molette / 🖐️).
     var z = _zoom || 1;
     var wrapW = wrap.clientWidth || 600, wrapH = wrap.clientHeight || 420;
-    bd.style.minHeight = Math.round(Math.max(360, wrapH / z)) + 'px';
+    var ext = _ink.ext || { w: 0, h: 0 };
+    bd.style.minHeight = Math.round(Math.max(360, wrapH / z) + ext.h) + 'px';
     // dézoom → planche élargie (plus de place) ; zoom → largeur logique figée
-    // pour pouvoir NAVIGUER dedans (molette, barres, outil 🖐️)
-    bd.style.width = (z < 1) ? Math.round(wrapW / z) + 'px' : (z > 1 ? wrapW + 'px' : '');
+    // pour pouvoir NAVIGUER dedans. + l'agrandissement gagné avec la main 🖐️
+    var baseW = (z < 1) ? Math.round(wrapW / z) : wrapW;
+    bd.style.width = (ext.w || z !== 1) ? (baseW + ext.w) + 'px' : '';
     var w = bd.clientWidth || wrapW;
     var h = Math.max(ed.scrollHeight, bd.clientHeight, 340);
     if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
@@ -577,6 +692,7 @@
     if (_ink.tool === 'hand') { // 🖐 main : on déplace la vue du tableau
       var wrap = el('cre-note-wrap');
       _ink.pan = { x: e.clientX, y: e.clientY, sl: wrap.scrollLeft, st: wrap.scrollTop };
+      _ink.canvas.style.cursor = 'grabbing';
       return;
     }
     var p = inkPos(e);
@@ -589,13 +705,34 @@
   function inkMove(e) {
     if (_ink.pan) {
       var wrap = el('cre-note-wrap');
-      wrap.scrollLeft = _ink.pan.sl - (e.clientX - _ink.pan.x);
-      wrap.scrollTop = _ink.pan.st - (e.clientY - _ink.pan.y);
+      var wantL = _ink.pan.sl - (e.clientX - _ink.pan.x);
+      var wantT = _ink.pan.st - (e.clientY - _ink.pan.y);
+      // tableau « sans fin » : tirer au-delà du bord droit/bas → la planche S'AGRANDIT
+      // (la main marche donc à TOUS les zooms, même quand tout est déjà visible)
+      var z = _zoom || 1, grew = false;
+      var overX = wantL + wrap.clientWidth - wrap.scrollWidth;
+      var overY = wantT + wrap.clientHeight - wrap.scrollHeight;
+      if (overX > 0 && _ink.ext.w < 4000) { _ink.ext.w = Math.min(4000, _ink.ext.w + Math.ceil(overX / z) + 260); grew = true; }
+      if (overY > 0 && _ink.ext.h < 4000) { _ink.ext.h = Math.min(4000, _ink.ext.h + Math.ceil(overY / z) + 260); grew = true; }
+      if (grew) inkResize();
+      wrap.scrollLeft = wantL;
+      wrap.scrollTop = wantT;
       return;
     }
     if (!_ink.cur) return;
     var p = inkPos(e);
     if (_ink.cur.a) { // forme : le 2e coin suit la souris (aperçu en direct)
+      if (e.shiftKey) { // Maj = forme PARFAITE : carré, cercle, ligne aimantée à 45°
+        var dx = p[0] - _ink.cur.a[0], dy = p[1] - _ink.cur.a[1];
+        if (_ink.cur.t === 'rect' || _ink.cur.t === 'ellipse') {
+          var m = Math.max(Math.abs(dx), Math.abs(dy));
+          p = [_ink.cur.a[0] + (dx < 0 ? -m : m), _ink.cur.a[1] + (dy < 0 ? -m : m)];
+        } else {
+          var ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+          var len = Math.sqrt(dx * dx + dy * dy);
+          p = [Math.round(_ink.cur.a[0] + len * Math.cos(ang)), Math.round(_ink.cur.a[1] + len * Math.sin(ang))];
+        }
+      }
       _ink.cur.b = p;
     } else {
       var last = _ink.cur.pts[_ink.cur.pts.length - 1];
@@ -605,7 +742,7 @@
     inkRedraw();
   }
   function inkUp() {
-    if (_ink.pan) { _ink.pan = null; return; }
+    if (_ink.pan) { _ink.pan = null; if (_ink.canvas) _ink.canvas.style.cursor = 'grab'; return; }
     if (!_ink.cur) return;
     // forme quasi nulle (simple clic) → ignorée
     var keep = _ink.cur.a
@@ -614,6 +751,7 @@
     if (keep) { _ink.strokes.push(_ink.cur); _ink.redo = []; }
     _ink.cur = null;
     inkRedraw();
+    if (keep) boardChanged();
   }
   function replayStroke(c, st, k) {
     var t = st.t || (st.e ? 'erase' : 'pen');
@@ -668,6 +806,10 @@
     applyInkMode();
     if (_ink.on) toast('🖊️ Stylo : dessine par-dessus le texte');
   };
+  // quitter le mode stylo (appelé par tous les outils « texte » : le stylo se désactive)
+  function exitInk() {
+    if (_ink.on) { _ink.on = false; applyInkMode(); }
+  }
   function applyInkMode() {
     var wrap = el('cre-note-wrap'), cv = el('cre-ink'), tools = el('cre-ink-tools');
     var btn = el('cre-draw-btn');
@@ -722,13 +864,13 @@
     });
     el('cre-ink-size').addEventListener('input', function () { _ink.size = +this.value; });
     el('cre-ink-undo').addEventListener('click', function () {
-      var st = _ink.strokes.pop(); if (st) _ink.redo.push(st); inkRedraw();
+      var st = _ink.strokes.pop(); if (st) _ink.redo.push(st); inkRedraw(); boardChanged();
     });
     el('cre-ink-redo').addEventListener('click', function () {
-      var st = _ink.redo.pop(); if (st) _ink.strokes.push(st); inkRedraw();
+      var st = _ink.redo.pop(); if (st) _ink.strokes.push(st); inkRedraw(); boardChanged();
     });
     el('cre-ink-clear').addEventListener('click', function () {
-      _ink.redo = _ink.strokes.reverse(); _ink.strokes = []; inkRedraw();
+      _ink.redo = _ink.strokes.reverse(); _ink.strokes = []; inkRedraw(); boardChanged();
     });
     el('cre-ink-done').addEventListener('click', function () { _ink.on = false; applyInkMode(); var ed = el('cre-note-editor'); if (ed) ed.focus(); });
     syncInkTools();
@@ -759,19 +901,39 @@
 
   /* ---------- ⛶ GRAND ÉCRAN : le tableau prend toute la fenêtre ---------- */
   window.creToggleFull = function (force) {
-    var panel = el('cre-note-edit'); if (!panel) return;
+    var studio = el('cre-studio'); if (!studio) return;
+    // le panneau à agrandir dépend de l'hôte : synthèse OU bloc-notes privé
+    var panel = studio.closest('#cre-note-edit, #note-wrap-prive') || studio;
     var on = (force !== undefined) ? !!force : !panel.classList.contains('cre-full');
+    // si un AUTRE panneau était resté en grand écran, on le libère d'abord
+    document.querySelectorAll('.cre-full').forEach(function (p) { if (p !== panel) p.classList.remove('cre-full'); });
+    document.querySelectorAll('.cre-full-host').forEach(function (s) { s.classList.remove('cre-full-host'); });
     panel.classList.toggle('cre-full', on);
     // le transform d'animation de la section piégerait le position:fixed → neutralisé
-    var sec = el('mesexos'); if (sec) sec.classList.toggle('cre-full-host', on);
+    var sec = studio.closest('.section');
+    if (sec && on) sec.classList.add('cre-full-host');
     var b = el('cre-full-btn'); if (b) b.classList.toggle('active', on);
     try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
     inkResizeSoon();
   };
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-      var panel = el('cre-note-edit');
-      if (panel && panel.classList.contains('cre-full')) window.creToggleFull(false);
+      if (document.querySelector('.cre-full')) window.creToggleFull(false);
+    }
+    // ↩️ Ctrl+Z / ↪️ Ctrl+Y (ou Ctrl+Shift+Z) sur le DESSIN quand le stylo est actif
+    if (_ink.on && (e.ctrlKey || e.metaKey)) {
+      var cv = el('cre-ink');
+      if (!cv || !cv.offsetParent) return; // tableau pas affiché
+      var k = (e.key || '').toLowerCase();
+      if (k === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        var s = _ink.strokes.pop(); if (s) _ink.redo.push(s);
+        inkRedraw(); boardChanged();
+      } else if (k === 'y' || (k === 'z' && e.shiftKey)) {
+        e.preventDefault();
+        var r = _ink.redo.pop(); if (r) _ink.strokes.push(r);
+        inkRedraw(); boardChanged();
+      }
     }
   });
 
@@ -847,17 +1009,38 @@
     i.addEventListener('keyup', sync);
     i.addEventListener('mouseup', sync);
     i.addEventListener('focus', function () { _fx.lastInput = i; sync(); });
+    // Entrée n'importe où = la formule est insérée directement
+    i.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); window.fxInsert(); }
+    });
     return i;
   }
 
-  window.fxAdd = function (type) {
+  window.fxAdd = function (type, opts) {
     var row = el('fx-row'); if (!row) return;
-    var item = { type: type, slots: [] };
+    opts = opts || {};
+    var item = { type: type, slots: [], pad: !!opts.pad };
     var wrap = document.createElement('span');
     wrap.className = 'fx-item fx-' + type;
     if (type === 'text') {
-      var ti = slotInput('1+1');
+      var ti = slotInput(opts.pad ? '…' : '1+1');
       item.slots = [ti]; wrap.appendChild(ti);
+      // ⌫ dans une case texte VIDE → la case s'enlève, le curseur recule sur le bloc d'avant
+      ti.addEventListener('keydown', function (e) {
+        if (e.key !== 'Backspace' || ti.value) return;
+        var idx = _fx.items.indexOf(item);
+        if (idx <= 0) return;
+        e.preventDefault();
+        _fx.items.splice(idx, 1);
+        wrap.remove();
+        var prev = _fx.items[idx - 1];
+        var s = prev && prev.slots[prev.slots.length - 1];
+        if (s) {
+          s.focus();
+          try { s.setSelectionRange(s.value.length, s.value.length); s._caret = s.value.length; } catch (err) {}
+        }
+        schedPrev();
+      });
     } else if (type === 'frac') {
       var num = slotInput('haut'), den = slotInput('bas');
       var top = document.createElement('span'); top.className = 'fx-num'; top.appendChild(num);
@@ -889,11 +1072,25 @@
     });
     wrap.appendChild(x);
     item.el = wrap;
-    _fx.items.push(item);
-    row.appendChild(wrap);
-    item.slots[0].focus();
+    // si une petite case « … » traîne en fin de ligne, le nouveau bloc se glisse AVANT elle
+    var last = _fx.items[_fx.items.length - 1];
+    if (!opts.pad && last && last.pad && last.type === 'text' && !last.slots[0].value) {
+      row.insertBefore(wrap, last.el);
+      _fx.items.splice(_fx.items.length - 1, 0, item);
+    } else {
+      row.appendChild(wrap);
+      _fx.items.push(item);
+    }
+    if (type !== 'text') ensurePad(); // toujours une case texte prête À DROITE des blocs
+    if (!opts.noFocus) item.slots[0].focus();
     schedPrev();
   };
+  // garantit qu'on peut toujours écrire à droite du dernier bloc (case « … »)
+  function ensurePad() {
+    var last = _fx.items[_fx.items.length - 1];
+    if (last && last.type === 'text' && !last.slots[0].value) { last.pad = true; return; }
+    window.fxAdd('text', { pad: true, noFocus: true });
+  }
 
   function slotTex(input, emptyAs) {
     var v = input.value.trim();
@@ -953,7 +1150,7 @@
       '<div class="fx-box">' +
         '<div class="fx-head"><b>ƒ𝑥 Créer une formule</b>' +
           '<button type="button" class="cre-view-x" onclick="fxClose()" aria-label="Fermer" style="position:static;">✕</button></div>' +
-        '<p class="fx-help">Ajoute des blocs et remplis les cases — pour une fraction, la barre se place toute seule entre le haut et le bas 😉 Astuce : écris <b>1+1</b> plutôt que « 1 plus 1 ».</p>' +
+        '<p class="fx-help">Ajoute des blocs et remplis les cases — pour une fraction, la barre se place toute seule entre le haut et le bas 😉 Tu peux <b>cliquer à côté des blocs</b> pour continuer à écrire, et <b>Entrée</b> insère la formule.</p>' +
         '<div class="fx-add">' +
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'text\')">✏️ texte</button>' +
           '<button type="button" class="fx-addbtn" onclick="fxAdd(\'frac\')"><span class="fx-minifrac"><span>a</span><span>b</span></span> fraction</button>' +
@@ -977,6 +1174,39 @@
       '</div>';
     document.body.appendChild(ov);
     ov.addEventListener('click', function (e) { if (e.target === ov) window.fxClose(); });
+    // clic sur le FOND de la ligne (à droite des blocs) → on écrit là, tout simplement
+    el('fx-row').addEventListener('mousedown', function (e) {
+      if (e.target !== this) return;
+      e.preventDefault();
+      var last = _fx.items[_fx.items.length - 1];
+      if (last && last.type === 'text' && !last.slots[0].value) last.slots[0].focus();
+      else window.fxAdd('text');
+    });
+  }
+
+  /* La formule devient une VRAIE image (SVG MathJax) directement dans le tableau —
+     fini le \( … \) en texte brut dans l'éditeur. L'image garde la formule LaTeX
+     dans son attribut alt, et survit au nettoyage anti-XSS (classe cre-fx-img). */
+  function texToImg(tex) {
+    try {
+      if (!window.MathJax || typeof MathJax.tex2svg !== 'function') return null;
+      var holder = MathJax.tex2svg(tex, { display: false });
+      var svg = holder.querySelector('svg');
+      if (!svg) return null;
+      var ref = activeEd() || document.body, cs = getComputedStyle(ref);
+      svg.setAttribute('color', cs.color || '#e9e6ff'); // la formule prend la couleur du texte
+      var exPx = (parseFloat(cs.fontSize) || 16) * 0.52;  // 1ex ≈ moitié de la taille du texte
+      var w = Math.max(8, Math.ceil((parseFloat(svg.getAttribute('width')) || 4) * exPx));
+      var h = Math.max(8, Math.ceil((parseFloat(svg.getAttribute('height')) || 2) * exPx));
+      svg.setAttribute('width', w + 'px');
+      svg.setAttribute('height', h + 'px');
+      var xml = new XMLSerializer().serializeToString(svg);
+      var img = document.createElement('img');
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml);
+      img.alt = tex;
+      img.className = 'cre-fx-img';
+      return img;
+    } catch (e) { return null; }
   }
 
   window.fxClear = function () {
@@ -993,8 +1223,10 @@
     _fx.savedRange = null;
     _fx.targetCaret = null;
     if (target === 'cre-note') {
-      var sel = window.getSelection(), ed = el('cre-note-editor');
-      if (sel && sel.rangeCount && ed && ed.contains(sel.getRangeAt(0).commonAncestorContainer)) {
+      exitInk(); // ouvrir l'éditeur de formule désactive le stylo
+      // curseur mémorisé dans l'éditeur principal OU dans un bloc déplaçable
+      var sel = window.getSelection(), zone = activeEd();
+      if (sel && sel.rangeCount && zone && zone.contains(sel.getRangeAt(0).commonAncestorContainer)) {
         _fx.savedRange = sel.getRangeAt(0).cloneRange();
       }
     } else if (target) {
@@ -1017,14 +1249,16 @@
     if (!tex) { toast('⚠️ La formule est vide', '#f87171'); return; }
     var str = '\\(' + tex + '\\)';
     if (_fx.target === 'cre-note') {
-      var ed = el('cre-note-editor');
+      var ed = activeEd();
       if (ed) {
         ed.focus();
         if (_fx.savedRange) {
           var sel = window.getSelection();
           if (sel) { sel.removeAllRanges(); sel.addRange(_fx.savedRange); }
         }
-        edInsert(' ' + str + ' ');
+        var img = texToImg(tex);
+        if (img) { edInsert(img); edInsert(' '); } // belle formule rendue + espace pour continuer
+        else edInsert(' ' + str + ' ');            // repli si MathJax pas encore chargé
       }
     } else {
       var f = el(_fx.target);

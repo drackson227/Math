@@ -755,13 +755,22 @@ img { max-width: 100%; height: auto; }
    (cliquer plusieurs fois vite ne surligne plus la page) */
 button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, .nd-tool { -webkit-user-select: none; user-select: none; }
 
-/* ═══ Navigation GROUPÉE : étiquettes de famille entre les boutons ═══
-   Desktop : étiquettes EN LIGNE (la nav garde sa hauteur compacte) ;
-   mobile (tiroir en colonne) : titres de groupe pleine largeur. */
-.nav-lab { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); opacity: 0.7; padding: 0 2px 0 10px; border-left: 2px solid var(--border-subtle); user-select: none; white-space: nowrap; }
-.nav-lab:first-child { border-left: none; padding-left: 2px; }
+/* ═══ Navigation GROUPÉE en ÎLOTS : l'étiquette et ses boutons restent ensemble ═══
+   Desktop : chaque famille est une petite « carte » arrondie → plus jamais
+   d'étiquette orpheline coincée en bout de ligne quand la nav se replie.
+   Mobile (tiroir en colonne) : les îlots disparaissent (display:contents),
+   les titres de groupe redeviennent des séparateurs pleine largeur. */
+.nav { gap: 10px; }
+.nav-grp {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 6px 10px 6px 8px; border: 1px solid var(--border-subtle);
+  border-radius: 16px; background: rgba(167, 139, 250, 0.04);
+}
+.nav-grp .nav-btn { margin: 0; }
+.nav-lab { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); opacity: 0.7; padding: 0 4px; user-select: none; white-space: nowrap; }
 @media (max-width: 768px) {
-  .nav-lab { flex-basis: 100%; align-self: auto; border-left: none; margin-top: 10px; padding: 0 4px 2px; border-bottom: 1px solid var(--border-subtle); font-size: 11px; }
+  .nav-grp { display: contents; }
+  .nav-lab { flex-basis: 100%; align-self: auto; margin-top: 10px; padding: 0 4px 2px; border-bottom: 1px solid var(--border-subtle); font-size: 11px; }
 }
 
 /* ═══ Matières repliables sur mobile : un bouton « 📐 Maths ▾ » remplace les 4 rangées ═══ */
@@ -828,10 +837,21 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
   .cre-ink-sep { display: none; }
   #cre-zoom-pill { right: 8px; bottom: auto; top: 8px; }
 }
-/* ⛶ grand écran : le panneau entier (titre + outils + tableau) prend la fenêtre */
-#mesexos.cre-full-host { transform: none !important; animation: none !important; }
-#cre-note-edit.cre-full { position: fixed; inset: 0; z-index: 2900; background: var(--bg-main); padding: 14px 18px; overflow: auto; display: block !important; }
+/* ⛶ grand écran : le panneau (outils + tableau) prend la fenêtre.
+   Générique : marche dans Mes créations ET dans le Bloc-notes privé. */
+.section.cre-full-host { transform: none !important; animation: none !important; }
+.cre-full { position: fixed; inset: 0; z-index: 2900; background: var(--bg-main); padding: 14px 18px; overflow: auto; display: block !important; }
 #cre-note-edit.cre-full #cre-note-wrap { height: calc(100vh - 235px); }
+#note-wrap-prive.cre-full #cre-note-wrap { height: calc(100vh - 160px); }
+/* 🧮 image-formule ƒ𝑥 : EN LIGNE dans le texte (pas en bloc comme les photos) */
+.note-editor img.cre-fx-img, .cre-tbox-body img.cre-fx-img, .cre-view-body img.cre-fx-img, .cre-card-face img.cre-fx-img {
+  display: inline-block; vertical-align: middle; max-width: 100%;
+  margin: 0 2px; border-radius: 0; background: transparent;
+}
+/* le tableau dans le Bloc-notes : un peu plus haut (pas de titre ni de boutons dessous) */
+#note-board-host #cre-note-wrap { height: 66vh; }
+/* la ligne de blocs du compositeur ƒ𝑥 invite à écrire (clic à côté des blocs = texte) */
+.fx-row { cursor: text; }
 .nd-col.on { border-color: #fff; transform: scale(1.18); }
 #cre-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; touch-action: none; }
 #cre-note-wrap.inking { outline: 2px dashed var(--color-nav); outline-offset: 3px; }

@@ -286,6 +286,45 @@
     } catch (e) {}
   }
 
+  /* ---------- 🔒 PRIVÉ = le MÊME tableau Discord que Mes créations ----------
+     Le studio partagé (stylo par-dessus le texte, blocs déplaçables, zoom,
+     grand écran, main 🖐️…) se monte ici, avec SAUVEGARDE AUTOMATIQUE :
+     texte → data.notesPrivate (compatible ancien format),
+     dessin + blocs → data.notesBoard. */
+  function mountBoard() {
+    var host = el('note-board-host');
+    if (!host || typeof window.creBoardMount !== 'function') {
+      // repli : ancien éditeur simple (si creations.js absent)
+      var ed = el('note-priv');
+      if (ed && !ed._loaded) {
+        ed._loaded = true;
+        ed.innerHTML = sanitize(loadSavedData().notesPrivate || '');
+      }
+      wire('note-priv');
+      return;
+    }
+    if (host.querySelector('#cre-studio')) return; // déjà monté ici
+    var d = loadSavedData();
+    var b = d.notesBoard || {};
+    window.creBoardMount(host, {
+      html: d.notesPrivate || '',
+      strokes: b.strokes || [], boxes: b.boxes || [], inkW: b.inkW || 0
+    }, { onChange: saveBoard });
+  }
+  function saveBoard(state) {
+    if (!state) return;
+    var inkLen = 0;
+    try { inkLen = JSON.stringify(state.strokes || []).length + JSON.stringify(state.boxes || []).length; } catch (e) {}
+    if ((state.html || '').length + inkLen > MAX_NOTE_BYTES) {
+      toast('Note trop lourde — supprime une image ou simplifie le dessin 🖼️', '#f87171'); return;
+    }
+    var d = loadSavedData();
+    d.notesPrivate = state.html || '';
+    d.notesBoard = { strokes: state.strokes || [], boxes: state.boxes || [], inkW: state.inkW || 0 };
+    saveData(d);
+    var st = el('note-status'); if (st) st.textContent = '💾 Enregistré';
+  }
+
   /* ---------- UI : onglets + init ---------- */
   window.notesSwitch = function (tab) {
     _tab = tab;
@@ -297,6 +336,7 @@
     if (wc) wc.style.display = tab === 'collectif' ? 'block' : 'none';
     var st = el('note-status'); if (st) st.textContent = '';
     if (tab === 'collectif') loadCollab();
+    else mountBoard(); // le studio revient s'il était parti dans Mes créations
   };
 
   function wire(edId) {
@@ -308,14 +348,8 @@
   }
 
   window.initNotes = function () {
-    // charge la note privée
-    var ed = el('note-priv');
-    if (ed && !ed._loaded) {
-      ed._loaded = true;
-      var d = loadSavedData();
-      ed.innerHTML = sanitize(d.notesPrivate || '');
-    }
-    wire('note-priv'); wire('note-collab');
+    mountBoard();
+    wire('note-collab');
     if (_tab === 'collectif') loadCollab();
   };
 
