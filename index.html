@@ -592,11 +592,15 @@
         <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creFormat('underline')" title="Souligné"><u>U</u></button>
         <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creToggleChars()" title="Caractères spéciaux de tous les cours">Ω Caractères</button>
         <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="crePickNoteImg()" title="Insérer une image (compressée automatiquement)">🖼️ Image</button>
-        <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creOpenDraw()" title="La zone d'écriture devient une zone de dessin (re-clic = retour à l'écriture)">🎨 Dessin</button>
+        <button type="button" id="cre-draw-btn" class="nav-btn" onmousedown="event.preventDefault()" onclick="creOpenDraw()" title="Mode stylo : dessine PAR-DESSUS ton texte, au même endroit (comme le tableau Discord)">🖊️ Stylo</button>
+        <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creAddTextBox()" title="Un bloc de texte libre que tu attrapes et déplaces où tu veux sur la page">🔲 Texte libre</button>
         <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="openFormulaComposer('cre-note')" title="Insérer une formule (fraction, racine…)">ƒ𝑥 Formule</button>
       </div>
+      <div id="cre-ink-tools" class="note-toolbar" style="display:none; align-items:center; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:12px; padding:8px 10px;"></div>
       <div id="cre-chars" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:10px 12px; margin-bottom:8px;"></div>
-      <div id="cre-note-editor" class="note-editor" contenteditable="true" data-ph="Écris ta synthèse ici… Texte, images (🖼️ ou Ctrl+V), dessins 🎨, caractères spéciaux Ω et formules ƒ𝑥. Les formules s'affichent en beau rendu dans 👁 Lire." aria-label="Contenu de la synthèse"></div>
+      <div id="cre-note-wrap">
+        <div id="cre-note-editor" class="note-editor" contenteditable="true" data-ph="Écris ta synthèse ici… Texte, images (🖼️ ou Ctrl+V), stylo 🖊️ PAR-DESSUS le texte, blocs déplaçables 🔲, caractères Ω et formules ƒ𝑥." aria-label="Contenu de la synthèse"></div>
+      </div>
       <div style="display:flex; gap:10px; margin-top:0.9rem; flex-wrap:wrap;">
         <button onclick="creSaveNote()" style="flex:1; min-width:180px; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la synthèse</button>
         <button onclick="creCloseEditor()" style="padding:11px 20px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; font-weight:600; cursor:pointer;">✕ Annuler</button>

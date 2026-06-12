@@ -222,28 +222,35 @@
     }).join('');
   }
 
-  window.creNewNote = function () { _editId = null; openEditor('', ''); };
+  window.creNewNote = function () { _editId = null; openEditor('', '', [], []); };
   window.creEditNote = function (id) {
     var n = (loadSavedData().customNotes || []).find(function (x) { return x.id === id; });
     if (!n) return;
-    _editId = id; openEditor(n.title, n.html);
+    _editId = id; openEditor(n.title, n.html, n.strokes, n.boxes);
   };
-  function openEditor(title, html) {
+  function openEditor(title, html, strokes, boxes) {
     var t = el('cre-note-title'), ed = el('cre-note-editor');
     if (t) t.value = title || '';
-    if (ed) { ed.innerHTML = sanitize(html || ''); ed.style.display = ''; }
-    var dr = el('cre-draw'); if (dr) dr.style.display = 'none'; // jamais en mode dessin à l'ouverture
+    if (ed) ed.innerHTML = sanitize(html || '');
     var box = el('cre-note-edit'); if (box) box.style.display = '';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = 'none';
     wireEditor();
+    // calque dessin + blocs de texte libres de cette synthèse
+    _ink.strokes = validStrokes(strokes);
+    _ink.cur = null; _ink.on = false;
+    clearBoxes();
+    validBoxes(boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html); });
+    window._creLastEd = ed;
+    ensureInk();
+    applyInkMode();
     if (t && !title) t.focus(); else if (ed) ed.focus();
   }
   function closeEditor() {
     var box = el('cre-note-edit'); if (box) box.style.display = 'none';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = '';
     var p = el('cre-chars'); if (p) p.style.display = 'none';
-    var dr = el('cre-draw'); if (dr) dr.style.display = 'none';
-    var ed = el('cre-note-editor'); if (ed) ed.style.display = '';
+    _ink.on = false; _ink.cur = null;
+    applyInkMode();
   }
   window.creCloseEditor = closeEditor;
 
@@ -251,22 +258,27 @@
     var t = el('cre-note-title'), ed = el('cre-note-editor');
     var title = t ? t.value.trim() : '';
     if (!title) { toast('⚠️ Donne un titre à ta synthèse', '#f87171'); if (t) t.focus(); return; }
+    if (_ink.cur) inkUp(); // un trait encore « en cours » est gardé aussi
     var html = sanitize(ed ? ed.innerHTML : '');
-    var hasContent = ed && (ed.textContent.trim() || ed.querySelector('img'));
-    if (!hasContent) { toast('⚠️ La synthèse est vide', '#f87171'); return; }
-    if (html.length > MAX_NOTE_BYTES) { toast('Synthèse trop lourde — enlève une image 🖼️', '#f87171'); return; }
+    var strokes = _ink.strokes || [];
+    var boxes = serializeBoxes();
+    var hasContent = (ed && (ed.textContent.trim() || ed.querySelector('img'))) || strokes.length || boxes.length;
+    if (!hasContent) { toast('⚠️ La synthèse est vide (ni texte, ni dessin)', '#f87171'); return; }
+    var inkLen = 0;
+    try { inkLen = JSON.stringify(strokes).length + JSON.stringify(boxes).length; } catch (e) {}
+    if (html.length + inkLen > MAX_NOTE_BYTES) { toast('Synthèse trop lourde — enlève une image ou simplifie le dessin 🖼️', '#f87171'); return; }
     var d = loadSavedData();
     d.customNotes = d.customNotes || [];
     var now = new Date().toISOString();
     if (_editId) {
       var n = d.customNotes.find(function (x) { return x.id === _editId; });
-      if (n) { n.title = title; n.html = html; n.updated = now; }
+      if (n) { n.title = title; n.html = html; n.strokes = strokes; n.boxes = boxes; n.inkW = _ink.inkW; n.updated = now; }
     } else {
-      d.customNotes.unshift({ id: Date.now(), subject: subj(), title: title, html: html, created: now, updated: now });
+      d.customNotes.unshift({ id: Date.now(), subject: subj(), title: title, html: html, strokes: strokes, boxes: boxes, inkW: _ink.inkW, created: now, updated: now });
     }
     saveData(d);
     closeEditor(); renderCustomNotes();
-    toast('✅ Synthèse enregistrée');
+    toast('✅ Synthèse enregistrée (texte + dessin)');
   };
 
   window.creDeleteNote = function (id) {
@@ -289,15 +301,58 @@
       ov.addEventListener('click', function (e) { if (e.target === ov) window.creCloseView(); });
     }
     el('cre-view-title').textContent = n.title;
-    el('cre-view-body').innerHTML = sanitize(n.html);
+    var body = el('cre-view-body');
+    body.innerHTML = sanitize(n.html);
     ov.style.display = 'flex';
-    if (typeof safeMathJax === 'function') safeMathJax([el('cre-view-body')]);
+    if (typeof safeMathJax === 'function') safeMathJax([body]);
+    // recompose la page : blocs déplacés + calque dessin, à l'échelle de la fenêtre
+    var strokes = validStrokes(n.strokes), boxes = validBoxes(n.boxes);
+    if (strokes.length || boxes.length) {
+      setTimeout(function () {
+        if (ov.style.display === 'none') return;
+        var k = (n.inkW > 0 && body.clientWidth) ? body.clientWidth / n.inkW : 1;
+        body.style.position = 'relative';
+        boxes.forEach(function (b) {
+          var d = document.createElement('div');
+          d.className = 'cre-tbox cre-tbox-view';
+          d.style.left = Math.round(b.x * k) + 'px';
+          d.style.top = Math.round(b.y * k) + 'px';
+          d.innerHTML = b.html;
+          body.appendChild(d);
+        });
+        // hauteur utile = texte + blocs + traits
+        var maxY = body.scrollHeight;
+        strokes.forEach(function (st) { (st.pts || []).forEach(function (p) { maxY = Math.max(maxY, p[1] * k + 30); }); });
+        if (maxY > body.scrollHeight) { body.style.minHeight = Math.ceil(maxY) + 'px'; }
+        if (strokes.length) {
+          var cv = document.createElement('canvas');
+          cv.className = 'cre-view-ink';
+          cv.width = body.clientWidth; cv.height = Math.ceil(maxY);
+          body.appendChild(cv);
+          var c = cv.getContext('2d');
+          strokes.forEach(function (st) { replayStroke(c, st, k); });
+        }
+        if (typeof safeMathJax === 'function') safeMathJax([body]);
+      }, 350);
+    }
   };
   window.creCloseView = function () { var ov = el('cre-view-ov'); if (ov) ov.style.display = 'none'; };
 
   /* ---------- éditeur de synthèse : caret, mise en forme, Ω, image, dessin, collage ---------- */
+  // dernière zone d'écriture utilisée : l'éditeur principal OU un bloc de texte libre
+  function activeEd() {
+    var last = window._creLastEd;
+    if (last && document.body.contains(last)) return last;
+    return el('cre-note-editor');
+  }
+  document.addEventListener('focusin', function (e) {
+    if (e.target && e.target.closest) {
+      var z = e.target.closest('#cre-note-editor, .cre-tbox-body');
+      if (z) window._creLastEd = z;
+    }
+  });
   function edInsert(nodeOrText) {
-    var ed = el('cre-note-editor'); if (!ed) return;
+    var ed = activeEd(); if (!ed) return;
     ed.focus();
     var sel = window.getSelection();
     var range = (sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).commonAncestorContainer))
@@ -308,6 +363,75 @@
     range.insertNode(node);
     range.setStartAfter(node); range.collapse(true);
     if (sel) { sel.removeAllRanges(); sel.addRange(range); }
+  }
+
+  /* ---------- 🔲 TEXTE LIBRE : des blocs qu'on attrape et qu'on déplace ----------
+     Comme sur le tableau Discord : un bloc de texte posé N'IMPORTE OÙ sur la page,
+     qu'on saisit par la poignée ⠿ pour le déplacer (même par-dessus le dessin). */
+  function validBoxes(arr) {
+    if (!Array.isArray(arr)) return [];
+    var out = [];
+    arr.forEach(function (b) {
+      if (!b) return;
+      out.push({ x: Math.max(0, Number(b.x) || 0), y: Math.max(0, Number(b.y) || 0), html: sanitize(b.html || '') });
+    });
+    return out;
+  }
+  function clearBoxes() {
+    var wrap = el('cre-note-wrap'); if (!wrap) return;
+    wrap.querySelectorAll('.cre-tbox').forEach(function (b) { b.remove(); });
+  }
+  window.creAddTextBox = function (x, y, html) {
+    var wrap = el('cre-note-wrap'); if (!wrap) return null;
+    var n = wrap.querySelectorAll('.cre-tbox').length;
+    var box = document.createElement('div');
+    box.className = 'cre-tbox';
+    box.style.left = (x != null ? x : 30 + (n % 6) * 26) + 'px';
+    box.style.top = (y != null ? y : 30 + (n % 6) * 26 + wrap.scrollTop) + 'px';
+    box.innerHTML =
+      '<span class="cre-tbox-grip" title="Attraper pour déplacer">⠿</span>' +
+      '<button type="button" class="cre-tbox-x" title="Supprimer ce bloc">✕</button>' +
+      '<div class="cre-tbox-body" contenteditable="true" data-ph="Écris ici…"></div>';
+    wrap.appendChild(box);
+    var body = box.querySelector('.cre-tbox-body');
+    if (html) body.innerHTML = sanitize(html);
+    // suppression
+    box.querySelector('.cre-tbox-x').addEventListener('click', function () { box.remove(); });
+    // déplacement à la poignée (souris + tactile via Pointer Events)
+    var grip = box.querySelector('.cre-tbox-grip');
+    grip.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      try { grip.setPointerCapture(e.pointerId); } catch (err) {}
+      var startX = e.clientX, startY = e.clientY;
+      var baseL = parseInt(box.style.left, 10) || 0, baseT = parseInt(box.style.top, 10) || 0;
+      function mv(ev) {
+        box.style.left = Math.max(0, baseL + ev.clientX - startX) + 'px';
+        box.style.top = Math.max(0, baseT + ev.clientY - startY) + 'px';
+      }
+      function up() {
+        grip.removeEventListener('pointermove', mv);
+        grip.removeEventListener('pointerup', up);
+        grip.removeEventListener('pointercancel', up);
+      }
+      grip.addEventListener('pointermove', mv);
+      grip.addEventListener('pointerup', up);
+      grip.addEventListener('pointercancel', up);
+    });
+    body.focus();
+    window._creLastEd = body;
+    return box;
+  };
+  function serializeBoxes() {
+    var wrap = el('cre-note-wrap'); if (!wrap) return [];
+    var out = [];
+    wrap.querySelectorAll('.cre-tbox').forEach(function (b) {
+      var body = b.querySelector('.cre-tbox-body');
+      var html = sanitize(body ? body.innerHTML : '');
+      var hasContent = body && (body.textContent.trim() || body.querySelector('img'));
+      if (!hasContent) return; // les blocs vides ne sont pas gardés
+      out.push({ x: parseInt(b.style.left, 10) || 0, y: parseInt(b.style.top, 10) || 0, html: html });
+    });
+    return out;
   }
 
   window.creFormat = function (cmd) {
@@ -339,92 +463,159 @@
       edInsert(img);
     });
   };
-  /* ---------- 🎨 DESSIN INLINE : on dessine AU MÊME ENDROIT qu'on écrit ----------
-     Pas de fenêtre séparée : la zone d'écriture se transforme en toile de dessin.
-     « Ajouter » insère le dessin là où était le curseur et on retrouve l'écriture. */
-  var _cd = { canvas: null, ctx: null, drawing: false, color: '#a78bfa', size: 4, erase: false, range: null };
+  /* ---------- 🎨 DESSIN « façon Discord » : texte ET dessin SUPERPOSÉS ----------
+     Un calque transparent recouvre la zone d'écriture. Mode ✏️ texte : le calque
+     laisse passer les clics, on écrit normalement (et on voit le dessin dessus).
+     Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
+     n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
+     sauvegardés avec la synthèse et redessinés à l'identique. */
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], cur: null, canvas: null, ctx: null, inkW: 0 };
 
-  function cdReset() {
-    if (!_cd.ctx) return;
-    _cd.ctx.fillStyle = '#11131f';
-    _cd.ctx.fillRect(0, 0, _cd.canvas.width, _cd.canvas.height);
+  // données de traits sûres (rechargées depuis la sauvegarde)
+  function validStrokes(arr) {
+    if (!Array.isArray(arr)) return [];
+    var out = [];
+    arr.forEach(function (st) {
+      if (!st || !Array.isArray(st.pts)) return;
+      var pts = st.pts.map(function (p) { return [Number(p[0]) || 0, Number(p[1]) || 0]; });
+      if (pts.length) out.push({ c: String(st.c || '#a78bfa').slice(0, 20), s: Math.min(40, Number(st.s) || 4), e: st.e ? 1 : 0, pts: pts });
+    });
+    return out;
   }
-  function cdStroke(e, start) {
-    var r = _cd.canvas.getBoundingClientRect();
-    var x = (e.clientX - r.left) * (_cd.canvas.width / r.width);
-    var y = (e.clientY - r.top) * (_cd.canvas.height / r.height);
-    var c = _cd.ctx;
-    c.strokeStyle = _cd.erase ? '#11131f' : _cd.color;
-    c.lineWidth = _cd.erase ? _cd.size * 4 : _cd.size;
+
+  function ensureInk() {
+    var wrap = el('cre-note-wrap'), ed = el('cre-note-editor');
+    if (!wrap || !ed) return null;
+    var cv = el('cre-ink');
+    if (!cv) {
+      cv = document.createElement('canvas');
+      cv.id = 'cre-ink';
+      wrap.appendChild(cv);
+      _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
+      cv.addEventListener('pointerdown', inkDown);
+      cv.addEventListener('pointermove', inkMove);
+      cv.addEventListener('pointerup', inkUp);
+      cv.addEventListener('pointercancel', inkUp);
+      ed.addEventListener('input', inkResizeSoon);
+      window.addEventListener('resize', inkResizeSoon);
+    }
+    _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
+    inkResize();
+    return cv;
+  }
+  var _inkRz = null;
+  function inkResizeSoon() { clearTimeout(_inkRz); _inkRz = setTimeout(inkResize, 120); }
+  function inkResize() {
+    var wrap = el('cre-note-wrap'), cv = _ink.canvas, ed = el('cre-note-editor');
+    if (!wrap || !cv || !ed) return;
+    var w = wrap.clientWidth || 600;
+    var h = Math.max(ed.scrollHeight, wrap.clientHeight, 280);
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    cv.style.height = h + 'px';
+    _ink.inkW = w;
+    inkRedraw();
+  }
+  function inkPos(e) {
+    var r = _ink.canvas.getBoundingClientRect();
+    return [Math.round(e.clientX - r.left), Math.round(e.clientY - r.top)];
+  }
+  function inkDown(e) {
+    if (!_ink.on) return;
+    e.preventDefault();
+    try { _ink.canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    var p = inkPos(e);
+    _ink.cur = { c: _ink.color, s: _ink.size, e: _ink.tool === 'erase' ? 1 : 0, pts: [p] };
+    drawSeg(_ink.cur, p, [p[0] + 0.01, p[1] + 0.01]);
+  }
+  function inkMove(e) {
+    if (!_ink.cur) return;
+    var p = inkPos(e);
+    var last = _ink.cur.pts[_ink.cur.pts.length - 1];
+    if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 3) return; // allège la sauvegarde
+    drawSeg(_ink.cur, last, p);
+    _ink.cur.pts.push(p);
+  }
+  function inkUp() {
+    if (!_ink.cur) return;
+    _ink.strokes.push(_ink.cur);
+    _ink.cur = null;
+  }
+  function drawSeg(st, a, b) {
+    var c = _ink.ctx; if (!c) return;
+    c.globalCompositeOperation = st.e ? 'destination-out' : 'source-over';
+    c.strokeStyle = st.c; c.lineWidth = st.e ? st.s * 4 : st.s;
     c.lineCap = 'round'; c.lineJoin = 'round';
-    if (start) { c.beginPath(); c.moveTo(x, y); c.lineTo(x + 0.01, y + 0.01); }
-    else c.lineTo(x, y);
+    c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+  }
+  function replayStroke(c, st, k) {
+    c.globalCompositeOperation = st.e ? 'destination-out' : 'source-over';
+    c.strokeStyle = st.c || '#a78bfa';
+    c.lineWidth = (st.e ? (st.s || 4) * 4 : (st.s || 4)) * k;
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    var pts = st.pts || []; if (!pts.length) return;
+    c.beginPath();
+    c.moveTo(pts[0][0] * k, pts[0][1] * k);
+    if (pts.length === 1) c.lineTo(pts[0][0] * k + 0.01, pts[0][1] * k + 0.01);
+    for (var i = 1; i < pts.length; i++) c.lineTo(pts[i][0] * k, pts[i][1] * k);
     c.stroke();
   }
-  function buildInlineDraw() {
-    if (el('cre-draw')) return;
-    var ed = el('cre-note-editor'); if (!ed) return;
-    var host = document.createElement('div');
-    host.id = 'cre-draw';
-    host.style.display = 'none';
-    host.innerHTML =
-      '<div class="nd-tools">' +
-        ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171', '#ffffff', '#000000'].map(function (c) {
-          return '<button type="button" class="nd-col" data-c="' + c + '" style="background:' + c + '" aria-label="couleur"></button>';
-        }).join('') +
-        '<button type="button" class="nd-tool" id="cre-nd-erase" title="Gomme">🧹</button>' +
-        '<input type="range" id="cre-nd-size" min="2" max="18" value="4" title="Épaisseur" aria-label="Épaisseur du trait">' +
-        '<button type="button" class="nd-tool" id="cre-nd-clear" title="Tout effacer">🗑️</button>' +
-      '</div>' +
-      '<canvas id="cre-canvas" width="900" height="430"></canvas>' +
-      '<div class="nd-actions">' +
-        '<button type="button" class="nd-btn" id="cre-nd-cancel">✕ Annuler le dessin</button>' +
-        '<button type="button" class="nd-btn nd-btn-ok" id="cre-nd-add">✅ Ajouter à ma synthèse</button>' +
-      '</div>';
-    ed.parentNode.insertBefore(host, ed.nextSibling);
-    var cv = el('cre-canvas');
-    _cd.canvas = cv; _cd.ctx = cv.getContext('2d');
-    cdReset();
-    cv.addEventListener('pointerdown', function (e) { _cd.drawing = true; cv.setPointerCapture(e.pointerId); cdStroke(e, true); });
-    cv.addEventListener('pointermove', function (e) { if (_cd.drawing) cdStroke(e, false); });
-    cv.addEventListener('pointerup', function () { _cd.drawing = false; });
-    host.querySelectorAll('.nd-col').forEach(function (b) {
-      b.addEventListener('click', function () { _cd.color = b.dataset.c; _cd.erase = false; el('cre-nd-erase').classList.remove('on'); });
-    });
-    el('cre-nd-erase').addEventListener('click', function () { _cd.erase = !_cd.erase; this.classList.toggle('on', _cd.erase); });
-    el('cre-nd-size').addEventListener('input', function () { _cd.size = +this.value; });
-    el('cre-nd-clear').addEventListener('click', cdReset);
-    el('cre-nd-cancel').addEventListener('click', creCloseDraw);
-    el('cre-nd-add').addEventListener('click', function () {
-      var img = document.createElement('img');
-      img.src = _cd.canvas.toDataURL('image/png'); img.className = 'note-img';
-      creCloseDraw();
-      if (_cd.range) {
-        var sel = window.getSelection();
-        if (sel) { sel.removeAllRanges(); sel.addRange(_cd.range); }
-      }
-      edInsert(img);
-      toast('🎨 Dessin ajouté à ta synthèse');
-    });
+  function inkRedraw() {
+    var c = _ink.ctx; if (!c || !_ink.canvas) return;
+    c.clearRect(0, 0, _ink.canvas.width, _ink.canvas.height);
+    _ink.strokes.forEach(function (st) { replayStroke(c, st, 1); });
   }
-  function creCloseDraw() {
-    var dr = el('cre-draw'); if (dr) dr.style.display = 'none';
-    var ed = el('cre-note-editor'); if (ed) { ed.style.display = ''; ed.focus(); }
-  }
+
+  /* bouton 🎨 de la barre d'outils : bascule texte ↔ stylo (même zone !) */
   window.creOpenDraw = function () {
-    var ed = el('cre-note-editor'); if (!ed) return;
-    var dr = el('cre-draw');
-    if (dr && dr.style.display !== 'none') { creCloseDraw(); return; } // re-clic = retour à l'écriture
-    // on retient où on écrivait, pour insérer le dessin au même endroit
-    var sel = window.getSelection();
-    _cd.range = (sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).commonAncestorContainer))
-      ? sel.getRangeAt(0).cloneRange() : null;
-    buildInlineDraw();
-    cdReset(); // toile vierge à chaque ouverture
-    var p = el('cre-chars'); if (p) p.style.display = 'none';
-    ed.style.display = 'none';
-    el('cre-draw').style.display = '';
+    var cv = ensureInk(); if (!cv) return;
+    _ink.on = !_ink.on;
+    applyInkMode();
+    if (_ink.on) toast('🖊️ Mode stylo : dessine par-dessus ton texte — « ✏️ Revenir au texte » pour réécrire');
   };
+  function applyInkMode() {
+    var wrap = el('cre-note-wrap'), cv = el('cre-ink'), tools = el('cre-ink-tools');
+    var btn = el('cre-draw-btn');
+    if (!wrap || !cv) return;
+    wrap.classList.toggle('inking', _ink.on);
+    cv.style.pointerEvents = _ink.on ? 'auto' : 'none';
+    if (tools) tools.style.display = _ink.on ? 'flex' : 'none';
+    if (btn) btn.classList.toggle('active', _ink.on);
+    if (_ink.on) {
+      buildInkTools();
+      var p = el('cre-chars'); if (p) p.style.display = 'none';
+    }
+  }
+  function buildInkTools() {
+    var t = el('cre-ink-tools');
+    if (!t) return;
+    if (t._built) { syncInkTools(); return; }
+    t._built = true;
+    t.innerHTML =
+      ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171', '#ffffff'].map(function (c) {
+        return '<button type="button" class="nd-col" data-c="' + c + '" style="background:' + c + '" aria-label="couleur"></button>';
+      }).join('') +
+      '<button type="button" class="nd-tool" id="cre-ink-pen" title="Stylo">🖊️</button>' +
+      '<button type="button" class="nd-tool" id="cre-ink-erase" title="Gomme — n\'efface que le dessin, jamais le texte">🧽</button>' +
+      '<input type="range" id="cre-ink-size" min="2" max="18" value="4" aria-label="Épaisseur du trait">' +
+      '<button type="button" class="nd-tool" id="cre-ink-undo" title="Annuler le dernier trait">↩️</button>' +
+      '<button type="button" class="nd-tool" id="cre-ink-clear" title="Effacer tout le dessin">🗑️</button>' +
+      '<button type="button" class="nd-btn nd-btn-ok" id="cre-ink-done" style="margin-left:auto;">✏️ Revenir au texte</button>';
+    t.querySelectorAll('.nd-col').forEach(function (b) {
+      b.addEventListener('click', function () { _ink.color = b.dataset.c; _ink.tool = 'pen'; syncInkTools(); });
+    });
+    el('cre-ink-pen').addEventListener('click', function () { _ink.tool = 'pen'; syncInkTools(); });
+    el('cre-ink-erase').addEventListener('click', function () { _ink.tool = 'erase'; syncInkTools(); });
+    el('cre-ink-size').addEventListener('input', function () { _ink.size = +this.value; });
+    el('cre-ink-undo').addEventListener('click', function () { _ink.strokes.pop(); inkRedraw(); });
+    el('cre-ink-clear').addEventListener('click', function () { _ink.strokes = []; inkRedraw(); });
+    el('cre-ink-done').addEventListener('click', function () { _ink.on = false; applyInkMode(); var ed = el('cre-note-editor'); if (ed) ed.focus(); });
+    syncInkTools();
+  }
+  function syncInkTools() {
+    var p = el('cre-ink-pen'), g = el('cre-ink-erase');
+    if (p) p.classList.toggle('on', _ink.tool === 'pen');
+    if (g) g.classList.toggle('on', _ink.tool === 'erase');
+  }
 
   function wireEditor() {
     var ed = el('cre-note-editor');
