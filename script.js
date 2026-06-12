@@ -5567,3 +5567,11 @@ function renderProgressCharts() {
     var b = document.getElementById('install-btn'); if (b) b.remove();
   });
 })();
+
+// ── Anti « fond blanc » ──────────────────────────────────────
+// Cliquer plusieurs fois très vite sur un bouton déclenchait la sélection
+// double/triple-clic du navigateur : tout le texte autour devenait surligné
+// (la page paraissait blanche). On bloque la sélection à partir du 2e clic.
+document.addEventListener('mousedown', function (e) {
+  if (e.detail > 1 && e.target && e.target.closest && e.target.closest('button, .nav-btn')) e.preventDefault();
+});

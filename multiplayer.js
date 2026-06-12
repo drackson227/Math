@@ -167,7 +167,12 @@
 
   window.mpStart = function () {
     if (!st.isHost) return;
-    sb().from(R_ROOMS).update({ status: 'playing', q_index: 0 }).eq('code', st.code).then(function (r) { if (r.error) toast('Erreur démarrage', '#f87171'); });
+    sb().from(R_ROOMS).update({ status: 'playing', q_index: 0 }).eq('code', st.code).then(function (r) {
+      if (r.error) { toast('Erreur démarrage', '#f87171'); return; }
+      // avance locale immédiate pour l'hôte (le temps réel confirme juste derrière)
+      st.room = Object.assign({}, st.room, { status: 'playing', q_index: 0 });
+      render();
+    });
   };
 
   /* ---------- question en direct ---------- */
@@ -239,8 +244,15 @@
   window.mpNext = function () {
     if (!st.isHost) return;
     var next = st.room.q_index + 1;
-    if (next >= st.room.questions.length) sb().from(R_ROOMS).update({ status: 'finished' }).eq('code', st.code);
-    else sb().from(R_ROOMS).update({ q_index: next }).eq('code', st.code);
+    var upd = (next >= st.room.questions.length) ? { status: 'finished' } : { q_index: next };
+    // ⚠️ sans .then() la requête supabase-js ne PART JAMAIS (builder paresseux)
+    // → c'était le bug « ça ne passe pas à la question suivante ».
+    sb().from(R_ROOMS).update(upd).eq('code', st.code).then(function (r) {
+      if (r.error) { console.warn('mp next:', r.error.message); toast('Erreur pour passer à la suite', '#f87171'); return; }
+      // avance locale immédiate pour l'hôte (les autres suivent via le temps réel)
+      st.room = Object.assign({}, st.room, upd);
+      render();
+    });
   };
 
   /* ---------- podium ---------- */

@@ -231,7 +231,8 @@
   function openEditor(title, html) {
     var t = el('cre-note-title'), ed = el('cre-note-editor');
     if (t) t.value = title || '';
-    if (ed) ed.innerHTML = sanitize(html || '');
+    if (ed) { ed.innerHTML = sanitize(html || ''); ed.style.display = ''; }
+    var dr = el('cre-draw'); if (dr) dr.style.display = 'none'; // jamais en mode dessin à l'ouverture
     var box = el('cre-note-edit'); if (box) box.style.display = '';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = 'none';
     wireEditor();
@@ -241,6 +242,8 @@
     var box = el('cre-note-edit'); if (box) box.style.display = 'none';
     var lw = el('cre-note-listwrap'); if (lw) lw.style.display = '';
     var p = el('cre-chars'); if (p) p.style.display = 'none';
+    var dr = el('cre-draw'); if (dr) dr.style.display = 'none';
+    var ed = el('cre-note-editor'); if (ed) ed.style.display = '';
   }
   window.creCloseEditor = closeEditor;
 
@@ -336,9 +339,91 @@
       edInsert(img);
     });
   };
+  /* ---------- 🎨 DESSIN INLINE : on dessine AU MÊME ENDROIT qu'on écrit ----------
+     Pas de fenêtre séparée : la zone d'écriture se transforme en toile de dessin.
+     « Ajouter » insère le dessin là où était le curseur et on retrouve l'écriture. */
+  var _cd = { canvas: null, ctx: null, drawing: false, color: '#a78bfa', size: 4, erase: false, range: null };
+
+  function cdReset() {
+    if (!_cd.ctx) return;
+    _cd.ctx.fillStyle = '#11131f';
+    _cd.ctx.fillRect(0, 0, _cd.canvas.width, _cd.canvas.height);
+  }
+  function cdStroke(e, start) {
+    var r = _cd.canvas.getBoundingClientRect();
+    var x = (e.clientX - r.left) * (_cd.canvas.width / r.width);
+    var y = (e.clientY - r.top) * (_cd.canvas.height / r.height);
+    var c = _cd.ctx;
+    c.strokeStyle = _cd.erase ? '#11131f' : _cd.color;
+    c.lineWidth = _cd.erase ? _cd.size * 4 : _cd.size;
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    if (start) { c.beginPath(); c.moveTo(x, y); c.lineTo(x + 0.01, y + 0.01); }
+    else c.lineTo(x, y);
+    c.stroke();
+  }
+  function buildInlineDraw() {
+    if (el('cre-draw')) return;
+    var ed = el('cre-note-editor'); if (!ed) return;
+    var host = document.createElement('div');
+    host.id = 'cre-draw';
+    host.style.display = 'none';
+    host.innerHTML =
+      '<div class="nd-tools">' +
+        ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171', '#ffffff', '#000000'].map(function (c) {
+          return '<button type="button" class="nd-col" data-c="' + c + '" style="background:' + c + '" aria-label="couleur"></button>';
+        }).join('') +
+        '<button type="button" class="nd-tool" id="cre-nd-erase" title="Gomme">🧹</button>' +
+        '<input type="range" id="cre-nd-size" min="2" max="18" value="4" title="Épaisseur" aria-label="Épaisseur du trait">' +
+        '<button type="button" class="nd-tool" id="cre-nd-clear" title="Tout effacer">🗑️</button>' +
+      '</div>' +
+      '<canvas id="cre-canvas" width="900" height="430"></canvas>' +
+      '<div class="nd-actions">' +
+        '<button type="button" class="nd-btn" id="cre-nd-cancel">✕ Annuler le dessin</button>' +
+        '<button type="button" class="nd-btn nd-btn-ok" id="cre-nd-add">✅ Ajouter à ma synthèse</button>' +
+      '</div>';
+    ed.parentNode.insertBefore(host, ed.nextSibling);
+    var cv = el('cre-canvas');
+    _cd.canvas = cv; _cd.ctx = cv.getContext('2d');
+    cdReset();
+    cv.addEventListener('pointerdown', function (e) { _cd.drawing = true; cv.setPointerCapture(e.pointerId); cdStroke(e, true); });
+    cv.addEventListener('pointermove', function (e) { if (_cd.drawing) cdStroke(e, false); });
+    cv.addEventListener('pointerup', function () { _cd.drawing = false; });
+    host.querySelectorAll('.nd-col').forEach(function (b) {
+      b.addEventListener('click', function () { _cd.color = b.dataset.c; _cd.erase = false; el('cre-nd-erase').classList.remove('on'); });
+    });
+    el('cre-nd-erase').addEventListener('click', function () { _cd.erase = !_cd.erase; this.classList.toggle('on', _cd.erase); });
+    el('cre-nd-size').addEventListener('input', function () { _cd.size = +this.value; });
+    el('cre-nd-clear').addEventListener('click', cdReset);
+    el('cre-nd-cancel').addEventListener('click', creCloseDraw);
+    el('cre-nd-add').addEventListener('click', function () {
+      var img = document.createElement('img');
+      img.src = _cd.canvas.toDataURL('image/png'); img.className = 'note-img';
+      creCloseDraw();
+      if (_cd.range) {
+        var sel = window.getSelection();
+        if (sel) { sel.removeAllRanges(); sel.addRange(_cd.range); }
+      }
+      edInsert(img);
+      toast('🎨 Dessin ajouté à ta synthèse');
+    });
+  }
+  function creCloseDraw() {
+    var dr = el('cre-draw'); if (dr) dr.style.display = 'none';
+    var ed = el('cre-note-editor'); if (ed) { ed.style.display = ''; ed.focus(); }
+  }
   window.creOpenDraw = function () {
-    if (typeof window.notesOpenDraw === 'function') window.notesOpenDraw(function (img) { edInsert(img); });
-    else toast('Atelier dessin indisponible', '#f87171');
+    var ed = el('cre-note-editor'); if (!ed) return;
+    var dr = el('cre-draw');
+    if (dr && dr.style.display !== 'none') { creCloseDraw(); return; } // re-clic = retour à l'écriture
+    // on retient où on écrivait, pour insérer le dessin au même endroit
+    var sel = window.getSelection();
+    _cd.range = (sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).commonAncestorContainer))
+      ? sel.getRangeAt(0).cloneRange() : null;
+    buildInlineDraw();
+    cdReset(); // toile vierge à chaque ouverture
+    var p = el('cre-chars'); if (p) p.style.display = 'none';
+    ed.style.display = 'none';
+    el('cre-draw').style.display = '';
   };
 
   function wireEditor() {
@@ -400,11 +485,19 @@
     var i = document.createElement('input');
     i.type = 'text'; i.className = 'fx-in' + (extraClass ? ' ' + extraClass : '');
     i.placeholder = ph || '';
+    i.setAttribute('dir', 'ltr');
+    // Position du curseur SUIVIE à la main (même correctif que le brouillon 🧮 :
+    // selectionStart est remis à 0 au clic souris dans certains navigateurs → texte inversé).
+    i._caret = 0;
+    var sync = function () { try { if (i.selectionStart != null) i._caret = i.selectionStart; } catch (e) {} };
     i.addEventListener('input', function () {
+      sync();
       i.style.width = Math.max(38, 14 + i.value.length * 10) + 'px';
       schedPrev();
     });
-    i.addEventListener('focus', function () { _fx.lastInput = i; });
+    i.addEventListener('keyup', sync);
+    i.addEventListener('mouseup', sync);
+    i.addEventListener('focus', function () { _fx.lastInput = i; sync(); });
     return i;
   }
 
@@ -492,11 +585,13 @@
       i = last ? last.slots[0] : null;
       if (!i) return;
     }
-    var st = (i.selectionStart != null) ? i.selectionStart : i.value.length;
-    var en = (i.selectionEnd != null) ? i.selectionEnd : st;
-    i.value = i.value.slice(0, st) + ch + i.value.slice(en);
+    // on utilise la position suivie à la main, jamais selectionStart au moment du clic
+    var st = i._caret;
+    if (st == null || st < 0 || st > i.value.length) st = i.value.length;
+    i.value = i.value.slice(0, st) + ch + i.value.slice(st);
+    i._caret = st + ch.length;
     i.focus();
-    i.selectionStart = i.selectionEnd = st + ch.length;
+    try { i.setSelectionRange(i._caret, i._caret); } catch (e) {}
     i.style.width = Math.max(38, 14 + i.value.length * 10) + 'px';
     schedPrev();
   };
@@ -547,10 +642,19 @@
   window.openFormulaComposer = function (target) {
     _fx.target = target || null;
     _fx.savedRange = null;
+    _fx.targetCaret = null;
     if (target === 'cre-note') {
       var sel = window.getSelection(), ed = el('cre-note-editor');
       if (sel && sel.rangeCount && ed && ed.contains(sel.getRangeAt(0).commonAncestorContainer)) {
         _fx.savedRange = sel.getRangeAt(0).cloneRange();
+      }
+    } else if (target) {
+      // position mémorisée À L'OUVERTURE (après, le clic des boutons la perdrait)
+      var f0 = el(target);
+      if (f0 && typeof f0.value === 'string' && f0.selectionStart != null) {
+        _fx.targetCaret = f0.selectionStart;
+        // caret perdu par le clic sur le bouton ƒ𝑥 → on insère en fin de champ
+        if (_fx.targetCaret === 0 && f0.value.length) _fx.targetCaret = f0.value.length;
       }
     }
     buildFx();
@@ -575,13 +679,11 @@
       }
     } else {
       var f = el(_fx.target);
-      if (f && typeof f.value === 'string' && f.selectionStart != null) {
-        var st = f.selectionStart, en = f.selectionEnd != null ? f.selectionEnd : st;
-        f.value = f.value.slice(0, st) + str + f.value.slice(en);
+      if (f && typeof f.value === 'string') {
+        var st = (_fx.targetCaret != null) ? Math.min(_fx.targetCaret, f.value.length) : f.value.length;
+        f.value = f.value.slice(0, st) + str + f.value.slice(st);
         f.focus();
-        f.selectionStart = f.selectionEnd = st + str.length;
-      } else if (f) {
-        f.value = (f.value || '') + str;
+        try { f.setSelectionRange(st + str.length, st + str.length); } catch (e) {}
       }
     }
     window.fxClose();

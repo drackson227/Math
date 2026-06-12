@@ -750,3 +750,12 @@ img { max-width: 100%; height: auto; }
 .fx-prev-empty { font-size: 13px; color: var(--text-secondary); opacity: 0.7; }
 .fx-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 @media (max-width: 480px) { .fx-box { padding: 1rem; } .fx-in { max-width: 110px; } }
+
+/* Anti « fond blanc » : le texte des boutons n'est jamais sélectionnable
+   (cliquer plusieurs fois vite ne surligne plus la page) */
+button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, .nd-tool { -webkit-user-select: none; user-select: none; }
+
+/* 🎨 dessin INLINE des synthèses : la zone d'écriture devient la toile */
+#cre-draw { background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; }
+#cre-canvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-subtle); background: #11131f; touch-action: none; cursor: crosshair; display: block; }
+#cre-draw .nd-actions { justify-content: flex-end; }
