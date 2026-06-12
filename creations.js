@@ -237,7 +237,7 @@
     wireEditor();
     // calque dessin + blocs de texte libres de cette synthèse
     _ink.strokes = validStrokes(strokes);
-    _ink.cur = null; _ink.on = false;
+    _ink.redo = []; _ink.cur = null; _ink.on = false; _ink.pan = null;
     clearBoxes();
     validBoxes(boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html); });
     window._creLastEd = ed;
@@ -398,6 +398,10 @@
     wrap.appendChild(box);
     var body = box.querySelector('.cre-tbox-body');
     if (html) body.innerHTML = sanitize(html);
+    // cliquer n'importe où sur le bloc → focus (le cadre + poignée apparaissent)
+    box.addEventListener('pointerdown', function (e) {
+      if (e.target === box) { body.focus(); }
+    });
     // suppression
     box.querySelector('.cre-tbox-x').addEventListener('click', function () { box.remove(); });
     // déplacement à la poignée (souris + tactile via Pointer Events)
@@ -473,16 +477,28 @@
      Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
      n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
      sauvegardés avec la synthèse et redessinés à l'identique. */
-  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], cur: null, canvas: null, ctx: null, inkW: 0 };
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null };
+  var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand'];
 
-  // données de traits sûres (rechargées depuis la sauvegarde)
+  // données de traits sûres (rechargées depuis la sauvegarde) — compatible anciens formats
   function validStrokes(arr) {
     if (!Array.isArray(arr)) return [];
     var out = [];
     arr.forEach(function (st) {
-      if (!st || !Array.isArray(st.pts)) return;
-      var pts = st.pts.map(function (p) { return [Number(p[0]) || 0, Number(p[1]) || 0]; });
-      if (pts.length) out.push({ c: String(st.c || '#a78bfa').slice(0, 20), s: Math.min(40, Number(st.s) || 4), e: st.e ? 1 : 0, pts: pts });
+      if (!st) return;
+      var t = st.t || (st.e ? 'erase' : 'pen');
+      if (INK_TOOLS.indexOf(t) < 0 || t === 'hand') return;
+      var base = { t: t, c: String(st.c || '#a78bfa').slice(0, 20), s: Math.min(40, Number(st.s) || 4) };
+      if (t === 'line' || t === 'arrow' || t === 'rect' || t === 'ellipse') {
+        if (!Array.isArray(st.a) || !Array.isArray(st.b)) return;
+        base.a = [Number(st.a[0]) || 0, Number(st.a[1]) || 0];
+        base.b = [Number(st.b[0]) || 0, Number(st.b[1]) || 0];
+        out.push(base);
+      } else {
+        if (!Array.isArray(st.pts)) return;
+        base.pts = st.pts.map(function (p) { return [Number(p[0]) || 0, Number(p[1]) || 0]; });
+        if (base.pts.length) out.push(base);
+      }
     });
     return out;
   }
@@ -516,6 +532,13 @@
         e.preventDefault();
         window.creZoom(e.deltaY < 0 ? 1 : -1);
       }, { passive: false });
+      // double-clic sur le FOND du tableau → nouveau bloc de texte à cet endroit (comme Discord)
+      bd.addEventListener('dblclick', function (e) {
+        if (e.target !== bd || _ink.on) return;
+        var r = bd.getBoundingClientRect();
+        var k = zScale();
+        window.creAddTextBox(Math.max(0, (e.clientX - r.left) / k - 20), Math.max(0, (e.clientY - r.top) / k - 14));
+      });
     }
     _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
     inkResize();
@@ -526,7 +549,16 @@
   function inkResize() {
     var bd = board(), wrap = el('cre-note-wrap'), cv = _ink.canvas, ed = el('cre-note-editor');
     if (!bd || !wrap || !cv || !ed) return;
-    var w = bd.clientWidth || wrap.clientWidth || 600;
+    // Le tableau remplit TOUJOURS la zone visible, dans les deux sens :
+    // dézoomé → il s'agrandit logiquement (plus de place), sans bande vide ni
+    // barre horizontale parasite. Zoomé → on navigue dedans (molette / 🖐️).
+    var z = _zoom || 1;
+    var wrapW = wrap.clientWidth || 600, wrapH = wrap.clientHeight || 420;
+    bd.style.minHeight = Math.round(Math.max(360, wrapH / z)) + 'px';
+    // dézoom → planche élargie (plus de place) ; zoom → largeur logique figée
+    // pour pouvoir NAVIGUER dedans (molette, barres, outil 🖐️)
+    bd.style.width = (z < 1) ? Math.round(wrapW / z) + 'px' : (z > 1 ? wrapW + 'px' : '');
+    var w = bd.clientWidth || wrapW;
     var h = Math.max(ed.scrollHeight, bd.clientHeight, 340);
     if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
     cv.style.height = h + 'px';
@@ -542,37 +574,71 @@
     if (!_ink.on) return;
     e.preventDefault();
     try { _ink.canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    if (_ink.tool === 'hand') { // 🖐 main : on déplace la vue du tableau
+      var wrap = el('cre-note-wrap');
+      _ink.pan = { x: e.clientX, y: e.clientY, sl: wrap.scrollLeft, st: wrap.scrollTop };
+      return;
+    }
     var p = inkPos(e);
-    _ink.cur = { c: _ink.color, s: _ink.size, e: _ink.tool === 'erase' ? 1 : 0, pts: [p] };
-    drawSeg(_ink.cur, p, [p[0] + 0.01, p[1] + 0.01]);
+    var shape = (['line', 'arrow', 'rect', 'ellipse'].indexOf(_ink.tool) >= 0);
+    _ink.cur = shape
+      ? { t: _ink.tool, c: _ink.color, s: _ink.size, a: p, b: p }
+      : { t: _ink.tool, c: _ink.color, s: _ink.size, pts: [p] };
+    inkRedraw();
   }
   function inkMove(e) {
+    if (_ink.pan) {
+      var wrap = el('cre-note-wrap');
+      wrap.scrollLeft = _ink.pan.sl - (e.clientX - _ink.pan.x);
+      wrap.scrollTop = _ink.pan.st - (e.clientY - _ink.pan.y);
+      return;
+    }
     if (!_ink.cur) return;
     var p = inkPos(e);
-    var last = _ink.cur.pts[_ink.cur.pts.length - 1];
-    if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 3) return; // allège la sauvegarde
-    drawSeg(_ink.cur, last, p);
-    _ink.cur.pts.push(p);
+    if (_ink.cur.a) { // forme : le 2e coin suit la souris (aperçu en direct)
+      _ink.cur.b = p;
+    } else {
+      var last = _ink.cur.pts[_ink.cur.pts.length - 1];
+      if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 3) return;
+      _ink.cur.pts.push(p);
+    }
+    inkRedraw();
   }
   function inkUp() {
+    if (_ink.pan) { _ink.pan = null; return; }
     if (!_ink.cur) return;
-    _ink.strokes.push(_ink.cur);
+    // forme quasi nulle (simple clic) → ignorée
+    var keep = _ink.cur.a
+      ? (Math.abs(_ink.cur.b[0] - _ink.cur.a[0]) + Math.abs(_ink.cur.b[1] - _ink.cur.a[1]) > 3)
+      : true;
+    if (keep) { _ink.strokes.push(_ink.cur); _ink.redo = []; }
     _ink.cur = null;
-    inkRedraw(); // re-trace en version LISSÉE (courbes douces)
-  }
-  function drawSeg(st, a, b) {
-    var c = _ink.ctx; if (!c) return;
-    c.globalCompositeOperation = st.e ? 'destination-out' : 'source-over';
-    c.strokeStyle = st.c; c.lineWidth = st.e ? st.s * 4 : st.s;
-    c.lineCap = 'round'; c.lineJoin = 'round';
-    c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+    inkRedraw();
   }
   function replayStroke(c, st, k) {
-    c.globalCompositeOperation = st.e ? 'destination-out' : 'source-over';
+    var t = st.t || (st.e ? 'erase' : 'pen');
+    c.globalAlpha = (t === 'hl') ? 0.35 : 1;
+    c.globalCompositeOperation = (t === 'erase') ? 'destination-out' : 'source-over';
     c.strokeStyle = st.c || '#a78bfa';
-    c.lineWidth = (st.e ? (st.s || 4) * 4 : (st.s || 4)) * k;
+    c.lineWidth = (t === 'erase' ? (st.s || 4) * 4 : t === 'hl' ? (st.s || 4) * 2.4 : (st.s || 4)) * k;
     c.lineCap = 'round'; c.lineJoin = 'round';
-    var pts = st.pts || []; if (!pts.length) return;
+    if (st.a && st.b) { // formes
+      var ax = st.a[0] * k, ay = st.a[1] * k, bx = st.b[0] * k, by = st.b[1] * k;
+      c.beginPath();
+      if (t === 'rect') c.rect(Math.min(ax, bx), Math.min(ay, by), Math.abs(bx - ax), Math.abs(by - ay));
+      else if (t === 'ellipse') c.ellipse((ax + bx) / 2, (ay + by) / 2, Math.abs(bx - ax) / 2 || 0.5, Math.abs(by - ay) / 2 || 0.5, 0, 0, Math.PI * 2);
+      else { // line / arrow
+        c.moveTo(ax, ay); c.lineTo(bx, by);
+        if (t === 'arrow') {
+          var ang = Math.atan2(by - ay, bx - ax), L = Math.max(10, (st.s || 4) * 3.5) * k;
+          c.moveTo(bx, by); c.lineTo(bx - L * Math.cos(ang - 0.45), by - L * Math.sin(ang - 0.45));
+          c.moveTo(bx, by); c.lineTo(bx - L * Math.cos(ang + 0.45), by - L * Math.sin(ang + 0.45));
+        }
+      }
+      c.stroke(); c.globalAlpha = 1;
+      return;
+    }
+    var pts = st.pts || []; if (!pts.length) { c.globalAlpha = 1; return; }
     c.beginPath();
     c.moveTo(pts[0][0] * k, pts[0][1] * k);
     if (pts.length < 3) {
@@ -586,11 +652,13 @@
       c.lineTo(pts[pts.length - 1][0] * k, pts[pts.length - 1][1] * k);
     }
     c.stroke();
+    c.globalAlpha = 1;
   }
   function inkRedraw() {
     var c = _ink.ctx; if (!c || !_ink.canvas) return;
     c.clearRect(0, 0, _ink.canvas.width, _ink.canvas.height);
     _ink.strokes.forEach(function (st) { replayStroke(c, st, 1); });
+    if (_ink.cur) replayStroke(c, _ink.cur, 1); // aperçu du trait/de la forme en cours
   }
 
   /* bouton 🎨 de la barre d'outils : bascule texte ↔ stylo (même zone !) */
@@ -598,7 +666,7 @@
     var cv = ensureInk(); if (!cv) return;
     _ink.on = !_ink.on;
     applyInkMode();
-    if (_ink.on) toast('🖊️ Mode stylo : dessine par-dessus ton texte — « ✏️ Revenir au texte » pour réécrire');
+    if (_ink.on) toast('🖊️ Stylo : dessine par-dessus le texte');
   };
   function applyInkMode() {
     var wrap = el('cre-note-wrap'), cv = el('cre-ink'), tools = el('cre-ink-tools');
@@ -613,40 +681,69 @@
       var p = el('cre-chars'); if (p) p.style.display = 'none';
     }
   }
+  var INK_TOOL_BTNS = [
+    ['pen', '🖊️', 'Stylo'],
+    ['hl', '🖍️', 'Surligneur (semi-transparent)'],
+    ['line', '📏', 'Ligne droite'],
+    ['arrow', '↗️', 'Flèche'],
+    ['rect', '⬜', 'Rectangle'],
+    ['ellipse', '⭕', 'Ellipse / cercle'],
+    ['erase', '🧽', 'Gomme — n\'efface que le dessin, jamais le texte'],
+    ['hand', '🖐️', 'Main : déplacer la vue du tableau']
+  ];
   function buildInkTools() {
     var t = el('cre-ink-tools');
     if (!t) return;
     if (t._built) { syncInkTools(); return; }
     t._built = true;
     t.innerHTML =
+      INK_TOOL_BTNS.map(function (b) {
+        return '<button type="button" class="nd-tool cre-tool" data-tool="' + b[0] + '" title="' + b[2] + '">' + b[1] + '</button>';
+      }).join('') +
+      '<span class="cre-ink-sep"></span>' +
       ['#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171', '#ffffff'].map(function (c) {
         return '<button type="button" class="nd-col" data-c="' + c + '" style="background:' + c + '" aria-label="couleur"></button>';
       }).join('') +
-      '<button type="button" class="nd-tool" id="cre-ink-pen" title="Stylo">🖊️</button>' +
-      '<button type="button" class="nd-tool" id="cre-ink-erase" title="Gomme — n\'efface que le dessin, jamais le texte">🧽</button>' +
       '<input type="range" id="cre-ink-size" min="2" max="18" value="4" aria-label="Épaisseur du trait">' +
-      '<button type="button" class="nd-tool" id="cre-ink-undo" title="Annuler le dernier trait">↩️</button>' +
+      '<span class="cre-ink-sep"></span>' +
+      '<button type="button" class="nd-tool" id="cre-ink-undo" title="Annuler (dernier trait)">↩️</button>' +
+      '<button type="button" class="nd-tool" id="cre-ink-redo" title="Refaire">↪️</button>' +
       '<button type="button" class="nd-tool" id="cre-ink-clear" title="Effacer tout le dessin">🗑️</button>' +
-      '<button type="button" class="nd-btn nd-btn-ok" id="cre-ink-done" style="margin-left:auto;">✏️ Revenir au texte</button>';
-    t.querySelectorAll('.nd-col').forEach(function (b) {
-      b.addEventListener('click', function () { _ink.color = b.dataset.c; _ink.tool = 'pen'; syncInkTools(); });
+      '<button type="button" class="nd-btn nd-btn-ok" id="cre-ink-done" title="Revenir au texte">✏️ Texte</button>';
+    t.querySelectorAll('.cre-tool').forEach(function (b) {
+      b.addEventListener('click', function () { _ink.tool = b.dataset.tool; syncInkTools(); });
     });
-    el('cre-ink-pen').addEventListener('click', function () { _ink.tool = 'pen'; syncInkTools(); });
-    el('cre-ink-erase').addEventListener('click', function () { _ink.tool = 'erase'; syncInkTools(); });
+    t.querySelectorAll('.nd-col').forEach(function (b) {
+      b.addEventListener('click', function () {
+        _ink.color = b.dataset.c;
+        if (_ink.tool === 'erase' || _ink.tool === 'hand') _ink.tool = 'pen';
+        syncInkTools();
+      });
+    });
     el('cre-ink-size').addEventListener('input', function () { _ink.size = +this.value; });
-    el('cre-ink-undo').addEventListener('click', function () { _ink.strokes.pop(); inkRedraw(); });
-    el('cre-ink-clear').addEventListener('click', function () { _ink.strokes = []; inkRedraw(); });
+    el('cre-ink-undo').addEventListener('click', function () {
+      var st = _ink.strokes.pop(); if (st) _ink.redo.push(st); inkRedraw();
+    });
+    el('cre-ink-redo').addEventListener('click', function () {
+      var st = _ink.redo.pop(); if (st) _ink.strokes.push(st); inkRedraw();
+    });
+    el('cre-ink-clear').addEventListener('click', function () {
+      _ink.redo = _ink.strokes.reverse(); _ink.strokes = []; inkRedraw();
+    });
     el('cre-ink-done').addEventListener('click', function () { _ink.on = false; applyInkMode(); var ed = el('cre-note-editor'); if (ed) ed.focus(); });
     syncInkTools();
   }
   function syncInkTools() {
-    var p = el('cre-ink-pen'), g = el('cre-ink-erase');
-    if (p) p.classList.toggle('on', _ink.tool === 'pen');
-    if (g) g.classList.toggle('on', _ink.tool === 'erase');
     var t = el('cre-ink-tools');
-    if (t) t.querySelectorAll('.nd-col').forEach(function (b) {
-      b.classList.toggle('on', _ink.tool === 'pen' && b.dataset.c === _ink.color);
+    if (!t) return;
+    t.querySelectorAll('.cre-tool').forEach(function (b) {
+      b.classList.toggle('on', b.dataset.tool === _ink.tool);
     });
+    t.querySelectorAll('.nd-col').forEach(function (b) {
+      b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && b.dataset.c === _ink.color);
+    });
+    var cv = el('cre-ink');
+    if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : 'crosshair';
   }
 
   /* ---------- 🔍 ZOOM du tableau (boutons ➖ 100% ➕ et Ctrl+molette) ---------- */
@@ -656,10 +753,8 @@
     else _zoom = Math.min(2.5, Math.max(0.4, _zoom * (dir > 0 ? 1.15 : 1 / 1.15)));
     var bd = board(); if (!bd) return;
     bd.style.zoom = _zoom;
-    // dézoomé → le tableau s'élargit : encore plus de place (tableau géant)
-    bd.style.width = (_zoom < 1) ? (100 / _zoom) + '%' : '';
     var v = el('cre-zoom-val'); if (v) v.textContent = Math.round(_zoom * 100) + '%';
-    inkResizeSoon();
+    inkResize(); // dimensionne la planche immédiatement (remplissage des deux axes)
   };
 
   /* ---------- ⛶ GRAND ÉCRAN : le tableau prend toute la fenêtre ---------- */

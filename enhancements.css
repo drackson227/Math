@@ -778,27 +778,75 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
 .fx-minivec span:last-child { font-size: 11px; }
 
 /* ═══ Synthèse « façon Discord » : texte + dessin + blocs déplaçables SUPERPOSÉS ═══ */
-#cre-note-wrap { position: relative; max-height: 70vh; overflow: auto; border-radius: 14px; }
-#cre-note-board { position: relative; min-height: 360px; }
-#cre-note-wrap #cre-note-editor { max-height: none; overflow: visible; min-height: 360px; }
-/* zoom : ➖ 100% ➕ ⛶ rangés à droite de la barre d'outils */
-.cre-zoom { display: inline-flex; gap: 4px; margin-left: auto; }
-.cre-zoom .nav-btn { padding: 8px 11px; font-size: 13px; }
-#cre-full-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
+#cre-board-frame { position: relative; }
+#cre-note-wrap { position: relative; height: 60vh; overflow: auto; border-radius: 14px; border: 1px solid var(--border-subtle); background: var(--bg-main); }
+#cre-note-board {
+  position: relative; min-height: 360px;
+  /* pointillés discrets de tableau blanc (comme Discord) */
+  background-image: radial-gradient(rgba(167, 139, 250, 0.13) 1px, transparent 1.5px);
+  background-size: 26px 26px;
+}
+#cre-note-wrap #cre-note-editor { max-height: none; overflow: visible; min-height: 360px; border: none; background: transparent; }
+/* ── barre d'outils FLOTTANTE en bas du tableau (mode stylo), comme Discord ── */
+#cre-ink-tools {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 7;
+  display: none; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px;
+  max-width: min(96%, 720px); padding: 8px 12px; border-radius: 18px;
+  background: rgba(13, 15, 26, 0.93); border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); backdrop-filter: blur(8px);
+}
+.cre-tool { width: 38px; height: 38px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; border-radius: 11px !important; }
+.cre-tool.on { background: var(--color-nav) !important; border-color: var(--color-nav) !important; }
+#cre-ink-tools .nd-col { width: 22px; height: 22px; }
+.cre-ink-sep { width: 1px; height: 26px; background: var(--border-subtle); margin: 0 4px; }
+#cre-ink-tools input[type="range"] { width: 80px; }
+#cre-ink-tools .nd-btn { padding: 8px 14px; border-radius: 12px; }
+/* ── zoom flottant en bas à droite du tableau, toujours accessible ── */
+#cre-zoom-pill {
+  position: absolute; right: 12px; bottom: 12px; z-index: 6;
+  display: flex; gap: 2px; padding: 4px;
+  background: rgba(13, 15, 26, 0.93); border: 1px solid var(--border-subtle);
+  border-radius: 12px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px);
+}
+#cre-zoom-pill button { min-width: 32px; height: 30px; padding: 0 7px; border: none; border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
+#cre-zoom-pill button:hover { background: var(--bg-card); }
+#cre-zoom-pill #cre-full-btn.active { background: var(--color-nav); color: #fff; }
+/* mobile : la barre d'outils devient UNE SEULE rangée qui défile au doigt,
+   collée en bas du tableau — le dessin reste dégagé */
+@media (max-width: 640px) {
+  #cre-ink-tools {
+    left: 6px; right: 6px; bottom: 6px; transform: none; max-width: none;
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+    gap: 4px; padding: 6px 8px; border-radius: 12px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  #cre-ink-tools::-webkit-scrollbar { display: none; }
+  #cre-ink-tools > * { flex: 0 0 auto; }
+  .cre-tool { width: 34px; height: 34px; font-size: 15px; }
+  #cre-ink-tools input[type="range"] { width: 56px; }
+  #cre-ink-tools .nd-btn { padding: 7px 10px; font-size: 12px; white-space: nowrap; }
+  .cre-ink-sep { display: none; }
+  #cre-zoom-pill { right: 8px; bottom: auto; top: 8px; }
+}
 /* ⛶ grand écran : le panneau entier (titre + outils + tableau) prend la fenêtre */
 #mesexos.cre-full-host { transform: none !important; animation: none !important; }
 #cre-note-edit.cre-full { position: fixed; inset: 0; z-index: 2900; background: var(--bg-main); padding: 14px 18px; overflow: auto; display: block !important; }
-#cre-note-edit.cre-full #cre-note-wrap { max-height: calc(100vh - 250px); }
+#cre-note-edit.cre-full #cre-note-wrap { height: calc(100vh - 235px); }
 .nd-col.on { border-color: #fff; transform: scale(1.18); }
 #cre-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; touch-action: none; }
 #cre-note-wrap.inking { outline: 2px dashed var(--color-nav); outline-offset: 3px; }
 #cre-note-wrap.inking #cre-ink { cursor: crosshair; }
 #cre-draw-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
-/* blocs de texte libres (attrape ⠿ et déplace) */
-.cre-tbox { position: absolute; z-index: 2; min-width: 90px; max-width: min(46%, 340px); background: rgba(20, 22, 38, 0.92); border: 1px dashed rgba(167, 139, 250, 0.65); border-radius: 9px; padding: 6px 22px 6px 22px; }
-.cre-tbox-grip { position: absolute; left: 3px; top: 5px; cursor: grab; color: var(--color-nav); font-size: 14px; user-select: none; touch-action: none; }
+/* blocs de texte libres (attrape ⠿ et déplace) — le cadre n'apparaît QUE
+   quand on clique sur le bloc (sinon : juste le texte, comme sur Discord) */
+.cre-tbox { position: absolute; z-index: 2; min-width: 90px; max-width: min(46%, 340px); background: transparent; border: 1px dashed transparent; border-radius: 9px; padding: 6px 22px 6px 22px; }
+.cre-tbox:hover { border-color: rgba(167, 139, 250, 0.3); }
+.cre-tbox:focus-within { background: rgba(20, 22, 38, 0.92); border-color: rgba(167, 139, 250, 0.75); }
+.cre-tbox-grip { position: absolute; left: 3px; top: 5px; cursor: grab; color: var(--color-nav); font-size: 14px; user-select: none; touch-action: none; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
+.cre-tbox:focus-within .cre-tbox-grip, .cre-tbox:hover .cre-tbox-grip { opacity: 1; pointer-events: auto; }
 .cre-tbox-grip:active { cursor: grabbing; }
-.cre-tbox-x { position: absolute; right: 2px; top: 3px; background: transparent; border: none; color: var(--text-secondary); font-size: 11px; cursor: pointer; padding: 2px; }
+.cre-tbox-x { position: absolute; right: 2px; top: 3px; background: transparent; border: none; color: var(--text-secondary); font-size: 11px; cursor: pointer; padding: 2px; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
+.cre-tbox:focus-within .cre-tbox-x, .cre-tbox:hover .cre-tbox-x { opacity: 1; pointer-events: auto; }
 .cre-tbox-x:hover { color: #f87171; }
 .cre-tbox-body { outline: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); min-height: 18px; }
 .cre-tbox-body:empty::before { content: attr(data-ph); color: var(--text-secondary); opacity: 0.55; pointer-events: none; }
