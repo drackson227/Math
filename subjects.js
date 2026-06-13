@@ -1,3 +1,4 @@
+/*! GR2 Study © 2026 Drackson — Tous droits réservés. Copie, reproduction ou réutilisation du code interdites sans autorisation écrite (Instagram @drackson227). */
 /* GR2 Study — gestion multi-matières
    Le moteur (quiz, flashcards, stats, XP…) est partagé. Chaque matière fournit son
    propre contenu (sections HTML + questions + flashcards + chapitres). On bascule en

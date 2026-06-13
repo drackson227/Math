@@ -1,3 +1,4 @@
+/*! GR2 Study © 2026 Drackson — Tous droits réservés. Copie, reproduction ou réutilisation du code interdites sans autorisation écrite (Instagram @drackson227). */
 /* ============================================================
    creations.js — 🎨 Mes créations
    L'élève crée SES propres contenus, rangés par matière :

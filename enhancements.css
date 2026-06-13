@@ -1060,6 +1060,14 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 .ft-item-acts { display: flex; gap: 4px; flex-shrink: 0; }
 .ft-ic { background: none; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 6px 8px; cursor: pointer; font-size: 14px; }
 .ft-ic:hover { border-color: var(--color-nav); background: var(--bg-main); }
+.ft-plainfx { font-family: ui-monospace, "Cascadia Code", "Consolas", monospace; font-size: 15px; letter-spacing: .3px; }
+/* groupe « formules du site » */
+.ft-group-h { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 1.6rem 0 0.3rem; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 1px dashed var(--border-subtle); padding-top: 1.2rem; }
+.ft-group-sub { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 0.8rem; }
+.ft-restore { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--color-nav); cursor: pointer; }
+.ft-restore:hover { border-color: var(--color-nav); }
+.ft-item-def { border-style: dashed; background: var(--bg-main); }
+.ft-item-def .ft-item-name { color: var(--text-secondary); }
 
 /* --- choix du mode --- */
 .ft-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.1rem; }

@@ -1,4 +1,5 @@
-﻿/* ============================================================
+﻿/*! GR2 Study © 2026 Drackson — Tous droits réservés. Copie, reproduction ou réutilisation du code interdites sans autorisation écrite (Instagram @drackson227). */
+/* ============================================================
    Application principale — Maths GR2
    Géométrie analytique plane : Vecteurs · Cercle · Droites
    ============================================================ */
