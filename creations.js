@@ -646,13 +646,21 @@
       var cx = rc.left + rc.width / 2, cy = rc.top + rc.height / 2;
       function mv(ev) {
         var deg = Math.atan2(ev.clientY - cy, ev.clientX - cx) * 180 / Math.PI + 90;
-        if (ev.shiftKey) deg = Math.round(deg / 15) * 15; // Maj = par pas de 15°
+        deg = ((deg % 360) + 360) % 360;
+        // 🧲 AIMANT : se clipse sur 0/45/90/135/180/225/270/315° quand on s'en approche
+        //    (Maj enfoncé = rotation LIBRE, fine, sans aimant)
+        if (!ev.shiftKey) {
+          var near = Math.round(deg / 45) * 45;
+          if (Math.abs(deg - near) <= 8) deg = near % 360;
+        }
         deg = Math.round(deg);
         box.dataset.rot = deg;
         box.style.transform = 'rotate(' + deg + 'deg)';
+        box.classList.toggle('cre-rot-snap', deg % 45 === 0); // petit retour visuel quand c'est pile
       }
       function up() {
         rotH.removeEventListener('pointermove', mv); rotH.removeEventListener('pointerup', up); rotH.removeEventListener('pointercancel', up);
+        box.classList.remove('cre-rot-snap');
         boardChanged();
       }
       rotH.addEventListener('pointermove', mv); rotH.addEventListener('pointerup', up); rotH.addEventListener('pointercancel', up);
@@ -817,8 +825,8 @@
      Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
      n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
      sauvegardés avec la synthèse et redessinés à l'identique. */
-  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 }, marq: null };
-  var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand', 'select'];
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 } };
+  var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand'];
 
   // données de traits sûres (rechargées depuis la sauvegarde) — compatible anciens formats
   function validStrokes(arr) {
@@ -827,7 +835,7 @@
     arr.forEach(function (st) {
       if (!st) return;
       var t = st.t || (st.e ? 'erase' : 'pen');
-      if (INK_TOOLS.indexOf(t) < 0 || t === 'hand' || t === 'select') return;
+      if (INK_TOOLS.indexOf(t) < 0 || t === 'hand') return;
       var base = { t: t, c: String(st.c || '#a78bfa').slice(0, 20), s: Math.min(40, Number(st.s) || 4) };
       if (t === 'line' || t === 'arrow' || t === 'rect' || t === 'ellipse') {
         if (!Array.isArray(st.a) || !Array.isArray(st.b)) return;
@@ -889,10 +897,58 @@
       wrap.addEventListener('touchend', function () { pinch = null; });
       // double-clic sur le FOND du tableau → nouveau bloc de texte à cet endroit (comme Discord)
       bd.addEventListener('dblclick', function (e) {
-        if (e.target !== bd || _ink.on) return;
+        if (e.target.closest('.cre-tbox') || _ink.on) return;
         var r = bd.getBoundingClientRect();
         var k = zScale();
         window.creAddTextBox(Math.max(0, (e.clientX - r.left) / k - 20), Math.max(0, (e.clientY - r.top) / k - 14));
+      });
+      // ⬚ SÉLECTION TOUJOURS ACTIVE (comme Discord) : clic-glissé sur le FOND =
+      // rectangle de sélection. Pas de bouton. Le glissé SUR du texte sélectionne
+      // le texte (on laisse le navigateur faire) ; sur le vide → on encadre les blocs.
+      bd.addEventListener('pointerdown', function (e) {
+        if (_ink.on || e.button !== 0) return;            // dessin/déplacer : géré ailleurs
+        if (e.target.closest('.cre-tbox')) return;         // sur un bloc : le bloc gère
+        var ed = el('cre-note-editor');
+        var start = inkPos(e), sx = e.clientX, sy = e.clientY;
+        var marqEl = null, active = false, aborted = false;
+        function mv(ev) {
+          if (aborted) return;
+          if (!active) {
+            if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return;
+            // le navigateur a-t-il attrapé du TEXTE ? → c'était sur du texte, on le laisse
+            var s = window.getSelection();
+            if (s && !s.isCollapsed && ed && ed.contains(s.anchorNode)) { aborted = true; return; }
+            active = true;
+            bd.classList.add('cre-marqueeing');
+            marqEl = document.createElement('div'); marqEl.className = 'cre-marquee'; bd.appendChild(marqEl);
+            if (!ev.shiftKey) clearSel();
+          }
+          var p = inkPos(ev);
+          var x = Math.min(start[0], p[0]), y = Math.min(start[1], p[1]), w = Math.abs(p[0] - start[0]), h = Math.abs(p[1] - start[1]);
+          marqEl.style.left = x + 'px'; marqEl.style.top = y + 'px'; marqEl.style.width = w + 'px'; marqEl.style.height = h + 'px';
+          try { window.getSelection().removeAllRanges(); } catch (_) {}
+          bd.querySelectorAll('.cre-tbox').forEach(function (b) {
+            var bx = parseInt(b.style.left, 10) || 0, by = parseInt(b.style.top, 10) || 0, bw = b.offsetWidth, bh = b.offsetHeight;
+            var hit = x < bx + bw && x + w > bx && y < by + bh && y + h > by;
+            if (hit) { if (_sel.indexOf(b) < 0) { b.classList.add('sel'); _sel.push(b); } }
+            else if (!ev.shiftKey) { var i = _sel.indexOf(b); if (i >= 0) { b.classList.remove('sel'); _sel.splice(i, 1); } }
+          });
+          updateSelBar();
+        }
+        function up() {
+          document.removeEventListener('pointermove', mv);
+          document.removeEventListener('pointerup', up);
+          if (active) {
+            bd.classList.remove('cre-marqueeing');
+            if (marqEl) marqEl.remove();
+            try { window.getSelection().removeAllRanges(); } catch (_) {}
+            if (_sel.length) toast('✅ ' + _sel.length + ' élément(s) — Suppr pour effacer');
+          } else if (!aborted && _sel.length) {
+            clearSel(); // simple clic sur le fond = tout désélectionner (comme Discord)
+          }
+        }
+        document.addEventListener('pointermove', mv);
+        document.addEventListener('pointerup', up);
       });
     }
     _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
@@ -937,13 +993,6 @@
       _ink.canvas.style.cursor = 'grabbing';
       return;
     }
-    if (_ink.tool === 'select') { // ⬚ sélection : rectangle de capture
-      var ps = inkPos(e);
-      _ink.marq = { ax: ps[0], ay: ps[1], bx: ps[0], by: ps[1], shift: e.shiftKey };
-      if (!e.shiftKey) clearSel();
-      inkRedraw();
-      return;
-    }
     var p = inkPos(e);
     var shape = (['line', 'arrow', 'rect', 'ellipse'].indexOf(_ink.tool) >= 0);
     _ink.cur = shape
@@ -968,7 +1017,6 @@
       wrap.scrollTop = wantT;
       return;
     }
-    if (_ink.marq) { var pm = inkPos(e); _ink.marq.bx = pm[0]; _ink.marq.by = pm[1]; inkRedraw(); return; }
     if (!_ink.cur) return;
     var p = inkPos(e);
     if (_ink.cur.a) { // forme : le 2e coin suit la souris (aperçu en direct)
@@ -993,21 +1041,6 @@
   }
   function inkUp() {
     if (_ink.pan) { _ink.pan = null; if (_ink.canvas) _ink.canvas.style.cursor = 'grab'; return; }
-    if (_ink.marq) {
-      var m = _ink.marq; _ink.marq = null;
-      var x = Math.min(m.ax, m.bx), y = Math.min(m.ay, m.by), w = Math.abs(m.bx - m.ax), h = Math.abs(m.by - m.ay);
-      var bd = board();
-      if (bd) bd.querySelectorAll('.cre-tbox').forEach(function (b) {
-        var bx = parseInt(b.style.left, 10) || 0, by = parseInt(b.style.top, 10) || 0, bw = b.offsetWidth, bh = b.offsetHeight;
-        var hit = (w < 6 && h < 6) ? (x >= bx && x <= bx + bw && y >= by && y <= by + bh)   // simple clic = bloc sous le point
-                                   : (x < bx + bw && x + w > bx && y < by + bh && y + h > by); // rectangle = chevauchement
-        if (hit && _sel.indexOf(b) < 0) { b.classList.add('sel'); _sel.push(b); }
-      });
-      updateSelBar();
-      if (_sel.length) toast('✅ ' + _sel.length + ' élément(s) — Suppr pour effacer');
-      inkRedraw();
-      return;
-    }
     if (!_ink.cur) return;
     // forme quasi nulle (simple clic) → ignorée
     var keep = _ink.cur.a
@@ -1062,15 +1095,6 @@
     c.clearRect(0, 0, _ink.canvas.width, _ink.canvas.height);
     _ink.strokes.forEach(function (st) { replayStroke(c, st, 1); });
     if (_ink.cur) replayStroke(c, _ink.cur, 1); // aperçu du trait/de la forme en cours
-    if (_ink.marq) { // rectangle de sélection (pointillés)
-      var m = _ink.marq;
-      var x = Math.min(m.ax, m.bx), y = Math.min(m.ay, m.by), w = Math.abs(m.bx - m.ax), h = Math.abs(m.by - m.ay);
-      c.save();
-      c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1;
-      c.fillStyle = 'rgba(167,139,250,0.15)'; c.strokeStyle = '#a78bfa'; c.lineWidth = 1.5;
-      c.setLineDash([6, 4]); c.fillRect(x, y, w, h); c.strokeRect(x, y, w, h);
-      c.restore();
-    }
   }
 
   /* bouton 🎨 de la barre d'outils : bascule texte ↔ stylo (même zone !) */
@@ -1084,15 +1108,14 @@
   function exitInk() {
     if (_ink.on) { _ink.on = false; applyInkMode(); }
   }
-  /* Mode tableau depuis la barre du HAUT : 🖐️ déplacer, ⬚ sélectionner.
-     (Ré-clic = on revient au texte.) */
+  /* Mode tableau depuis la barre du HAUT : 🖐️ déplacer (la sélection, elle, est
+     TOUJOURS active au clic-glissé sur le fond — pas besoin de bouton). */
   window.creBoardMode = function (tool) {
     var cv = ensureInk(); if (!cv) return;
     if (_ink.on && _ink.tool === tool) { _ink.on = false; applyInkMode(); return; }
     _ink.on = true; _ink.tool = tool;
     applyInkMode();
     if (tool === 'hand') toast('🖐️ Déplacer : glisse pour bouger la vue du tableau');
-    else if (tool === 'select') toast('⬚ Sélection : encadre des éléments pour les déplacer/supprimer');
   };
   function applyInkMode() {
     var wrap = el('cre-note-wrap'), cv = el('cre-ink'), tools = el('cre-ink-tools');
@@ -1101,10 +1124,8 @@
     cv.style.pointerEvents = _ink.on ? 'auto' : 'none';
     if (tools) tools.style.display = _ink.on ? 'flex' : 'none';
     // surligne le bon bouton du HAUT selon le mode
-    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand' && _ink.tool !== 'select');
+    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand');
     var hand = el('cre-hand-btn'); if (hand) hand.classList.toggle('active', _ink.on && _ink.tool === 'hand');
-    var selb = el('cre-select-btn'); if (selb) selb.classList.toggle('active', _ink.on && _ink.tool === 'select');
-    if (!_ink.on) { _ink.marq = null; }
     if (_ink.on) {
       buildInkTools(); syncInkTools();
       var p = el('cre-chars'); if (p) p.style.display = 'none';
@@ -1118,7 +1139,6 @@
     ['rect', '⬜', 'Rectangle'],
     ['ellipse', '⭕', 'Ellipse / cercle'],
     ['erase', '🧽', 'Gomme — n\'efface que le dessin, jamais le texte'],
-    ['select', '⬚', 'Sélectionner des éléments (encadrer pour déplacer/supprimer)'],
     ['hand', '🖐️', 'Main : déplacer la vue du tableau']
   ];
   function buildInkTools() {
@@ -1146,7 +1166,7 @@
     t.querySelectorAll('.nd-col').forEach(function (b) {
       b.addEventListener('click', function () {
         _ink.color = b.dataset.c;
-        if (_ink.tool === 'erase' || _ink.tool === 'hand' || _ink.tool === 'select') _ink.tool = 'pen';
+        if (_ink.tool === 'erase' || _ink.tool === 'hand') _ink.tool = 'pen';
         syncInkTools();
       });
     });
@@ -1170,14 +1190,13 @@
       b.classList.toggle('on', b.dataset.tool === _ink.tool);
     });
     t.querySelectorAll('.nd-col').forEach(function (b) {
-      b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && _ink.tool !== 'select' && b.dataset.c === _ink.color);
+      b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && b.dataset.c === _ink.color);
     });
     var cv = el('cre-ink');
-    if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : (_ink.tool === 'select' ? 'crosshair' : 'crosshair');
+    if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : 'crosshair';
     // reflète aussi l'état sur les boutons du HAUT
-    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand' && _ink.tool !== 'select');
+    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand');
     var hand = el('cre-hand-btn'); if (hand) hand.classList.toggle('active', _ink.on && _ink.tool === 'hand');
-    var selb = el('cre-select-btn'); if (selb) selb.classList.toggle('active', _ink.on && _ink.tool === 'select');
   }
 
   /* ---------- 🔍 ZOOM du tableau (boutons ➖ 100% ➕ et Ctrl+molette) ---------- */

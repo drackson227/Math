@@ -760,17 +760,39 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
    d'étiquette orpheline coincée en bout de ligne quand la nav se replie.
    Mobile (tiroir en colonne) : les îlots disparaissent (display:contents),
    les titres de groupe redeviennent des séparateurs pleine largeur. */
-.nav { gap: 10px; }
+.nav { gap: 12px; align-items: stretch; padding: 1.1rem; }
+/* chaque famille a sa COULEUR d'accent (--ga) : point lumineux + teinte d'îlot + halo */
 .nav-grp {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  padding: 6px 10px 6px 8px; border: 1px solid var(--border-subtle);
-  border-radius: 16px; background: rgba(167, 139, 250, 0.04);
+  --ga: var(--color-nav);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px;
+  padding: 8px 12px 8px 11px;
+  border: 1px solid var(--border-subtle);           /* repli si color-mix non supporté */
+  border-color: color-mix(in srgb, var(--ga) 32%, var(--border-subtle));
+  border-radius: 18px;
+  background: rgba(167, 139, 250, 0.04);             /* repli */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ga) 9%, transparent), color-mix(in srgb, var(--ga) 2%, transparent));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
+.nav-grp:hover { border-color: color-mix(in srgb, var(--ga) 60%, transparent); box-shadow: 0 6px 20px color-mix(in srgb, var(--ga) 20%, transparent); }
+.nav-grp:nth-of-type(1) { --ga: var(--color-cercle); }
+.nav-grp:nth-of-type(2) { --ga: var(--color-nav); }
+.nav-grp:nth-of-type(3) { --ga: #34d399; }
+.nav-grp:nth-of-type(4) { --ga: var(--color-parabole); }
+.nav-grp:nth-of-type(5) { --ga: #94a3b8; }
 .nav-grp .nav-btn { margin: 0; }
-.nav-lab { align-self: center; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); opacity: 0.7; padding: 0 4px; user-select: none; white-space: nowrap; }
+.nav-lab {
+  align-self: center; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ga); padding: 0 7px 0 2px; user-select: none; white-space: nowrap;
+}
+.nav-lab::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ga); box-shadow: 0 0 8px var(--ga); flex: 0 0 auto; }
+/* bouton actif : prend la couleur de SA famille (pas toujours le violet) */
+.nav-grp .nav-btn.active { background: linear-gradient(135deg, var(--ga), color-mix(in srgb, var(--ga) 55%, #000)) !important; border-color: var(--ga) !important; box-shadow: 0 4px 16px color-mix(in srgb, var(--ga) 45%, transparent) !important; }
+.nav-grp .nav-btn:hover { border-color: color-mix(in srgb, var(--ga) 50%, var(--border-subtle)); }
 @media (max-width: 768px) {
+  .nav { padding: 1rem; }
   .nav-grp { display: contents; }
-  .nav-lab { flex-basis: 100%; align-self: auto; margin-top: 10px; padding: 0 4px 2px; border-bottom: 1px solid var(--border-subtle); font-size: 11px; }
+  .nav-lab { flex-basis: 100%; align-self: auto; margin-top: 12px; padding: 0 4px 4px; border-bottom: 1px solid color-mix(in srgb, var(--ga) 40%, var(--border-subtle)); font-size: 11px; }
 }
 
 /* ═══ Matières repliables sur mobile : un bouton « 📐 Maths ▾ » remplace les 4 rangées ═══ */
@@ -894,6 +916,12 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 .cre-tbox:hover { border-color: rgba(167, 139, 250, 0.35); }
 .cre-tbox:focus-within { background: rgba(20, 22, 38, 0.92); border-color: rgba(167, 139, 250, 0.75); }
 .cre-tbox.sel { border-style: solid; border-color: var(--color-nav); box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.45); background: rgba(20, 22, 38, 0.6); }
+/* halo vert quand la rotation se clipse pile sur 45/90… (retour visuel d'aimant) */
+.cre-tbox.cre-rot-snap { box-shadow: 0 0 0 2px #34d399, 0 0 14px rgba(52, 211, 153, 0.6); }
+/* rectangle de sélection (clic-glissé sur le fond, façon Discord) */
+.cre-marquee { position: absolute; z-index: 6; border: 1.5px dashed var(--color-nav); background: rgba(167, 139, 250, 0.14); pointer-events: none; border-radius: 4px; }
+/* pendant l'encadrement : pas de sélection de texte parasite */
+.cre-marqueeing, .cre-marqueeing #cre-note-editor, .cre-marqueeing .cre-tbox-body { user-select: none !important; -webkit-user-select: none !important; }
 /* bloc IMAGE : l'image remplit le bloc, pas de fond ni padding */
 .cre-tbox-img { padding: 0; }
 .cre-tbox-img .cre-tbox-body { width: 100%; height: 100%; }
