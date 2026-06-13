@@ -927,6 +927,10 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 #cre-draw-btn.active, #cre-hand-btn.active, #cre-select-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
 /* petit séparateur dans la barre d'outils du tableau (avant les outils de dessin) */
 .cre-tb-sep { width: 1px; align-self: stretch; background: var(--border-subtle); margin: 2px 4px; }
+/* ✋ boîte autour des TRAITS sélectionnés : glisser pour déplacer, ✕ pour supprimer */
+#cre-stroke-sel { position: absolute; z-index: 5; border: 1.5px dashed var(--color-nav); background: rgba(167, 139, 250, 0.07); border-radius: 8px; cursor: move; touch-action: none; }
+.cre-ssel-x { position: absolute; right: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bg-main); background: #f87171; color: #fff; font-size: 11px; line-height: 1; padding: 0; cursor: pointer; }
+.cre-ssel-x:hover { filter: brightness(1.1); }
 /* blocs libres (texte OU image) — attrape ⠿ pour bouger, coin ◢ pour la taille,
    rond vert pour tourner ; le cadre n'apparaît qu'au survol/sélection (façon Discord) */
 .cre-tbox { position: absolute; z-index: 2; min-width: 56px; min-height: 26px; max-width: min(96%, 900px); background: transparent; border: 1px dashed transparent; border-radius: 9px; padding: 8px 22px; box-sizing: border-box; transform-origin: center center; }

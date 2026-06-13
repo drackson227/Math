@@ -346,6 +346,7 @@
     _ink.ext = { w: 0, h: 0 };
     _ink.tool = 'pen'; // nouveau tableau → on repart au stylo (pas la main ni la gomme)
     clearBoxes();
+    _strokeSel = []; var _ssb = el('cre-stroke-sel'); if (_ssb) _ssb.style.display = 'none';
     validBoxes(state && state.boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html, true, b); });
     window._creLastEd = ed;
     window.creZoom(0);  // on repart à 100%
@@ -1013,7 +1014,8 @@
      Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
      n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
      sauvegardés avec la synthèse et redessinés à l'identique. */
-  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 } };
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, fill: false, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 } };
+  var _strokeSel = []; // indices des traits dessinés sélectionnés (pour les déplacer/supprimer)
   var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand'];
 
   // données de traits sûres (rechargées depuis la sauvegarde) — compatible anciens formats
@@ -1029,6 +1031,7 @@
         if (!Array.isArray(st.a) || !Array.isArray(st.b)) return;
         base.a = [Number(st.a[0]) || 0, Number(st.a[1]) || 0];
         base.b = [Number(st.b[0]) || 0, Number(st.b[1]) || 0];
+        if (st.fill && (t === 'rect' || t === 'ellipse')) base.fill = true;
         out.push(base);
       } else {
         if (!Array.isArray(st.pts)) return;
@@ -1136,6 +1139,13 @@
             if (hit) { if (_sel.indexOf(b) < 0) { b.classList.add('sel'); _sel.push(b); } }
             else if (!ev.shiftKey) { var i = _sel.indexOf(b); if (i >= 0) { b.classList.remove('sel'); _sel.splice(i, 1); } }
           });
+          // + TRAITS DESSINÉS qui touchent le rectangle (sélection multiple de dessin)
+          _strokeSel = [];
+          (_ink.strokes || []).forEach(function (st, si) {
+            var bb = strokeBBox(st); if (!bb) return;
+            if (x < bb.X && x + w > bb.x && y < bb.Y && y + h > bb.y) _strokeSel.push(si);
+          });
+          inkRedraw();
           updateSelBar();
         }
         function up() {
@@ -1145,9 +1155,11 @@
             bd.classList.remove('cre-marqueeing');
             if (marqEl) marqEl.remove();
             try { window.getSelection().removeAllRanges(); } catch (_) {}
-            if (_sel.length) toast('✅ ' + _sel.length + ' élément(s) — Suppr pour effacer');
-          } else if (_sel.length) {
-            clearSel(); // simple clic sur le fond = tout désélectionner (comme Discord)
+            updateStrokeSelBox();
+            var _tot = _sel.length + _strokeSel.length;
+            if (_tot) toast('✅ ' + _tot + ' élément(s) — glisse pour déplacer · ✕ ou Suppr pour effacer');
+          } else if (_sel.length || _strokeSel.length) {
+            clearSel(); clearStrokeSel(); // simple clic sur le fond = tout désélectionner
           }
         }
         document.addEventListener('pointermove', mv);
@@ -1158,6 +1170,84 @@
     inkResize();
     return cv;
   }
+
+  /* ---------- ✋ SÉLECTIONNER / DÉPLACER DES TRAITS DESSINÉS ----------
+     Le marquee (clic-glissé sur le fond) sélectionne aussi les traits. Une boîte
+     en pointillés apparaît autour : on la glisse pour DÉPLACER les traits, ✕ pour
+     les supprimer. (Hors mode stylo : le calque laisse passer les clics.) */
+  function strokeBBox(st) {
+    var minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+    function add(px, py) { if (px < minX) minX = px; if (py < minY) minY = py; if (px > maxX) maxX = px; if (py > maxY) maxY = py; }
+    if (st.a && st.b) { add(st.a[0], st.a[1]); add(st.b[0], st.b[1]); }
+    else (st.pts || []).forEach(function (p) { add(p[0], p[1]); });
+    if (minX > maxX) return null;
+    return { x: minX, y: minY, X: maxX, Y: maxY };
+  }
+  function drawStrokeHalo(c, st) {
+    c.save();
+    c.globalAlpha = 0.35; c.globalCompositeOperation = 'source-over';
+    c.strokeStyle = '#a78bfa'; c.lineWidth = (st.s || 4) + 10; c.lineCap = 'round'; c.lineJoin = 'round';
+    c.beginPath();
+    if (st.a && st.b) {
+      var t = st.t;
+      if (t === 'rect') c.rect(Math.min(st.a[0], st.b[0]), Math.min(st.a[1], st.b[1]), Math.abs(st.b[0] - st.a[0]), Math.abs(st.b[1] - st.a[1]));
+      else if (t === 'ellipse') c.ellipse((st.a[0] + st.b[0]) / 2, (st.a[1] + st.b[1]) / 2, Math.abs(st.b[0] - st.a[0]) / 2 || 0.5, Math.abs(st.b[1] - st.a[1]) / 2 || 0.5, 0, 0, Math.PI * 2);
+      else { c.moveTo(st.a[0], st.a[1]); c.lineTo(st.b[0], st.b[1]); }
+    } else { var pts = st.pts || []; if (pts.length) { c.moveTo(pts[0][0], pts[0][1]); pts.forEach(function (p) { c.lineTo(p[0], p[1]); }); } }
+    c.stroke(); c.restore();
+  }
+  function clearStrokeSel() {
+    _strokeSel = [];
+    var bx = el('cre-stroke-sel'); if (bx) bx.style.display = 'none';
+    if (_ink.ctx) inkRedraw();
+  }
+  function deleteStrokeSel() {
+    if (!_strokeSel.length) return;
+    _strokeSel.slice().sort(function (a, b) { return b - a; }).forEach(function (i) { _ink.strokes.splice(i, 1); });
+    _strokeSel = [];
+    var bx = el('cre-stroke-sel'); if (bx) bx.style.display = 'none';
+    inkRedraw(); boardChanged();
+  }
+  window._creHasStrokeSel = function () { return _strokeSel.length > 0; };
+  window._creDeleteStrokeSel = deleteStrokeSel;
+  function updateStrokeSelBox() {
+    var bd = board(); if (!bd) return;
+    _strokeSel = _strokeSel.filter(function (i) { return _ink.strokes[i]; });
+    if (!_strokeSel.length) { var ex = el('cre-stroke-sel'); if (ex) ex.style.display = 'none'; return; }
+    var minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+    _strokeSel.forEach(function (i) { var b = strokeBBox(_ink.strokes[i]); if (!b) return; if (b.x < minX) minX = b.x; if (b.y < minY) minY = b.y; if (b.X > maxX) maxX = b.X; if (b.Y > maxY) maxY = b.Y; });
+    if (minX > maxX) return;
+    var pad = 10;
+    var box = el('cre-stroke-sel');
+    if (!box) {
+      box = document.createElement('div'); box.id = 'cre-stroke-sel';
+      box.innerHTML = '<button type="button" class="cre-ssel-x" title="Supprimer ces traits (Suppr)">✕</button>';
+      bd.appendChild(box);
+      box.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('.cre-ssel-x')) return;
+        e.preventDefault(); e.stopPropagation();
+        try { box.setPointerCapture(e.pointerId); } catch (_) {}
+        var k = zScale(), sx = e.clientX, sy = e.clientY;
+        var bases = _strokeSel.map(function (i) { return { i: i, st: JSON.parse(JSON.stringify(_ink.strokes[i])) }; });
+        function mv(ev) {
+          var dx = (ev.clientX - sx) / k, dy = (ev.clientY - sy) / k;
+          bases.forEach(function (o) {
+            var src = o.st, dst = _ink.strokes[o.i]; if (!dst) return;
+            if (src.a) { dst.a = [src.a[0] + dx, src.a[1] + dy]; dst.b = [src.b[0] + dx, src.b[1] + dy]; }
+            else dst.pts = src.pts.map(function (p) { return [p[0] + dx, p[1] + dy]; });
+          });
+          inkRedraw(); updateStrokeSelBox();
+        }
+        function up() { box.removeEventListener('pointermove', mv); box.removeEventListener('pointerup', up); box.removeEventListener('pointercancel', up); boardChanged(); }
+        box.addEventListener('pointermove', mv); box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+      });
+      box.querySelector('.cre-ssel-x').addEventListener('click', function (e) { e.stopPropagation(); deleteStrokeSel(); });
+    }
+    box.style.display = 'block';
+    box.style.left = (minX - pad) + 'px'; box.style.top = (minY - pad) + 'px';
+    box.style.width = (maxX - minX + pad * 2) + 'px'; box.style.height = (maxY - minY + pad * 2) + 'px';
+  }
+
   var _inkRz = null;
   function inkResizeSoon() { clearTimeout(_inkRz); _inkRz = setTimeout(inkResize, 120); }
   function inkResize() {
@@ -1201,6 +1291,7 @@
     _ink.cur = shape
       ? { t: _ink.tool, c: _ink.color, s: _ink.size, a: p, b: p }
       : { t: _ink.tool, c: _ink.color, s: _ink.size, pts: [p] };
+    if (_ink.fill && (_ink.tool === 'rect' || _ink.tool === 'ellipse')) _ink.cur.fill = true;
     inkRedraw();
   }
   function inkMove(e) {
@@ -1274,6 +1365,14 @@
           c.moveTo(bx, by); c.lineTo(bx - L * Math.cos(ang + 0.45), by - L * Math.sin(ang + 0.45));
         }
       }
+      // 🪣 formes pleines : remplissage semi-transparent SOUS le contour
+      if (st.fill && (t === 'rect' || t === 'ellipse')) {
+        var prevA = c.globalAlpha;
+        c.globalAlpha = prevA * 0.28;
+        c.fillStyle = st.c || '#a78bfa';
+        c.fill();
+        c.globalAlpha = prevA;
+      }
       c.stroke(); c.globalAlpha = 1;
       return;
     }
@@ -1296,6 +1395,8 @@
   function inkRedraw() {
     var c = _ink.ctx; if (!c || !_ink.canvas) return;
     c.clearRect(0, 0, _ink.canvas.width, _ink.canvas.height);
+    // halo SOUS les traits sélectionnés (pour bien les voir)
+    if (_strokeSel.length) _strokeSel.forEach(function (i) { if (_ink.strokes[i]) drawStrokeHalo(c, _ink.strokes[i]); });
     _ink.strokes.forEach(function (st) { replayStroke(c, st, 1); });
     if (_ink.cur) replayStroke(c, _ink.cur, 1); // aperçu du trait/de la forme en cours
   }
@@ -1332,6 +1433,7 @@
     if (_ink.on) {
       buildInkTools(); syncInkTools();
       var p = el('cre-chars'); if (p) p.style.display = 'none';
+      if (_strokeSel.length) clearStrokeSel(); // on dessine → on lâche la sélection de traits
     }
   }
   var INK_TOOL_BTNS = [
@@ -1358,6 +1460,7 @@
         return '<button type="button" class="nd-col" data-c="' + c + '" style="background:' + c + '" aria-label="couleur"></button>';
       }).join('') +
       '<input type="range" id="cre-ink-size" min="2" max="18" value="4" aria-label="Épaisseur du trait">' +
+      '<button type="button" class="nd-tool" id="cre-ink-fill" title="Remplir les formes (rectangle / ellipse)">🪣</button>' +
       '<span class="cre-ink-sep"></span>' +
       '<button type="button" class="nd-tool" id="cre-ink-undo" title="Annuler (dernier trait)">↩️</button>' +
       '<button type="button" class="nd-tool" id="cre-ink-redo" title="Refaire">↪️</button>' +
@@ -1374,6 +1477,11 @@
       });
     });
     el('cre-ink-size').addEventListener('input', function () { _ink.size = +this.value; });
+    el('cre-ink-fill').addEventListener('click', function () {
+      _ink.fill = !_ink.fill;
+      if (_ink.fill && _ink.tool !== 'rect' && _ink.tool !== 'ellipse') _ink.tool = 'rect'; // remplir → passe à une forme
+      syncInkTools();
+    });
     el('cre-ink-undo').addEventListener('click', function () {
       var st = _ink.strokes.pop(); if (st) _ink.redo.push(st); inkRedraw(); boardChanged();
     });
@@ -1395,6 +1503,7 @@
     t.querySelectorAll('.nd-col').forEach(function (b) {
       b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && b.dataset.c === _ink.color);
     });
+    var fillBtn = el('cre-ink-fill'); if (fillBtn) fillBtn.classList.toggle('on', !!_ink.fill);
     var cv = el('cre-ink');
     if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : 'crosshair';
     // reflète aussi l'état sur les boutons du HAUT
@@ -1436,12 +1545,16 @@
   }
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
+      if (_strokeSel.length) { clearStrokeSel(); return; }
       if (_sel.length) { clearSel(); return; }
       if (document.querySelector('.cre-full')) window.creToggleFull(false);
     }
-    // 🗑️ Suppr / Retour : efface les blocs SÉLECTIONNÉS (jamais pendant qu'on tape un texte)
-    if ((e.key === 'Delete' || e.key === 'Backspace') && _sel.length && !isTyping()) {
-      e.preventDefault(); deleteSelection(); return;
+    // 🗑️ Suppr / Retour : efface les blocs ET les traits SÉLECTIONNÉS (jamais en saisie)
+    if ((e.key === 'Delete' || e.key === 'Backspace') && !isTyping() && (_sel.length || _strokeSel.length)) {
+      e.preventDefault();
+      if (_sel.length) deleteSelection();
+      if (_strokeSel.length) deleteStrokeSel();
+      return;
     }
     // Ctrl/Cmd+A dans le tableau (hors saisie) = tout sélectionner les blocs
     if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A') && !isTyping()) {
