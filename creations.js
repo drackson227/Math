@@ -62,6 +62,9 @@
             var s = safeStyle(a.value);
             if (s) { c.setAttribute('style', s); return; } // taille / couleur / surlignage / alignement
           }
+          // ☑ cases à cocher : on garde la classe (cre-todo / cre-todo-box) + contenteditable=false
+          if ((c.tagName === 'DIV' || c.tagName === 'SPAN') && a.name === 'class' && /^(cre-todo( done)?|cre-todo-box)$/.test(a.value)) return;
+          if (c.tagName === 'SPAN' && a.name === 'contenteditable' && a.value === 'false') return;
           c.removeAttribute(a.name);
         });
         if (c.tagName === 'IMG' && c.className !== 'cre-fx-img') c.className = 'note-img';
@@ -95,6 +98,7 @@
     });
     if (tab === 'cards') renderCustomCards();
     if (tab === 'notes') { closeEditor(); renderCustomNotes(); }
+    try { localStorage.setItem('mathsgr2_cretab', tab); } catch (e) {} // mémorise le dernier onglet
   };
 
   /* ════════════════ 🎴 FLASHCARDS PERSOS ════════════════ */
@@ -1022,6 +1026,38 @@
     });
     boardChanged();
   };
+  // ☑ CASES À COCHER (to-do) : ligne avec une case cliquable
+  window.creInsertTodo = function () {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    var sel = window.getSelection();
+    var range = (sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).commonAncestorContainer))
+      ? sel.getRangeAt(0)
+      : (function () { var r = document.createRange(); r.selectNodeContents(ed); r.collapse(false); return r; })();
+    range.deleteContents();
+    var line = document.createElement('div');
+    line.className = 'cre-todo';
+    var box = document.createElement('span');
+    box.className = 'cre-todo-box'; box.setAttribute('contenteditable', 'false'); box.textContent = '☐';
+    line.appendChild(box); line.appendChild(document.createTextNode(' '));
+    range.insertNode(line);
+    var r2 = document.createRange(); r2.setStart(line, line.childNodes.length); r2.collapse(true);
+    if (sel) { sel.removeAllRanges(); sel.addRange(r2); }
+    boardChanged();
+  };
+  function toggleTodo(box) {
+    if (!box) return;
+    var done = (box.textContent || '').trim() === '☑';
+    box.textContent = done ? '☐' : '☑';
+    var line = box.closest && box.closest('.cre-todo'); if (line) line.classList.toggle('done', !done);
+    if (box.closest && box.closest('#cre-note-board')) boardChanged(); // ne sauve que dans l'éditeur (pas la lecture)
+  }
+  // clic sur une case (éditeur OU lecture 👁) → coche/décoche
+  document.addEventListener('click', function (e) {
+    var box = e.target && e.target.closest && e.target.closest('.cre-todo-box');
+    if (box) { e.preventDefault(); toggleTodo(box); }
+  });
   window.creInsertChar = function (ch) { edInsert(ch); };
   window.creToggleChars = function () {
     exitInk();
@@ -2040,6 +2076,11 @@
     }
     renderCustomCards();
     renderCustomNotes();
+    // restaure le dernier onglet utilisé (quiz / cartes / synthèses)
+    try {
+      var lt = localStorage.getItem('mathsgr2_cretab');
+      if (lt && ['quiz', 'cards', 'notes'].indexOf(lt) >= 0 && lt !== 'quiz') window.creSwitch(lt);
+    } catch (e) {}
   };
 
   // rafraîchit les listes (cartes + synthèses) quand on change de matière —
