@@ -714,7 +714,7 @@
   /* ---------- 🔠 TAILLE DU TEXTE : A− / A+ ----------
      Marche dans le texte principal ET dans les blocs déplaçables.
      Si rien n'est sélectionné → s'applique à TOUT le bloc actif (plus simple). */
-  var FONT_STEPS = [12, 15, 19, 24, 30];
+  var FONT_STEPS = [10, 12, 14, 16, 18, 21, 24, 28, 32, 40, 48, 60];
   // s'assure qu'il y a une sélection ; sinon sélectionne tout le contenu du bloc actif
   function ensureSelectionIn(ed) {
     var sel = window.getSelection();
