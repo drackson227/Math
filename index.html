@@ -525,11 +525,11 @@
       <label class="ft-lab">Nom / énoncé <span class="ft-hint">(ce que l'app te demandera)</span></label>
       <input id="ft-name" type="text" class="ft-in" placeholder="Ex. : Distance d'un point à une droite" maxlength="180" autocomplete="off">
       <label class="ft-lab" id="ft-lab-formula">La formule</label>
-      <div class="ft-fxrow">
-        <input id="ft-formula" type="text" class="ft-in ft-in-fx" placeholder="Clique sur ƒ𝑥 pour la construire…" oninput="creFxPreview('ft-formula','ft-formula-prev')" autocomplete="off">
+      <div class="ft-fxrow" id="ft-formula-edit">
+        <input id="ft-formula" type="text" class="ft-in ft-in-fx" placeholder="Clique sur ƒ𝑥 pour la construire…" oninput="ftFieldChanged('ft-formula')" autocomplete="off">
         <button type="button" class="nav-btn ft-fxbtn" onclick="openFormulaComposer('ft-formula')" title="Construire la formule">ƒ𝑥</button>
       </div>
-      <div id="ft-formula-prev" class="ft-prev" style="display:none;"></div>
+      <div id="ft-formula-prev" class="ft-prev ft-rendered" style="display:none;" onclick="ftEditField('ft-formula')" title="Cliquer pour modifier le code"></div>
       <label class="ft-lab">Chapitre <span class="ft-hint">(facultatif)</span></label>
       <select id="ft-chapter" class="ft-in"></select>
       <div class="ft-form-actions">
@@ -575,11 +575,11 @@
       <div class="ft-ask-label" id="ft-ask-label">Écris la formule&nbsp;:</div>
       <div id="ft-ask" class="ft-ask"></div>
       <div id="ft-chap-tag" class="ft-chaptag"></div>
-      <div class="ft-fxrow">
-        <input id="ft-answer" type="text" class="ft-in ft-in-fx" placeholder="Construis ta réponse avec ƒ𝑥…" oninput="creFxPreview('ft-answer','ft-answer-prev')" autocomplete="off">
+      <div class="ft-fxrow" id="ft-answer-edit">
+        <input id="ft-answer" type="text" class="ft-in ft-in-fx" placeholder="Construis ta réponse avec ƒ𝑥… (ou tape-la)" oninput="ftFieldChanged('ft-answer')" autocomplete="off">
         <button type="button" class="nav-btn ft-fxbtn" onclick="openFormulaComposer('ft-answer')" title="Construire la formule">ƒ𝑥</button>
       </div>
-      <div id="ft-answer-prev" class="ft-prev" style="display:none;"></div>
+      <div id="ft-answer-prev" class="ft-prev ft-rendered" style="display:none;" onclick="ftEditField('ft-answer')" title="Cliquer pour modifier"></div>
       <div id="ft-check-row" class="ft-form-actions">
         <button type="button" class="nav-btn nd-btn-ok" onclick="ftCheck()">✅ Vérifier</button>
         <button type="button" class="nav-btn" onclick="ftDunno()">🤷 Je ne sais pas</button>

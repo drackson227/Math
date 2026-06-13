@@ -1044,6 +1044,11 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 .ft-in-fx { flex: 1; }
 .ft-fxbtn { white-space: nowrap; font-weight: 700; }
 .ft-prev { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--bg-formula, rgba(124,108,255,0.08)); border: 1px dashed var(--border-subtle); min-height: 20px; overflow-x: auto; }
+/* champ qui montre la formule RENDUE (au lieu du code \(..\)) — cliquable pour rééditer */
+.ft-rendered { position: relative; cursor: pointer; border-style: solid; border-color: var(--color-nav); background: var(--bg-main); min-height: 30px; display: flex; align-items: center; gap: 8px; font-size: 19px; padding: 12px 40px 12px 14px; }
+.ft-rendered:hover { box-shadow: 0 0 0 2px rgba(124,108,255,0.25); }
+.ft-rendered::after { content: '✏️'; position: absolute; top: 8px; right: 10px; font-size: 13px; opacity: 0.6; }
+.ft-rendered:empty { display: none; }
 .ft-form-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }
 .ft-listh { font-size: 18px; color: var(--text-primary); margin: 0 0 0.8rem; display: flex; align-items: center; gap: 8px; }
 .ft-badge { display: inline-flex; min-width: 22px; height: 22px; padding: 0 7px; align-items: center; justify-content: center; border-radius: 999px; background: var(--color-nav); color: #fff; font-size: 12px; font-weight: 700; }

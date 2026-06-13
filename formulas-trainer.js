@@ -28,6 +28,7 @@
   var _results = [];              // {id, name, result:'good'|'bad'|'dunno'}
   var _graded = false;            // la carte courante a-t-elle été notée ?
   var _editId = null;            // id de la formule en cours de modification (banque)
+  var _lastUser = '';            // dernière réponse écrite (pour l'apprentissage des variantes)
 
   function el(id) { return document.getElementById(id); }
   function data() { return (typeof loadSavedData === 'function') ? loadSavedData() : {}; }
@@ -244,6 +245,48 @@
     show('home');
   };
 
+  /* ---- 🧠 variantes apprises : « j'avais juste » mémorise MA version pour cette formule ---- */
+  function acceptKey(f) { return String(f.id); }
+  function isAccepted(f, userTex) {
+    var arr = (data().fbAccept || {})[acceptKey(f)];
+    if (!arr || !arr.length) return false;
+    var n = norm(userTex);
+    return !!n && arr.indexOf(n) >= 0;
+  }
+  function addAccepted(f, userTex) {
+    var n = norm(userTex); if (!n) return false;
+    if (sameFormula(userTex, f.latex)) return false; // déjà la forme officielle
+    var d = data(); d.fbAccept = d.fbAccept || {};
+    var key = acceptKey(f), arr = d.fbAccept[key] = d.fbAccept[key] || [];
+    if (arr.indexOf(n) >= 0) return false;
+    arr.push(n);
+    if (typeof saveData === 'function') saveData(d);
+    return true;
+  }
+
+  /* ---- ✍️ champ formule : affiche le BEAU rendu au lieu du code \(..\) ----
+     Convention d'ids : input « X » → aperçu « X-prev » → ligne d'édition « X-edit ». */
+  function ftRenderField(inputId) {
+    var inp = el(inputId), prev = el(inputId + '-prev'), row = el(inputId + '-edit');
+    if (!inp || !prev) return;
+    var v = (inp.value || '').trim();
+    if (v && v.indexOf('\\(') >= 0) {        // une formule a été construite avec ƒ𝑥 → on montre le rendu
+      setFormula(prev, v);
+      prev.style.display = '';
+      if (row) row.style.display = 'none';
+    } else {                                  // vide ou texte simple → on garde la saisie visible
+      prev.style.display = 'none'; prev.innerHTML = '';
+      if (row) row.style.display = '';
+    }
+  }
+  window.ftFieldChanged = function (id) { ftRenderField(id); };
+  window.ftEditField = function (id) {       // clic sur le rendu → revenir au code modifiable
+    var prev = el(id + '-prev'), row = el(id + '-edit'), inp = el(id);
+    if (prev) prev.style.display = 'none';
+    if (row) row.style.display = '';
+    if (inp) { inp.focus(); try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch (e) {} }
+  };
+
   function renderStats() {
     var box = el('ft-stats'); if (!box) return;
     var info = subjInfo(), list = bank(), t = T(), masc = isMasc();
@@ -340,10 +383,10 @@
       toast('✅ ' + cap(T().one) + (isMasc() ? ' ajouté' : ' ajoutée') + ' à ta banque');
     }
     if (typeof saveData === 'function') saveData(d);
-    // reset formulaire
+    // reset formulaire (le chapitre est gardé pour enchaîner les ajouts)
     if (nameEl) nameEl.value = '';
     if (fxEl) fxEl.value = '';
-    var prev = el('ft-formula-prev'); if (prev) { prev.style.display = 'none'; prev.innerHTML = ''; }
+    ftRenderField('ft-formula');
     cancelEditUI();
     renderStats(); renderList();
     if (nameEl) nameEl.focus();
@@ -356,7 +399,7 @@
     if (nameEl) nameEl.value = f.name || '';
     if (fxEl) fxEl.value = f.latex ? ('\\(' + rawTex(f.latex) + '\\)') : '';
     if (chEl) chEl.value = f.chapter || '';
-    if (typeof creFxPreview === 'function') creFxPreview('ft-formula', 'ft-formula-prev');
+    ftRenderField('ft-formula');
     var t = el('ft-form-title'), c = el('ft-cancel-btn'), s = el('ft-save-btn');
     if (t) t.textContent = '✏️ Modifier ' + T().art + ' ' + T().one;
     if (c) c.style.display = '';
@@ -372,7 +415,7 @@
     if (nameEl) nameEl.value = '';
     if (fxEl) fxEl.value = '';
     if (chEl) chEl.value = '';
-    var prev = el('ft-formula-prev'); if (prev) { prev.style.display = 'none'; prev.innerHTML = ''; }
+    ftRenderField('ft-formula');
     cancelEditUI();
   };
 
@@ -449,9 +492,9 @@
     var ask = el('ft-ask'); if (ask) { ask.textContent = f.name || ''; render(ask); }
     var ct = el('ft-chap-tag');
     if (ct) { if (f.chapter) { ct.textContent = '📂 ' + chapLabel(f.chapter); ct.style.display = ''; } else { ct.style.display = 'none'; } }
-    // réinit champ réponse
+    // réinit champ réponse (revient en mode saisie, cache l'ancien rendu)
     var ans = el('ft-answer'); if (ans) ans.value = '';
-    var prev = el('ft-answer-prev'); if (prev) { prev.style.display = 'none'; prev.innerHTML = ''; }
+    ftRenderField('ft-answer');
     // réinit zone résultat
     var rb = el('ft-result-box'); if (rb) rb.style.display = 'none';
     var sg = el('ft-selfgrade'); if (sg) sg.style.display = 'none';
@@ -480,11 +523,12 @@
     if (_graded) return;
     var ans = el('ft-answer'); var userTex = ans ? ans.value : '';
     if (!rawTex(userTex)) { toast('✍️ Écris ta réponse (ou « Je ne sais pas »)', '#fbbf24'); return; }
+    _lastUser = userTex;
     var f = _queue[_idx];
     var verdict = el('ft-verdict'), sg = el('ft-selfgrade'), nx = el('ft-next-btn');
     showCompare(userTex);
-    if (sameFormula(userTex, f.latex)) {
-      // correspondance certaine → bonne réponse automatique
+    if (sameFormula(userTex, f.latex) || isAccepted(f, userTex)) {
+      // forme officielle OU variante que TU as déjà validée → bonne réponse automatique
       if (verdict) { verdict.className = 'ft-verdict ft-verdict-ok'; verdict.textContent = '🎉 Parfait, c\'est exactement ça !'; }
       record('good');
       _graded = true;
@@ -515,8 +559,15 @@
     _graded = true;
     var verdict = el('ft-verdict');
     if (verdict) {
-      if (ok) { verdict.className = 'ft-verdict ft-verdict-ok'; verdict.textContent = '✅ Super, tu ' + pron() + ' connais !'; }
-      else { verdict.className = 'ft-verdict ft-verdict-no'; verdict.textContent = '❌ Note-' + pron() + ' — tu l\'auras la prochaine fois.'; }
+      if (ok) {
+        // 🧠 l'app apprend : ta version devient une bonne réponse acceptée pour cette formule
+        var learned = addAccepted(_queue[_idx], _lastUser);
+        verdict.className = 'ft-verdict ft-verdict-ok';
+        verdict.textContent = '✅ Super, tu ' + pron() + ' connais !' + (learned ? ' 🧠 Ta version est mémorisée — elle sera acceptée automatiquement la prochaine fois.' : '');
+      } else {
+        verdict.className = 'ft-verdict ft-verdict-no';
+        verdict.textContent = '❌ Note-' + pron() + ' — tu l\'auras la prochaine fois.';
+      }
     }
     var sg = el('ft-selfgrade'); if (sg) sg.style.display = 'none';
     var nx = el('ft-next-btn'); if (nx) nx.style.display = '';

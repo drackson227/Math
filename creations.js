@@ -2027,9 +2027,10 @@
     var d = loadSavedData();
     var pack = {
       _type: 'gr2-creations', _date: new Date().toISOString(),
-      customCards: d.customCards || [], customNotes: d.customNotes || [], customExercises: d.customExercises || []
+      customCards: d.customCards || [], customNotes: d.customNotes || [], customExercises: d.customExercises || [],
+      formulaBank: d.formulaBank || []
     };
-    var total = pack.customCards.length + pack.customNotes.length + pack.customExercises.length;
+    var total = pack.customCards.length + pack.customNotes.length + pack.customExercises.length + pack.formulaBank.length;
     if (!total) { toast('Rien à exporter pour l\'instant', '#fbbf24'); return; }
     try {
       var blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' });
@@ -2049,7 +2050,7 @@
       var obj; try { obj = JSON.parse(e.target.result); } catch (err) { toast('❌ Fichier illisible (JSON invalide)', '#f87171'); return; }
       if (!obj || typeof obj !== 'object' || Array.isArray(obj)) { toast('❌ Fichier invalide', '#f87171'); return; }
       var d = loadSavedData(), added = 0;
-      ['customCards', 'customNotes', 'customExercises'].forEach(function (key) {
+      ['customCards', 'customNotes', 'customExercises', 'formulaBank'].forEach(function (key) {
         var incoming = Array.isArray(obj[key]) ? obj[key] : [];
         d[key] = d[key] || [];
         var seen = {}; d[key].forEach(function (it) { if (it && it.id != null) seen[it.id] = 1; });
