@@ -195,6 +195,7 @@
     try { if (typeof rebuildFlashcardFilters === 'function') rebuildFlashcardFilters(); } catch (_) {}
     try { if (typeof rebuildExoThemes === 'function') rebuildExoThemes(); } catch (_) {}
     try { if (typeof renderCustomExoList === 'function') renderCustomExoList(); } catch (_) {}
+    try { if (typeof window.creRefreshLists === 'function') window.creRefreshLists(); } catch (_) {}
   };
 
   function init() {

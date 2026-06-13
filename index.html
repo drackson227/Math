@@ -505,6 +505,10 @@
     <button type="button" id="cre-tab-quiz" class="note-tab on" onclick="creSwitch('quiz')">❓ Questions de quiz</button>
     <button type="button" id="cre-tab-cards" class="note-tab" onclick="creSwitch('cards')">🎴 Flashcards</button>
     <button type="button" id="cre-tab-notes" class="note-tab" onclick="creSwitch('notes')">📜 Synthèses</button>
+    <span style="flex:1;"></span>
+    <button type="button" class="cre-io-btn" onclick="creExport()" title="Télécharger une sauvegarde de toutes tes créations (cartes, synthèses, questions)">💾 Exporter</button>
+    <button type="button" class="cre-io-btn" onclick="crePickImport()" title="Ajouter des créations depuis un fichier de sauvegarde (fusion, sans rien écraser)">📂 Importer</button>
+    <input type="file" id="cre-import-file" accept="application/json,.json" style="display:none;" onchange="creImport(this)">
   </div>
 
   <!-- ════ ❓ ONGLET QUESTIONS DE QUIZ (formulaire historique) ════ -->
@@ -525,11 +529,22 @@
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Ta réponse <button type="button" class="fx-mini" onmousedown="event.preventDefault()" title="Insérer une formule" onclick="openFormulaComposer('exo-answer')">ƒ𝑥 formule</button></label>
       <input id="exo-answer" type="text" oninput="creFxPreview('exo-answer','exo-answer-prev')" placeholder="La bonne réponse…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; margin-bottom:0.4rem;">
       <div id="exo-answer-prev" class="fx-fieldprev" style="display:none;"></div>
+      <div style="margin:0.3rem 0 0.7rem; padding:10px 12px; border:1px dashed var(--border-subtle); border-radius:9px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-primary); font-weight:600; cursor:pointer;">
+          <input type="checkbox" id="exo-qcm-toggle" onchange="creToggleQcm()"> 🎯 En faire un QCM jouable dans le <strong style="color:var(--color-nav);">vrai Quiz</strong>
+        </label>
+        <div id="exo-qcm-fields" style="display:none; margin-top:8px;">
+          <p style="font-size:11px; color:var(--text-secondary); opacity:0.8; margin:0 0 6px;">Ajoute 3 <strong>mauvaises</strong> réponses (mélangées avec la bonne dans le Quiz). Difficulté : Intermédiaire.</p>
+          <input id="exo-wrong1" type="text" placeholder="Mauvaise réponse 1" class="exo-wrong-in">
+          <input id="exo-wrong2" type="text" placeholder="Mauvaise réponse 2" class="exo-wrong-in">
+          <input id="exo-wrong3" type="text" placeholder="Mauvaise réponse 3" class="exo-wrong-in">
+        </div>
+      </div>
       <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:4px;">Explication <span style="font-weight:400; opacity:0.7;">(facultatif)</span> <button type="button" class="fx-mini" onmousedown="event.preventDefault()" title="Insérer une formule" onclick="openFormulaComposer('exo-exp')">ƒ𝑥 formule</button></label>
       <textarea id="exo-exp" rows="2" oninput="creFxPreview('exo-exp','exo-exp-prev')" placeholder="Comment on arrive au résultat…" style="width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:14px; resize:vertical; margin-bottom:0.4rem;"></textarea>
       <div id="exo-exp-prev" class="fx-fieldprev" style="display:none;"></div>
       <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin-bottom:1rem;">💡 Le bouton <strong>ƒ𝑥</strong> construit la formule pour toi. (Ou écris entre <code>\\( … \\)</code> si tu connais le LaTeX.)</p>
-      <button onclick="saveCustomExo()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la question</button>
+      <button id="exo-save-btn" onclick="saveCustomExo()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Enregistrer la question</button>
     </div>
 
     <!-- Liste + révision -->
@@ -542,7 +557,7 @@
   </div>
 
   <!-- Overlay de révision -->
-  <div id="exo-review-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:3000; align-items:center; justify-content:center; padding:1rem;">
+  <div id="exo-review-overlay" onclick="if(event.target===this)closeExoReview()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:3000; align-items:center; justify-content:center; padding:1rem;">
     <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:20px; padding:2rem; max-width:560px; width:100%; max-height:90vh; overflow-y:auto; position:relative;">
       <button onclick="closeExoReview()" style="position:absolute; top:1rem; right:1rem; background:transparent; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer;">✕</button>
       <div id="exo-review-counter" style="font-size:13px; color:var(--text-secondary); margin-bottom:1rem;"></div>
@@ -583,7 +598,7 @@
         <div id="cre-card-back-prev" class="fx-fieldprev" style="display:none;"></div>
         <span id="cre-img-back" class="cre-imgchip" style="display:none;"><img alt="aperçu verso"><button type="button" onclick="creCardImgClear('back')" aria-label="Retirer l'image du verso">✕</button></span>
         <p style="font-size:11px; color:var(--text-secondary); opacity:0.7; margin:0.5rem 0 1rem;">💡 Ta carte rejoint le paquet de l'onglet 🎴 Flashcards, avec la répétition espacée et les filtres par chapitre.</p>
-        <button onclick="saveCustomCard()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Créer la flashcard</button>
+        <button id="cre-card-save-btn" onclick="saveCustomCard()" style="width:100%; padding:11px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--color-nav),#7c3aed); color:#fff; font-size:15px; font-weight:700; cursor:pointer;">💾 Créer la flashcard</button>
       </div>
       <!-- Liste -->
       <div>
@@ -615,7 +630,7 @@
               <option value="">Taille</option>
               <option value="10">10</option><option value="12">12</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="21">21</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option><option value="60">60</option>
             </select>
-            <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creHighlight()" title="Surligner le texte sélectionné">🖍️</button>
+            <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creToggleHilite()" title="Surligner (choix de la couleur)">🖍️</button>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creToggleColors()" title="Couleur du texte sélectionné">🎨</button>
             <span class="cre-tb-sep"></span>
             <button type="button" class="nav-btn" onmousedown="event.preventDefault()" onclick="creAlign('left')" title="Aligner à gauche"><svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor" aria-hidden="true"><rect x="0" y="0" width="15" height="2" rx="1"></rect><rect x="0" y="4.5" width="9" height="2" rx="1"></rect><rect x="0" y="9" width="12" height="2" rx="1"></rect></svg></button>
@@ -632,6 +647,7 @@
             <button type="button" id="cre-hand-btn" class="nav-btn" onmousedown="event.preventDefault()" onclick="creBoardMode('hand')" title="Déplacer la vue du tableau (glisser). Astuce : glisse sur le fond vide pour sélectionner plusieurs éléments.">🖐️ Déplacer</button>
           </div>
           <div id="cre-colors" style="display:none;"></div>
+          <div id="cre-hilites" style="display:none;"></div>
           <div id="cre-chars" style="display:none; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:10px 12px; margin-bottom:8px;"></div>
           <div id="cre-board-frame">
             <div id="cre-note-wrap">

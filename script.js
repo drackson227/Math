@@ -132,10 +132,19 @@ function loadSavedData() {
 function saveData(data) {
   try {
     localStorage.setItem('mathsgr2_data', JSON.stringify(data));
-  } catch(e) { console.warn('Impossible de sauvegarder:', e); }
+  } catch(e) {
+    console.warn('Impossible de sauvegarder:', e);
+    // 🛑 stockage plein : prévenir l'élève (sinon la sauvegarde échoue en SILENCE → perte)
+    var full = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || /quota|exceeded/i.test(e.message || ''));
+    if (full && typeof showToast === 'function') {
+      showToast('⚠️ Stockage plein — allège une synthèse/image, ou exporte puis supprime des créations', '#f87171');
+    }
+    return false;
+  }
   // Si connecté à un compte, pousse aussi vers le cloud (en différé, défensif).
   if (typeof cloudPushDebounced === 'function') { try { cloudPushDebounced(); } catch(e){} }
   if (typeof leaderboardPush === 'function') { try { leaderboardPush(); } catch(e){} }
+  return true;
 }
 
 // ── CLASSEMENT (leaderboard XP via Supabase) ──
@@ -253,7 +262,22 @@ function filterQuiz(force) {
     const difficultyMatch = difficultyFilter === 'all' || q.difficulty === difficultyFilter;
     return chapterMatch && difficultyMatch;
   });
-  
+
+  // ➕ Questions QCM PERSO de l'élève → jouables dans le VRAI Quiz (mêmes filtres).
+  //    Textes échappés (anti-XSS, notamment si import) ; les formules \( \) survivent.
+  try {
+    const _cust = (data.customExercises || [])
+      .filter(e => (e.subject || 'maths') === curSubject() && e.qcm && Array.isArray(e.opts) && e.opts.length === 4)
+      .map(e => ({
+        q: escapeHtmlExo(e.q || ''), opts: e.opts.map(o => escapeHtmlExo(o || '')),
+        ans: (e.ans || 0), chapter: e.theme || '', difficulty: e.difficulty || 'intermediaire',
+        exp: escapeHtmlExo(e.exp || ''), _custom: e.id
+      }))
+      .filter(q => (chapterFilter === 'all' || q.chapter === chapterFilter) &&
+                   (difficultyFilter === 'all' || q.difficulty === difficultyFilter));
+    if (_cust.length) questions = questions.concat(_cust);
+  } catch (e) {}
+
   // Prioritize missed questions (adaptive quiz)
   if (missedQuestions.length > 0) {
     const missed = questions.filter(q => missedQuestions.includes(q.q));
@@ -4302,6 +4326,12 @@ function escapeHtmlExo(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+let _exoEditId = null; // id de la question en cours de modification (sinon création)
+// 🎯 affiche/masque les 3 champs « mauvaises réponses » du mode QCM
+function creToggleQcm() {
+  const t = document.getElementById('exo-qcm-toggle'), f = document.getElementById('exo-qcm-fields');
+  if (f) f.style.display = (t && t.checked) ? 'block' : 'none';
+}
 function saveCustomExo() {
   const theme = document.getElementById('exo-theme').value;
   const q = document.getElementById('exo-question').value.trim();
@@ -4311,24 +4341,73 @@ function saveCustomExo() {
     showToast('⚠️ Remplis au moins la question et la réponse', '#f87171');
     return;
   }
+  // mode QCM (optionnel) : 3 mauvaises réponses → question jouable dans le VRAI Quiz
+  const qcmOn = !!(document.getElementById('exo-qcm-toggle') && document.getElementById('exo-qcm-toggle').checked);
+  let qcmData = { qcm: false };
+  if (qcmOn) {
+    const w1 = (document.getElementById('exo-wrong1').value || '').trim();
+    const w2 = (document.getElementById('exo-wrong2').value || '').trim();
+    const w3 = (document.getElementById('exo-wrong3').value || '').trim();
+    if (!w1 || !w2 || !w3) { showToast('⚠️ Pour un QCM, remplis les 3 mauvaises réponses', '#f87171'); return; }
+    qcmData = { qcm: true, opts: [a, w1, w2, w3], ans: 0, difficulty: 'intermediaire' };
+  }
   const themeLabel = (typeof CHAP_LABELS !== 'undefined' && CHAP_LABELS && CHAP_LABELS[theme])
     ? CHAP_LABELS[theme]
     : (EXO_THEMES[theme] ? EXO_THEMES[theme].label : theme);
   const data = loadSavedData();
   data.customExercises = data.customExercises || [];
-  data.customExercises.unshift({ id: Date.now(), theme, themeLabel, subject: curSubject(), q, a, exp, created: new Date().toISOString() });
+  if (_exoEditId) { // ✏️ mise à jour
+    const ex = data.customExercises.find(e => e.id === _exoEditId);
+    if (ex) {
+      ex.theme = theme; ex.themeLabel = themeLabel; ex.q = q; ex.a = a; ex.exp = exp; ex.updated = new Date().toISOString();
+      if (qcmData.qcm) { ex.qcm = true; ex.opts = qcmData.opts; ex.ans = 0; ex.difficulty = 'intermediaire'; }
+      else { ex.qcm = false; delete ex.opts; delete ex.ans; }
+    }
+    _exoEditId = null;
+    const b = document.getElementById('exo-save-btn'); if (b) b.textContent = '💾 Enregistrer la question';
+    showToast('✅ Question mise à jour', 'var(--color-parabole)');
+  } else {
+    data.customExercises.unshift(Object.assign({ id: Date.now(), theme, themeLabel, subject: curSubject(), q, a, exp, created: new Date().toISOString() }, qcmData));
+    showToast(qcmData.qcm ? '✅ QCM enregistré — il apparaîtra dans le Quiz' : '✅ Question enregistrée', 'var(--color-parabole)');
+  }
   saveData(data);
   document.getElementById('exo-question').value = '';
   document.getElementById('exo-answer').value = '';
   document.getElementById('exo-exp').value = '';
+  ['exo-wrong1', 'exo-wrong2', 'exo-wrong3'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const tg = document.getElementById('exo-qcm-toggle'); if (tg) tg.checked = false; creToggleQcm();
+  ['exo-question', 'exo-answer', 'exo-exp'].forEach(id => { const pv = document.getElementById(id + '-prev'); if (pv) { pv.style.display = 'none'; pv.innerHTML = ''; } });
   renderCustomExoList();
-  showToast('✅ Question enregistrée', 'var(--color-parabole)');
+}
+
+function editCustomExo(id) {
+  const e = (loadSavedData().customExercises || []).find(x => x.id === id);
+  if (!e) return;
+  _exoEditId = id;
+  const th = document.getElementById('exo-theme'); if (th && e.theme) { try { th.value = e.theme; } catch (_) {} }
+  document.getElementById('exo-question').value = e.q || '';
+  document.getElementById('exo-answer').value = e.a || '';
+  document.getElementById('exo-exp').value = e.exp || '';
+  // restaure le mode QCM + les 3 mauvaises réponses
+  const tg = document.getElementById('exo-qcm-toggle'); if (tg) tg.checked = !!e.qcm;
+  if (e.qcm && Array.isArray(e.opts)) {
+    document.getElementById('exo-wrong1').value = e.opts[1] || '';
+    document.getElementById('exo-wrong2').value = e.opts[2] || '';
+    document.getElementById('exo-wrong3').value = e.opts[3] || '';
+  } else { ['exo-wrong1', 'exo-wrong2', 'exo-wrong3'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+  creToggleQcm();
+  ['exo-question', 'exo-answer', 'exo-exp'].forEach(id2 => { if (typeof creFxPreview === 'function') creFxPreview(id2, id2 + '-prev'); });
+  const b = document.getElementById('exo-save-btn'); if (b) b.textContent = '✏️ Mettre à jour la question';
+  const qf = document.getElementById('exo-question'); if (qf) { try { qf.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (_) {} qf.focus(); }
+  showToast('✏️ Modifie puis « Mettre à jour »', 'var(--color-nav)');
 }
 
 function deleteCustomExo(id) {
+  if (!confirm('Supprimer cette question ? (irréversible)')) return;
   const data = loadSavedData();
   data.customExercises = (data.customExercises || []).filter(e => e.id !== id);
   saveData(data);
+  if (_exoEditId === id) { _exoEditId = null; const b = document.getElementById('exo-save-btn'); if (b) b.textContent = '💾 Enregistrer la question'; }
   renderCustomExoList();
   showToast('🗑️ Question supprimée', '#f87171');
 }
@@ -4349,8 +4428,10 @@ function renderCustomExoList() {
     const t = exoThemeInfo(e);
     return '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; padding:1rem 1.1rem; margin-bottom:0.85rem;">' +
       '<div style="display:flex; justify-content:space-between; align-items:start; gap:10px;">' +
-        '<span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; color:' + t.color + '; border:1px solid ' + t.color + ';">' + t.label + '</span>' +
-        '<button onclick="deleteCustomExo(' + e.id + ')" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:15px;" aria-label="Supprimer">🗑️</button>' +
+        '<span><span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; color:' + t.color + '; border:1px solid ' + t.color + ';">' + t.label + '</span>' +
+        (e.qcm ? '<span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:var(--color-nav); color:#fff; margin-left:6px;">🎯 QCM</span>' : '') + '</span>' +
+        '<span style="display:flex; gap:4px;"><button onclick="editCustomExo(' + e.id + ')" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:15px;" aria-label="Modifier">✏️</button>' +
+        '<button onclick="deleteCustomExo(' + e.id + ')" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:15px;" aria-label="Supprimer">🗑️</button></span>' +
       '</div>' +
       '<div style="font-size:15px; color:var(--text-primary); margin:0.6rem 0 0.4rem; line-height:1.5;">' + escapeHtmlExo(e.q) + '</div>' +
       '<div style="font-size:13px; color:var(--text-secondary);"><strong style="color:var(--color-parabole);">Réponse :</strong> ' + escapeHtmlExo(e.a) + '</div>' +
@@ -4369,7 +4450,11 @@ function reviewCustomExos() {
   exoReviewQueue = shuffleArray((data.customExercises || []).filter(e => (e.subject || 'maths') === cur));
   if (!exoReviewQueue.length) { showToast('Crée d\'abord une question', '#f87171'); return; }
   exoReviewIndex = 0;
-  document.getElementById('exo-review-overlay').style.display = 'flex';
+  var ov = document.getElementById('exo-review-overlay');
+  // le transform d'animation de la section piège le position:fixed → on sort l'overlay
+  // sur <body> pour qu'il soit VRAIMENT centré plein écran (et que le clic-dehors marche)
+  if (ov && ov.parentNode !== document.body) document.body.appendChild(ov);
+  ov.style.display = 'flex';
   showExoReviewCard();
 }
 
@@ -4784,6 +4869,8 @@ document.addEventListener('click', function (e) {
 
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
+    var exoOv = document.getElementById('exo-review-overlay');
+    if (exoOv && exoOv.style.display === 'flex') { closeExoReview(); return; } // Échap ferme la révision
     if (window._infoStack.length) { infoBack(); }
     else { closeImgModal(); }
   }

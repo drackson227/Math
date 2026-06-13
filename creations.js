@@ -100,6 +100,7 @@
   /* ════════════════ 🎴 FLASHCARDS PERSOS ════════════════ */
   var _cardImg = { front: null, back: null };
   var _imgSide = 'front';
+  var _cardEditId = null; // id de la carte en cours de modification (sinon création)
 
   window.crePickCardImg = function (side) {
     _imgSide = side;
@@ -141,24 +142,61 @@
     }
     var d = loadSavedData();
     d.customCards = d.customCards || [];
-    d.customCards.unshift({
-      id: Date.now(), subject: subj(), chapter: sel ? sel.value : '',
-      front: sideHtml(front, _cardImg.front), back: sideHtml(back, _cardImg.back),
-      created: new Date().toISOString()
-    });
+    if (_cardEditId) { // ✏️ mise à jour d'une carte existante
+      var ce = d.customCards.find(function (x) { return x.id === _cardEditId; });
+      if (ce) { ce.chapter = sel ? sel.value : ''; ce.front = sideHtml(front, _cardImg.front); ce.back = sideHtml(back, _cardImg.back); ce.updated = new Date().toISOString(); }
+      _cardEditId = null;
+      var btnU = el('cre-card-save-btn'); if (btnU) btnU.textContent = '💾 Créer la flashcard';
+      toast('✅ Flashcard mise à jour');
+    } else {
+      d.customCards.unshift({
+        id: Date.now(), subject: subj(), chapter: sel ? sel.value : '',
+        front: sideHtml(front, _cardImg.front), back: sideHtml(back, _cardImg.back),
+        created: new Date().toISOString()
+      });
+      toast('✅ Flashcard créée — retrouve-la dans l\'onglet 🎴 Flashcards');
+    }
     saveData(d);
     if (fEl) fEl.value = '';
     if (bEl) bEl.value = '';
     _cardImg = { front: null, back: null }; updateImgChips();
+    creFxPreview('cre-card-front', 'cre-card-front-prev'); creFxPreview('cre-card-back', 'cre-card-back-prev');
     renderCustomCards();
     refreshDeck();
-    toast('✅ Flashcard créée — retrouve-la dans l\'onglet 🎴 Flashcards');
+  };
+
+  // texte affichable (HTML stocké → texte brut éditable) + récup de l'image éventuelle
+  function htmlToPlain(html) {
+    var dv = document.createElement('div');
+    dv.innerHTML = String(html || '').replace(/<img[^>]*>/gi, '');
+    dv.querySelectorAll('br').forEach(function (b) { b.replaceWith('\n'); });
+    return (dv.textContent || '').replace(/ /g, ' ').trim();
+  }
+  function extractImg(html) {
+    var m = String(html || '').match(/<img[^>]*src="([^"]+)"/i);
+    return m ? m[1] : null;
+  }
+  window.editCustomCard = function (id) {
+    var c = (loadSavedData().customCards || []).find(function (x) { return x.id === id; });
+    if (!c) return;
+    _cardEditId = id;
+    var fEl = el('cre-card-front'), bEl = el('cre-card-back'), th = el('cre-card-theme');
+    if (fEl) fEl.value = htmlToPlain(c.front);
+    if (bEl) bEl.value = htmlToPlain(c.back);
+    if (th && c.chapter) { try { th.value = c.chapter; } catch (e) {} }
+    _cardImg.front = extractImg(c.front); _cardImg.back = extractImg(c.back); updateImgChips();
+    creFxPreview('cre-card-front', 'cre-card-front-prev'); creFxPreview('cre-card-back', 'cre-card-back-prev');
+    var btn = el('cre-card-save-btn'); if (btn) btn.textContent = '✏️ Mettre à jour la flashcard';
+    if (fEl) { try { fEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} fEl.focus(); }
+    toast('✏️ Modifie le recto/verso puis « Mettre à jour »');
   };
 
   window.deleteCustomCard = function (id) {
+    if (!confirm('Supprimer cette flashcard ? (irréversible)')) return;
     var d = loadSavedData();
     d.customCards = (d.customCards || []).filter(function (c) { return c.id !== id; });
     saveData(d);
+    if (_cardEditId === id) { _cardEditId = null; var b = el('cre-card-save-btn'); if (b) b.textContent = '💾 Créer la flashcard'; }
     renderCustomCards(); refreshDeck();
     toast('🗑️ Flashcard supprimée', '#f87171');
   };
@@ -179,7 +217,8 @@
     list.innerHTML = cards.map(function (c) {
       return '<div class="cre-item">' +
         '<div class="cre-item-top"><span class="cre-chip">' + esc(chapName(c.chapter)) + '</span>' +
-        '<button class="cre-del" onclick="deleteCustomCard(' + c.id + ')" aria-label="Supprimer la carte">🗑️</button></div>' +
+        '<span class="cre-item-acts"><button class="cre-del" onclick="editCustomCard(' + c.id + ')" aria-label="Modifier la carte">✏️</button>' +
+        '<button class="cre-del" onclick="deleteCustomCard(' + c.id + ')" aria-label="Supprimer la carte">🗑️</button></span></div>' +
         '<div class="cre-card-face"><span class="cre-facelab">Recto</span>' + sanitize(c.front) + '</div>' +
         '<div class="cre-card-face cre-face-back"><span class="cre-facelab">Verso</span>' + sanitize(c.back) + '</div>' +
       '</div>';
@@ -354,6 +393,7 @@
   };
 
   window.creDeleteNote = function (id) {
+    if (!confirm('Supprimer cette synthèse ? (irréversible)')) return;
     var d = loadSavedData();
     d.customNotes = (d.customNotes || []).filter(function (n) { return n.id !== id; });
     saveData(d);
@@ -393,6 +433,7 @@
       if (b.w) d.style.width = b.w + 'px';
       if (b.h) d.style.height = b.h + 'px';
       if (b.rot) d.style.transform = 'rotate(' + b.rot + 'deg)';
+      if (b.bg && /^(#[0-9a-f]{3,8}|rgba?\([\d.,\s]+\))$/i.test(b.bg)) d.style.backgroundColor = b.bg;
       var alStyle = (b.align && /^(left|center|right|justify)$/.test(b.align)) ? ' style="text-align:' + b.align + '"' : '';
       d.innerHTML = '<div class="cre-tbox-body"' + alStyle + '>' + b.html + '</div>';
       stage.appendChild(d);
@@ -471,6 +512,7 @@
       if (b.rot) o.rot = ((Number(b.rot) || 0) % 360);
       if (b.kind === 'img') o.kind = 'img';
       if (b.align && /^(left|center|right|justify)$/.test(b.align)) o.align = b.align;
+      if (b.bg && /^(#[0-9a-f]{3,8}|rgba?\([\d.,\s]+\))$/i.test(b.bg)) o.bg = b.bg;
       out.push(o);
     });
     return out;
@@ -508,9 +550,13 @@
       var frame = el('cre-board-frame'); if (!frame) return;
       bar = document.createElement('div'); bar.id = 'cre-sel-bar'; bar.style.display = 'none';
       bar.innerHTML = '<span id="cre-sel-n"></span>' +
+        '<button type="button" id="cre-sel-bg" title="Couleur de fond du bloc (post-it)">🎨 Fond</button>' +
+        '<button type="button" id="cre-sel-dup" title="Dupliquer (Ctrl+D)">📑 Dupliquer</button>' +
         '<button type="button" id="cre-sel-del" title="Supprimer la sélection (touche Suppr)">🗑️ Supprimer</button>' +
         '<button type="button" id="cre-sel-clr" title="Tout désélectionner">✕</button>';
       frame.appendChild(bar);
+      bar.querySelector('#cre-sel-bg').addEventListener('click', cycleSelBg);
+      bar.querySelector('#cre-sel-dup').addEventListener('click', duplicateSelection);
       bar.querySelector('#cre-sel-del').addEventListener('click', deleteSelection);
       bar.querySelector('#cre-sel-clr').addEventListener('click', clearSel);
     }
@@ -527,7 +573,45 @@
     updateSelBar();
     boardChanged();
   }
+  // 📑 dupliquer le(s) bloc(s) sélectionné(s), décalés de 16px (et sélectionne les copies)
+  function duplicateSelection() {
+    if (!_sel.length) return;
+    var clones = [];
+    _sel.slice().forEach(function (b) {
+      var body = b.querySelector('.cre-tbox-body');
+      var html = sanitize(body ? body.innerHTML : '');
+      var opts = {};
+      if (b.style.width) opts.w = parseInt(b.style.width, 10) || 0;
+      if (b.style.height) opts.h = parseInt(b.style.height, 10) || 0;
+      var rot = Number(b.dataset.rot) || 0; if (rot) opts.rot = rot;
+      if (b.classList.contains('cre-tbox-img')) opts.kind = 'img';
+      if (body && body.style.textAlign) opts.align = body.style.textAlign;
+      var x = (parseInt(b.style.left, 10) || 0) + 16, y = (parseInt(b.style.top, 10) || 0) + 16;
+      var nb = window.creAddTextBox(x, y, html, true, opts);
+      if (nb) clones.push(nb);
+    });
+    clearSel();
+    clones.forEach(function (c) { c.classList.add('sel'); _sel.push(c); });
+    updateSelBar();
+    boardChanged();
+    if (clones.length) toast('📑 ' + clones.length + ' bloc(s) dupliqué(s)');
+  }
+  // 🎨 fond « post-it » : cycle les blocs sélectionnés à travers quelques teintes (+ aucun)
+  var POSTIT = ['', 'rgba(251,191,36,0.22)', 'rgba(96,165,250,0.22)', 'rgba(52,211,153,0.22)', 'rgba(248,113,113,0.22)', 'rgba(167,139,250,0.22)'];
+  function cycleSelBg() {
+    if (!_sel.length) return;
+    var idx = (parseInt(_sel[0].dataset.bgi, 10) || 0);
+    idx = (idx + 1) % POSTIT.length;
+    var next = POSTIT[idx];
+    _sel.forEach(function (b) {
+      b.dataset.bgi = idx;
+      if (next) b.style.backgroundColor = next; else b.style.removeProperty('background-color');
+    });
+    boardChanged();
+  }
   window._creDeleteSelection = deleteSelection;
+  window._creDuplicateSelection = duplicateSelection;
+  window._creCycleSelBg = cycleSelBg;
   window._creHasSelection = function () { return _sel.length > 0; };
 
   // poignée de déplacement (souris + tactile) ; déplace TOUT le groupe si plusieurs sélectionnés
@@ -591,6 +675,7 @@
     var body = box.querySelector('.cre-tbox-body');
     if (html) body.innerHTML = sanitize(html);
     if (opts.align && /^(left|center|right|justify)$/.test(opts.align)) body.style.textAlign = opts.align;
+    if (opts.bg) box.style.backgroundColor = opts.bg; // fond « post-it » du bloc
     if (!isImg) body.addEventListener('input', boardChanged);
 
     // clic sur le bloc → le sélectionner (Maj = ajouter/retirer de la sélection)
@@ -705,6 +790,7 @@
       var rot = Number(b.dataset.rot) || 0; if (rot) o.rot = rot;
       if (b.classList.contains('cre-tbox-img')) o.kind = 'img';
       if (body && body.style.textAlign) o.align = body.style.textAlign;
+      if (b.style.backgroundColor) o.bg = b.style.backgroundColor;
       out.push(o);
     });
     return out;
@@ -825,22 +911,46 @@
     boardChanged();
   };
 
-  /* ---------- 🖍️ SURLIGNER le texte sélectionné ---------- */
-  window.creHighlight = function () {
+  /* ---------- 🖍️ SURLIGNER le texte sélectionné (avec choix de couleur) ---------- */
+  function applyHilite(val) {
     exitInk();
     var ed = activeEd(); if (!ed) return;
     ed.focus();
     if (!ensureSelectionIn(ed)) return;
     try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
-    try { document.execCommand('hiliteColor', false, 'rgba(251,191,36,0.45)'); }
-    catch (e) { try { document.execCommand('backColor', false, 'rgba(251,191,36,0.45)'); } catch (e2) { return; } }
+    try { document.execCommand('hiliteColor', false, val); }
+    catch (e) { try { document.execCommand('backColor', false, val); } catch (e2) { return; } }
     boardChanged();
+  }
+  window.creHighlight = function () { applyHilite('rgba(251,191,36,0.45)'); }; // jaune par défaut (compat)
+  // palette de surlignage : [couleur appliquée, pastille] ; 'none' = retirer
+  var HILITE_COLORS = [
+    ['rgba(251,191,36,0.45)', '#fbbf24'], ['rgba(96,165,250,0.40)', '#60a5fa'],
+    ['rgba(52,211,153,0.40)', '#34d399'], ['rgba(248,113,113,0.40)', '#f87171'],
+    ['rgba(167,139,250,0.40)', '#a78bfa'], ['none', 'transparent']
+  ];
+  window.creToggleHilite = function () {
+    exitInk();
+    var p = el('cre-hilites'); if (!p) return;
+    var open = p.style.display !== 'none';
+    p.style.display = open ? 'none' : 'flex';
+    if (!open && !p.innerHTML) {
+      p.innerHTML = '<span class="cre-colors-lab">Surligner avec :</span>' +
+        HILITE_COLORS.map(function (c) {
+          var none = c[0] === 'none';
+          return '<button type="button" class="nd-col' + (none ? ' nd-col-none' : '') + '" style="background:' +
+            (none ? 'transparent' : c[0]) + '" onmousedown="event.preventDefault()" onclick="creHiliteColor(\'' + c[0] +
+            '\')" aria-label="' + (none ? 'Retirer le surlignage' : 'Surligner ' + c[1]) + '">' + (none ? '⌀' : '') + '</button>';
+        }).join('');
+    }
+    if (!open) { ['cre-chars', 'cre-colors'].forEach(function (id) { var x = el(id); if (x) x.style.display = 'none'; }); }
   };
+  window.creHiliteColor = function (col) { applyHilite(col === 'none' ? 'transparent' : col); };
 
   /* ---------- 🎨 COULEUR DU TEXTE (comme Discord) ----------
      Petit panneau de pastilles ; la couleur s'applique à la sélection,
      dans l'éditeur principal OU dans un bloc déplaçable. */
-  var TEXT_COLORS = ['#e9e6ff', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24', '#f87171'];
+  var TEXT_COLORS = ['#e9e6ff', '#ffffff', '#a78bfa', '#60a5fa', '#22d3ee', '#34d399', '#a3e635', '#fbbf24', '#fb923c', '#f87171', '#f472b6', '#94a3b8'];
   window.creToggleColors = function () {
     exitInk();
     var p = el('cre-colors'); if (!p) return;
@@ -983,21 +1093,36 @@
       // ⬚ SÉLECTION TOUJOURS ACTIVE (comme Discord) : clic-glissé sur le FOND =
       // rectangle de sélection. Pas de bouton. Le glissé SUR du texte sélectionne
       // le texte (on laisse le navigateur faire) ; sur le vide → on encadre les blocs.
+      // démarre-t-on SUR du vrai texte de l'éditeur ? (≠ le vide sous/à côté du texte)
+      function startsOnText(e) {
+        try {
+          var r = document.caretRangeFromPoint && document.caretRangeFromPoint(e.clientX, e.clientY);
+          if (!r) return false;
+          var n = r.startContainer;
+          if (!n || n.nodeType !== 3 || !n.textContent.trim()) return false;
+          // le point tombe-t-il VRAIMENT dans un rectangle de ligne du texte ?
+          // (sinon = vide en dessous / à côté → on veut le marquee, pas la sélection de texte)
+          var rng = document.createRange(); rng.selectNodeContents(n);
+          var rects = rng.getClientRects();
+          for (var i = 0; i < rects.length; i++) {
+            var b = rects[i];
+            if (e.clientX >= b.left - 2 && e.clientX <= b.right + 2 &&
+                e.clientY >= b.top - 2 && e.clientY <= b.bottom + 2) return true;
+          }
+          return false;
+        } catch (_) { return false; }
+      }
       bd.addEventListener('pointerdown', function (e) {
         if (_ink.on || e.button !== 0) return;            // dessin/déplacer : géré ailleurs
         if (e.target.closest('.cre-tbox')) return;         // sur un bloc : le bloc gère
-        var ed = el('cre-note-editor');
+        if (startsOnText(e)) return;                       // sur du texte : sélection de texte normale
         var start = inkPos(e), sx = e.clientX, sy = e.clientY;
-        var marqEl = null, active = false, aborted = false;
+        var marqEl = null, active = false;
         function mv(ev) {
-          if (aborted) return;
           if (!active) {
             if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return;
-            // le navigateur a-t-il attrapé du TEXTE ? → c'était sur du texte, on le laisse
-            var s = window.getSelection();
-            if (s && !s.isCollapsed && ed && ed.contains(s.anchorNode)) { aborted = true; return; }
             active = true;
-            bd.classList.add('cre-marqueeing');
+            bd.classList.add('cre-marqueeing'); // user-select:none → plus de texte parasite
             marqEl = document.createElement('div'); marqEl.className = 'cre-marquee'; bd.appendChild(marqEl);
             if (!ev.shiftKey) clearSel();
           }
@@ -1021,7 +1146,7 @@
             if (marqEl) marqEl.remove();
             try { window.getSelection().removeAllRanges(); } catch (_) {}
             if (_sel.length) toast('✅ ' + _sel.length + ' élément(s) — Suppr pour effacer');
-          } else if (!aborted && _sel.length) {
+          } else if (_sel.length) {
             clearSel(); // simple clic sur le fond = tout désélectionner (comme Discord)
           }
         }
@@ -1325,6 +1450,11 @@
         var any = bdAll.querySelectorAll('.cre-tbox');
         if (any.length) { e.preventDefault(); clearSel(); any.forEach(function (b) { b.classList.add('sel'); _sel.push(b); }); updateSelBar(); }
       }
+    }
+    // 📑 Ctrl/Cmd+D = dupliquer la sélection (quand l'éditeur de synthèse est ouvert)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D') && _sel.length &&
+        el('cre-note-edit') && el('cre-note-edit').offsetParent !== null) {
+      e.preventDefault(); duplicateSelection();
     }
     // ↩️ Ctrl+Z / ↪️ Ctrl+Y (ou Ctrl+Shift+Z) sur le DESSIN quand le stylo est actif
     if (_ink.on && (e.ctrlKey || e.metaKey)) {
@@ -1699,6 +1829,55 @@
     toast('✅ Formule insérée — elle s\'affichera en beau rendu 🤩');
   };
 
+  /* ════════════════ 💾 EXPORT / IMPORT de MES CRÉATIONS (fusion, non destructif) ════════════════
+     Différent de l'export « Progrès » (global, qui REMPLACE) : ici on ne sauvegarde QUE
+     les créations (cartes + synthèses + questions) et l'import les AJOUTE (fusion par id). */
+  window.creExport = function () {
+    var d = loadSavedData();
+    var pack = {
+      _type: 'gr2-creations', _date: new Date().toISOString(),
+      customCards: d.customCards || [], customNotes: d.customNotes || [], customExercises: d.customExercises || []
+    };
+    var total = pack.customCards.length + pack.customNotes.length + pack.customExercises.length;
+    if (!total) { toast('Rien à exporter pour l\'instant', '#fbbf24'); return; }
+    try {
+      var blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var n = new Date(), stamp = n.getFullYear() + '-' + ('0' + (n.getMonth() + 1)).slice(-2) + '-' + ('0' + n.getDate()).slice(-2);
+      var a = document.createElement('a'); a.href = url; a.download = 'mes-creations-gr2-' + stamp + '.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      toast('✅ ' + total + ' création(s) exportée(s)');
+    } catch (e) { toast('❌ Export impossible', '#f87171'); }
+  };
+  window.crePickImport = function () { var i = el('cre-import-file'); if (i) { i.value = ''; i.click(); } };
+  window.creImport = function (input) {
+    var f = input && input.files && input.files[0]; if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var obj; try { obj = JSON.parse(e.target.result); } catch (err) { toast('❌ Fichier illisible (JSON invalide)', '#f87171'); return; }
+      if (!obj || typeof obj !== 'object' || Array.isArray(obj)) { toast('❌ Fichier invalide', '#f87171'); return; }
+      var d = loadSavedData(), added = 0;
+      ['customCards', 'customNotes', 'customExercises'].forEach(function (key) {
+        var incoming = Array.isArray(obj[key]) ? obj[key] : [];
+        d[key] = d[key] || [];
+        var seen = {}; d[key].forEach(function (it) { if (it && it.id != null) seen[it.id] = 1; });
+        incoming.forEach(function (it) {
+          if (!it || typeof it !== 'object') return;
+          if (it.id == null || seen[it.id]) it.id = Date.now() + Math.floor(Math.random() * 1e5); // évite les collisions d'id
+          seen[it.id] = 1; d[key].unshift(it); added++;
+        });
+      });
+      if (!added) { toast('Aucune création trouvée dans ce fichier', '#fbbf24'); return; }
+      saveData(d);
+      renderCustomCards(); renderCustomNotes();
+      if (typeof renderCustomExoList === 'function') renderCustomExoList();
+      refreshDeck();
+      toast('✅ ' + added + ' création(s) importée(s) (ajoutées aux tiennes)');
+    };
+    reader.readAsText(f);
+  };
+
   /* ════════════════ init ════════════════ */
   window.initCreations = function () {
     var sel = el('cre-card-theme');
@@ -1707,6 +1886,13 @@
     }
     renderCustomCards();
     renderCustomNotes();
+  };
+
+  // rafraîchit les listes (cartes + synthèses) quand on change de matière —
+  // sinon elles affichent encore les créations de la matière précédente
+  window.creRefreshLists = function () {
+    try { renderCustomCards(); } catch (e) {}
+    try { if (!el('cre-note-edit') || el('cre-note-edit').style.display === 'none') renderCustomNotes(); } catch (e) {}
   };
 
   // Au chargement : les cartes persos rejoignent le paquet de la matière restaurée
