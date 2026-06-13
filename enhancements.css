@@ -945,9 +945,20 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 .cre-tbox:hover .cre-tbox-grip, .cre-tbox:hover .cre-tbox-x, .cre-tbox:hover .cre-tbox-rsz, .cre-tbox:hover .cre-tbox-rot,
 .cre-tbox:focus-within .cre-tbox-grip, .cre-tbox:focus-within .cre-tbox-x, .cre-tbox:focus-within .cre-tbox-rsz, .cre-tbox:focus-within .cre-tbox-rot,
 .cre-tbox.sel .cre-tbox-grip, .cre-tbox.sel .cre-tbox-x, .cre-tbox.sel .cre-tbox-rsz, .cre-tbox.sel .cre-tbox-rot { opacity: 1; pointer-events: auto; }
-.cre-tbox-body { outline: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); min-height: 18px; overflow: hidden; }
+.cre-tbox-body { outline: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); min-height: 18px; overflow: visible; }
 .cre-tbox-body:empty::before { content: attr(data-ph); color: var(--text-secondary); opacity: 0.55; pointer-events: none; }
 .cre-tbox-body img { max-width: 100%; border-radius: 6px; }
+/* 🔠 menu déroulant « Taille » dans la barre d'outils du studio */
+.cre-font-select { height: 33px; border-radius: 9px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 13px; font-weight: 700; padding: 0 6px; cursor: pointer; vertical-align: middle; }
+.cre-font-select:hover, .cre-font-select:focus { border-color: var(--color-nav); outline: none; }
+/* icônes SVG d'alignement dans les boutons de la barre */
+.note-toolbar .nav-btn svg { display: block; pointer-events: none; }
+/* 🔢 listes (à puces / numérotées) — éditeur, blocs, lecture 👁 et cartes */
+.note-editor ul, .note-editor ol, .cre-tbox-body ul, .cre-tbox-body ol,
+.cre-view-text ul, .cre-view-text ol, .cre-card-face ul, .cre-card-face ol { margin: 6px 0; padding-left: 1.4em; }
+.note-editor ul, .cre-tbox-body ul, .cre-view-text ul, .cre-card-face ul { list-style: disc; }
+.note-editor ol, .cre-tbox-body ol, .cre-view-text ol, .cre-card-face ol { list-style: decimal; }
+.note-editor li, .cre-tbox-body li, .cre-view-text li, .cre-card-face li { margin: 2px 0; }
 /* barre flottante quand des éléments sont sélectionnés */
 #cre-sel-bar { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); z-index: 8; display: none; align-items: center; gap: 8px; padding: 5px 8px 5px 14px; border-radius: 999px; background: rgba(13, 15, 26, 0.95); border: 1px solid var(--color-nav); box-shadow: 0 8px 22px rgba(0,0,0,0.5); backdrop-filter: blur(8px); font-size: 13px; color: var(--text-primary); }
 #cre-sel-bar button { border: none; border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 700; cursor: pointer; }

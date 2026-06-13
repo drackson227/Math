@@ -28,8 +28,8 @@
   }
 
   /* ---------- même nettoyage anti-XSS que le bloc-notes ---------- */
-  var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1 };
-  // ne garde QUE les styles utiles & sûrs : taille (A−/A+), couleur 🎨, surlignage 🖍️
+  var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1, UL: 1, OL: 1, LI: 1 };
+  // ne garde QUE les styles utiles & sûrs : taille (A−/A+), couleur 🎨, surlignage 🖍️, alignement ↔
   function safeStyle(v) {
     var out = [];
     String(v || '').split(';').forEach(function (d) {
@@ -39,6 +39,7 @@
       if (prop === 'font-size' && /^\d{1,2}px$/.test(val)) out.push('font-size:' + val);
       else if (prop === 'color' && colorRe.test(val)) out.push('color:' + val);
       else if ((prop === 'background-color' || prop === 'background') && colorRe.test(val)) out.push('background-color:' + val);
+      else if (prop === 'text-align' && /^(left|center|right|justify)$/.test(val)) out.push('text-align:' + val);
     });
     return out.join(';');
   }
@@ -57,9 +58,9 @@
           if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
           if (c.tagName === 'IMG' && a.name === 'alt') return; // garde la formule LaTeX d'origine
           if (c.tagName === 'IMG' && a.name === 'class' && a.value === 'cre-fx-img') return; // image-formule ƒ𝑥
-          if (c.tagName === 'SPAN' && a.name === 'style') {
+          if ((c.tagName === 'SPAN' || c.tagName === 'DIV' || c.tagName === 'P' || c.tagName === 'LI') && a.name === 'style') {
             var s = safeStyle(a.value);
-            if (s) { c.setAttribute('style', s); return; } // taille / couleur / surlignage
+            if (s) { c.setAttribute('style', s); return; } // taille / couleur / surlignage / alignement
           }
           c.removeAttribute(a.name);
         });
@@ -392,7 +393,8 @@
       if (b.w) d.style.width = b.w + 'px';
       if (b.h) d.style.height = b.h + 'px';
       if (b.rot) d.style.transform = 'rotate(' + b.rot + 'deg)';
-      d.innerHTML = '<div class="cre-tbox-body">' + b.html + '</div>';
+      var alStyle = (b.align && /^(left|center|right|justify)$/.test(b.align)) ? ' style="text-align:' + b.align + '"' : '';
+      d.innerHTML = '<div class="cre-tbox-body"' + alStyle + '>' + b.html + '</div>';
       stage.appendChild(d);
     });
     var finish = function () {
@@ -468,6 +470,7 @@
       if (b.h) o.h = Math.max(24, Math.min(2400, Number(b.h) || 0));
       if (b.rot) o.rot = ((Number(b.rot) || 0) % 360);
       if (b.kind === 'img') o.kind = 'img';
+      if (b.align && /^(left|center|right|justify)$/.test(b.align)) o.align = b.align;
       out.push(o);
     });
     return out;
@@ -587,6 +590,7 @@
     bd.appendChild(box);
     var body = box.querySelector('.cre-tbox-body');
     if (html) body.innerHTML = sanitize(html);
+    if (opts.align && /^(left|center|right|justify)$/.test(opts.align)) body.style.textAlign = opts.align;
     if (!isImg) body.addEventListener('input', boardChanged);
 
     // clic sur le bloc → le sélectionner (Maj = ajouter/retirer de la sélection)
@@ -700,6 +704,7 @@
       if (b.style.height) o.h = parseInt(b.style.height, 10) || 0;
       var rot = Number(b.dataset.rot) || 0; if (rot) o.rot = rot;
       if (b.classList.contains('cre-tbox-img')) o.kind = 'img';
+      if (body && body.style.textAlign) o.align = body.style.textAlign;
       out.push(o);
     });
     return out;
@@ -708,7 +713,12 @@
   window.creFormat = function (cmd) {
     exitInk();
     var ed = activeEd();
-    if (ed) { ed.focus(); try { document.execCommand(cmd); } catch (e) {} }
+    if (!ed) return;
+    ed.focus();
+    // comme A−/A+ : si rien n'est sélectionné, on applique à TOUT le bloc actif
+    if (!ensureSelectionIn(ed)) return;
+    try { document.execCommand(cmd); } catch (e) {}
+    boardChanged(); // la mise en forme déclenche aussi la sauvegarde auto
   };
 
   /* ---------- 🔠 TAILLE DU TEXTE : A− / A+ ----------
@@ -725,25 +735,93 @@
     sel.removeAllRanges(); sel.addRange(r);
     return true;
   }
+  // taille RÉELLEMENT affichée au début de la sélection (on descend dans l'élément
+  // qui rend le texte — sinon on lit la taille du body et A+ reste coincé à 16px)
+  function selFontPx(ed) {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return parseFloat(getComputedStyle(ed).fontSize) || 16;
+    var r = sel.getRangeAt(0), node = r.startContainer;
+    if (node.nodeType === 1) {
+      var c = node.childNodes[r.startOffset] || node.lastChild || node;
+      node = (c && c.nodeType === 3) ? c.parentElement : c;
+    } else node = node.parentElement;
+    // tombé sur un conteneur sans taille propre → on cherche un span de taille à l'intérieur
+    if (node && node.nodeType === 1 && !(node.style && node.style.fontSize) && node.querySelector) {
+      var inner = node.querySelector('span[style*="font-size"]');
+      if (inner) node = inner;
+    }
+    return parseFloat(getComputedStyle(node || ed).fontSize) || 16;
+  }
+  // applique une taille EXACTE (px) à la sélection courante (partagé par A−/A+ et le menu)
+  function applyFontPx(target) {
+    try { document.execCommand('fontSize', false, '7'); } catch (e) { return; }
+    // le <font size=7> du navigateur → <span style="font-size:CIBLEpx"> propre
+    var scope = el('cre-note-wrap') || document;
+    scope.querySelectorAll('font[size="7"]').forEach(function (f) {
+      var span = document.createElement('span');
+      span.style.fontSize = target + 'px';
+      while (f.firstChild) span.appendChild(f.firstChild);
+      // ⚠️ une taille imbriquée PLUS PROFONDE l'emporterait (CSS) → on retire les
+      //    font-size internes pour que la nouvelle taille gagne vraiment
+      span.querySelectorAll('span[style]').forEach(function (s2) {
+        if (!s2.style.fontSize) return;
+        s2.style.fontSize = '';
+        if (!s2.getAttribute('style')) { // span devenu vide de style → on le déballe
+          while (s2.firstChild) s2.parentNode.insertBefore(s2.firstChild, s2);
+          s2.remove();
+        }
+      });
+      f.parentNode.replaceChild(span, f);
+    });
+  }
   window.creFontSize = function (dir) {
     exitInk();
     var ed = activeEd(); if (!ed) return;
     ed.focus();
     if (!ensureSelectionIn(ed)) return;
-    try { document.execCommand('fontSize', false, '7'); } catch (e) { return; }
-    // l'astuce classique : le <font size=7> posé par le navigateur est converti
-    // en <span style="font-size:..px"> propre, une taille au-dessus/en-dessous
-    var scope = el('cre-note-wrap') || document;
-    scope.querySelectorAll('font[size="7"]').forEach(function (f) {
-      var cur = parseFloat(getComputedStyle(f.parentElement).fontSize) || 15;
-      var idx = 0, best = 99;
-      FONT_STEPS.forEach(function (s, i) { if (Math.abs(s - cur) < best) { best = Math.abs(s - cur); idx = i; } });
-      idx = Math.min(FONT_STEPS.length - 1, Math.max(0, idx + (dir > 0 ? 1 : -1)));
-      var span = document.createElement('span');
-      span.style.fontSize = FONT_STEPS[idx] + 'px';
-      while (f.firstChild) span.appendChild(f.firstChild);
-      f.parentNode.replaceChild(span, f);
-    });
+    // on calcule la taille CIBLE une seule fois, à partir de la taille réelle du texte
+    var cur = selFontPx(ed);
+    var idx = 0, best = 1e9;
+    FONT_STEPS.forEach(function (s, i) { var d = Math.abs(s - cur); if (d < best) { best = d; idx = i; } });
+    idx = Math.min(FONT_STEPS.length - 1, Math.max(0, idx + (dir > 0 ? 1 : -1)));
+    applyFontPx(FONT_STEPS[idx]);
+    boardChanged();
+  };
+  // 🔠 mémorise la sélection AVANT que le menu déroulant ne vole le focus
+  var _savedSelRange = null;
+  window.creSaveSel = function () {
+    var sel = window.getSelection();
+    if (sel && sel.rangeCount) _savedSelRange = sel.getRangeAt(0).cloneRange();
+  };
+  // 🔠 taille EXACTE choisie dans le menu déroulant « Taille »
+  window.creSetFontSize = function (px) {
+    px = parseInt(px, 10);
+    var selEl = el('cre-font-select');
+    if (!px) { if (selEl) selEl.value = ''; return; }
+    exitInk();
+    var ed = activeEd(); if (!ed) { if (selEl) selEl.value = ''; return; }
+    ed.focus();
+    // restaure la sélection capturée à l'ouverture du menu (sinon = tout le bloc actif)
+    if (_savedSelRange && ed.contains(_savedSelRange.commonAncestorContainer)) {
+      try { var s = window.getSelection(); s.removeAllRanges(); s.addRange(_savedSelRange); } catch (e) {}
+    }
+    if (ensureSelectionIn(ed)) { applyFontPx(px); boardChanged(); }
+    if (selEl) selEl.value = ''; // le menu revient sur « Taille »
+  };
+  // ↔ alignement du texte (gauche / centre / droite)
+  window.creAlign = function (how) {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    var dir = (how === 'center') ? 'center' : (how === 'right') ? 'right' : 'left';
+    if (ed.classList && ed.classList.contains('cre-tbox-body')) {
+      // bloc de texte libre → on aligne TOUT le bloc (fiable, sauvegardé via o.align)
+      ed.style.textAlign = (dir === 'left') ? '' : dir;
+    } else {
+      if (!ensureSelectionIn(ed)) return; // éditeur principal → alignement par paragraphe
+      try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
+      try { document.execCommand('justify' + dir.charAt(0).toUpperCase() + dir.slice(1)); } catch (e) {}
+    }
     boardChanged();
   };
 
@@ -1278,9 +1356,9 @@
           e.preventDefault();
           var f = items[i].getAsFile();
           if (f) compressImage(f, IMG_MAX_SIDE, function (dataUrl) {
-            var img = document.createElement('img');
-            img.src = dataUrl; img.className = 'note-img';
-            edInsert(img);
+            // image collée = BLOC déplaçable/redimensionnable (comme Discord), pas collée dans le texte
+            window.creAddImageBox(dataUrl);
+            toast('🖼️ Image collée — attrape ⠿ pour la bouger, le coin ◢ pour la taille');
           });
           return;
         }
