@@ -29,6 +29,19 @@
 
   /* ---------- même nettoyage anti-XSS que le bloc-notes ---------- */
   var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1 };
+  // ne garde QUE les styles utiles & sûrs : taille (A−/A+), couleur 🎨, surlignage 🖍️
+  function safeStyle(v) {
+    var out = [];
+    String(v || '').split(';').forEach(function (d) {
+      var i = d.indexOf(':'); if (i < 0) return;
+      var prop = d.slice(0, i).trim().toLowerCase(), val = d.slice(i + 1).trim();
+      var colorRe = /^(#[0-9a-f]{3,8}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\))$/i;
+      if (prop === 'font-size' && /^\d{1,2}px$/.test(val)) out.push('font-size:' + val);
+      else if (prop === 'color' && colorRe.test(val)) out.push('color:' + val);
+      else if ((prop === 'background-color' || prop === 'background') && colorRe.test(val)) out.push('background-color:' + val);
+    });
+    return out.join(';');
+  }
   function sanitize(html) {
     var root = document.createElement('div');
     root.innerHTML = String(html || '');
@@ -44,9 +57,10 @@
           if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
           if (c.tagName === 'IMG' && a.name === 'alt') return; // garde la formule LaTeX d'origine
           if (c.tagName === 'IMG' && a.name === 'class' && a.value === 'cre-fx-img') return; // image-formule ƒ𝑥
-          // tailles A−/A+ et couleurs 🎨 du texte : seuls styles acceptés, format strict
-          // (#hex OU rgb(…) : les navigateurs normalisent les couleurs en rgb)
-          if (c.tagName === 'SPAN' && a.name === 'style' && /^(font-size:\s*\d{1,2}px|color:\s*(#[0-9a-f]{3,8}|rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)))\s*;?\s*$/i.test(a.value.trim())) return;
+          if (c.tagName === 'SPAN' && a.name === 'style') {
+            var s = safeStyle(a.value);
+            if (s) { c.setAttribute('style', s); return; } // taille / couleur / surlignage
+          }
           c.removeAttribute(a.name);
         });
         if (c.tagName === 'IMG' && c.className !== 'cre-fx-img') c.className = 'note-img';
@@ -292,7 +306,7 @@
     _ink.ext = { w: 0, h: 0 };
     _ink.tool = 'pen'; // nouveau tableau → on repart au stylo (pas la main ni la gomme)
     clearBoxes();
-    validBoxes(state && state.boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html, true); });
+    validBoxes(state && state.boxes).forEach(function (b) { window.creAddTextBox(b.x, b.y, b.html, true, b); });
     window._creLastEd = ed;
     window.creZoom(0);  // on repart à 100%
     ensureInk();
@@ -359,39 +373,57 @@
     }
     el('cre-view-title').textContent = n.title;
     var body = el('cre-view-body');
-    body.innerHTML = sanitize(n.html);
     ov.style.display = 'flex';
-    if (typeof safeMathJax === 'function') safeMathJax([body]);
-    // recompose la page : blocs déplacés + calque dessin, à l'échelle de la fenêtre
+    // ── La lecture reproduit EXACTEMENT l'éditeur : on compose le tableau à sa
+    //    taille NATIVE (inkW) puis on applique UN SEUL transform: scale(s).
+    //    Comme tout (texte, blocs, dessin) est mis à l'échelle ensemble, les
+    //    positions relatives sont identiques à l'édition (fini le décalage). ──
     var strokes = validStrokes(n.strokes), boxes = validBoxes(n.boxes);
-    if (strokes.length || boxes.length) {
-      setTimeout(function () {
-        if (ov.style.display === 'none') return;
-        var k = (n.inkW > 0 && body.clientWidth) ? body.clientWidth / n.inkW : 1;
-        body.style.position = 'relative';
-        boxes.forEach(function (b) {
-          var d = document.createElement('div');
-          d.className = 'cre-tbox cre-tbox-view';
-          d.style.left = Math.round(b.x * k) + 'px';
-          d.style.top = Math.round(b.y * k) + 'px';
-          d.innerHTML = b.html;
-          body.appendChild(d);
-        });
-        // hauteur utile = texte + blocs + traits
-        var maxY = body.scrollHeight;
-        strokes.forEach(function (st) { (st.pts || []).forEach(function (p) { maxY = Math.max(maxY, p[1] * k + 30); }); });
-        if (maxY > body.scrollHeight) { body.style.minHeight = Math.ceil(maxY) + 'px'; }
-        if (strokes.length) {
-          var cv = document.createElement('canvas');
-          cv.className = 'cre-view-ink';
-          cv.width = body.clientWidth; cv.height = Math.ceil(maxY);
-          body.appendChild(cv);
-          var c = cv.getContext('2d');
-          strokes.forEach(function (st) { replayStroke(c, st, k); });
-        }
-        if (typeof safeMathJax === 'function') safeMathJax([body]);
-      }, 350);
-    }
+    var inkW = (n.inkW > 0) ? n.inkW : (body.clientWidth || 600);
+    body.innerHTML = '<div class="cre-view-scaler"><div class="cre-view-stage" style="width:' + inkW + 'px;">' +
+      '<div class="note-editor cre-view-text">' + sanitize(n.html) + '</div></div></div>';
+    var scaler = body.querySelector('.cre-view-scaler');
+    var stage = body.querySelector('.cre-view-stage');
+    // blocs (texte + images) à coordonnées NATIVES, avec taille/rotation
+    boxes.forEach(function (b) {
+      var d = document.createElement('div');
+      d.className = 'cre-tbox cre-tbox-view' + (b.kind === 'img' ? ' cre-tbox-img' : '');
+      d.style.left = b.x + 'px'; d.style.top = b.y + 'px';
+      if (b.w) d.style.width = b.w + 'px';
+      if (b.h) d.style.height = b.h + 'px';
+      if (b.rot) d.style.transform = 'rotate(' + b.rot + 'deg)';
+      d.innerHTML = '<div class="cre-tbox-body">' + b.html + '</div>';
+      stage.appendChild(d);
+    });
+    var finish = function () {
+      if (ov.style.display === 'none') return;
+      // hauteur native utile = texte + bas des blocs + bas des traits
+      var maxY = stage.querySelector('.cre-view-text').scrollHeight;
+      boxes.forEach(function (b) { maxY = Math.max(maxY, (b.y || 0) + (b.h || 80) + 20); });
+      strokes.forEach(function (st) {
+        (st.pts || []).forEach(function (p) { maxY = Math.max(maxY, p[1] + 30); });
+        if (st.a) maxY = Math.max(maxY, st.a[1] + 30); if (st.b) maxY = Math.max(maxY, st.b[1] + 30);
+      });
+      stage.style.height = Math.ceil(maxY) + 'px';
+      if (strokes.length) {
+        var cv = document.createElement('canvas');
+        cv.className = 'cre-view-ink';
+        cv.width = inkW; cv.height = Math.ceil(maxY);
+        cv.style.width = inkW + 'px'; cv.style.height = Math.ceil(maxY) + 'px';
+        stage.appendChild(cv);
+        var c = cv.getContext('2d');
+        strokes.forEach(function (st) { replayStroke(c, st, 1); }); // natif → pas de déformation
+      }
+      // une seule échelle : on rentre la largeur native dans la fenêtre (jamais > 100%)
+      var avail = body.clientWidth || inkW;
+      var s = Math.min(1, avail / inkW);
+      scaler.style.transform = 'scale(' + s + ')';
+      scaler.style.width = inkW + 'px';
+      body.style.height = Math.ceil(maxY * s) + 'px';
+      if (typeof safeMathJax === 'function') safeMathJax([stage]);
+    };
+    if (typeof safeMathJax === 'function') safeMathJax([stage]);
+    setTimeout(finish, 60);
   };
   window.creCloseView = function () { var ov = el('cre-view-ov'); if (ov) ov.style.display = 'none'; };
 
@@ -431,20 +463,106 @@
     var out = [];
     arr.forEach(function (b) {
       if (!b) return;
-      out.push({ x: Math.max(0, Number(b.x) || 0), y: Math.max(0, Number(b.y) || 0), html: sanitize(b.html || '') });
+      var o = { x: Math.max(0, Number(b.x) || 0), y: Math.max(0, Number(b.y) || 0), html: sanitize(b.html || '') };
+      if (b.w) o.w = Math.max(40, Math.min(2400, Number(b.w) || 0));
+      if (b.h) o.h = Math.max(24, Math.min(2400, Number(b.h) || 0));
+      if (b.rot) o.rot = ((Number(b.rot) || 0) % 360);
+      if (b.kind === 'img') o.kind = 'img';
+      out.push(o);
     });
     return out;
   }
   function clearBoxes() {
     var bd = board(); if (!bd) return;
     bd.querySelectorAll('.cre-tbox').forEach(function (b) { b.remove(); });
+    _sel = [];
+    if (typeof updateSelBar === 'function') updateSelBar();
   }
-  window.creAddTextBox = function (x, y, html, quiet) {
+
+  /* ---------- sélection de blocs (un ou plusieurs, comme Discord) ---------- */
+  var _sel = [];
+  function clearSel() {
+    var bd = board(); if (bd) bd.querySelectorAll('.cre-tbox.sel').forEach(function (b) { b.classList.remove('sel'); });
+    _sel = [];
+    updateSelBar();
+  }
+  function selectOnly(box) {
+    clearSel();
+    if (box) { box.classList.add('sel'); _sel = [box]; }
+    updateSelBar();
+  }
+  function toggleSel(box) {
+    if (!box) return;
+    var i = _sel.indexOf(box);
+    if (i >= 0) { _sel.splice(i, 1); box.classList.remove('sel'); }
+    else { _sel.push(box); box.classList.add('sel'); }
+    updateSelBar();
+  }
+  // petite barre flottante quand ≥1 bloc est sélectionné (supprimer la sélection)
+  function updateSelBar() {
+    var bar = el('cre-sel-bar');
+    if (!bar) {
+      var frame = el('cre-board-frame'); if (!frame) return;
+      bar = document.createElement('div'); bar.id = 'cre-sel-bar'; bar.style.display = 'none';
+      bar.innerHTML = '<span id="cre-sel-n"></span>' +
+        '<button type="button" id="cre-sel-del" title="Supprimer la sélection (touche Suppr)">🗑️ Supprimer</button>' +
+        '<button type="button" id="cre-sel-clr" title="Tout désélectionner">✕</button>';
+      frame.appendChild(bar);
+      bar.querySelector('#cre-sel-del').addEventListener('click', deleteSelection);
+      bar.querySelector('#cre-sel-clr').addEventListener('click', clearSel);
+    }
+    _sel = _sel.filter(function (b) { return document.body.contains(b); });
+    if (_sel.length) {
+      bar.style.display = 'flex';
+      el('cre-sel-n').textContent = _sel.length + (_sel.length > 1 ? ' éléments' : ' élément');
+    } else bar.style.display = 'none';
+  }
+  function deleteSelection() {
+    if (!_sel.length) return;
+    _sel.forEach(function (b) { b.remove(); });
+    _sel = [];
+    updateSelBar();
+    boardChanged();
+  }
+  window._creDeleteSelection = deleteSelection;
+  window._creHasSelection = function () { return _sel.length > 0; };
+
+  // poignée de déplacement (souris + tactile) ; déplace TOUT le groupe si plusieurs sélectionnés
+  function wireDrag(box, handle) {
+    handle.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      try { handle.setPointerCapture(e.pointerId); } catch (err) {}
+      // si le bloc n'est pas dans la sélection courante → il devient la sélection
+      if (_sel.indexOf(box) < 0 && !e.shiftKey) selectOnly(box);
+      else if (e.shiftKey) toggleSel(box);
+      var group = _sel.length ? _sel.slice() : [box];
+      var startX = e.clientX, startY = e.clientY;
+      var bases = group.map(function (b) { return { b: b, l: parseInt(b.style.left, 10) || 0, t: parseInt(b.style.top, 10) || 0 }; });
+      var k = zScale();
+      function mv(ev) {
+        var dx = (ev.clientX - startX) / k, dy = (ev.clientY - startY) / k;
+        bases.forEach(function (o) { o.b.style.left = Math.max(0, o.l + dx) + 'px'; o.b.style.top = Math.max(0, o.t + dy) + 'px'; });
+      }
+      function up() {
+        handle.removeEventListener('pointermove', mv);
+        handle.removeEventListener('pointerup', up);
+        handle.removeEventListener('pointercancel', up);
+        boardChanged();
+      }
+      handle.addEventListener('pointermove', mv);
+      handle.addEventListener('pointerup', up);
+      handle.addEventListener('pointercancel', up);
+    });
+  }
+
+  /* Bloc générique : texte OU image. opts = { w, h, rot, kind:'img'|'text' } */
+  window.creAddTextBox = function (x, y, html, quiet, opts) {
+    opts = opts || {};
+    var isImg = opts.kind === 'img';
     var bd = board(); if (!bd) return null;
-    if (!quiet) exitInk(); // le stylo se désactive : on passe en mode texte
+    if (!quiet) exitInk(); // le stylo se désactive : on passe en mode texte/blocs
     var n = bd.querySelectorAll('.cre-tbox').length;
     if (x == null) {
-      // nouveau bloc au CENTRE de la vue actuelle (pas dans un coin)
       var wrap = el('cre-note-wrap'), k0 = zScale();
       if (wrap) {
         x = Math.max(10, (wrap.scrollLeft + wrap.clientWidth / 2) / k0 - 80 + (n % 4) * 20);
@@ -452,56 +570,115 @@
       } else { x = 30; y = 30; }
     }
     var box = document.createElement('div');
-    box.className = 'cre-tbox';
+    box.className = 'cre-tbox' + (isImg ? ' cre-tbox-img' : '');
     box.style.left = x + 'px';
     box.style.top = y + 'px';
+    if (opts.w) box.style.width = opts.w + 'px';
+    if (opts.h) box.style.height = opts.h + 'px';
+    var rot = Number(opts.rot) || 0;
+    box.dataset.rot = rot;
+    if (rot) box.style.transform = 'rotate(' + rot + 'deg)';
     box.innerHTML =
       '<span class="cre-tbox-grip" title="Attraper pour déplacer">⠿</span>' +
+      '<span class="cre-tbox-rot" title="Tourner le bloc"></span>' +
       '<button type="button" class="cre-tbox-x" title="Supprimer ce bloc">✕</button>' +
-      '<div class="cre-tbox-body" contenteditable="true" data-ph="Écris ici…"></div>';
-    bd.appendChild(box); // sur le TABLEAU (positions relatives au tableau, pas au cadre)
+      '<div class="cre-tbox-body" contenteditable="' + (isImg ? 'false' : 'true') + '" data-ph="Écris ici…"></div>' +
+      '<span class="cre-tbox-rsz" title="Redimensionner (coin)"></span>';
+    bd.appendChild(box);
     var body = box.querySelector('.cre-tbox-body');
     if (html) body.innerHTML = sanitize(html);
-    body.addEventListener('input', boardChanged);
-    // cliquer n'importe où sur le bloc → focus (le cadre + poignée apparaissent)
+    if (!isImg) body.addEventListener('input', boardChanged);
+
+    // clic sur le bloc → le sélectionner (Maj = ajouter/retirer de la sélection)
     box.addEventListener('pointerdown', function (e) {
-      if (e.target === box) { body.focus(); }
+      if (e.target.closest('.cre-tbox-grip, .cre-tbox-rot, .cre-tbox-rsz, .cre-tbox-x')) return;
+      if (e.shiftKey) { e.preventDefault(); toggleSel(box); return; }
+      if (_sel.length > 1) return; // on laisse le groupe tranquille
+      selectOnly(box);
+      if (!isImg) body.focus();
     });
-    // un bloc resté VIDE disparaît tout seul quand on clique ailleurs (comme Discord)
-    body.addEventListener('blur', function () {
+    // un bloc TEXTE resté vide disparaît quand on clique ailleurs (comme Discord)
+    if (!isImg) body.addEventListener('blur', function () {
       setTimeout(function () {
         if (!document.body.contains(box)) return;
         var has = body.textContent.trim() || body.querySelector('img');
-        if (!has && !box.contains(document.activeElement)) box.remove();
+        if (!has && !box.contains(document.activeElement)) { var i = _sel.indexOf(box); if (i >= 0) _sel.splice(i, 1); box.remove(); updateSelBar(); }
       }, 150);
     });
-    // suppression
-    box.querySelector('.cre-tbox-x').addEventListener('click', function () { box.remove(); boardChanged(); });
-    // déplacement à la poignée (souris + tactile via Pointer Events)
-    var grip = box.querySelector('.cre-tbox-grip');
-    grip.addEventListener('pointerdown', function (e) {
-      e.preventDefault();
-      try { grip.setPointerCapture(e.pointerId); } catch (err) {}
-      var startX = e.clientX, startY = e.clientY;
-      var baseL = parseInt(box.style.left, 10) || 0, baseT = parseInt(box.style.top, 10) || 0;
-      var k = zScale(); // déplacement juste même quand le tableau est zoomé
+    box.querySelector('.cre-tbox-x').addEventListener('click', function () { var i = _sel.indexOf(box); if (i >= 0) _sel.splice(i, 1); box.remove(); updateSelBar(); boardChanged(); });
+
+    // déplacement (poignée ⠿)
+    wireDrag(box, box.querySelector('.cre-tbox-grip'));
+
+    // redimensionnement (coin bas-droit) — comme une fenêtre ; image = ratio gardé
+    var rsz = box.querySelector('.cre-tbox-rsz');
+    rsz.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      try { rsz.setPointerCapture(e.pointerId); } catch (err) {}
+      var r = box.getBoundingClientRect();
+      var k = zScale();
+      var baseW = box.offsetWidth, baseH = box.offsetHeight;
+      var ratio = baseH ? baseW / baseH : 1;
+      var ang = (Number(box.dataset.rot) || 0) * Math.PI / 180;
+      var sx = e.clientX, sy = e.clientY;
       function mv(ev) {
-        box.style.left = Math.max(0, baseL + (ev.clientX - startX) / k) + 'px';
-        box.style.top = Math.max(0, baseT + (ev.clientY - startY) / k) + 'px';
+        var dx = (ev.clientX - sx) / k, dy = (ev.clientY - sy) / k;
+        // projette le déplacement sur les axes LOCAUX du bloc (gère la rotation)
+        var lx = dx * Math.cos(-ang) - dy * Math.sin(-ang);
+        var ly = dx * Math.sin(-ang) + dy * Math.cos(-ang);
+        var w = Math.max(46, baseW + lx);
+        if (isImg) { box.style.width = w + 'px'; box.style.height = (w / ratio) + 'px'; }
+        else { box.style.width = w + 'px'; box.style.height = Math.max(28, baseH + ly) + 'px'; }
       }
       function up() {
-        grip.removeEventListener('pointermove', mv);
-        grip.removeEventListener('pointerup', up);
-        grip.removeEventListener('pointercancel', up);
-        boardChanged(); // nouvelle position → sauvegarde auto (Bloc-notes)
+        rsz.removeEventListener('pointermove', mv); rsz.removeEventListener('pointerup', up); rsz.removeEventListener('pointercancel', up);
+        boardChanged();
       }
-      grip.addEventListener('pointermove', mv);
-      grip.addEventListener('pointerup', up);
-      grip.addEventListener('pointercancel', up);
+      rsz.addEventListener('pointermove', mv); rsz.addEventListener('pointerup', up); rsz.addEventListener('pointercancel', up);
     });
-    if (!quiet) { body.focus(); window._creLastEd = body; }
+
+    // rotation (poignée ronde en haut)
+    var rotH = box.querySelector('.cre-tbox-rot');
+    rotH.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      try { rotH.setPointerCapture(e.pointerId); } catch (err) {}
+      var rc = box.getBoundingClientRect();
+      var cx = rc.left + rc.width / 2, cy = rc.top + rc.height / 2;
+      function mv(ev) {
+        var deg = Math.atan2(ev.clientY - cy, ev.clientX - cx) * 180 / Math.PI + 90;
+        if (ev.shiftKey) deg = Math.round(deg / 15) * 15; // Maj = par pas de 15°
+        deg = Math.round(deg);
+        box.dataset.rot = deg;
+        box.style.transform = 'rotate(' + deg + 'deg)';
+      }
+      function up() {
+        rotH.removeEventListener('pointermove', mv); rotH.removeEventListener('pointerup', up); rotH.removeEventListener('pointercancel', up);
+        boardChanged();
+      }
+      rotH.addEventListener('pointermove', mv); rotH.addEventListener('pointerup', up); rotH.addEventListener('pointercancel', up);
+    });
+
+    if (!quiet) { if (!isImg) body.focus(); selectOnly(box); window._creLastEd = isImg ? window._creLastEd : body; }
     return box;
   };
+
+  /* Bloc IMAGE déplaçable/redimensionnable (au lieu d'une image collée dans le texte) */
+  window.creAddImageBox = function (dataUrl, quiet) {
+    var html = '<img class="note-img" src="' + dataUrl + '" alt="" draggable="false">';
+    // taille de départ raisonnable selon l'image
+    var box = window.creAddTextBox(null, null, html, quiet, { kind: 'img', w: 220 });
+    if (box) {
+      var img = box.querySelector('img');
+      img.onload = function () {
+        var w = Math.min(360, img.naturalWidth || 220);
+        box.style.width = w + 'px';
+        box.style.height = (w / ((img.naturalWidth || 1) / (img.naturalHeight || 1))) + 'px';
+        boardChanged();
+      };
+    }
+    return box;
+  };
+
   function serializeBoxes() {
     var wrap = board(); if (!wrap) return [];
     var out = [];
@@ -510,7 +687,12 @@
       var html = sanitize(body ? body.innerHTML : '');
       var hasContent = body && (body.textContent.trim() || body.querySelector('img'));
       if (!hasContent) return; // les blocs vides ne sont pas gardés
-      out.push({ x: parseInt(b.style.left, 10) || 0, y: parseInt(b.style.top, 10) || 0, html: html });
+      var o = { x: parseInt(b.style.left, 10) || 0, y: parseInt(b.style.top, 10) || 0, html: html };
+      if (b.style.width) o.w = parseInt(b.style.width, 10) || 0;
+      if (b.style.height) o.h = parseInt(b.style.height, 10) || 0;
+      var rot = Number(b.dataset.rot) || 0; if (rot) o.rot = rot;
+      if (b.classList.contains('cre-tbox-img')) o.kind = 'img';
+      out.push(o);
     });
     return out;
   }
@@ -521,13 +703,25 @@
     if (ed) { ed.focus(); try { document.execCommand(cmd); } catch (e) {} }
   };
 
-  /* ---------- 🔠 TAILLE DU TEXTE : A− / A+ sur la sélection ----------
-     Marche dans le texte principal ET dans les blocs déplaçables. */
+  /* ---------- 🔠 TAILLE DU TEXTE : A− / A+ ----------
+     Marche dans le texte principal ET dans les blocs déplaçables.
+     Si rien n'est sélectionné → s'applique à TOUT le bloc actif (plus simple). */
   var FONT_STEPS = [12, 15, 19, 24, 30];
+  // s'assure qu'il y a une sélection ; sinon sélectionne tout le contenu du bloc actif
+  function ensureSelectionIn(ed) {
+    var sel = window.getSelection();
+    var has = sel && sel.rangeCount && !sel.getRangeAt(0).collapsed && ed.contains(sel.getRangeAt(0).commonAncestorContainer);
+    if (has) return true;
+    if (!ed.textContent.trim()) { toast('✍️ Écris d\'abord du texte, puis re-clique', '#fbbf24'); return false; }
+    var r = document.createRange(); r.selectNodeContents(ed);
+    sel.removeAllRanges(); sel.addRange(r);
+    return true;
+  }
   window.creFontSize = function (dir) {
     exitInk();
     var ed = activeEd(); if (!ed) return;
     ed.focus();
+    if (!ensureSelectionIn(ed)) return;
     try { document.execCommand('fontSize', false, '7'); } catch (e) { return; }
     // l'astuce classique : le <font size=7> posé par le navigateur est converti
     // en <span style="font-size:..px"> propre, une taille au-dessus/en-dessous
@@ -542,6 +736,18 @@
       while (f.firstChild) span.appendChild(f.firstChild);
       f.parentNode.replaceChild(span, f);
     });
+    boardChanged();
+  };
+
+  /* ---------- 🖍️ SURLIGNER le texte sélectionné ---------- */
+  window.creHighlight = function () {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    if (!ensureSelectionIn(ed)) return;
+    try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
+    try { document.execCommand('hiliteColor', false, 'rgba(251,191,36,0.45)'); }
+    catch (e) { try { document.execCommand('backColor', false, 'rgba(251,191,36,0.45)'); } catch (e2) { return; } }
     boardChanged();
   };
 
@@ -599,9 +805,10 @@
     var f = input.files && input.files[0];
     if (!f || !/^image\//.test(f.type)) return;
     compressImage(f, IMG_MAX_SIDE, function (dataUrl) {
-      var img = document.createElement('img');
-      img.src = dataUrl; img.className = 'note-img';
-      edInsert(img);
+      // l'image arrive comme un BLOC déplaçable/redimensionnable (comme Discord),
+      // pas collée dans le texte → on peut la bouger, l'agrandir, la tourner.
+      window.creAddImageBox(dataUrl);
+      toast('🖼️ Image ajoutée — attrape ⠿ pour la bouger, le coin ◢ pour la taille');
     });
   };
   /* ---------- 🎨 DESSIN « façon Discord » : texte ET dessin SUPERPOSÉS ----------
@@ -610,8 +817,8 @@
      Mode 🖊️ stylo : on dessine PAR-DESSUS le texte, où on veut. La gomme
      n'efface QUE le dessin, jamais le texte. Les traits sont des vecteurs,
      sauvegardés avec la synthèse et redessinés à l'identique. */
-  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 } };
-  var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand'];
+  var _ink = { on: false, tool: 'pen', color: '#a78bfa', size: 4, strokes: [], redo: [], cur: null, canvas: null, ctx: null, inkW: 0, pan: null, ext: { w: 0, h: 0 }, marq: null };
+  var INK_TOOLS = ['pen', 'hl', 'line', 'arrow', 'rect', 'ellipse', 'erase', 'hand', 'select'];
 
   // données de traits sûres (rechargées depuis la sauvegarde) — compatible anciens formats
   function validStrokes(arr) {
@@ -620,7 +827,7 @@
     arr.forEach(function (st) {
       if (!st) return;
       var t = st.t || (st.e ? 'erase' : 'pen');
-      if (INK_TOOLS.indexOf(t) < 0 || t === 'hand') return;
+      if (INK_TOOLS.indexOf(t) < 0 || t === 'hand' || t === 'select') return;
       var base = { t: t, c: String(st.c || '#a78bfa').slice(0, 20), s: Math.min(40, Number(st.s) || 4) };
       if (t === 'line' || t === 'arrow' || t === 'rect' || t === 'ellipse') {
         if (!Array.isArray(st.a) || !Array.isArray(st.b)) return;
@@ -730,6 +937,13 @@
       _ink.canvas.style.cursor = 'grabbing';
       return;
     }
+    if (_ink.tool === 'select') { // ⬚ sélection : rectangle de capture
+      var ps = inkPos(e);
+      _ink.marq = { ax: ps[0], ay: ps[1], bx: ps[0], by: ps[1], shift: e.shiftKey };
+      if (!e.shiftKey) clearSel();
+      inkRedraw();
+      return;
+    }
     var p = inkPos(e);
     var shape = (['line', 'arrow', 'rect', 'ellipse'].indexOf(_ink.tool) >= 0);
     _ink.cur = shape
@@ -754,6 +968,7 @@
       wrap.scrollTop = wantT;
       return;
     }
+    if (_ink.marq) { var pm = inkPos(e); _ink.marq.bx = pm[0]; _ink.marq.by = pm[1]; inkRedraw(); return; }
     if (!_ink.cur) return;
     var p = inkPos(e);
     if (_ink.cur.a) { // forme : le 2e coin suit la souris (aperçu en direct)
@@ -778,6 +993,21 @@
   }
   function inkUp() {
     if (_ink.pan) { _ink.pan = null; if (_ink.canvas) _ink.canvas.style.cursor = 'grab'; return; }
+    if (_ink.marq) {
+      var m = _ink.marq; _ink.marq = null;
+      var x = Math.min(m.ax, m.bx), y = Math.min(m.ay, m.by), w = Math.abs(m.bx - m.ax), h = Math.abs(m.by - m.ay);
+      var bd = board();
+      if (bd) bd.querySelectorAll('.cre-tbox').forEach(function (b) {
+        var bx = parseInt(b.style.left, 10) || 0, by = parseInt(b.style.top, 10) || 0, bw = b.offsetWidth, bh = b.offsetHeight;
+        var hit = (w < 6 && h < 6) ? (x >= bx && x <= bx + bw && y >= by && y <= by + bh)   // simple clic = bloc sous le point
+                                   : (x < bx + bw && x + w > bx && y < by + bh && y + h > by); // rectangle = chevauchement
+        if (hit && _sel.indexOf(b) < 0) { b.classList.add('sel'); _sel.push(b); }
+      });
+      updateSelBar();
+      if (_sel.length) toast('✅ ' + _sel.length + ' élément(s) — Suppr pour effacer');
+      inkRedraw();
+      return;
+    }
     if (!_ink.cur) return;
     // forme quasi nulle (simple clic) → ignorée
     var keep = _ink.cur.a
@@ -832,6 +1062,15 @@
     c.clearRect(0, 0, _ink.canvas.width, _ink.canvas.height);
     _ink.strokes.forEach(function (st) { replayStroke(c, st, 1); });
     if (_ink.cur) replayStroke(c, _ink.cur, 1); // aperçu du trait/de la forme en cours
+    if (_ink.marq) { // rectangle de sélection (pointillés)
+      var m = _ink.marq;
+      var x = Math.min(m.ax, m.bx), y = Math.min(m.ay, m.by), w = Math.abs(m.bx - m.ax), h = Math.abs(m.by - m.ay);
+      c.save();
+      c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1;
+      c.fillStyle = 'rgba(167,139,250,0.15)'; c.strokeStyle = '#a78bfa'; c.lineWidth = 1.5;
+      c.setLineDash([6, 4]); c.fillRect(x, y, w, h); c.strokeRect(x, y, w, h);
+      c.restore();
+    }
   }
 
   /* bouton 🎨 de la barre d'outils : bascule texte ↔ stylo (même zone !) */
@@ -845,16 +1084,29 @@
   function exitInk() {
     if (_ink.on) { _ink.on = false; applyInkMode(); }
   }
+  /* Mode tableau depuis la barre du HAUT : 🖐️ déplacer, ⬚ sélectionner.
+     (Ré-clic = on revient au texte.) */
+  window.creBoardMode = function (tool) {
+    var cv = ensureInk(); if (!cv) return;
+    if (_ink.on && _ink.tool === tool) { _ink.on = false; applyInkMode(); return; }
+    _ink.on = true; _ink.tool = tool;
+    applyInkMode();
+    if (tool === 'hand') toast('🖐️ Déplacer : glisse pour bouger la vue du tableau');
+    else if (tool === 'select') toast('⬚ Sélection : encadre des éléments pour les déplacer/supprimer');
+  };
   function applyInkMode() {
     var wrap = el('cre-note-wrap'), cv = el('cre-ink'), tools = el('cre-ink-tools');
-    var btn = el('cre-draw-btn');
     if (!wrap || !cv) return;
     wrap.classList.toggle('inking', _ink.on);
     cv.style.pointerEvents = _ink.on ? 'auto' : 'none';
     if (tools) tools.style.display = _ink.on ? 'flex' : 'none';
-    if (btn) btn.classList.toggle('active', _ink.on);
+    // surligne le bon bouton du HAUT selon le mode
+    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand' && _ink.tool !== 'select');
+    var hand = el('cre-hand-btn'); if (hand) hand.classList.toggle('active', _ink.on && _ink.tool === 'hand');
+    var selb = el('cre-select-btn'); if (selb) selb.classList.toggle('active', _ink.on && _ink.tool === 'select');
+    if (!_ink.on) { _ink.marq = null; }
     if (_ink.on) {
-      buildInkTools();
+      buildInkTools(); syncInkTools();
       var p = el('cre-chars'); if (p) p.style.display = 'none';
     }
   }
@@ -866,6 +1118,7 @@
     ['rect', '⬜', 'Rectangle'],
     ['ellipse', '⭕', 'Ellipse / cercle'],
     ['erase', '🧽', 'Gomme — n\'efface que le dessin, jamais le texte'],
+    ['select', '⬚', 'Sélectionner des éléments (encadrer pour déplacer/supprimer)'],
     ['hand', '🖐️', 'Main : déplacer la vue du tableau']
   ];
   function buildInkTools() {
@@ -893,7 +1146,7 @@
     t.querySelectorAll('.nd-col').forEach(function (b) {
       b.addEventListener('click', function () {
         _ink.color = b.dataset.c;
-        if (_ink.tool === 'erase' || _ink.tool === 'hand') _ink.tool = 'pen';
+        if (_ink.tool === 'erase' || _ink.tool === 'hand' || _ink.tool === 'select') _ink.tool = 'pen';
         syncInkTools();
       });
     });
@@ -917,10 +1170,14 @@
       b.classList.toggle('on', b.dataset.tool === _ink.tool);
     });
     t.querySelectorAll('.nd-col').forEach(function (b) {
-      b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && b.dataset.c === _ink.color);
+      b.classList.toggle('on', _ink.tool !== 'erase' && _ink.tool !== 'hand' && _ink.tool !== 'select' && b.dataset.c === _ink.color);
     });
     var cv = el('cre-ink');
-    if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : 'crosshair';
+    if (cv) cv.style.cursor = _ink.tool === 'hand' ? 'grab' : (_ink.tool === 'select' ? 'crosshair' : 'crosshair');
+    // reflète aussi l'état sur les boutons du HAUT
+    var draw = el('cre-draw-btn'); if (draw) draw.classList.toggle('active', _ink.on && _ink.tool !== 'hand' && _ink.tool !== 'select');
+    var hand = el('cre-hand-btn'); if (hand) hand.classList.toggle('active', _ink.on && _ink.tool === 'hand');
+    var selb = el('cre-select-btn'); if (selb) selb.classList.toggle('active', _ink.on && _ink.tool === 'select');
   }
 
   /* ---------- 🔍 ZOOM du tableau (boutons ➖ 100% ➕ et Ctrl+molette) ---------- */
@@ -951,9 +1208,26 @@
     try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
     inkResizeSoon();
   };
+  function isTyping() {
+    var a = document.activeElement;
+    return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+  }
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
+      if (_sel.length) { clearSel(); return; }
       if (document.querySelector('.cre-full')) window.creToggleFull(false);
+    }
+    // 🗑️ Suppr / Retour : efface les blocs SÉLECTIONNÉS (jamais pendant qu'on tape un texte)
+    if ((e.key === 'Delete' || e.key === 'Backspace') && _sel.length && !isTyping()) {
+      e.preventDefault(); deleteSelection(); return;
+    }
+    // Ctrl/Cmd+A dans le tableau (hors saisie) = tout sélectionner les blocs
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A') && !isTyping()) {
+      var bdAll = board();
+      if (bdAll && el('cre-note-edit') && el('cre-note-edit').offsetParent !== null) {
+        var any = bdAll.querySelectorAll('.cre-tbox');
+        if (any.length) { e.preventDefault(); clearSel(); any.forEach(function (b) { b.classList.add('sel'); _sel.push(b); }); updateSelBar(); }
+      }
     }
     // ↩️ Ctrl+Z / ↪️ Ctrl+Y (ou Ctrl+Shift+Z) sur le DESSIN quand le stylo est actif
     if (_ink.on && (e.ctrlKey || e.metaKey)) {
@@ -1281,6 +1555,23 @@
     window.fxAdd('text'); // un bloc texte prêt à l'emploi
   };
 
+  /* ---------- 👁 APERÇU LIVE des champs qui acceptent une formule (quiz, flashcards) ----------
+     Le champ garde le code \( … \) (nécessaire pour la sauvegarde / le rendu au quiz),
+     mais un petit aperçu sous le champ montre le BEAU rendu — fini le « LaTeX brut » à l'écran. */
+  var _fxPrevTimers = {};
+  window.creFxPreview = function (srcId, prevId) {
+    var src = el(srcId), prev = el(prevId);
+    if (!src || !prev) return;
+    clearTimeout(_fxPrevTimers[prevId]);
+    _fxPrevTimers[prevId] = setTimeout(function () {
+      var v = (src.value || '').trim();
+      if (!v || v.indexOf('\\(') < 0) { prev.style.display = 'none'; prev.innerHTML = ''; return; }
+      prev.style.display = 'block';
+      prev.textContent = v;                 // MathJax rend les \( … \) (texte sûr)
+      if (typeof safeMathJax === 'function') safeMathJax([prev]);
+    }, 260);
+  };
+
   window.fxInsert = function () {
     var tex = fxToTex();
     if (!tex) { toast('⚠️ La formule est vide', '#f87171'); return; }
@@ -1304,6 +1595,7 @@
         f.value = f.value.slice(0, st) + str + f.value.slice(st);
         f.focus();
         try { f.setSelectionRange(st + str.length, st + str.length); } catch (e) {}
+        f.dispatchEvent(new Event('input', { bubbles: true })); // déclenche l'aperçu live
       }
     }
     window.fxClose();

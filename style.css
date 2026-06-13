@@ -494,6 +494,11 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
   .formula-main { border-color: #000 !important; background: #f5f5f5 !important; color: #000 !important; box-shadow: none !important; }
   .formula-box, .key-rule, .card { background: #f9f9f9 !important; border: 1px solid #ccc !important; box-shadow: none !important; }
   svg { background: #fff !important; }
+  /* Formules MathJax : forcées en NOIR à l'impression (sinon var(--text-primary)
+     restait clair → texte blanc sur blanc = cases vides sur la feuille imprimée). */
+  .synth-section mjx-container, .formula-main mjx-container, .formula-box mjx-container,
+  mjx-container, mjx-container svg { color: #000 !important; }
+  mjx-container svg, mjx-container svg * { fill: #000 !important; stroke: #000 !important; background: transparent !important; }
   .step-btn { display: none !important; }
   .exercise-step { display: block !important; }
 }

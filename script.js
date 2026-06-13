@@ -2792,6 +2792,10 @@ function rebuildFlashcardFilters() {
   html += '<button type="button" class="fc-chip fc-chip-due" data-ch="due" onclick="filterFlashcards(\'due\')">🔔 À réviser</button>';
   html += '<button type="button" class="fc-chip fc-chip-fav" data-ch="fav" onclick="filterFlashcards(\'fav\')">⭐ Favoris</button>';
   html += '<button type="button" class="fc-chip fc-chip-hard" data-ch="hard" onclick="filterFlashcards(\'hard\')">😓 Difficiles</button>';
+  // 🎨 « Mes cartes » : accès direct aux flashcards que l'élève a lui-même créées
+  if (typeof flashcards !== 'undefined' && flashcards.some(function (c) { return c._custom; })) {
+    html += '<button type="button" class="fc-chip fc-chip-mine" data-ch="mine" onclick="filterFlashcards(\'mine\')">🎨 Mes cartes</button>';
+  }
   order.forEach(function (ch) {
     html += '<button type="button" class="fc-chip" data-ch="' + ch + '" onclick="filterFlashcards(\'' + ch + '\')">' + (labels[ch] || ch) + '</button>';
   });
@@ -2811,6 +2815,8 @@ function filterFlashcards(chapter) {
     filteredFlashcards = flashcards.filter(c => favs.indexOf(c.front) >= 0);
   } else if (chapter === 'hard') {
     filteredFlashcards = flashcards.filter(c => { const r = flashcardData[c.front]; return r && r.rating === 'hard'; });
+  } else if (chapter === 'mine') {
+    filteredFlashcards = flashcards.filter(c => c._custom);
   } else {
     filteredFlashcards = chapter === 'all' ? null : flashcards.filter(c => c.chapter === chapter);
   }
@@ -2819,12 +2825,12 @@ function filterFlashcards(chapter) {
   document.querySelectorAll('#fc-filters .fc-chip').forEach(b => {
     b.classList.toggle('on', b.dataset.ch === chapter);
   });
-  // Filtre vide (dues ou favoris) → message sympa au lieu d'une carte vide
-  if ((chapter === 'due' || chapter === 'fav' || chapter === 'hard') && filteredFlashcards.length === 0) {
+  // Filtre vide (dues, favoris, difficiles, mes cartes) → message sympa au lieu d'une carte vide
+  if ((chapter === 'due' || chapter === 'fav' || chapter === 'hard' || chapter === 'mine') && filteredFlashcards.length === 0) {
     const c = document.getElementById('flashcard-content');
     const bc = document.getElementById('flashcard-back-content');
-    if (c) c.innerHTML = chapter === 'fav' ? '⭐ Aucun favori' : (chapter === 'hard' ? '💪 Aucune carte difficile' : '🎉 Tout est à jour !');
-    if (bc) bc.innerHTML = chapter === 'fav' ? 'Touche « ☆ Favori » sur une carte pour la garder ici.' : (chapter === 'hard' ? 'Une carte arrive ici quand tu réponds « 😓 Je ne savais pas ». Rien pour l\'instant, bravo !' : 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».');
+    if (c) c.innerHTML = chapter === 'fav' ? '⭐ Aucun favori' : (chapter === 'hard' ? '💪 Aucune carte difficile' : (chapter === 'mine' ? '🎨 Aucune carte perso' : '🎉 Tout est à jour !'));
+    if (bc) bc.innerHTML = chapter === 'fav' ? 'Touche « ☆ Favori » sur une carte pour la garder ici.' : (chapter === 'hard' ? 'Une carte arrive ici quand tu réponds « 😓 Je ne savais pas ». Rien pour l\'instant, bravo !' : (chapter === 'mine' ? 'Crée tes propres cartes dans 🎨 Mes créations → 🎴 Flashcards.' : 'Aucune carte à réviser aujourd\'hui. Reviens demain ou choisis « Toutes ».'));
     const prog = document.getElementById('flashcard-progress'); if (prog) prog.textContent = '0 / 0';
     const ctrl = document.getElementById('flashcard-controls'); if (ctrl) ctrl.style.display = 'none';
     updateDueCount();
@@ -2916,6 +2922,8 @@ function updateFcStats() {
 function initFlashcards() {
   const data = loadSavedData();
   flashcardData = data.flashcardData || {};
+  // reconstruit les filtres (fait apparaître/disparaître « 🎨 Mes cartes » selon les créations)
+  try { rebuildFlashcardFilters(); } catch (e) {}
   fcSessionCount = 0;
   const _se = document.getElementById('fc-session'); if (_se) { _se.style.display = 'none'; _se.textContent = ''; }
   fcWriteMode = localStorage.getItem('mathsgr2_fc_write') === '1';
@@ -5593,8 +5601,14 @@ function renderProgressCharts() {
 // double/triple-clic du navigateur : tout le texte autour devenait surligné
 // (la page paraissait blanche). On bloque la sélection à partir du 2e clic.
 document.addEventListener('mousedown', function (e) {
-  if (e.detail > 1 && e.target && e.target.closest && e.target.closest('button, .nav-btn')) e.preventDefault();
-});
+  // À partir du 2e clic rapide, on bloque la sélection PARTOUT sauf dans une vraie
+  // zone de saisie (champ, liste déroulante, texte éditable). Couvre aussi les
+  // <select> (ex. choix du thème dans Mes créations) où le bug réapparaissait.
+  if (e.detail > 1 && e.target && e.target.closest) {
+    var editable = e.target.closest('input, textarea, select, option, [contenteditable="true"], .cre-tbox-body, #cre-note-editor, .note-editor');
+    if (!editable) e.preventDefault();
+  }
+}, true);
 
 // ── Matières repliables (mobile) ─────────────────────────────
 // Sur petit écran, la rangée des 9 matières se replie en un seul bouton

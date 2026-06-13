@@ -224,16 +224,44 @@
     }
   };
 
-  /* ---------- COLLECTIF (Supabase temps réel, 1 note partagée) ---------- */
+  /* ---------- COLLECTIF (Supabase temps réel, 1 tableau partagé) ----------
+     Désormais le MÊME tableau Discord que le privé : le studio se monte dans
+     l'onglet Collectif et son état complet (texte + dessin + blocs) est
+     synchronisé en JSON dans la colonne `content` (dernier écrivain gagne). */
+  var _applyingRemote = false;
   function collabGate(msg) {
-    var g = el('note-collab-gate'), ed = el('note-collab');
+    var g = el('note-collab-gate'), h = el('note-collab-host');
     if (g) { g.innerHTML = msg; g.style.display = 'block'; }
-    if (ed) ed.style.display = 'none';
+    if (h) h.style.display = 'none';
   }
   function collabShow() {
-    var g = el('note-collab-gate'), ed = el('note-collab');
+    var g = el('note-collab-gate'), h = el('note-collab-host');
     if (g) g.style.display = 'none';
-    if (ed) ed.style.display = 'block';
+    if (h) h.style.display = 'block';
+  }
+  // ancien format = HTML brut ; nouveau = JSON {html,strokes,boxes,inkW}
+  function parseBoard(content) {
+    var empty = { html: '', strokes: [], boxes: [], inkW: 0 };
+    if (!content) return empty;
+    if (content.charAt(0) === '{') {
+      try { var o = JSON.parse(content); return { html: o.html || '', strokes: o.strokes || [], boxes: o.boxes || [], inkW: o.inkW || 0 }; }
+      catch (e) {}
+    }
+    return { html: content, strokes: [], boxes: [], inkW: 0 }; // compat ancienne note texte
+  }
+  function mountCollabBoard(content) {
+    var host = el('note-collab-host');
+    if (!host || typeof window.creBoardMount !== 'function') return;
+    _applyingRemote = true; // le pré-enregistrement du mont précédent ne doit pas repartir
+    window.creBoardMount(host, parseBoard(content), {
+      onChange: function (state) {
+        if (_applyingRemote) return;
+        _lastLocalEdit = Date.now();
+        clearTimeout(_collabPushTimer);
+        _collabPushTimer = setTimeout(function () { pushCollabBoard(state); }, 900);
+      }
+    });
+    setTimeout(function () { _applyingRemote = false; }, 60);
   }
   function loadCollab() {
     var client = sb();
@@ -245,22 +273,20 @@
         collabGate('🛠️ Table pas encore créée. Le créateur doit exécuter <code>_SQL_notes.sql</code> dans Supabase → SQL Editor. (Le bloc-notes privé marche déjà !)');
         return;
       }
-      var ed = el('note-collab');
-      if (ed && res.data) {
-        ed.innerHTML = sanitize(res.data.content || '');
-        var by = el('note-collab-by');
-        if (by && res.data.updated_by) by.textContent = '✍️ Dernière modif : ' + res.data.updated_by;
-      }
       _collabLoaded = true;
+      mountCollabBoard(res.data ? res.data.content : '');
+      var by = el('note-collab-by');
+      if (by && res.data && res.data.updated_by) by.textContent = '✍️ Dernière modif : ' + res.data.updated_by;
       subscribeCollab();
     });
   }
-  function pushCollab() {
+  function pushCollabBoard(state) {
     var client = sb(); if (!client || !curUser() || !_collabLoaded) return;
-    var ed = el('note-collab'); if (!ed) return;
-    var html = sanitize(ed.innerHTML);
-    if (html.length > MAX_NOTE_BYTES) { toast('Note collective trop lourde 🖼️', '#f87171'); return; }
-    client.from('shared_note').update({ content: html, updated_by: myPseudo(), updated_at: new Date().toISOString() }).eq('id', 1)
+    var json;
+    try { json = JSON.stringify({ html: state.html || '', strokes: state.strokes || [], boxes: state.boxes || [], inkW: state.inkW || 0 }); }
+    catch (e) { return; }
+    if (json.length > MAX_NOTE_BYTES) { toast('Tableau collectif trop lourd — simplifie 🖼️', '#f87171'); return; }
+    client.from('shared_note').update({ content: json, updated_by: myPseudo(), updated_at: new Date().toISOString() }).eq('id', 1)
       .then(function (r) {
         var st = el('note-status');
         if (r.error) { if (st) st.textContent = '⚠️ envoi raté'; }
@@ -274,13 +300,11 @@
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'shared_note' }, function (payload) {
           var row = payload.new || {};
           if (row.updated_by === myPseudo() && Date.now() - _lastLocalEdit < 5000) return; // ma propre modif
-          if (Date.now() - _lastLocalEdit < 2000) return; // je suis en train d'écrire : on ne m'écrase pas
-          var ed = el('note-collab');
-          if (ed) {
-            ed.innerHTML = sanitize(row.content || '');
-            var by = el('note-collab-by');
-            if (by && row.updated_by) by.textContent = '✍️ Dernière modif : ' + row.updated_by;
-          }
+          if (Date.now() - _lastLocalEdit < 2500) return; // je suis en train d'écrire : on ne m'écrase pas
+          var host = el('note-collab-host');
+          if (host && host.querySelector('#cre-studio')) mountCollabBoard(row.content || '');
+          var by = el('note-collab-by');
+          if (by && row.updated_by) by.textContent = '✍️ Dernière modif : ' + row.updated_by;
         })
         .subscribe();
     } catch (e) {}
@@ -348,9 +372,8 @@
   }
 
   window.initNotes = function () {
-    mountBoard();
-    wire('note-collab');
     if (_tab === 'collectif') loadCollab();
+    else mountBoard();
   };
 
   // si l'utilisateur se connecte pendant qu'il est sur l'onglet collectif

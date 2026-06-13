@@ -852,6 +852,12 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
 #note-board-host #cre-note-wrap { height: 66vh; }
 /* la ligne de blocs du compositeur ƒ𝑥 invite à écrire (clic à côté des blocs = texte) */
 .fx-row { cursor: text; }
+/* 🎨 pastille « Mes cartes » dans les filtres flashcards (accent perso) */
+.fc-chip-mine { border-color: var(--color-nav) !important; }
+.fc-chip-mine.on { background: linear-gradient(135deg, var(--color-nav), #7c3aed) !important; color: #fff !important; }
+/* 👁 aperçu rendu sous les champs « formule » (quiz, flashcards) */
+.fx-fieldprev { background: var(--bg-main); border: 1px dashed var(--color-nav); border-radius: 9px; padding: 7px 12px; margin-bottom: 0.9rem; color: var(--text-primary); font-size: 15px; overflow-x: auto; }
+.fx-fieldprev::before { content: "👁 "; opacity: 0.6; }
 
 /* ═══ v115 — retouches du tour du site ═══ */
 /* PC : moins de vide sous la nav → le contenu remonte au-dessus du pli */
@@ -879,24 +885,47 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
 #cre-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; touch-action: none; }
 #cre-note-wrap.inking { outline: 2px dashed var(--color-nav); outline-offset: 3px; }
 #cre-note-wrap.inking #cre-ink { cursor: crosshair; }
-#cre-draw-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
-/* blocs de texte libres (attrape ⠿ et déplace) — le cadre n'apparaît QUE
-   quand on clique sur le bloc (sinon : juste le texte, comme sur Discord) */
-.cre-tbox { position: absolute; z-index: 2; min-width: 90px; max-width: min(46%, 340px); background: transparent; border: 1px dashed transparent; border-radius: 9px; padding: 6px 22px 6px 22px; }
-.cre-tbox:hover { border-color: rgba(167, 139, 250, 0.3); }
+#cre-draw-btn.active, #cre-hand-btn.active, #cre-select-btn.active { background: var(--color-nav); color: #fff; border-color: var(--color-nav); }
+/* petit séparateur dans la barre d'outils du tableau (avant les outils de dessin) */
+.cre-tb-sep { width: 1px; align-self: stretch; background: var(--border-subtle); margin: 2px 4px; }
+/* blocs libres (texte OU image) — attrape ⠿ pour bouger, coin ◢ pour la taille,
+   rond vert pour tourner ; le cadre n'apparaît qu'au survol/sélection (façon Discord) */
+.cre-tbox { position: absolute; z-index: 2; min-width: 56px; min-height: 26px; max-width: min(96%, 900px); background: transparent; border: 1px dashed transparent; border-radius: 9px; padding: 8px 22px; box-sizing: border-box; transform-origin: center center; }
+.cre-tbox:hover { border-color: rgba(167, 139, 250, 0.35); }
 .cre-tbox:focus-within { background: rgba(20, 22, 38, 0.92); border-color: rgba(167, 139, 250, 0.75); }
-.cre-tbox-grip { position: absolute; left: 3px; top: 5px; cursor: grab; color: var(--color-nav); font-size: 14px; user-select: none; touch-action: none; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
-.cre-tbox:focus-within .cre-tbox-grip, .cre-tbox:hover .cre-tbox-grip { opacity: 1; pointer-events: auto; }
+.cre-tbox.sel { border-style: solid; border-color: var(--color-nav); box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.45); background: rgba(20, 22, 38, 0.6); }
+/* bloc IMAGE : l'image remplit le bloc, pas de fond ni padding */
+.cre-tbox-img { padding: 0; }
+.cre-tbox-img .cre-tbox-body { width: 100%; height: 100%; }
+.cre-tbox-img .cre-tbox-body img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 6px; margin: 0; pointer-events: none; }
+.cre-tbox-grip { position: absolute; left: 3px; top: 5px; cursor: grab; color: var(--color-nav); font-size: 14px; user-select: none; touch-action: none; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; z-index: 4; }
 .cre-tbox-grip:active { cursor: grabbing; }
-.cre-tbox-x { position: absolute; right: 2px; top: 3px; background: transparent; border: none; color: var(--text-secondary); font-size: 11px; cursor: pointer; padding: 2px; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
-.cre-tbox:focus-within .cre-tbox-x, .cre-tbox:hover .cre-tbox-x { opacity: 1; pointer-events: auto; }
+.cre-tbox-x { position: absolute; right: 2px; top: 3px; background: transparent; border: none; color: var(--text-secondary); font-size: 11px; cursor: pointer; padding: 2px; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; z-index: 4; }
 .cre-tbox-x:hover { color: #f87171; }
-.cre-tbox-body { outline: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); min-height: 18px; }
+/* poignée de redimensionnement (coin bas-droit, comme une fenêtre) */
+.cre-tbox-rsz { position: absolute; right: -4px; bottom: -4px; width: 14px; height: 14px; border-radius: 3px; background: var(--color-nav); border: 2px solid var(--bg-main); cursor: nwse-resize; opacity: 0; pointer-events: none; touch-action: none; transition: opacity 0.15s ease; z-index: 4; }
+/* poignée de rotation (rond vert au-dessus) */
+.cre-tbox-rot { position: absolute; left: 50%; top: -24px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: #34d399; border: 2px solid var(--bg-main); cursor: grab; opacity: 0; pointer-events: none; touch-action: none; transition: opacity 0.15s ease; z-index: 4; }
+.cre-tbox-rot::after { content: ''; position: absolute; left: 50%; top: 13px; width: 2px; height: 9px; background: #34d399; transform: translateX(-50%); }
+.cre-tbox:hover .cre-tbox-grip, .cre-tbox:hover .cre-tbox-x, .cre-tbox:hover .cre-tbox-rsz, .cre-tbox:hover .cre-tbox-rot,
+.cre-tbox:focus-within .cre-tbox-grip, .cre-tbox:focus-within .cre-tbox-x, .cre-tbox:focus-within .cre-tbox-rsz, .cre-tbox:focus-within .cre-tbox-rot,
+.cre-tbox.sel .cre-tbox-grip, .cre-tbox.sel .cre-tbox-x, .cre-tbox.sel .cre-tbox-rsz, .cre-tbox.sel .cre-tbox-rot { opacity: 1; pointer-events: auto; }
+.cre-tbox-body { outline: none; font-size: 14px; line-height: 1.5; color: var(--text-primary); min-height: 18px; overflow: hidden; }
 .cre-tbox-body:empty::before { content: attr(data-ph); color: var(--text-secondary); opacity: 0.55; pointer-events: none; }
 .cre-tbox-body img { max-width: 100%; border-radius: 6px; }
-/* en lecture 👁 : mêmes blocs, sans poignée ni bordure de travail */
-.cre-tbox-view { border: none; background: rgba(20, 22, 38, 0.85); padding: 6px 10px; z-index: 2; }
-.cre-view-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; }
+/* barre flottante quand des éléments sont sélectionnés */
+#cre-sel-bar { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); z-index: 8; display: none; align-items: center; gap: 8px; padding: 5px 8px 5px 14px; border-radius: 999px; background: rgba(13, 15, 26, 0.95); border: 1px solid var(--color-nav); box-shadow: 0 8px 22px rgba(0,0,0,0.5); backdrop-filter: blur(8px); font-size: 13px; color: var(--text-primary); }
+#cre-sel-bar button { border: none; border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 700; cursor: pointer; }
+#cre-sel-del { background: #f87171; color: #fff; }
+#cre-sel-clr { background: transparent; color: var(--text-secondary); padding: 5px 9px; }
+/* ── lecture 👁 : reproduit l'éditeur à l'identique via UNE échelle (transform) ── */
+.cre-view-body { overflow: auto; }
+.cre-view-scaler { transform-origin: top left; position: relative; }
+.cre-view-stage { position: relative; }
+.cre-view-text { background: transparent !important; border: none !important; min-height: 0 !important; max-height: none !important; padding: 8px 22px; }
+.cre-tbox-view { border: none !important; background: transparent !important; box-shadow: none !important; }
+.cre-tbox-view .cre-tbox-body { background: transparent; overflow: visible; }
+.cre-view-ink { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; }
 
 /* 🎨 dessin INLINE des synthèses : la zone d'écriture devient la toile */
 #cre-draw { background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; }
