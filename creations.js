@@ -28,7 +28,7 @@
   }
 
   /* ---------- même nettoyage anti-XSS que le bloc-notes ---------- */
-  var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1, UL: 1, OL: 1, LI: 1 };
+  var OK_TAGS = { DIV: 1, P: 1, BR: 1, B: 1, STRONG: 1, I: 1, EM: 1, U: 1, SPAN: 1, IMG: 1, UL: 1, OL: 1, LI: 1, H1: 1, H2: 1, H3: 1, BLOCKQUOTE: 1 };
   // ne garde QUE les styles utiles & sûrs : taille (A−/A+), couleur 🎨, surlignage 🖍️, alignement ↔
   function safeStyle(v) {
     var out = [];
@@ -58,7 +58,7 @@
           if (c.tagName === 'IMG' && a.name === 'src' && /^(data:image\/|https:\/\/)/i.test(a.value)) return;
           if (c.tagName === 'IMG' && a.name === 'alt') return; // garde la formule LaTeX d'origine
           if (c.tagName === 'IMG' && a.name === 'class' && a.value === 'cre-fx-img') return; // image-formule ƒ𝑥
-          if ((c.tagName === 'SPAN' || c.tagName === 'DIV' || c.tagName === 'P' || c.tagName === 'LI') && a.name === 'style') {
+          if ((c.tagName === 'SPAN' || c.tagName === 'DIV' || c.tagName === 'P' || c.tagName === 'LI' || c.tagName === 'H1' || c.tagName === 'H2' || c.tagName === 'H3' || c.tagName === 'BLOCKQUOTE') && a.name === 'style') {
             var s = safeStyle(a.value);
             if (s) { c.setAttribute('style', s); return; } // taille / couleur / surlignage / alignement
           }
@@ -409,6 +409,7 @@
     if (!ov) {
       ov = document.createElement('div'); ov.id = 'cre-view-ov';
       ov.innerHTML = '<div class="cre-view-box"><button type="button" class="cre-view-x" onclick="creCloseView()" aria-label="Fermer">✕</button>' +
+        '<button type="button" class="cre-view-print" onclick="crePrintNote()" title="Imprimer ou enregistrer en PDF">🖨️ PDF</button>' +
         '<h3 id="cre-view-title"></h3><div id="cre-view-body" class="cre-view-body"></div></div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function (e) { if (e.target === ov) window.creCloseView(); });
@@ -470,6 +471,32 @@
     setTimeout(finish, 60);
   };
   window.creCloseView = function () { var ov = el('cre-view-ov'); if (ov) ov.style.display = 'none'; };
+
+  /* ---------- 🖨️ IMPRIMER / EXPORTER EN PDF la synthèse ouverte ----------
+     On met la lecture 👁 à l'échelle de la page A4, on isole l'overlay via une
+     classe sur <body> (CSS @media print), on imprime, puis on restaure. */
+  window.crePrintNote = function () {
+    var ov = el('cre-view-ov'); if (!ov || ov.style.display === 'none') { return; }
+    var scaler = ov.querySelector('.cre-view-scaler'), stage = ov.querySelector('.cre-view-stage');
+    var prev = null;
+    if (scaler && stage) {
+      var w = stage.offsetWidth || 600, h = stage.offsetHeight || 400;
+      var s = Math.min(1, 720 / w); // ~largeur utile d'une page A4 à 96 dpi
+      prev = { t: scaler.style.transform, w: scaler.style.width, h: scaler.style.height, o: scaler.style.transformOrigin };
+      scaler.style.transformOrigin = 'top left';
+      scaler.style.transform = 'scale(' + s + ')';
+      scaler.style.width = (w * s) + 'px';
+      scaler.style.height = (h * s) + 'px';
+    }
+    document.body.classList.add('cre-printing');
+    function restore() {
+      document.body.classList.remove('cre-printing');
+      if (scaler && prev) { scaler.style.transform = prev.t; scaler.style.width = prev.w; scaler.style.height = prev.h; scaler.style.transformOrigin = prev.o; }
+      window.removeEventListener('afterprint', restore);
+    }
+    window.addEventListener('afterprint', restore);
+    setTimeout(function () { try { window.print(); } catch (e) { restore(); } }, 80);
+  };
 
   /* ---------- éditeur de synthèse : caret, mise en forme, Ω, image, dessin, collage ---------- */
   // dernière zone d'écriture utilisée : l'éditeur principal OU un bloc de texte libre
@@ -894,6 +921,20 @@
     }
     if (ensureSelectionIn(ed)) { applyFontPx(px); boardChanged(); }
     if (selEl) selEl.value = ''; // le menu revient sur « Taille »
+  };
+  // 🔠 transforme le paragraphe en Titre / Sous-titre / Citation (ou re-paragraphe)
+  window.creBlockFormat = function (tag) {
+    exitInk();
+    var ed = activeEd(); if (!ed) return;
+    ed.focus();
+    if (!ensureSelectionIn(ed)) return;
+    // 2e clic sur le même style → revient au paragraphe normal
+    var cur = '';
+    try { cur = (document.queryCommandValue('formatBlock') || '').toLowerCase(); } catch (e) {}
+    var want = tag.toLowerCase();
+    var target = (cur === want || cur === '<' + want + '>') ? 'div' : tag;
+    try { document.execCommand('formatBlock', false, target); } catch (e) {}
+    boardChanged();
   };
   // ↔ alignement du texte (gauche / centre / droite)
   window.creAlign = function (how) {
