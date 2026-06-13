@@ -294,6 +294,7 @@
     <span class="nav-lab">🎯 S'entraîner</span>
     <button class="nav-btn" onclick="showSection(event,'quiz')">🧠 Quiz</button>
     <button class="nav-btn" data-sec="flashcards" onclick="showSection(event,'flashcards')">🎴 Flashcards</button>
+    <button class="nav-btn" onclick="showSection(event,'memoformules')">✍️ Formules par cœur</button>
     <button class="nav-btn" onclick="showSection(event,'mesexos')">🎨 Mes créations</button>
     <button class="nav-btn" onclick="showSection(event,'erreurs')">⚠️ Erreurs fréquentes</button>
   </div>
@@ -494,6 +495,118 @@
     </div>
     <p style="font-size:11px; color:var(--text-secondary); text-align:center; margin-bottom:0.75rem; opacity:0.65;">⌨️ Touches <strong>1–4</strong> pour répondre rapidement</p>
     <div id="quiz-container"></div>
+  </div>
+</div>
+
+<div id="memoformules" class="section">
+  <h2 class="ft-title">✍️ Formules par cœur</h2>
+  <p class="ft-sub">Apprends tes formules en les <strong>réécrivant</strong> à la main. Tu encodes d'abord tes formules avec le bouton <strong>ƒ𝑥</strong>, puis tu t'entraînes : l'app te demande une formule par son nom, tu l'écris, et elle te corrige. <em>Ce sont 100&nbsp;% tes formules — rien n'est inventé.</em></p>
+
+  <div id="ft-stats" class="ft-statsbar"></div>
+
+  <!-- ÉCRAN ACCUEIL -->
+  <div id="ft-home" class="ft-screen">
+    <div class="ft-home-cards">
+      <button type="button" class="ft-bigcard ft-bigcard-train" onclick="ftStartSetup()">
+        <span class="ft-bc-ico">📝</span><span class="ft-bc-t">M'entraîner</span>
+        <span class="ft-bc-d">Écris les formules de mémoire — l'app corrige</span>
+      </button>
+      <button type="button" class="ft-bigcard ft-bigcard-bank" onclick="ftShow('bank')">
+        <span class="ft-bc-ico">🗂️</span><span class="ft-bc-t">Ma banque de formules</span>
+        <span class="ft-bc-d">Ajoute, modifie ou supprime tes formules</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ÉCRAN BANQUE -->
+  <div id="ft-bank" class="ft-screen" style="display:none;">
+    <div class="ft-bankform">
+      <h3 id="ft-form-title" class="ft-formh">➕ Nouvelle formule</h3>
+      <label class="ft-lab">Nom / énoncé <span class="ft-hint">(ce que l'app te demandera)</span></label>
+      <input id="ft-name" type="text" class="ft-in" placeholder="Ex. : Distance d'un point à une droite" maxlength="180" autocomplete="off">
+      <label class="ft-lab">La formule</label>
+      <div class="ft-fxrow">
+        <input id="ft-formula" type="text" class="ft-in ft-in-fx" placeholder="Clique sur ƒ𝑥 pour la construire…" oninput="creFxPreview('ft-formula','ft-formula-prev')" autocomplete="off">
+        <button type="button" class="nav-btn ft-fxbtn" onclick="openFormulaComposer('ft-formula')" title="Construire la formule">ƒ𝑥</button>
+      </div>
+      <div id="ft-formula-prev" class="ft-prev" style="display:none;"></div>
+      <label class="ft-lab">Chapitre <span class="ft-hint">(facultatif)</span></label>
+      <select id="ft-chapter" class="ft-in"></select>
+      <div class="ft-form-actions">
+        <button type="button" class="nav-btn nd-btn-ok" id="ft-save-btn" onclick="ftSaveFormula()">💾 Enregistrer</button>
+        <button type="button" class="nav-btn" id="ft-cancel-btn" onclick="ftCancelEdit()" style="display:none;">Annuler</button>
+        <button type="button" class="nav-btn" onclick="ftShow('home')">← Retour</button>
+      </div>
+    </div>
+    <h3 class="ft-listh">📚 Mes formules <span id="ft-count" class="ft-badge"></span></h3>
+    <div id="ft-list" class="ft-list"></div>
+  </div>
+
+  <!-- ÉCRAN CHOIX DU MODE -->
+  <div id="ft-setup" class="ft-screen" style="display:none;">
+    <h3 class="ft-listh">Comment veux-tu réviser ?</h3>
+    <div class="ft-modes">
+      <button type="button" class="ft-mode" onclick="ftStartAll()"><span class="ft-bc-ico">🌍</span><b>Tout écrire</b><span>Toutes tes formules, une par une</span></button>
+      <button type="button" class="ft-mode" onclick="ftShow('pick')"><span class="ft-bc-ico">☑️</span><b>Choisir</b><span>Tu sélectionnes les formules</span></button>
+      <button type="button" class="ft-mode" onclick="ftStartRandom()"><span class="ft-bc-ico">🎲</span><b>Piocher au hasard</b><span>L'app tire les formules au sort</span></button>
+    </div>
+    <button type="button" class="nav-btn" onclick="ftShow('home')">← Retour</button>
+  </div>
+
+  <!-- ÉCRAN SÉLECTION (choisir) -->
+  <div id="ft-pick" class="ft-screen" style="display:none;">
+    <h3 class="ft-listh">Coche les formules à réviser</h3>
+    <div class="ft-pickbar">
+      <button type="button" class="nav-btn" onclick="ftPickAll(true)">Tout cocher</button>
+      <button type="button" class="nav-btn" onclick="ftPickAll(false)">Tout décocher</button>
+    </div>
+    <div id="ft-picklist" class="ft-list"></div>
+    <div class="ft-form-actions">
+      <button type="button" class="nav-btn nd-btn-ok" onclick="ftStartSelected()">▶️ Commencer</button>
+      <button type="button" class="nav-btn" onclick="ftShow('setup')">← Retour</button>
+    </div>
+  </div>
+
+  <!-- ÉCRAN ENTRAÎNEMENT -->
+  <div id="ft-train" class="ft-screen" style="display:none;">
+    <div class="ft-progress"><div id="ft-progress-bar" class="ft-progress-bar"></div></div>
+    <div class="ft-trainhead"><span id="ft-counter" class="ft-counter"></span><button type="button" class="nav-btn ft-quit" onclick="ftQuit()">✕ Quitter</button></div>
+    <div class="ft-card">
+      <div class="ft-ask-label">Écris la formule&nbsp;:</div>
+      <div id="ft-ask" class="ft-ask"></div>
+      <div id="ft-chap-tag" class="ft-chaptag"></div>
+      <div class="ft-fxrow">
+        <input id="ft-answer" type="text" class="ft-in ft-in-fx" placeholder="Construis ta réponse avec ƒ𝑥…" oninput="creFxPreview('ft-answer','ft-answer-prev')" autocomplete="off">
+        <button type="button" class="nav-btn ft-fxbtn" onclick="openFormulaComposer('ft-answer')" title="Construire la formule">ƒ𝑥</button>
+      </div>
+      <div id="ft-answer-prev" class="ft-prev" style="display:none;"></div>
+      <div id="ft-check-row" class="ft-form-actions">
+        <button type="button" class="nav-btn nd-btn-ok" onclick="ftCheck()">✅ Vérifier</button>
+        <button type="button" class="nav-btn" onclick="ftDunno()">🤷 Je ne sais pas</button>
+      </div>
+      <div id="ft-result-box" class="ft-resbox" style="display:none;">
+        <div id="ft-verdict" class="ft-verdict"></div>
+        <div class="ft-compare">
+          <div class="ft-cmp"><span class="ft-cmp-lab">Ta réponse</span><div id="ft-yours" class="ft-cmp-fx"></div></div>
+          <div class="ft-cmp ft-cmp-good"><span class="ft-cmp-lab">La bonne formule</span><div id="ft-correct" class="ft-cmp-fx"></div></div>
+        </div>
+        <div id="ft-selfgrade" class="ft-selfgrade" style="display:none;">
+          <p class="ft-sg-q">L'app n'est pas sûre&nbsp;: ta réponse est-elle juste ?</p>
+          <button type="button" class="nav-btn ft-sg-ok" onclick="ftSelfGrade(true)">✅ J'avais juste</button>
+          <button type="button" class="nav-btn ft-sg-no" onclick="ftSelfGrade(false)">❌ Je m'étais trompé</button>
+        </div>
+        <button type="button" id="ft-next-btn" class="nav-btn nd-btn-ok ft-next" onclick="ftNext()" style="display:none;">Suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN RÉSULTAT -->
+  <div id="ft-done" class="ft-screen" style="display:none;">
+    <div id="ft-done-body" class="ft-done"></div>
+    <div class="ft-form-actions">
+      <button type="button" class="nav-btn nd-btn-ok" onclick="ftStartSetup()">🔁 Nouvel entraînement</button>
+      <button type="button" class="nav-btn" onclick="ftShow('home')">🏠 Accueil</button>
+    </div>
   </div>
 </div>
 
@@ -894,6 +1007,7 @@
   <script src="stats.js"></script>
   <script src="notes.js"></script>
   <script src="creations.js"></script>
+  <script src="formulas-trainer.js"></script>
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>

@@ -106,6 +106,7 @@ function _defaultData() {
     journalEntries: [],
     pomodorosCompleted: 0,
     customExercises: [],
+    formulaBank: [],
     ficheNotes: {},
     badgeEarned: [],
     examDates: {}
@@ -1468,6 +1469,7 @@ function showSection(evtOrId, id) {
   if (sectionId === 'profil') requestAnimationFrame(() => updateProfile()); // throttle handled inside
   if (sectionId === 'glossaire' && typeof renderGlossaire === 'function') renderGlossaire();
   if (sectionId === 'flashcards') initFlashcards();
+  if (sectionId === 'memoformules' && typeof ftInit === 'function') ftInit();
   if (sectionId === 'formules') initFormulaBookmarks();
   if (sectionId === 'journal') loadJournalHistory();
   if (sectionId === 'graphiques') requestAnimationFrame(() => requestAnimationFrame(() => initGraphs()));
