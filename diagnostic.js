@@ -60,6 +60,88 @@
     return bad;
   }
 
+  // ---- 🎨 analyse QUALITÉ (imperfections, pas des bugs) ----
+  function parseColor(s) {
+    if (!s) return null;
+    if (s === 'transparent') return { r: 0, g: 0, b: 0, a: 0 };
+    var m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null;
+    var p = m[1].split(/[,\/\s]+/).map(parseFloat).filter(function (x) { return !isNaN(x); });
+    return { r: p[0] || 0, g: p[1] || 0, b: p[2] || 0, a: (p[3] == null ? 1 : p[3]) };
+  }
+  function relLum(c) {
+    function ch(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+    return 0.2126 * ch(c.r) + 0.7152 * ch(c.g) + 0.0722 * ch(c.b);
+  }
+  function contrast(a, b) { var hi = Math.max(relLum(a), relLum(b)), lo = Math.min(relLum(a), relLum(b)); return (hi + 0.05) / (lo + 0.05); }
+  function effBg(el) {
+    // empile les fonds (semi-)transparents puis les compose sur le fond sombre de la page
+    var layers = [], node = el;
+    while (node && node.nodeType === 1) {
+      var c = parseColor(getComputedStyle(node).backgroundColor);
+      if (c && c.a > 0) { layers.push(c); if (c.a >= 0.99) break; }
+      node = node.parentElement;
+    }
+    var base = { r: 15, g: 17, b: 23 }; // page sombre par défaut
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var L = layers[i], a = L.a;
+      base = { r: L.r * a + base.r * (1 - a), g: L.g * a + base.g * (1 - a), b: L.b * a + base.b * (1 - a) };
+    }
+    return base;
+  }
+  // fond dégradé / image en arrière-plan → contraste non fiable (comme Lighthouse, on ignore)
+  function bgIsComplex(el) {
+    var node = el;
+    while (node && node.nodeType === 1) {
+      var cs = getComputedStyle(node);
+      if (cs.backgroundImage && cs.backgroundImage !== 'none') return true;
+      var c = parseColor(cs.backgroundColor);
+      if (c && c.a > 0.1) return false; // fond plein atteint
+      node = node.parentElement;
+    }
+    return false;
+  }
+  function qualityInfo() {
+    var L = [], active = document.querySelector('.section.active');
+    L.push('Zone analysée : ' + (active ? '« ' + active.id + ' »' : 'page') + ' — ⚠️ seul ce qui est AFFICHÉ est vu (ouvre le diagnostic sur chaque onglet pour tout couvrir).');
+    var sw = document.documentElement.scrollWidth, iw = window.innerWidth;
+    L.push(sw > iw + 2 ? '⚠️ Débordement horizontal : la page dépasse de ' + (sw - iw) + 'px (un élément est trop large).' : 'Pas de débordement horizontal ✅');
+    var els = [].slice.call(document.querySelectorAll('p,h1,h2,h3,h4,li,a,button,.nav-btn,span,div,label,td,th'));
+    var scanned = 0, lowC = [], tiny = 0, skipped = 0;
+    for (var i = 0; i < els.length && scanned < 600; i++) {
+      var e = els[i];
+      if (!e.offsetParent && getComputedStyle(e).position !== 'fixed') continue;
+      var hasDirect = false, txt = '';
+      for (var j = 0; j < e.childNodes.length; j++) { var n = e.childNodes[j]; if (n.nodeType === 3 && n.textContent.trim()) { hasDirect = true; txt += n.textContent; } }
+      if (!hasDirect) continue;
+      txt = txt.trim(); if (txt.length < 2) continue;
+      scanned++;
+      var cs = getComputedStyle(e), fs = parseFloat(cs.fontSize) || 16;
+      if (fs < 12) tiny++;
+      var col = parseColor(cs.color) || { r: 230, g: 230, b: 230, a: 1 };
+      var clip = cs.webkitBackgroundClip || cs.backgroundClip;
+      if (bgIsComplex(e) || col.a < 0.1 || clip === 'text') { skipped++; continue; } // fond dégradé OU texte en dégradé → non fiable
+      var ratio = contrast(col, effBg(e));
+      var big = fs >= 24 || (fs >= 18.66 && (parseInt(cs.fontWeight, 10) >= 700 || cs.fontWeight === 'bold'));
+      if (ratio < (big ? 3 : 4.5)) lowC.push({ t: txt.slice(0, 30), r: ratio.toFixed(2), fs: Math.round(fs) });
+    }
+    L.push('Textes analysés : ' + scanned + (skipped ? ' (' + skipped + ' sur fond dégradé non vérifiés)' : ''));
+    L.push('Contraste trop faible (lisibilité) : ' + (lowC.length ? lowC.length + ' ⚠️' : 'aucun ✅'));
+    lowC.slice(0, 6).forEach(function (x) { L.push('  • "' + x.t + '" — contraste ' + x.r + ' (cible ≥ 4.5) · ' + x.fs + 'px'); });
+    L.push('Textes < 12px (trop petits) : ' + (tiny ? tiny + ' ⚠️' : 'aucun ✅'));
+    var ins = [].slice.call(document.querySelectorAll('input,select,textarea')).filter(function (e) { return e.offsetParent; });
+    var smallIn = ins.filter(function (e) { return (parseFloat(getComputedStyle(e).fontSize) || 16) < 16; }).length;
+    L.push('Champs < 16px (font zoomer l\'iPhone) : ' + (smallIn ? smallIn + ' ⚠️' : 'aucun ✅'));
+    var tap = [].slice.call(document.querySelectorAll('button,a,.nav-btn,input,select')).filter(function (e) { return e.offsetParent; });
+    var small = 0; tap.forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width > 0 && (r.width < 40 || r.height < 40)) small++; });
+    L.push('Boutons/liens petits au doigt (<40px) : ' + (small ? small + ' ⚠️' : 'aucun ✅'));
+    var imgs = [].slice.call(document.querySelectorAll('img'));
+    var noAlt = imgs.filter(function (e) { return !e.alt; }).length;
+    L.push('Images sans description (alt) : ' + (noAlt ? noAlt + ' / ' + imgs.length + ' ⚠️' : (imgs.length ? 'toutes décrites ✅' : 'aucune image')));
+    var noName = tap.filter(function (e) { return !((e.textContent || '').trim()) && !e.getAttribute('aria-label') && !e.title && e.type !== 'text' && e.type !== 'search'; }).length;
+    L.push('Boutons sans nom (lecteur d\'écran) : ' + (noName ? noName + ' ⚠️' : 'aucun ✅'));
+    return L;
+  }
+
   // ---- construit le rapport texte ----
   function buildReport() {
     var L = [];
@@ -135,6 +217,12 @@
     var bad = brokenImages();
     L.push('Images cassées : ' + (bad.length ? bad.length + ' ⚠️ → ' + bad.slice(0, 5).join(', ') : 'aucune ✅'));
     L.push('');
+
+    // Qualité / imperfections (pas des bugs)
+    L.push('── QUALITÉ / À PEAUFINER (perfection, pas des bugs) ──');
+    try { [].push.apply(L, qualityInfo()); } catch (e) { L.push('Analyse qualité indisponible : ' + e); }
+    L.push('');
+
     L.push('═══ FIN DU RAPPORT (copie tout et colle-le à Claude) ═══');
     return L.join('\n');
   }
