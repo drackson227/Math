@@ -61,7 +61,7 @@ ils ne sont pas ici, ne pas chercher à les recréer dans le dépôt.
 Résumé pour qu'une nouvelle session (web/téléphone) reprenne le fil sans tout réexpliquer.
 
 ### Version & déploiement
-- Version du cache : `sw.js` → `mathsgr2-vNNN` (incrémenter à CHAQUE changement ; ~v133+).
+- Version du cache : `sw.js` → `mathsgr2-vNNN` (incrémenter à CHAQUE changement ; ~v134+).
 - **Déploiement = `git push` sur `main`** → GitHub Pages publie tout seul (~1 min).
 
 ### Fonctionnalités déjà en place
@@ -77,6 +77,15 @@ Résumé pour qu'une nouvelle session (web/téléphone) reprenne le fil sans tou
   correction tolérante, banque perso + banque par défaut du site, vocabulaire adapté par
   matière (formule / règle / repère / mot…).
 - **Outil Diagnostic** (`diagnostic.js`, Ctrl+Maj+D) : rapport technique + analyse qualité.
+- **Aides à la lecture/étude** (`study-tools.js` + `study-tools.css`) : barre d'outils en
+  haut de la Synthèse → 📑 sommaire des chapitres, barre de progression de lecture,
+  ✅ marquer chaque chapitre « compris / à revoir » (+ % d'avancement), 🖍️ surligneur
+  (4 couleurs, mémorisé), 📖 mode lecture sans distraction, et 🎬 **mode cours animé**
+  (présentation plein écran : scènes révélées étape par étape avec GSAP + narration vocale).
+  Module **générique** : il lit la structure commune (`.synth-section > h2`, `.card`) du
+  contenu déjà rendu → marche pour les 9 matières sans toucher aux fichiers de contenu.
+  Données dans `localStorage` (clé `gr2_study_v1`). Greffé via `onShowStudySection()`
+  appelé depuis `showSection()`.
 - **Social** (Supabase, clé anon publique) : bloc-notes collectif, chat, quiz multijoueur.
 - PWA installable + utilisable hors-ligne.
 
