@@ -162,24 +162,92 @@
 
     <div class="synth-section">
       <div class="eng-tense-card t-past">
-        <div class="eng-tc-head">🟡 Verbes irréguliers (à connaître par cœur)</div>
-        <div class="eng-tc-when">Base verbale → <strong>prétérit</strong> (past simple) → <strong>participe passé</strong> (V3, pour le perfect).</div>
-        <table class="eng-irr">
-          <thead><tr><th>Base</th><th>Prétérit</th><th>Participe (V3)</th></tr></thead>
-          <tbody>
-            <tr><td>go</td><td>went</td><td>gone</td></tr>
-            <tr><td>see</td><td>saw</td><td>seen</td></tr>
-            <tr><td>eat</td><td>ate</td><td>eaten</td></tr>
-            <tr><td>take</td><td>took</td><td>taken</td></tr>
-            <tr><td>have</td><td>had</td><td>had</td></tr>
-            <tr><td>give</td><td>gave</td><td>given</td></tr>
-            <tr><td>find</td><td>found</td><td>found</td></tr>
-            <tr><td>write</td><td>wrote</td><td>written</td></tr>
-            <tr><td>drink</td><td>drank</td><td>drunk</td></tr>
-            <tr><td>do</td><td>did</td><td>done</td></tr>
-          </tbody>
-        </table>
-        <div class="eng-tc-err">❌ <strong>Erreur :</strong> après <strong>did / didn't</strong> → base verbale (<s>I didn't went</s>).</div>
+        <div class="eng-tc-head">🟡 Verbes irréguliers — liste de référence</div>
+        <div class="eng-tc-when">Base → <strong>prétérit</strong> (past simple) → <strong>participe</strong> (V3, pour le perfect). Astuce : apprends-les par <strong>groupes</strong>, c'est bien plus facile.</div>
+
+        <div class="eng-tc-keys">🟩 <strong>1. Les 3 formes identiques</strong> (les plus faciles)</div>
+        <table class="eng-irr"><thead><tr><th>Base</th><th>Prétérit</th><th>Participe</th></tr></thead><tbody>
+          <tr><td>cut</td><td>cut</td><td>cut</td></tr>
+          <tr><td>put</td><td>put</td><td>put</td></tr>
+          <tr><td>let</td><td>let</td><td>let</td></tr>
+          <tr><td>hit</td><td>hit</td><td>hit</td></tr>
+          <tr><td>cost</td><td>cost</td><td>cost</td></tr>
+          <tr><td>set</td><td>set</td><td>set</td></tr>
+          <tr><td>shut</td><td>shut</td><td>shut</td></tr>
+          <tr><td>read</td><td>read</td><td>read</td></tr>
+        </tbody></table>
+
+        <div class="eng-tc-keys">🟦 <strong>2. Base = participe</strong></div>
+        <table class="eng-irr"><thead><tr><th>Base</th><th>Prétérit</th><th>Participe</th></tr></thead><tbody>
+          <tr><td>become</td><td>became</td><td>become</td></tr>
+          <tr><td>come</td><td>came</td><td>come</td></tr>
+          <tr><td>run</td><td>ran</td><td>run</td></tr>
+        </tbody></table>
+
+        <div class="eng-tc-keys">🟨 <strong>3. Prétérit = participe</strong> (le plus gros groupe)</div>
+        <table class="eng-irr"><thead><tr><th>Base</th><th>Prétérit</th><th>Participe</th></tr></thead><tbody>
+          <tr><td>have</td><td>had</td><td>had</td></tr>
+          <tr><td>make</td><td>made</td><td>made</td></tr>
+          <tr><td>say</td><td>said</td><td>said</td></tr>
+          <tr><td>pay</td><td>paid</td><td>paid</td></tr>
+          <tr><td>find</td><td>found</td><td>found</td></tr>
+          <tr><td>buy</td><td>bought</td><td>bought</td></tr>
+          <tr><td>bring</td><td>brought</td><td>brought</td></tr>
+          <tr><td>think</td><td>thought</td><td>thought</td></tr>
+          <tr><td>teach</td><td>taught</td><td>taught</td></tr>
+          <tr><td>catch</td><td>caught</td><td>caught</td></tr>
+          <tr><td>tell</td><td>told</td><td>told</td></tr>
+          <tr><td>sell</td><td>sold</td><td>sold</td></tr>
+          <tr><td>hear</td><td>heard</td><td>heard</td></tr>
+          <tr><td>hold</td><td>held</td><td>held</td></tr>
+          <tr><td>keep</td><td>kept</td><td>kept</td></tr>
+          <tr><td>sleep</td><td>slept</td><td>slept</td></tr>
+          <tr><td>feel</td><td>felt</td><td>felt</td></tr>
+          <tr><td>leave</td><td>left</td><td>left</td></tr>
+          <tr><td>lose</td><td>lost</td><td>lost</td></tr>
+          <tr><td>meet</td><td>met</td><td>met</td></tr>
+          <tr><td>sit</td><td>sat</td><td>sat</td></tr>
+          <tr><td>stand</td><td>stood</td><td>stood</td></tr>
+          <tr><td>understand</td><td>understood</td><td>understood</td></tr>
+          <tr><td>win</td><td>won</td><td>won</td></tr>
+          <tr><td>send</td><td>sent</td><td>sent</td></tr>
+          <tr><td>spend</td><td>spent</td><td>spent</td></tr>
+          <tr><td>build</td><td>built</td><td>built</td></tr>
+          <tr><td>get</td><td>got</td><td>got</td></tr>
+        </tbody></table>
+
+        <div class="eng-tc-keys">🟧 <strong>4. Les 3 formes différentes</strong></div>
+        <table class="eng-irr"><thead><tr><th>Base</th><th>Prétérit</th><th>Participe</th></tr></thead><tbody>
+          <tr><td>be</td><td>was / were</td><td>been</td></tr>
+          <tr><td>begin</td><td>began</td><td>begun</td></tr>
+          <tr><td>break</td><td>broke</td><td>broken</td></tr>
+          <tr><td>choose</td><td>chose</td><td>chosen</td></tr>
+          <tr><td>do</td><td>did</td><td>done</td></tr>
+          <tr><td>draw</td><td>drew</td><td>drawn</td></tr>
+          <tr><td>drink</td><td>drank</td><td>drunk</td></tr>
+          <tr><td>drive</td><td>drove</td><td>driven</td></tr>
+          <tr><td>eat</td><td>ate</td><td>eaten</td></tr>
+          <tr><td>fall</td><td>fell</td><td>fallen</td></tr>
+          <tr><td>fly</td><td>flew</td><td>flown</td></tr>
+          <tr><td>forget</td><td>forgot</td><td>forgotten</td></tr>
+          <tr><td>give</td><td>gave</td><td>given</td></tr>
+          <tr><td>go</td><td>went</td><td>gone</td></tr>
+          <tr><td>grow</td><td>grew</td><td>grown</td></tr>
+          <tr><td>know</td><td>knew</td><td>known</td></tr>
+          <tr><td>ride</td><td>rode</td><td>ridden</td></tr>
+          <tr><td>ring</td><td>rang</td><td>rung</td></tr>
+          <tr><td>see</td><td>saw</td><td>seen</td></tr>
+          <tr><td>sing</td><td>sang</td><td>sung</td></tr>
+          <tr><td>speak</td><td>spoke</td><td>spoken</td></tr>
+          <tr><td>swim</td><td>swam</td><td>swum</td></tr>
+          <tr><td>take</td><td>took</td><td>taken</td></tr>
+          <tr><td>throw</td><td>threw</td><td>thrown</td></tr>
+          <tr><td>wake</td><td>woke</td><td>woken</td></tr>
+          <tr><td>wear</td><td>wore</td><td>worn</td></tr>
+          <tr><td>write</td><td>wrote</td><td>written</td></tr>
+        </tbody></table>
+
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> après <strong>did / didn't</strong> → base verbale (<s>I didn't went</s>). · <strong>get</strong> : participe « gotten » en anglais américain.</div>
       </div>
     </div>
 
