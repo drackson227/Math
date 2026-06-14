@@ -112,10 +112,15 @@ mark.gr2-hl.gr2-hl-blue   { background: #93c5fd; }
 
 /* ---------- Mode lecture sans distraction ---------- */
 body.gr2-reading-focus header,
+body.gr2-reading-focus #app-header,
 body.gr2-reading-focus .nav,
 body.gr2-reading-focus .subject-bar,
 body.gr2-reading-focus #subj-fold,
 body.gr2-reading-focus #exam-chip,
+body.gr2-reading-focus #feuille-btn,
+body.gr2-reading-focus #feuille-panel,
+body.gr2-reading-focus #back-to-top,
+body.gr2-reading-focus #revision-reminder,
 body.gr2-reading-focus .gr2-study-bar { display: none !important; }
 body.gr2-reading-focus #synthese {
   max-width: 760px; margin: 0 auto; padding-top: 24px;
@@ -133,7 +138,7 @@ body.gr2-reading-focus #synthese .grid2 { grid-template-columns: 1fr !important;
    MODE COURS ANIMÉ
    ============================================================ */
 .gr2-course {
-  position: fixed; inset: 0; z-index: 2000; display: none;
+  position: fixed; inset: 0; z-index: 3900; display: none;
   flex-direction: column; background: var(--bg-main);
 }
 .gr2-course.open { display: flex; }
