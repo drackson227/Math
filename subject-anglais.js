@@ -363,6 +363,13 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Le <strong>Quiz</strong> et les <strong>Flashcards</strong> testent tout ça automatiquement.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🎯 Entraîne-toi aux verbes irréguliers</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">12 verbes au hasard : on te donne la base, écris le <strong>prétérit</strong> et le <strong>participe</strong>. Correction automatique + 🔊 audio.</p>
+      <button type="button" class="nav-btn" id="irr-start">▶ Commencer l'entraînement</button>
+      <div id="irr-mount" class="irr-mount"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">✅ Simple or continuous?</h3>
       <ul style="line-height:2;">
         <li>I <strong>have been waiting</strong> for two hours. (durée → continuous)</li>
@@ -450,7 +457,13 @@
     { q: "Spontaneous decision: « The phone's ringing. I ___ get it. »", opts: ["'ll", "'m going to", "will to", "am get"], ans: 0, chapter: "future", difficulty: "intermediaire", exp: "Décision prise à l'instant → will ('ll)." },
     { q: "Fixed arrangement: « I ___ Anna at 5 p.m. »", opts: ["'m meeting", "meet", "will meet", "meeted"], ans: 0, chapter: "future", difficulty: "difficile", exp: "Rendez-vous fixé (heure) → present continuous : I'm meeting…" },
     { q: "« be going to » expresses…", opts: ["une intention / un projet", "une obligation", "une interdiction", "le passé"], ans: 0, chapter: "future", difficulty: "facile", exp: "be going to = intention, projet déjà décidé (ou prédiction avec preuve)." },
-    { q: "Which is correct?", opts: ["I will help you.", "I will to help you.", "I will helping you.", "I will helps you."], ans: 0, chapter: "future", difficulty: "facile", exp: "will + base verbale, jamais « will to »." }
+    { q: "Which is correct?", opts: ["I will help you.", "I will to help you.", "I will helping you.", "I will helps you."], ans: 0, chapter: "future", difficulty: "facile", exp: "will + base verbale, jamais « will to »." },
+    { q: "« take » : prétérit / participe ?", opts: ["took / taken", "taked / taken", "took / took", "taken / took"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "take → took (prétérit) → taken (participe)." },
+    { q: "Participe passé de « write » ?", opts: ["written", "wrote", "writed", "writen"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "write → wrote → written. « I have written » (participe)." },
+    { q: "« I have ___ my keys. » (lose)", opts: ["lost", "losed", "loosed", "lose"], ans: 0, chapter: "past", difficulty: "intermediaire", exp: "lose → lost → lost. Present perfect : have + participe (lost)." },
+    { q: "Prétérit de « buy » ?", opts: ["bought", "buyed", "brought", "buied"], ans: 0, chapter: "past", difficulty: "facile", exp: "buy → bought → bought. Piège : « brought » = prétérit de bring !" },
+    { q: "« She has ___ that song. » (sing)", opts: ["sung", "sang", "singed", "songed"], ans: 0, chapter: "past", difficulty: "difficile", exp: "sing → sang (prétérit) → sung (participe). Ici present perfect → sung." },
+    { q: "Quel verbe ne change JAMAIS (3 formes identiques) ?", opts: ["cut", "go", "see", "take"], ans: 0, chapter: "past", difficulty: "facile", exp: "cut → cut → cut. (Comme put, let, hit, cost, set, read.)" }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */

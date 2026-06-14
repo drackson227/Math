@@ -1223,3 +1223,21 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .eng-voc td:first-child::after, .eng-irr td:first-child::after { content: " 🔊"; opacity: .35; font-size: .85em; }
 .eng-voc td:first-child:hover::after, .eng-irr td:first-child:hover::after { opacity: .85; }
 .say-flash { background: rgba(167,139,250,0.28) !important; border-radius: 4px; }
+
+/* Entraîneur de verbes irréguliers */
+.irr-mount { margin-top: .9rem; }
+.irr-mount:empty { display: none; }
+.irr-prog { font-size: 12.5px; color: var(--text-secondary); margin-bottom: .3rem; }
+.irr-q { font-size: 26px; font-weight: 800; color: var(--color-nav); margin-bottom: .7rem; }
+.irr-say { background: transparent; border: none; cursor: pointer; font-size: 20px; vertical-align: middle; min-height: 40px; min-width: 40px; }
+.irr-row { display: flex; align-items: center; gap: 10px; margin: .45rem 0; }
+.irr-row label { width: 92px; font-weight: 600; color: var(--text-secondary); font-size: 14px; }
+.irr-row input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 16px; }
+.irr-check { margin-top: .7rem; background: #7c3aed; color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-weight: 700; cursor: pointer; min-height: 42px; }
+.irr-check:hover { background: #6d28d9; }
+.irr-fb { margin-top: .8rem; font-size: 15px; line-height: 1.6; }
+.irr-fb.ok { color: #34d399; }
+.irr-fb.no { color: #fca5a5; }
+.irr-next { margin-left: 8px; background: var(--bg-card); border: 1px solid var(--color-nav); color: var(--color-nav); border-radius: 8px; padding: 7px 14px; font-weight: 700; cursor: pointer; min-height: 38px; }
+.irr-score { margin-top: .8rem; font-size: 14px; color: var(--text-secondary); }
+.irr-done { font-size: 19px; font-weight: 700; line-height: 1.6; margin-bottom: 1rem; }
