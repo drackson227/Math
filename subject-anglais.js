@@ -47,61 +47,117 @@
     </div>
 
     <div class="synth-section">
-      <h2>Grammar 1 — Present perfect : simple vs continuous</h2>
-      <p>Les deux parlent d'une action liée au <strong>présent</strong>, mais l'idée diffère :</p>
-      <div class="key-rule"><div class="formula-main" style="font-size:17px;">Simple : have/has + participe passé<br>Continuous : have/has + been + V-ing</div></div>
-      <ul style="line-height:1.9;">
-        <li><strong>Present perfect simple</strong> → un <strong>résultat</strong>, une action <strong>terminée</strong>, une <strong>quantité</strong> (how many). <br><em>I <strong>have written</strong> three emails.</em> (résultat : 3 mails finis)</li>
-        <li><strong>Present perfect continuous</strong> → la <strong>durée</strong>, une action qui <strong>continue</strong> ou vient de s'arrêter (how long). <br><em>I <strong>have been writing</strong> emails all morning.</em> (insiste sur la durée)</li>
-      </ul>
-      <p><strong>Mots-clés :</strong> <strong>for</strong> (durée) · <strong>since</strong> (point de départ) · already, yet, just, ever, never · <strong>how long</strong> (→ continuous) · <strong>how many</strong> (→ simple).</p>
+      <h2>🕐 Tous les temps en un coup d'œil</h2>
+      <p>Le tableau qui résume tout. Couleur par famille : <strong>passé</strong> 🟡 · <strong>present perfect</strong> 🔵 · <strong>futur</strong> 🟢.</p>
+      <div class="eng-recap-wrap">
+        <table class="eng-recap">
+          <thead><tr><th>Temps</th><th>Structure</th><th>Exemple</th><th>Quand&nbsp;?</th></tr></thead>
+          <tbody>
+            <tr class="t-past"><td>Past simple</td><td>V-ed / V2</td><td><em>I went</em></td><td>passé fini, moment précis</td></tr>
+            <tr class="t-past"><td>Past perfect</td><td>had + V3</td><td><em>I had gone</em></td><td>le passé <strong>du</strong> passé</td></tr>
+            <tr class="t-perfect"><td>Present perfect simple</td><td>have/has + V3</td><td><em>I have gone</em></td><td>résultat / quantité, lien au présent</td></tr>
+            <tr class="t-perfect"><td>Present perfect continuous</td><td>have/has + been + V-ing</td><td><em>I have been going</em></td><td>durée (how long)</td></tr>
+            <tr class="t-future"><td>Futur — will</td><td>will + base</td><td><em>I will go</em></td><td>prédiction, décision spontanée</td></tr>
+            <tr class="t-future"><td>Futur — going to</td><td>be going to + base</td><td><em>I'm going to go</em></td><td>intention, projet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 style="margin-top:1.4rem;">⏳ La frise du temps</h2>
+      <p>Où se place chaque temps par rapport à <strong>maintenant</strong> :</p>
+      <div class="eng-timeline">
+        <div class="eng-tl-item t-past">Past perfect<small>had + V3</small></div>
+        <div class="eng-tl-item t-past">Past simple<small>V-ed / V2</small></div>
+        <div class="eng-tl-item t-perfect">Present perfect<small>have + V3</small></div>
+        <div class="eng-tl-now">🟡 NOW</div>
+        <div class="eng-tl-item t-future">Futur<small>will / going to</small></div>
+      </div>
     </div>
 
     <div class="synth-section">
-      <h2>Grammar 2 — Modal auxiliaries (auxiliaires de mode)</h2>
-      <p>Un <strong>modal</strong> se met devant un verbe à la <strong>base verbale</strong> (pas de « to », pas de « -s » à la 3ᵉ pers.) : <em>She <strong>can swim</strong></em>, <em>He <strong>must go</strong></em>.</p>
-      <ul style="line-height:1.9;">
-        <li><strong>can / could</strong> : capacité, permission, possibilité. <em>I can swim.</em></li>
-        <li><strong>may / might</strong> : permission, possibilité (might = moins sûr). <em>It might rain.</em></li>
-        <li><strong>must</strong> : obligation forte / certitude. <strong>mustn't</strong> = interdiction. <em>You must stop. / You mustn't smoke.</em></li>
-        <li><strong>have to</strong> : obligation (extérieure). <strong>don't have to</strong> = pas obligé. <em>I have to wear a uniform.</em></li>
-        <li><strong>should / ought to</strong> : conseil. <em>You should sleep more.</em></li>
-      </ul>
+      <h2>📘 Les fiches par temps</h2>
+      <div class="eng-tense-card t-perfect">
+        <div class="eng-tc-head">🔵 Present perfect — SIMPLE</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> un <strong>résultat</strong>, une action <strong>terminée</strong>, une <strong>quantité</strong> (how many) — avec un lien au présent.</div>
+        <div class="eng-tc-form"><strong>Forme :</strong> have / has + participe passé (V3)</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">➕</td><td>I <strong>have written</strong> three emails.</td></tr>
+          <tr><td class="eng-pol">➖</td><td>I <strong>haven't written</strong> the email.</td></tr>
+          <tr><td class="eng-pol">❓</td><td><strong>Have</strong> you <strong>written</strong> it?</td></tr>
+        </table>
+        <div class="eng-tc-keys">🔑 <strong>Mots-clés :</strong> already, yet, just, ever, never, since, for, how many</div>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> les verbes d'état (know, be, like…) restent au <strong>simple</strong>.</div>
+      </div>
+      <div class="eng-tense-card t-perfect">
+        <div class="eng-tc-head">🔵 Present perfect — CONTINUOUS</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> la <strong>durée</strong>, une action qui <strong>continue</strong> ou vient de s'arrêter (how long).</div>
+        <div class="eng-tc-form"><strong>Forme :</strong> have / has + been + V-ing</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">➕</td><td>I <strong>have been waiting</strong> for an hour.</td></tr>
+          <tr><td class="eng-pol">➖</td><td>I <strong>haven't been waiting</strong> long.</td></tr>
+          <tr><td class="eng-pol">❓</td><td><strong>Have</strong> you <strong>been waiting</strong>?</td></tr>
+        </table>
+        <div class="eng-tc-keys">🔑 <strong>Mots-clés :</strong> how long, for, since, all day / morning</div>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> jamais avec un verbe d'état (<s>I have been knowing</s>).</div>
+      </div>
     </div>
 
     <div class="synth-section">
-      <h2>Grammar 3 — Past simple (le prétérit)</h2>
-      <p>On l'utilise pour une action <strong>terminée</strong> à un <strong>moment précis du passé</strong> (yesterday, last week, in 2020, two days ago).</p>
-      <div class="key-rule"><div class="formula-main" style="font-size:16px;">+ : V-ed (réguliers) / V2 (irréguliers)<br>− : didn't + base verbale<br>? : Did + sujet + base verbale</div></div>
-      <ul style="line-height:1.9;">
-        <li><strong>Réguliers</strong> : verbe + <strong>-ed</strong>. <em>work → worked, play → played, watch → watched.</em></li>
-        <li><strong>Irréguliers</strong> (à apprendre par cœur) : go → <strong>went</strong>, see → <strong>saw</strong>, eat → <strong>ate</strong>, take → <strong>took</strong>, have → <strong>had</strong>, give → <strong>gave</strong>, find → <strong>found</strong>, write → <strong>wrote</strong>, drink → <strong>drank</strong>.</li>
-        <li><strong>Négatif</strong> : <em>I <strong>didn't go</strong></em> (jamais <s>didn't went</s> : la base verbale après did).</li>
-        <li><strong>Question</strong> : <em><strong>Did</strong> you <strong>see</strong> it?</em> (base verbale, pas de -ed).</li>
-      </ul>
-      <p><strong>Mots-clés :</strong> yesterday · last (night/week/year) · … ago · in 1990 · when.</p>
+      <div class="eng-tense-card t-modal">
+        <div class="eng-tc-head">🟣 Modaux (can, must, should…)</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> capacité, permission, obligation, conseil, possibilité.</div>
+        <div class="eng-tc-form"><strong>Règle :</strong> modal + <strong>base verbale</strong> (pas de « to », pas de « -s »)</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">➕</td><td>She <strong>can</strong> swim. · You <strong>must</strong> stop.</td></tr>
+          <tr><td class="eng-pol">➖</td><td>You <strong>mustn't</strong> smoke (interdit) · You <strong>don't have to</strong> come (pas obligé).</td></tr>
+          <tr><td class="eng-pol">❓</td><td><strong>Can</strong> you help? · <strong>Should</strong> I go?</td></tr>
+        </table>
+        <div class="eng-tc-keys">🔑 <strong>Sens :</strong> can/could = capacité · may/might = possibilité · must / have to = obligation · should / ought to = conseil</div>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> <s>She can to swim</s> / <s>He cans</s>. Et <strong>mustn't</strong> (interdit) ≠ <strong>don't have to</strong> (pas obligé).</div>
+      </div>
     </div>
 
     <div class="synth-section">
-      <h2>Grammar 4 — Past perfect (le plus-que-parfait)</h2>
-      <p>Il décrit une action <strong>encore plus ancienne</strong> qu'une autre action passée : le passé <strong>du</strong> passé.</p>
-      <div class="key-rule"><div class="formula-main" style="font-size:17px;">had + participe passé (V-ed / V3)</div></div>
-      <ul style="line-height:1.9;">
-        <li>Même forme à <strong>toutes les personnes</strong> : <em>I/you/he <strong>had</strong> finished</em>.</li>
-        <li>Action <strong>1</strong> (la plus ancienne) → <strong>past perfect</strong> · action <strong>2</strong> (plus récente) → <strong>past simple</strong>.<br><em>When I <strong>arrived</strong> (2), the train <strong>had</strong> already <strong>left</strong> (1).</em> → le train est parti AVANT mon arrivée.</li>
-        <li><strong>Négatif</strong> : <em>hadn't + V3</em> (<em>I hadn't seen it before</em>).</li>
-      </ul>
-      <p><strong>Mots-clés :</strong> already, just, never, before, after, by the time, when.</p>
+      <div class="eng-tense-card t-past">
+        <div class="eng-tc-head">🟡 Past simple (le prétérit)</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> une action <strong>terminée</strong> à un <strong>moment précis</strong> du passé.</div>
+        <div class="eng-tc-form"><strong>Forme :</strong> V-ed (réguliers) / V2 (irréguliers)</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">➕</td><td>I <strong>worked</strong>. · I <strong>went</strong> (irrégulier).</td></tr>
+          <tr><td class="eng-pol">➖</td><td>I <strong>didn't</strong> work / go. <span style="color:var(--text-secondary);">(base verbale après didn't)</span></td></tr>
+          <tr><td class="eng-pol">❓</td><td><strong>Did</strong> you work / go?</td></tr>
+        </table>
+        <div class="eng-tc-keys">🔁 <strong>Irréguliers fréquents :</strong> go→went · see→saw · eat→ate · take→took · have→had · give→gave · find→found · write→wrote · drink→drank</div>
+        <div class="eng-tc-keys">🔑 <strong>Mots-clés :</strong> yesterday, last week, … ago, in 1990, when</div>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> <s>I didn't went</s> / <s>Did you saw?</s> → base verbale après did/didn't.</div>
+      </div>
     </div>
 
     <div class="synth-section">
-      <h2>Grammar 5 — Talking about the future (parler du futur)</h2>
-      <p>Trois façons d'exprimer le futur, selon l'intention :</p>
-      <ul style="line-height:1.9;">
-        <li><strong>be going to</strong> + base verbale → une <strong>intention</strong>, un <strong>projet décidé</strong>, ou une prédiction avec <strong>preuve</strong>. <em>I'<strong>m going to</strong> study tonight. / Look at those clouds — it'<strong>s going to</strong> rain.</em></li>
-        <li><strong>will / won't</strong> + base verbale → une <strong>prédiction sans preuve</strong>, une décision <strong>spontanée</strong>, une promesse. <em>I think it <strong>will</strong> rain. / OK, I'<strong>ll</strong> help you.</em></li>
-        <li><strong>present continuous</strong> (be + V-ing) → un <strong>rendez-vous fixé</strong>, noté dans l'agenda. <em>I'<strong>m meeting</strong> Anna at 5 p.m.</em></li>
-      </ul>
+      <div class="eng-tense-card t-past">
+        <div class="eng-tc-head">🟡 Past perfect (le plus-que-parfait)</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> une action <strong>encore plus ancienne</strong> qu'une autre action passée — le passé <strong>du</strong> passé.</div>
+        <div class="eng-tc-form"><strong>Forme :</strong> had + participe passé (V3) — à toutes les personnes</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">➕</td><td>The train <strong>had</strong> already <strong>left</strong>.</td></tr>
+          <tr><td class="eng-pol">➖</td><td>I <strong>hadn't</strong> seen it before.</td></tr>
+          <tr><td class="eng-pol">❓</td><td><strong>Had</strong> you <strong>left</strong>?</td></tr>
+        </table>
+        <div class="eng-tc-keys">💡 <strong>Astuce :</strong> action 1 (la + ancienne) = past perfect · action 2 = past simple.<br><em>When I <strong>arrived</strong> (2), the train <strong>had left</strong> (1).</em></div>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> c'est <strong>had + V3</strong> (pas <s>was left</s>).</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <div class="eng-tense-card t-future">
+        <div class="eng-tc-head">🟢 Le futur (3 façons)</div>
+        <div class="eng-tc-when"><strong>Quand&nbsp;?</strong> ça dépend de l'<strong>intention</strong> :</div>
+        <table class="eng-conj">
+          <tr><td class="eng-pol">🎯</td><td><strong>be going to</strong> + base → intention / projet / prédiction avec preuve. <em>I'm going to study.</em></td></tr>
+          <tr><td class="eng-pol">💭</td><td><strong>will</strong> + base → prédiction sans preuve / décision spontanée / promesse. <em>I'll help you.</em></td></tr>
+          <tr><td class="eng-pol">📅</td><td><strong>present continuous</strong> (be + V-ing) → rendez-vous fixé. <em>I'm meeting Anna at 5.</em></td></tr>
+        </table>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> <s>I will to go</s> → will + base verbale.</div>
+      </div>
     </div>
 
     <div class="synth-section">

@@ -1174,3 +1174,38 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 
 /* Pastilles de couleur (palette créations) : légère hausse, restent compactes */
 #cre-colors .nd-col, #cre-hilites .nd-col { width: 30px; height: 30px; }
+
+/* ════════ Anglais — temps clairs (tableau récap, fiches, frise) ════════ */
+/* Tableau récapitulatif de tous les temps (défile sur mobile) */
+.eng-recap-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .5rem 0 1rem; border: 1px solid var(--border-subtle); border-radius: 12px; }
+.eng-recap { width: 100%; border-collapse: collapse; min-width: 540px; font-size: 14.5px; }
+.eng-recap th { background: var(--bg-main); color: var(--color-nav); text-align: left; padding: 10px 12px; font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+.eng-recap td { padding: 9px 12px; border-top: 1px solid var(--border-subtle); color: var(--text-primary); }
+.eng-recap tbody td:first-child { font-weight: 700; border-left: 4px solid var(--eng-accent, transparent); }
+.eng-recap tr.t-past { --eng-accent: #fbbf24; }
+.eng-recap tr.t-perfect { --eng-accent: #60a5fa; }
+.eng-recap tr.t-future { --eng-accent: #34d399; }
+
+/* Frise du temps */
+.eng-timeline { display: flex; align-items: stretch; gap: 6px; overflow-x: auto; padding: .3rem 0 .7rem; -webkit-overflow-scrolling: touch; }
+.eng-tl-item { flex: 1 0 auto; min-width: 104px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-top: 4px solid var(--eng-accent, var(--color-nav)); border-radius: 10px; padding: 9px 10px; text-align: center; font-weight: 700; font-size: 13px; }
+.eng-tl-item small { display: block; font-weight: 500; color: var(--text-secondary); margin-top: 3px; font-size: 12px; }
+.eng-tl-item.t-past { --eng-accent: #fbbf24; }
+.eng-tl-item.t-perfect { --eng-accent: #60a5fa; }
+.eng-tl-item.t-future { --eng-accent: #34d399; }
+.eng-tl-now { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #0f1117; background: #fcd34d; border-radius: 10px; padding: 9px 13px; font-size: 13px; }
+
+/* Fiche par temps */
+.eng-tense-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-left: 5px solid var(--eng-accent, var(--color-nav)); border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 1rem; }
+.eng-tense-card.t-perfect { --eng-accent: #60a5fa; }
+.eng-tense-card.t-past { --eng-accent: #fbbf24; }
+.eng-tense-card.t-future { --eng-accent: #34d399; }
+.eng-tense-card.t-modal { --eng-accent: #a78bfa; }
+.eng-tc-head { font-size: 18px; font-weight: 800; color: var(--eng-accent); margin-bottom: .5rem; }
+.eng-tc-when, .eng-tc-form, .eng-tc-keys, .eng-tc-err { line-height: 1.75; margin: .3rem 0; font-size: 15px; }
+.eng-tc-form { font-weight: 600; }
+.eng-tc-err { color: #fca5a5; }
+.eng-conj { width: 100%; border-collapse: collapse; margin: .55rem 0; background: var(--bg-main); border-radius: 8px; overflow: hidden; }
+.eng-conj td { padding: 8px 11px; border-bottom: 1px solid var(--border-subtle); vertical-align: top; font-size: 15px; }
+.eng-conj tr:last-child td { border-bottom: none; }
+.eng-conj td.eng-pol { width: 38px; text-align: center; font-weight: 700; }
