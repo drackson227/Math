@@ -51,6 +51,9 @@ le contenu de ce dépôt EST le site en ligne → https://drackson227.github.io/
 - Respecter le **style du code existant** (mêmes conventions, mêmes noms).
 - Garder le site **simple à déployer** : pas de build, pas de dépendance npm côté site.
 - Travailler par **petites étapes vérifiables**.
+- 🧰 **Avant ET après chaque modif, suivre la checklist qualité** : voir le skill
+  `.claude/skills/gr2-quality/SKILL.md` (règles à ne pas casser, contrôles mobile/contraste,
+  vérification via `gr2BuildReport()` / Diagnostic, procédure de déploiement git).
 
 ## 🚫 Hors dépôt
 Des fichiers privés (mémos, sauvegardes, dossiers de travail) sont exclus par `.gitignore` —
@@ -61,7 +64,7 @@ ils ne sont pas ici, ne pas chercher à les recréer dans le dépôt.
 Résumé pour qu'une nouvelle session (web/téléphone) reprenne le fil sans tout réexpliquer.
 
 ### Version & déploiement
-- Version du cache : `sw.js` → `mathsgr2-vNNN` (incrémenter à CHAQUE changement ; ~v134+).
+- Version du cache : `sw.js` → `mathsgr2-vNNN` (incrémenter à CHAQUE changement ; ~v144+).
 - **Déploiement = `git push` sur `main`** → GitHub Pages publie tout seul (~1 min).
 
 ### Fonctionnalités déjà en place
