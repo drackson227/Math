@@ -341,9 +341,18 @@
         <li><strong>2ᵉ division</strong> : comme une mitose, on sépare les <strong>chromatides</strong> → 4 cellules à n.</li>
         <li>La méiose est une grande source de <strong>variabilité</strong> (brassage) : chaque gamète est unique.</li>
       </ul>
-      <div class="formula-box vecteur">
-        <h3>Mitose vs méiose</h3>
-        <p class="note"><strong>Mitose</strong> : 1 cellule → <strong>2</strong> cellules <strong>identiques</strong> (2n → 2n), pour la croissance. <br><strong>Méiose</strong> : 1 cellule → <strong>4</strong> cellules <strong>différentes</strong> (2n → n), pour fabriquer les gamètes.</p>
+      <div class="bio-compare-wrap">
+        <table class="bio-compare">
+          <thead><tr><th>Critère</th><th class="c-mito">🔵 Mitose</th><th class="c-meio">🟣 Méiose</th></tr></thead>
+          <tbody>
+            <tr><td>Nombre de divisions</td><td>1 division</td><td><strong>2</strong> divisions successives</td></tr>
+            <tr><td>Cellules filles</td><td><strong>2</strong> cellules</td><td><strong>4</strong> cellules</td></tr>
+            <tr><td>Chromosomes</td><td>2n → <strong>2n</strong> (inchangé)</td><td>2n → <strong>n</strong> (divisé par 2)</td></tr>
+            <tr><td>Cellules obtenues</td><td><strong>identiques</strong> à la mère</td><td><strong>différentes</strong> (chacune unique)</td></tr>
+            <tr><td>À l'anaphase, on sépare…</td><td>les chromatides-sœurs</td><td>division 1 : les chromosomes homologues</td></tr>
+            <tr><td>À quoi ça sert</td><td>croissance & réparation</td><td>fabriquer les gamètes (reproduction)</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

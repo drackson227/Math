@@ -1241,3 +1241,15 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .irr-next { margin-left: 8px; background: var(--bg-card); border: 1px solid var(--color-nav); color: var(--color-nav); border-radius: 8px; padding: 7px 14px; font-weight: 700; cursor: pointer; min-height: 38px; }
 .irr-score { margin-top: .8rem; font-size: 14px; color: var(--text-secondary); }
 .irr-done { font-size: 19px; font-weight: 700; line-height: 1.6; margin-bottom: 1rem; }
+
+/* ===== Tableau comparatif (bio : mitose vs méiose) — clair et lisible sur mobile ===== */
+.bio-compare-wrap { overflow-x: auto; margin: 1rem 0; -webkit-overflow-scrolling: touch; }
+.bio-compare { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 460px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; overflow: hidden; }
+.bio-compare th, .bio-compare td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+.bio-compare thead th { font-weight: 800; font-size: 15px; background: rgba(255,255,255,0.04); }
+.bio-compare th.c-mito { color: #60a5fa; }
+.bio-compare th.c-meio { color: #c4b5fd; }
+.bio-compare tbody td:first-child { color: var(--text-secondary); font-weight: 600; }
+.bio-compare tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+.bio-compare tbody tr:last-child td { border-bottom: none; }
+.bio-compare strong { color: var(--text-primary); }
