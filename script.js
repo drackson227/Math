@@ -4,6 +4,17 @@
    Géométrie analytique plane : Vecteurs · Cercle · Droites
    ============================================================ */
 
+// Nettoyage unique : retire d'anciennes clés API (projet « Notiq ») qui pouvaient
+// traîner dans le localStorage PARTAGÉ de drackson227.github.io (tous les sites du
+// compte partagent le même stockage). Exécuté UNE seule fois (drapeau) → si Notiq
+// est réutilisé un jour, ses nouvelles clés ne seront pas touchées.
+try {
+  if (!localStorage.getItem('gr2_notiq_cleaned')) {
+    ['notiq_gemini_key', 'notiq_gemini_key2', 'notiq_openrouter_key', 'notiq_groq_key'].forEach(function (k) { localStorage.removeItem(k); });
+    localStorage.setItem('gr2_notiq_cleaned', '1');
+  }
+} catch (e) {}
+
 // Helper sécurisé : attend que MathJax soit prêt avant de typeset
 // Un élément contient-il du LaTeX PAS ENCORE rendu ? (délimiteurs bruts dans le texte).
 // Après rendu, MathJax remplace les délimiteurs par des <mjx-container> : plus rien à faire.
