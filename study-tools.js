@@ -180,93 +180,130 @@
     hlOn = on;
     document.body.classList.toggle('gr2-hl-active', on);
     var btn = document.getElementById('gr2-hl-btn');
-    if (btn) btn.classList.toggle('on', on);
+    if (btn) { btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
     var pal = document.getElementById('gr2-hl-palette');
     if (pal) pal.style.display = on ? 'flex' : 'none';
   }
-  function onMouseUpHighlight() {
+
+  // Carte des nœuds texte d'un chapitre (on ignore formules, SVG, boutons, contrôles).
+  function textMap(root) {
+    var full = '', map = [];
+    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        var p = n.parentNode;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        if (p.closest && p.closest('.formula-main, mjx-container, svg, script, style, button, .gr2-chap-ctrl, .gr2-study-bar')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var n;
+    while ((n = tw.nextNode())) { map.push({ node: n, start: full.length }); full += n.nodeValue; }
+    return { full: full, map: map };
+  }
+  function globalOffset(tm, node, offset) {
+    for (var i = 0; i < tm.map.length; i++) if (tm.map[i].node === node) return tm.map[i].start + offset;
+    return -1;
+  }
+  // Entoure d'un <mark> chaque nœud texte couvert par [gs, ge[ — jamais à cheval
+  // sur un autre élément (donc ne casse jamais une formule ni la mise en page).
+  function wrapByOffsets(tm, gs, ge, color) {
+    var made = false;
+    for (var i = 0; i < tm.map.length; i++) {
+      var seg = tm.map[i], node = seg.node, len = node.nodeValue.length, segEnd = seg.start + len;
+      if (segEnd <= gs || seg.start >= ge) continue;
+      var p = node.parentNode;
+      if (!p || (p.closest && p.closest('mark.gr2-hl'))) continue;
+      var s = Math.max(0, gs - seg.start), e = Math.min(len, ge - seg.start);
+      if (s >= e || !node.nodeValue.slice(s, e).trim()) continue;
+      var r = document.createRange(); r.setStart(node, s); r.setEnd(node, e);
+      var m = el('mark', 'gr2-hl gr2-hl-' + color); m.setAttribute('data-c', color);
+      m.title = 'Clique pour retirer le surlignage';
+      try { r.surroundContents(m); made = true; } catch (e2) {}
+    }
+    return made;
+  }
+
+  // Création d'un surlignage à partir de la sélection courante.
+  function onSelectHighlight() {
     if (!hlOn) return;
     var sel = window.getSelection();
-    if (!sel || sel.isCollapsed) return;
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
     var range = sel.getRangeAt(0);
-    var root = synthRoot();
-    if (!root || !root.contains(range.commonAncestorContainer)) return;
-    var text = norm(sel.toString());
-    if (text.length < 2) { sel.removeAllRanges(); return; }
-    var mark = wrapRange(range, hlColor);
+    var base = range.commonAncestorContainer;
+    if (base.nodeType === 3) base = base.parentNode;
+    var sec = base && base.closest ? base.closest('.synth-section') : null;
+    if (!sec) return;
+    var tm = textMap(sec);
+    var gs = globalOffset(tm, range.startContainer, range.startOffset);
+    var ge = globalOffset(tm, range.endContainer, range.endOffset);
+    if (gs < 0 || ge < 0) { sel.removeAllRanges(); return; }
+    if (gs > ge) { var t = gs; gs = ge; ge = t; }
+    var raw = tm.full.slice(gs, ge);
+    if (!raw.trim()) { sel.removeAllRanges(); return; }
+    var made = wrapByOffsets(tm, gs, ge, hlColor);
     sel.removeAllRanges();
-    if (!mark) return;
-    // mémoriser pour ce chapitre
-    var sec = mark.closest('.synth-section');
-    if (sec) {
-      var d = load(); d.hl = d.hl || {};
-      var k = chapKey(chapTitle(sec));
-      d.hl[k] = d.hl[k] || [];
-      d.hl[k].push({ t: text, c: hlColor });
-      save(d);
-    }
+    if (!made) return;
+    var occ = tm.full.slice(0, gs).split(raw).length - 1;   // n-ième occurrence
+    var d = load(); d.hl = d.hl || {};
+    var k = chapKey(chapTitle(sec));
+    d.hl[k] = d.hl[k] || [];
+    d.hl[k].push({ t: raw, c: hlColor, o: occ });
+    save(d);
   }
-  function wrapRange(range, color) {
-    var m = el('mark', 'gr2-hl gr2-hl-' + color);
-    m.setAttribute('data-c', color);
-    try { range.surroundContents(m); return m; }
-    catch (e) {
-      try {
-        var frag = range.extractContents();
-        m.appendChild(frag);
-        range.insertNode(m);
-        return m;
-      } catch (e2) { return null; }
-    }
-  }
-  /* clic sur un surlignage → le retirer */
-  function onClickRemoveHl(ev) {
-    var m = ev.target.closest && ev.target.closest('mark.gr2-hl');
+
+  // Retirer un surlignage en cliquant dessus (toujours actif, même surligneur ON).
+  function onClickMark(ev) {
+    var m = ev.target && ev.target.closest ? ev.target.closest('mark.gr2-hl') : null;
     if (!m) return;
-    if (hlOn) return; // en mode surlignage, on laisse sélectionner
-    ev.preventDefault();
+    var sel = window.getSelection();
+    if (sel && !sel.isCollapsed) return; // l'utilisateur sélectionne → ne pas retirer
+    ev.preventDefault(); ev.stopPropagation();
     var sec = m.closest('.synth-section');
     var txt = norm(m.textContent);
-    // déballer
     var parent = m.parentNode;
     while (m.firstChild) parent.insertBefore(m.firstChild, m);
     parent.removeChild(m);
     parent.normalize();
     if (sec) {
-      var d = load();
-      var k = chapKey(chapTitle(sec));
+      var d = load(); var k = chapKey(chapTitle(sec));
       if (d.hl && d.hl[k]) {
-        var i = d.hl[k].findIndex(function (h) { return h.t === txt; });
-        if (i >= 0) d.hl[k].splice(i, 1);
+        var i = d.hl[k].findIndex(function (h) { return norm(h.t) === txt; });
+        if (i < 0) i = 0;
+        d.hl[k].splice(i, 1);
         if (!d.hl[k].length) delete d.hl[k];
         save(d);
       }
     }
   }
-  /* ré-applique les surlignages mémorisés (au chargement d'un chapitre) */
+
+  // Tout effacer dans le chapitre courant (ou tous) — bouton 🧽
+  function clearHighlights() {
+    var root = synthRoot(); if (!root) return;
+    Array.prototype.forEach.call(root.querySelectorAll('mark.gr2-hl'), function (m) {
+      var p = m.parentNode; while (m.firstChild) p.insertBefore(m.firstChild, m); p.removeChild(m); p.normalize();
+    });
+    var d = load();
+    if (d.hl) { chapters().forEach(function (sec) { delete d.hl[chapKey(chapTitle(sec))]; }); save(d); }
+  }
+
+  // Ré-applique les surlignages mémorisés au chargement d'un chapitre.
   function reapplyHighlights() {
     var d = load(); if (!d.hl) return;
     chapters().forEach(function (sec) {
-      var k = chapKey(chapTitle(sec));
-      var list = d.hl[k]; if (!list || !list.length) return;
-      list.forEach(function (h) { wrapTextOnce(sec, h.t, h.c); });
+      var list = d.hl[chapKey(chapTitle(sec))]; if (!list || !list.length) return;
+      list.forEach(function (h) {
+        if (!h || !h.t) return;
+        var tm = textMap(sec);                 // recalculé : les marks déjà posés ne changent pas le texte
+        var target = h.o || 0, idx = -1, from = 0, count = 0, found = -1;
+        while ((idx = tm.full.indexOf(h.t, from)) >= 0) {
+          if (count === target) { found = idx; break; }
+          from = idx + 1; count++;
+        }
+        if (found < 0) found = tm.full.indexOf(h.t);
+        if (found < 0) return;
+        wrapByOffsets(tm, found, found + h.t.length, h.c || 'yellow');
+      });
     });
-  }
-  function wrapTextOnce(root, text, color) {
-    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) {
-        if (!n.nodeValue || n.nodeValue.indexOf(text) < 0) return NodeFilter.FILTER_REJECT;
-        if (n.parentNode && n.parentNode.closest && n.parentNode.closest('mark.gr2-hl')) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    var node = walker.nextNode();
-    if (!node) return false;
-    var idx = node.nodeValue.indexOf(text);
-    var range = document.createRange();
-    range.setStart(node, idx);
-    range.setEnd(node, idx + text.length);
-    return !!wrapRange(range, color);
   }
 
   /* Mode lecture sans distraction */
@@ -303,8 +340,10 @@
       '<span class="gr2-spacer"></span>' +
       '<button class="gr2-tool" id="gr2-course-btn">🎬 Mode cours</button>' +
       '<button class="gr2-tool" id="gr2-focus-btn">📖 Lecture</button>' +
-      '<button class="gr2-tool" id="gr2-hl-btn">🖍️ Surligner</button>' +
-      '<span class="gr2-hl-palette" id="gr2-hl-palette" style="display:none;">' + palette + '</span>';
+      '<button class="gr2-tool" id="gr2-hl-btn" aria-pressed="false">🖍️ Surligner</button>' +
+      '<span class="gr2-hl-palette" id="gr2-hl-palette" style="display:none;">' + palette +
+        '<button class="gr2-sw-clear" id="gr2-hl-clear" title="Effacer tous les surlignages du chapitre">🧽</button>' +
+      '</span>';
     // insérer tout en haut de la synthèse
     root.insertBefore(bar, root.firstChild);
 
@@ -312,6 +351,7 @@
     bar.querySelector('#gr2-focus-btn').addEventListener('click', toggleReadingFocus);
     bar.querySelector('#gr2-course-btn').addEventListener('click', function () { window.GR2Course && window.GR2Course.open(); });
     bar.querySelector('#gr2-hl-btn').addEventListener('click', function () { setHlActive(!hlOn); });
+    bar.querySelector('#gr2-hl-clear').addEventListener('click', clearHighlights);
     bar.querySelectorAll('.gr2-sw').forEach(function (sw) {
       sw.addEventListener('click', function () {
         hlColor = sw.dataset.c;
@@ -348,10 +388,14 @@
   window.onShowStudySection = onShowStudySection;
 
   /* écouteurs globaux */
-  window.addEventListener('scroll', updateProgressBar, { passive: true });
-  document.addEventListener('mouseup', onMouseUpHighlight);
-  document.addEventListener('touchend', onMouseUpHighlight);
-  document.addEventListener('click', onClickRemoveHl, true);
+  var progTick = false;
+  window.addEventListener('scroll', function () {
+    if (progTick) return; progTick = true;
+    requestAnimationFrame(function () { updateProgressBar(); progTick = false; });
+  }, { passive: true });
+  document.addEventListener('mouseup', onSelectHighlight);
+  document.addEventListener('touchend', onSelectHighlight);
+  document.addEventListener('click', onClickMark);
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       closeToc();
@@ -392,11 +436,14 @@
   var scenes = [], si = 0, steps = [], ki = -1;
   var playing = false, narration = true;
   var autoTimer = null;
+  var reduceMotion = false;
+  try { reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   function gsapReveal(node) {
     node.style.visibility = 'visible';
+    if (reduceMotion) { node.style.opacity = '1'; return; }
     if (window.gsap) {
-      window.gsap.fromTo(node, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+      window.gsap.fromTo(node, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power1.out' });
     } else {
       node.classList.add('gr2-step-in');
     }
@@ -498,6 +545,7 @@
     content.innerHTML = sc.html;
     stage.appendChild(head);
     stage.appendChild(content);
+    try { overlay.querySelector('.gr2-course-body').scrollTop = 0; } catch (e) {}
 
     // étapes = enfants directs du contenu (titre, formule, points, explication…)
     steps = Array.prototype.filter.call(content.children, function (n) {
@@ -516,7 +564,12 @@
       ki++;
       var node = steps[ki];
       gsapReveal(node);
-      node.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // garder l'étape visible sans saccade : on ne scrolle que si elle dépasse le bas
+      try {
+        var body = overlay.querySelector('.gr2-course-body');
+        var nb = node.getBoundingClientRect(), bb = body.getBoundingClientRect();
+        if (nb.bottom > bb.bottom - 8 || nb.top < bb.top) node.scrollIntoView({ block: 'nearest' });
+      } catch (e) {}
       speak(node, onStepSpoken);
     } else {
       // scène terminée → suivante (ou fin si auto)

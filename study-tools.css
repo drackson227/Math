@@ -45,6 +45,11 @@
   border: 2px solid var(--border-subtle); padding: 0;
 }
 .gr2-sw.on { border-color: var(--text-primary); transform: scale(1.12); }
+.gr2-sw-clear {
+  width: 28px; height: 28px; border-radius: 8px; cursor: pointer; padding: 0;
+  border: 1px solid var(--border-subtle); background: var(--bg-main); font-size: 14px; line-height: 1;
+}
+.gr2-sw-clear:hover { border-color: #ef4444; }
 .gr2-hl-yellow { background: #fde047; }
 .gr2-hl-green  { background: #86efac; }
 .gr2-hl-pink   { background: #f9a8d4; }
