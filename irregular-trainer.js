@@ -40,7 +40,11 @@
   function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function mount() { return document.getElementById('irr-mount'); }
 
-  function start() { var m = mount(); if (!m) return; st.queue = shuffle(VERBS.slice()).slice(0, ROUND); st.idx = 0; st.score = 0; st.total = 0; st.streak = 0; render(); }
+  function start() {
+    var m = mount(); if (!m) return;
+    var sb = document.getElementById('irr-start'); if (sb) sb.style.display = 'none'; // cache le bouton « Commencer » pendant la partie
+    st.queue = shuffle(VERBS.slice()).slice(0, ROUND); st.idx = 0; st.score = 0; st.total = 0; st.streak = 0; render();
+  }
 
   function render() {
     var m = mount(); if (!m) return;
@@ -89,12 +93,12 @@
     var msg = pct >= 80 ? '🏆 Excellent !' : (pct >= 50 ? '👍 Pas mal, continue !' : '💪 Encore un peu d\'entraînement !');
     m.innerHTML = '<div class="irr-done">🎉 Terminé — <b>' + st.score + ' / ' + st.total + '</b> (' + pct + '%)<br>' + msg +
       ' · meilleure série : ' + st.best + ' 🔥</div>' +
-      '<button type="button" class="irr-check" id="irr-start">↻ Recommencer</button>';
+      '<button type="button" class="irr-check" id="irr-restart">↻ Recommencer</button>';
   }
 
   // Délégation (un seul écouteur, robuste au re-render)
   document.addEventListener('click', function (e) {
-    if (e.target.closest('#irr-start')) { e.preventDefault(); start(); }
+    if (e.target.closest('#irr-start, #irr-restart')) { e.preventDefault(); start(); }
     else if (e.target.closest('#irr-check')) { e.preventDefault(); check(); }
     else if (e.target.closest('#irr-next')) { e.preventDefault(); next(); }
   });
