@@ -55,3 +55,34 @@ le contenu de ce dépôt EST le site en ligne → https://drackson227.github.io/
 ## 🚫 Hors dépôt
 Des fichiers privés (mémos, sauvegardes, dossiers de travail) sont exclus par `.gitignore` —
 ils ne sont pas ici, ne pas chercher à les recréer dans le dépôt.
+
+## 🧠 Mémoire du projet (notre travail ensemble)
+
+Résumé pour qu'une nouvelle session (web/téléphone) reprenne le fil sans tout réexpliquer.
+
+### Version & déploiement
+- Version du cache : `sw.js` → `mathsgr2-vNNN` (incrémenter à CHAQUE changement ; ~v133+).
+- **Déploiement = `git push` sur `main`** → GitHub Pages publie tout seul (~1 min).
+
+### Fonctionnalités déjà en place
+- **9 matières** (maths par défaut, chimie, bio, géo, éco, histoire, français, anglais,
+  néerlandais) : chacune avec synthèses, formules clés, méthodes, exercices, erreurs,
+  questions de quiz et flashcards.
+- **Quiz** (QCM, score, XP, niveaux), **Flashcards** (répétition espacée), **Mode examen**.
+- **Profil** : stats, badges, calendrier d'activité, régularité, maîtrise par chapitre,
+  objectif du jour, planning d'examen.
+- **« Mes créations »** (`creations.js`) : éditeur de flashcards/questions/synthèses +
+  compositeur de formules **ƒ𝑥** + dessin façon tableau.
+- **« Formules par cœur »** (`formulas-trainer.js`) : écrire les formules de mémoire,
+  correction tolérante, banque perso + banque par défaut du site, vocabulaire adapté par
+  matière (formule / règle / repère / mot…).
+- **Outil Diagnostic** (`diagnostic.js`, Ctrl+Maj+D) : rapport technique + analyse qualité.
+- **Social** (Supabase, clé anon publique) : bloc-notes collectif, chat, quiz multijoueur.
+- PWA installable + utilisable hors-ligne.
+
+### Façon de travailler (rappels importants)
+- Viser le **détail et la perfection** : une imperfection (couleurs, contraste, alignement,
+  lisibilité) compte autant qu'un bug — c'est le niveau d'analyse attendu.
+- **Mesurer avant / après** avec l'outil Diagnostic (et des tests quand c'est possible).
+- Méthode qualité de référence : **heuristiques de Nielsen** + vérifs type **Lighthouse / axe**
+  (contraste, tailles de texte, cibles tactiles, descriptions d'images…).
