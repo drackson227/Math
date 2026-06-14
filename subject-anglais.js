@@ -161,23 +161,58 @@
     </div>
 
     <div class="synth-section">
-      <h2>Vocabulary 1 — Superstitions</h2>
-      <ul style="line-height:1.9;">
-        <li><strong>Bad luck</strong> (malchance) : a black cat, a broken mirror (7 years bad luck), walking under a ladder, <strong>Friday the 13th</strong>, opening an umbrella indoors.</li>
-        <li><strong>Good luck</strong> (chance) : a four-leaf clover, a horseshoe, <strong>touch wood</strong>, crossing your fingers.</li>
-        <li><em>lucky</em> / <em>unlucky</em> · <em>a superstition</em> · <em>to be superstitious</em>.</li>
-      </ul>
+      <div class="eng-tense-card t-past">
+        <div class="eng-tc-head">🟡 Verbes irréguliers (à connaître par cœur)</div>
+        <div class="eng-tc-when">Base verbale → <strong>prétérit</strong> (past simple) → <strong>participe passé</strong> (V3, pour le perfect).</div>
+        <table class="eng-irr">
+          <thead><tr><th>Base</th><th>Prétérit</th><th>Participe (V3)</th></tr></thead>
+          <tbody>
+            <tr><td>go</td><td>went</td><td>gone</td></tr>
+            <tr><td>see</td><td>saw</td><td>seen</td></tr>
+            <tr><td>eat</td><td>ate</td><td>eaten</td></tr>
+            <tr><td>take</td><td>took</td><td>taken</td></tr>
+            <tr><td>have</td><td>had</td><td>had</td></tr>
+            <tr><td>give</td><td>gave</td><td>given</td></tr>
+            <tr><td>find</td><td>found</td><td>found</td></tr>
+            <tr><td>write</td><td>wrote</td><td>written</td></tr>
+            <tr><td>drink</td><td>drank</td><td>drunk</td></tr>
+            <tr><td>do</td><td>did</td><td>done</td></tr>
+          </tbody>
+        </table>
+        <div class="eng-tc-err">❌ <strong>Erreur :</strong> après <strong>did / didn't</strong> → base verbale (<s>I didn't went</s>).</div>
+      </div>
     </div>
 
     <div class="synth-section">
-      <h2>Vocabulary 2 — School rules</h2>
-      <p>On exprime les règles avec des <strong>modals</strong> :</p>
-      <ul style="line-height:1.9;">
-        <li>We <strong>must</strong> wear a uniform. (obligation)</li>
-        <li>We <strong>mustn't</strong> use our phones in class. (interdiction)</li>
-        <li>We <strong>have to</strong> be on time. / We <strong>don't have to</strong> bring lunch. (pas obligé)</li>
-        <li>We <strong>are (not) allowed to</strong> eat in the classroom. (être (in)autorisé)</li>
-      </ul>
+      <div class="eng-tense-card t-vocab">
+        <div class="eng-tc-head">🟠 Vocabulaire — Superstitions</div>
+        <table class="eng-voc">
+          <tr><td>a black cat</td><td>un chat noir (malchance)</td></tr>
+          <tr><td>a broken mirror</td><td>un miroir brisé (7 ans de malheur)</td></tr>
+          <tr><td>to walk under a ladder</td><td>passer sous une échelle</td></tr>
+          <tr><td>Friday the 13th</td><td>vendredi 13</td></tr>
+          <tr><td>a four-leaf clover</td><td>un trèfle à 4 feuilles (chance)</td></tr>
+          <tr><td>a horseshoe</td><td>un fer à cheval (chance)</td></tr>
+          <tr><td>to touch wood</td><td>toucher du bois (conjurer le sort)</td></tr>
+          <tr><td>to cross your fingers</td><td>croiser les doigts</td></tr>
+          <tr><td>lucky / unlucky</td><td>chanceux / malchanceux</td></tr>
+          <tr><td>(to be) superstitious</td><td>(être) superstitieux</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <div class="eng-tense-card t-vocab">
+        <div class="eng-tc-head">🟠 Vocabulaire — School rules</div>
+        <div class="eng-tc-when">On exprime les règles avec des <strong>modals</strong> :</div>
+        <table class="eng-voc">
+          <tr><td>We must wear a uniform.</td><td>On doit porter un uniforme. (obligation)</td></tr>
+          <tr><td>We mustn't use our phones.</td><td>C'est interdit. (interdiction)</td></tr>
+          <tr><td>We have to be on time.</td><td>On doit être à l'heure.</td></tr>
+          <tr><td>We don't have to bring lunch.</td><td>On n'est pas obligé (libre).</td></tr>
+          <tr><td>We are (not) allowed to eat.</td><td>On a (n'a pas) le droit de manger.</td></tr>
+        </table>
+      </div>
     </div>
 
     <div class="synth-section">

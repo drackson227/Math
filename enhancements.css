@@ -1209,3 +1209,11 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .eng-conj td { padding: 8px 11px; border-bottom: 1px solid var(--border-subtle); vertical-align: top; font-size: 15px; }
 .eng-conj tr:last-child td { border-bottom: none; }
 .eng-conj td.eng-pol { width: 38px; text-align: center; font-weight: 700; }
+/* Vocabulaire (EN | FR) + verbes irréguliers */
+.eng-tense-card.t-vocab { --eng-accent: #fb923c; }
+.eng-voc, .eng-irr { width: 100%; border-collapse: collapse; margin: .55rem 0; background: var(--bg-main); border-radius: 8px; overflow: hidden; font-size: 15px; }
+.eng-voc td, .eng-irr td { padding: 8px 11px; border-top: 1px solid var(--border-subtle); vertical-align: top; }
+.eng-voc td:first-child { font-weight: 700; width: 46%; }
+.eng-voc td:last-child { color: var(--text-secondary); }
+.eng-irr th { background: rgba(255,255,255,0.05); text-align: left; padding: 7px 11px; font-size: 12.5px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .03em; }
+.eng-irr td:first-child { font-weight: 700; }
