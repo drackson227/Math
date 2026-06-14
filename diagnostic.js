@@ -114,6 +114,7 @@
       for (var j = 0; j < e.childNodes.length; j++) { var n = e.childNodes[j]; if (n.nodeType === 3 && n.textContent.trim()) { hasDirect = true; txt += n.textContent; } }
       if (!hasDirect) continue;
       txt = txt.trim(); if (txt.length < 2) continue;
+      if (!/[A-Za-zÀ-ÿ0-9]/.test(txt)) continue; // emoji/symbole seul (⚙️…) → contraste non pertinent
       scanned++;
       var cs = getComputedStyle(e), fs = parseFloat(cs.fontSize) || 16;
       if (fs < 12) tiny++;
@@ -135,7 +136,7 @@
     var small = 0; tap.forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width > 0 && (r.width < 40 || r.height < 40)) small++; });
     L.push('Boutons/liens petits au doigt (<40px) : ' + (small ? small + ' ⚠️' : 'aucun ✅'));
     var imgs = [].slice.call(document.querySelectorAll('img'));
-    var noAlt = imgs.filter(function (e) { return !e.alt; }).length;
+    var noAlt = imgs.filter(function (e) { return !e.hasAttribute('alt'); }).length; // alt="" = décoratif (valide), on ne signale que l'absence totale
     L.push('Images sans description (alt) : ' + (noAlt ? noAlt + ' / ' + imgs.length + ' ⚠️' : (imgs.length ? 'toutes décrites ✅' : 'aucune image')));
     var noName = tap.filter(function (e) { return !((e.textContent || '').trim()) && !e.getAttribute('aria-label') && !e.title && e.type !== 'text' && e.type !== 'search'; }).length;
     L.push('Boutons sans nom (lecteur d\'écran) : ' + (noName ? noName + ' ⚠️' : 'aucun ✅'));

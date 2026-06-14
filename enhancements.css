@@ -683,7 +683,13 @@ img { max-width: 100%; height: auto; }
 #nd-canvas { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border-subtle); touch-action: none; cursor: crosshair; display: block; }
 .nd-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
 .nd-btn { padding: 9px 18px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-weight: 700; cursor: pointer; }
-.nd-btn-ok { background: var(--color-nav); border-color: var(--color-nav); color: #fff; }
+/* violet plus profond → texte blanc lisible (≈5.7:1, conforme WCAG AA) au lieu de #a78bfa (≈2.5:1) */
+.nd-btn-ok { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.nd-btn-ok:hover { background: #6d28d9; border-color: #6d28d9; }
+/* 📱 anti-zoom iOS : un champ < 16px fait zoomer l'iPhone au focus → on force 16px sur mobile */
+@media (max-width: 768px) {
+  input, select, textarea, .ft-in, .exo-in, .nd-input { font-size: 16px !important; }
+}
 
 /* ═══════════ 🎨 Mes créations — creations.js ═══════════ */
 .fx-mini { margin-left: 6px; padding: 2px 9px; border-radius: 7px; border: 1px solid var(--color-nav); background: transparent; color: var(--color-nav); font-size: 11px; font-weight: 700; cursor: pointer; vertical-align: middle; }
@@ -814,7 +820,7 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
 @media (max-width: 768px) {
   .nav { padding: 1rem; }
   .nav-grp { display: contents; }
-  .nav-lab { flex-basis: 100%; width: auto; align-self: auto; margin-top: 12px; padding: 0 4px 4px; border-bottom: 1px solid color-mix(in srgb, var(--ga) 40%, var(--border-subtle)); font-size: 11px; }
+  .nav-lab { flex-basis: 100%; width: auto; align-self: auto; margin-top: 12px; padding: 0 4px 4px; border-bottom: 1px solid color-mix(in srgb, var(--ga) 40%, var(--border-subtle)); font-size: 12px; }
 }
 
 /* ═══ Matières repliables sur mobile : un bouton « 📐 Maths ▾ » remplace les 4 rangées ═══ */
@@ -1139,3 +1145,32 @@ body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
   .ft-ask { font-size: 20px; }
   .ft-pick-item { flex-wrap: wrap; }
 }
+
+/* ════════ Cibles tactiles — confort au doigt ════════
+   Remonte les boutons/liens trop petits vers ≥ 40px (recommandation Apple/Material).
+   On NE touche PAS à la barre de nav (déjà 40px de haut) pour ne pas casser sa mise
+   en page, ni aux ✕ en position absolue (on agrandit juste leur zone de clic). */
+
+/* Boutons d'action moyens (31–39px) + pastilles de filtre → 40px pile */
+.simple-exp-toggle, .step-btn, .mtab, .demo-launch, .why-btn, .exercise-step .why-btn,
+.nd-btn, .cre-io-btn, .gen-new, .gen-solve, .note-tab,
+.gen-chip, .fc-chip, .gloss-chip,
+.ansheet-line, .ansheet-final-input, select { min-height: 40px; }
+
+/* Petits boutons-icônes (<28px) → zone tactile ~40px, contenu centré */
+.note-ch { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+.nd-tool { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+.bookmark-btn { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+
+/* Mini-boutons « ƒx / animer » : plus de hauteur sans changer le flux */
+.fx-mini { padding: 7px 11px; font-size: 12px; }
+.formula-anim-btn { padding: 6px 12px; font-size: 12px; }
+
+/* Croix de fermeture minuscules (✕) → zone de clic agrandie (pas de min-size forcé) */
+.fx-x, .cre-tbox-x { font-size: 13px; padding: 5px 7px; }
+
+/* Cases à cocher / boutons radio agrandis (13px → 18px) et aux couleurs du site */
+input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-color: var(--color-nav); }
+
+/* Pastilles de couleur (palette créations) : légère hausse, restent compactes */
+#cre-colors .nd-col, #cre-hilites .nd-col { width: 30px; height: 30px; }

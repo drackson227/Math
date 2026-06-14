@@ -2398,8 +2398,9 @@ function renderStudyDashboard() {
     var hasWeak = (weak && weakPct < 100);
     var weakTxt = hasWeak ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span style="color:#34d399;">tout maîtrisé 🎉</span>';
     var examTxt = examBest != null ? ' · 📝 record ' + examBest + '/20' : '';
-    var actBtn = 'font-size:12px; font-weight:700; border:none; border-radius:9px; padding:6px 11px; cursor:pointer;';
-    var quizBtn = hasWeak ? '<button type="button" onclick="reviseWeakChapter(\'' + key + '\',\'' + weak + '\')" style="' + actBtn + ' background:' + accent + '; color:#fff;">🎯 Quiz : ' + (chLabels[weak] || weak) + '</button>' : '';
+    var actBtn = 'font-size:12.5px; font-weight:700; border:none; border-radius:9px; padding:9px 13px; min-height:40px; cursor:pointer;';
+    // couleur de matière assombrie (color-mix) → texte blanc lisible même sur les teintes claires (géo, histoire…)
+    var quizBtn = hasWeak ? '<button type="button" onclick="reviseWeakChapter(\'' + key + '\',\'' + weak + '\')" style="' + actBtn + ' background:color-mix(in srgb, ' + accent + ' 70%, #000); color:#fff;">🎯 Quiz : ' + (chLabels[weak] || weak) + '</button>' : '';
     rows += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-left:5px solid ' + accent + '; border-radius:14px; padding:0.75rem 1rem; margin-bottom:0.55rem; color:var(--text-primary);">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:15px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' + dueBadge + '</div>' +
       '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div>' +
@@ -2440,7 +2441,7 @@ function renderStudyDashboard() {
     }
     return '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:.45rem 0; border-bottom:1px solid var(--border-subtle);">' +
       '<span style="font-weight:600; min-width:96px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' +
-      '<input type="date" value="' + dateVal + '" onchange="setExamDate(\'' + key + '\', this.value)" style="background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-subtle); border-radius:8px; padding:4px 8px; font-size:12px;">' +
+      '<input type="date" value="' + dateVal + '" onchange="setExamDate(\'' + key + '\', this.value)" style="background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-subtle); border-radius:8px; min-height:40px; padding:8px 10px; font-size:13px;">' +
       '<span style="font-size:13px;">' + info + '</span></div>';
   }).join('');
   var planningCard = '<details class="dash-plan" ' + (anyDate ? 'open' : '') + ' style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:.8rem 1.1rem; margin-bottom:1rem;">' +
@@ -5262,7 +5263,7 @@ function showRevisionReminder() {
     bar.id = 'revision-reminder';
     bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; max-width:min(92vw,560px); animation:imgModalIn .25s ease;';
     bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
-      '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:var(--color-nav); color:#fff; border:none; border-radius:9px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer;">📚 Réviser</button>' +
+      '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:#7c3aed; color:#fff; border:none; border-radius:9px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; min-height:36px;">📚 Réviser</button>' +
       '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer; min-width:32px; min-height:32px; border-radius:8px;">✕</button>';
     document.body.appendChild(bar);
     // Après 6 s : repli en pastille discrète (clic = aller réviser)
@@ -5531,7 +5532,7 @@ function renderProgressCharts() {
   function regCell(val, lbl, emo) {
     return '<div style="flex:1; min-width:84px; background:var(--bg-main); border:1px solid var(--border-subtle); border-radius:12px; padding:.7rem .4rem; text-align:center;">' +
       '<div style="font-size:22px; font-weight:800; color:var(--color-nav);">' + emo + ' ' + val + '</div>' +
-      '<div style="font-size:11.5px; color:var(--text-secondary); margin-top:2px;">' + lbl + '</div></div>';
+      '<div style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">' + lbl + '</div></div>';
   }
   html += '<div class="pc-card" style="margin-bottom:1rem;"><div class="pc-head"><span>🔥 Ma régularité</span></div>' +
     '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
