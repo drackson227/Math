@@ -54,6 +54,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="enhancements.css">
+  <link rel="stylesheet" href="study-tools.css">
   <style>
     /* B7 fix: focus-overlay.show was missing from style.css */
     .focus-mode-overlay.show { display: flex !important; }
@@ -264,7 +265,7 @@
 </div>
 
 <div class="container">
-<div style="text-align:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-subtle);">
+<div id="app-header" style="text-align:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-subtle);">
   <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:0.25rem;">
     <svg width="48" height="48" viewBox="0 0 120 120" style="flex-shrink:0;" aria-hidden="true">
       <defs><linearGradient id="hdrLogoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
@@ -1043,6 +1044,7 @@
   <script src="bat.js"></script>
   <script src="shortcuts.js"></script>
   <script src="backtotop.js"></script>
+  <script src="study-tools.js"></script>
   <!-- PWA : enregistrement du service worker (hors-ligne + installable) -->
   <script>
     if ('serviceWorker' in navigator) {

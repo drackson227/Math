@@ -1,0 +1,209 @@
+/* ============================================================
+   study-tools.css — Styles des aides à la lecture & à l'étude
+   (sommaire, progression, compris/à revoir, surligneur,
+    mode lecture, mode cours animé). Utilise les variables de thème.
+   ============================================================ */
+
+/* ---------- Barre de progression de lecture (haut de page) ---------- */
+.gr2-readprog {
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: transparent; z-index: 1200; pointer-events: none; display: none;
+}
+.gr2-readprog > span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--color-cercle), var(--color-nav));
+  transition: width 0.1s linear; border-radius: 0 3px 3px 0;
+}
+
+/* ---------- Barre d'outils « étude » (en haut de la synthèse) ---------- */
+.gr2-study-bar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 10px 12px; margin: 0 0 1.4rem;
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+.gr2-study-bar .gr2-spacer { flex: 1 1 auto; }
+.gr2-tool {
+  padding: 8px 14px; border-radius: 10px;
+  border: 1px solid var(--border-subtle); background: var(--bg-main);
+  color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: border-color .15s ease, transform .1s ease, background .15s ease;
+}
+.gr2-tool:hover { border-color: var(--color-nav); transform: translateY(-1px); }
+.gr2-tool.on { border-color: var(--color-nav); background: rgba(167,139,250,0.16); color: var(--text-primary); }
+.gr2-pill {
+  padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  background: rgba(96,165,250,0.12); color: var(--color-cercle);
+  border: 1px solid rgba(96,165,250,0.3); white-space: nowrap;
+}
+
+/* palette du surligneur */
+.gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
+.gr2-sw {
+  width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+  border: 2px solid var(--border-subtle); padding: 0;
+}
+.gr2-sw.on { border-color: var(--text-primary); transform: scale(1.12); }
+.gr2-hl-yellow { background: #fde047; }
+.gr2-hl-green  { background: #86efac; }
+.gr2-hl-pink   { background: #f9a8d4; }
+.gr2-hl-blue   { background: #93c5fd; }
+
+/* curseur « surligneur actif » sur le texte de la synthèse */
+body.gr2-hl-active #synthese p,
+body.gr2-hl-active #synthese li,
+body.gr2-hl-active #synthese h3 { cursor: text; }
+
+/* ---------- Marques de surlignage ---------- */
+mark.gr2-hl { color: #1a1a1a; border-radius: 3px; padding: 0 2px; cursor: pointer; }
+mark.gr2-hl.gr2-hl-yellow { background: #fde047; }
+mark.gr2-hl.gr2-hl-green  { background: #86efac; }
+mark.gr2-hl.gr2-hl-pink   { background: #f9a8d4; }
+mark.gr2-hl.gr2-hl-blue   { background: #93c5fd; }
+
+/* ---------- Contrôle « compris / à revoir » par chapitre ---------- */
+.gr2-chap-ctrl { display: flex; gap: 10px; margin: 0.4rem 0 1.2rem; flex-wrap: wrap; }
+.gr2-cc {
+  padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  border: 1px solid var(--border-subtle); background: var(--bg-card);
+  color: var(--text-secondary); cursor: pointer; transition: all .15s ease;
+}
+.gr2-cc.ok:hover, .gr2-cc.ok.on { border-color: #22c55e; color: #22c55e; background: rgba(34,197,94,0.12); }
+.gr2-cc.rev:hover, .gr2-cc.rev.on { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.12); }
+
+.synth-section.gr2-done { position: relative; }
+.synth-section.gr2-done > h2::after {
+  content: " ✅"; font-size: 0.7em;
+}
+.synth-section.gr2-review > h2::after {
+  content: " 🔁"; font-size: 0.7em;
+}
+
+/* ---------- Panneau Sommaire (slide-in à droite) ---------- */
+.gr2-toc {
+  position: fixed; top: 0; right: 0; height: 100%; width: 320px; max-width: 86vw;
+  background: var(--bg-card); border-left: 1px solid var(--border-subtle);
+  box-shadow: -10px 0 40px rgba(0,0,0,0.35); z-index: 1300;
+  transform: translateX(105%); transition: transform .28s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; padding: 16px;
+}
+.gr2-toc.open { transform: translateX(0); }
+.gr2-toc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.gr2-toc-head strong { font-size: 18px; color: var(--text-primary); }
+.gr2-toc-close {
+  background: none; border: none; color: var(--text-secondary); font-size: 20px;
+  cursor: pointer; padding: 4px 8px; border-radius: 8px;
+}
+.gr2-toc-close:hover { background: var(--bg-main); color: var(--text-primary); }
+.gr2-toc-prog { margin-bottom: 14px; font-size: 12px; color: var(--text-secondary); }
+.gr2-toc-bar { height: 8px; background: var(--bg-main); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+.gr2-toc-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#22c55e,var(--color-cercle)); border-radius: 999px; transition: width .3s ease; }
+.gr2-toc-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.gr2-toc-item {
+  display: flex; align-items: center; gap: 8px; text-align: left;
+  padding: 10px 12px; border-radius: 10px; border: 1px solid transparent;
+  background: var(--bg-main); color: var(--text-primary); font-size: 14px;
+  font-weight: 600; cursor: pointer; transition: all .14s ease;
+}
+.gr2-toc-item:hover { border-color: var(--color-nav); }
+.gr2-toc-item .gr2-b { flex: 0 0 auto; }
+.gr2-toc-item > span:last-child { flex: 1 1 auto; }
+
+/* ---------- Mode lecture sans distraction ---------- */
+body.gr2-reading-focus header,
+body.gr2-reading-focus #app-header,
+body.gr2-reading-focus .nav,
+body.gr2-reading-focus .subject-bar,
+body.gr2-reading-focus #subj-fold,
+body.gr2-reading-focus #exam-chip,
+body.gr2-reading-focus #feuille-btn,
+body.gr2-reading-focus #feuille-panel,
+body.gr2-reading-focus #back-to-top,
+body.gr2-reading-focus #revision-reminder,
+body.gr2-reading-focus .gr2-study-bar { display: none !important; }
+body.gr2-reading-focus #synthese {
+  max-width: 760px; margin: 0 auto; padding-top: 24px;
+  font-size: 1.05em; line-height: 1.75;
+}
+body.gr2-reading-focus #synthese .grid2 { grid-template-columns: 1fr !important; }
+#gr2-focus-exit {
+  position: fixed; top: 14px; right: 14px; z-index: 1400;
+  padding: 9px 16px; border-radius: 999px; cursor: pointer;
+  background: var(--color-nav); color: #fff; border: none; font-weight: 700; font-size: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* ============================================================
+   MODE COURS ANIMÉ
+   ============================================================ */
+.gr2-course {
+  position: fixed; inset: 0; z-index: 3900; display: none;
+  flex-direction: column; background: var(--bg-main);
+}
+.gr2-course.open { display: flex; }
+body.gr2-course-on { overflow: hidden; }
+
+.gr2-course-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--border-subtle);
+}
+.gr2-course-chap { font-size: 15px; font-weight: 700; color: var(--color-nav); }
+.gr2-course-x {
+  background: none; border: none; color: var(--text-secondary); font-size: 24px;
+  cursor: pointer; line-height: 1; padding: 4px 10px; border-radius: 8px;
+}
+.gr2-course-x:hover { background: var(--bg-card); color: var(--text-primary); }
+
+.gr2-course-progress { height: 5px; background: var(--bg-card); }
+.gr2-course-progress > i {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--color-cercle), var(--color-nav));
+  transition: width .35s ease;
+}
+
+.gr2-course-body { flex: 1 1 auto; overflow-y: auto; display: flex; justify-content: center; padding: 30px 20px; }
+.gr2-course-stage { width: 100%; max-width: 820px; }
+.gr2c-scene-head h3 {
+  font-size: clamp(22px, 4vw, 34px); font-weight: 800; color: var(--text-primary);
+  margin: 0 0 24px; line-height: 1.25;
+}
+.gr2c-scene-content { font-size: clamp(16px, 2.4vw, 20px); line-height: 1.7; color: var(--text-primary); }
+.gr2c-scene-content > * { margin-bottom: 18px; }
+.gr2c-scene-content .formula-main {
+  font-size: 1.15em; padding: 18px; background: var(--bg-formula);
+  border-radius: 14px; text-align: center; border: 1px solid var(--border-subtle);
+}
+.gr2c-scene-content .simple-exp-box {
+  background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 14px; padding: 16px;
+}
+.gr2c-scene-content .simple-exp-content { display: block !important; margin-top: 8px; }
+.gr2c-scene-content .simple-exp-toggle { display: none; }
+.gr2c-scene-content .note { border-left: 3px solid var(--color-droite); padding-left: 14px; color: var(--text-secondary); }
+.gr2-step-in { animation: gr2StepIn .5s ease both; }
+@keyframes gr2StepIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+.gr2-course-foot {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 14px 20px; border-top: 1px solid var(--border-subtle); background: var(--bg-card);
+}
+.gr2-course-foot .gr2c-spacer { flex: 1 1 auto; }
+.gr2c-btn {
+  padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border-subtle);
+  background: var(--bg-main); color: var(--text-primary); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: border-color .15s ease, transform .1s ease;
+}
+.gr2c-btn:hover { border-color: var(--color-nav); transform: translateY(-1px); }
+.gr2c-play { border-color: var(--color-cercle); color: var(--color-cercle); }
+.gr2c-play.on { background: rgba(96,165,250,0.16); }
+.gr2c-ok { border-color: #22c55e; color: #22c55e; }
+.gr2c-count { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+
+@media (max-width: 600px) {
+  .gr2-study-bar { gap: 6px; padding: 8px; }
+  .gr2-tool { padding: 7px 10px; font-size: 13px; }
+  .gr2-course-foot { gap: 6px; padding: 10px; }
+  .gr2c-btn { padding: 9px 12px; font-size: 13px; }
+  .gr2c-ok { order: 5; }
+}

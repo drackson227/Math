@@ -1497,6 +1497,9 @@ function showSection(evtOrId, id) {
   if (window.innerWidth <= 768 && document.querySelector('.nav').classList.contains('open')) {
     toggleSidebar();
   }
+  // Aides à la lecture & à l'étude (study-tools.js) : sommaire, progression,
+  // marquage compris/à revoir, surligneur, mode lecture, mode cours animé.
+  if (typeof onShowStudySection === 'function') { try { onShowStudySection(sectionId); } catch (e) {} }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
