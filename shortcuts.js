@@ -15,6 +15,11 @@
       ['1 – 4', 'Choisir une réponse'],
       ['A – D', 'Choisir une réponse (lettres)']
     ]],
+    ['Entraîneur de verbes (anglais)', [
+      ['Entrée / ↓', 'Descendre au champ suivant'],
+      ['↑', 'Remonter au Prétérit'],
+      ['Entrée', 'Vérifier, puis verbe suivant']
+    ]],
     ['Flashcards', [
       ['Espace / Entrée', 'Retourner la carte'],
       ['→', 'Je savais (facile)'],

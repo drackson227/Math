@@ -83,6 +83,8 @@
     document.addEventListener('touchstart', onStart, { passive: true });
     document.addEventListener('touchend', onEnd, { passive: true });
     window.openNavDrawer = open; // utile pour test / bouton éventuel
+    window.closeNavDrawer = close;
+    window.toggleNavDrawer = function () { (drawer && drawer.classList.contains('open')) ? close() : open(); };
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

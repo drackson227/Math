@@ -3547,7 +3547,10 @@ function startMixedQuiz() {
 
 // ── SIDEBAR MOBILE ──
 function toggleSidebar() {
-  document.querySelector('.nav').classList.toggle('open');
+  // Le bouton ☰ ouvre le tiroir « Matières & onglets » (gestures.js), bien rangé.
+  // (L'ancienne sidebar .nav cassait la mise en page sur mobile : panneau quasi vide.)
+  if (typeof window.toggleNavDrawer === 'function') { window.toggleNavDrawer(); return; }
+  document.querySelector('.nav').classList.toggle('open'); // repli si le tiroir n'est pas chargé
   document.getElementById('sidebar-overlay').classList.toggle('show');
 }
 

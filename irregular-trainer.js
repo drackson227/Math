@@ -103,8 +103,15 @@
     else if (e.target.closest('#irr-next')) { e.preventDefault(); next(); }
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-    if (document.getElementById('irr-next')) { e.preventDefault(); next(); }
-    else if (document.getElementById('irr-check') && (e.target.id === 'irr-pr' || e.target.id === 'irr-pp')) { e.preventDefault(); check(); }
+    var pr = document.getElementById('irr-pr'), pp = document.getElementById('irr-pp');
+    // Correction affichée → Entrée = verbe suivant
+    if (e.key === 'Enter' && document.getElementById('irr-next')) { e.preventDefault(); next(); return; }
+    // Champ Prétérit : Entrée ou ↓ descend vers Participe
+    if (e.target === pr && (e.key === 'Enter' || e.key === 'ArrowDown')) { e.preventDefault(); if (pp) pp.focus(); return; }
+    // Champ Participe : ↑ remonte au Prétérit, Entrée valide
+    if (e.target === pp) {
+      if (e.key === 'ArrowUp') { e.preventDefault(); if (pr) pr.focus(); return; }
+      if (e.key === 'Enter') { e.preventDefault(); check(); return; }
+    }
   });
 })();
