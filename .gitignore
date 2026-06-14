@@ -1,2 +1,24 @@
+# ───── Système ─────
 .DS_Store
 Thumbs.db
+
+# ───── Mémos privés de Drackson — NE JAMAIS publier sur GitHub ─────
+_A_UPLOADER.md
+_AUDIT_MES_CREATIONS.md
+_SQL_notes.sql
+
+# ───── Sauvegardes & dossiers de travail (locaux — le site n'en a pas besoin) ─────
+_utf16_backup/
+_shots/
+img/
+lib/
+tasks/
+theme 1/
+theme 2 et 3/
+
+# ───── Scripts de test / d'analyse temporaires ─────
+_probe*.mjs
+_verify*.mjs
+
+# ───── Dépendances ─────
+node_modules/
