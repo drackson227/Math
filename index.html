@@ -2,6 +2,20 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <!-- 🔧 Capteur d'erreurs (tout en HAUT pour attraper les erreurs au plus tôt) → lu par le Diagnostic -->
+  <script>
+    window.__GR2_ERRORS = window.__GR2_ERRORS || [];
+    (function () {
+      function rec(kind, msg, src, line) {
+        try {
+          window.__GR2_ERRORS.push({ t: Date.now(), kind: kind, msg: String(msg || '').slice(0, 300), src: String(src || '').split('/').pop(), line: line || 0 });
+          if (window.__GR2_ERRORS.length > 60) window.__GR2_ERRORS.shift();
+        } catch (e) {}
+      }
+      window.addEventListener('error', function (e) { rec('error', e.message, e.filename, e.lineno); });
+      window.addEventListener('unhandledrejection', function (e) { rec('promesse', (e.reason && (e.reason.message || e.reason)) || 'rejet non géré', '', 0); });
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GR2 Study — application d'étude multi-matières (Maths, Chimie, Bio…) : cours, formules, méthodes, exercices guidés, flashcards à répétition espacée, quiz, défi du jour et multijoueur.">
   <meta name="theme-color" content="#0f1117">
@@ -928,6 +942,7 @@
   </p>
   <p style="margin:0; font-size:12px; color:var(--text-secondary); opacity:0.8;">💜 100% gratuit — bonne révision !</p>
   <p style="margin:0.75rem 0 0; font-size:11px; color:var(--text-secondary); opacity:0.6;">© 2026 Drackson — Tous droits réservés. Copie et reproduction interdites.</p>
+  <p style="margin:0.5rem 0 0; font-size:11px;"><a href="#" onclick="gr2Diag();return false;" style="color:var(--text-secondary); opacity:0.5; text-decoration:none;" title="Rapport technique à coller à Claude (ou Ctrl+Maj+D)">🔧 Diagnostic</a></p>
 </footer>
 
 <!-- Fenêtre d'info sur les images (cliquables) -->
@@ -1009,6 +1024,7 @@
   <script src="notes.js"></script>
   <script src="creations.js"></script>
   <script src="formulas-trainer.js"></script>
+  <script src="diagnostic.js"></script>
   <!-- Fiche de révision imprimable (cachée à l'écran, visible uniquement à l'impression) -->
   <div id="revision-sheet" aria-hidden="true"></div>
   <script src="search.js"></script>
