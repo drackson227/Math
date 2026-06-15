@@ -1329,9 +1329,16 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .chem-bal { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
 .cb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
 .cb-counter { font-size: 12px; font-weight: 700; color: var(--text-secondary); background: rgba(var(--color-nav-rgb), 0.16); padding: 2px 9px; border-radius: 999px; }
-.cb-eq { display: flex; align-items: center; overflow: hidden; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
-.cb-eqline { display: inline-flex; flex-wrap: nowrap; white-space: nowrap; align-items: center; gap: 8px 10px; transform-origin: left center; }
-.cb-term { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; }
+.cb-eq { display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.cb-eqline { display: inline-flex; flex-wrap: nowrap; white-space: nowrap; align-items: center; gap: 8px 10px; transform-origin: center; }
+.cb-rterm { display: inline-flex; align-items: baseline; gap: 4px; flex: 0 0 auto; }
+.cb-rc { font-weight: 800; font-size: 20px; color: var(--color-nav); }
+.cb-rc:empty { display: none; }
+.cb-ctrl-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin: 12px 0 6px; }
+/* Grille des sélecteurs (sous l'équation) : gros boutons − / + faciles à toucher (≥40px) */
+.cb-steppers { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.cb-sset { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.cb-sset .cb-f { font-size: 16px; }
 .cb-step { display: inline-flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; background: var(--bg-main); }
 .cb-dec, .cb-inc { min-width: 40px; min-height: 40px; border: none; background: transparent; color: var(--color-nav); font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
 .cb-dec:hover, .cb-inc:hover { background: rgba(var(--color-nav-rgb), 0.16); }
@@ -1355,13 +1362,13 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
-/* Téléphone : l'équation reste HORIZONTALE sur UNE seule ligne (molécules de gauche à
-   droite, jamais rien sous son sélecteur). Le JS la dézoome pour qu'elle rentre EN ENTIER
-   dans l'écran → tout visible, sans glisser. Marges/écarts réduits = moins de dézoom. */
+/* Téléphone : équation lisible en haut (dézoomée par le JS seulement si vraiment trop
+   large) + sélecteurs − / + en pile (1 par ligne, pleine taille = faciles à toucher). */
 @media (max-width: 600px) {
   .chem-bal { padding: 10px; }
   .cb-eq { padding: 8px; }
-  .cb-eqline { gap: 6px 7px; }
-  .cb-term { gap: 6px; }
+  .cb-steppers { grid-template-columns: 1fr; }
+  .cb-sset { padding: 6px 8px; }
+  .cb-coef { min-width: 20px; }
   .cb-btn { flex: 1 1 auto; }
 }

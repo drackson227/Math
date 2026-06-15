@@ -45,14 +45,19 @@
     return s;
   }
 
-  function termHTML(term, idx) {
-    return '<span class="cb-term">' +
-      '<span class="cb-step">' +
-        '<button type="button" class="cb-dec" data-i="' + idx + '" aria-label="Diminuer le coefficient">−</button>' +
-        '<span class="cb-coef" data-i="' + idx + '">1</span>' +
-        '<button type="button" class="cb-inc" data-i="' + idx + '" aria-label="Augmenter le coefficient">+</button>' +
-      '</span>' +
+  // Équation du HAUT (lisible) : coefficient (caché s'il vaut 1, comme en vraie chimie) + formule.
+  function readTermHTML(term, idx) {
+    return '<span class="cb-rterm"><span class="cb-rc" data-i="' + idx + '"></span>' +
       '<span class="cb-f">' + esc(term[0]) + '</span></span>';
+  }
+  // Contrôles du BAS : par molécule, formule + GROS sélecteur − / + (toujours pleine taille, ≥40px).
+  function stepTermHTML(term, idx) {
+    return '<div class="cb-sset"><span class="cb-f">' + esc(term[0]) + '</span>' +
+      '<span class="cb-step">' +
+        '<button type="button" class="cb-dec" data-i="' + idx + '" aria-label="Diminuer le coefficient de ' + esc(term[0]) + '">−</button>' +
+        '<span class="cb-coef" data-i="' + idx + '">1</span>' +
+        '<button type="button" class="cb-inc" data-i="' + idx + '" aria-label="Augmenter le coefficient de ' + esc(term[0]) + '">+</button>' +
+      '</span></div>';
   }
 
   function curIdx(host) { return parseInt(host.getAttribute('data-eq') || '0', 10) % EQS.length; }
@@ -87,8 +92,10 @@
     var n = eq.r.length + eq.p.length;
     host._coefs = []; for (var i = 0; i < n; i++) host._coefs.push(1);
 
-    var rHTML = eq.r.map(function (t, i) { return termHTML(t, i); }).join('<span class="cb-op">+</span>');
-    var pHTML = eq.p.map(function (t, j) { return termHTML(t, eq.r.length + j); }).join('<span class="cb-op">+</span>');
+    var rHTML = eq.r.map(function (t, i) { return readTermHTML(t, i); }).join('<span class="cb-op">+</span>');
+    var pHTML = eq.p.map(function (t, j) { return readTermHTML(t, eq.r.length + j); }).join('<span class="cb-op">+</span>');
+    var steps = eq.r.map(function (t, i) { return stepTermHTML(t, i); })
+      .concat(eq.p.map(function (t, j) { return stepTermHTML(t, eq.r.length + j); })).join('');
     var rows = elements(eq).map(function (e) {
       return '<tr data-el="' + e + '"><td class="cb-el">' + e + '</td><td class="cb-l">0</td><td class="cb-r">0</td><td class="cb-ok"></td></tr>';
     }).join('');
@@ -96,6 +103,8 @@
     host.innerHTML =
       '<div class="cb-head">⚖️ Pondère l\'équation <span class="cb-counter">' + (curIdx(host) + 1) + ' / ' + EQS.length + '</span></div>' +
       '<div class="cb-eq"><div class="cb-eqline">' + rHTML + '<span class="cb-op">→</span>' + pHTML + '</div></div>' +
+      '<div class="cb-ctrl-label">Règle les coefficients :</div>' +
+      '<div class="cb-steppers">' + steps + '</div>' +
       '<table class="cb-tally"><thead><tr><th>Atome</th><th>Réactifs</th><th>Produits</th><th aria-label="équilibré"></th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="cb-status" role="status">Ajuste les coefficients avec − / + : le compteur d\'atomes se met à jour en direct.</div>' +
       '<div class="cb-controls">' +
@@ -109,6 +118,7 @@
   function update(host) {
     var eq = EQS[curIdx(host)], coefs = host._coefs;
     each(host.querySelectorAll('.cb-coef'), function (c) { c.textContent = coefs[parseInt(c.getAttribute('data-i'), 10)]; });
+    each(host.querySelectorAll('.cb-rc'), function (c) { var v = coefs[parseInt(c.getAttribute('data-i'), 10)]; c.textContent = (v === 1 ? '' : v); });
     var allOk = true;
     each(host.querySelectorAll('.cb-tally tbody tr'), function (tr) {
       var e = tr.getAttribute('data-el');
