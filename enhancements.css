@@ -1329,15 +1329,20 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .chem-bal { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
 .cb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
 .cb-counter { font-size: 12px; font-weight: 700; color: var(--text-secondary); background: rgba(var(--color-nav-rgb), 0.16); padding: 2px 9px; border-radius: 999px; }
-.cb-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
-.cb-term { display: inline-flex; align-items: center; gap: 7px; }
+.cb-eq { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; overflow-x: auto; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.cb-term { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; }
 .cb-step { display: inline-flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; background: var(--bg-main); }
 .cb-dec, .cb-inc { min-width: 40px; min-height: 40px; border: none; background: transparent; color: var(--color-nav); font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
 .cb-dec:hover, .cb-inc:hover { background: rgba(var(--color-nav-rgb), 0.16); }
 .cb-coef { min-width: 24px; text-align: center; font-weight: 800; font-size: 17px; color: var(--color-nav); }
-.cb-f { font-weight: 700; font-size: 18px; color: var(--text-primary); }
-.cb-op { color: var(--text-secondary); font-weight: 800; font-size: 18px; }
-.cb-tally { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
+.cb-f { font-weight: 700; font-size: 18px; color: var(--text-primary); white-space: nowrap; }
+.cb-op { color: var(--text-secondary); font-weight: 800; font-size: 18px; flex: 0 0 auto; }
+.cb-hint { display: none; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+.chem-bal.cb-scrollable .cb-hint { display: block; }
+.cb-tally { width: 100%; border-collapse: collapse; margin: 14px 0 4px; table-layout: fixed; }
+.cb-tally th:nth-child(1), .cb-tally td:nth-child(1) { width: 24%; }
+.cb-tally th:nth-child(2), .cb-tally td:nth-child(2), .cb-tally th:nth-child(3), .cb-tally td:nth-child(3) { width: 30%; }
+.cb-tally th:nth-child(4), .cb-tally td:nth-child(4) { width: 16%; }
 .cb-tally th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-secondary); font-weight: 700; padding: 4px 8px; border-bottom: 1px solid var(--border-subtle); }
 .cb-tally td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle); color: var(--text-primary); font-weight: 700; font-size: 14px; }
 .cb-tally .cb-el { color: var(--color-nav); font-weight: 800; }
@@ -1351,24 +1356,9 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
-/* Téléphone : la molécule reste TOUJOURS à côté de son sélecteur (jamais en dessous) ;
-   on réduit juste les tailles pour que la ligne tienne, même à 320px. */
+/* Téléphone : MÊME affichage que sur PC (sélecteur + molécule pleine taille).
+   Si l'équation est trop large, elle DÉFILE horizontalement (.cb-eq overflow-x) — on ne rétrécit pas. */
 @media (max-width: 600px) {
   .chem-bal { padding: 12px; }
-  .cb-eq { gap: 6px 8px; padding: 9px; }
-  .cb-term { gap: 5px; }              /* sélecteur + formule sur la même ligne */
-  .cb-f { font-size: 15px; }
-  .cb-coef { font-size: 15px; min-width: 18px; }
-  .cb-dec, .cb-inc { min-width: 34px; min-height: 38px; font-size: 18px; }
-  .cb-op { font-size: 15px; }
-  .cb-tally { table-layout: fixed; }
-  .cb-tally th, .cb-tally td { padding: 5px 6px; font-size: 12px; }
-  .cb-tally .cb-el { font-size: 13px; }
-  .cb-btn { padding: 9px 12px; font-size: 13px; flex: 1 1 auto; }
-}
-@media (max-width: 360px) {
-  .cb-eq { padding: 8px; gap: 5px 6px; }
-  .cb-f { font-size: 14px; }
-  .cb-coef { font-size: 14px; min-width: 16px; }
-  .cb-dec, .cb-inc { min-width: 32px; font-size: 17px; }
+  .cb-btn { flex: 1 1 auto; }
 }

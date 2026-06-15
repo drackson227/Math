@@ -71,6 +71,7 @@
     host.innerHTML =
       '<div class="cb-head">⚖️ Pondère l\'équation <span class="cb-counter">' + (curIdx(host) + 1) + ' / ' + EQS.length + '</span></div>' +
       '<div class="cb-eq">' + rHTML + '<span class="cb-op">→</span>' + pHTML + '</div>' +
+      '<div class="cb-hint">↔ glisse pour voir toute l\'équation</div>' +
       '<table class="cb-tally"><thead><tr><th>Atome</th><th>Réactifs</th><th>Produits</th><th aria-label="équilibré"></th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="cb-status" role="status">Ajuste les coefficients avec − / + : le compteur d\'atomes se met à jour en direct.</div>' +
       '<div class="cb-controls">' +
@@ -79,6 +80,9 @@
         '<button type="button" class="cb-btn cb-next">Équation suivante ▶</button>' +
       '</div>';
     update(host);
+    // affiche l'indice de défilement uniquement si l'équation dépasse (ex. sur téléphone)
+    var eqEl = host.querySelector('.cb-eq');
+    if (eqEl) host.classList.toggle('cb-scrollable', eqEl.scrollWidth > eqEl.clientWidth + 2);
   }
 
   function update(host) {
