@@ -64,10 +64,15 @@
     <div class="synth-section">
       <h2>Les combustions</h2>
       <p>Une combustion = réaction d'un composé avec le dioxygène O₂ (+ dégagement d'énergie).</p>
-      <ul style="line-height:2;">
-        <li><strong>Combustion complète</strong> d'un hydrocarbure : C<sub>x</sub>H<sub>y</sub> + O₂ → <strong>CO₂</strong> + <strong>H₂O</strong> + énergie</li>
-        <li><strong>Combustion incomplète</strong> (manque d'O₂) : C<sub>x</sub>H<sub>y</sub> + O₂ → <strong>CO</strong> + H₂O + énergie &nbsp; <em>(CO = monoxyde de carbone, « le tueur silencieux » : inodore et mortel ⚠️)</em></li>
-      </ul>
+      <div class="bio-compare-wrap">
+        <table class="bio-compare">
+          <thead><tr><th>Combustion</th><th>Quand</th><th>Produits</th></tr></thead>
+          <tbody>
+            <tr><td>Complète</td><td>assez d'O₂</td><td><strong>CO₂</strong> + H₂O + énergie</td></tr>
+            <tr><td>Incomplète</td><td>manque d'O₂</td><td><strong>CO</strong> (monoxyde, inodore & mortel ⚠️) + H₂O</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>Astuce d'ordre de pondération : on équilibre dans l'ordre <strong>C, puis H, puis O</strong> (« CHO »).</p>
       <div class="key-rule"><div class="formula-main">C₄H₁₀ + 13/2 O₂ → 4 CO₂ + 5 H₂O</div></div>
       <div class="simple-exp-box">
@@ -78,11 +83,16 @@
 
     <div class="synth-section">
       <h2>Les autres types de réactions</h2>
-      <ul style="line-height:2.1;">
-        <li><strong>Acide + hydroxyde</strong> → <strong>sel + eau</strong> &nbsp;(ex. H₂SO₄ + 2 NaOH → Na₂SO₄ + 2 H₂O)</li>
-        <li><strong>Acide + oxyde</strong> → <strong>sel + eau</strong> &nbsp;(ex. 6 HNO₂ + Fe₂O₃ → 2 Fe(NO₂)₃ + 3 H₂O)</li>
-        <li><strong>Acide + métal</strong> → <strong>sel + hydrogène (H₂)</strong> &nbsp;(ex. 2 H₃PO₄ + 3 Mg → Mg₃(PO₄)₂ + 3 H₂)</li>
-      </ul>
+      <div class="bio-compare-wrap">
+        <table class="bio-compare">
+          <thead><tr><th>Réactifs</th><th>Produits</th><th>Exemple</th></tr></thead>
+          <tbody>
+            <tr><td>Acide + hydroxyde</td><td>sel + eau</td><td>H₂SO₄ + 2 NaOH → Na₂SO₄ + 2 H₂O</td></tr>
+            <tr><td>Acide + oxyde</td><td>sel + eau</td><td>6 HNO₂ + Fe₂O₃ → 2 Fe(NO₂)₃ + 3 H₂O</td></tr>
+            <tr><td>Acide + métal</td><td>sel + <strong>H₂</strong></td><td>2 H₃PO₄ + 3 Mg → Mg₃(PO₄)₂ + 3 H₂</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>Ordre de pondération conseillé : <strong>M, X, H, O</strong> (métal, puis le reste, puis H, puis O).</p>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
