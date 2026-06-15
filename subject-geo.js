@@ -94,11 +94,14 @@
     <div class="synth-section">
       <h2>3. Le relief : 3 grands ensembles</h2>
       <p>Le relief belge monte doucement du nord-ouest (mer) vers le sud-est (Ardenne).</p>
-      <ul style="line-height:1.9;">
-        <li><strong>La Basse Belgique</strong> (&lt; 100 m) : la côte, les <strong>polders</strong> et la plaine flamande.</li>
-        <li><strong>La Moyenne Belgique</strong> (100–200 m) : plateaux fertiles (limons), région agricole.</li>
-        <li><strong>La Haute Belgique</strong> (&gt; 200 m) : les plateaux de l'<strong>Ardenne</strong>. Point culminant : le <strong>Signal de Botrange</strong> (<strong>694 m</strong>, Hautes Fagnes).</li>
-      </ul>
+      <table class="compare-table">
+        <thead><tr><th>Ensemble</th><th>Altitude</th><th>Où / caractéristiques</th></tr></thead>
+        <tbody>
+          <tr><th>Basse Belgique</th><td>&lt; 100 m</td><td>la côte, les <strong>polders</strong>, la plaine flamande</td></tr>
+          <tr><th>Moyenne Belgique</th><td>100–200 m</td><td>plateaux fertiles (limons), région <strong>agricole</strong></td></tr>
+          <tr><th>Haute Belgique</th><td>&gt; 200 m</td><td>plateaux de l'<strong>Ardenne</strong> · point culminant : <strong>Signal de Botrange</strong> (694 m, Hautes Fagnes)</td></tr>
+        </tbody>
+      </table>
       <figure class="hfig hfig-float" style="max-width:200px"><img src="belgique_relief.jpg" alt="Relief de la Belgique" loading="lazy"><figcaption>Le relief monte vers le sud-est (Ardenne). Clique pour la fiche.</figcaption></figure>
     </div>
 

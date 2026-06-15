@@ -140,10 +140,19 @@
         <li><strong>Disposition des rimes</strong> : plates/suivies <em>AABB</em>, croisées <em>ABAB</em>, embrassées <em>ABBA</em>.</li>
         <li><strong>Calligramme</strong> (Apollinaire) : poème dont la disposition dessine une forme.</li>
       </ul>
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Figures de style à connaître</button>
-        <div class="simple-exp-content"><strong>Comparaison</strong> : rapproche 2 éléments avec un outil (<em>comme, tel, pareil à</em>). <strong>Métaphore</strong> : même idée mais <em>sans</em> outil (« cet homme est un lion »). <strong>Personnification</strong> : donner des traits humains à une chose. <strong>Hyperbole</strong> : exagération. <strong>Anaphore</strong> : répétition d'un mot en début de vers. <strong>Allitération</strong> (consonnes) / <strong>assonance</strong> (voyelles) : répétition de sons.</div>
-      </div>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">✨ Figures de style à connaître</h3>
+      <table class="compare-table">
+        <thead><tr><th>Figure</th><th>Définition (et exemple)</th></tr></thead>
+        <tbody>
+          <tr><th>Comparaison</th><td>rapproche 2 éléments avec un <strong>outil</strong> (comme, tel, pareil à)</td></tr>
+          <tr><th>Métaphore</th><td>même idée mais <strong>sans</strong> outil (« cet homme est un lion »)</td></tr>
+          <tr><th>Personnification</th><td>donner des <strong>traits humains</strong> à une chose</td></tr>
+          <tr><th>Hyperbole</th><td><strong>exagération</strong></td></tr>
+          <tr><th>Anaphore</th><td>répétition d'un mot en <strong>début de vers</strong></td></tr>
+          <tr><th>Allitération</th><td>répétition de <strong>consonnes</strong></td></tr>
+          <tr><th>Assonance</th><td>répétition de <strong>voyelles</strong></td></tr>
+        </tbody>
+      </table>
       <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">🎤 Le slam (poésie contemporaine)</h3>
       <p>Le <strong>slam</strong> est une <strong>poésie orale</strong>, <strong>déclamée</strong> en public, à l'origine <strong>sans musique</strong> ni décor. Il joue sur le <strong>rythme</strong>, les <strong>jeux de mots</strong>, les <strong>rimes</strong> et les <strong>figures de style</strong>, dans une langue souvent <strong>quotidienne</strong>.</p>
       <ul style="line-height:1.9;">
