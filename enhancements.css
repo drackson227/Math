@@ -1271,3 +1271,22 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .bmm-score { margin-top: .8rem; font-size: 14px; color: var(--text-secondary); }
 .bmm-done { font-size: 19px; font-weight: 700; line-height: 1.6; color: var(--text-primary); margin-bottom: 1rem; }
 .bmm-restart { background: color-mix(in srgb, var(--color-nav) 55%, #000); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-weight: 700; cursor: pointer; min-height: 40px; }
+
+/* ===== Moteur de mini-jeux réutilisable (mini-game.js) — 2 à 4 choix ===== */
+.mg-mount { margin-top: 1rem; }
+.mg-prog { font-size: 13px; color: var(--text-secondary); margin-bottom: .4rem; }
+.mg-q { font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1.4; margin-bottom: 1rem; }
+.mg-choices { display: flex; gap: 10px; flex-wrap: wrap; }
+.mg-choice { flex: 1 1 0; min-width: 130px; min-height: 48px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-card); color: var(--text-primary); font-size: 16px; font-weight: 700; cursor: pointer; padding: 10px; }
+.mg-choice:hover:not(:disabled) { border-color: var(--color-nav); }
+.mg-choice:disabled { cursor: default; opacity: .92; }
+.mg-choice.right { border-color: #34d399; background: rgba(52,211,153,0.18); }
+.mg-choice.wrong { border-color: #fca5a5; background: rgba(248,113,113,0.16); }
+.mg-fb { margin-top: .9rem; font-size: 15px; line-height: 1.5; }
+.mg-fb.ok { color: #34d399; }
+.mg-fb.no { color: #fca5a5; }
+.mg-why { display: block; margin-top: .35rem; color: var(--text-secondary); font-size: 13.5px; }
+.mg-next { margin-left: 8px; background: var(--bg-card); border: 1px solid var(--color-nav); color: var(--color-nav); border-radius: 8px; padding: 7px 14px; font-weight: 700; cursor: pointer; min-height: 38px; }
+.mg-score { margin-top: .8rem; font-size: 14px; color: var(--text-secondary); }
+.mg-done { font-size: 19px; font-weight: 700; line-height: 1.6; color: var(--text-primary); margin-bottom: 1rem; }
+.mg-restart { background: color-mix(in srgb, var(--color-nav) 55%, #000); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-weight: 700; cursor: pointer; min-height: 40px; }

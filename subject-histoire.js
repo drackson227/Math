@@ -424,6 +424,13 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Réponds de tête, puis vérifie. Le <strong>Quiz</strong> et les <strong>Flashcards</strong> testent tout automatiquement.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Catholique ou Protestant ?</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne un trait ; tu choisis le bon camp. Correction immédiate + score &amp; série. (Clavier : 1-2, puis Entrée.)</p>
+      <button type="button" class="nav-btn" data-mg="hist-mm">▶ Commencer le jeu</button>
+      <div id="hist-mm" class="mg-mount"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">📋 À connaître par cœur</h3>
       <ul style="line-height:2;">
         <li>Les <strong>5 grandes périodes</strong> et leurs bornes (476, 1492, 1789).</li>
