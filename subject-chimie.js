@@ -248,6 +248,12 @@
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">⚖️ Pondère toi-même (interactif)</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .9rem;">La compétence clé du chapitre. Choisis les coefficients avec <strong>− / +</strong> : le <strong>compteur d'atomes</strong> se met à jour en direct et te dit quand c'est équilibré. 7 équations du cours.</p>
+      <div class="chem-bal"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Quels produits se forment ?</h3>
       <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne une réaction ; tu choisis les produits (sel + eau · sel + H₂ · CO₂ + H₂O · CO + H₂O). Correction immédiate + score. (Clavier : 1-4, puis Entrée.)</p>
       <button type="button" class="nav-btn" data-mg="chi-mm">▶ Commencer le jeu</button>

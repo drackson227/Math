@@ -1324,3 +1324,30 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 /* encadré d'explication « en clair » (générique, toutes matières) */
 .bio-explain, .gr2-explain { background: rgba(var(--color-nav-rgb), 0.08); border-left: 4px solid var(--color-nav); border-radius: 10px; padding: .85rem 1rem; margin: .9rem 0; font-size: 14px; line-height: 1.6; color: var(--text-primary); }
 .bio-explain .exam-tip, .gr2-explain .exam-tip { display: block; margin-top: .5rem; color: var(--text-secondary); font-weight: 700; }
+
+/* === Pondérateur d'équations interactif (chimie) === */
+.chem-bal { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
+.cb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
+.cb-counter { font-size: 12px; font-weight: 700; color: var(--text-secondary); background: rgba(var(--color-nav-rgb), 0.16); padding: 2px 9px; border-radius: 999px; }
+.cb-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.cb-term { display: inline-flex; align-items: center; gap: 7px; }
+.cb-step { display: inline-flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; background: var(--bg-main); }
+.cb-dec, .cb-inc { min-width: 40px; min-height: 40px; border: none; background: transparent; color: var(--color-nav); font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
+.cb-dec:hover, .cb-inc:hover { background: rgba(var(--color-nav-rgb), 0.16); }
+.cb-coef { min-width: 24px; text-align: center; font-weight: 800; font-size: 17px; color: var(--color-nav); }
+.cb-f { font-weight: 700; font-size: 18px; color: var(--text-primary); }
+.cb-op { color: var(--text-secondary); font-weight: 800; font-size: 18px; }
+.cb-tally { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
+.cb-tally th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-secondary); font-weight: 700; padding: 4px 8px; border-bottom: 1px solid var(--border-subtle); }
+.cb-tally td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle); color: var(--text-primary); font-weight: 700; font-size: 14px; }
+.cb-tally .cb-el { color: var(--color-nav); font-weight: 800; }
+.cb-tally tr.ok { background: rgba(34, 197, 94, 0.10); }
+.cb-ok { display: inline-block; min-width: 20px; text-align: center; border-radius: 6px; font-size: 13px; font-weight: 800; padding: 1px 7px; color: #fff; }
+.cb-tally tr.ok .cb-ok { background: #15803d; }
+.cb-tally tr.bad .cb-ok { background: #b91c1c; }
+.cb-status { margin: 10px 0; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: var(--bg-main); border: 1px solid var(--border-subtle); }
+.chem-bal.cb-solved .cb-status { background: #15803d; color: #fff; border-color: #15803d; }
+.cb-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
+.cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
+.cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
