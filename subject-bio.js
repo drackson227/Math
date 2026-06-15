@@ -228,6 +228,20 @@
       <p style="color:var(--text-secondary); margin-top:6px;">La structure du vivant, les biomolécules, la division cellulaire & la génétique</p>
     </div>
 
+    <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; padding:1rem 1.1rem; margin-bottom:1.6rem;">
+      <div style="font-weight:800; color:var(--color-nav); font-size:16px; margin-bottom:.7rem;">🧭 Le fil rouge — d'une cellule à un nouvel individu</div>
+      <div style="display:flex; flex-direction:column; gap:.55rem; font-size:14px; color:var(--text-primary); line-height:1.5;">
+        <div><strong>1.</strong> 🧬 L'<strong>ADN est copié</strong> (phase S) — appariement <strong>A–T</strong> et <strong>C–G</strong>.</div>
+        <div><strong>2.</strong> ➗ La cellule se <strong>divise</strong>, de deux façons :</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.5rem;">
+          <div style="background:rgba(96,165,250,0.12); border-radius:8px; padding:.55rem .65rem;"><strong style="color:#60a5fa;">🔵 MITOSE</strong><br>2 cellules <strong>identiques</strong> (2n → 2n)<br><span style="color:var(--text-secondary);">le corps : croissance & réparation</span></div>
+          <div style="background:rgba(196,181,253,0.12); border-radius:8px; padding:.55rem .65rem;"><strong style="color:#c4b5fd;">🟣 MÉIOSE</strong><br>4 <strong>gamètes</strong> (2n → n)<br><span style="color:var(--text-secondary);">la reproduction : ovules, spermatozoïdes</span></div>
+        </div>
+        <div><strong>3.</strong> 💞 <strong>Fécondation</strong> : n + n → <strong>2n</strong> (la cellule-œuf).</div>
+        <div><strong>4.</strong> 🧪 <strong>Génétique</strong> (Mendel) : gènes & allèles, <strong>dominant / récessif</strong>, Aa × Aa → <strong>3 : 1</strong>.</div>
+      </div>
+    </div>
+
     <div class="synth-section">
       <h2>1. La structure du vivant</h2>
       <p>Le vivant est organisé en <strong>niveaux emboîtés</strong>, du plus petit au plus grand. Chaque niveau est constitué de plusieurs éléments du niveau précédent :</p>
