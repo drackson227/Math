@@ -1329,7 +1329,7 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .chem-bal { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
 .cb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
 .cb-counter { font-size: 12px; font-weight: 700; color: var(--text-secondary); background: rgba(var(--color-nav-rgb), 0.16); padding: 2px 9px; border-radius: 999px; }
-.cb-eq { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; overflow-x: auto; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.cb-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
 .cb-term { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; }
 .cb-step { display: inline-flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; background: var(--bg-main); }
 .cb-dec, .cb-inc { min-width: 40px; min-height: 40px; border: none; background: transparent; color: var(--color-nav); font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
@@ -1356,13 +1356,12 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
-/* Téléphone : équation EMPILÉE verticalement → on voit TOUT d'un coup, sans glisser ni rapetisser.
-   Chaque molécule reste à côté de son sélecteur ; les opérateurs (+ et →) deviennent des séparateurs centrés. */
+/* Téléphone : équation HORIZONTALE (molécules de gauche à droite), pleine taille.
+   Elle revient à la ligne si besoin — tout reste visible, sans glisser ni rapetisser.
+   On gagne de la place en réduisant les MARGES (pas le contenu). */
 @media (max-width: 600px) {
-  .chem-bal { padding: 12px; }
-  .cb-eq { flex-direction: column; align-items: stretch; overflow-x: visible; gap: 10px; }
-  .cb-term { width: 100%; justify-content: flex-start; }
-  .cb-op { width: 100%; text-align: center; line-height: 1; }
+  .chem-bal { padding: 10px; }
+  .cb-eq { padding: 8px; gap: 8px 6px; justify-content: center; }
   .cb-hint { display: none !important; }
   .cb-btn { flex: 1 1 auto; }
 }
