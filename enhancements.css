@@ -516,6 +516,51 @@ body, .container, .nav, .settings-panel {
   #revision-sheet .cs-sheet svg, #revision-sheet .cs-sheet figure, #revision-sheet .cs-sheet img { display: none !important; }
 }
 
+/* L'anti-sèche AFFICHÉE à l'écran (overlay). Sans ça, l'impression/PDF est BLANCHE sur
+   téléphone : un élément display:none à l'écran n'est pas capturé par l'impression mobile.
+   À l'écran = panneau blanc lisible + barre 🖨️/✕ ; à l'impression, c'est le bloc @media print
+   ci-dessus (dense, 1 page) qui s'applique, et la barre est masquée. */
+@media screen {
+  #revision-sheet.cs-open {
+    display: block !important; position: fixed; inset: 0; z-index: 100000;
+    background: #fff; color: #111; overflow: auto; -webkit-overflow-scrolling: touch;
+  }
+  .cs-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center;
+    justify-content: space-between; gap: 10px; padding: 10px 14px; background: #111; color: #fff; }
+  .cs-bar-title { font-weight: 800; font-size: 14px; }
+  .cs-bar-actions { display: flex; gap: 8px; flex: 0 0 auto; }
+  .cs-bar-btn { min-height: 40px; padding: 8px 14px; border-radius: 10px; border: none;
+    font-size: 14px; font-weight: 700; cursor: pointer; }
+  .cs-bar-btn.cs-print { background: #7c3aed; color: #fff; }
+  .cs-bar-btn.cs-close { background: #fff; color: #111; }
+  #revision-sheet.cs-open .cs-sheet { max-width: 900px; margin: 0 auto; padding: 16px 18px; color: #111; }
+  #revision-sheet.cs-open .cs-head { display: flex; align-items: baseline; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap; border-bottom: 2px solid #111; padding-bottom: 6px; margin-bottom: 12px; }
+  #revision-sheet.cs-open .cs-head h1 { font-size: 20px; font-weight: 800; margin: 0; color: #111; }
+  #revision-sheet.cs-open .cs-date { font-size: 12px; color: #555; }
+  #revision-sheet.cs-open .cs-h { font-size: 15px; font-weight: 800; margin: 14px 0 8px;
+    padding: 4px 8px; background: #eee; border-left: 4px solid #111; color: #111; }
+  #revision-sheet.cs-open .cs-formules, #revision-sheet.cs-open .cs-defs { column-count: 1; }
+  #revision-sheet.cs-open .cs-defs { list-style: none; margin: 0; padding: 0; }
+  #revision-sheet.cs-open .cs-defs li { margin: 0 0 6px; font-size: 13px; padding-left: 12px; text-indent: -12px; color: #222; }
+  #revision-sheet.cs-open .cs-defs b { font-weight: 800; color: #111; }
+  #revision-sheet.cs-open .cs-sheet .formula-grid { display: block; }
+  #revision-sheet.cs-open .cs-sheet .formula-box, #revision-sheet.cs-open .cs-sheet .key-rule {
+    break-inside: avoid; border: 1px solid #ccc; border-radius: 8px; padding: 8px 10px; margin: 0 0 8px; background: #fff; box-shadow: none; }
+  #revision-sheet.cs-open .cs-sheet .formula-box h3 { font-size: 14px; font-weight: 800; margin: 0 0 4px; color: #111; }
+  #revision-sheet.cs-open .cs-sheet .formula-main { font-size: 15px; font-weight: 700; text-align: center; margin: 4px 0;
+    color: #111; background: #f6f6f6; border: 1px solid #ddd; box-shadow: none; }
+  #revision-sheet.cs-open .cs-sheet .formula-box p, #revision-sheet.cs-open .cs-sheet .formula-box .note { margin: 0; font-size: 13px; color: #333; }
+  #revision-sheet.cs-open .cs-sheet .simple-exp-box,
+  #revision-sheet.cs-open .cs-sheet svg, #revision-sheet.cs-open .cs-sheet figure,
+  #revision-sheet.cs-open .cs-sheet img { display: none; }
+  #revision-sheet.cs-open mjx-container, #revision-sheet.cs-open mjx-container svg * { color: #111 !important; fill: #111 !important; }
+}
+@media screen and (min-width: 720px) {
+  #revision-sheet.cs-open .cs-formules, #revision-sheet.cs-open .cs-defs { column-count: 2; column-gap: 16px; }
+}
+@media print { .cs-bar { display: none !important; } }
+
 /* ═══════════ 105 — VITESSE & CONFORT ═══════════ */
 
 /* Défilement plus doux + pas de zoom auto du texte sur téléphone (iOS/Android). */

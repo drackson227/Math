@@ -5232,6 +5232,13 @@ function openCheatSheet(mode) {
   // .cs-sheet déclenche la mise en page DENSE (CSS @media print). #revision-sheet
   // est déjà isolé à l'impression (il masque tout le reste de la page).
   host.innerHTML =
+    '<div class="cs-bar">' +
+      '<span class="cs-bar-title">📄 Anti-sèche — ' + label + '</span>' +
+      '<span class="cs-bar-actions">' +
+        '<button type="button" class="cs-bar-btn cs-print" onclick="window.print()">🖨️ Imprimer / PDF</button>' +
+        '<button type="button" class="cs-bar-btn cs-close" onclick="closeCheatSheet()">✕ Fermer</button>' +
+      '</span>' +
+    '</div>' +
     '<div class="cs-sheet">' +
       '<div class="cs-head"><h1>' + icon + ' Anti-sèche — ' + label + '</h1>' +
       '<span class="cs-date">Révisions · ' + today + '</span></div>' +
@@ -5239,11 +5246,40 @@ function openCheatSheet(mode) {
       (defs ? '<h2 class="cs-h">Définitions clés</h2>' + defs : '') +
     '</div>';
 
-  if (typeof showToast === 'function') showToast('📄 Anti-sèche prête à imprimer', 'var(--color-parabole)');
-  var doPrint = function () { setTimeout(function () { try { window.print(); } catch (e) {} }, 60); };
+  // On AFFICHE la fiche à l'écran (overlay). Indispensable pour le mobile : un élément
+  // display:none à l'écran ne s'imprime pas (page blanche) ; visible, il s'imprime partout.
+  host.classList.add('cs-open');
+  host.scrollTop = 0;
+  if (!window.__csEsc) { // Échap pour fermer (une seule fois)
+    window.__csEsc = true;
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { var r = document.getElementById('revision-sheet'); if (r && r.classList.contains('cs-open')) closeCheatSheet(); }
+    });
+  }
+
+  var isTouch = !!(window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+  var doPrint = function () { setTimeout(function () { try { window.print(); } catch (e) {} }, 120); };
+  var afterTypeset = function () {
+    // Ordinateur : on ouvre direct l'impression. Téléphone : on laisse l'aperçu affiché
+    // (l'utilisateur touche 🖨️ = geste direct → impression/PDF fiable, et il la VOIT).
+    if (isTouch) {
+      if (typeof showToast === 'function') showToast('📄 Anti-sèche affichée — touche 🖨️ pour imprimer / PDF', 'var(--color-parabole)');
+    } else {
+      if (typeof showToast === 'function') showToast('📄 Anti-sèche prête à imprimer', 'var(--color-parabole)');
+      doPrint();
+    }
+  };
   if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([host]).then(doPrint).catch(doPrint);
-  } else { doPrint(); }
+    MathJax.typesetPromise([host]).then(afterTypeset).catch(afterTypeset);
+  } else { afterTypeset(); }
+}
+
+// Ferme l'aperçu d'anti-sèche (overlay) et vide le contenu.
+function closeCheatSheet() {
+  var host = document.getElementById('revision-sheet');
+  if (!host) return;
+  host.classList.remove('cs-open');
+  host.innerHTML = '';
 }
 
 /* ════════════ Confort de lecture (dyslexie) ════════════ */
