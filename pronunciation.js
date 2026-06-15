@@ -71,13 +71,19 @@
   }
   function hasFile(text, lang) { return !!fileFor(text, lang); }
   window.gr2HasFile = hasFile; // utilitaire
-  function playFile(path, onfail) {
+  // opts : { rate (playbackRate), onend (fin de lecture), onfail (erreur fichier) }
+  function playFile(path, opts) {
+    opts = opts || {};
     try {
       try { synth.cancel(); } catch (e) {}            // coupe une éventuelle voix navigateur
-      if (curAudio) { try { curAudio.pause(); } catch (e) {} }
+      if (curAudio) { try { curAudio.pause(); } catch (e) {} curAudio = null; }
       var a = new Audio(path);
       curAudio = a;
-      a.addEventListener('error', function () { if (onfail) onfail(); }, { once: true });
+      if (typeof opts.rate === 'number') { try { a.playbackRate = opts.rate; } catch (e) {} }
+      var done = false;
+      function fin(cb) { if (done) return; done = true; if (cb) try { cb(); } catch (e) {} }
+      a.addEventListener('ended', function () { fin(opts.onend); }, { once: true });
+      a.addEventListener('error', function () { fin(opts.onfail); }, { once: true });
       var p = a.play();
       if (p && p.catch) p.catch(function () { /* clic = autorisé ; on ignore */ });
       return true;
@@ -102,40 +108,62 @@
     } catch (e) {}
   }
 
-  function emit(text, lang, v) {
+  // rate facultatif (mode cours) ; sinon 0.92 (clic vocab). onend appelé en fin de lecture.
+  function emit(text, lang, v, rate, onend) {
     try {
       synth.cancel(); // coupe ce qui parle déjà
-      if (!v) { noVoiceToast(String(lang || '').slice(0, 2).toLowerCase()); return; }
+      if (!v) { noVoiceToast(String(lang || '').slice(0, 2).toLowerCase()); if (onend) onend(); return; }
       var u = new SpeechSynthesisUtterance(String(text).trim());
       u.voice = v;
       u.lang = v.lang || lang;
-      u.rate = 0.92;
+      u.rate = (typeof rate === 'number') ? rate : 0.92;
+      if (onend) { u.onend = function () { onend(); }; u.onerror = function () { onend(); }; }
       synth.speak(u);
-    } catch (e) {}
+    } catch (e) { if (onend) onend(); }
   }
 
-  function speak(text, lang) {
-    if (!text) return;
-    lang = lang || subjLang();
-    // 1) fichier audio de qualité (voix neuronale) si disponible → marche sur tous les appareils
-    var path = fileFor(text, lang);
-    if (path) {
-      // en cas d'échec du fichier (404, hors-ligne sans cache…) → repli voix de l'appareil
-      if (playFile(path, function () { emit(text, lang, pickVoice(lang)); })) return;
-    }
-    // 2) repli : voix de l'appareil (Web Speech), avec la bonne voix de langue
+  // voix de l'appareil, en attendant le chargement des voix si besoin (une seule fois)
+  function voiceSpeak(text, lang, rate, onend) {
     var v = pickVoice(lang);
     if (!v && !VOICES.length) {
-      // les voix ne sont pas encore prêtes : on attend leur chargement puis on réessaie UNE fois
       var done = false;
-      var go = function () { if (done) return; done = true; loadVoices(); emit(text, lang, pickVoice(lang)); };
+      var go = function () { if (done) return; done = true; loadVoices(); emit(text, lang, pickVoice(lang), rate, onend); };
       try { synth.addEventListener('voiceschanged', go, { once: true }); } catch (e) {}
       setTimeout(go, 350);
       return;
     }
-    emit(text, lang, v);
+    emit(text, lang, v, rate, onend);
   }
-  window.gr2Speak = speak; // utilisable ailleurs (entraîneur, etc.)
+
+  /* speak(text, lang, opts) — opts : { rate, onend }.
+     1) fichier audio neuronal si présent (même belle voix partout) ;
+     2) repli voix de l'appareil. onend est TOUJOURS appelé une fois en fin (le mode
+        cours en a besoin pour enchaîner ses étapes, même sans voix disponible). */
+  function speak(text, lang, opts) {
+    opts = opts || {};
+    var onend = opts.onend, called = false;
+    function finish() { if (called) return; called = true; if (onend) try { onend(); } catch (e) {} }
+    if (!text) { finish(); return; }
+    lang = lang || subjLang();
+    var rate = (typeof opts.rate === 'number') ? opts.rate : undefined;
+    // 1) fichier audio de qualité (voix neuronale)
+    var path = fileFor(text, lang);
+    if (path) {
+      if (playFile(path, {
+        rate: rate, onend: finish,
+        onfail: function () { voiceSpeak(text, lang, rate, finish); } // échec fichier → repli voix
+      })) return;
+    }
+    // 2) repli : voix de l'appareil (Web Speech), avec la bonne voix de langue
+    voiceSpeak(text, lang, rate, finish);
+  }
+  window.gr2Speak = speak; // utilisable ailleurs (entraîneur, mode cours…)
+
+  function stopSpeak() {
+    try { synth.cancel(); } catch (e) {}
+    if (curAudio) { try { curAudio.pause(); } catch (e) {} }
+  }
+  window.gr2StopSpeak = stopSpeak; // coupe voix ET fichier audio en cours
 
   // Délégation : un seul écouteur pour toute la page
   var SAY_SEL = '[data-say], .eng-irr td, .eng-voc td:first-child';

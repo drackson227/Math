@@ -434,21 +434,13 @@
 
   var overlay = null, stage = null;
   var scenes = [], si = 0, steps = [], ki = -1;
-  var playing = false, narration = true, rate = 1, frVoice = null;
+  var playing = false, narration = true, rate = 1;
   var autoTimer = null;
   var PREFS_KEY = 'gr2_course_prefs';
   function loadPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch (e) { return {}; } }
   function savePrefs() { try { localStorage.setItem(PREFS_KEY, JSON.stringify({ voice: narration, rate: rate })); } catch (e) {} }
   (function () { var p = loadPrefs(); if (typeof p.voice === 'boolean') narration = p.voice; if (p.rate) rate = p.rate; })();
-  function pickFrVoice() {
-    try {
-      var vs = (window.speechSynthesis && window.speechSynthesis.getVoices()) || [];
-      return vs.find(function (v) { return /fr-FR/i.test(v.lang) && /google|natural|am[ée]lie|thomas|virginie|denise|paul/i.test(v.name); })
-        || vs.find(function (v) { return /fr-FR/i.test(v.lang); })
-        || vs.find(function (v) { return /^fr/i.test(v.lang); }) || null;
-    } catch (e) { return null; }
-  }
-  try { if (window.speechSynthesis) window.speechSynthesis.addEventListener('voiceschanged', function () { frVoice = pickFrVoice(); }); } catch (e) {}
+  // La sélection de voix + le repli fichier neuronal sont gérés par pronunciation.js (gr2Speak).
   var reduceMotion = false;
   try { reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
@@ -645,7 +637,10 @@
     if (!narration) stopSpeak();
     savePrefs();
   }
-  function stopSpeak() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {} }
+  function stopSpeak() {
+    if (window.gr2StopSpeak) { window.gr2StopSpeak(); return; } // coupe voix ET fichier MP3
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+  }
   function speak(node, onEnd) {
     stopSpeak();
     var clone = node.cloneNode(true);
@@ -657,17 +652,17 @@
       var words = txt ? txt.split(/\s+/).length : 0;
       return Math.min(9000, Math.max(1600, words * 320)) / rate;
     }
-    if (!narration || !window.speechSynthesis) {
+    // audio dispo = fichier neuronal pré-généré OU voix FR de l'appareil
+    var hasAudio = (window.gr2HasFile && window.gr2HasFile(txt, 'fr-FR')) ||
+                   (window.gr2HasVoice && window.gr2HasVoice('fr-FR'));
+    if (!narration || !window.gr2Speak || !hasAudio) {
+      // narration coupée OU aucun son possible → révélation minutée (lecture silencieuse)
       if (onEnd && playing) { autoTimer = setTimeout(onEnd, txt ? readDelay() : 600); }
       return;
     }
     if (!txt) { if (onEnd && playing) autoTimer = setTimeout(onEnd, 500); return; }
-    var u = new SpeechSynthesisUtterance(txt);
-    u.lang = 'fr-FR'; u.rate = rate; u.pitch = 1.0;
-    if (!frVoice) frVoice = pickFrVoice();
-    if (frVoice) { try { u.voice = frVoice; } catch (e) {} }
-    u.onend = function () { if (onEnd) onEnd(); };
-    try { window.speechSynthesis.speak(u); } catch (e) { if (onEnd && playing) onEnd(); }
+    // fichier neuronal (voix Denise) d'abord, repli voix de l'appareil — onEnd enchaîne l'auto-play
+    window.gr2Speak(txt, 'fr-FR', { rate: rate, onend: function () { if (onEnd) onEnd(); } });
   }
 
   function escape2(s) { return (s || '').replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }

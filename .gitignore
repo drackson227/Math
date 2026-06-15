@@ -24,6 +24,9 @@ _verify*.mjs
 _audio_*.mjs
 _audio_*.py
 _audio_items.json
+_course_*.mjs
+_course_*.py
+_course_items.json
 _voicetest.mp3
 
 # ───── Dépendances ─────
