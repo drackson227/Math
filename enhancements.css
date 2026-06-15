@@ -1218,8 +1218,8 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .eng-irr th { background: rgba(255,255,255,0.05); text-align: left; padding: 7px 11px; font-size: 12.5px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .03em; }
 .eng-irr td:first-child { font-weight: 700; }
 /* Mots cliquables → prononciation audio (🔊) */
-.eng-irr td, .eng-voc td:first-child { cursor: pointer; }
-.eng-irr td:hover, .eng-voc td:first-child:hover { color: var(--color-nav); }
+.eng-irr td, .eng-voc td:first-child, [data-say] { cursor: pointer; }
+.eng-irr td:hover, .eng-voc td:first-child:hover, [data-say]:hover { color: var(--color-nav); }
 .eng-voc td:first-child::after, .eng-irr td:first-child::after { content: " 🔊"; opacity: .35; font-size: .85em; }
 .eng-voc td:first-child:hover::after, .eng-irr td:first-child:hover::after { opacity: .85; }
 .say-flash { background: rgba(167,139,250,0.28) !important; border-radius: 4px; }

@@ -45,6 +45,8 @@
       <p style="color:var(--text-secondary); margin-top:6px;">Grammaire · De woning · Aan tafel! — examen juin 2026</p>
     </div>
 
+    <div style="background:rgba(var(--color-nav-rgb),0.10); border:1px solid var(--border-subtle); border-radius:10px; padding:.7rem .9rem; margin-bottom:1.4rem; font-size:14px; color:var(--text-primary);">🔊 <strong>Astuce audio</strong> : clique un mot ou une phrase en néerlandais (🔊) dans les tableaux pour l'<strong>entendre prononcé</strong>.</div>
+
     <div class="synth-section">
       <h2>1. Le passé composé — VTT (Voltooid Tegenwoordige Tijd)</h2>
       <p>On l'utilise pour parler du <strong>passé</strong> (les vacances, le week-end…). Structure :</p>
@@ -65,28 +67,42 @@
     <div class="synth-section">
       <h2>2. Les verbes de position — liggen · zitten · staan · hangen</h2>
       <p>Le néerlandais précise <strong>comment</strong> une chose se trouve quelque part (couchée, debout, accrochée…). Ils traduisent aussi « <strong>il y a</strong> ».</p>
-      <ul style="line-height:1.9;">
-        <li><strong>liggen</strong> = être couché / à plat → <em>De bril <strong>ligt</strong> naast het kopje.</em></li>
-        <li><strong>zitten</strong> = être assis → <em>De man <strong>zit</strong> op de bank.</em></li>
-        <li><strong>staan</strong> = être debout / posé → <em>Het kopje <strong>staat</strong> op de tafel.</em></li>
-        <li><strong>hangen</strong> = être accroché / pendu → <em>De foto's <strong>hangen</strong> aan de muur.</em></li>
-      </ul>
+      <table class="eng-voc">
+        <tr><td data-say="liggen">liggen</td><td>être couché / à plat · <span data-say="De bril ligt naast het kopje">De bril ligt naast het kopje 🔊</span></td></tr>
+        <tr><td data-say="zitten">zitten</td><td>être assis · <span data-say="De man zit op de bank">De man zit op de bank 🔊</span></td></tr>
+        <tr><td data-say="staan">staan</td><td>être debout / posé · <span data-say="Het kopje staat op de tafel">Het kopje staat op de tafel 🔊</span></td></tr>
+        <tr><td data-say="hangen">hangen</td><td>être accroché · <span data-say="De foto's hangen aan de muur">De foto's hangen aan de muur 🔊</span></td></tr>
+      </table>
       <div class="key-rule"><div class="formula-main">« Il y a » → Er <strong>ligt/staat/hangt</strong> een… (singulier) · Er <strong>liggen/staan/hangen</strong> … (pluriel)</div></div>
       <p>⚠️ Attention à l'<strong>accord singulier / pluriel</strong> du verbe : Er <strong>hangt</strong> een schilderij. / Er <strong>hangen</strong> twee schilderijen.</p>
     </div>
 
     <div class="synth-section">
       <h2>3. Les prépositions de lieu</h2>
-      <ul style="line-height:1.9;">
-        <li><strong>in</strong> (dans) · <strong>op</strong> (sur) · <strong>boven</strong> (au-dessus) · <strong>onder</strong> (en dessous) · <strong>aan</strong> (à / contre)</li>
-        <li><strong>voor</strong> (devant) · <strong>achter</strong> (derrière) · <strong>naast</strong> (à côté de) · <strong>tussen</strong> (entre) · <strong>tegenover</strong> (en face de)</li>
-      </ul>
+      <table class="eng-voc">
+        <tr><td>in</td><td>dans</td></tr>
+        <tr><td>op</td><td>sur</td></tr>
+        <tr><td>boven</td><td>au-dessus</td></tr>
+        <tr><td>onder</td><td>en dessous</td></tr>
+        <tr><td>aan</td><td>à / contre</td></tr>
+        <tr><td>voor</td><td>devant</td></tr>
+        <tr><td>achter</td><td>derrière</td></tr>
+        <tr><td>naast</td><td>à côté de</td></tr>
+        <tr><td>tussen</td><td>entre</td></tr>
+        <tr><td>tegenover</td><td>en face de</td></tr>
+      </table>
       <p>Très utile pour <strong>décrire une pièce ou une maison</strong> à l'oral et à l'écrit (avec les verbes de position).</p>
     </div>
 
     <div class="synth-section">
       <h2>4. Les verbes modaux & la négation</h2>
       <p>Un <strong>modal</strong> (moeten = devoir · willen = vouloir · kunnen = pouvoir · mogen = avoir le droit) se conjugue, et le <strong>second verbe part à l'infinitif en fin de phrase</strong> :</p>
+      <table class="eng-voc">
+        <tr><td>moeten</td><td>devoir</td></tr>
+        <tr><td>willen</td><td>vouloir</td></tr>
+        <tr><td>kunnen</td><td>pouvoir</td></tr>
+        <tr><td>mogen</td><td>avoir le droit</td></tr>
+      </table>
       <ul style="line-height:1.9;">
         <li><em>Ik <strong>moet</strong> thuis <strong>helpen</strong>.</em> (Je dois aider à la maison.)</li>
         <li><em>Ik <strong>kan</strong> goed <strong>zwemmen</strong>.</em> (Je sais bien nager.)</li>
