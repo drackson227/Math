@@ -329,6 +329,10 @@
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Moyen mnémo</button>
         <div class="simple-exp-content"><strong>P-M-A-T</strong> : la cellule <strong>P</strong>répare, <strong>M</strong> met au milieu, <strong>A</strong> sépare, <strong>T</strong> termine. Résultat : 2 cellules <strong>identiques</strong> (2n → 2n, le nombre de chromosomes ne change pas).</div>
       </div>
+      <div class="bio-anim-host">
+        <div class="bio-anim-title">🎬 La mitose étape par étape — clique « Suivant ▶ » (ou « Auto »)</div>
+        <div id="bio-mito-anim"></div>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -350,6 +354,10 @@
       <h2>6. La méiose</h2>
       <p>La <strong>méiose</strong> fabrique les <strong>gamètes</strong> (spermatozoïdes, ovules). À partir d'<strong>une</strong> cellule (2n), elle réalise <strong>2 divisions successives</strong> et donne <strong>4 cellules</strong> à <strong>n</strong> chromosomes (deux fois moins).</p>
       <div style="text-align:center; margin:0.8rem 0;">${SVG_MEIOSE}</div>
+      <div class="bio-anim-host">
+        <div class="bio-anim-title">🎬 La méiose étape par étape — 2 divisions → 4 gamètes (n)</div>
+        <div id="bio-meio-anim"></div>
+      </div>
       <ul style="line-height:2;">
         <li><strong>1ʳᵉ division (réductionnelle)</strong> : on sépare les <strong>chromosomes homologues</strong> → on passe de <strong>2n à n</strong>.</li>
         <li><strong>2ᵉ division</strong> : comme une mitose, on sépare les <strong>chromatides</strong> → 4 cellules à n.</li>
@@ -482,6 +490,21 @@
       <div class="lblexo-foot"><button class="step-btn" onclick="checkPunnett(this)">✓ Corriger</button>
       <button class="step-btn" onclick="resetPunnett(this)" style="background:transparent; color:var(--color-nav); border:1px solid var(--color-nav);">↻ Recommencer</button></div>
       <div class="punnett-res"></div>
+    </div>
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 Simulateur de croisement (monohybridisme)</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">Choisis le génotype de chaque parent (<strong>A</strong> = dominant, <strong>a</strong> = récessif) et croise : la grille de Punnett se remplit et te donne les rapports génotype &amp; phénotype.</p>
+      <div id="bio-cross">
+        <div class="bio-cross-pick">
+          <span>Parent 1 :</span>
+          <select class="bio-cross-p" data-p="1" aria-label="Génotype du parent 1"><option>AA</option><option selected>Aa</option><option>aa</option></select>
+          <span style="font-weight:800; color:var(--color-nav);">×</span>
+          <span>Parent 2 :</span>
+          <select class="bio-cross-p" data-p="2" aria-label="Génotype du parent 2"><option>AA</option><option selected>Aa</option><option>aa</option></select>
+          <button type="button" class="nav-btn bio-cross-go">Croiser ▶</button>
+        </div>
+        <div class="bio-cross-out"></div>
+      </div>
     </div>
     <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🔬 Mitose : remettre les phases dans l'ordre</h3>

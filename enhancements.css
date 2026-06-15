@@ -1290,3 +1290,33 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .mg-score { margin-top: .8rem; font-size: 14px; color: var(--text-secondary); }
 .mg-done { font-size: 19px; font-weight: 700; line-height: 1.6; color: var(--text-primary); margin-bottom: 1rem; }
 .mg-restart { background: color-mix(in srgb, var(--color-nav) 55%, #000); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-weight: 700; cursor: pointer; min-height: 40px; }
+
+/* ===== Bio — visuels animés (mitose/méiose) + simulateur de croisement (Punnett) ===== */
+.bio-anim-host { margin: 1.1rem 0; }
+.bio-anim-host > .bio-anim-title { font-weight: 700; color: var(--color-nav); margin-bottom: .45rem; font-size: 15px; }
+.bio-anim { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: .8rem; }
+.bio-stage { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; background: #f8fafc; border-radius: 12px; border: 2px solid var(--border-subtle); }
+.bio-chromatid { transition: transform .65s cubic-bezier(.45,.05,.25,1); }
+@media (prefers-reduced-motion: reduce) { .bio-chromatid { transition: none; } }
+.bio-anim-cap { min-height: 3.4em; margin: .7rem .2rem .45rem; font-size: 14px; line-height: 1.45; color: var(--text-primary); text-align: center; }
+.bio-anim-ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.bio-anim-btn { min-height: 40px; padding: 7px 13px; border-radius: 9px; border: 1px solid var(--color-nav); background: var(--bg-card); color: var(--color-nav); font-weight: 700; font-size: 14px; cursor: pointer; }
+.bio-anim-btn:hover { background: rgba(var(--color-nav-rgb), 0.10); }
+.bio-anim-play.on { background: color-mix(in srgb, var(--color-nav) 55%, #000); color: #fff; border-color: transparent; }
+.bio-anim-step { font-size: 13px; color: var(--text-secondary); font-weight: 700; min-width: 46px; text-align: center; }
+
+.bio-cross-pick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--text-primary); margin-bottom: .9rem; }
+.bio-cross-p { min-height: 40px; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-primary); font-size: 15px; font-weight: 700; padding: 4px 8px; }
+.punnett-sim { border-collapse: collapse; margin: .3rem auto .8rem; }
+.punnett-sim th, .punnett-sim td { width: 56px; height: 50px; text-align: center; font-size: 17px; font-weight: 800; border: 2px solid var(--border-subtle); }
+.punnett-sim th { color: var(--color-nav); background: rgba(var(--color-nav-rgb), 0.08); }
+.punnett-sim .corner { background: transparent; border: none; }
+.bio-cross-cell { color: #fff; opacity: 0; transform: scale(.4); transition: opacity .3s ease, transform .3s cubic-bezier(.3,1.4,.5,1); }
+.bio-cross-cell.in { opacity: 1; transform: scale(1); }
+.bio-cross-cell.dom { background: #15803d; }
+.bio-cross-cell.rec { background: #b91c1c; }
+.bio-cross-sum { font-size: 14px; line-height: 1.75; color: var(--text-primary); }
+.bio-cross-tag { display: inline-block; padding: 1px 9px; border-radius: 999px; font-weight: 700; font-size: 13px; color: #fff; }
+.bio-cross-tag.dom { background: #15803d; }
+.bio-cross-tag.rec { background: #b91c1c; }
+.bio-cross-note { margin-top: .45rem; color: var(--text-secondary); }
