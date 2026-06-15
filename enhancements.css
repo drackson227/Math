@@ -1320,3 +1320,7 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .bio-cross-tag.dom { background: #15803d; }
 .bio-cross-tag.rec { background: #b91c1c; }
 .bio-cross-note { margin-top: .45rem; color: var(--text-secondary); }
+
+/* encadré d'explication « en clair » (bio) */
+.bio-explain { background: rgba(var(--color-nav-rgb), 0.08); border-left: 4px solid var(--color-nav); border-radius: 10px; padding: .85rem 1rem; margin: .9rem 0; font-size: 14px; line-height: 1.6; color: var(--text-primary); }
+.bio-explain .exam-tip { display: block; margin-top: .5rem; color: var(--text-secondary); font-weight: 700; }

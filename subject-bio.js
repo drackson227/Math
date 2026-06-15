@@ -333,6 +333,10 @@
         <div class="bio-anim-title">🎬 La mitose étape par étape — clique « Suivant ▶ » (ou « Auto »)</div>
         <div id="bio-mito-anim"></div>
       </div>
+      <div class="bio-explain">
+        <strong>💡 La mitose en clair.</strong> Avant de se diviser, la cellule a <strong>copié tout son ADN</strong> : chaque chromosome est dédoublé (forme en <strong>X</strong> = 2 chromatides-sœurs identiques, reliées par le centromère). En <strong>une seule division</strong> (P → M → A → T), elle sépare les 2 chromatides de chaque chromosome et les répartit dans deux cellules. Résultat : <strong>2 cellules filles strictement identiques</strong> à la cellule mère (2n → 2n).
+        <span class="exam-tip">🎯 Pour l'exam : <strong>1</strong> division · <strong>2</strong> cellules · <strong>identiques</strong> · sert à <strong>grandir &amp; réparer</strong>.</span>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -357,6 +361,11 @@
       <div class="bio-anim-host">
         <div class="bio-anim-title">🎬 La méiose étape par étape — 2 divisions → 4 gamètes (n)</div>
         <div id="bio-meio-anim"></div>
+      </div>
+      <div class="bio-explain">
+        <strong>💡 La méiose en clair.</strong> Elle sert à fabriquer les <strong>gamètes</strong> (spermatozoïdes, ovules). À partir d'une cellule <strong>2n</strong>, il y a <strong>2 divisions à la suite</strong> → <strong>4 cellules à n</strong> (deux fois moins de chromosomes).
+        <br><strong>⚠️ LA différence avec la mitose</strong> : à la <strong>1ʳᵉ division</strong>, on sépare les <strong>chromosomes homologues</strong> (les 2 d'une même paire : un du père, un de la mère) — c'est ça qui fait passer de <strong>2n à n</strong>. À la <strong>2ᵉ division</strong> (comme une mitose), on sépare enfin les <strong>chromatides-sœurs</strong>.
+        <span class="exam-tip">🎯 Pour l'exam : <strong>2</strong> divisions · <strong>4</strong> gamètes · <strong>2n → n</strong> · <strong>homologues</strong> séparés en 1ʳᵉ division · chaque gamète <strong>unique</strong> (brassage).</span>
       </div>
       <ul style="line-height:2;">
         <li><strong>1ʳᵉ division (réductionnelle)</strong> : on sépare les <strong>chromosomes homologues</strong> → on passe de <strong>2n à n</strong>.</li>
@@ -405,6 +414,13 @@
       </ul>
       <p>Expérience de Mendel : pois lisse pur (AA) × pois ridé pur (aa) → en <strong>F1</strong> tous lisses (<strong>Aa</strong>). On croise F1 × F1 → en <strong>F2</strong> le ridé réapparaît !</p>
       <div class="key-rule"><div class="formula-main" style="font-size:16px;">Aa × Aa → 1 AA : 2 Aa : 1 aa (génotype) → 3 dominants : 1 récessif (phénotype)</div></div>
+      <div class="bio-explain">
+        <strong>💡 Comment lire un croisement (exemple Aa × Aa).</strong>
+        <br><strong>1.</strong> Chaque parent <strong>Aa</strong> fabrique 2 sortes de gamètes : <strong>A</strong> et <strong>a</strong> (à la méiose, les 2 allèles se séparent).
+        <br><strong>2.</strong> On croise dans l'échiquier : A+A = <strong>AA</strong>, A+a = <strong>Aa</strong>, a+A = <strong>Aa</strong>, a+a = <strong>aa</strong> → on obtient <strong>1 AA · 2 Aa · 1 aa</strong> (rapport génotypique <strong>1 : 2 : 1</strong>).
+        <br><strong>3.</strong> Le <strong>phénotype</strong> (ce qu'on voit) : AA et Aa montrent le caractère <strong>dominant</strong> (A masque a) ; seul <strong>aa</strong> montre le récessif → <strong>3 dominants : 1 récessif</strong>.
+        <span class="exam-tip">🎯 Entraîne-toi avec le <strong>Simulateur de croisement</strong> (onglet Exercices) : change les parents, la grille se remplit toute seule.</span>
+      </div>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 L'échiquier de Punnett</button>
         <div class="simple-exp-content">Pour trouver les enfants possibles, on croise les allèles dans un tableau (échiquier de Punnett). Aa × Aa donne 1 AA, 2 Aa et 1 aa → on voit <strong>3</strong> individus au caractère dominant pour <strong>1</strong> au caractère récessif. Essaie-le dans l'onglet <strong>Exercices</strong> !</div>
