@@ -434,7 +434,7 @@
 
   var overlay = null, stage = null;
   var scenes = [], si = 0, steps = [], ki = -1;
-  var playing = false, narration = true, rate = 1;
+  var playing = false, narration = true, rate = 1, speakingNode = null;
   var autoTimer = null;
   var PREFS_KEY = 'gr2_course_prefs';
   function loadPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch (e) { return {}; } }
@@ -448,7 +448,19 @@
     node.style.visibility = 'visible';
     if (reduceMotion) { node.style.opacity = '1'; return; }
     if (window.gsap) {
-      window.gsap.fromTo(node, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.32, ease: 'power1.out' });
+      // éléments internes à révéler EN CASCADE (puces de liste, lignes, sous-blocs)
+      var kids = (node.tagName === 'UL' || node.tagName === 'OL')
+        ? Array.prototype.slice.call(node.children)
+        : Array.prototype.filter.call(node.children, function (c) {
+            return S.norm(c.textContent) || (c.querySelector && c.querySelector('svg, img'));
+          });
+      if (kids.length >= 2) {
+        window.gsap.fromTo(kids, { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.34, ease: 'power2.out', stagger: 0.08, clearProps: 'opacity,transform' });
+      } else {
+        window.gsap.fromTo(node, { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.36, ease: 'power2.out', clearProps: 'opacity,transform' });
+      }
     } else {
       node.classList.add('gr2-step-in');
     }
@@ -548,21 +560,48 @@
     document.body.classList.remove('gr2-course-on');
   }
 
+  /* ---- transitions de scène (glissement + fondu, selon le sens) ---- */
+  function sceneIn(node, dir) {
+    if (reduceMotion || !window.gsap) { if (!reduceMotion) node.classList.add('gr2c-scene-in'); return; }
+    window.gsap.fromTo(node, { opacity: 0, x: (dir || 0) * 46 },
+      { opacity: 1, x: 0, duration: 0.42, ease: 'power2.out', clearProps: 'opacity,transform' });
+  }
+  function sceneOut(node, dir) {
+    var done = function () { if (node && node.parentNode) node.parentNode.removeChild(node); };
+    if (reduceMotion || !window.gsap) { done(); return; }
+    window.gsap.to(node, { opacity: 0, x: (dir || 0) * -46, duration: 0.28, ease: 'power1.in', onComplete: done });
+  }
+
   /* ---- affichage d'une scène ---- */
-  function showScene(i) {
+  function showScene(i, dir) {
+    var prevI = si;
     si = Math.max(0, Math.min(scenes.length - 1, i));
+    if (typeof dir !== 'number') dir = (si > prevI) ? 1 : (si < prevI ? -1 : 0);
     var sc = scenes[si];
     overlay.querySelector('#gr2c-chap').textContent = sc.title;
     overlay.querySelector('#gr2c-count').textContent = 'Scène ' + (si + 1) + ' / ' + scenes.length;
     overlay.querySelector('#gr2c-bar').style.width = ((si + 1) / scenes.length * 100) + '%';
 
-    stage.innerHTML = '';
+    // ancienne scène : on en garde UNE (la dernière) pour l'animer en sortie, on nettoie les retards
+    var existing = stage.querySelectorAll('.gr2c-scene');
+    var old = existing.length ? existing[existing.length - 1] : null;
+    for (var j = 0; j < existing.length - 1; j++) { if (existing[j].parentNode) existing[j].parentNode.removeChild(existing[j]); }
+
+    var scene = S.el('div', 'gr2c-scene gr2c-reading');
     var head = S.el('div', 'gr2c-scene-head', (sc.sub ? '<h3>' + escape2(sc.sub) + '</h3>' : ''));
     var content = S.el('div', 'gr2c-scene-content');
     content.innerHTML = sc.html;
-    stage.appendChild(head);
-    stage.appendChild(content);
+    scene.appendChild(head);
+    scene.appendChild(content);
+
+    if (old) {
+      var oa = old.querySelector('.gr2c-active'); if (oa) oa.classList.remove('gr2c-active'); // une seule scène active
+      old.style.position = 'absolute'; old.style.left = '0'; old.style.right = '0'; old.style.top = '0';
+      sceneOut(old, dir);
+    }
+    stage.appendChild(scene);
     try { overlay.querySelector('.gr2-course-body').scrollTop = 0; } catch (e) {}
+    sceneIn(scene, dir);
 
     // étapes = enfants directs du contenu (titre, formule, points, explication…)
     steps = Array.prototype.filter.call(content.children, function (n) {
@@ -571,7 +610,7 @@
     steps.forEach(function (n) { n.style.visibility = 'hidden'; });
     ki = -1;
 
-    if (typeof safeMathJax === 'function') { try { safeMathJax([stage]); } catch (e) {} }
+    if (typeof safeMathJax === 'function') { try { safeMathJax([scene]); } catch (e) {} }
     // révéler la 1re étape
     advanceStep();
   }
@@ -637,7 +676,11 @@
     if (!narration) stopSpeak();
     savePrefs();
   }
+  function clearSpeaking() {
+    if (speakingNode) { speakingNode.classList.remove('gr2c-speaking'); speakingNode = null; }
+  }
   function stopSpeak() {
+    clearSpeaking();
     if (window.gr2StopSpeak) { window.gr2StopSpeak(); return; } // coupe voix ET fichier MP3
     try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
   }
@@ -661,8 +704,13 @@
       return;
     }
     if (!txt) { if (onEnd && playing) autoTimer = setTimeout(onEnd, 500); return; }
+    // surlignage « en cours de lecture » synchronisé à la voix (le halo respire pendant la lecture)
+    speakingNode = node; node.classList.add('gr2c-speaking');
     // fichier neuronal (voix Denise) d'abord, repli voix de l'appareil — onEnd enchaîne l'auto-play
-    window.gr2Speak(txt, 'fr-FR', { rate: rate, onend: function () { if (onEnd) onEnd(); } });
+    window.gr2Speak(txt, 'fr-FR', { rate: rate, onend: function () {
+      if (speakingNode === node) clearSpeaking();
+      if (onEnd) onEnd();
+    } });
   }
 
   function escape2(s) { return (s || '').replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
