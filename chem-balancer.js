@@ -29,6 +29,8 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
   function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+  function gcd2(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function gcdArr(arr) { return arr.reduce(function (g, v) { return gcd2(g, v); }, 0); }
 
   function elements(eq) {
     var seen = {}, out = [];
@@ -95,9 +97,16 @@
     });
     host.classList.toggle('cb-solved', allOk);
     var st = host.querySelector('.cb-status');
-    if (st) st.textContent = allOk
-      ? '✅ Équilibré ! Tous les atomes sont conservés des deux côtés. Bravo 🎉'
-      : 'Ajuste les coefficients avec − / + : chaque atome doit être égal des deux côtés.';
+    if (st) {
+      if (!allOk) {
+        st.textContent = 'Ajuste les coefficients avec − / + : chaque atome doit être égal des deux côtés.';
+      } else {
+        var g = gcdArr(coefs);
+        st.textContent = (g > 1)
+          ? '✅ Équilibré ! Astuce : tu peux encore simplifier — divise tous les coefficients par ' + g + ' pour la forme la plus simple.'
+          : '✅ Parfait — équilibré et sous la forme la plus simple ! 🏆';
+      }
+    }
   }
 
   document.addEventListener('click', function (e) {

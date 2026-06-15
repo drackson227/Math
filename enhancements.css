@@ -1351,3 +1351,17 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
+/* Téléphone : rien ne doit être coupé, même à 320px / grosse police */
+@media (max-width: 600px) {
+  .chem-bal { padding: 12px; }
+  .cb-eq { gap: 6px 8px; padding: 10px; }
+  .cb-term { flex-wrap: wrap; justify-content: center; gap: 4px 6px; max-width: 100%; }
+  .cb-f { font-size: 16px; }
+  .cb-coef { font-size: 16px; min-width: 22px; }
+  .cb-dec, .cb-inc { min-width: 38px; }
+  .cb-op { font-size: 16px; }
+  .cb-tally { table-layout: fixed; }
+  .cb-tally th, .cb-tally td { padding: 5px 6px; font-size: 12px; }
+  .cb-tally .cb-el { font-size: 13px; }
+  .cb-btn { padding: 9px 12px; font-size: 13px; flex: 1 1 auto; }
+}

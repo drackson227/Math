@@ -144,7 +144,7 @@
         <li>Compare avec les coefficients : le réactif dont il y a le <strong>moins</strong> (proportionnellement) est le <strong>limitant</strong>.</li>
         <li>La quantité de produit se calcule <strong>à partir du limitant</strong>.</li>
       </ul>
-      <p><strong>Exemple :</strong> 50 g Fe (n = 50/55,85 = 0,895 mol) + 50 g S (n = 50/32,06 = 1,56 mol), réaction 1 : 1. Le fer s'épuise le premier → <strong>le fer est le réactif limitant</strong>. Il reste 1,56 − 0,895 = <strong>0,665 mol de soufre en excès</strong>, et il se forme 0,895 mol de FeS.</p>
+      <p><strong>Exemple :</strong> 50 g Fe (n = 50/55,86 = 0,895 mol) + 50 g S (n = 50/32,06 = 1,56 mol), réaction 1 : 1. Le fer s'épuise le premier → <strong>le fer est le réactif limitant</strong>. Il reste 1,56 − 0,895 = <strong>0,665 mol de soufre en excès</strong>, et il se forme 0,895 mol de FeS.</p>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
         <div class="simple-exp-content">Imagine une recette : pour 1 burger il faut 1 pain + 1 steak. Si tu as 5 pains mais seulement 3 steaks, tu ne peux faire que <strong>3 burgers</strong> : le <strong>steak est le limitant</strong>, et il te reste 2 pains <strong>en excès</strong>. En chimie c'est pareil, sauf qu'on compte en <strong>moles</strong> (pas en pièces), donc on convertit d'abord les grammes en moles.</div>
