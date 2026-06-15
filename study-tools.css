@@ -204,6 +204,16 @@ body.gr2-course-on { overflow: hidden; }
 .gr2c-play.on { background: rgba(96,165,250,0.16); }
 .gr2c-ok { border-color: #22c55e; color: #22c55e; }
 .gr2c-count { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+/* — mode vidéo « de fous » : boutons icônes, vitesse, menu chapitres, surlignage karaoké — */
+.gr2-course-foot { flex-wrap: wrap; }
+.gr2c-icon { background: transparent; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 8px; min-width: 38px; min-height: 38px; }
+.gr2c-icon:hover { background: var(--bg-card); color: var(--text-primary); }
+#gr2c-speed { min-width: 48px; font-weight: 800; }
+.gr2c-menu-panel { position: absolute; top: 56px; left: 12px; right: 12px; max-width: 380px; max-height: 62vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 8px; z-index: 6; box-shadow: 0 14px 44px rgba(0,0,0,0.5); }
+.gr2c-menu-h { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700; padding: 6px 8px; }
+.gr2c-menu-item { display: block; width: 100%; text-align: left; background: transparent; border: none; color: var(--text-primary); font-size: 14px; padding: 10px; border-radius: 8px; cursor: pointer; min-height: 40px; }
+.gr2c-menu-item:hover { background: rgba(var(--color-nav-rgb), 0.16); color: var(--color-nav); }
+.gr2c-scene-content > .gr2c-active { background: rgba(var(--color-nav-rgb), 0.12); border-radius: 8px; box-shadow: 0 0 0 6px rgba(var(--color-nav-rgb), 0.12); transition: background 0.25s ease, box-shadow 0.25s ease; }
 
 @media (max-width: 600px) {
   .gr2-study-bar { gap: 6px; padding: 8px; }

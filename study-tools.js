@@ -434,8 +434,21 @@
 
   var overlay = null, stage = null;
   var scenes = [], si = 0, steps = [], ki = -1;
-  var playing = false, narration = true;
+  var playing = false, narration = true, rate = 1, frVoice = null;
   var autoTimer = null;
+  var PREFS_KEY = 'gr2_course_prefs';
+  function loadPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch (e) { return {}; } }
+  function savePrefs() { try { localStorage.setItem(PREFS_KEY, JSON.stringify({ voice: narration, rate: rate })); } catch (e) {} }
+  (function () { var p = loadPrefs(); if (typeof p.voice === 'boolean') narration = p.voice; if (p.rate) rate = p.rate; })();
+  function pickFrVoice() {
+    try {
+      var vs = (window.speechSynthesis && window.speechSynthesis.getVoices()) || [];
+      return vs.find(function (v) { return /fr-FR/i.test(v.lang) && /google|natural|am[ée]lie|thomas|virginie|denise|paul/i.test(v.name); })
+        || vs.find(function (v) { return /fr-FR/i.test(v.lang); })
+        || vs.find(function (v) { return /^fr/i.test(v.lang); }) || null;
+    } catch (e) { return null; }
+  }
+  try { if (window.speechSynthesis) window.speechSynthesis.addEventListener('voiceschanged', function () { frVoice = pickFrVoice(); }); } catch (e) {}
   var reduceMotion = false;
   try { reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
@@ -486,19 +499,24 @@
     overlay = S.el('div', 'gr2-course');
     overlay.innerHTML =
       '<div class="gr2-course-top">' +
+        '<button class="gr2c-icon" id="gr2c-menu" aria-label="Chapitres" title="Aller à un chapitre">📑</button>' +
         '<div class="gr2-course-chap" id="gr2c-chap"></div>' +
+        '<button class="gr2c-icon" id="gr2c-full" aria-label="Plein écran" title="Plein écran (F)">⛶</button>' +
         '<button class="gr2-course-x" id="gr2c-close" aria-label="Fermer le mode cours">✕</button>' +
       '</div>' +
       '<div class="gr2-course-progress"><i id="gr2c-bar"></i></div>' +
+      '<div class="gr2c-menu-panel" id="gr2c-menu-panel" hidden></div>' +
       '<div class="gr2-course-body"><div class="gr2-course-stage" id="gr2c-stage"></div></div>' +
       '<div class="gr2-course-foot">' +
         '<button class="gr2c-btn" id="gr2c-prev" aria-label="Scène précédente">◀</button>' +
-        '<button class="gr2c-btn gr2c-play" id="gr2c-play" aria-label="Lecture automatique">▶ Lecture</button>' +
+        '<button class="gr2c-btn gr2c-play" id="gr2c-play" aria-label="Lecture automatique (P)">▶ Lecture</button>' +
         '<button class="gr2c-btn" id="gr2c-next" aria-label="Étape suivante">Suivant ▶</button>' +
+        '<button class="gr2c-btn" id="gr2c-restart" aria-label="Recommencer le chapitre (R)" title="Recommencer le chapitre">↻</button>' +
         '<span class="gr2c-count" id="gr2c-count"></span>' +
         '<span class="gr2c-spacer"></span>' +
+        '<button class="gr2c-btn" id="gr2c-speed" title="Vitesse de lecture">1×</button>' +
         '<button class="gr2c-btn" id="gr2c-voice" aria-pressed="true">🔊 Voix</button>' +
-        '<button class="gr2c-btn gr2c-ok" id="gr2c-ok">✅ Chapitre compris</button>' +
+        '<button class="gr2c-btn gr2c-ok" id="gr2c-ok">✅ Compris</button>' +
       '</div>';
     document.body.appendChild(overlay);
     stage = overlay.querySelector('#gr2c-stage');
@@ -508,11 +526,18 @@
     overlay.querySelector('#gr2c-next').addEventListener('click', function () { stopAuto(); advanceStep(); });
     overlay.querySelector('#gr2c-play').addEventListener('click', togglePlay);
     overlay.querySelector('#gr2c-voice').addEventListener('click', toggleVoice);
+    overlay.querySelector('#gr2c-restart').addEventListener('click', function () { stopAuto(); showScene(0); });
+    overlay.querySelector('#gr2c-speed').addEventListener('click', cycleSpeed);
+    overlay.querySelector('#gr2c-full').addEventListener('click', toggleFull);
+    overlay.querySelector('#gr2c-menu').addEventListener('click', toggleMenu);
     overlay.querySelector('#gr2c-ok').addEventListener('click', function () {
       var sc = scenes[si]; if (sc) S.setChapStatus(sc.title, 'ok');
       var b = overlay.querySelector('#gr2c-ok'); b.textContent = '✅ Marqué !';
-      setTimeout(function () { b.textContent = '✅ Chapitre compris'; }, 1500);
+      setTimeout(function () { b.textContent = '✅ Compris'; }, 1500);
     });
+    // préférences mémorisées
+    var vb = overlay.querySelector('#gr2c-voice'); vb.setAttribute('aria-pressed', narration ? 'true' : 'false'); vb.style.opacity = narration ? '1' : '0.5';
+    overlay.querySelector('#gr2c-speed').textContent = rate + '×';
   }
 
   function open() {
@@ -563,6 +588,8 @@
     if (ki < steps.length - 1) {
       ki++;
       var node = steps[ki];
+      steps.forEach(function (n) { n.classList.remove('gr2c-active'); });
+      node.classList.add('gr2c-active');
       gsapReveal(node);
       // garder l'étape visible sans saccade : on ne scrolle que si elle dépasse le bas
       try {
@@ -616,6 +643,7 @@
     b.setAttribute('aria-pressed', narration ? 'true' : 'false');
     b.style.opacity = narration ? '1' : '0.5';
     if (!narration) stopSpeak();
+    savePrefs();
   }
   function stopSpeak() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {} }
   function speak(node, onEnd) {
@@ -627,7 +655,7 @@
     // délai de lecture estimé quand la voix est coupée (≈ vitesse de lecture humaine)
     function readDelay() {
       var words = txt ? txt.split(/\s+/).length : 0;
-      return Math.min(9000, Math.max(1600, words * 320));
+      return Math.min(9000, Math.max(1600, words * 320)) / rate;
     }
     if (!narration || !window.speechSynthesis) {
       if (onEnd && playing) { autoTimer = setTimeout(onEnd, txt ? readDelay() : 600); }
@@ -635,7 +663,9 @@
     }
     if (!txt) { if (onEnd && playing) autoTimer = setTimeout(onEnd, 500); return; }
     var u = new SpeechSynthesisUtterance(txt);
-    u.lang = 'fr-FR'; u.rate = 1.0; u.pitch = 1.0;
+    u.lang = 'fr-FR'; u.rate = rate; u.pitch = 1.0;
+    if (!frVoice) frVoice = pickFrVoice();
+    if (frVoice) { try { u.voice = frVoice; } catch (e) {} }
     u.onend = function () { if (onEnd) onEnd(); };
     try { window.speechSynthesis.speak(u); } catch (e) { if (onEnd && playing) onEnd(); }
   }
@@ -648,7 +678,39 @@
     if (e.key === 'Escape') { close(); }
     else if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); stopAuto(); advanceStep(); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); stopAuto(); prevScene(); }
+    else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); togglePlay(); }
+    else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFull(); }
+    else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); stopAuto(); showScene(0); }
   });
+
+  /* ---- vitesse de lecture, plein écran, menu chapitres ---- */
+  function cycleSpeed() {
+    var seq = [1, 1.25, 1.5, 0.75]; var idx = seq.indexOf(rate); rate = seq[(idx + 1) % seq.length];
+    if (overlay) overlay.querySelector('#gr2c-speed').textContent = rate + '×';
+    savePrefs();
+    if (playing && steps[ki]) speak(steps[ki], onStepSpoken); // applique la vitesse immédiatement
+  }
+  function toggleFull() {
+    try {
+      var d = document;
+      if (!d.fullscreenElement && !d.webkitFullscreenElement) {
+        (overlay.requestFullscreen || overlay.webkitRequestFullscreen || function () {}).call(overlay);
+      } else {
+        (d.exitFullscreen || d.webkitExitFullscreen || function () {}).call(d);
+      }
+    } catch (e) {}
+  }
+  function toggleMenu() {
+    var p = overlay.querySelector('#gr2c-menu-panel');
+    if (!p.hasAttribute('hidden')) { p.setAttribute('hidden', ''); return; }
+    var seen = {}, html = '<div class="gr2c-menu-h">Chapitres</div>';
+    scenes.forEach(function (sc, idx) { if (seen[sc.title]) return; seen[sc.title] = 1; html += '<button class="gr2c-menu-item" data-i="' + idx + '">' + escape2(sc.title) + '</button>'; });
+    p.innerHTML = html;
+    Array.prototype.forEach.call(p.querySelectorAll('.gr2c-menu-item'), function (b) {
+      b.addEventListener('click', function () { stopAuto(); p.setAttribute('hidden', ''); showScene(parseInt(b.getAttribute('data-i'), 10)); });
+    });
+    p.removeAttribute('hidden');
+  }
 
   window.GR2Course = { open: open, close: close };
 })();
