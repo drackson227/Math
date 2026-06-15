@@ -20,5 +20,11 @@ theme 2 et 3/
 _probe*.mjs
 _verify*.mjs
 
+# ───── Outils locaux de génération audio (le site n'a besoin que de audio/ + manifest) ─────
+_audio_*.mjs
+_audio_*.py
+_audio_items.json
+_voicetest.mp3
+
 # ───── Dépendances ─────
 node_modules/

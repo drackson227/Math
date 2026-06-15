@@ -48,6 +48,42 @@
   function hasVoice(lang) { return !!pickVoice(lang || subjLang()); }
   window.gr2HasVoice = hasVoice; // utilitaire (ex. masquer un indice audio si pas de voix)
 
+  /* ---- audio de QUALITÉ pré-généré (voix neuronale) : audio/manifest.json ----
+     Si un mot a son fichier, on le joue (même belle voix sur TOUS les appareils,
+     même ceux sans voix installée). Sinon → repli sur la voix de l'appareil. */
+  var MANIFEST = null, curAudio = null;
+  function norm(t) { return String(t == null ? '' : t).trim().replace(/\s+/g, ' '); }
+  (function loadManifest() {
+    try {
+      // fetch interdit en file:// (CORS) → on garde la voix de l'appareil. En ligne (http/https) : OK.
+      if (!/^https?:$/.test(location.protocol)) return;
+      fetch('audio/manifest.json', { cache: 'default' })
+        .then(function (r) { return r && r.ok ? r.json() : null; })
+        .then(function (m) { if (m) MANIFEST = m; })
+        .catch(function () {});
+    } catch (e) {}
+  })();
+  function fileFor(text, lang) {
+    if (!MANIFEST) return null;
+    var pre = String(lang || subjLang()).slice(0, 2).toLowerCase();
+    var byLang = MANIFEST[pre];
+    return (byLang && byLang[norm(text)]) || null;
+  }
+  function hasFile(text, lang) { return !!fileFor(text, lang); }
+  window.gr2HasFile = hasFile; // utilitaire
+  function playFile(path, onfail) {
+    try {
+      try { synth.cancel(); } catch (e) {}            // coupe une éventuelle voix navigateur
+      if (curAudio) { try { curAudio.pause(); } catch (e) {} }
+      var a = new Audio(path);
+      curAudio = a;
+      a.addEventListener('error', function () { if (onfail) onfail(); }, { once: true });
+      var p = a.play();
+      if (p && p.catch) p.catch(function () { /* clic = autorisé ; on ignore */ });
+      return true;
+    } catch (e) { return false; }
+  }
+
   /* Petit message si aucune voix de la langue n'est installée (une fois par langue). */
   var warned = {};
   function noVoiceToast(pre) {
@@ -81,6 +117,13 @@
   function speak(text, lang) {
     if (!text) return;
     lang = lang || subjLang();
+    // 1) fichier audio de qualité (voix neuronale) si disponible → marche sur tous les appareils
+    var path = fileFor(text, lang);
+    if (path) {
+      // en cas d'échec du fichier (404, hors-ligne sans cache…) → repli voix de l'appareil
+      if (playFile(path, function () { emit(text, lang, pickVoice(lang)); })) return;
+    }
+    // 2) repli : voix de l'appareil (Web Speech), avec la bonne voix de langue
     var v = pickVoice(lang);
     if (!v && !VOICES.length) {
       // les voix ne sont pas encore prêtes : on attend leur chargement puis on réessaie UNE fois
