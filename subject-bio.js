@@ -466,6 +466,12 @@
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.5rem;">✏️ Exercices guidés</h2>
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Mitose ou Méiose ?</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne une caractéristique, tu choisis la bonne division. Correction immédiate + score &amp; série.</p>
+      <button type="button" class="nav-btn" id="bmm-start">▶ Commencer le jeu</button>
+      <div id="bio-mm" class="bmm-mount"></div>
+    </div>
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🧬 L'échiquier de Punnett — pois lisse (A) × ridé (a)</h3>
       <p style="color:var(--text-secondary); margin-bottom:0.8rem;">On croise deux pois hétérozygotes (génotype <strong>Aa</strong>). Écris le génotype de chaque case (ex. « Aa »), puis clique sur <strong>Corriger</strong>.</p>
       <table class="punnett">
