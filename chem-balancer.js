@@ -57,6 +57,31 @@
 
   function curIdx(host) { return parseInt(host.getAttribute('data-eq') || '0', 10) % EQS.length; }
 
+  // L'équation reste sur UNE seule ligne horizontale ; sur petit écran on la dézoome
+  // (scale) juste ce qu'il faut pour qu'elle rentre EN ENTIER dans la boîte — rien de
+  // coupé, aucun glissement. Sur grand écran (tout rentre déjà) : échelle 1, taille réelle.
+  function fit(host) {
+    var box = host.querySelector('.cb-eq'), line = host.querySelector('.cb-eqline');
+    if (!box || !line) return;
+    line.style.transform = 'none';
+    box.style.height = 'auto';
+    var cs = getComputedStyle(box);
+    var avail = box.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
+    var natural = line.scrollWidth;
+    if (!(natural > 0) || !(avail > 0)) return; // pas encore visible : on refera à l'affichage
+    var k = Math.min(1, avail / natural);
+    if (k < 1) {
+      var h = line.offsetHeight;
+      line.style.transform = 'scale(' + k + ')';
+      var target = Math.ceil(h * k);
+      if (cs.boxSizing === 'border-box') {
+        target += parseFloat(cs.paddingTop || 0) + parseFloat(cs.paddingBottom || 0) +
+                  parseFloat(cs.borderTopWidth || 0) + parseFloat(cs.borderBottomWidth || 0);
+      }
+      box.style.height = target + 'px';
+    }
+  }
+
   function render(host) {
     var eq = EQS[curIdx(host)];
     var n = eq.r.length + eq.p.length;
@@ -70,8 +95,7 @@
 
     host.innerHTML =
       '<div class="cb-head">⚖️ Pondère l\'équation <span class="cb-counter">' + (curIdx(host) + 1) + ' / ' + EQS.length + '</span></div>' +
-      '<div class="cb-eq">' + rHTML + '<span class="cb-op">→</span>' + pHTML + '</div>' +
-      '<div class="cb-hint">↔ glisse pour voir toute l\'équation</div>' +
+      '<div class="cb-eq"><div class="cb-eqline">' + rHTML + '<span class="cb-op">→</span>' + pHTML + '</div></div>' +
       '<table class="cb-tally"><thead><tr><th>Atome</th><th>Réactifs</th><th>Produits</th><th aria-label="équilibré"></th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="cb-status" role="status">Ajuste les coefficients avec − / + : le compteur d\'atomes se met à jour en direct.</div>' +
       '<div class="cb-controls">' +
@@ -80,9 +104,6 @@
         '<button type="button" class="cb-btn cb-next">Équation suivante ▶</button>' +
       '</div>';
     update(host);
-    // affiche l'indice de défilement uniquement si l'équation dépasse (ex. sur téléphone)
-    var eqEl = host.querySelector('.cb-eq');
-    if (eqEl) host.classList.toggle('cb-scrollable', eqEl.scrollWidth > eqEl.clientWidth + 2);
   }
 
   function update(host) {
@@ -111,6 +132,7 @@
           : '✅ Parfait — équilibré et sous la forme la plus simple ! 🏆';
       }
     }
+    fit(host);
   }
 
   document.addEventListener('click', function (e) {
@@ -133,11 +155,20 @@
     if (t.closest('.cb-next')) { host.setAttribute('data-eq', (curIdx(host) + 1) % EQS.length); render(host); return; }
   });
 
+  function fitAll() { each(document.querySelectorAll('.chem-bal[data-built]'), function (h) { fit(h); }); }
+  var io = null;
+  try { io = new IntersectionObserver(function (ents) { ents.forEach(function (e) { if (e.isIntersecting) fit(e.target); }); }); } catch (e) {}
+  var rT;
+  window.addEventListener('resize', function () { clearTimeout(rT); rT = setTimeout(fitAll, 120); });
+  window.addEventListener('orientationchange', function () { setTimeout(fitAll, 220); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll).catch(function () {});
+
   function tryInit() {
     each(document.querySelectorAll('.chem-bal:not([data-built])'), function (host) {
       host.setAttribute('data-built', '1');
       if (!host.hasAttribute('data-eq')) host.setAttribute('data-eq', '0');
       render(host);
+      if (io) io.observe(host); // refit quand la section devient visible
     });
   }
   if (document.readyState !== 'loading') tryInit();

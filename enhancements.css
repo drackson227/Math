@@ -1329,7 +1329,8 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .chem-bal { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; }
 .cb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
 .cb-counter { font-size: 12px; font-weight: 700; color: var(--text-secondary); background: rgba(var(--color-nav-rgb), 0.16); padding: 2px 9px; border-radius: 999px; }
-.cb-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.cb-eq { display: flex; align-items: center; overflow: hidden; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 10px; }
+.cb-eqline { display: inline-flex; flex-wrap: nowrap; white-space: nowrap; align-items: center; gap: 8px 10px; transform-origin: left center; }
 .cb-term { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; }
 .cb-step { display: inline-flex; align-items: center; border: 1px solid var(--border-subtle); border-radius: 9px; overflow: hidden; background: var(--bg-main); }
 .cb-dec, .cb-inc { min-width: 40px; min-height: 40px; border: none; background: transparent; color: var(--color-nav); font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
@@ -1337,8 +1338,6 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-coef { min-width: 24px; text-align: center; font-weight: 800; font-size: 17px; color: var(--color-nav); }
 .cb-f { font-weight: 700; font-size: 18px; color: var(--text-primary); white-space: nowrap; }
 .cb-op { color: var(--text-secondary); font-weight: 800; font-size: 18px; flex: 0 0 auto; }
-.cb-hint { display: none; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-.chem-bal.cb-scrollable .cb-hint { display: block; }
 .cb-tally { width: 100%; border-collapse: collapse; margin: 14px 0 4px; table-layout: fixed; }
 .cb-tally th:nth-child(1), .cb-tally td:nth-child(1) { width: 24%; }
 .cb-tally th:nth-child(2), .cb-tally td:nth-child(2), .cb-tally th:nth-child(3), .cb-tally td:nth-child(3) { width: 30%; }
@@ -1356,12 +1355,13 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
-/* Téléphone : équation HORIZONTALE (molécules de gauche à droite), pleine taille.
-   Elle revient à la ligne si besoin — tout reste visible, sans glisser ni rapetisser.
-   On gagne de la place en réduisant les MARGES (pas le contenu). */
+/* Téléphone : l'équation reste HORIZONTALE sur UNE seule ligne (molécules de gauche à
+   droite, jamais rien sous son sélecteur). Le JS la dézoome pour qu'elle rentre EN ENTIER
+   dans l'écran → tout visible, sans glisser. Marges/écarts réduits = moins de dézoom. */
 @media (max-width: 600px) {
   .chem-bal { padding: 10px; }
-  .cb-eq { padding: 8px; gap: 8px 6px; justify-content: center; }
-  .cb-hint { display: none !important; }
+  .cb-eq { padding: 8px; }
+  .cb-eqline { gap: 6px 7px; }
+  .cb-term { gap: 6px; }
   .cb-btn { flex: 1 1 auto; }
 }
