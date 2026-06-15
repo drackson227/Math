@@ -95,6 +95,10 @@
         <li>Ex : <strong>fleur</strong> (hyperonyme) → <em>rose, tulipe, marguerite</em> (hyponymes). <strong>félin</strong> → <em>chat, lion, tigre</em>.</li>
         <li>💡 Très utile pour <strong>résumer</strong> : on remplace une <strong>liste</strong> d'hyponymes par un seul <strong>hyperonyme</strong>. <em>« des roses, des tulipes et des lys »</em> → <em>« des fleurs »</em>.</li>
       </ul>
+      <div class="gr2-explain">
+        <strong>💡 En clair.</strong> Résumer = redire le texte <strong>beaucoup plus court</strong> (≈ ¼), avec <strong>tes</strong> mots, sans rien ajouter. Tu gardes les <strong>idées importantes</strong> et tu enlèves les exemples et les détails. Astuce : une liste (roses, tulipes, lys) → un mot général (des fleurs) = un <strong>hyperonyme</strong>.
+        <span class="exam-tip">🎯 Pièges : pas de « je », pas d'avis personnel, on respecte l'<strong>ordre des idées</strong> de l'auteur.</span>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -107,6 +111,10 @@
         <li>Transmettre des <strong>valeurs</strong> et des leçons à une communauté.</li>
       </ul>
       <p>Exemple grec : <strong>Prométhée</strong> vole le <strong>feu</strong> aux dieux pour le donner aux hommes ; <strong>Zeus</strong> le punit. (Explique l'origine du feu + le courage et la ruse.)</p>
+      <div class="gr2-explain">
+        <strong>💡 En clair.</strong> Un mythe = une <strong>vieille histoire</strong> (avec des dieux et des héros) qu'on se racontait pour <strong>2 raisons</strong> : <strong>expliquer</strong> le monde (d'où vient le feu → Prométhée) et transmettre des <strong>valeurs</strong> (courage, ruse).
+        <span class="exam-tip">🎯 Ne pas confondre avec le <strong>conte</strong> (« il était une fois », merveilleux).</span>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -120,6 +128,10 @@
       <p>Structure : <strong>thèse</strong> (l'opinion défendue) → <strong>arguments</strong> (les idées qui la soutiennent) → <strong>exemples</strong> (qui illustrent) → reliés par des <strong>connecteurs logiques</strong> (car, donc, mais, en effet, cependant…).</p>
       <figure class="hfig hfig-float" style="max-width:140px"><img src="lafontaine.jpg" alt="Jean de La Fontaine" loading="lazy"><figcaption>La Fontaine : argumenter par la fable (une morale)</figcaption></figure>
       <p>💡 La <strong>fable</strong> (ex. <strong>La Fontaine</strong>) est une argumentation <em>indirecte</em> : un petit récit d'animaux qui débouche sur une <strong>morale</strong>.</p>
+      <div class="gr2-explain">
+        <strong>💡 En clair.</strong> Argumenter = <strong>défendre une opinion</strong> (la <strong>thèse</strong>) pour faire changer d'avis le lecteur. Deux façons : <strong>convaincre</strong> = avec la <strong>raison</strong> (arguments, preuves) · <strong>persuader</strong> = avec les <strong>émotions</strong>. On relie les idées avec des <strong>connecteurs</strong> (car, donc, mais, en effet…).
+        <span class="exam-tip">🎯 Plan : thèse → arguments → exemples. La <strong>fable</strong> argumente indirectement (récit + morale).</span>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -128,6 +140,10 @@
       <p>Le <strong>théâtre</strong> est un texte <strong>joué</strong> sur scène. La <strong>comédie</strong> fait <strong>rire</strong> et finit bien ; la <strong>tragédie</strong> finit mal (personnages nobles, fatalité).</p>
       <p><strong>Vocabulaire :</strong> <strong>acte</strong> (grande partie), <strong>scène</strong> (sous-partie), <strong>réplique</strong> (ce que dit un personnage), <strong>tirade</strong> (longue réplique), <strong>monologue</strong> (seul en scène), <strong>aparté</strong> (au public, les autres « n'entendent pas »), <strong>didascalies</strong> (indications de mise en scène, en italique), <strong>quiproquo</strong> (malentendu, un pour un autre).</p>
       <p><strong>Les ressorts du comique :</strong> comique de <strong>mots</strong>, de <strong>gestes</strong>, de <strong>situation</strong>, de <strong>caractère</strong>, de <strong>répétition</strong>. Grand auteur : <strong>Molière</strong>.</p>
+      <div class="gr2-explain">
+        <strong>💡 En clair.</strong> Le théâtre, c'est du texte <strong>joué</strong> sur scène. La <strong>comédie</strong> fait <strong>rire</strong> et finit <strong>bien</strong> ; la <strong>tragédie</strong> finit <strong>mal</strong>. À retenir : <strong>réplique</strong> (ce qu'on dit), <strong>tirade</strong> (longue réplique), <strong>monologue</strong> (parler seul), <strong>aparté</strong> (au public), <strong>didascalies</strong> (les indications en italique).
+        <span class="exam-tip">🎯 Le rire vient des 5 comiques : mots · gestes · situation · caractère · répétition.</span>
+      </div>
     </div>
 
     <div class="synth-section">
@@ -147,7 +163,8 @@
           <tr><th>Comparaison</th><td>rapproche 2 éléments avec un <strong>outil</strong> (comme, tel, pareil à)</td></tr>
           <tr><th>Métaphore</th><td>même idée mais <strong>sans</strong> outil (« cet homme est un lion »)</td></tr>
           <tr><th>Personnification</th><td>donner des <strong>traits humains</strong> à une chose</td></tr>
-          <tr><th>Hyperbole</th><td><strong>exagération</strong></td></tr>
+          <tr><th>Hyperbole</th><td><strong>exagération</strong> (« je te l'ai dit <strong>mille fois</strong> »)</td></tr>
+          <tr><th>Métonymie</th><td>désigner une chose par une autre <strong>liée</strong> (« <strong>Paris</strong> a gagné » = l'équipe)</td></tr>
           <tr><th>Anaphore</th><td>répétition d'un mot en <strong>début de vers</strong></td></tr>
           <tr><th>Allitération</th><td>répétition de <strong>consonnes</strong></td></tr>
           <tr><th>Assonance</th><td>répétition de <strong>voyelles</strong></td></tr>
@@ -159,6 +176,10 @@
         <li><strong>Grand Corps Malade</strong> (de son vrai nom <strong>Fabien Marsaud</strong>) est un <strong>artiste contemporain</strong> français, pionnier du slam (album « <em>Midi 20</em> »). Son nom de scène vient d'un grave accident qui a failli le laisser paralysé.</li>
         <li>On <strong>analyse un slam</strong> comme un poème : thème, procédés (rimes, anaphores, métaphores), rythme, et message.</li>
       </ul>
+      <div class="gr2-explain">
+        <strong>💡 En clair.</strong> En poésie on <strong>compte les syllabes</strong> d'un vers : <strong>12 = alexandrin</strong>, 10 = décasyllabe, 8 = octosyllabe. Les <strong>rimes</strong> : plates <em>AABB</em>, croisées <em>ABAB</em>, embrassées <em>ABBA</em>. Une <strong>figure de style</strong> = une image (comparaison avec « comme », métaphore sans « comme », personnification, hyperbole = exagération…).
+        <span class="exam-tip">🎯 Entraîne-toi avec le jeu « <strong>Quelle figure de style ?</strong> » dans l'onglet Exercices.</span>
+      </div>
     </div>
 
     <div class="synth-section">
