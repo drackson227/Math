@@ -1351,17 +1351,24 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
 .cb-btn { min-height: 40px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; }
 .cb-btn:hover { border-color: var(--color-nav); color: var(--color-nav); }
 .cb-btn.cb-next { border-color: var(--color-nav); color: var(--color-nav); }
-/* Téléphone : rien ne doit être coupé, même à 320px / grosse police */
+/* Téléphone : la molécule reste TOUJOURS à côté de son sélecteur (jamais en dessous) ;
+   on réduit juste les tailles pour que la ligne tienne, même à 320px. */
 @media (max-width: 600px) {
   .chem-bal { padding: 12px; }
-  .cb-eq { gap: 6px 8px; padding: 10px; }
-  .cb-term { flex-wrap: wrap; justify-content: center; gap: 4px 6px; max-width: 100%; }
-  .cb-f { font-size: 16px; }
-  .cb-coef { font-size: 16px; min-width: 22px; }
-  .cb-dec, .cb-inc { min-width: 38px; }
-  .cb-op { font-size: 16px; }
+  .cb-eq { gap: 6px 8px; padding: 9px; }
+  .cb-term { gap: 5px; }              /* sélecteur + formule sur la même ligne */
+  .cb-f { font-size: 15px; }
+  .cb-coef { font-size: 15px; min-width: 18px; }
+  .cb-dec, .cb-inc { min-width: 34px; min-height: 38px; font-size: 18px; }
+  .cb-op { font-size: 15px; }
   .cb-tally { table-layout: fixed; }
   .cb-tally th, .cb-tally td { padding: 5px 6px; font-size: 12px; }
   .cb-tally .cb-el { font-size: 13px; }
   .cb-btn { padding: 9px 12px; font-size: 13px; flex: 1 1 auto; }
+}
+@media (max-width: 360px) {
+  .cb-eq { padding: 8px; gap: 5px 6px; }
+  .cb-f { font-size: 14px; }
+  .cb-coef { font-size: 14px; min-width: 16px; }
+  .cb-dec, .cb-inc { min-width: 32px; font-size: 17px; }
 }
