@@ -296,6 +296,13 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Essaie de répondre de tête, puis vérifie.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Quel risque de la mondialisation ?</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne un effet ; tu choisis le bon risque (économique · social · environnemental). Correction immédiate + score. (Clavier : 1-3, puis Entrée.)</p>
+      <button type="button" class="nav-btn" data-mg="eco-mm">▶ Commencer le jeu</button>
+      <div id="eco-mm" class="mg-mount"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">📋 À retenir par cœur</h3>
       <ul style="line-height:2;">
         <li>Définis la <strong>mondialisation</strong> en une phrase.</li>

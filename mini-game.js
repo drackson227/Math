@@ -59,6 +59,68 @@
         { t: "Une combustion complète.", a: 'cc' },
         { t: "Une combustion incomplète.", a: 'ci' }
       ]
+    },
+
+    /* GÉO — les 10 provinces (5 Flandre + 5 Wallonie), d'après subject-geo (§2 + repères). */
+    'geo-mm': {
+      title: 'Flandre ou Wallonie ?',
+      cats: [{ c: 'fl', label: '🟡 Flandre' }, { c: 'wa', label: '🔴 Wallonie' }],
+      round: 10,
+      items: [
+        { t: "Anvers", a: 'fl', why: "chef-lieu : Anvers." },
+        { t: "Flandre-Orientale", a: 'fl', why: "chef-lieu : Gand." },
+        { t: "Flandre-Occidentale", a: 'fl', why: "chef-lieu : Bruges." },
+        { t: "Limbourg", a: 'fl', why: "chef-lieu : Hasselt." },
+        { t: "Brabant flamand", a: 'fl', why: "chef-lieu : Louvain." },
+        { t: "Brabant wallon", a: 'wa', why: "chef-lieu : Wavre." },
+        { t: "Hainaut", a: 'wa', why: "chef-lieu : Mons." },
+        { t: "Liège", a: 'wa', why: "chef-lieu : Liège." },
+        { t: "Namur", a: 'wa', why: "chef-lieu : Namur." },
+        { t: "Luxembourg (belge)", a: 'wa', why: "chef-lieu : Arlon (≠ le pays voisin)." }
+      ]
+    },
+
+    /* ÉCO — les 3 risques de la mondialisation, d'après subject-eco (synthèse §5). */
+    'eco-mm': {
+      title: 'Quel risque de la mondialisation ?',
+      cats: [
+        { c: 'ec', label: '💼 Économique' },
+        { c: 'so', label: '👥 Social' },
+        { c: 'en', label: '🌍 Environnemental' }
+      ],
+      round: 10,
+      items: [
+        { t: "La perte d'emplois dans les pays riches.", a: 'ec', why: "à cause des délocalisations." },
+        { t: "Les délocalisations (usines vers la main-d'œuvre moins chère).", a: 'ec' },
+        { t: "L'augmentation des inégalités.", a: 'so' },
+        { t: "Les mauvaises conditions de travail (bas salaires, peu de droits).", a: 'so' },
+        { t: "La baisse de la solidarité.", a: 'so' },
+        { t: "La pollution (transports, usines).", a: 'en' },
+        { t: "L'épuisement des ressources naturelles.", a: 'en' }
+      ]
+    },
+
+    /* FRANÇAIS — figures de style (exemples & définitions validés : exercices + tableau + quiz). */
+    'fr-mm': {
+      title: 'Quelle figure de style ?',
+      cats: [
+        { c: 'comp', label: 'Comparaison' },
+        { c: 'meta', label: 'Métaphore' },
+        { c: 'perso', label: 'Personnification' },
+        { c: 'hyper', label: 'Hyperbole' }
+      ],
+      round: 9,
+      items: [
+        { t: "« Il est fort comme un lion. »", a: 'comp', why: "outil de comparaison « comme »." },
+        { t: "« Il est rusé comme un renard. »", a: 'comp' },
+        { t: "« Cet homme est un lion. »", a: 'meta', why: "rapprochement SANS outil." },
+        { t: "« Le vent hurlait dans la nuit. »", a: 'perso', why: "un comportement humain donné à une chose." },
+        { t: "« Je te l'ai dit mille fois ! »", a: 'hyper', why: "exagération volontaire." },
+        { t: "Rapprocher 2 éléments avec un outil (comme, tel, pareil à).", a: 'comp' },
+        { t: "Rapprocher 2 éléments SANS outil de comparaison.", a: 'meta' },
+        { t: "Donner des traits humains à une chose.", a: 'perso' },
+        { t: "Une exagération volontaire.", a: 'hyper' }
+      ]
     }
   };
 

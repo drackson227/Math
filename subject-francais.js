@@ -213,6 +213,13 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Le <strong>Quiz</strong> et les <strong>Flashcards</strong> testent tout ça automatiquement.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Quelle figure de style ?</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne un exemple (ou une définition) ; tu choisis la figure. Correction immédiate + score &amp; série. (Clavier : 1-4, puis Entrée.)</p>
+      <button type="button" class="nav-btn" data-mg="fr-mm">▶ Commencer le jeu</button>
+      <div id="fr-mm" class="mg-mount"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔎 Reconnaître la figure de style</h3>
       <ul style="line-height:2;">
         <li>« Cet homme est <strong>un lion</strong>. » → <strong>métaphore</strong> (pas d'outil).</li>

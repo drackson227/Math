@@ -194,6 +194,13 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Entraîne-toi : essaie de répondre de tête, puis vérifie.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Flandre ou Wallonie ?</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne une province ; tu choisis sa région (+ son chef-lieu en correction). Score &amp; série. (Clavier : 1-2, puis Entrée.)</p>
+      <button type="button" class="nav-btn" data-mg="geo-mm">▶ Commencer le jeu</button>
+      <div id="geo-mm" class="mg-mount"></div>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">📋 À retenir par cœur</h3>
       <ul style="line-height:2;">
         <li>Cite les <strong>3 Régions</strong> et les <strong>3 Communautés</strong>.</li>
