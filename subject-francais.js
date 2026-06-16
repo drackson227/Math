@@ -384,12 +384,22 @@
       <h2>Séquence 8 — La poésie</h2>
       <figure class="hfig hfig-float" style="max-width:150px"><img src="apollinaire.jpg" alt="Guillaume Apollinaire" loading="lazy"><figcaption>Apollinaire, le poète des calligrammes</figcaption></figure>
       <p>Vocabulaire : un <strong>vers</strong> (une ligne), une <strong>strophe</strong> (un groupe de vers), une <strong>rime</strong> (sons identiques à la fin des vers).</p>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">Le vers &amp; les syllabes</h3>
       <ul style="line-height:1.9;">
-        <li><strong>Compter les syllabes</strong> : <strong>alexandrin = 12</strong>, décasyllabe = 10, octosyllabe = 8.</li>
-        <li><strong>Strophes</strong> : distique (2 vers), tercet (3), quatrain (4).</li>
-        <li><strong>Disposition des rimes</strong> : plates/suivies <em>AABB</em>, croisées <em>ABAB</em>, embrassées <em>ABBA</em>.</li>
-        <li><strong>Calligramme</strong> (Apollinaire) : poème dont la disposition dessine une forme.</li>
+        <li>On <strong>compte les syllabes</strong> : le « e » muet <strong>en fin de vers ne compte pas</strong> (à l'intérieur, il compte souvent).</li>
+        <li>Les <strong>mètres</strong> : <strong>12 = alexandrin</strong>, 10 = décasyllabe, 9 = ennéasyllabe, 8 = octosyllabe, 7 = heptasyllabe.</li>
+        <li><strong>La césure</strong> : dans l'<strong>alexandrin</strong>, une coupure au <strong>milieu</strong> partage le vers en <strong>2 hémistiches</strong> de 6 syllabes.</li>
+        <li><strong>Vers libres</strong> : ils ne respectent ni la longueur fixe, ni les rimes.</li>
       </ul>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">Les strophes</h3>
+      <p>Selon le <strong>nombre de vers</strong> : <strong>distique</strong> (2), <strong>tercet</strong> (3), <strong>quatrain</strong> (4), quintil (5), sizain (6)… dizain (10), douzain (12).</p>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">Les rimes</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>Disposition</strong> : <strong>plates</strong> (suivies) <em>AABB</em> · <strong>croisées</strong> <em>ABAB</em> · <strong>embrassées</strong> <em>ABBA</em>.</li>
+        <li><strong>Nature</strong> : rime <strong>féminine</strong> (se termine par un « e » muet) / rime <strong>masculine</strong> (pas de « e » muet).</li>
+        <li><strong>Qualité</strong> (nombre de sons en commun) : <strong>pauvre</strong> (1 son), <strong>suffisante</strong> (2 sons), <strong>riche</strong> (3 sons ou +).</li>
+      </ul>
+      <p><strong>Calligramme</strong> (Apollinaire) : poème dont la disposition des mots <strong>dessine une forme</strong>.</p>
       <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">✨ Figures de style à connaître</h3>
       <table class="compare-table">
         <thead><tr><th>Figure</th><th>Définition (et exemple)</th></tr></thead>
@@ -439,8 +449,9 @@
         <div class="formula-box"><h3>Les métiers du théâtre</h3><p style="line-height:1.9; margin:0;"><strong>dramaturge</strong> (auteur) · <strong>comédien</strong> · <strong>tragédien</strong> · <strong>figurant</strong> (muet) · <strong>metteur en scène</strong> · <strong>régisseurs</strong></p></div>
       </div>
       <div>
-        <div class="formula-box"><h3>Compter les syllabes</h3><div class="formula-main" style="font-size:17px;">alexandrin = 12 · décasyllabe = 10 · octosyllabe = 8</div></div>
+        <div class="formula-box"><h3>Compter les syllabes</h3><div class="formula-main" style="font-size:15px;">12 alexandrin · 10 décasyllabe · 8 octosyllabe</div><p style="line-height:1.8; margin:.5rem 0 0;">Césure de l'alexandrin = 2 <strong>hémistiches</strong> de 6 syllabes. Le « e » muet en fin de vers ne compte pas.</p></div>
         <div class="formula-box"><h3>Disposition des rimes</h3><p style="line-height:1.9; margin:0;">plates <em>AABB</em> · croisées <em>ABAB</em> · embrassées <em>ABBA</em></p></div>
+        <div class="formula-box"><h3>Rimes : nature &amp; qualité</h3><p style="line-height:1.9; margin:0;"><strong>Nature</strong> : féminine (« e » muet final) / masculine (sans). <strong>Qualité</strong> : pauvre (1 son) · suffisante (2) · riche (3+).</p></div>
         <div class="formula-box"><h3>Figures de style</h3><p style="line-height:1.9; margin:0;"><strong>Comparaison</strong> (avec « comme ») · <strong>Métaphore</strong> (sans outil) · <strong>Personnification</strong> · <strong>Hyperbole</strong> · <strong>Anaphore</strong> · <strong>Allitération</strong>/<strong>assonance</strong></p></div>
         <div class="formula-box"><h3>Le mythe</h3><p style="line-height:1.9; margin:0;">Récit <strong>sacré</strong> (oral à l'origine ; <em>muthos</em> = « la parole ») avec des <strong>êtres surnaturels/héros</strong> ; <strong>explique</strong> le monde (création, mort, foudre…) et transmet des <strong>valeurs</strong>. Ex : Genèse, Prométhée, Popol Vuh.</p></div>
         <div class="formula-box"><h3>Le résumé</h3><p style="line-height:1.9; margin:0;"><strong>Réduire</strong> (≈ ¼), <strong>reformuler</strong> avec ses mots, rester <strong>neutre</strong> (pas de « je »), garder l'<strong>essentiel</strong> et l'<strong>ordre</strong>. Une liste → un <strong>hyperonyme</strong>.</p></div>
@@ -577,6 +588,10 @@
     { q: "« Il est rusé comme un renard » est…", opts: ["une comparaison", "une métaphore", "une hyperbole", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Comparaison : présence de l'outil « comme »." },
     { q: "« Cet homme est un lion » est…", opts: ["une métaphore", "une comparaison", "une personnification", "une assonance"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Métaphore : rapprochement sans outil de comparaison." },
     { q: "Des rimes disposées ABAB sont…", opts: ["croisées", "plates", "embrassées", "absentes"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Plates AABB · croisées ABAB · embrassées ABBA." },
+    { q: "La césure de l'alexandrin le coupe en deux…", opts: ["hémistiches (6 + 6 syllabes)", "strophes", "rimes", "quatrains"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "L'alexandrin (12) se coupe au milieu en 2 hémistiches de 6 syllabes." },
+    { q: "Une rime « féminine » se termine par…", opts: ["un « e » muet", "une consonne forte", "une majuscule", "un point"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Féminine = avec « e » muet final ; masculine = sans « e » muet." },
+    { q: "Une rime « riche », c'est…", opts: ["3 sons en commun (ou plus)", "1 seul son", "aucune rime", "2 strophes"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Qualité : pauvre (1 son), suffisante (2), riche (3 ou +)." },
+    { q: "Un vers de 8 syllabes s'appelle…", opts: ["un octosyllabe", "un alexandrin", "un décasyllabe", "un hémistiche"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "8 = octosyllabe ; 10 = décasyllabe ; 12 = alexandrin." },
     { q: "Pour présenter une œuvre à l'oral, on termine par…", opts: ["un avis personnel argumenté", "le prix du livre", "rien", "une question au prof"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Présenter → résumer → analyser → avis argumenté." },
     { q: "Un calligramme, inventé par Apollinaire, est…", opts: ["un poème dont les mots dessinent une forme", "une longue tirade", "une fable", "un résumé"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Calligramme = poème-dessin (Guillaume Apollinaire)." },
     { q: "Une fable de La Fontaine se termine toujours par…", opts: ["une morale", "une rime", "un quiproquo", "un acte"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La fable = court récit (souvent d'animaux) + une morale : une argumentation indirecte." },
@@ -638,6 +653,9 @@
     { front: "Comédie vs tragédie ?", back: "Comédie = fait rire, dénouement heureux, personnages ordinaires. Tragédie = personnages nobles, fatalité, fin malheureuse.", chapter: "comedie" },
     { front: "Alexandrin / décasyllabe / octosyllabe ?", back: "12 / 10 / 8 syllabes.", chapter: "poesie" },
     { front: "Rimes plates / croisées / embrassées ?", back: "Plates AABB · croisées ABAB · embrassées ABBA.", chapter: "poesie" },
+    { front: "La césure et l'hémistiche ?", back: "La césure coupe le vers ; dans l'alexandrin, elle le partage en 2 hémistiches de 6 syllabes (6 + 6).", chapter: "poesie" },
+    { front: "Rime féminine vs masculine ?", back: "Féminine = se termine par un « e » muet. Masculine = sans « e » muet final.", chapter: "poesie" },
+    { front: "Qualité d'une rime (pauvre/suffisante/riche) ?", back: "Selon le nombre de sons en commun : pauvre = 1 son, suffisante = 2 sons, riche = 3 sons ou plus.", chapter: "poesie" },
     { front: "Comparaison vs métaphore ?", back: "Comparaison = avec outil (comme, tel). Métaphore = sans outil (« cet homme est un lion »).", chapter: "poesie" },
     { front: "Personnification / hyperbole / anaphore ?", back: "Personnification = traits humains à une chose. Hyperbole = exagération. Anaphore = répétition en début de vers.", chapter: "poesie" },
     { front: "Plan pour présenter une œuvre à l'oral ?", back: "Présenter (auteur, titre) → résumer le thème → analyser (procédés) → avis personnel argumenté.", chapter: "oral" },
