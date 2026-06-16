@@ -1195,6 +1195,10 @@
       }
       bd.addEventListener('pointerdown', function (e) {
         if (_ink.on || e.button !== 0) return;            // dessin/déplacer : géré ailleurs
+        // 👆 TACTILE : un glissé du doigt doit FAIRE DÉFILER la page, pas dessiner un
+        // rectangle de sélection. Le marquee (clic-glissé sur le fond) reste réservé à
+        // la SOURIS (PC). Sans ça, impossible de scroller le tableau au doigt.
+        if (e.pointerType && e.pointerType !== 'mouse') return;
         if (e.target.closest('.cre-tbox')) return;         // sur un bloc : le bloc gère
         if (startsOnText(e)) return;                       // sur du texte : sélection de texte normale
         var start = inkPos(e), sx = e.clientX, sy = e.clientY;
@@ -1229,6 +1233,7 @@
         function up() {
           document.removeEventListener('pointermove', mv);
           document.removeEventListener('pointerup', up);
+          document.removeEventListener('pointercancel', up);
           if (active) {
             bd.classList.remove('cre-marqueeing');
             if (marqEl) marqEl.remove();
@@ -1242,6 +1247,7 @@
         }
         document.addEventListener('pointermove', mv);
         document.addEventListener('pointerup', up);
+        document.addEventListener('pointercancel', up);
       });
     }
     _ink.canvas = cv; _ink.ctx = cv.getContext('2d');
