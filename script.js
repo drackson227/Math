@@ -2849,6 +2849,15 @@ function rebuildFlashcardFilters() {
   wrap.innerHTML = html;
 }
 
+// Mobile : replier/déplier les filtres flashcards (écran moins chargé)
+function toggleFcFilters() {
+  var f = document.getElementById('fc-filters');
+  var t = document.getElementById('fc-filter-toggle');
+  if (!f) return;
+  var open = f.classList.toggle('fc-open');
+  if (t) { t.classList.toggle('on', open); t.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+}
+
 function _dueCards() {
   const now = Date.now();
   return flashcards.filter(c => { const r = flashcardData[c.front]; return !r || !r.due || new Date(r.due).getTime() <= now; });
@@ -3092,7 +3101,7 @@ function updateFavStar(front) {
   const b = document.getElementById('fc-fav-btn');
   if (!b) return;
   const fav = _favCards().indexOf(front) >= 0;
-  b.textContent = fav ? '⭐ Favori' : '☆ Favori';
+  b.innerHTML = (fav ? '⭐' : '☆') + ' <span class="fc-lbl">Favori</span>';
   b.classList.toggle('speaking', fav);
 }
 

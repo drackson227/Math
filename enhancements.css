@@ -1479,3 +1479,16 @@ body.theme-light .tag-cercle { background: rgba(29,78,216,0.12); color: #1d4ed8;
 body.theme-light #missed-filter-btn { color: #9a3412 !important; }
 body.theme-light .reset-prog-btn { color: #b91c1c !important; }
 body.theme-light code { color: #6b21a8; }
+
+/* ═══════════ Flashcards mobile : moins de boutons (filtres repliés + actions en icônes) ═══════════ */
+#fc-filter-toggle { display: none; }                       /* bureau : filtres toujours visibles */
+@media (max-width: 768px) {
+  #fc-filter-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; margin-bottom: 8px; }
+  #fc-filter-toggle.on { color: var(--color-nav); border-color: var(--color-nav); } /* contraste-sûr (pas de blanc sur accent) */
+  #fc-filters { display: none !important; }                /* repliés par défaut (inline display:flex → !important) */
+  #fc-filters.fc-open { display: flex !important; }        /* dépliés au tap sur « 🔎 Filtres » */
+  .fc-speak .fc-lbl { display: none; }                     /* boutons d'action = icônes seules */
+  #fc-prev-btn, #fc-speak-btn, #fc-write-btn, #fc-fav-btn, #fc-shuffle-btn, #fc-revision-btn {
+    min-width: 44px; min-height: 40px; padding: 8px 11px; font-size: 18px; line-height: 1;
+  }
+}

@@ -404,15 +404,16 @@
     <div style="max-width:600px; margin:0 auto 0.5rem; height:4px; background:var(--border-subtle); border-radius:2px;">
       <div id="flashcard-prog-bar" style="height:100%; background:var(--color-nav); border-radius:2px; transition:width 0.4s ease; width:0%;"></div>
     </div>
+    <button type="button" id="fc-filter-toggle" class="fc-speak" onclick="toggleFcFilters(); event.stopPropagation();" aria-expanded="false">🔎 Filtres</button>
     <div id="fc-filters" style="display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; justify-content:center;"><!-- chips générés par rebuildFlashcardFilters() selon la matière --></div>
     <p id="flashcard-progress" style="color:var(--text-secondary); margin-bottom:0.5rem;">Carte 1 / 10</p>
     <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:0.7rem;">
-      <button type="button" id="fc-prev-btn" class="fc-speak" onclick="prevFlashcard(); event.stopPropagation();">◀ Précédent</button>
-      <button type="button" id="fc-speak-btn" class="fc-speak" onclick="speakFlashcard(); event.stopPropagation();">🔊 Écouter</button>
-      <button type="button" id="fc-write-btn" class="fc-speak" onclick="toggleWriteMode(); event.stopPropagation();">✏️ Écrire la réponse</button>
-      <button type="button" id="fc-fav-btn" class="fc-speak" onclick="toggleFavCard(); event.stopPropagation();">☆ Favori</button>
-      <button type="button" id="fc-shuffle-btn" class="fc-speak" onclick="shuffleFlashcards(); event.stopPropagation();">🔀 Mélanger</button>
-      <button type="button" id="fc-revision-btn" class="fc-speak" onclick="printRevisionSheet(); event.stopPropagation();">📄 Fiche de révision</button>
+      <button type="button" id="fc-prev-btn" class="fc-speak" aria-label="Carte précédente" title="Précédent" onclick="prevFlashcard(); event.stopPropagation();">◀ <span class="fc-lbl">Précédent</span></button>
+      <button type="button" id="fc-speak-btn" class="fc-speak" aria-label="Écouter la carte" title="Écouter" onclick="speakFlashcard(); event.stopPropagation();">🔊 <span class="fc-lbl">Écouter</span></button>
+      <button type="button" id="fc-write-btn" class="fc-speak" aria-label="Écrire la réponse" title="Écrire la réponse" onclick="toggleWriteMode(); event.stopPropagation();">✏️ <span class="fc-lbl">Écrire la réponse</span></button>
+      <button type="button" id="fc-fav-btn" class="fc-speak" aria-label="Mettre en favori" title="Favori" onclick="toggleFavCard(); event.stopPropagation();">☆ <span class="fc-lbl">Favori</span></button>
+      <button type="button" id="fc-shuffle-btn" class="fc-speak" aria-label="Mélanger les cartes" title="Mélanger" onclick="shuffleFlashcards(); event.stopPropagation();">🔀 <span class="fc-lbl">Mélanger</span></button>
+      <button type="button" id="fc-revision-btn" class="fc-speak" aria-label="Fiche de révision" title="Fiche de révision" onclick="printRevisionSheet(); event.stopPropagation();">📄 <span class="fc-lbl">Fiche de révision</span></button>
     </div>
     <p id="fc-session" style="display:none; color:var(--color-parabole); font-weight:600; font-size:13px; margin-bottom:0.5rem;"></p>
     <div id="fc-write" style="display:none; max-width:480px; margin:0 auto 0.9rem;">
