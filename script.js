@@ -2400,7 +2400,7 @@ function renderStudyDashboard() {
     if (!s || !s.ready || !s.content) return;
     var c = s.content;
     var cards = c.flashcards || [];
-    var due = cards.filter(function (card) { var r = fcData[card.front]; return !r || !r.due || new Date(r.due).getTime() <= now; }).length;
+    var due = cards.filter(function (card) { var r = fcData[card.front]; return r && r.due && new Date(r.due).getTime() <= now; }).length; // I: cartes déjà vues ET réellement dues (pas les neuves jamais ouvertes)
     totalDue += due;
     var qs = c.questions || [], chOrder = c.chapOrder || [], chLabels = c.chapLabels || {};
     var weak = null, weakPct = 101;
@@ -2413,13 +2413,13 @@ function renderStudyDashboard() {
     });
     var examBest = (examHist[key] && examHist[key].length) ? examHist[key].reduce(function (m, h) { return Math.max(m, h.note); }, 0) : null;
     var accent = (window.SUBJECT_ACCENTS && window.SUBJECT_ACCENTS[key]) || 'var(--color-nav)';
-    var dueBadge = due > 0 ? '<span style="color:#fbbf24; font-weight:700;">🔔 ' + due + ' carte' + (due > 1 ? 's' : '') + '</span>' : '<span style="color:#34d399;">✓ à jour</span>';
+    var dueBadge = due > 0 ? '<span class="dash-due" style="font-weight:700;">🔔 ' + due + ' carte' + (due > 1 ? 's' : '') + '</span>' : '<span class="dash-ok">✓ à jour</span>';
     var hasWeak = (weak && weakPct < 100);
-    var weakTxt = hasWeak ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span style="color:#34d399;">tout maîtrisé 🎉</span>';
+    var weakTxt = hasWeak ? 'point faible : <strong>' + (chLabels[weak] || weak) + '</strong> (' + weakPct + '%)' : '<span class="dash-ok">tout maîtrisé 🎉</span>';
     var examTxt = examBest != null ? ' · 📝 record ' + examBest + '/20' : '';
     var actBtn = 'font-size:12.5px; font-weight:700; border:none; border-radius:9px; padding:9px 13px; min-height:40px; cursor:pointer;';
     // couleur de matière assombrie (color-mix) → texte blanc lisible même sur les teintes claires (géo, histoire…)
-    var quizBtn = hasWeak ? '<button type="button" onclick="reviseWeakChapter(\'' + key + '\',\'' + weak + '\')" style="' + actBtn + ' background:color-mix(in srgb, ' + accent + ' 70%, #000); color:#fff;">🎯 Quiz : ' + (chLabels[weak] || weak) + '</button>' : '';
+    var quizBtn = hasWeak ? '<button type="button" onclick="reviseWeakChapter(\'' + key + '\',\'' + weak + '\')" style="' + actBtn + ' background:color-mix(in srgb, ' + accent + ' 55%, #000); color:#fff;">🎯 Quiz : ' + (chLabels[weak] || weak) + '</button>' : '';
     rows += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-left:5px solid ' + accent + '; border-radius:14px; padding:0.75rem 1rem; margin-bottom:0.55rem; color:var(--text-primary);">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><span style="font-weight:700; font-size:15px;">' + (DASH_ICONS[key] || '📘') + ' ' + (DASH_LABELS[key] || key) + '</span>' + dueBadge + '</div>' +
       '<div style="font-size:12.5px; margin-top:3px; color:var(--text-secondary);">' + weakTxt + examTxt + '</div>' +
@@ -2563,7 +2563,7 @@ function updateProfile() {
         return '<div style="margin-bottom:0.85rem;">' +
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:14px;">' +
             '<span style="font-weight:600; color:var(--text-primary);">' + r.icon + ' ' + r.label + (done ? ' ✅' : '') + '</span>' +
-            '<span style="font-size:13px;"><span style="font-weight:800; color:' + accent + ';">' + pct + '%</span> <span style="color:var(--text-secondary);">· ' + r.done + '/' + r.total + '</span></span>' +
+            '<span style="font-size:13px;"><span class="dash-pct" style="font-weight:800; --acc:' + accent + '; color:var(--acc);">' + pct + '%</span> <span style="color:var(--text-secondary);">· ' + r.done + '/' + r.total + '</span></span>' +
           '</div>' +
           '<div style="height:10px; background:var(--border-subtle); border-radius:6px; overflow:hidden;">' +
             '<div style="width:' + pct + '%; height:100%; background:linear-gradient(90deg, ' + accent + ', color-mix(in srgb, ' + accent + ' 55%, #ffffff)); border-radius:6px; transition:width 0.6s ease;"></div>' +
@@ -5313,7 +5313,7 @@ function showRevisionReminder() {
     var data = loadSavedData(); var fc = data.flashcardData || {}; var now = Date.now(); var total = 0;
     ['maths', 'francais', 'anglais', 'neerlandais', 'histoire', 'geo', 'chimie', 'bio', 'eco'].forEach(function (key) {
       var s = window.SUBJECTS[key]; if (!s || !s.ready || !s.content) return;
-      (s.content.flashcards || []).forEach(function (c) { var r = fc[c.front]; if (!r || !r.due || new Date(r.due).getTime() <= now) total++; });
+      (s.content.flashcards || []).forEach(function (c) { var r = fc[c.front]; if (r && r.due && new Date(r.due).getTime() <= now) total++; }); // I: idem — cartes vues + dues seulement (un nouvel utilisateur n'a rien « à réviser »)
     });
     if (total <= 0) return;
     sessionStorage.setItem('mathsgr2_reminded', '1');

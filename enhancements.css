@@ -1420,3 +1420,62 @@ input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-
   .cb-coef { min-width: 20px; }
   .cb-btn { flex: 1 1 auto; }
 }
+
+/* ═══════════ Corrections de contraste (audit multi-thèmes) ═══════════
+   Sur un fond accent (var(--color-nav)), le texte blanc PASSE en thème clair
+   (accent foncé) mais ÉCHOUE en thèmes sombres (accent clair). → on assombrit
+   le fond de l'accent UNIQUEMENT hors thème clair, avec repli sur l'accent si
+   color-mix n'est pas supporté (aucune régression). Convention maison : 55%. */
+body:not(.theme-light) .note-tab.on,
+body:not(.theme-light) .fc-chip.on:not(.fc-chip-due):not(.fc-chip-fav):not(.fc-chip-hard):not(.fc-chip-mine),
+body:not(.theme-light) .ansheet-key.k-eq,
+body:not(.theme-light) .lblexo-list .lx-num,
+body:not(.theme-light) .lblexo:not(.marks-hidden) .lx-mark:not(.ok):not(.no) {
+  background: var(--color-nav);
+  background: color-mix(in srgb, var(--color-nav) 55%, #000);
+  border-color: color-mix(in srgb, var(--color-nav) 55%, #000);
+}
+/* "Commencer le quiz" a un style inline → !important pour le surcharger */
+body:not(.theme-light) button[onclick="startQuiz()"] {
+  background: var(--color-nav) !important;
+  background: color-mix(in srgb, var(--color-nav) 55%, #000) !important;
+}
+
+/* Thème CLAIR « minimal » : accents codés en dur, illisibles sur blanc → versions
+   assombries (contraste AA). Les couleurs inline en JS sont corrigées côté JS. */
+body.theme-light #app-validated { color: #166534 !important; background: rgba(21,128,61,0.10) !important; border-color: rgba(21,128,61,0.40) !important; }
+body.theme-light .tag-vecteur { background: rgba(91,33,182,0.12); color: #5b21b6; }
+body.theme-light .tag-droite { background: rgba(154,52,18,0.12); color: #9a3412; }
+body.theme-light .bio-compare th.c-mito { color: #1d4ed8; }
+body.theme-light .bio-compare th.c-meio { color: #6d28d9; }
+body.theme-light .fc-chip-fav { color: #b45309; border-color: #b45309; }
+body.theme-light .fc-chip-fav.on { background: #b45309; border-color: #b45309; color: #fff; }
+
+/* bascules flottantes ☰/⚙️ : même assombrissement hors thème clair */
+body:not(.theme-light) .settings-toggle,
+body:not(.theme-light) .sidebar-toggle {
+  background: var(--color-nav);
+  background: color-mix(in srgb, var(--color-nav) 55%, #000);
+}
+/* marqueurs ✓/✗ du pondérateur : blanc (lisible sur vert ET rouge, tous thèmes) */
+.cb-tally td.cb-ok { color: #fff; }
+/* badges du tableau de bord (profil) : couleurs fixes lisibles dans les 2 thèmes */
+.dash-due { color: #fbbf24; }
+.dash-ok { color: #34d399; }
+body.theme-light .dash-due { color: #b45309; }
+body.theme-light .dash-ok { color: #15803d; }
+/* % de maîtrise par matière : accent gardé en sombre, assombri en clair */
+body.theme-light .dash-pct { color: color-mix(in srgb, var(--acc, var(--color-nav)) 50%, #000) !important; }
+/* thème clair : ambres / rouges codés en dur → lisibles sur blanc */
+body.theme-light .ft-chip-ok { color: #b45309; border-color: rgba(180,83,9,0.4); }
+body.theme-light .ansheet-key.k-del { color: #b91c1c; border-color: rgba(185,28,28,0.4); }
+body.theme-light .fc-chip-due.on { color: #fff; }
+/* titres mitose/méiose (encadrés bio) : accent gardé en sombre, assombri en clair */
+.bio-mito { color: #60a5fa; }
+.bio-meio { color: #c4b5fd; }
+body.theme-light .bio-mito { color: #1d4ed8; }
+body.theme-light .bio-meio { color: #6d28d9; }
+body.theme-light .tag-cercle { background: rgba(29,78,216,0.12); color: #1d4ed8; }
+body.theme-light #missed-filter-btn { color: #9a3412 !important; }
+body.theme-light .reset-prog-btn { color: #b91c1c !important; }
+body.theme-light code { color: #6b21a8; }

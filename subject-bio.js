@@ -234,8 +234,8 @@
         <div><strong>1.</strong> 🧬 L'<strong>ADN est copié</strong> (phase S) — appariement <strong>A–T</strong> et <strong>C–G</strong>.</div>
         <div><strong>2.</strong> ➗ La cellule se <strong>divise</strong>, de deux façons :</div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:.5rem;">
-          <div style="background:rgba(96,165,250,0.12); border-radius:8px; padding:.55rem .65rem;"><strong style="color:#60a5fa;">🔵 MITOSE</strong><br>2 cellules <strong>identiques</strong> (2n → 2n)<br><span style="color:var(--text-secondary);">le corps : croissance & réparation</span></div>
-          <div style="background:rgba(196,181,253,0.12); border-radius:8px; padding:.55rem .65rem;"><strong style="color:#c4b5fd;">🟣 MÉIOSE</strong><br>4 <strong>gamètes</strong> (2n → n)<br><span style="color:var(--text-secondary);">la reproduction : ovules, spermatozoïdes</span></div>
+          <div style="background:rgba(96,165,250,0.12); border-radius:8px; padding:.55rem .65rem;"><strong class="bio-mito">🔵 MITOSE</strong><br>2 cellules <strong>identiques</strong> (2n → 2n)<br><span style="color:var(--text-secondary);">le corps : croissance & réparation</span></div>
+          <div style="background:rgba(196,181,253,0.12); border-radius:8px; padding:.55rem .65rem;"><strong class="bio-meio">🟣 MÉIOSE</strong><br>4 <strong>gamètes</strong> (2n → n)<br><span style="color:var(--text-secondary);">la reproduction : ovules, spermatozoïdes</span></div>
         </div>
         <div><strong>3.</strong> 💞 <strong>Fécondation</strong> : n + n → <strong>2n</strong> (la cellule-œuf).</div>
         <div><strong>4.</strong> 🧪 <strong>Génétique</strong> (Mendel) : gènes & allèles, <strong>dominant / récessif</strong>, Aa × Aa → <strong>3 : 1</strong>.</div>

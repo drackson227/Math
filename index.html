@@ -498,7 +498,7 @@
         <span style="color:var(--text-secondary); font-size:13px; margin-left:6px;">disponibles</span>
       </div>
       <br>
-      <button onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.favoriteCards=[]; d.study={}; d.badgeEarned=[]; d.examDates={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
+      <button class="reset-prog-btn" onclick="if(confirm('Réinitialiser tous les progrès ? (quiz, XP, badges, erreurs, journal…)')){ const d=loadSavedData(); d.bestScore=0; d.totalQuizzes=0; d.totalScore=0; d.masteredQuestions={}; d.missedQuestions=[]; d.wrongQuestions=[]; d.xp=0; d.level='Apprenti géomètre'; d.badges=[]; d.streak=0; d.lastDate=null; d.scoreHistory=[]; d.confidenceData={}; d.calendar={}; d.flashcardData={}; d.examHistory={}; d.favoriteCards=[]; d.study={}; d.badgeEarned=[]; d.examDates={}; d.journalEntries=[]; d.pomodorosCompleted=0; saveData(d); filterQuiz(); showToast('Tous les progrès réinitialisés','#f87171'); }" style="margin-top:0.5rem; padding:6px 14px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); color:#f87171; font-size:12px; cursor:pointer;">🗑️ Réinitialiser progrès</button>
   </div>
   <!-- Écran quiz actif -->
   <div id="quiz-active-screen" style="display:none;">
@@ -641,7 +641,7 @@
 
   <!-- ════ ❓ ONGLET QUESTIONS DE QUIZ (formulaire historique) ════ -->
   <div id="cre-pane-quiz">
-  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:1.5rem; align-items:start;">
     <!-- Formulaire de création -->
     <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
       <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">➕ Nouvelle question</h3>
@@ -711,7 +711,7 @@
 
   <!-- ════ 🎴 ONGLET FLASHCARDS PERSOS ════ -->
   <div id="cre-pane-cards" style="display:none;">
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; align-items:start;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:1.5rem; align-items:start;">
       <!-- Formulaire -->
       <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;">
         <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin-bottom:1rem;">➕ Nouvelle flashcard</h3>

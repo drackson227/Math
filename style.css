@@ -683,7 +683,7 @@ input[type="number"]:focus { outline: none; border-color: var(--color-nav) !impo
 * { scrollbar-width: thin; scrollbar-color: var(--color-nav) var(--bg-main); }
 
 /* ── THÈME CLAIR ── */
-body.theme-light { --bg-main:#f0f4f8; --bg-container:#ffffff; --bg-card:#f8fafc; --bg-card-hover:#eef2f7; --bg-formula:#e8edf5; --text-primary:#1a202c; --text-secondary:#4a5568; --border-subtle:rgba(0,0,0,0.1); --color-cercle:#2563eb; --color-parabole:#059669; --color-droite:#d97706; --color-nav:#7c3aed; }
+body.theme-light { --bg-main:#f0f4f8; --bg-container:#ffffff; --bg-card:#f8fafc; --bg-card-hover:#eef2f7; --bg-formula:#e8edf5; --text-primary:#1a202c; --text-secondary:#4a5568; --border-subtle:rgba(0,0,0,0.1); --color-cercle:#1d4ed8; --color-parabole:#047857; --color-droite:#b45309; --color-nav:#7c3aed; }
 body.theme-light .container { background:var(--bg-container); box-shadow:0 2px 20px rgba(0,0,0,0.08); }
 body.theme-light .nav { background:var(--bg-card); border-bottom:1px solid var(--border-subtle); }
 body.theme-light .formula-box { background:var(--bg-formula); }
