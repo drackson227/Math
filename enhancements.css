@@ -979,12 +979,15 @@ button, .nav-btn, .note-tab, .note-ch, .fx-addbtn, .fx-mini, .cre-btn, .nd-btn, 
 .exo-wrong-in:focus { outline: none; border-color: var(--color-nav); }
 /* thème Clair : la formule-image (claire) est inversée pour rester lisible */
 body.theme-light img.cre-fx-img { filter: invert(0.88) hue-rotate(180deg); }
-/* 📱 mobile : la barre d'outils devient UNE rangée qui défile au doigt
-   (au lieu de 4 rangées qui mangeaient ~30% de l'écran) */
+/* 📱 mobile : la barre d'outils PASSE À LA LIGNE (tout visible, AUCUN glissement
+   horizontal — avant : 1 rangée qui défilait et cachait la plupart des outils).
+   Boutons compacts pour limiter le nombre de rangées. */
 @media (max-width: 768px) {
-  .note-toolbar { gap: 6px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 5px; scrollbar-width: thin; }
-  .note-toolbar .nav-btn { width: auto; flex: 0 0 auto; text-align: center; white-space: nowrap; padding: 7px 10px; font-size: 13px; }
+  .note-toolbar { gap: 5px; flex-wrap: wrap; padding-bottom: 4px; }
+  .note-toolbar .nav-btn { width: auto; flex: 0 0 auto; text-align: center; white-space: nowrap; padding: 6px 9px; font-size: 12.5px; min-height: 38px; }
   .note-toolbar .cre-tb-sep, .note-toolbar .cre-font-select { flex: 0 0 auto; }
+  /* le bouton « ⬆️ haut de page » remonte au-dessus du ⚙️ réglages (sinon ils se superposent) */
+  #back-to-top { bottom: 84px !important; right: 20px !important; }
 }
 .nd-col.on { border-color: #fff; transform: scale(1.18); }
 #cre-ink { position: absolute; left: 0; top: 0; width: 100%; z-index: 3; pointer-events: none; touch-action: none; }

@@ -2278,13 +2278,18 @@ document.addEventListener('keydown', (e) => {
 
   // n'afficher le bouton que dans la section Quiz
   window.updateScratchVisibility = function () {
-    const btn = document.getElementById('scratch-btn');
-    const panel = document.getElementById('scratch-panel');
-    if (!btn) return;
     const quiz = document.getElementById('quiz');
-    const onQuiz = quiz && quiz.classList.contains('active');
-    btn.style.display = onQuiz ? 'block' : 'none';
-    if (!onQuiz && panel) panel.style.display = 'none';
+    const exo = document.getElementById('exercices');
+    const onCalc = (quiz && quiz.classList.contains('active')) || (exo && exo.classList.contains('active'));
+    const btn = document.getElementById('scratch-btn');   // ancien bouton (n'existe plus en général)
+    const panel = document.getElementById('scratch-panel');
+    if (btn) { btn.style.display = onCalc ? 'block' : 'none'; if (!onCalc && panel) panel.style.display = 'none'; }
+    // Outil ACTIF « 🧮 Brouillon » (answersheet.js) : visible UNIQUEMENT là où l'on calcule
+    // (quiz + exercices). Avant il s'affichait partout et flottait par-dessus le contenu
+    // (bloc-notes/tableau, profil, chat…) → c'était ça le « bug » d'interface sur mobile.
+    const f = document.getElementById('feuille-btn');
+    const fp = document.getElementById('feuille-panel');
+    if (f) { f.style.display = onCalc ? '' : 'none'; if (!onCalc && fp) fp.classList.remove('show'); }
   };
 
   // Ancien brouillon FUSIONNÉ avec la feuille intelligente → outil unique « 🧮 Brouillon »
@@ -5314,6 +5319,18 @@ function showRevisionReminder() {
     sessionStorage.setItem('mathsgr2_reminded', '1');
     var bar = document.createElement('div');
     bar.id = 'revision-reminder';
+    // 📱 Petit écran : pastille discrète en haut à droite — elle NE RECOUVRE PAS le menu
+    // ni le contenu (avant : gros bandeau centré collé en haut qui cachait la nav).
+    if (window.matchMedia && window.matchMedia('(max-width:768px)').matches) {
+      bar.style.cssText = 'position:fixed; top:60px; right:12px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:999px; padding:8px 13px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer; font-size:13px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px; min-height:40px; max-width:90vw;';
+      bar.innerHTML = '🔔 <strong>' + total + '</strong> <span style="opacity:.85; font-weight:600;">à réviser</span>' +
+        '<span onclick="event.stopPropagation(); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="cursor:pointer; opacity:.7; padding:0 4px; margin-left:2px;">✕</span>';
+      bar.title = total + ' carte' + (total > 1 ? 's' : '') + ' à réviser — clique pour y aller';
+      bar.onclick = function () { showSection('profil'); bar.remove(); };
+      document.body.appendChild(bar);
+      setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 90000);
+      return;
+    }
     bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; max-width:min(92vw,560px); animation:imgModalIn .25s ease;';
     bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
       '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:#7c3aed; color:#fff; border:none; border-radius:9px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; min-height:36px;">📚 Réviser</button>' +

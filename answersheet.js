@@ -227,6 +227,10 @@
     document.body.appendChild(btn);
     document.body.appendChild(panel);
 
+    // Le 🧮 Brouillon ne s'affiche que sur quiz/exercices (sinon il recouvre le contenu).
+    btn.style.display = 'none';
+    if (window.updateScratchVisibility) window.updateScratchVisibility();
+
     var sheet = panel.querySelector('#feuille-sheet');
     mount(sheet, { storageKey: 'gr2_feuille', keypad: true, liveResult: true });
 
