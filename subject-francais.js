@@ -95,6 +95,21 @@
         <li>Ex : <strong>fleur</strong> (hyperonyme) → <em>rose, tulipe, marguerite</em> (hyponymes). <strong>félin</strong> → <em>chat, lion, tigre</em>.</li>
         <li>💡 Très utile pour <strong>résumer</strong> : on remplace une <strong>liste</strong> d'hyponymes par un seul <strong>hyperonyme</strong>. <em>« des roses, des tulipes et des lys »</em> → <em>« des fleurs »</em>.</li>
       </ul>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">🔎 Trouver une information fiable (UAA 1)</h3>
+      <p>Avant de résumer, il faut <strong>trouver</strong> et <strong>sélectionner</strong> une information. Deux questions essentielles :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>La pertinence</strong> : le document <strong>concerne-t-il bien mon thème</strong> ? (le bon <strong>thème</strong>, la bonne <strong>époque</strong>, le bon <strong>lieu</strong>) — et puis-je le <strong>comprendre et l'utiliser</strong> dans mon travail ?</li>
+        <li><strong>La fiabilité</strong> : puis-je <strong>faire confiance</strong> à l'auteur ? (Il peut vouloir <strong>vendre</strong> quelque chose ou être <strong>partial</strong>.)</li>
+      </ul>
+      <p style="margin:.5rem 0 .2rem;"><strong>Évaluer un site internet</strong> (la grille du cours) :</p>
+      <ul style="line-height:1.9;">
+        <li>L'<strong>intention</strong> du site est-elle claire ?</li>
+        <li>Le <strong>responsable</strong> est-il identifiable ? (un organisme <strong>officiel / reconnu</strong>, un <strong>expert</strong> ?)</li>
+        <li>Le site est-il <strong>à jour</strong> et <strong>bien organisé</strong> ?</li>
+        <li>Le <strong>langage</strong> (orthographe, syntaxe) est-il <strong>correct</strong> ?</li>
+        <li>Les <strong>publicités</strong> sont-elles <strong>séparées</strong> du contenu ?</li>
+      </ul>
+
       <div class="gr2-explain">
         <strong>💡 En clair.</strong> Résumer = redire le texte <strong>beaucoup plus court</strong> (≈ ¼), avec <strong>tes</strong> mots, sans rien ajouter. Tu gardes les <strong>idées importantes</strong> et tu enlèves les exemples et les détails. Astuce : une liste (roses, tulipes, lys) → un mot général (des fleurs) = un <strong>hyperonyme</strong>.
         <span class="exam-tip">🎯 Pièges : pas de « je », pas d'avis personnel, on respecte l'<strong>ordre des idées</strong> de l'auteur.</span>
@@ -428,6 +443,8 @@
         <div class="formula-box"><h3>Disposition des rimes</h3><p style="line-height:1.9; margin:0;">plates <em>AABB</em> · croisées <em>ABAB</em> · embrassées <em>ABBA</em></p></div>
         <div class="formula-box"><h3>Figures de style</h3><p style="line-height:1.9; margin:0;"><strong>Comparaison</strong> (avec « comme ») · <strong>Métaphore</strong> (sans outil) · <strong>Personnification</strong> · <strong>Hyperbole</strong> · <strong>Anaphore</strong> · <strong>Allitération</strong>/<strong>assonance</strong></p></div>
         <div class="formula-box"><h3>Le mythe</h3><p style="line-height:1.9; margin:0;">Récit <strong>sacré</strong> (oral à l'origine ; <em>muthos</em> = « la parole ») avec des <strong>êtres surnaturels/héros</strong> ; <strong>explique</strong> le monde (création, mort, foudre…) et transmet des <strong>valeurs</strong>. Ex : Genèse, Prométhée, Popol Vuh.</p></div>
+        <div class="formula-box"><h3>Le résumé</h3><p style="line-height:1.9; margin:0;"><strong>Réduire</strong> (≈ ¼), <strong>reformuler</strong> avec ses mots, rester <strong>neutre</strong> (pas de « je »), garder l'<strong>essentiel</strong> et l'<strong>ordre</strong>. Une liste → un <strong>hyperonyme</strong>.</p></div>
+        <div class="formula-box"><h3>Source fiable &amp; pertinente</h3><p style="line-height:1.9; margin:0;"><strong>Pertinence</strong> : bon thème/époque/lieu, utilisable. <strong>Fiabilité</strong> : auteur de confiance ? (site : intention claire, responsable identifiable, à jour, pubs séparées).</p></div>
         <div class="formula-box"><h3>Molière (FO19)</h3><p style="line-height:1.9; margin:0;"><strong>Jean-Baptiste Poquelin</strong> (1622-1673). Illustre Théâtre · <em>Tartuffe</em>, <em>Dom Juan</em> (interdits) · mort en jouant <em>Le Malade imaginaire</em>. « La maison de Molière ».</p></div>
         <div class="formula-box"><h3>La comédie (FO20)</h3><p style="line-height:1.9; margin:0;">Pièce qui fait <strong>rire</strong> (mœurs, caractères, situations). Règle des <strong>3 unités</strong> (lieu, temps, action) · <strong>dénouement heureux</strong>. ≠ tragédie (nobles, fatalité, finit mal).</p></div>
       </div>
@@ -572,6 +589,9 @@
     { q: "« rose, tulipe, marguerite » sont des hyponymes de…", opts: ["fleur", "jardin", "couleur", "parfum"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "« fleur » est l'hyperonyme ; rose/tulipe/marguerite en sont les hyponymes." },
     { q: "Pourquoi l'hyperonyme est utile dans un résumé ?", opts: ["il remplace une liste par un seul mot", "il rallonge le texte", "il donne un avis", "il ajoute des exemples"], ans: 0, chapter: "resume", difficulty: "difficile", exp: "On condense : « des roses, des lys, des tulipes » → « des fleurs »." },
     { q: "Le « chat » est un hyponyme de…", opts: ["félin", "chien", "meuble", "légume"], ans: 0, chapter: "resume", difficulty: "facile", exp: "félin (hyperonyme) englobe chat, lion, tigre (hyponymes)." },
+    { q: "La « pertinence » d'une source, c'est…", opts: ["qu'elle concerne bien ton thème (et est utilisable)", "qu'elle est jolie", "qu'elle est récente uniquement", "qu'elle est longue"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Pertinence = bon thème/époque/lieu + tu peux la comprendre et l'utiliser." },
+    { q: "La « fiabilité » d'une source, ça vérifie…", opts: ["si on peut faire confiance à l'auteur", "si le texte est long", "le nombre d'images", "la couleur du site"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "L'auteur peut vouloir vendre ou être partial : on vérifie sa fiabilité." },
+    { q: "Pour juger un site internet fiable, on regarde…", opts: ["l'intention, le responsable, la mise à jour, les pubs", "uniquement les couleurs", "le nombre de visiteurs", "la taille de la police"], ans: 0, chapter: "resume", difficulty: "difficile", exp: "Grille : intention claire, responsable identifiable (officiel/expert), site à jour, pubs séparées du contenu." },
     { q: "Le slam est avant tout une poésie…", opts: ["orale, déclamée en public", "uniquement écrite et chantée", "sans rimes", "en latin"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Le slam = poésie orale, scandée en public, à l'origine sans musique." },
     { q: "Artiste contemporain pionnier du slam en France :", opts: ["Grand Corps Malade", "Molière", "La Fontaine", "Apollinaire"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Grand Corps Malade (Fabien Marsaud), album « Midi 20 »." },
     { q: "On analyse un slam…", opts: ["comme un poème (thème, procédés, rythme)", "comme un résumé neutre", "sans figures de style", "comme une pièce de théâtre"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Mêmes outils que la poésie : rimes, anaphores, métaphores, rythme, message." }
@@ -630,6 +650,8 @@
     { front: "Tragédie : 3 traits ?", back: "Fin malheureuse, personnages nobles, poids de la fatalité/destin.", chapter: "comedie" },
     { front: "Hyperonyme vs hyponyme ?", back: "Hyperonyme = mot général qui en englobe d'autres (fleur). Hyponyme = mot précis compris dedans (rose, tulipe).", chapter: "resume" },
     { front: "À quoi servent les hyperonymes dans un résumé ?", back: "À condenser : on remplace une liste d'hyponymes par un seul mot générique. « roses, lys, tulipes » → « fleurs ».", chapter: "resume" },
+    { front: "Pertinence vs fiabilité d'une source ?", back: "Pertinence = la source concerne bien ton thème (époque, lieu) et tu peux l'utiliser. Fiabilité = peux-tu faire confiance à l'auteur (pas de but caché : vendre, manipuler) ?", chapter: "resume" },
+    { front: "Évaluer un site internet (fiabilité) ?", back: "Intention claire ? Responsable identifiable (organisme officiel / expert) ? Site à jour et bien organisé ? Langage correct ? Publicités séparées du contenu ?", chapter: "resume" },
     { front: "Qu'est-ce que le slam ?", back: "Une poésie orale, déclamée en public, à l'origine sans musique. Joue sur le rythme, les jeux de mots, les rimes et les figures de style.", chapter: "poesie" },
     { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" }
   ];
