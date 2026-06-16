@@ -54,7 +54,7 @@
     "comedie": {
       title: "La comédie", sub: "genre théâtral", img: "moliere.jpg",
       cours: "<p>La <strong>comédie</strong> est une pièce de <strong>théâtre</strong> qui fait <strong>rire</strong> et <strong>finit bien</strong>. Maître du genre : <strong>Molière</strong>.</p>",
-      exam: "<ul><li>Comédie = rire / fin heureuse · <strong>tragédie</strong> = fin malheureuse.</li><li>Vocabulaire : acte, scène, tirade, <strong>didascalies</strong>, quiproquo.</li></ul>"
+      exam: "<ul><li><strong>4 types de comique</strong> : mots · gestes · situation · caractère.</li><li>Pièce au programme : <strong>« Knock »</strong> (Jules Romains). Auteur phare : <strong>Molière</strong>.</li></ul>"
     },
     "tragedie": {
       title: "La tragédie", sub: "genre théâtral",
@@ -135,89 +135,195 @@
     </div>
 
     <div class="synth-section">
-      <h2>Séquence 7 — Le théâtre</h2>
-      <figure class="hfig hfig-float" style="max-width:150px"><img src="moliere.jpg" alt="Molière" loading="lazy"><figcaption>Molière, maître de la comédie</figcaption></figure>
-      <div class="gr2-explain" style="border-left-color:#d97706; background:rgba(217,119,6,0.12);">
-        <strong>⚠️ À vérifier avec ton cours.</strong> Voici le <strong>lexique du théâtre standard</strong> (celui qu'on retrouve partout). Compare-le aux notes de ton prof : garde ce qui correspond, et dis-moi ce qu'il faut ajouter ou enlever pour coller exactement à ton examen.
+      <h2>Séquence 7 — La comédie (le théâtre)</h2>
+      <figure class="hfig hfig-float" style="max-width:150px"><img src="moliere.jpg" alt="Molière" loading="lazy"><figcaption>Molière, l'auteur phare de la comédie</figcaption></figure>
+      <div class="key-rule" style="text-align:left;">
+        <strong>🎯 Objectifs de l'examen — séquence « La comédie »</strong>
+        <ol style="margin:.45rem 0 0; padding-left:1.2rem; line-height:1.8;">
+          <li>Comprendre et <strong>analyser des scènes de comédie</strong>.</li>
+          <li>Relater les <strong>grands événements de la vie de Molière</strong> (FO19).</li>
+          <li>Connaître le <strong>vocabulaire et les notions du monde théâtral</strong> (FO18).</li>
+          <li>Connaître les <strong>notions théoriques de la comédie</strong> (FO20) pour analyser un texte théâtral.</li>
+        </ol>
       </div>
-      <p>Le <strong>théâtre</strong> est un texte <strong>écrit pour être joué</strong> sur une scène, devant un public. Il y a deux niveaux : ce qui est <strong>dit</strong> (les répliques) et ce qui est <strong>montré</strong> (la mise en scène : décor, gestes, lumières).</p>
+      <p>Le <strong>théâtre</strong> est un genre <strong>littéraire</strong> (un texte) <em>et</em> <strong>artistique</strong> (un spectacle). Il est né dans l'<strong>Antiquité</strong>, en <strong>Grèce</strong>. Le mot vient du grec <em>theaomai</em> = « <strong>regarder, contempler</strong> ».</p>
+      <p>Une pièce <strong>ne se réduit pas au texte</strong> : elle est faite pour être <strong>jouée</strong> sur scène, devant un public. C'est un <strong>spectacle vivant</strong> (chaque représentation est <strong>unique</strong>) et un <strong>travail collectif</strong> : le metteur en scène, les comédiens et de nombreux <strong>travailleurs de l'ombre</strong>.</p>
 
-      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">🏛️ Le lieu théâtral (la salle)</h3>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.4rem 0 0.5rem;">🏛️ A. Le monde du théâtre <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(FO18)</span></h3>
+
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1rem 0 0.4rem;">1) L'espace théâtral</h4>
+      <p>Dans un <strong>théâtre à l'italienne</strong>, les comédiens jouent sur la <strong>scène</strong> et les spectateurs prennent place dans la <strong>salle</strong>.</p>
       <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.6rem 0;">
-        <p style="text-align:center; font-weight:700; color:var(--color-nav); margin:0 0 10px; font-size:14px;">La salle vue de côté</p>
-        <div style="display:flex; flex-direction:column; gap:6px; max-width:430px; margin:0 auto;">
-          <div style="display:flex; align-items:stretch; gap:6px;">
-            <div style="flex:0 0 52px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:10.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
-            <div style="flex:1; text-align:center; font-weight:800; color:#fff; background:color-mix(in srgb, var(--color-nav) 55%, #000); border-radius:8px; padding:13px 8px;">SCÈNE <span style="font-weight:600; font-size:11.5px; opacity:.92;">(le plateau)</span></div>
-            <div style="flex:0 0 52px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:10.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
-          </div>
+        <p style="text-align:center; font-weight:700; color:var(--color-nav); margin:0 0 10px; font-size:14px;">La scène vue depuis la salle</p>
+        <div style="display:flex; align-items:stretch; gap:6px; max-width:470px; margin:0 auto;">
+          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:9.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
+          <div style="flex:0 0 62px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 4px;">côté JARDIN</div>
+          <div style="flex:1; text-align:center; font-weight:800; color:#fff; background:color-mix(in srgb, var(--color-nav) 55%, #000); border-radius:8px; padding:14px 8px;">SCÈNE <span style="font-weight:600; font-size:11.5px; opacity:.92;">(le plateau)</span></div>
+          <div style="flex:0 0 62px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 4px;">côté COUR</div>
+          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:9.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
+        </div>
+        <div style="text-align:center; font-size:11.5px; color:var(--text-secondary); margin-top:8px;">↓ la salle (le public) ↓</div>
+        <p style="font-size:11px; color:var(--text-secondary); margin:8px 0 0;">💡 Mémo : <strong>Jardin–Cour</strong>, de gauche à droite (initiales « JC »). Vu du <strong>comédien</strong> qui regarde la salle, c'est l'inverse : cour à sa <strong>gauche</strong>, jardin à sa <strong>droite</strong>.</p>
+      </div>
+      <ul style="line-height:1.9;">
+        <li><strong>Le plateau</strong> : l'espace précis où sont plantés les décors et où évoluent les comédiens.</li>
+        <li><strong>Côté cour</strong> : pour le comédien qui regarde la salle, la partie de la scène à sa <strong>gauche</strong> (donc à <strong>droite</strong> pour le spectateur).</li>
+        <li><strong>Côté jardin</strong> : la partie à sa <strong>droite</strong> (à <strong>gauche</strong> pour le spectateur).</li>
+        <li><strong>Les coulisses</strong> : la partie <strong>cachée</strong>, derrière le décor (les comédiens s'y préparent et attendent).</li>
+        <li><strong>La loge</strong> a <strong>deux sens</strong> : dans la salle = un compartiment de sièges ; dans les coulisses = la petite pièce où le comédien se prépare.</li>
+      </ul>
+      <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.8rem 0;">
+        <p style="text-align:center; font-weight:700; color:var(--color-nav); margin:0 0 10px; font-size:14px;">La salle vue de côté (les places)</p>
+        <div style="display:flex; flex-direction:column; gap:6px; max-width:440px; margin:0 auto;">
+          <div style="text-align:center; font-weight:800; color:#fff; background:color-mix(in srgb, var(--color-nav) 55%, #000); border-radius:8px; padding:12px 8px;">SCÈNE</div>
           <div style="text-align:center; font-size:11px; color:var(--text-secondary);">↑ rideau ↑</div>
-          <div style="text-align:center; font-size:12px; font-weight:600; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px;">🎻 fosse d'orchestre</div>
-          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">PARTERRE / orchestre <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">les places du bas, devant la scène</span></div>
-          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:2px solid var(--color-nav); border-radius:8px; padding:9px;">BALCON <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">les places en hauteur (à l'étage)</span></div>
+          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:2px solid var(--color-nav); border-radius:8px; padding:9px;">ORCHESTRE <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">les sièges du centre, en contrebas, devant la scène</span></div>
+          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">PARTERRE <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">les places situées derrière l'orchestre</span></div>
+          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">CORBEILLES <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">le 1ᵉʳ balcon, au-dessus de l'orchestre</span></div>
+          <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">POULAILLER / « PARADIS » <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">le dernier balcon, tout en haut (places les moins chères)</span></div>
           <div style="display:flex; gap:6px;">
-            <div style="flex:1; text-align:center; font-size:10.5px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">loges (sur les côtés)</div>
-            <div style="flex:1; text-align:center; font-size:10.5px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">galerie / « poulailler » (tout en haut)</div>
+            <div style="flex:1; text-align:center; font-size:10px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">baignoire (loge au rez-de-chaussée)</div>
+            <div style="flex:1; text-align:center; font-size:10px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">loges (compartiments sur les côtés)</div>
           </div>
         </div>
       </div>
       <ul style="line-height:1.9;">
-        <li><strong>La scène</strong> (le plateau) : l'espace où jouent les comédiens.</li>
-        <li><strong>Le rideau</strong> : sépare la scène du public ; il s'ouvre au début et se ferme à la fin.</li>
-        <li><strong>Les coulisses</strong> : l'arrière de la scène, <strong>caché</strong> du public (les comédiens s'y préparent et attendent).</li>
-        <li><strong>La fosse d'orchestre</strong> : l'espace en contrebas, entre la scène et le public, pour les musiciens.</li>
-        <li><strong>Le parterre</strong> (ou l'<strong>orchestre</strong>) : les places du <strong>rez-de-chaussée</strong>, juste devant la scène.</li>
-        <li><strong>Le balcon</strong> : les places situées <strong>en hauteur</strong>, à l'étage, qui avancent au-dessus du parterre. <em>(« c'est quoi un balcon » → un niveau de sièges surélevé.)</em></li>
-        <li><strong>Les loges</strong> : petits espaces fermés sur les côtés, pour quelques spectateurs.</li>
-        <li><strong>La galerie</strong> / le « <strong>poulailler</strong> » : les places tout en haut (les moins chères).</li>
+        <li><strong>L'orchestre</strong> : les sièges du centre, en <strong>contrebas</strong>, juste devant la scène.</li>
+        <li><strong>Le parterre</strong> : les places situées <strong>derrière</strong> les fauteuils d'orchestre.</li>
+        <li><strong>La baignoire</strong> : une <strong>loge</strong> située au <strong>rez-de-chaussée</strong>.</li>
+        <li><strong>Les corbeilles</strong> : le <strong>premier balcon</strong>, au-dessus de l'orchestre.</li>
+        <li><strong>Le poulailler</strong> (ou le « <strong>paradis</strong> ») : le <strong>dernier balcon</strong>, tout en haut ; visibilité limitée, places les <strong>moins chères</strong>.</li>
+        <li><strong>La loge</strong> : un compartiment cloisonné où des spectateurs prennent place.</li>
       </ul>
 
-      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">📜 Le texte de théâtre</h3>
-      <ul style="line-height:1.9;">
-        <li><strong>Acte</strong> : une grande partie de la pièce.</li>
-        <li><strong>Scène</strong> : une sous-partie d'un acte (elle change à chaque entrée ou sortie de personnage).</li>
-        <li><strong>Réplique</strong> : ce que dit un personnage.</li>
-        <li><strong>Tirade</strong> : une <strong>longue</strong> réplique, adressée à un autre personnage.</li>
-        <li><strong>Monologue</strong> : un personnage <strong>seul</strong> en scène qui parle (il pense à voix haute).</li>
-        <li><strong>Aparté</strong> : une parole dite <strong>au public</strong> — les autres personnages « n'entendent pas ».</li>
-        <li><strong>Dialogue</strong> : un échange de répliques entre personnages.</li>
-        <li><strong>Stichomythie</strong> : un échange de répliques <strong>très courtes</strong> et rapides (monte la tension).</li>
-        <li><strong>Didascalies</strong> : les <strong>indications de mise en scène</strong> (gestes, décor, ton), souvent <strong>en italique</strong> — elles ne sont pas dites à voix haute.</li>
-        <li><strong>Quiproquo</strong> : un <strong>malentendu</strong> (on prend une personne ou une chose pour une autre) — grand ressort comique.</li>
-      </ul>
-      <div class="key-rule"><div class="formula-main" style="font-size:16px;">Tirade = longue (à un autre) · Monologue = seul · Aparté = au public</div></div>
-
-      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">📈 La structure d'une pièce</h3>
-      <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.6rem 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; font-size:13px;">
-        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">1. Exposition</span><span style="color:var(--color-nav); font-weight:800;">→</span>
-        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">2. Nœud</span><span style="color:var(--color-nav); font-weight:800;">→</span>
-        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">3. Péripéties</span><span style="color:var(--color-nav); font-weight:800;">→</span>
-        <span style="background:var(--bg-card); border:1px solid var(--border-subtle); color:var(--text-secondary); border-radius:999px; padding:6px 12px; font-weight:700;">(coup de théâtre)</span><span style="color:var(--color-nav); font-weight:800;">→</span>
-        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">4. Dénouement</span>
-      </div>
-      <ul style="line-height:1.9;">
-        <li><strong>Exposition</strong> (scène d'exposition) : le début qui <strong>présente</strong> les personnages, le lieu et la situation.</li>
-        <li><strong>Nœud</strong> : le <strong>problème</strong> principal (le conflit) se met en place.</li>
-        <li><strong>Péripéties</strong> : les <strong>rebondissements</strong> qui compliquent l'action.</li>
-        <li><strong>Coup de théâtre</strong> : un <strong>retournement</strong> brutal et inattendu.</li>
-        <li><strong>Dénouement</strong> : la <strong>fin</strong>, qui résout (ou non) le problème — <strong>heureux</strong> en comédie, <strong>malheureux</strong> en tragédie.</li>
-      </ul>
-
-      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">🎭 Les genres</h3>
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">2) Les métiers du théâtre</h4>
       <table class="compare-table">
-        <thead><tr><th>Genre</th><th>Caractéristiques</th></tr></thead>
+        <thead><tr><th>Métier</th><th>Rôle</th></tr></thead>
         <tbody>
-          <tr><th>Comédie</th><td>fait <strong>rire</strong>, <strong>finit bien</strong> ; personnages ordinaires. (Molière)</td></tr>
-          <tr><th>Tragédie</th><td>personnages <strong>nobles</strong>, poids de la <strong>fatalité</strong>, <strong>finit mal</strong> (souvent la mort). (Corneille, Racine)</td></tr>
-          <tr><th>Drame</th><td>mêle le grave et le quotidien ; sérieux, mais sans la noblesse de la tragédie.</td></tr>
-          <tr><th>Tragi-comédie</th><td>mélange tragique et comique ; peut bien se terminer.</td></tr>
+          <tr><th>Le dramaturge</th><td>l'<strong>auteur</strong> qui écrit la pièce (comique ou tragique).</td></tr>
+          <tr><th>Le comédien</th><td>l'acteur qui interprète surtout des <strong>comédies</strong>.</td></tr>
+          <tr><th>Le tragédien</th><td>l'acteur qui joue surtout des <strong>tragédies</strong>.</td></tr>
+          <tr><th>Le figurant</th><td>l'acteur qui joue un <strong>rôle muet</strong>.</td></tr>
+          <tr><th>Le metteur en scène</th><td>celui qui <strong>organise la représentation</strong> à partir du texte.</td></tr>
+          <tr><th>Les régisseurs</th><td>les <strong>techniciens</strong> du son et de la lumière.</td></tr>
         </tbody>
       </table>
-      <p style="margin-top:0.8rem;"><strong>Les 5 ressorts du comique :</strong> comique de <strong>mots</strong> (jeux de mots), de <strong>gestes</strong>, de <strong>situation</strong> (quiproquo…), de <strong>caractère</strong> (un défaut exagéré : l'avare, le jaloux), de <strong>répétition</strong>. Grand auteur de comédies : <strong>Molière</strong>.</p>
+      <p style="margin-top:.6rem;">Sans oublier les <strong>travailleurs de l'ombre</strong> : décorateurs, costumiers, accessoiristes… qu'on ne voit pas, mais sans qui le spectacle n'existerait pas.</p>
+
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">3) La structure d'une pièce</h4>
+      <ul style="line-height:1.9;">
+        <li><strong>L'acte</strong> : une grande partie de la pièce. On <strong>baisse le rideau</strong> entre deux actes (pour changer le décor). La pause entre deux actes est l'<strong>entracte</strong>.</li>
+        <li><strong>Les tableaux</strong> / les <strong>journées</strong> : dans les pièces plus récentes, le découpage en actes est parfois remplacé par des tableaux (certaines pièces modernes n'ont plus de découpage).</li>
+        <li><strong>La scène</strong> : une <strong>subdivision</strong> de l'acte. On change de scène quand un personnage <strong>entre ou sort</strong>.</li>
+      </ul>
+
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">4) La progression de l'intrigue</h4>
+      <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.6rem 0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; font-size:13px;">
+        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">Exposition</span><span style="color:var(--color-nav); font-weight:800;">→</span>
+        <span style="background:var(--bg-card); border:1px solid var(--border-subtle); color:var(--text-secondary); border-radius:999px; padding:6px 12px; font-weight:700;">(coup de théâtre)</span><span style="color:var(--color-nav); font-weight:800;">→</span>
+        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">Nœud (point culminant)</span><span style="color:var(--color-nav); font-weight:800;">→</span>
+        <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:999px; padding:6px 12px; font-weight:700;">Dénouement</span>
+      </div>
+      <ul style="line-height:1.9;">
+        <li><strong>L'exposition</strong> (la 1ʳᵉ scène = <strong>scène d'exposition</strong>) : présente les personnages, le lieu et la situation.</li>
+        <li><strong>Le coup de théâtre</strong> : un <strong>événement inattendu</strong> qui modifie le cours de l'action.</li>
+        <li><strong>Le nœud</strong> : le <strong>point culminant</strong> de l'action.</li>
+        <li><strong>Le dénouement</strong> : la <strong>fin</strong> et la <strong>solution</strong> ; ce qui met un terme à l'intrigue.</li>
+      </ul>
+
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">5) Le langage théâtral</h4>
+      <div class="key-rule" style="text-align:left;"><strong>⭐ La double énonciation.</strong> Au théâtre, une parole s'adresse <strong>en même temps</strong> à deux destinataires : les autres <strong>personnages</strong> (sur scène) <em>et</em> le <strong>public</strong> (dans la salle). C'est ce qui rend possibles le <strong>quiproquo</strong>, l'<strong>ironie</strong> et le <strong>comique</strong> : le spectateur comprend ce que les personnages ignorent.</div>
+      <p style="margin:.6rem 0 .2rem;"><strong>Les formes de la parole :</strong></p>
+      <ul style="line-height:1.9;">
+        <li><strong>Réplique</strong> : chaque prise de parole d'un personnage.</li>
+        <li><strong>Tirade</strong> : une <strong>longue</strong> suite de phrases dite sans interruption.</li>
+        <li><strong>Monologue</strong> : un personnage <strong>seul</strong> qui parle (il réfléchit, hésite, analyse ses sentiments).</li>
+        <li><strong>Aparté</strong> : une parole dite <strong>au public</strong>, que les autres personnages « n'entendent pas ».</li>
+        <li><strong>Stichomythies</strong> : des répliques <strong>très courtes</strong> qui s'enchaînent rapidement.</li>
+      </ul>
+      <p style="margin:.4rem 0 .2rem;"><strong>Le langage non verbal :</strong> les <strong>didascalies</strong> (les indications du texte : gestes, décor, ton… souvent en italique), complétées par les choix du <strong>metteur en scène</strong> (lumière, son, décor).</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:15px;">Tirade = longue · Monologue = seul · Aparté = au public · Stichomythies = répliques très courtes</div></div>
+
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">6) Les expressions du théâtre <span style="font-size:12.5px; font-weight:600; color:var(--text-secondary);">(à savoir par cœur)</span></h4>
+      <table class="compare-table">
+        <thead><tr><th>Expression</th><th>Sens</th></tr></thead>
+        <tbody>
+          <tr><th>Faire une entrée théâtrale</th><td>une entrée <strong>remarquée</strong>, spectaculaire.</td></tr>
+          <tr><th>Être le théâtre de…</th><td>être le <strong>lieu</strong> où se passe un événement.</td></tr>
+          <tr><th>Jouer la comédie</th><td><strong>faire semblant</strong>.</td></tr>
+          <tr><th>Un coup de théâtre</th><td>un <strong>retournement</strong> soudain et inattendu.</td></tr>
+          <tr><th>L'art dramatique</th><td>le <strong>théâtre</strong> (comme discipline).</td></tr>
+          <tr><th>Brûler les planches</th><td>jouer avec <strong>talent et énergie</strong>.</td></tr>
+          <tr><th>Tenir l'affiche</th><td>être joué <strong>longtemps</strong> (un succès).</td></tr>
+          <tr><th>Jouer les divas</th><td>faire des <strong>caprices</strong>.</td></tr>
+          <tr><th>Jouer au pied levé</th><td><strong>remplacer</strong> au dernier moment, sans préparation.</td></tr>
+          <tr><th>Rester en carafe</th><td>rester <strong>bloqué</strong>, en plan (ex. oublier son texte).</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.5rem 0 0.5rem;">🎭 B. Molière, l'auteur phare <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(FO19)</span></h3>
+      <ul style="line-height:1.9;">
+        <li>De son vrai nom <strong>Jean-Baptiste Poquelin</strong> (Paris, <strong>15 janvier 1622</strong> – <strong>17 février 1673</strong>).</li>
+        <li>Famille de la <strong>bourgeoisie</strong> (père tapissier du roi) ; il perd sa <strong>mère à 10 ans</strong>.</li>
+        <li>Études chez les <strong>jésuites</strong> (auteurs comiques latins), puis des études de <strong>droit</strong> — mais à <strong>20 ans</strong> il choisit le théâtre.</li>
+        <li>Il fonde l'<strong>Illustre Théâtre</strong> (1643) avec la comédienne <strong>Madeleine Béjart</strong> ; <strong>faillite</strong> en 1645, puis une <strong>tournée en province</strong> d'une douzaine d'années.</li>
+        <li>Retour à Paris (1658) : succès des <em>Précieuses ridicules</em>, puis de <em>L'École des femmes</em> (1662). Il s'attire la jalousie des rivaux et des <strong>dévots</strong> ; <em>Tartuffe</em> et <em>Dom Juan</em> sont <strong>interdits</strong>, mais <strong>Louis XIV</strong> le soutient.</li>
+        <li><strong>Mort presque en scène</strong> : pris d'un malaise en jouant <em>Le Malade imaginaire</em>, il meurt le soir même ; il est <strong>enterré de nuit</strong>.</li>
+        <li>👉 La <strong>Comédie-Française</strong> est surnommée « <strong>la maison de Molière</strong> ».</li>
+      </ul>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.5rem 0 0.5rem;">😂 C. La comédie <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(FO20)</span></h3>
+      <div class="key-rule" style="text-align:left;"><strong>Définition.</strong> La <strong>comédie</strong> est une pièce de théâtre destinée à <strong>faire rire</strong>, par la <strong>peinture des mœurs</strong>, des <strong>caractères</strong> ou la <strong>succession de situations inattendues</strong>.</div>
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1rem 0 0.4rem;">Un peu d'histoire</h4>
+      <table class="compare-table">
+        <thead><tr><th>Époque</th><th>La comédie</th></tr></thead>
+        <tbody>
+          <tr><th>Antiquité</th><td>en Grèce, <strong>Aristophane</strong> en fait une satire des mœurs ; à Rome, <strong>Plaute</strong>.</td></tr>
+          <tr><th>Moyen-Âge</th><td>la <strong>farce</strong> : un mari cocu, un avare, un mauvais tour joué à un sot ; coups de bâton, déguisements. Le rire <strong>libère</strong> (on se moque des puissants).</td></tr>
+          <tr><th>XVIIᵉ s.</th><td>la <strong>commedia dell'arte</strong> italienne (théâtre improvisé sur canevas) ; en France, <strong>Molière</strong>.</td></tr>
+          <tr><th>XVIIIᵉ s.</th><td>le <strong>vaudeville</strong> : une comédie d'<strong>intrigue</strong> (péripéties, quiproquos).</td></tr>
+          <tr><th>Après 1945</th><td>le <strong>théâtre de l'absurde</strong> (Ionesco, Tardieu, Vian) : comique mais grinçant.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.6rem;"><strong>Personnages et intrigue :</strong> l'univers de la comédie est celui du <strong>tiers état</strong> (bourgeois, paysans). Les <strong>valets et servantes</strong> y jouent un grand rôle (dévoués, mais rusés et gourmands). Au centre des conflits : l'<strong>argent</strong> et l'<strong>amour</strong>, souvent des <strong>conflits familiaux</strong>.</p>
+      <p style="margin:.5rem 0 .2rem;"><strong>Les règles de la comédie classique :</strong></p>
+      <ul style="line-height:1.9;">
+        <li>La <strong>règle des trois unités</strong> : un seul <strong>lieu</strong>, un seul <strong>temps</strong>, une seule <strong>action</strong>.</li>
+        <li>On met en scène des <strong>bourgeois</strong> et des gens du <strong>peuple</strong>.</li>
+        <li>On multiplie <strong>rebondissements</strong>, <strong>quiproquos</strong> et <strong>péripéties</strong> jusqu'au <strong>dénouement heureux</strong>.</li>
+        <li>Le <strong>déguisement</strong>, ressort propice à la surprise.</li>
+      </ul>
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">Les 4 types de comique</h4>
+      <table class="compare-table">
+        <thead><tr><th>Type</th><th>En quoi ça consiste</th></tr></thead>
+        <tbody>
+          <tr><th>de mots</th><td>jeu sur les <strong>mots</strong> ou les sons : double sens, mélange des niveaux de langue (calembour, contrepèterie, jeu de mots).</td></tr>
+          <tr><th>de gestes</th><td><strong>grimaces</strong>, mimes, chutes, <strong>coups</strong> (farce, commedia dell'arte, cinéma muet).</td></tr>
+          <tr><th>de situation</th><td>effet de <strong>surprise</strong>, stratagème (personnage caché, déguisement), <strong>quiproquo</strong>, malentendu.</td></tr>
+          <tr><th>de caractère</th><td>on <strong>exagère les défauts</strong> d'un personnage type : l'avare, l'hypocrite, le naïf.</td></tr>
+        </tbody>
+      </table>
+      <h4 style="font-size:16.5px; font-weight:700; color:var(--text-primary); margin:1.1rem 0 0.4rem;">Les 5 procédés d'écriture comique</h4>
+      <ul style="line-height:1.9;">
+        <li><strong>L'écart</strong> : un décalage entre l'attitude / le statut / le caractère d'une personne et la situation où elle se trouve.</li>
+        <li><strong>Le renversement</strong> : un retournement <strong>brutal</strong> de la situation.</li>
+        <li><strong>Le glissement vers l'absurde</strong> : on passe de l'ordre <strong>logique</strong> à l'<strong>absurde</strong>.</li>
+        <li><strong>La répétition</strong> : un même mot, geste ou situation qui revient → effet <strong>mécanique</strong>, accélération.</li>
+        <li><strong>L'exagération</strong> : une situation <strong>amplifiée</strong> ; le comique repose sur la <strong>démesure</strong>.</li>
+      </ul>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.5rem 0 0.5rem;">💉 D. La pièce : « Knock ou le triomphe de la médecine »</h3>
+      <ul style="line-height:1.9;">
+        <li>La <strong>pièce intégrale</strong> au programme : <em>Knock ou le triomphe de la médecine</em>, de <strong>Jules Romains</strong> (1885-1972), créée en <strong>1923</strong>. C'est une <strong>comédie satirique</strong> (elle se moque).</li>
+        <li><strong>L'histoire :</strong> le docteur <strong>Knock</strong> rachète le cabinet du vieux docteur <strong>Parpalaid</strong>, dans le village de Saint-Maurice. Sa « <strong>méthode</strong> » : persuader les gens <strong>bien portants</strong> qu'ils sont malades. Les consultations (gratuites au début) se multiplient et tout le village devient « malade » : un triomphe… <strong>commercial</strong>.</li>
+        <li><strong>L'idée célèbre :</strong> « Les gens bien portants sont des malades qui s'ignorent. »</li>
+        <li><strong>Les personnages :</strong> Knock, le docteur Parpalaid, la <strong>Dame en noir</strong>, le pharmacien Mousquet, le tambour de ville.</li>
+        <li><strong>La satire vise :</strong> la <strong>crédulité</strong>, le <strong>pouvoir de la suggestion</strong> et l'<strong>argent</strong> dans la médecine.</li>
+      </ul>
 
       <div class="gr2-explain">
-        <strong>💡 En clair.</strong> Le théâtre = du texte <strong>joué</strong>. Dans la <strong>salle</strong> : le <strong>balcon</strong> = les places en hauteur, le <strong>parterre</strong> = en bas devant la scène, les <strong>coulisses</strong> = l'arrière caché. Dans le <strong>texte</strong> : <strong>réplique</strong> (ce qu'on dit), <strong>tirade</strong> (longue), <strong>monologue</strong> (seul), <strong>aparté</strong> (au public), <strong>didascalies</strong> (indications en italique). Une pièce va de l'<strong>exposition</strong> au <strong>dénouement</strong>.
-        <span class="exam-tip">🎯 Le rire vient des 5 comiques : mots · gestes · situation · caractère · répétition.</span>
+        <strong>💡 En clair.</strong> Le théâtre, c'est du texte <strong>joué</strong> (un spectacle vivant). La <strong>comédie</strong> cherche à faire <strong>rire</strong>. À retenir : les <strong>4 types de comique</strong> (mots · gestes · situation · caractère) + les <strong>5 procédés</strong> (écart · renversement · absurde · répétition · exagération) ; <strong>Molière</strong>, l'auteur phare ; la <strong>double énonciation</strong> (on parle aux personnages <em>et</em> au public) ; le vocabulaire de la <strong>salle</strong> (orchestre, parterre, corbeilles, poulailler) et de la <strong>scène</strong> (côté cour/jardin, coulisses, plateau).
+        <span class="exam-tip">🎯 Pièce au programme : « Knock » de Jules Romains. Sache relater la vie de Molière et analyser une scène de comédie.</span>
       </div>
     </div>
 
@@ -270,17 +376,21 @@
       <div>
         <div class="formula-box"><h3>Convaincre vs Persuader</h3><p style="line-height:1.9; margin:0;"><strong>Convaincre</strong> = la <strong>raison</strong> (logique, preuves). <strong>Persuader</strong> = les <strong>émotions</strong> (sentiments).</p></div>
         <div class="formula-box"><h3>Texte argumenté</h3><p style="line-height:1.9; margin:0;"><strong>Thèse</strong> → <strong>arguments</strong> → <strong>exemples</strong> + <strong>connecteurs logiques</strong> (car, donc, mais, en effet…).</p></div>
-        <div class="formula-box"><h3>Vocabulaire du théâtre</h3><p style="line-height:1.9; margin:0;">acte · scène · réplique · <strong>tirade</strong> (longue) · <strong>monologue</strong> (seul) · <strong>aparté</strong> (au public) · <strong>didascalies</strong> · <strong>quiproquo</strong></p></div>
-        <div class="formula-box"><h3>Les comiques</h3><p style="line-height:1.9; margin:0;">de <strong>mots</strong> · de <strong>gestes</strong> · de <strong>situation</strong> · de <strong>caractère</strong> · de <strong>répétition</strong></p></div>
-        <div class="formula-box"><h3>Le lieu théâtral (la salle)</h3><p style="line-height:1.9; margin:0;"><strong>scène</strong> (le plateau) · <strong>rideau</strong> · <strong>coulisses</strong> (arrière caché) · <strong>parterre</strong>/orchestre (places du bas) · <strong>balcon</strong> (places en hauteur) · <strong>loges</strong> · galerie/« poulailler »</p></div>
-        <div class="formula-box"><h3>Structure d'une pièce</h3><p style="line-height:1.9; margin:0;"><strong>exposition</strong> → <strong>nœud</strong> → <strong>péripéties</strong> → (coup de théâtre) → <strong>dénouement</strong></p></div>
+        <div class="formula-box"><h3>Vocabulaire du théâtre</h3><p style="line-height:1.9; margin:0;"><strong>réplique</strong> · <strong>tirade</strong> (longue) · <strong>monologue</strong> (seul) · <strong>aparté</strong> (au public) · <strong>stichomythies</strong> (courtes) · <strong>didascalies</strong> · <strong>quiproquo</strong> · <strong>double énonciation</strong> (personnages + public)</p></div>
+        <div class="formula-box"><h3>Les 4 types de comique</h3><p style="line-height:1.9; margin:0;">de <strong>mots</strong> · de <strong>gestes</strong> · de <strong>situation</strong> · de <strong>caractère</strong></p></div>
+        <div class="formula-box"><h3>Les 5 procédés comiques</h3><p style="line-height:1.9; margin:0;"><strong>écart</strong> · <strong>renversement</strong> · <strong>glissement vers l'absurde</strong> · <strong>répétition</strong> · <strong>exagération</strong></p></div>
+        <div class="formula-box"><h3>Le lieu théâtral</h3><p style="line-height:1.9; margin:0;"><strong>Scène</strong> : plateau · côté cour/jardin · coulisses. <strong>Salle</strong> : orchestre · parterre · baignoire · corbeilles · poulailler/« paradis » · loges.</p></div>
+        <div class="formula-box"><h3>Structure d'une pièce</h3><p style="line-height:1.9; margin:0;"><strong>actes</strong> (entracte) · tableaux/journées · scènes — progression : <strong>exposition</strong> → (coup de théâtre) → <strong>nœud</strong> → <strong>dénouement</strong></p></div>
+        <div class="formula-box"><h3>Les métiers du théâtre</h3><p style="line-height:1.9; margin:0;"><strong>dramaturge</strong> (auteur) · <strong>comédien</strong> · <strong>tragédien</strong> · <strong>figurant</strong> (muet) · <strong>metteur en scène</strong> · <strong>régisseurs</strong></p></div>
       </div>
       <div>
         <div class="formula-box"><h3>Compter les syllabes</h3><div class="formula-main" style="font-size:17px;">alexandrin = 12 · décasyllabe = 10 · octosyllabe = 8</div></div>
         <div class="formula-box"><h3>Disposition des rimes</h3><p style="line-height:1.9; margin:0;">plates <em>AABB</em> · croisées <em>ABAB</em> · embrassées <em>ABBA</em></p></div>
         <div class="formula-box"><h3>Figures de style</h3><p style="line-height:1.9; margin:0;"><strong>Comparaison</strong> (avec « comme ») · <strong>Métaphore</strong> (sans outil) · <strong>Personnification</strong> · <strong>Hyperbole</strong> · <strong>Anaphore</strong> · <strong>Allitération</strong>/<strong>assonance</strong></p></div>
         <div class="formula-box"><h3>Le mythe</h3><p style="line-height:1.9; margin:0;">Récit ancien (dieux/héros) qui <strong>explique</strong> le monde et transmet des <strong>valeurs</strong>. Ex : Prométhée &amp; le feu.</p></div>
-        <div class="formula-box"><h3>Les genres du théâtre</h3><p style="line-height:1.9; margin:0;"><strong>Comédie</strong> (rire, finit bien) · <strong>Tragédie</strong> (nobles, fatalité, finit mal) · <strong>Drame</strong> · <strong>Tragi-comédie</strong></p></div>
+        <div class="formula-box"><h3>Molière (FO19)</h3><p style="line-height:1.9; margin:0;"><strong>Jean-Baptiste Poquelin</strong> (1622-1673). Illustre Théâtre · <em>Tartuffe</em>, <em>Dom Juan</em> (interdits) · mort en jouant <em>Le Malade imaginaire</em>. « La maison de Molière ».</p></div>
+        <div class="formula-box"><h3>La comédie (FO20)</h3><p style="line-height:1.9; margin:0;">Pièce qui fait <strong>rire</strong> (mœurs, caractères, situations). Règle des <strong>3 unités</strong> (lieu, temps, action) · <strong>dénouement heureux</strong>. ≠ tragédie (nobles, fatalité, finit mal).</p></div>
+        <div class="formula-box"><h3>Knock (Jules Romains)</h3><p style="line-height:1.9; margin:0;">Comédie satirique (1923) : le docteur <strong>Knock</strong> persuade tout le village qu'il est malade. « Les gens bien portants sont des malades qui s'ignorent. »</p></div>
       </div>
     </div>
   </div>`;
@@ -365,18 +475,40 @@
     { q: "Persuader, c'est faire adhérer par…", opts: ["les émotions / sentiments", "des preuves chiffrées", "la logique pure", "des définitions"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Persuader joue sur l'affectif (sentiments)." },
     { q: "L'opinion défendue dans un texte argumenté s'appelle…", opts: ["la thèse", "l'exemple", "le connecteur", "la rime"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La thèse, soutenue par des arguments illustrés d'exemples." },
     { q: "Lequel est un connecteur logique ?", opts: ["donc", "table", "rouge", "vite"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Car, donc, mais, en effet, cependant… relient les arguments." },
-    { q: "La comédie, au théâtre…", opts: ["fait rire et finit bien", "finit toujours mal", "n'a pas de personnages", "ne se joue pas"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Comédie = registre comique, fin heureuse (≠ tragédie)." },
-    { q: "Une longue réplique adressée à un autre personnage est…", opts: ["une tirade", "un aparté", "une didascalie", "un quiproquo"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tirade = longue réplique. Monologue = seul. Aparté = au public." },
-    { q: "Les indications de mise en scène (en italique) sont…", opts: ["les didascalies", "les répliques", "les strophes", "les thèses"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Les didascalies indiquent gestes, décors, tons." },
-    { q: "Un malentendu (on prend une personne/chose pour une autre) :", opts: ["un quiproquo", "une métaphore", "une tirade", "un alexandrin"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Le quiproquo est un ressort comique classique." },
-    { q: "Grand auteur de comédies françaises :", opts: ["Molière", "Newton", "Zeus", "Colbert"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Molière (XVIIᵉ s.)." },
-    { q: "Au théâtre, le « balcon » désigne…", opts: ["les places en hauteur (à l'étage)", "la scène", "l'arrière caché de la scène", "le rideau"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Le balcon = un niveau de sièges surélevé, au-dessus du parterre." },
-    { q: "Le « parterre » (ou l'orchestre), ce sont…", opts: ["les places du bas, devant la scène", "les places en hauteur", "les coulisses", "les loges"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le parterre = les places du rez-de-chaussée, devant la scène." },
-    { q: "Les « coulisses » d'un théâtre, c'est…", opts: ["l'arrière de la scène, caché du public", "les places du balcon", "la fosse des musiciens", "le rideau"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Coulisses = l'arrière caché de la scène (les comédiens s'y préparent)." },
-    { q: "Le début d'une pièce, qui présente les personnages et la situation, est…", opts: ["l'exposition", "le dénouement", "le nœud", "l'aparté"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "La scène d'exposition installe personnages, lieu et situation." },
-    { q: "La fin d'une pièce, qui résout le problème, est…", opts: ["le dénouement", "l'exposition", "la tirade", "le quiproquo"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le dénouement : heureux en comédie, malheureux en tragédie." },
-    { q: "Un retournement brutal et inattendu de l'intrigue est…", opts: ["un coup de théâtre", "une didascalie", "une strophe", "un alexandrin"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Le coup de théâtre relance ou bascule l'action." },
-    { q: "La tragédie, au théâtre…", opts: ["finit mal (personnages nobles, fatalité)", "fait rire et finit bien", "n'a pas de fin", "se passe toujours de nos jours"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tragédie = personnages nobles, fatalité, fin malheureuse (≠ comédie)." },
+    { q: "La comédie est une pièce de théâtre destinée surtout à…", opts: ["faire rire", "faire pleurer", "informer", "vendre un produit"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "La comédie fait rire (peinture des mœurs, des caractères, situations inattendues)." },
+    { q: "Une longue suite de phrases dite sans interruption est…", opts: ["une tirade", "un aparté", "une stichomythie", "une didascalie"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tirade = longue. Monologue = seul. Aparté = au public." },
+    { q: "Un personnage SEUL en scène qui parle (il réfléchit) fait…", opts: ["un monologue", "une tirade", "un aparté", "un dialogue"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Le monologue : un personnage seul se parle à lui-même." },
+    { q: "Une parole dite AU PUBLIC, que les autres « n'entendent pas » :", opts: ["un aparté", "une tirade", "une réplique", "une corbeille"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "L'aparté s'adresse au public ; il repose sur la double énonciation." },
+    { q: "Des répliques très courtes qui s'enchaînent vite, ce sont des…", opts: ["stichomythies", "didascalies", "tirades", "monologues"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les stichomythies : répliques brèves qui se répondent rapidement." },
+    { q: "Une parole qui vise à la fois les personnages ET le public, c'est…", opts: ["la double énonciation", "le quiproquo", "la didascalie", "l'entracte"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "La double énonciation rend possibles l'ironie, le quiproquo, le comique." },
+    { q: "Les indications de mise en scène (gestes, décor, ton) sont…", opts: ["les didascalies", "les répliques", "les apartés", "les tirades"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Les didascalies : le langage non verbal noté dans le texte." },
+    { q: "Un malentendu (on prend une personne/chose pour une autre) :", opts: ["un quiproquo", "une métaphore", "une tirade", "un alexandrin"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le quiproquo : grand ressort du comique de situation." },
+    { q: "« Côté cour » désigne, pour le comédien qui regarde la salle…", opts: ["sa gauche", "sa droite", "derrière lui", "le balcon"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Côté cour = gauche du comédien (= droite du spectateur). Côté jardin = l'inverse." },
+    { q: "La partie cachée, derrière le décor, où les comédiens se préparent :", opts: ["les coulisses", "l'orchestre", "le parterre", "la corbeille"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Les coulisses : invisibles du public." },
+    { q: "Dans la salle, les sièges du centre, en contrebas, devant la scène :", opts: ["l'orchestre", "le poulailler", "les coulisses", "le plateau"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "L'orchestre : places centrales en contrebas. Le parterre est derrière." },
+    { q: "Le dernier balcon, tout en haut, aux places les moins chères :", opts: ["le poulailler (« paradis »)", "l'orchestre", "le parterre", "la baignoire"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le poulailler ou « paradis » : visibilité limitée, places les moins chères." },
+    { q: "Le premier balcon, juste au-dessus de l'orchestre, ce sont…", opts: ["les corbeilles", "la baignoire", "les coulisses", "le plateau"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les corbeilles = le 1er balcon. La baignoire = une loge au rez-de-chaussée." },
+    { q: "L'auteur qui écrit une pièce de théâtre est…", opts: ["le dramaturge", "le figurant", "le régisseur", "le tragédien"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Le dramaturge écrit la pièce (comique ou tragique)." },
+    { q: "Un acteur qui joue un rôle MUET est…", opts: ["un figurant", "un dramaturge", "un metteur en scène", "un régisseur"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le figurant : rôle muet. Le comédien joue des comédies, le tragédien des tragédies." },
+    { q: "Celui qui organise la représentation à partir du texte est…", opts: ["le metteur en scène", "le figurant", "le dramaturge", "le tragédien"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Le metteur en scène dirige la représentation." },
+    { q: "La pause entre deux actes s'appelle…", opts: ["l'entracte", "l'exposition", "le dénouement", "l'aparté"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "On baisse le rideau entre les actes : c'est l'entracte." },
+    { q: "La première scène, qui présente personnages, lieu et situation :", opts: ["l'exposition", "le dénouement", "le nœud", "l'entracte"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "La scène d'exposition installe l'histoire." },
+    { q: "La fin qui apporte la solution et met un terme à l'intrigue :", opts: ["le dénouement", "l'exposition", "le nœud", "la tirade"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le dénouement : fin + solution (heureux en comédie)." },
+    { q: "Un événement inattendu qui modifie le cours de l'action :", opts: ["un coup de théâtre", "une didascalie", "un entracte", "une corbeille"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Le coup de théâtre : retournement brutal et inattendu." },
+    { q: "La règle des trois unités, c'est un seul…", opts: ["lieu, temps et action", "personnage", "acte", "décor"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Comédie/tragédie classiques : unité de lieu, de temps et d'action." },
+    { q: "Jouer sur les mots (double sens, calembour), c'est le comique de…", opts: ["mots", "gestes", "situation", "caractère"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Les 4 types de comique : mots, gestes, situation, caractère." },
+    { q: "Exagérer les défauts d'un personnage (l'avare, le naïf), c'est le comique de…", opts: ["caractère", "mots", "gestes", "situation"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Comique de caractère : on grossit un défaut type." },
+    { q: "Grimaces, chutes et coups de bâton relèvent du comique de…", opts: ["gestes", "mots", "caractère", "situation"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Comique de gestes : farce, commedia dell'arte, cinéma muet." },
+    { q: "Répéter un même mot/geste pour faire rire est un procédé comique :", opts: ["la répétition", "l'exposition", "la stichomythie", "la métaphore"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les 5 procédés d'écriture comique : écart, renversement, glissement vers l'absurde, répétition, exagération." },
+    { q: "Le vrai nom de Molière est…", opts: ["Jean-Baptiste Poquelin", "Jean de La Fontaine", "Jules Romains", "Fabien Marsaud"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Molière = Jean-Baptiste Poquelin (1622-1673)." },
+    { q: "Molière est mort presque sur scène en jouant…", opts: ["Le Malade imaginaire", "Tartuffe", "Dom Juan", "Knock"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Pris d'un malaise en jouant Le Malade imaginaire ; enterré de nuit." },
+    { q: "La troupe fondée par Molière en 1643 s'appelait…", opts: ["l'Illustre Théâtre", "la Comédie humaine", "le Globe", "le Vaudeville"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "L'Illustre Théâtre (avec Madeleine Béjart), en faillite dès 1645." },
+    { q: "La pièce intégrale au programme, « Knock », est de…", opts: ["Jules Romains", "Molière", "Corneille", "Ionesco"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "« Knock ou le triomphe de la médecine », Jules Romains (1923)." },
+    { q: "Dans « Knock », la formule célèbre : « Les gens bien portants sont… »", opts: ["des malades qui s'ignorent", "des gens heureux", "rarement à l'heure", "des clients fidèles"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "C'est la « méthode » de Knock : tout le monde est malade." },
+    { q: "« Knock » est une comédie qui fait la satire de…", opts: ["la médecine", "l'école", "la guerre", "la mode"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Satire de la crédulité, du pouvoir de suggestion et de l'argent en médecine." },
+    { q: "« Brûler les planches » signifie…", opts: ["jouer avec talent et énergie", "rater son entrée", "oublier son texte", "incendier le décor"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Expression du théâtre : jouer avec brio (les « planches » = la scène)." },
+    { q: "« Jouer au pied levé » veut dire…", opts: ["remplacer au dernier moment sans préparation", "danser sur scène", "jouer très lentement", "faire des caprices"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Remplacer quelqu'un à l'improviste. (« Jouer les divas » = faire des caprices.)" },
+    { q: "Par contraste avec la comédie, la tragédie…", opts: ["met en scène des nobles et finit mal (fatalité)", "fait toujours rire", "n'a pas de personnages", "se passe de nos jours"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tragédie : personnages nobles, fatalité, fin malheureuse." },
     { q: "Un vers de 12 syllabes s'appelle…", opts: ["un alexandrin", "un octosyllabe", "un quatrain", "une strophe"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Alexandrin = 12 syllabes ; octosyllabe = 8 ; décasyllabe = 10." },
     { q: "Une strophe de 4 vers est…", opts: ["un quatrain", "un tercet", "un distique", "un sonnet"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Distique 2, tercet 3, quatrain 4." },
     { q: "« Il est rusé comme un renard » est…", opts: ["une comparaison", "une métaphore", "une hyperbole", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Comparaison : présence de l'outil « comme »." },
@@ -390,9 +522,7 @@
     { q: "« Le vent hurlait dans la nuit » est…", opts: ["une personnification", "une comparaison", "une métonymie", "un quiproquo"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Personnification : donner un comportement humain à une chose." },
     { q: "« Je te l'ai dit mille fois ! » est…", opts: ["une hyperbole", "une litote", "une comparaison", "une anaphore"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Hyperbole : exagération volontaire." },
     { q: "Répéter un même mot en début de plusieurs vers, c'est…", opts: ["une anaphore", "une allitération", "une métaphore", "une rime"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "Anaphore = répétition en tête de vers/phrase." },
-    { q: "Une strophe de 3 vers s'appelle…", opts: ["un tercet", "un distique", "un quatrain", "un sonnet"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Distique 2 · tercet 3 · quatrain 4." },
-    { q: "Quand le même mot/geste revient pour faire rire, c'est le comique de…", opts: ["répétition", "caractère", "situation", "mots"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Les 5 comiques : mots, gestes, situation, caractère, répétition." },
-    { q: "Un hyperonyme est un mot…", opts: ["général qui en englobe d'autres", "précis et particulier", "inventé", "interdit en résumé"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Hyperonyme = mot générique (fleur). Hyponyme = mot précis (rose, tulipe)." },
+    { q: "Une strophe de 3 vers s'appelle…", opts: ["un tercet", "un distique", "un quatrain", "un sonnet"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Distique 2 · tercet 3 · quatrain 4." },    { q: "Un hyperonyme est un mot…", opts: ["général qui en englobe d'autres", "précis et particulier", "inventé", "interdit en résumé"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Hyperonyme = mot générique (fleur). Hyponyme = mot précis (rose, tulipe)." },
     { q: "« rose, tulipe, marguerite » sont des hyponymes de…", opts: ["fleur", "jardin", "couleur", "parfum"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "« fleur » est l'hyperonyme ; rose/tulipe/marguerite en sont les hyponymes." },
     { q: "Pourquoi l'hyperonyme est utile dans un résumé ?", opts: ["il remplace une liste par un seul mot", "il rallonge le texte", "il donne un avis", "il ajoute des exemples"], ans: 0, chapter: "resume", difficulty: "difficile", exp: "On condense : « des roses, des lys, des tulipes » → « des fleurs »." },
     { q: "Le « chat » est un hyponyme de…", opts: ["félin", "chien", "meuble", "légume"], ans: 0, chapter: "resume", difficulty: "facile", exp: "félin (hyperonyme) englobe chat, lion, tigre (hyponymes)." },
@@ -410,18 +540,27 @@
     { front: "Convaincre vs Persuader ?", back: "Convaincre = par la raison (arguments logiques). Persuader = par les émotions (sentiments).", chapter: "argumentation" },
     { front: "Structure d'un texte argumenté ?", back: "Thèse (opinion) → arguments → exemples, reliés par des connecteurs logiques (car, donc, mais, en effet…).", chapter: "argumentation" },
     { front: "Informatif vs argumenté ?", back: "Informatif = informer (neutre). Argumenté = défendre une thèse / faire réagir.", chapter: "argumentation" },
-    { front: "Comédie vs tragédie ?", back: "Comédie = fait rire, fin heureuse. Tragédie = fin malheureuse, personnages nobles, fatalité.", chapter: "comedie" },
-    { front: "Tirade / monologue / aparté ?", back: "Tirade = longue réplique (à un autre). Monologue = parler seul. Aparté = au public (les autres « n'entendent pas »).", chapter: "comedie" },
-    { front: "Les didascalies ?", back: "Les indications de mise en scène (gestes, décor, ton), souvent en italique.", chapter: "comedie" },
-    { front: "Les 5 ressorts du comique ?", back: "Comique de mots, de gestes, de situation, de caractère, de répétition.", chapter: "comedie" },
-    { front: "Au théâtre, qu'est-ce que le balcon ?", back: "Les places situées en hauteur, à l'étage (au-dessus du parterre).", chapter: "comedie" },
-    { front: "Le parterre (l'orchestre) ?", back: "Les places du rez-de-chaussée, devant la scène.", chapter: "comedie" },
-    { front: "Les coulisses ?", back: "L'arrière de la scène, caché du public (les comédiens s'y préparent).", chapter: "comedie" },
-    { front: "La fosse d'orchestre ?", back: "L'espace en contrebas, entre la scène et le public, pour les musiciens.", chapter: "comedie" },
-    { front: "Structure d'une pièce (les étapes) ?", back: "Exposition → nœud → péripéties → (coup de théâtre) → dénouement.", chapter: "comedie" },
-    { front: "Exposition / dénouement ?", back: "Exposition = le début qui présente personnages, lieu et situation. Dénouement = la fin qui résout le problème.", chapter: "comedie" },
-    { front: "Un coup de théâtre ?", back: "Un retournement brutal et inattendu de l'intrigue.", chapter: "comedie" },
-    { front: "Les genres du théâtre ?", back: "Comédie (rire, finit bien), tragédie (nobles, fatalité, finit mal), drame, tragi-comédie.", chapter: "comedie" },
+    { front: "La comédie : définition ?", back: "Une pièce de théâtre destinée à faire RIRE, par la peinture des mœurs, des caractères ou la succession de situations inattendues.", chapter: "comedie" },
+    { front: "Tirade / monologue / aparté ?", back: "Tirade = longue suite de phrases (à un autre). Monologue = un personnage parle seul. Aparté = dit au public (les autres « n'entendent pas »).", chapter: "comedie" },
+    { front: "Les stichomythies ?", back: "Des répliques très courtes qui s'enchaînent rapidement (montent la tension).", chapter: "comedie" },
+    { front: "La double énonciation ?", back: "Au théâtre, une parole vise en même temps les personnages (sur scène) ET le public (dans la salle). Permet quiproquo, ironie, comique.", chapter: "comedie" },
+    { front: "Les didascalies ?", back: "Les indications du texte (gestes, décor, ton), souvent en italique = le langage non verbal.", chapter: "comedie" },
+    { front: "Les 4 types de comique ?", back: "Comique de mots, de gestes, de situation, de caractère.", chapter: "comedie" },
+    { front: "Les 5 procédés d'écriture comique ?", back: "L'écart, le renversement, le glissement vers l'absurde, la répétition, l'exagération.", chapter: "comedie" },
+    { front: "Côté cour / côté jardin ?", back: "Pour le comédien face à la salle : cour = sa gauche, jardin = sa droite. (Pour le spectateur, c'est l'inverse ; mémo « Jardin-Cour » de gauche à droite.)", chapter: "comedie" },
+    { front: "Le plateau / les coulisses ?", back: "Le plateau = l'espace où sont les décors et où jouent les comédiens. Les coulisses = la partie cachée, derrière le décor.", chapter: "comedie" },
+    { front: "L'orchestre / le parterre ?", back: "L'orchestre = les sièges du centre, en contrebas, devant la scène. Le parterre = les places situées derrière l'orchestre.", chapter: "comedie" },
+    { front: "Les corbeilles / la baignoire ?", back: "Les corbeilles = le 1er balcon, au-dessus de l'orchestre. La baignoire = une loge au rez-de-chaussée.", chapter: "comedie" },
+    { front: "Le poulailler (« paradis ») ?", back: "Le dernier balcon, tout en haut : visibilité limitée, places les moins chères.", chapter: "comedie" },
+    { front: "Les métiers du théâtre ?", back: "Dramaturge (auteur), comédien (comédies), tragédien (tragédies), figurant (rôle muet), metteur en scène, régisseurs (son/lumière).", chapter: "comedie" },
+    { front: "Acte / scène / entracte ?", back: "Acte = grande partie (on baisse le rideau entre les actes). Scène = subdivision (change quand un perso entre/sort). Entracte = la pause entre deux actes.", chapter: "comedie" },
+    { front: "La structure d'une pièce (progression) ?", back: "Exposition → (coup de théâtre) → nœud (point culminant) → dénouement (fin + solution).", chapter: "comedie" },
+    { front: "Un coup de théâtre ?", back: "Un événement inattendu qui modifie brutalement le cours de l'action.", chapter: "comedie" },
+    { front: "La règle des trois unités ?", back: "Un seul lieu, un seul temps, une seule action (théâtre classique).", chapter: "comedie" },
+    { front: "Molière, qui est-ce ?", back: "Jean-Baptiste Poquelin (1622-1673), auteur phare de la comédie. Illustre Théâtre ; Tartuffe, Dom Juan (interdits) ; mort en jouant Le Malade imaginaire.", chapter: "comedie" },
+    { front: "« Knock » : auteur et sujet ?", back: "Knock ou le triomphe de la médecine, de Jules Romains (1923). Comédie satirique : le docteur Knock persuade tout le village qu'il est malade. « Les gens bien portants sont des malades qui s'ignorent. »", chapter: "comedie" },
+    { front: "Expressions : brûler les planches / tenir l'affiche / rester en carafe ?", back: "Brûler les planches = jouer avec talent. Tenir l'affiche = être joué longtemps. Rester en carafe = rester bloqué (ex. oublier son texte).", chapter: "comedie" },
+    { front: "Comédie vs tragédie ?", back: "Comédie = fait rire, dénouement heureux, personnages ordinaires. Tragédie = personnages nobles, fatalité, fin malheureuse.", chapter: "comedie" },
     { front: "Alexandrin / décasyllabe / octosyllabe ?", back: "12 / 10 / 8 syllabes.", chapter: "poesie" },
     { front: "Rimes plates / croisées / embrassées ?", back: "Plates AABB · croisées ABAB · embrassées ABBA.", chapter: "poesie" },
     { front: "Comparaison vs métaphore ?", back: "Comparaison = avec outil (comme, tel). Métaphore = sans outil (« cet homme est un lion »).", chapter: "poesie" },
