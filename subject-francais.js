@@ -123,18 +123,61 @@
 
     <div class="synth-section">
       <h2>Séquence 6 — L'argumentation</h2>
-      <p>Un <strong>texte argumenté</strong> défend une <strong>thèse</strong> (une opinion) pour agir sur le lecteur. À distinguer du texte informatif (neutre).</p>
-      <div class="key-rule"><div class="formula-main" style="font-size:18px;">Convaincre = la raison &nbsp;|&nbsp; Persuader = les émotions</div></div>
+      <p>Un <strong>texte argumenté</strong> défend une <strong>thèse</strong> (une opinion) pour <strong>agir sur le lecteur</strong>. À distinguer du texte <strong>informatif</strong> (neutre).</p>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">Convaincre ou persuader ?</h3>
+      <div class="key-rule"><div class="formula-main" style="font-size:17px;">Convaincre = la raison (preuves) &nbsp;|&nbsp; Persuader = les émotions</div></div>
       <ul style="line-height:1.9;">
-        <li><strong>Convaincre</strong> : faire adhérer par la <strong>raison</strong> (arguments logiques, preuves, exemples).</li>
-        <li><strong>Persuader</strong> : faire adhérer par les <strong>émotions / sentiments</strong> (registre affectif).</li>
+        <li><strong>Convaincre</strong> : obtenir l'accord sur la base de <strong>preuves</strong> ou de témoignages → <strong>adhésion rationnelle</strong>.</li>
+        <li><strong>Persuader</strong> : <strong>faire croire</strong> en touchant les <strong>émotions</strong> → <strong>adhésion émotionnelle</strong>.</li>
       </ul>
-      <p>Structure : <strong>thèse</strong> (l'opinion défendue) → <strong>arguments</strong> (les idées qui la soutiennent) → <strong>exemples</strong> (qui illustrent) → reliés par des <strong>connecteurs logiques</strong> (car, donc, mais, en effet, cependant…).</p>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">Les notions de base</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>Le thème</strong> : le <strong>sujet</strong> dont on parle (de quoi ça parle).</li>
+        <li><strong>La thèse</strong> : l'<strong>opinion</strong> défendue sur ce thème.</li>
+        <li><strong>L'argument</strong> : une <strong>bonne raison</strong> avancée pour faire admettre la thèse.</li>
+        <li><strong>Le développement / l'exemple</strong> : ce qui <strong>illustre</strong> ou explique l'argument.</li>
+      </ul>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">Le schéma argumentatif</h3>
+      <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.6rem 0;">
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:center; font-size:13px;">
+          <span style="background:color-mix(in srgb, var(--color-nav) 55%, #000); color:#fff; border-radius:8px; padding:8px 16px; font-weight:800;">THÈSE (l'opinion défendue)</span>
+          <span style="color:var(--color-nav); font-weight:800;">↓</span>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+            <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:8px; padding:8px 12px; font-weight:700; text-align:center;">Argument 1<span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">+ développement</span></span>
+            <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:8px; padding:8px 12px; font-weight:700; text-align:center;">Argument 2<span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">+ développement</span></span>
+            <span style="background:var(--bg-card); border:1px solid var(--color-nav); color:var(--text-primary); border-radius:8px; padding:8px 12px; font-weight:700; text-align:center;">Argument 3<span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">+ développement</span></span>
+          </div>
+        </div>
+      </div>
+      <p>⚠️ Tous les textes ne suivent pas cet ordre : la thèse peut <strong>précéder</strong>, <strong>suivre</strong> ou se trouver <strong>au milieu</strong> des arguments. Parfois la thèse (ou un argument) <strong>n'est pas écrite</strong> : il faut alors l'<strong>inférer</strong> (la déduire).</p>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">Les connecteurs logiques</h3>
+      <table class="compare-table">
+        <thead><tr><th>Pour exprimer…</th><th>Connecteurs</th></tr></thead>
+        <tbody>
+          <tr><th>la cause</th><td>car · parce que · puisque</td></tr>
+          <tr><th>la conséquence / conclusion</th><td>donc · ainsi · c'est pourquoi · si bien que</td></tr>
+          <tr><th>l'addition / l'alternative</th><td>et · ni · ou · en outre · puis · premièrement · enfin</td></tr>
+          <tr><th>l'opposition / la concession</th><td>mais · or · pourtant · cependant · certes · alors que</td></tr>
+          <tr><th>l'explication</th><td>en effet · c'est-à-dire · par exemple</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 0.5rem;">Réussir son argumentation</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>Avancer des arguments recevables</strong> : ne pas heurter les valeurs / convictions du destinataire (sinon on « perd » celui qu'on veut convaincre).</li>
+        <li><strong>Nuancer son opinion</strong> : les choses ne sont pas <strong>toutes blanches ou toutes noires</strong> → on a plus de chances de convaincre.</li>
+        <li><strong>Concession → réfutation</strong> : on <strong>concède</strong> d'abord un point (« <strong>certes</strong>… ») puis on le <strong>réfute</strong> (« <strong>mais</strong>… ») en avançant ses propres arguments.</li>
+      </ul>
+
       <figure class="hfig hfig-float" style="max-width:140px"><img src="lafontaine.jpg" alt="Jean de La Fontaine" loading="lazy"><figcaption>La Fontaine : argumenter par la fable (une morale)</figcaption></figure>
       <p>💡 La <strong>fable</strong> (ex. <strong>La Fontaine</strong>) est une argumentation <em>indirecte</em> : un petit récit d'animaux qui débouche sur une <strong>morale</strong>.</p>
       <div class="gr2-explain">
-        <strong>💡 En clair.</strong> Argumenter = <strong>défendre une opinion</strong> (la <strong>thèse</strong>) pour faire changer d'avis le lecteur. Deux façons : <strong>convaincre</strong> = avec la <strong>raison</strong> (arguments, preuves) · <strong>persuader</strong> = avec les <strong>émotions</strong>. On relie les idées avec des <strong>connecteurs</strong> (car, donc, mais, en effet…).
-        <span class="exam-tip">🎯 Plan : thèse → arguments → exemples. La <strong>fable</strong> argumente indirectement (récit + morale).</span>
+        <strong>💡 En clair.</strong> Argumenter = <strong>défendre une opinion</strong> (la <strong>thèse</strong>) sur un <strong>thème</strong>, avec des <strong>arguments</strong> (+ développements/exemples) reliés par des <strong>connecteurs</strong>. <strong>Convaincre</strong> = la raison (preuves) · <strong>persuader</strong> = les émotions. Pour réussir : des arguments <strong>recevables</strong>, un avis <strong>nuancé</strong>, et la technique « <strong>certes… mais…</strong> » (concession → réfutation).
+        <span class="exam-tip">🎯 Schéma : thèse → arguments. Connais les 5 familles de connecteurs. La <strong>fable</strong> argumente indirectement (récit + morale).</span>
       </div>
     </div>
 
@@ -370,7 +413,9 @@
     <div class="formula-grid">
       <div>
         <div class="formula-box"><h3>Convaincre vs Persuader</h3><p style="line-height:1.9; margin:0;"><strong>Convaincre</strong> = la <strong>raison</strong> (logique, preuves). <strong>Persuader</strong> = les <strong>émotions</strong> (sentiments).</p></div>
-        <div class="formula-box"><h3>Texte argumenté</h3><p style="line-height:1.9; margin:0;"><strong>Thèse</strong> → <strong>arguments</strong> → <strong>exemples</strong> + <strong>connecteurs logiques</strong> (car, donc, mais, en effet…).</p></div>
+        <div class="formula-box"><h3>Texte argumenté</h3><p style="line-height:1.9; margin:0;"><strong>Thème</strong> (le sujet) · <strong>thèse</strong> (l'opinion) → <strong>arguments</strong> (+ développement) → <strong>exemples</strong>, reliés par des <strong>connecteurs</strong>.</p></div>
+        <div class="formula-box"><h3>Connecteurs logiques</h3><p style="line-height:1.9; margin:0;"><strong>Cause</strong> (car, parce que) · <strong>conséquence</strong> (donc, ainsi) · <strong>addition</strong> (et, puis, enfin) · <strong>opposition/concession</strong> (mais, or, cependant, certes) · <strong>explication</strong> (en effet, par exemple)</p></div>
+        <div class="formula-box"><h3>Réussir à convaincre</h3><p style="line-height:1.9; margin:0;">Arguments <strong>recevables</strong> + opinion <strong>nuancée</strong> + technique <strong>concession→réfutation</strong> (« certes… mais… »).</p></div>
         <div class="formula-box"><h3>Vocabulaire du théâtre</h3><p style="line-height:1.9; margin:0;"><strong>réplique</strong> · <strong>tirade</strong> (longue) · <strong>monologue</strong> (seul) · <strong>aparté</strong> (au public) · <strong>stichomythies</strong> (courtes) · <strong>didascalies</strong> · <strong>quiproquo</strong> · <strong>double énonciation</strong> (personnages + public)</p></div>
         <div class="formula-box"><h3>Les 4 types de comique</h3><p style="line-height:1.9; margin:0;">de <strong>mots</strong> · de <strong>gestes</strong> · de <strong>situation</strong> · de <strong>caractère</strong></p></div>
         <div class="formula-box"><h3>Les 5 procédés comiques</h3><p style="line-height:1.9; margin:0;"><strong>écart</strong> · <strong>renversement</strong> · <strong>glissement vers l'absurde</strong> · <strong>répétition</strong> · <strong>exagération</strong></p></div>
@@ -473,6 +518,12 @@
     { q: "Persuader, c'est faire adhérer par…", opts: ["les émotions / sentiments", "des preuves chiffrées", "la logique pure", "des définitions"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Persuader joue sur l'affectif (sentiments)." },
     { q: "L'opinion défendue dans un texte argumenté s'appelle…", opts: ["la thèse", "l'exemple", "le connecteur", "la rime"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La thèse, soutenue par des arguments illustrés d'exemples." },
     { q: "Lequel est un connecteur logique ?", opts: ["donc", "table", "rouge", "vite"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Car, donc, mais, en effet, cependant… relient les arguments." },
+    { q: "Le « thème » d'un texte argumenté, c'est…", opts: ["le sujet dont on parle", "l'opinion défendue", "un connecteur", "un exemple"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Thème = le sujet. Thèse = l'opinion sur ce sujet." },
+    { q: "Un « argument », c'est…", opts: ["une bonne raison pour faire admettre la thèse", "le sujet du texte", "une rime", "une didascalie"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "L'argument soutient la thèse ; il est souvent illustré par un développement/exemple." },
+    { q: "« Donc, ainsi, c'est pourquoi » sont des connecteurs de…", opts: ["conséquence", "cause", "opposition", "explication"], ans: 0, chapter: "argumentation", difficulty: "difficile", exp: "Conséquence : donc, ainsi, c'est pourquoi. Cause : car, parce que, puisque." },
+    { q: "« Mais, or, pourtant, cependant » expriment…", opts: ["l'opposition / la concession", "la cause", "l'addition", "la conséquence"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Opposition/concession : mais, or, pourtant, cependant, certes, alors que." },
+    { q: "La stratégie « certes… mais… » s'appelle…", opts: ["concession puis réfutation", "thèse puis thème", "rime embrassée", "quiproquo"], ans: 0, chapter: "argumentation", difficulty: "difficile", exp: "On concède un point (« certes ») puis on le réfute (« mais ») avec ses arguments." },
+    { q: "Pour mieux convaincre, il vaut mieux…", opts: ["nuancer son opinion", "insulter l'adversaire", "n'avoir aucun exemple", "cacher sa thèse"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Un avis nuancé (pas tout blanc/tout noir) + des arguments recevables = plus convaincant." },
     { q: "La comédie est une pièce de théâtre destinée surtout à…", opts: ["faire rire", "faire pleurer", "informer", "vendre un produit"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "La comédie fait rire (peinture des mœurs, des caractères, situations inattendues)." },
     { q: "Une longue suite de phrases dite sans interruption est…", opts: ["une tirade", "un aparté", "une stichomythie", "une didascalie"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tirade = longue. Monologue = seul. Aparté = au public." },
     { q: "Un personnage SEUL en scène qui parle (il réfléchit) fait…", opts: ["un monologue", "une tirade", "un aparté", "un dialogue"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Le monologue : un personnage seul se parle à lui-même." },
@@ -538,6 +589,12 @@
     { front: "Mythes étudiés en classe ?", back: "La Genèse (Adam et Ève), Prométhée, le Popol Vuh (maya), la mort d'Orion.", chapter: "mythe" },
     { front: "Convaincre vs Persuader ?", back: "Convaincre = par la raison (arguments logiques). Persuader = par les émotions (sentiments).", chapter: "argumentation" },
     { front: "Structure d'un texte argumenté ?", back: "Thèse (opinion) → arguments → exemples, reliés par des connecteurs logiques (car, donc, mais, en effet…).", chapter: "argumentation" },
+    { front: "Thème / thèse / argument ?", back: "Thème = le sujet (de quoi on parle). Thèse = l'opinion défendue. Argument = une bonne raison qui soutient la thèse (souvent + un développement/exemple).", chapter: "argumentation" },
+    { front: "Convaincre vs persuader (précis) ?", back: "Convaincre = obtenir l'accord par des preuves/témoignages (adhésion rationnelle). Persuader = faire croire en touchant les émotions (adhésion émotionnelle).", chapter: "argumentation" },
+    { front: "Le schéma argumentatif ?", back: "Thèse → Argument 1 (+ développement) → Argument 2 → Argument 3. L'ordre peut varier ; parfois il faut inférer la thèse ou un argument.", chapter: "argumentation" },
+    { front: "Les connecteurs logiques (familles) ?", back: "Cause (car, parce que) · Conséquence (donc, ainsi) · Addition (et, puis, enfin) · Opposition/concession (mais, or, cependant, certes) · Explication (en effet, par exemple).", chapter: "argumentation" },
+    { front: "La stratégie concession-réfutation ?", back: "On concède d'abord un point (« certes… »), puis on le réfute (« mais… ») en avançant ses propres arguments.", chapter: "argumentation" },
+    { front: "Comment réussir son argumentation ?", back: "Avancer des arguments recevables (ne pas heurter le destinataire) et nuancer son opinion (pas tout blanc/tout noir).", chapter: "argumentation" },
     { front: "Informatif vs argumenté ?", back: "Informatif = informer (neutre). Argumenté = défendre une thèse / faire réagir.", chapter: "argumentation" },
     { front: "La comédie : définition ?", back: "Une pièce de théâtre destinée à faire RIRE, par la peinture des mœurs, des caractères ou la succession de situations inattendues.", chapter: "comedie" },
     { front: "Tirade / monologue / aparté ?", back: "Tirade = longue suite de phrases (à un autre). Monologue = un personnage parle seul. Aparté = dit au public (les autres « n'entendent pas »).", chapter: "comedie" },
