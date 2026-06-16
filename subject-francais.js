@@ -674,12 +674,47 @@
     { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" }
   ];
 
+  /* ---------------------- LEXIQUE (onglet bonus) ----------------------
+     Regroupe TOUTES les définitions (à partir des flashcards), par chapitre,
+     en mode « cache-révèle » (clic sur un mot = sa définition). Parfait pour
+     les questions de définition. Se remplit tout seul quand on ajoute des cartes. */
+  window.gr2LexAll = function (btn, open) {
+    var w = btn.closest('.lex-wrap'); if (!w) return;
+    [].forEach.call(w.querySelectorAll('details'), function (d) { d.open = open; });
+  };
+  function buildLexiqueHTML() {
+    var order = ['resume', 'mythe', 'argumentation', 'comedie', 'poesie', 'oral'];
+    var labels = { resume: 'Le résumé', mythe: 'Le mythe', argumentation: "L'argumentation", comedie: 'La comédie / le théâtre', poesie: 'La poésie', oral: 'Examen oral' };
+    var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+    var by = {}; flashcards.forEach(function (c) { (by[c.chapter] = by[c.chapter] || []).push(c); });
+    var h = '<h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:.4rem;">📖 Lexique — les définitions</h2>';
+    h += '<p style="color:var(--text-secondary); margin:0 0 1rem;">Tous les mots importants pour les <strong>questions de définition</strong>. Clique sur un mot pour révéler sa définition (mode « je me teste »). <strong>' + flashcards.length + '</strong> termes.</p>';
+    h += '<div class="lex-wrap">';
+    h += '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem;">';
+    h += '<button type="button" style="padding:8px 14px; border-radius:999px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-weight:700; cursor:pointer; font-size:14px;" onclick="gr2LexAll(this,true)">👁️ Tout afficher</button>';
+    h += '<button type="button" style="padding:8px 14px; border-radius:999px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-weight:700; cursor:pointer; font-size:14px;" onclick="gr2LexAll(this,false)">🙈 Tout cacher</button>';
+    h += '</div>';
+    order.forEach(function (ch) {
+      var items = by[ch]; if (!items || !items.length) return;
+      h += '<h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.3rem 0 .5rem;">' + esc(labels[ch] || ch) + ' <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(' + items.length + ')</span></h3>';
+      items.forEach(function (c) {
+        h += '<details style="border:1px solid var(--border-subtle); border-radius:10px; margin:.4rem 0; background:var(--bg-card);">'
+          + '<summary style="padding:11px 14px; font-weight:700; color:var(--text-primary); cursor:pointer;">' + esc(c.front) + '</summary>'
+          + '<div style="padding:2px 14px 12px; color:var(--text-secondary); line-height:1.7;">' + esc(c.back) + '</div>'
+          + '</details>';
+      });
+    });
+    h += '</div>';
+    return h;
+  }
+
   window.registerSubject('francais', {
     subtitle: 'Français 4ᵉ — résumé, mythe, argumentation, comédie, poésie',
     content: {
       sections: sections,
       questions: questions,
       flashcards: flashcards,
+      extraTabs: [{ label: '📖 Lexique', html: buildLexiqueHTML() }],
       demos: {},
       navLabels: { formules: '📌 Notions', exercices: '🎯 Exercices' },
       chapOrder: ['resume', 'mythe', 'argumentation', 'comedie', 'poesie', 'oral'],
