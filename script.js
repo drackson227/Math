@@ -5319,33 +5319,21 @@ function showRevisionReminder() {
     sessionStorage.setItem('mathsgr2_reminded', '1');
     var bar = document.createElement('div');
     bar.id = 'revision-reminder';
-    // 📱 Petit écran : pastille discrète en haut à droite — elle NE RECOUVRE PAS le menu
-    // ni le contenu (avant : gros bandeau centré collé en haut qui cachait la nav).
-    if (window.matchMedia && window.matchMedia('(max-width:768px)').matches) {
-      bar.style.cssText = 'position:fixed; top:60px; right:12px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:999px; padding:8px 13px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer; font-size:13px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px; min-height:40px; max-width:90vw;';
-      bar.innerHTML = '🔔 <strong>' + total + '</strong> <span style="opacity:.85; font-weight:600;">à réviser</span>' +
-        '<span onclick="event.stopPropagation(); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="cursor:pointer; opacity:.7; padding:0 4px; margin-left:2px;">✕</span>';
-      bar.title = total + ' carte' + (total > 1 ? 's' : '') + ' à réviser — clique pour y aller';
-      bar.onclick = function () { showSection('profil'); bar.remove(); };
-      document.body.appendChild(bar);
-      setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 90000);
-      return;
-    }
-    bar.style.cssText = 'position:fixed; left:50%; transform:translateX(-50%); top:14px; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:14px; padding:10px 14px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; max-width:min(92vw,560px); animation:imgModalIn .25s ease;';
-    bar.innerHTML = '<span style="font-size:14px;">🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui</span>' +
-      '<button onclick="showSection(\'profil\'); var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" style="background:#7c3aed; color:#fff; border:none; border-radius:9px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; min-height:36px;">📚 Réviser</button>' +
-      '<button onclick="var b=document.getElementById(\'revision-reminder\'); if(b)b.remove();" aria-label="Fermer le rappel" style="background:transparent; border:none; color:var(--text-secondary); font-size:16px; cursor:pointer; min-width:32px; min-height:32px; border-radius:8px;">✕</button>';
+    var mob = window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+    // RAPPEL = TOAST NON BLOQUANT (pointer-events:none) : il informe puis disparaît tout
+    // seul. Il ne peut JAMAIS recouvrir/bloquer un bouton (les clics passent au travers).
+    // Avant : un bandeau/pastille FIXE rendait non cliquables les boutons sous lui (☆ favori,
+    // filtres, « Commencer le quiz », « Citation »…) — sur mobile ET sur bureau.
+    bar.style.cssText = 'position:fixed; z-index:2500; pointer-events:none; background:var(--bg-card); border:1px solid var(--color-nav); box-shadow:0 8px 24px rgba(0,0,0,.45); font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:8px; border-radius:999px; transition:opacity .45s ease; ' +
+      (mob ? 'top:60px; right:12px; padding:8px 13px; font-size:13px; max-width:80vw;'
+           : 'top:16px; left:50%; transform:translateX(-50%); padding:10px 18px; font-size:14px; animation:imgModalIn .25s ease;');
+    bar.innerHTML = '🔔 Tu as <strong>' + total + '</strong> carte' + (total > 1 ? 's' : '') + ' à réviser aujourd\'hui';
     document.body.appendChild(bar);
-    // Après 6 s : repli en pastille discrète (clic = aller réviser)
     setTimeout(function () {
       var b = document.getElementById('revision-reminder'); if (!b) return;
-      b.style.cssText = 'position:fixed; top:72px; right:14px; left:auto; transform:none; z-index:2500; background:var(--bg-card); border:1px solid var(--color-nav); border-radius:999px; padding:7px 14px; box-shadow:0 6px 18px rgba(0,0,0,.4); cursor:pointer; font-size:13px; font-weight:700; color:var(--text-primary);';
-      b.innerHTML = '🔔 ' + total;
-      b.title = total + ' carte' + (total > 1 ? 's' : '') + ' à réviser — clique pour y aller';
-      b.onclick = function () { showSection('profil'); b.remove(); };
-    }, 6000);
-    // Et on range tout après 90 s si pas utilisé
-    setTimeout(function () { var b = document.getElementById('revision-reminder'); if (b) b.remove(); }, 90000);
+      b.style.opacity = '0';
+      setTimeout(function () { if (b.parentNode) b.remove(); }, 500);
+    }, 6500);
   } catch (_) {}
 }
 document.addEventListener('DOMContentLoaded', function () { setTimeout(showRevisionReminder, 1800); });
