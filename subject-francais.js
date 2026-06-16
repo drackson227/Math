@@ -54,7 +54,7 @@
     "comedie": {
       title: "La comédie", sub: "genre théâtral", img: "moliere.jpg",
       cours: "<p>La <strong>comédie</strong> est une pièce de <strong>théâtre</strong> qui fait <strong>rire</strong> et <strong>finit bien</strong>. Maître du genre : <strong>Molière</strong>.</p>",
-      exam: "<ul><li><strong>4 types de comique</strong> : mots · gestes · situation · caractère.</li><li>Pièce au programme : <strong>« Knock »</strong> (Jules Romains). Auteur phare : <strong>Molière</strong>.</li></ul>"
+      exam: "<ul><li><strong>4 types de comique</strong> : mots · gestes · situation · caractère.</li><li><strong>5 procédés</strong> : écart · renversement · absurde · répétition · exagération. Auteur phare : <strong>Molière</strong>.</li></ul>"
     },
     "tragedie": {
       title: "La tragédie", sub: "genre théâtral",
@@ -104,16 +104,20 @@
     <div class="synth-section">
       <h2>Séquence 5 — Le mythe</h2>
       <figure class="hfig hfig-float" style="max-width:160px"><img src="prometheus.jpg" alt="Prométhée" loading="lazy"><figcaption>Prométhée, qui vole le feu aux dieux</figcaption></figure>
-      <p>Un <strong>mythe</strong> est un <strong>récit</strong> ancien, souvent <strong>anonyme</strong>, transmis d'abord <strong>oralement</strong>, qui met en scène des <strong>dieux</strong> et des <strong>héros</strong>.</p>
-      <p>Ses <strong>fonctions</strong> :</p>
+      <div class="key-rule" style="text-align:left;"><strong>Définition.</strong> Un <strong>mythe</strong> est un <strong>récit sacré</strong> (souvent une portée <strong>religieuse</strong> pour le peuple qui l'a créé) qui met en scène des <strong>êtres surnaturels ou légendaires</strong> et des <strong>héros</strong> accomplissant un <strong>exploit</strong> ou vivant une <strong>aventure extraordinaire</strong>.</div>
+      <p>Le mythe a souvent pour <strong>but d'expliquer</strong> des réalités <strong>mystérieuses</strong>, difficiles voire impossibles à expliquer scientifiquement à l'époque. Par exemple :</p>
       <ul style="line-height:1.9;">
-        <li><strong>Expliquer</strong> le monde, ses origines, les phénomènes naturels (fonction <em>étiologique</em>).</li>
-        <li>Transmettre des <strong>valeurs</strong> et des leçons à une communauté.</li>
+        <li>la <strong>création du monde</strong> ;</li>
+        <li>la <strong>condition mortelle</strong> de l'homme ;</li>
+        <li>certains <strong>phénomènes cosmiques</strong> (la foudre, les éclipses, les constellations…).</li>
       </ul>
-      <p>Exemple grec : <strong>Prométhée</strong> vole le <strong>feu</strong> aux dieux pour le donner aux hommes ; <strong>Zeus</strong> le punit. (Explique l'origine du feu + le courage et la ruse.)</p>
+      <p>👉 Il transmet aussi des <strong>valeurs</strong> à une communauté (le courage, la ruse…).</p>
+      <div class="key-rule"><div class="formula-main" style="font-size:16px;">Étymologie : du grec <em>muthos</em> = « la parole »</div></div>
+      <p>Le mythe s'est d'abord transmis par <strong>tradition orale</strong> (« la parole »). Certains auteurs de l'Antiquité en ont ensuite fixé une <strong>version écrite</strong> (les tragédies, la Bible…).</p>
+      <p><strong>Exemples étudiés :</strong> la <strong>Genèse</strong> (Adam et Ève, dans la Bible), <strong>Prométhée</strong> (il vole le feu aux dieux pour le donner aux hommes ; Zeus le punit), le <strong>Popol Vuh</strong> (mythe maya de la création), la mort d'<strong>Orion</strong> (mythe grec).</p>
       <div class="gr2-explain">
-        <strong>💡 En clair.</strong> Un mythe = une <strong>vieille histoire</strong> (avec des dieux et des héros) qu'on se racontait pour <strong>2 raisons</strong> : <strong>expliquer</strong> le monde (d'où vient le feu → Prométhée) et transmettre des <strong>valeurs</strong> (courage, ruse).
-        <span class="exam-tip">🎯 Ne pas confondre avec le <strong>conte</strong> (« il était une fois », merveilleux).</span>
+        <strong>💡 En clair.</strong> Un mythe = une <strong>vieille histoire sacrée</strong> (dieux, héros, créatures) qu'on se transmettait à l'<strong>oral</strong> pour <strong>expliquer</strong> ce qu'on ne comprenait pas (la création du monde, la mort, la foudre…) et transmettre des <strong>valeurs</strong>. Le mot vient du grec <em>muthos</em> = « la parole ».
+        <span class="exam-tip">🎯 Ne pas confondre avec le <strong>conte</strong> (« il était une fois », but : divertir). Sache <strong>définir</strong> le mythe + donner ses <strong>fonctions</strong> et un <strong>exemple</strong>.</span>
       </div>
     </div>
 
@@ -312,18 +316,9 @@
         <li><strong>L'exagération</strong> : une situation <strong>amplifiée</strong> ; le comique repose sur la <strong>démesure</strong>.</li>
       </ul>
 
-      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.5rem 0 0.5rem;">💉 D. La pièce : « Knock ou le triomphe de la médecine »</h3>
-      <ul style="line-height:1.9;">
-        <li>La <strong>pièce intégrale</strong> au programme : <em>Knock ou le triomphe de la médecine</em>, de <strong>Jules Romains</strong> (1885-1972), créée en <strong>1923</strong>. C'est une <strong>comédie satirique</strong> (elle se moque).</li>
-        <li><strong>L'histoire :</strong> le docteur <strong>Knock</strong> rachète le cabinet du vieux docteur <strong>Parpalaid</strong>, dans le village de Saint-Maurice. Sa « <strong>méthode</strong> » : persuader les gens <strong>bien portants</strong> qu'ils sont malades. Les consultations (gratuites au début) se multiplient et tout le village devient « malade » : un triomphe… <strong>commercial</strong>.</li>
-        <li><strong>L'idée célèbre :</strong> « Les gens bien portants sont des malades qui s'ignorent. »</li>
-        <li><strong>Les personnages :</strong> Knock, le docteur Parpalaid, la <strong>Dame en noir</strong>, le pharmacien Mousquet, le tambour de ville.</li>
-        <li><strong>La satire vise :</strong> la <strong>crédulité</strong>, le <strong>pouvoir de la suggestion</strong> et l'<strong>argent</strong> dans la médecine.</li>
-      </ul>
-
       <div class="gr2-explain">
         <strong>💡 En clair.</strong> Le théâtre, c'est du texte <strong>joué</strong> (un spectacle vivant). La <strong>comédie</strong> cherche à faire <strong>rire</strong>. À retenir : les <strong>4 types de comique</strong> (mots · gestes · situation · caractère) + les <strong>5 procédés</strong> (écart · renversement · absurde · répétition · exagération) ; <strong>Molière</strong>, l'auteur phare ; la <strong>double énonciation</strong> (on parle aux personnages <em>et</em> au public) ; le vocabulaire de la <strong>salle</strong> (orchestre, parterre, corbeilles, poulailler) et de la <strong>scène</strong> (côté cour/jardin, coulisses, plateau).
-        <span class="exam-tip">🎯 Pièce au programme : « Knock » de Jules Romains. Sache relater la vie de Molière et analyser une scène de comédie.</span>
+        <span class="exam-tip">🎯 Sache relater la vie de Molière, connaître le vocabulaire du théâtre et analyser une scène de comédie.</span>
       </div>
     </div>
 
@@ -387,10 +382,9 @@
         <div class="formula-box"><h3>Compter les syllabes</h3><div class="formula-main" style="font-size:17px;">alexandrin = 12 · décasyllabe = 10 · octosyllabe = 8</div></div>
         <div class="formula-box"><h3>Disposition des rimes</h3><p style="line-height:1.9; margin:0;">plates <em>AABB</em> · croisées <em>ABAB</em> · embrassées <em>ABBA</em></p></div>
         <div class="formula-box"><h3>Figures de style</h3><p style="line-height:1.9; margin:0;"><strong>Comparaison</strong> (avec « comme ») · <strong>Métaphore</strong> (sans outil) · <strong>Personnification</strong> · <strong>Hyperbole</strong> · <strong>Anaphore</strong> · <strong>Allitération</strong>/<strong>assonance</strong></p></div>
-        <div class="formula-box"><h3>Le mythe</h3><p style="line-height:1.9; margin:0;">Récit ancien (dieux/héros) qui <strong>explique</strong> le monde et transmet des <strong>valeurs</strong>. Ex : Prométhée &amp; le feu.</p></div>
+        <div class="formula-box"><h3>Le mythe</h3><p style="line-height:1.9; margin:0;">Récit <strong>sacré</strong> (oral à l'origine ; <em>muthos</em> = « la parole ») avec des <strong>êtres surnaturels/héros</strong> ; <strong>explique</strong> le monde (création, mort, foudre…) et transmet des <strong>valeurs</strong>. Ex : Genèse, Prométhée, Popol Vuh.</p></div>
         <div class="formula-box"><h3>Molière (FO19)</h3><p style="line-height:1.9; margin:0;"><strong>Jean-Baptiste Poquelin</strong> (1622-1673). Illustre Théâtre · <em>Tartuffe</em>, <em>Dom Juan</em> (interdits) · mort en jouant <em>Le Malade imaginaire</em>. « La maison de Molière ».</p></div>
         <div class="formula-box"><h3>La comédie (FO20)</h3><p style="line-height:1.9; margin:0;">Pièce qui fait <strong>rire</strong> (mœurs, caractères, situations). Règle des <strong>3 unités</strong> (lieu, temps, action) · <strong>dénouement heureux</strong>. ≠ tragédie (nobles, fatalité, finit mal).</p></div>
-        <div class="formula-box"><h3>Knock (Jules Romains)</h3><p style="line-height:1.9; margin:0;">Comédie satirique (1923) : le docteur <strong>Knock</strong> persuade tout le village qu'il est malade. « Les gens bien portants sont des malades qui s'ignorent. »</p></div>
       </div>
     </div>
   </div>`;
@@ -471,6 +465,10 @@
     { q: "On résume souvent un texte au…", opts: ["quart", "double", "tiers exact obligatoire", "centième"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "En général au quart de sa longueur (selon la consigne)." },
     { q: "Un mythe est un récit qui…", opts: ["explique le monde et transmet des valeurs", "donne la météo", "vend un produit", "résume l'actualité"], ans: 0, chapter: "mythe", difficulty: "facile", exp: "Récit ancien (dieux/héros) à fonction explicative et porteuse de valeurs." },
     { q: "Dans la mythologie grecque, Prométhée…", opts: ["vole le feu pour les hommes", "crée la mer", "est un roi de France", "invente l'écriture"], ans: 0, chapter: "mythe", difficulty: "intermediaire", exp: "Prométhée vole le feu aux dieux pour les hommes ; Zeus le punit." },
+    { q: "L'étymologie du mot « mythe » (grec muthos) signifie…", opts: ["la parole", "le dieu", "le héros", "le mensonge"], ans: 0, chapter: "mythe", difficulty: "difficile", exp: "Muthos = « la parole » : le mythe s'est transmis d'abord à l'oral." },
+    { q: "Un mythe est avant tout un récit…", opts: ["sacré (souvent religieux)", "scientifique", "publicitaire", "d'actualité"], ans: 0, chapter: "mythe", difficulty: "intermediaire", exp: "Récit sacré, à portée souvent religieuse, avec des êtres surnaturels/héros." },
+    { q: "Lequel est un mythe étudié en classe ?", opts: ["Le Popol Vuh (maya)", "Le Petit Chaperon rouge", "Harry Potter", "Le Corbeau et le Renard"], ans: 0, chapter: "mythe", difficulty: "intermediaire", exp: "Mythes vus : la Genèse, Prométhée, le Popol Vuh, la mort d'Orion." },
+    { q: "Le mythe explique souvent…", opts: ["la création du monde, la mort, les phénomènes cosmiques", "le prix des choses", "les règles de grammaire", "la météo de demain"], ans: 0, chapter: "mythe", difficulty: "facile", exp: "Il explique des réalités mystérieuses : création du monde, condition mortelle, foudre/éclipses/constellations." },
     { q: "Convaincre, c'est faire adhérer par…", opts: ["la raison (arguments logiques)", "les émotions", "la peur uniquement", "le hasard"], ans: 0, chapter: "argumentation", difficulty: "facile", exp: "Convaincre = la raison ; persuader = les émotions." },
     { q: "Persuader, c'est faire adhérer par…", opts: ["les émotions / sentiments", "des preuves chiffrées", "la logique pure", "des définitions"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "Persuader joue sur l'affectif (sentiments)." },
     { q: "L'opinion défendue dans un texte argumenté s'appelle…", opts: ["la thèse", "l'exemple", "le connecteur", "la rime"], ans: 0, chapter: "argumentation", difficulty: "intermediaire", exp: "La thèse, soutenue par des arguments illustrés d'exemples." },
@@ -503,9 +501,6 @@
     { q: "Le vrai nom de Molière est…", opts: ["Jean-Baptiste Poquelin", "Jean de La Fontaine", "Jules Romains", "Fabien Marsaud"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "Molière = Jean-Baptiste Poquelin (1622-1673)." },
     { q: "Molière est mort presque sur scène en jouant…", opts: ["Le Malade imaginaire", "Tartuffe", "Dom Juan", "Knock"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Pris d'un malaise en jouant Le Malade imaginaire ; enterré de nuit." },
     { q: "La troupe fondée par Molière en 1643 s'appelait…", opts: ["l'Illustre Théâtre", "la Comédie humaine", "le Globe", "le Vaudeville"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "L'Illustre Théâtre (avec Madeleine Béjart), en faillite dès 1645." },
-    { q: "La pièce intégrale au programme, « Knock », est de…", opts: ["Jules Romains", "Molière", "Corneille", "Ionesco"], ans: 0, chapter: "comedie", difficulty: "facile", exp: "« Knock ou le triomphe de la médecine », Jules Romains (1923)." },
-    { q: "Dans « Knock », la formule célèbre : « Les gens bien portants sont… »", opts: ["des malades qui s'ignorent", "des gens heureux", "rarement à l'heure", "des clients fidèles"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "C'est la « méthode » de Knock : tout le monde est malade." },
-    { q: "« Knock » est une comédie qui fait la satire de…", opts: ["la médecine", "l'école", "la guerre", "la mode"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Satire de la crédulité, du pouvoir de suggestion et de l'argent en médecine." },
     { q: "« Brûler les planches » signifie…", opts: ["jouer avec talent et énergie", "rater son entrée", "oublier son texte", "incendier le décor"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Expression du théâtre : jouer avec brio (les « planches » = la scène)." },
     { q: "« Jouer au pied levé » veut dire…", opts: ["remplacer au dernier moment sans préparation", "danser sur scène", "jouer très lentement", "faire des caprices"], ans: 0, chapter: "comedie", difficulty: "difficile", exp: "Remplacer quelqu'un à l'improviste. (« Jouer les divas » = faire des caprices.)" },
     { q: "Par contraste avec la comédie, la tragédie…", opts: ["met en scène des nobles et finit mal (fatalité)", "fait toujours rire", "n'a pas de personnages", "se passe de nos jours"], ans: 0, chapter: "comedie", difficulty: "intermediaire", exp: "Tragédie : personnages nobles, fatalité, fin malheureuse." },
@@ -537,6 +532,10 @@
     { front: "Texte informatif ?", back: "Un texte qui informe objectivement, sans donner d'avis.", chapter: "resume" },
     { front: "Qu'est-ce qu'un mythe ?", back: "Récit ancien (souvent anonyme, oral) avec dieux/héros, qui explique le monde et transmet des valeurs.", chapter: "mythe" },
     { front: "Le mythe de Prométhée ?", back: "Prométhée vole le feu aux dieux pour le donner aux hommes ; Zeus le punit. (Origine du feu + ruse/courage.)", chapter: "mythe" },
+    { front: "Le mythe : définition complète ?", back: "Un récit sacré (souvent religieux) avec des êtres surnaturels/légendaires et des héros, qui explique des réalités mystérieuses et transmet des valeurs.", chapter: "mythe" },
+    { front: "Étymologie de « mythe » ?", back: "Du grec muthos = « la parole » : transmis d'abord oralement, puis fixé par écrit (tragédies, Bible).", chapter: "mythe" },
+    { front: "Que peut expliquer un mythe ?", back: "La création du monde, la condition mortelle de l'homme, des phénomènes cosmiques (foudre, éclipses, constellations…).", chapter: "mythe" },
+    { front: "Mythes étudiés en classe ?", back: "La Genèse (Adam et Ève), Prométhée, le Popol Vuh (maya), la mort d'Orion.", chapter: "mythe" },
     { front: "Convaincre vs Persuader ?", back: "Convaincre = par la raison (arguments logiques). Persuader = par les émotions (sentiments).", chapter: "argumentation" },
     { front: "Structure d'un texte argumenté ?", back: "Thèse (opinion) → arguments → exemples, reliés par des connecteurs logiques (car, donc, mais, en effet…).", chapter: "argumentation" },
     { front: "Informatif vs argumenté ?", back: "Informatif = informer (neutre). Argumenté = défendre une thèse / faire réagir.", chapter: "argumentation" },
@@ -558,7 +557,6 @@
     { front: "Un coup de théâtre ?", back: "Un événement inattendu qui modifie brutalement le cours de l'action.", chapter: "comedie" },
     { front: "La règle des trois unités ?", back: "Un seul lieu, un seul temps, une seule action (théâtre classique).", chapter: "comedie" },
     { front: "Molière, qui est-ce ?", back: "Jean-Baptiste Poquelin (1622-1673), auteur phare de la comédie. Illustre Théâtre ; Tartuffe, Dom Juan (interdits) ; mort en jouant Le Malade imaginaire.", chapter: "comedie" },
-    { front: "« Knock » : auteur et sujet ?", back: "Knock ou le triomphe de la médecine, de Jules Romains (1923). Comédie satirique : le docteur Knock persuade tout le village qu'il est malade. « Les gens bien portants sont des malades qui s'ignorent. »", chapter: "comedie" },
     { front: "Expressions : brûler les planches / tenir l'affiche / rester en carafe ?", back: "Brûler les planches = jouer avec talent. Tenir l'affiche = être joué longtemps. Rester en carafe = rester bloqué (ex. oublier son texte).", chapter: "comedie" },
     { front: "Comédie vs tragédie ?", back: "Comédie = fait rire, dénouement heureux, personnages ordinaires. Tragédie = personnages nobles, fatalité, fin malheureuse.", chapter: "comedie" },
     { front: "Alexandrin / décasyllabe / octosyllabe ?", back: "12 / 10 / 8 syllabes.", chapter: "poesie" },
