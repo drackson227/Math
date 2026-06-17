@@ -82,6 +82,15 @@
     <div class="synth-section">
       <h2>Séquence 4 — Le résumé de texte informatif</h2>
       <p>Un <strong>texte informatif</strong> donne des informations <strong>objectives</strong> (il informe, sans donner d'avis).</p>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">📨 La situation de communication (FO1)</h3>
+      <p>Avant de résumer, on <strong>analyse</strong> le texte source (et le <strong>genre à produire</strong>) en répondant à :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Qui ?</strong> l'<strong>émetteur</strong> (l'auteur).</li>
+        <li><strong>À qui ?</strong> le <strong>récepteur</strong> / destinataire.</li>
+        <li><strong>Quoi ?</strong> le <strong>message</strong> (le sujet, les idées).</li>
+        <li><strong>Pourquoi ?</strong> l'<strong>intention</strong> et le <strong>but</strong> (informer, expliquer…).</li>
+        <li><strong>Comment / où ?</strong> le <strong>support</strong> et le <strong>genre</strong> (article, encyclopédie…), avec l'<strong>énonciation</strong> (qui parle, à quel temps).</li>
+      </ul>
       <p><strong>Résumer</strong>, c'est <strong>réduire</strong> un texte (souvent au <strong>quart</strong>) en gardant seulement l'<strong>essentiel</strong>. Règles d'or :</p>
       <ul style="line-height:1.9;">
         <li><strong>Reformuler</strong> avec ses propres mots (ne pas recopier).</li>
@@ -412,6 +421,9 @@
           <tr><th>Anaphore</th><td>répétition d'un mot en <strong>début de vers</strong></td></tr>
           <tr><th>Allitération</th><td>répétition de <strong>consonnes</strong></td></tr>
           <tr><th>Assonance</th><td>répétition de <strong>voyelles</strong></td></tr>
+          <tr><th>Antithèse</th><td>oppose deux mots/idées <strong>contraires</strong> (« <strong>formidable</strong> » / « <strong>minable</strong> »)</td></tr>
+          <tr><th>Énumération</th><td><strong>liste</strong> d'éléments (« il vend tout : maison, voiture, meubles »)</td></tr>
+          <tr><th>Gradation</th><td>énumération en <strong>progression</strong> (« va, cours, vole »)</td></tr>
         </tbody>
       </table>
       <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">🎤 Le slam (poésie contemporaine)</h3>
@@ -427,8 +439,42 @@
     </div>
 
     <div class="synth-section">
-      <h2>Examen oral — présenter une œuvre (une chanson)</h2>
-      <p>Présente l'œuvre choisie de façon structurée : <strong>biographie</strong> de l'auteur → <strong>contexte</strong> → <strong>thème</strong> et résumé → <strong>analyse</strong> (procédés, figures de style) → <strong>avis personnel argumenté</strong> (justifier ton choix).</p>
+      <h2>Examen oral — présenter un artiste et une de ses œuvres</h2>
+      <p><strong>UAA 4 &amp; 6</strong> — tu présentes un <strong>artiste contemporain</strong> et l'une de ses <strong>œuvres poétiques</strong> (une chanson choisie dans la liste du prof). Noté sur <strong>/50</strong>. ⚠️ <strong>Par cœur</strong> : interdit de lire ta feuille.</p>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">🪜 Les 6 étapes de l'exposé</h3>
+      <ol style="line-height:1.9;">
+        <li><strong>Présentation</strong> : l'artiste + l'œuvre + l'année.</li>
+        <li><strong>Biographie de l'artiste</strong> — <strong>6 informations</strong> (biographie <em>sélective</em> : identité/naissance, métiers, débuts, carrière, reconnaissance, lien avec ses origines/ses œuvres).</li>
+        <li><strong>Compréhension &amp; choix</strong> : de quoi parle la chanson (histoire, <strong>thème(s)</strong>) + <strong>pourquoi</strong> tu l'as choisie.</li>
+        <li><strong>Jugement de goût</strong> : ton avis, soutenu par <strong>minimum 3 justifications</strong> différentes et pertinentes.</li>
+        <li><strong>Analyse de la forme</strong> : <strong>vers / strophes</strong>, <strong>rimes</strong> (disposition, nature, qualité), <strong>minimum 2 figures de style</strong>, et le <strong>niveau de langue</strong>.</li>
+        <li><strong>Conclusion</strong> : bilan court (ce que tu retiens + ce que tu as préféré).</li>
+      </ol>
+      <h3 style="font-size:20px; font-weight:700; color:var(--color-nav); margin:1.2rem 0 0.4rem;">📋 Grille d'évaluation (/50)</h3>
+      <table class="compare-table">
+        <thead><tr><th>Critère</th><th>Ce qui est évalué</th><th>Pts</th></tr></thead>
+        <tbody>
+          <tr><th>Audibilité</th><td>articulation, prononciation, intonation, volume, débit, pauses</td><td>/5</td></tr>
+          <tr><th>Intelligibilité</th><td>langage correct (on te comprend bien)</td><td>/5</td></tr>
+          <tr><th>Recevabilité</th><td>politesse + bon <strong>registre de langue</strong> pendant l'exposé</td><td>/5</td></tr>
+          <tr><th>Pertinence</th><td>contenu suffisant + <strong>mémorisé</strong> · bio sélective · explication perso · jugement de goût (≥ 3 justifs) · analyse de la forme (vers, rimes, strophes + ≥ 2 figures) + analyse du langage</td><td>/35</td></tr>
+        </tbody>
+      </table>
+      <div class="key-rule"><div class="formula-main" style="font-size:15px;">Bio = 6 infos · Jugement de goût = 3 justifications · Forme = 2 figures de style minimum</div></div>
+      <details class="lex-card" style="margin:1rem 0;"><summary style="cursor:pointer; font-weight:700; color:var(--color-nav);">🎼 Exemple complet — Charles Aznavour, « For Me Formidable » (1963)</summary>
+        <div style="margin-top:.6rem; line-height:1.85;">
+          <p><strong>① Présentation.</strong> Je vais présenter Charles Aznavour et sa chanson « For Me Formidable », sortie en 1963 (paroles avec Jacques Plante).</p>
+          <p><strong>② Biographie (6 infos).</strong> De son vrai nom <strong>Shahnour Aznavourian</strong>, né le 22 mai 1924 à Paris (famille arménienne), mort le 1ᵉʳ octobre 2018 à 94 ans · artiste complet (chanteur, auteur-compositeur, acteur) · débuts difficiles (moqué pour sa taille et sa voix, aidé par Édith Piaf) · grande carrière (plus de 1 000 chansons, 100 millions de disques) · élu « chanteur du siècle » en 1998 (devant Elvis Presley) · a soutenu l'Arménie ; titres connus : « La Bohème », « Emmenez-moi ».</p>
+          <p><strong>③ Compréhension &amp; choix.</strong> Un homme français tente de séduire une femme anglaise ; comme il parle mal anglais, il mélange les deux langues. Thèmes : la difficulté de dire ses sentiments dans une autre langue + le mélange des langues. Le titre joue dessus (« formidable » = génial en français, mais sonne anglais). <em>Refrain :</em> « You are the one for me, for me, for me, formidable… »</p>
+          <p><strong>④ Jugement de goût (3 raisons).</strong> La <strong>voix</strong> très particulière d'Aznavour ; l'<strong>originalité</strong> du mélange français/anglais ; la <strong>musique</strong> entraînante avec les rimes en « -able ».</p>
+          <p><strong>⑤ Analyse de la forme.</strong> Couplets + refrain ; <strong>vers libres</strong> (pas des alexandrins) ; rimes en « -able » <strong>féminines</strong> et <strong>riches</strong>, <strong>plates</strong> dans le refrain ; deux figures : <strong>anaphore</strong> (« You are », « for me, for me, for me ») et <strong>antithèse</strong> (« formidable » / « minable ») ; niveau de langue <strong>courant</strong>, adresse directe (« you », « te », « darling »).</p>
+          <p><strong>⑥ Conclusion.</strong> Une chanson originale qui mélange deux langues, que j'aime surtout pour la voix d'Aznavour.</p>
+        </div>
+      </details>
+      <div class="gr2-explain">
+        <strong>💡 Conseils le jour J.</strong> Parle <strong>fort</strong>, <strong>articule</strong>, pas trop <strong>vite</strong>, fais des <strong>pauses</strong> entre les parties, et <strong>regarde</strong> la prof. Apprends ton texte <strong>par cœur</strong> (interdit de lire).
+        <span class="exam-tip">🎯 N'oublie aucune des 6 parties — et donne bien tes <strong>6 informations</strong> de biographie.</span>
+      </div>
     </div>
   </div>`;
 
@@ -458,6 +504,8 @@
         <div class="formula-box"><h3>Source fiable &amp; pertinente</h3><div class="formula-main" style="font-size:15px;">Pertinence : bon thème/époque/lieu, utilisable · Fiabilité : auteur de confiance ?</div><p style="line-height:1.9; margin:.6rem 0 0;">Site sérieux : intention claire, responsable identifiable, à jour, pubs séparées.</p></div>
         <div class="formula-box"><h3>Molière (FO19)</h3><div class="formula-main" style="font-size:15px;">Jean-Baptiste Poquelin (1622-1673), mort en jouant Le Malade imaginaire</div><p style="line-height:1.9; margin:.6rem 0 0;">Fonde l'Illustre Théâtre · <em>Tartuffe</em>, <em>Dom Juan</em> (interdits) · « la maison de Molière ».</p></div>
         <div class="formula-box"><h3>La comédie (FO20)</h3><div class="formula-main" style="font-size:15px;">Pièce qui fait rire · règle des 3 unités (lieu, temps, action) · dénouement heureux</div><p style="line-height:1.9; margin:.6rem 0 0;">Se moque des mœurs, caractères, situations. ≠ <strong>tragédie</strong> (personnages nobles, fatalité, fin malheureuse).</p></div>
+        <div class="formula-box"><h3>Situation de communication (FO1)</h3><div class="formula-main" style="font-size:15px;">Qui ? (émetteur) · à qui ? (récepteur) · quoi ? (message) · pourquoi ? (intention) · comment/où ? (support, genre)</div></div>
+        <div class="formula-box"><h3>Examen oral — les 6 étapes</h3><div class="formula-main" style="font-size:15px;">1 Présentation · 2 Biographie (6 infos) · 3 Compréhension et choix · 4 Jugement de goût (3 justifs) · 5 Forme (2 figures) · 6 Conclusion</div></div>
       </div>
     </div>
   </div>`;
@@ -609,7 +657,12 @@
     { q: "Pour juger un site internet fiable, on regarde…", opts: ["l'intention, le responsable, la mise à jour, les pubs", "uniquement les couleurs", "le nombre de visiteurs", "la taille de la police"], ans: 0, chapter: "resume", difficulty: "difficile", exp: "Grille : intention claire, responsable identifiable (officiel/expert), site à jour, pubs séparées du contenu." },
     { q: "Le slam est avant tout une poésie…", opts: ["orale, déclamée en public", "uniquement écrite et chantée", "sans rimes", "en latin"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Le slam = poésie orale, scandée en public, à l'origine sans musique." },
     { q: "Artiste contemporain pionnier du slam en France :", opts: ["Grand Corps Malade", "Molière", "La Fontaine", "Apollinaire"], ans: 0, chapter: "poesie", difficulty: "facile", exp: "Grand Corps Malade (Fabien Marsaud), album « Midi 20 »." },
-    { q: "On analyse un slam…", opts: ["comme un poème (thème, procédés, rythme)", "comme un résumé neutre", "sans figures de style", "comme une pièce de théâtre"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Mêmes outils que la poésie : rimes, anaphores, métaphores, rythme, message." }
+    { q: "On analyse un slam…", opts: ["comme un poème (thème, procédés, rythme)", "comme un résumé neutre", "sans figures de style", "comme une pièce de théâtre"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Mêmes outils que la poésie : rimes, anaphores, métaphores, rythme, message." },
+    { q: "Analyser la « situation de communication », c'est répondre à…", opts: ["qui ? à qui ? quoi ? pourquoi ?", "au titre seulement", "au nombre de pages", "à la police d'écriture"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Émetteur (qui), récepteur (à qui), message (quoi), intention (pourquoi), support/genre (comment/où)." },
+    { q: "« Formidable » opposé à « minable » est une…", opts: ["antithèse", "métaphore", "allitération", "comparaison"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "L'antithèse oppose deux mots ou idées contraires." },
+    { q: "À l'oral, le jugement de goût doit être soutenu par…", opts: ["minimum 3 justifications", "1 seule raison", "aucune raison", "un résumé neutre"], ans: 0, chapter: "oral", difficulty: "intermediaire", exp: "Jugement de goût = minimum 3 justifications différentes et pertinentes." },
+    { q: "À l'oral, l'analyse de la forme exige au minimum…", opts: ["2 figures de style", "10 figures de style", "0 figure", "seulement une rime"], ans: 0, chapter: "oral", difficulty: "intermediaire", exp: "Vers, rimes, strophes + au moins 2 figures de style + l'analyse du langage." },
+    { q: "Combien d'informations dans la biographie de l'oral ?", opts: ["6 (sélectives)", "1", "20", "aucune"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Une biographie sélective de 6 informations." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -671,7 +724,12 @@
     { front: "Pertinence vs fiabilité d'une source ?", back: "Pertinence = la source concerne bien ton thème (époque, lieu) et tu peux l'utiliser. Fiabilité = peux-tu faire confiance à l'auteur (pas de but caché : vendre, manipuler) ?", chapter: "resume" },
     { front: "Évaluer un site internet (fiabilité) ?", back: "Intention claire ? Responsable identifiable (organisme officiel / expert) ? Site à jour et bien organisé ? Langage correct ? Publicités séparées du contenu ?", chapter: "resume" },
     { front: "Qu'est-ce que le slam ?", back: "Une poésie orale, déclamée en public, à l'origine sans musique. Joue sur le rythme, les jeux de mots, les rimes et les figures de style.", chapter: "poesie" },
-    { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" }
+    { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" },
+    { front: "La situation de communication ?", back: "Qui (émetteur) ? à qui (récepteur) ? quoi (message) ? pourquoi (intention/but) ? comment/où (support, genre, énonciation) ?", chapter: "resume" },
+    { front: "Qu'est-ce qu'une antithèse ?", back: "Une figure de style qui oppose deux mots ou idées contraires (ex. « formidable » / « minable »).", chapter: "poesie" },
+    { front: "Examen oral : les 6 étapes ?", back: "1) Présentation 2) Biographie (6 infos) 3) Compréhension et choix 4) Jugement de goût (3 justifications) 5) Analyse de la forme (2 figures min) 6) Conclusion.", chapter: "oral" },
+    { front: "Oral : le jugement de goût ?", back: "Ton avis, soutenu par au minimum 3 justifications différentes et pertinentes.", chapter: "oral" },
+    { front: "Oral : l'analyse de la forme ?", back: "Vers, strophes, rimes (disposition/nature/qualité), au moins 2 figures de style, et le niveau de langue.", chapter: "oral" }
   ];
 
   /* ---------------------- LEXIQUE (onglet bonus) ----------------------
