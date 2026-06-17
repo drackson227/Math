@@ -422,6 +422,7 @@
           <tr><th>Allitération</th><td>répétition de <strong>consonnes</strong></td></tr>
           <tr><th>Assonance</th><td>répétition de <strong>voyelles</strong></td></tr>
           <tr><th>Antithèse</th><td>oppose deux mots/idées <strong>contraires</strong> (« <strong>formidable</strong> » / « <strong>minable</strong> »)</td></tr>
+          <tr><th>Oxymore</th><td>réunit deux mots de <strong>sens contraires</strong> (« une <strong>obscure clarté</strong> », « un <strong>silence assourdissant</strong> »)</td></tr>
           <tr><th>Énumération</th><td><strong>liste</strong> d'éléments (« il vend tout : maison, voiture, meubles »)</td></tr>
           <tr><th>Gradation</th><td>énumération en <strong>progression</strong> (« va, cours, vole »)</td></tr>
         </tbody>
@@ -660,6 +661,7 @@
     { q: "On analyse un slam…", opts: ["comme un poème (thème, procédés, rythme)", "comme un résumé neutre", "sans figures de style", "comme une pièce de théâtre"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "Mêmes outils que la poésie : rimes, anaphores, métaphores, rythme, message." },
     { q: "Analyser la « situation de communication », c'est répondre à…", opts: ["qui ? à qui ? quoi ? pourquoi ?", "au titre seulement", "au nombre de pages", "à la police d'écriture"], ans: 0, chapter: "resume", difficulty: "intermediaire", exp: "Émetteur (qui), récepteur (à qui), message (quoi), intention (pourquoi), support/genre (comment/où)." },
     { q: "« Formidable » opposé à « minable » est une…", opts: ["antithèse", "métaphore", "allitération", "comparaison"], ans: 0, chapter: "poesie", difficulty: "intermediaire", exp: "L'antithèse oppose deux mots ou idées contraires." },
+    { q: "« Une obscure clarté » est un…", opts: ["oxymore", "pléonasme", "euphémisme", "hyperbole"], ans: 0, chapter: "poesie", difficulty: "difficile", exp: "L'oxymore réunit deux mots de sens contraires dans la même expression." },
     { q: "À l'oral, le jugement de goût doit être soutenu par…", opts: ["minimum 3 justifications", "1 seule raison", "aucune raison", "un résumé neutre"], ans: 0, chapter: "oral", difficulty: "intermediaire", exp: "Jugement de goût = minimum 3 justifications différentes et pertinentes." },
     { q: "À l'oral, l'analyse de la forme exige au minimum…", opts: ["2 figures de style", "10 figures de style", "0 figure", "seulement une rime"], ans: 0, chapter: "oral", difficulty: "intermediaire", exp: "Vers, rimes, strophes + au moins 2 figures de style + l'analyse du langage." },
     { q: "Combien d'informations dans la biographie de l'oral ?", opts: ["6 (sélectives)", "1", "20", "aucune"], ans: 0, chapter: "oral", difficulty: "facile", exp: "Une biographie sélective de 6 informations." }
@@ -727,6 +729,7 @@
     { front: "Grand Corps Malade ?", back: "Fabien Marsaud, artiste contemporain français, pionnier du slam (album « Midi 20 »). Son nom de scène vient d'un accident grave.", chapter: "poesie" },
     { front: "La situation de communication ?", back: "Qui (émetteur) ? à qui (récepteur) ? quoi (message) ? pourquoi (intention/but) ? comment/où (support, genre, énonciation) ?", chapter: "resume" },
     { front: "Qu'est-ce qu'une antithèse ?", back: "Une figure de style qui oppose deux mots ou idées contraires (ex. « formidable » / « minable »).", chapter: "poesie" },
+    { front: "Qu'est-ce qu'un oxymore ?", back: "Une figure qui réunit deux mots de sens contraires dans la même expression (« une obscure clarté », « un silence assourdissant »).", chapter: "poesie" },
     { front: "Examen oral : les 6 étapes ?", back: "1) Présentation 2) Biographie (6 infos) 3) Compréhension et choix 4) Jugement de goût (3 justifications) 5) Analyse de la forme (2 figures min) 6) Conclusion.", chapter: "oral" },
     { front: "Oral : le jugement de goût ?", back: "Ton avis, soutenu par au minimum 3 justifications différentes et pertinentes.", chapter: "oral" },
     { front: "Oral : l'analyse de la forme ?", back: "Vers, strophes, rimes (disposition/nature/qualité), au moins 2 figures de style, et le niveau de langue.", chapter: "oral" }
