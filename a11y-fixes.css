@@ -62,6 +62,13 @@ code {
    (désaturé) mais ses textes deviennent lisibles. */
 .badge-tile:not(.on) { opacity: 1 !important; filter: grayscale(0.85) !important; }
 .badge-ds, .badge-pr { color: #aeb9cb !important; }
+/* étiquettes colorées (« Cercle », « Vecteurs »…) : fond neutre + texte clair
+   pour un bon contraste (thème SOMBRE seulement ; le thème clair garde ses règles). */
+body:not(.theme-light) .tag { background: rgba(255,255,255,0.08) !important; font-weight: 700; }
+body:not(.theme-light) .tag-cercle { color: #93c5fd !important; }
+body:not(.theme-light) .tag-droite { color: #fcd34d !important; }
+body:not(.theme-light) .tag-parabole { color: #6ee7b7 !important; }
+body:not(.theme-light) .tag-vecteur { color: #c4b5fd !important; }
 /* libellés de l'éditeur de quiz (Mes créations) */
 #cre-pane-quiz label,
 #cre-pane-quiz label span { color: #b6c2d4 !important; opacity: 1 !important; }

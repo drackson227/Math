@@ -1130,7 +1130,7 @@ function setTheme(theme) {
     default: {
       '--bg-main':'#0f1117','--bg-container':'#1a1d2e','--bg-card':'#1e2235',
       '--bg-card-hover':'#252840','--bg-formula':'#0d1117',
-      '--text-primary':'#e2e8f0','--text-secondary':'#94a3b8',
+      '--text-primary':'#e2e8f0','--text-secondary':'#a7b4c6',
       '--color-cercle':'#60a5fa','--color-cercle-light':'rgba(96,165,250,0.12)','--shadow-glow-cercle':'0 0 20px rgba(96,165,250,0.2)','--shadow-glow-parabole':'0 0 20px rgba(52,211,153,0.2)','--shadow-glow-droite':'0 0 20px rgba(251,191,36,0.2)','--shadow-glow-nav':'0 0 20px rgba(167,139,250,0.2)','--color-parabole-light':'rgba(52,211,153,0.12)','--color-droite-light':'rgba(251,191,36,0.12)','--color-parabole':'#34d399',
       '--color-droite':'#fbbf24','--color-nav':'#a78bfa',
       '--border-subtle':'rgba(255,255,255,0.08)',
