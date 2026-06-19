@@ -227,11 +227,11 @@
       <div style="border:1px solid var(--border-subtle); border-radius:12px; padding:14px; background:var(--bg-main); margin:0.6rem 0;">
         <p style="text-align:center; font-weight:700; color:var(--color-nav); margin:0 0 10px; font-size:14px;">La scène vue depuis la salle</p>
         <div style="display:flex; align-items:stretch; gap:6px; max-width:470px; margin:0 auto;">
-          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:9.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
+          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
           <div style="flex:0 0 62px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 4px;">côté JARDIN</div>
           <div style="flex:1; text-align:center; font-weight:800; color:#fff; background:color-mix(in srgb, var(--color-nav) 55%, #000); border-radius:8px; padding:14px 8px;">SCÈNE <span style="font-weight:600; font-size:11.5px; opacity:.92;">(le plateau)</span></div>
           <div style="flex:0 0 62px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 4px;">côté COUR</div>
-          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:9.5px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
+          <div style="flex:0 0 44px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:11px; font-weight:700; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px;">coulisses</div>
         </div>
         <div style="text-align:center; font-size:11.5px; color:var(--text-secondary); margin-top:8px;">↓ la salle (le public) ↓</div>
         <p style="font-size:11px; color:var(--text-secondary); margin:8px 0 0;">💡 Mémo : <strong>Jardin–Cour</strong>, de gauche à droite (initiales « JC »). Vu du <strong>comédien</strong> qui regarde la salle, c'est l'inverse : cour à sa <strong>gauche</strong>, jardin à sa <strong>droite</strong>.</p>
@@ -253,8 +253,8 @@
           <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">CORBEILLES <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">le 1ᵉʳ balcon, au-dessus de l'orchestre</span></div>
           <div style="text-align:center; font-weight:700; color:var(--text-primary); background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; padding:9px;">POULAILLER / « PARADIS » <span style="display:block; font-weight:500; font-size:11px; color:var(--text-secondary);">le dernier balcon, tout en haut (places les moins chères)</span></div>
           <div style="display:flex; gap:6px;">
-            <div style="flex:1; text-align:center; font-size:10px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">baignoire (loge au rez-de-chaussée)</div>
-            <div style="flex:1; text-align:center; font-size:10px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">loges (compartiments sur les côtés)</div>
+            <div style="flex:1; text-align:center; font-size:11.5px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">baignoire (loge au rez-de-chaussée)</div>
+            <div style="flex:1; text-align:center; font-size:11.5px; color:var(--text-secondary); border:1px dashed var(--border-subtle); border-radius:8px; padding:6px;">loges (compartiments sur les côtés)</div>
           </div>
         </div>
       </div>
