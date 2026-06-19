@@ -387,32 +387,32 @@ const SECTIONS_CONTENT = {
     
     <p style="margin-top:1.5rem; font-weight:600; font-size:18px;">Condition d'existence :</p>
     <ul>
-      <li><strong>$a^2 + b^2 - 4c > 0$</strong> → cercle avec centre \\(C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)\\) et rayon \\(R = \\frac{\\sqrt{a^2 + b^2 - 4c}}{2}\\)<br><em>Explication :</em> Le rayon est un nombre réel positif, donc on peut tracer le cercle.</li>
-      
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">
-          Quand ce calcul donne un nombre positif, ça veut dire que le cercle existe vraiment ! C'est comme si tu dis "oui, je peux dessiner ce rond parce qu'il a une taille positive".
+      <li><strong>$a^2 + b^2 - 4c > 0$</strong> → cercle avec centre \\(C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)\\) et rayon \\(R = \\frac{\\sqrt{a^2 + b^2 - 4c}}{2}\\)<br><em>Explication :</em> Le rayon est un nombre réel positif, donc on peut tracer le cercle.
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">
+            Quand ce calcul donne un nombre positif, ça veut dire que le cercle existe vraiment ! C'est comme si tu dis "oui, je peux dessiner ce rond parce qu'il a une taille positive".
+          </div>
         </div>
-      </div>
-      
-      <li><strong>\\(a^2 + b^2 - 4c = 0\\)</strong> → point unique \\(C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)\\), pas de cercle<br><em>Explication :</em> Le rayon serait R = 0, donc tous les points se réduisent au centre uniquement.</li>
-      
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">
-          Si le résultat est 0, ça veut dire que le cercle est si petit qu'il n'est plus qu'un point ! C'est comme si ton rond est réduit à un seul point au milieu.
+      </li>
+
+      <li><strong>\\(a^2 + b^2 - 4c = 0\\)</strong> → point unique \\(C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)\\), pas de cercle<br><em>Explication :</em> Le rayon serait R = 0, donc tous les points se réduisent au centre uniquement.
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">
+            Si le résultat est 0, ça veut dire que le cercle est si petit qu'il n'est plus qu'un point ! C'est comme si ton rond est réduit à un seul point au milieu.
+          </div>
         </div>
-      </div>
-      
-      <li><strong>\\(a^2 + b^2 - 4c &lt; 0\\)</strong> → impossible, pas de lieu géométrique<br><em>Explication :</em> Le rayon serait √(nombre négatif), ce qui n'existe pas dans les réels. Aucun point ne satisfait l'équation.</li>
-      
-      <div class="simple-exp-box">
-        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">
-          Si le résultat est négatif, c'est impossible ! Tu ne peux pas avoir un cercle avec une taille négative. C'est comme essayer de mesurer une distance négative : ça n'existe pas !
+      </li>
+
+      <li><strong>\\(a^2 + b^2 - 4c &lt; 0\\)</strong> → impossible, pas de lieu géométrique<br><em>Explication :</em> Le rayon serait √(nombre négatif), ce qui n'existe pas dans les réels. Aucun point ne satisfait l'équation.
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">
+            Si le résultat est négatif, c'est impossible ! Tu ne peux pas avoir un cercle avec une taille négative. C'est comme essayer de mesurer une distance négative : ça n'existe pas !
+          </div>
         </div>
-      </div>
+      </li>
     </ul>
     
     <p style="margin-top:1.5rem; font-weight:600; font-size:18px;">Cercle passant par 3 points :</p>
@@ -497,6 +497,7 @@ const SECTIONS_CONTENT = {
 </div>`,
 
   formules: `<div id="formules" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">🧮 Formules clés</h2>
   <div style="margin-bottom:1.5rem;">
     <input type="search" id="formula-search" oninput="filterFormulas(this.value)" placeholder="🔍 Rechercher une formule (ex. rayon, centre, pente, vecteur…)" aria-label="Rechercher une formule" style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:15px; box-sizing:border-box;">
     <button id="formula-bookmark-filter" type="button" onclick="toggleBookmarkFilter(this)" aria-pressed="false" style="margin-top:8px; padding:8px 14px; border-radius:20px; border:1px solid var(--color-droite); background:transparent; color:var(--color-droite); font-size:13px; cursor:pointer; font-weight:600;">★ Voir mes formules marquées</button>

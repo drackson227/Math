@@ -55,6 +55,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="enhancements.css">
   <link rel="stylesheet" href="study-tools.css">
+  <link rel="stylesheet" href="a11y-fixes.css">
   <style>
     /* B7 fix: focus-overlay.show was missing from style.css */
     .focus-mode-overlay.show { display: flex !important; }
@@ -265,7 +266,7 @@
 </div>
 
 <div class="container">
-<div id="app-header" style="text-align:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-subtle);">
+<div id="app-header" role="banner" style="text-align:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border-subtle);">
   <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:0.25rem;">
     <svg width="48" height="48" viewBox="0 0 120 120" style="flex-shrink:0;" aria-hidden="true">
       <defs><linearGradient id="hdrLogoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
@@ -281,7 +282,7 @@
   <button id="exam-chip" type="button" onclick="showSection('profil')" title="Voir mon planning d'examens" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.4); color:#fbbf24; font-size:12px; font-weight:700; cursor:pointer;"></button>
 </div>
 <button id="subj-fold" class="subj-fold" onclick="toggleSubjectBar()" aria-expanded="false" aria-controls="subject-bar">📚 Matière ▾</button>
-<div id="subject-bar" class="subject-bar" role="tablist" aria-label="Choisir une matière">
+<div id="subject-bar" class="subject-bar" role="group" aria-label="Choisir une matière">
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
   <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
   <button class="subj-btn" data-subj="anglais" onclick="setSubject('anglais')">🇬🇧 Anglais</button>
@@ -341,6 +342,7 @@
   </div>
 </div>
 
+<main id="gr2-main">
 <div id="synthese" class="section active"><!-- contenu chargé depuis content.js --></div>
 
 <div id="formules" class="section"><!-- contenu chargé depuis content.js --></div>
@@ -935,6 +937,7 @@
   </div>
 </div>
 
+</main>
 <footer style="text-align:center; padding:2rem 1rem 3rem; margin-top:2rem; border-top:1px solid var(--border-subtle); color:var(--text-secondary); font-size:13px;">
   <p style="margin:0 0 0.5rem;">Créé par <strong style="color:var(--color-nav);">Drackson</strong></p>
   <p style="margin:0 0 0.75rem;">

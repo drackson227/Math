@@ -4,9 +4,9 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v136';
+const CACHE = 'mathsgr2-v137';
 const CORE = [
-  './', './index.html', './style.css', './enhancements.css', './study-tools.css',
+  './', './index.html', './style.css', './enhancements.css', './study-tools.css', './a11y-fixes.css',
   './data.js', './content.js', './script.js',
   './auth.js', './chat.js', './multiplayer.js', './stats.js', './notes.js', './creations.js', './formulas-trainer.js', './diagnostic.js', './search.js', './generator.js', './subjects.js', './subject-chimie.js', './subject-bio.js', './subject-geo.js', './subject-eco.js', './subject-histoire.js', './subject-francais.js', './subject-anglais.js', './subject-neerlandais.js', './answersheet.js', './gestures.js', './bat.js', './shortcuts.js', './backtotop.js', './study-tools.js',
   './manifest.json', './logo.svg', './icon-192.png', './icon-512.png'
