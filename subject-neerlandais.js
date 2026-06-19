@@ -464,7 +464,7 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
       <span style="font-size:13px; color:var(--text-secondary);">Objectif : ~150 mots — <strong id="nl-my-count">0 mot</strong></span>
       <div style="display:flex; gap:8px;">
         <button type="button" onclick="nlTextReset()" style="padding:9px 14px; border-radius:10px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">↩️ Modèle</button>
-        <button type="button" onclick="nlTextSave()" style="padding:9px 16px; border-radius:10px; border:none; background:var(--color-nav); color:#fff; font-weight:700; cursor:pointer;">💾 Enregistrer</button>
+        <button type="button" onclick="nlTextSave()" style="padding:9px 16px; min-height:40px; display:inline-flex; align-items:center; gap:5px; border-radius:10px; border:none; background:color-mix(in srgb, var(--color-nav) 50%, #000); color:#fff; font-weight:700; cursor:pointer;">💾 Enregistrer</button>
       </div>
     </div>
     <textarea id="nl-my-text" lang="nl" spellcheck="true" oninput="nlMyCount()" rows="16" placeholder="Écris ton texte ici…" style="width:100%; box-sizing:border-box; padding:14px; border-radius:12px; border:1px solid var(--border-subtle); background:var(--bg-main); color:var(--text-primary); font-size:15px; line-height:1.8; resize:vertical; font-family:inherit;"></textarea>
@@ -475,7 +475,7 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
       <p style="margin:.2rem 0 .6rem;">Complète les <strong>auxiliaires</strong> (ben/heb…), <strong>participes</strong> et <strong>modaux</strong>, puis vérifie.</p>
       <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:.6rem;">
         <button type="button" onclick="nlGapGen()" style="padding:8px 13px; border-radius:9px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">🔄 Recommencer</button>
-        <button type="button" onclick="nlGapCheck()" style="padding:8px 14px; border-radius:9px; border:none; background:var(--color-parabole); color:#04130d; font-weight:700; cursor:pointer;">✅ Vérifier</button>
+        <button type="button" onclick="nlGapCheck()" style="padding:8px 14px; min-height:40px; display:inline-flex; align-items:center; gap:5px; border-radius:9px; border:none; background:color-mix(in srgb, var(--color-parabole) 50%, #000); color:#fff; font-weight:700; cursor:pointer;">✅ Vérifier</button>
         <button type="button" onclick="nlGapReveal()" style="padding:8px 13px; border-radius:9px; border:1px solid var(--border-subtle); background:transparent; color:var(--text-secondary); font-weight:600; cursor:pointer;">👁️ Montrer</button>
         <strong id="nl-gap-score" style="color:var(--color-parabole);"></strong>
       </div>
