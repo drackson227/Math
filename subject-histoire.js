@@ -478,66 +478,45 @@
     </div>
   </div>`;
 
-  /* ---------------------- ONGLET BONUS : PERSONNAGES ---------------------- */
-  function perso(img, name, dates, role) {
-    return '<div class="perso-card"><img src="' + img + '" alt="' + name + '" loading="lazy">' +
-      '<h4>' + name + '</h4><div class="dates">' + dates + '</div><p>' + role + '</p>' +
-      '<span class="perso-more">👆 Clique pour la fiche + anecdote</span></div>';
-  }
-  var PERSONNAGES = `
-    <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">👑 Personnages importants</h2>
-    <p style="color:var(--text-secondary); margin-bottom:0.6rem;">Les visages à reconnaître pour l'examen.</p>
-    <div class="perso-grid">
-      ${perso('gutenberg.jpg', 'Gutenberg', '≈ 1400–1468', 'Invente l’imprimerie à caractères mobiles (≈ 1450) → diffusion des idées dans toute l’Europe.')}
-      ${perso('erasme.jpg', 'Érasme', '1466–1536', 'Le « prince des humanistes », auteur de « L’Éloge de la folie ». Savoir, raison et esprit critique.')}
-      ${perso('vinci.jpg', 'Léonard de Vinci', '1452–1519', 'Génie de la Renaissance : peintre (La Joconde, La Cène), ingénieur et inventeur.')}
-      ${perso('michelange.jpg', 'Michel-Ange', '1475–1564', 'Sculpteur et peintre de génie : le David et le plafond de la chapelle Sixtine.')}
-      ${perso('luther.jpg', 'Martin Luther', '1483–1546', 'Moine allemand : ses 95 thèses (1517) lancent la Réforme protestante (foi seule, Bible seule).')}
-      ${perso('calvin.jpg', 'Jean Calvin', '1509–1564', 'Réformateur à Genève, théoricien de la prédestination ; 2ᵉ grand nom du protestantisme.')}
-      ${perso('charlesquint.jpg', 'Charles Quint', '1500–1558', 'Empereur catholique d’un immense empire (dont les Pays-Bas espagnols) ; adversaire de la Réforme.')}
-      ${perso('henri4.jpg', 'Henri IV', '1553–1610', 'Roi de France ; signe l’Édit de Nantes (1598) pour mettre fin aux guerres de religion.')}
-      ${perso('louis14.jpg', 'Louis XIV', '1638–1715', 'Le Roi-Soleil, modèle de la monarchie absolue ; Versailles, Colbert, « L’État c’est moi ».')}
-    </div>`;
-
-  /* ---------------------- ONGLET BONUS : NOTIONS & ÉVÉNEMENTS ---------------------- */
-  // Cartes cliquables (data-info → openInfoCard) qui rouvrent les fiches déjà validées.
-  function notion(key, emoji, title, when, def) {
-    return '<div class="perso-card notion-card" data-info="' + key + '">' +
-      '<div aria-hidden="true" style="font-size:32px;line-height:1;margin:2px 0 4px;">' + emoji + '</div>' +
+  /* ---------------------- ONGLET BONUS : FICHES À CONNAÎTRE ---------------------- */
+  // Galerie illustrée (personnages, œuvres, événements) — data-info → openInfoCard (fiche complète).
+  function fiche(img, title, when, desc, key) {
+    return '<div class="perso-card" data-info="' + key + '">' +
+      '<img src="' + img + '" alt="' + title.replace(/"/g, '') + '" loading="lazy">' +
       '<h4>' + title + '</h4>' +
       (when ? '<div class="dates">' + when + '</div>' : '') +
-      '<p>' + def + '</p>' +
-      '<span class="perso-more">👆 Fiche + « à l’examen »</span></div>';
+      '<p>' + desc + '</p>' +
+      '<span class="perso-more">👆 Fiche complète</span></div>';
   }
-  function notionGroup(title, cards) {
-    return '<h3 style="color:var(--text-primary);font-size:16px;font-weight:700;margin:1.3rem 0 .4rem;border-left:4px solid var(--color-nav);padding-left:8px;">' + title + '</h3><div class="perso-grid">' + cards + '</div>';
+  function ficheGroup(title, cards) {
+    return '<h3 style="color:var(--text-primary);font-size:16px;font-weight:700;margin:1.4rem 0 .5rem;border-left:4px solid var(--color-nav);padding-left:8px;">' + title + '</h3><div class="perso-grid">' + cards + '</div>';
   }
-  var NOTIONS = `
-    <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">📜 Notions &amp; événements clés</h2>
-    <p style="color:var(--text-primary); margin-bottom:0.2rem;">Les mots et les faits à savoir <strong>expliquer</strong>. 👆 Clique une carte pour la fiche complète (cours + « à l’examen »).</p>
-    ${notionGroup('📖 Le livre, l’Humanisme &amp; la Renaissance',
-      notion('imprimerie', '🖨️', 'L’imprimerie', '≈ 1450', 'Caractères mobiles (Gutenberg) : des livres en série, plus vite et moins chers.') +
-      notion('humanisme', '🧠', 'L’Humanisme', 'XVᵉ–XVIᵉ s.', 'Courant de pensée qui place l’être humain, le savoir et la raison au centre.') +
-      notion('renaissance', '🎨', 'La Renaissance', 'XVᵉ s.', 'Renouveau des arts né en Italie, inspiré de l’Antiquité.') +
-      notion('mecenes', '💰', 'Les mécènes', '', 'Riches protecteurs qui financent les artistes (ex. les Médicis).')
+  var FICHES = `
+    <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">📚 Fiches à connaître</h2>
+    <p style="color:var(--text-primary); margin-bottom:0.4rem;">Personnages, œuvres &amp; événements clés — 👆 clique une carte pour la fiche complète (cours + « à l’examen » + anecdote).</p>
+    ${ficheGroup('📖 Le livre, l’Humanisme &amp; la Renaissance',
+      fiche('gutenberg.jpg', 'Gutenberg', '≈ 1400–1468', 'Invente l’imprimerie à caractères mobiles (≈ 1450).', 'gutenberg.jpg') +
+      fiche('erasme.jpg', 'Érasme', '1466–1536', 'Le « prince des humanistes » (savoir, raison, esprit critique).', 'erasme.jpg') +
+      fiche('vinci.jpg', 'Léonard de Vinci', '1452–1519', 'Génie de la Renaissance : peintre, ingénieur, inventeur.', 'vinci.jpg') +
+      fiche('joconde.jpg', 'La Joconde', '≈ 1503', 'Le tableau le plus célèbre, peint par Léonard de Vinci.', 'joconde.jpg') +
+      fiche('michelange.jpg', 'Michel-Ange', '1475–1564', 'Le David et le plafond de la chapelle Sixtine.', 'michelange.jpg') +
+      fiche('medicis.jpg', 'Les mécènes', 'Renaissance', 'Les Médicis (Florence) financent les artistes.', 'mecenes')
     )}
-    ${notionGroup('⛪ La Réforme &amp; la Contre-Réforme',
-      notion('reforme', '📖', 'La Réforme', '1517', 'Mouvement lancé par Luther : naissance du protestantisme.') +
-      notion('indulgences', '💸', 'Les indulgences', '', 'Payer l’Église pour le pardon de ses péchés — l’abus que dénonce Luther.') +
-      notion('predestination', '✝️', 'La prédestination', '', 'L’idée de Calvin : Dieu a déjà choisi qui sera sauvé.') +
-      notion('contre-reforme', '⛪', 'La Contre-Réforme', '1545–1563', 'La réaction catholique : Concile de Trente, Jésuites.') +
-      notion('jesuites', '🎓', 'Les Jésuites', 'XVIᵉ s.', 'Ordre catholique, fer de lance de la Contre-Réforme.')
+    ${ficheGroup('⛪ La Réforme &amp; la Contre-Réforme',
+      fiche('luther.jpg', 'Martin Luther', '1483–1546', 'Ses 95 thèses (1517) lancent la Réforme protestante.', 'luther.jpg') +
+      fiche('europe_religions.jpg', 'Les 95 thèses', '1517', 'Contre les indulgences ; diffusées par l’imprimerie.', 'europe_religions.jpg') +
+      fiche('calvin.jpg', 'Jean Calvin', '1509–1564', 'Réformateur à Genève ; la prédestination.', 'calvin.jpg') +
+      fiche('trente.jpg', 'Concile de Trente', '1545–1563', 'La Contre-Réforme (réaction catholique).', 'trente.jpg') +
+      fiche('charlesquint.jpg', 'Charles Quint', '1500–1558', 'Empereur catholique, adversaire de la Réforme.', 'charlesquint.jpg')
     )}
-    ${notionGroup('⚔️ Les guerres de religion',
-      notion('guerres-religion', '⚔️', 'Les guerres de religion', 'XVIᵉ s.', 'Catholiques contre protestants en France.') +
-      notion('saint-barthelemy', '🗡️', 'La Saint-Barthélemy', '24 août 1572', 'Massacre de milliers de protestants à Paris, puis en province.') +
-      notion('edit-de-nantes', '🕊️', 'L’Édit de Nantes', '1598', 'Henri IV accorde la tolérance aux protestants → fin des guerres.')
+    ${ficheGroup('⚔️ Les guerres de religion',
+      fiche('saint_barthelemy.jpg', 'La Saint-Barthélemy', '24 août 1572', 'Massacre de milliers de protestants en France.', 'saint-barthelemy') +
+      fiche('henri4.jpg', 'Henri IV', '1553–1610', 'Signe l’Édit de Nantes (1598) → la tolérance.', 'henri4.jpg')
     )}
-    ${notionGroup('👑 L’absolutisme &amp; l’Ancien Régime',
-      notion('absolutisme', '👑', 'L’absolutisme', '', 'Le roi détient tous les pouvoirs, qu’il tient de Dieu.') +
-      notion('droit-divin', '☀️', 'Le droit divin', '', 'Le roi affirme tenir son pouvoir directement de Dieu.') +
-      notion('mercantilisme', '⚓', 'Le mercantilisme', '', 'La politique de Colbert : enrichir l’État (exporter plus qu’importer).') +
-      notion('ancien-regime', '🏛️', 'L’Ancien Régime', 'avant 1789', 'La société en 3 ordres : clergé, noblesse, tiers état.')
+    ${ficheGroup('👑 L’absolutisme &amp; l’Ancien Régime',
+      fiche('louis14.jpg', 'Louis XIV', '1638–1715', 'Le Roi-Soleil, modèle de la monarchie absolue.', 'louis14.jpg') +
+      fiche('versailles.jpg', 'Versailles', 'Louis XIV', 'Le château : un outil pour contrôler la noblesse.', 'versailles.jpg') +
+      fiche('colbert.jpg', 'Colbert', 'ministre du roi', 'Le mercantilisme : enrichir l’État.', 'colbert')
     )}`;
 
   /* ---------------------- QUIZ ---------------------- */
@@ -643,7 +622,7 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📅 Dates & repères', exercices: "🎯 S'entraîner" },
-      extraTabs: [{ label: '👑 Personnages', html: PERSONNAGES }, { label: '📜 Notions clés', html: NOTIONS }],
+      extraTabs: [{ label: '📚 Fiches clés', html: FICHES }],
       chapOrder: ['periodes', 'livre', 'humanisme', 'reforme', 'absolutisme', 'methode'],
       chapLabels: { periodes: 'Grandes périodes', livre: 'Le livre', humanisme: 'Humanisme & Renaissance', reforme: 'Réforme protestante', absolutisme: 'Absolutisme', methode: 'Critique de document' }
     }
