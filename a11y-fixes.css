@@ -1,0 +1,75 @@
+/* ============================================================
+   a11y-fixes.css — Corrections d'accessibilité mesurées (axe-core)
+   Chargé EN DERNIER pour surcharger proprement. Centralisé ici pour
+   pouvoir tout ajuster/annuler facilement.
+   Couvre : contraste WCAG AA (texte blanc sur accent, pied de page,
+   code, badges) + cibles tactiles ≥ 40px.
+   ============================================================ */
+
+/* ---------- 1. Contraste : texte blanc sur accent (toutes matières) ----------
+   --color-nav change selon la matière (violet, teal, orange…). Au lieu de
+   figer une couleur, on ASSOMBRIT le fond avec color-mix : le texte blanc
+   redevient lisible (≥ 4.5:1) sans changer la teinte de la matière. */
+.fc-chip.on,
+.gen-chip.on,
+.gloss-chip.on,
+.note-tab.on,
+.cre-tool.on,
+.exp-btn.on,
+.fc-chip-mine.on,
+.qz-chip.on,
+button[data-ch].on,
+button[data-t].on {
+  background: color-mix(in srgb, var(--color-nav) 58%, #000) !important;
+  border-color: color-mix(in srgb, var(--color-nav) 58%, #000) !important;
+  color: #fff !important;
+}
+/* bouton principal « Commencer le quiz » (style inline → !important nécessaire) */
+button[onclick="startQuiz()"] {
+  background: color-mix(in srgb, var(--color-nav) 58%, #000) !important;
+  color: #fff !important;
+}
+/* onglets méthodes (dégradé) → on garde le dégradé mais plus foncé */
+.mtab.on {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-nav) 62%, #000), #5b21b6) !important;
+  color: #fff !important;
+}
+/* pastilles carte de Belgique (géo) : fond accent + texte blanc */
+.bemap-dot:not(.sel):not(.ok):not(.no) {
+  background: color-mix(in srgb, var(--color-nav) 55%, #000) !important;
+}
+/* frise chronologique (histoire) : segments colorés à texte blanc */
+.htl-seg {
+  background: color-mix(in srgb, var(--c) 60%, #000) !important;
+}
+
+/* ---------- 2. Contraste : pied de page, code, badges ---------- */
+footer p,
+footer a[href="#"] {
+  color: #b6c2d4 !important;
+  opacity: 1 !important;
+}
+code {
+  color: color-mix(in srgb, var(--color-nav) 45%, #fff) !important;
+}
+.badge-ds {
+  color: #aeb9cb !important;
+}
+
+/* ---------- 3. Cibles tactiles : minimum confortable au doigt ---------- */
+.nav-btn,
+.subj-btn,
+.gr2-tool,
+.gr2-cc,
+.fc-chip,
+.gen-chip,
+.gloss-chip,
+.note-tab,
+.cre-tool,
+.mtab,
+.exp-btn {
+  min-height: 40px;
+}
+.gr2-cc { padding-top: 8px; padding-bottom: 8px; }
+.gr2-sw { width: 32px; height: 32px; }
+.gr2-sw-clear { width: 38px; height: 38px; }
