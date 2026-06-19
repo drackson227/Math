@@ -147,6 +147,27 @@
         <div class="simple-exp-content">Parce que ce n'est pas une solution parfaite : produire du carburant avec des plantes peut entrer en <strong>concurrence avec l'alimentation</strong> (champs utilisés pour les voitures plutôt que pour nourrir), provoquer de la <strong>déforestation</strong> (huile de palme) et consommer beaucoup d'eau et d'engrais. D'où le débat : avantage écologique réel ou fausse bonne idée ?</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>6. Mondialisation de l'alimentation : le cacao 🍫</h2>
+      <p>Le <strong>chocolat</strong> illustre les <strong>inégalités Nord–Sud</strong> : la matière première est cultivée au <strong>Sud</strong>, mais transformée et vendue (chère) au <strong>Nord</strong>.</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Production</strong> : la <strong>Côte d'Ivoire</strong> est le <strong>1ᵉʳ producteur mondial</strong> de fèves de cacao (devant le Ghana). Les fèves partent par le <strong>port de San Pedro</strong>.</li>
+        <li><strong>Transformation</strong> : l'entreprise belge <strong>Barry Callebaut</strong> est le <strong>n°1 mondial</strong> de la transformation du chocolat.</li>
+        <li><strong>Les géants de l'agroalimentaire</strong> : une <strong>dizaine de multinationales</strong> (Nestlé, Mondelez, Mars, Unilever, Danone, Coca-Cola, PepsiCo, Kellogg's…) possèdent la plupart des marques et <strong>fixent les prix</strong>.</li>
+      </ul>
+      <p><strong>Conséquences</strong> :</p>
+      <ul style="line-height:1.9;">
+        <li>💰 <strong>Économiques</strong> : les <strong>producteurs du Sud</strong> sont <strong>mal payés</strong> ; les profits vont aux multinationales du Nord.</li>
+        <li>👥 <strong>Sociales</strong> : pauvreté des planteurs, <strong>travail des enfants</strong> dans les plantations.</li>
+        <li>🌳 <strong>Environnementales</strong> : <strong>déforestation</strong> et monoculture pour étendre les plantations.</li>
+      </ul>
+      <p><strong>Solutions</strong> : le <strong>commerce équitable</strong> (mieux payer les producteurs), une <strong>consommation responsable</strong> et des <strong>labels</strong>.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Le pays qui <strong>cultive</strong> le cacao (Côte d'Ivoire) gagne <strong>peu</strong>, alors que les entreprises qui le <strong>transforment et le vendent</strong> (au Nord) gagnent <strong>beaucoup</strong>. Le <strong>commerce équitable</strong> sert à payer plus justement les producteurs.</div>
+      </div>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES (cartes / chiffres clés) ---------------------- */
@@ -270,7 +291,11 @@
     { q: "La Communauté germanophone se situe surtout…", opts: ["dans les cantons de l'Est (région d'Eupen)", "à la côte", "autour de Bruxelles", "en Flandre-Occidentale"], ans: 0, chapter: "belgique", difficulty: "difficile", exp: "À l'est de la Wallonie (cantons de l'Est, Eupen), frontière allemande." },
     { q: "La Région de Bruxelles-Capitale compte…", opts: ["19 communes", "10 communes", "1 commune", "100 communes"], ans: 0, chapter: "belgique", difficulty: "intermediaire", exp: "19 communes ; Région bilingue (français + néerlandais)." },
     { q: "Le biogaz est produit par…", opts: ["méthanisation de déchets organiques", "fermentation de betteraves", "transestérification d'huiles", "raffinage du pétrole"], ans: 0, chapter: "biocarburants", difficulty: "intermediaire", exp: "Biogaz = méthane issu de la méthanisation (déchets organiques)." },
-    { q: "L'Escaut passe par quelles villes ?", opts: ["Tournai, Gand, Anvers", "Namur, Liège", "Arlon, Bastogne", "Bruges, Ostende"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "L'Escaut : Tournai → Gand (la Lys le rejoint) → Anvers → mer du Nord." }
+    { q: "L'Escaut passe par quelles villes ?", opts: ["Tournai, Gand, Anvers", "Namur, Liège", "Arlon, Bastogne", "Bruges, Ostende"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "L'Escaut : Tournai → Gand (la Lys le rejoint) → Anvers → mer du Nord." },
+    { q: "Le 1ᵉʳ producteur mondial de fèves de cacao est…", opts: ["la Côte d'Ivoire", "la Belgique", "la Suisse", "la France"], ans: 0, chapter: "agro", difficulty: "facile", exp: "La Côte d'Ivoire (devant le Ghana) ; les fèves partent par le port de San Pedro." },
+    { q: "Le n°1 mondial de la transformation du chocolat est…", opts: ["Barry Callebaut (belge)", "Coca-Cola", "Apple", "Toyota"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "Barry Callebaut, entreprise belge, leader mondial de la transformation du cacao." },
+    { q: "Le marché agroalimentaire mondial est dominé par…", opts: ["une dizaine de multinationales", "des milliers de petites fermes", "un seul pays", "l'État belge"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "≈ 10 multinationales (Nestlé, Mondelez, Mars, Unilever, Danone…) possèdent la plupart des marques." },
+    { q: "Une solution aux inégalités du commerce du cacao :", opts: ["le commerce équitable", "plus de déforestation", "baisser les salaires des producteurs", "le travail des enfants"], ans: 0, chapter: "agro", difficulty: "facile", exp: "Le commerce équitable paie plus justement les producteurs du Sud." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -297,19 +322,23 @@
     { front: "Belgique : capitale, superficie, population ?", back: "Capitale : Bruxelles · ≈ 30 700 km² · ≈ 11,7 millions d'habitants.", chapter: "belgique" },
     { front: "Où est la Communauté germanophone ?", back: "À l'est de la Wallonie : les cantons de l'Est (région d'Eupen), à la frontière allemande.", chapter: "belgique" },
     { front: "Combien de communes à Bruxelles ?", back: "19 communes ; Région bilingue (français + néerlandais).", chapter: "belgique" },
-    { front: "Le biogaz ?", back: "Du méthane produit par méthanisation de déchets organiques (3ᵉ type de biocarburant avec bioéthanol et biodiesel).", chapter: "biocarburants" }
+    { front: "Le biogaz ?", back: "Du méthane produit par méthanisation de déchets organiques (3ᵉ type de biocarburant avec bioéthanol et biodiesel).", chapter: "biocarburants" },
+    { front: "1ᵉʳ producteur mondial de cacao ?", back: "La Côte d'Ivoire (devant le Ghana). Les fèves sont exportées par le port de San Pedro.", chapter: "agro" },
+    { front: "Qui est Barry Callebaut ?", back: "Une entreprise belge, n°1 mondial de la transformation du chocolat (le cacao cultivé au Sud est transformé au Nord).", chapter: "agro" },
+    { front: "Qui domine l'agroalimentaire mondial ?", back: "Une dizaine de multinationales (Nestlé, Mondelez, Mars, Unilever, Danone, Coca-Cola, PepsiCo, Kellogg's…) qui possèdent la plupart des marques et fixent les prix.", chapter: "agro" },
+    { front: "Cacao : conséquences + solution ?", back: "Producteurs du Sud mal payés, travail des enfants, déforestation. Solution : le commerce équitable + une consommation responsable.", chapter: "agro" }
   ];
 
   window.registerSubject('geo', {
-    subtitle: 'Géo — la Belgique (régions, provinces, relief, fleuves) + biocarburants',
+    subtitle: 'Géo — la Belgique (régions, provinces, relief, fleuves) + biocarburants & agroalimentaire',
     content: {
       sections: sections,
       questions: questions,
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
-      chapOrder: ['belgique', 'relief', 'hydro', 'biocarburants'],
-      chapLabels: { belgique: 'La Belgique', relief: 'Relief', hydro: 'Hydrographie', biocarburants: 'Biocarburants' }
+      chapOrder: ['belgique', 'relief', 'hydro', 'biocarburants', 'agro'],
+      chapLabels: { belgique: 'La Belgique', relief: 'Relief', hydro: 'Hydrographie', biocarburants: 'Biocarburants', agro: 'Cacao & agroalimentaire' }
     }
   });
 })();
