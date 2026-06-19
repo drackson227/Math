@@ -102,6 +102,7 @@
           <tr><th>Haute Belgique</th><td>&gt; 200 m</td><td>plateaux de l'<strong>Ardenne</strong> · point culminant : <strong>Signal de Botrange</strong> (694 m, Hautes Fagnes)</td></tr>
         </tbody>
       </table>
+      <p style="margin-top:.7rem;">Le <strong>sillon Sambre-et-Meuse</strong> (la vallée de la Sambre puis de la Meuse : Mons → Charleroi → Namur → Liège) sépare la <strong>Moyenne</strong> de la <strong>Haute Belgique</strong>. C'est l'ancien <strong>axe industriel</strong> wallon (charbon, sidérurgie).</p>
       <figure class="hfig hfig-float" style="max-width:200px"><img src="belgique_relief.jpg" alt="Relief de la Belgique" loading="lazy"><figcaption>Le relief monte vers le sud-est (Ardenne). Clique pour la fiche.</figcaption></figure>
     </div>
 
@@ -247,6 +248,16 @@
         <li>Consomme beaucoup d'eau et d'engrais → <strong>❌</strong></li>
       </ul>
     </div>
+
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour revoir la géo autrement (vidéos, fiches, animations) :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos &amp; quiz de géographie.</li>
+        <li><a href="https://www.lelivrescolaire.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Le Livre Scolaire</a> — manuels d'histoire-géo gratuits.</li>
+        <li><a href="https://www.edumedia.com/fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">éduMédia</a> — animations (relief, environnement, agriculture).</li>
+      </ul>
+    </div>
   </div>`;
 
   /* ---------------------- ERREURS ---------------------- */
@@ -321,6 +332,7 @@
     { front: "Bruxelles : quelle particularité ?", back: "3ᵉ Région du pays, bilingue, qui n'appartient à aucune province.", chapter: "belgique" },
     { front: "Où la Meuse se jette-t-elle ?", back: "Dans la mer du Nord (comme l'Escaut). Elle traverse France, Belgique, Pays-Bas.", chapter: "hydro" },
     { front: "Que sont les polders ?", back: "Des terres gagnées sur la mer, en Basse Belgique (côte/plaine flamande).", chapter: "relief" },
+    { front: "Le sillon Sambre-et-Meuse ?", back: "La vallée de la Sambre puis de la Meuse (Mons → Charleroi → Namur → Liège) ; elle sépare la Moyenne de la Haute Belgique et fut l'ancien axe industriel wallon (charbon, sidérurgie).", chapter: "relief" },
     { front: "Belgique : capitale, superficie, population ?", back: "Capitale : Bruxelles · ≈ 30 700 km² · ≈ 11,7 millions d'habitants.", chapter: "belgique" },
     { front: "Où est la Communauté germanophone ?", back: "À l'est de la Wallonie : les cantons de l'Est (région d'Eupen), à la frontière allemande.", chapter: "belgique" },
     { front: "Combien de communes à Bruxelles ?", back: "19 communes ; Région bilingue (français + néerlandais).", chapter: "belgique" },

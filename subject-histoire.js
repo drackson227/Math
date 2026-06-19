@@ -453,6 +453,16 @@
         <li>Peur de la noblesse rebelle → <strong>Louis XIV l'enferme à Versailles</strong>.</li>
       </ul>
     </div>
+
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour revoir le cours autrement (vidéos, fiches, quiz) :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos &amp; quiz d'histoire (Renaissance, Réforme, absolutisme).</li>
+        <li><a href="https://www.lelivrescolaire.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Le Livre Scolaire</a> — manuels d'histoire-géo gratuits.</li>
+        <li><a href="https://www.assistancescolaire.com/eleve" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Assistance scolaire</a> — fiches Renaissance, Humanisme &amp; Réformes.</li>
+      </ul>
+    </div>
   </div>`;
 
   /* ---------------------- ERREURS ---------------------- */
