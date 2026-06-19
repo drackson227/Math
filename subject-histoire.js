@@ -172,9 +172,9 @@
       exam: "<ul><li>3 ordres : clergé · noblesse · tiers état.</li><li>Seuls les privilégiés échappent à l'impôt.</li></ul>"
     },
     "saint-barthelemy": {
-      title: "Le massacre de la Saint-Barthélemy", sub: "1572 · guerres de religion", img: "saint_barthelemy.jpg",
-      cours: "<p>Le <strong>24 août 1572</strong>, des milliers de <strong>protestants</strong> sont massacrés à Paris et en France pendant les <strong>guerres de religion</strong>.</p>",
-      exam: "<ul><li><strong>1572</strong> · symbole de la violence catholiques / protestants.</li><li>Apaisé plus tard par l'<strong>Édit de Nantes</strong> (1598).</li></ul>"
+      title: "Le massacre de la Saint-Barthélemy", sub: "24 août 1572 · guerres de religion", img: "saint_barthelemy.jpg",
+      cours: "<p>Dans la nuit du <strong>24 août 1572</strong>, à <strong>Paris</strong> puis dans plusieurs villes de France, des <strong>milliers de protestants</strong> (les huguenots) sont massacrés pendant les <strong>guerres de religion</strong>.</p><p><strong>Pourquoi ?</strong> Le <strong>mariage</strong> d'Henri de Navarre (protestant, futur <strong>Henri IV</strong>) venait de réunir à Paris les chefs protestants. La cour royale — le roi <strong>Charles IX</strong> et sa mère <strong>Catherine de Médicis</strong> — laisse alors se déclencher le massacre.</p>",
+      exam: "<ul><li><strong>24 août 1572</strong> · symbole de la violence entre catholiques et protestants.</li><li>Plusieurs <strong>milliers de victimes</strong> protestantes (Paris, puis la province).</li><li>Les guerres continuent ; la paix reviendra avec l'<strong>Édit de Nantes (1598)</strong>.</li></ul>"
     },
     "mecenes": {
       title: "Les mécènes", sub: "protecteurs des artistes (les Médicis)", img: "medicis.jpg",
@@ -499,6 +499,47 @@
       ${perso('louis14.jpg', 'Louis XIV', '1638–1715', 'Le Roi-Soleil, modèle de la monarchie absolue ; Versailles, Colbert, « L’État c’est moi ».')}
     </div>`;
 
+  /* ---------------------- ONGLET BONUS : NOTIONS & ÉVÉNEMENTS ---------------------- */
+  // Cartes cliquables (data-info → openInfoCard) qui rouvrent les fiches déjà validées.
+  function notion(key, emoji, title, when, def) {
+    return '<div class="perso-card notion-card" data-info="' + key + '">' +
+      '<div aria-hidden="true" style="font-size:32px;line-height:1;margin:2px 0 4px;">' + emoji + '</div>' +
+      '<h4>' + title + '</h4>' +
+      (when ? '<div class="dates">' + when + '</div>' : '') +
+      '<p>' + def + '</p>' +
+      '<span class="perso-more">👆 Fiche + « à l’examen »</span></div>';
+  }
+  function notionGroup(title, cards) {
+    return '<h3 style="color:var(--text-primary);font-size:16px;font-weight:700;margin:1.3rem 0 .4rem;border-left:4px solid var(--color-nav);padding-left:8px;">' + title + '</h3><div class="perso-grid">' + cards + '</div>';
+  }
+  var NOTIONS = `
+    <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.4rem;">📜 Notions &amp; événements clés</h2>
+    <p style="color:var(--text-primary); margin-bottom:0.2rem;">Les mots et les faits à savoir <strong>expliquer</strong>. 👆 Clique une carte pour la fiche complète (cours + « à l’examen »).</p>
+    ${notionGroup('📖 Le livre, l’Humanisme &amp; la Renaissance',
+      notion('imprimerie', '🖨️', 'L’imprimerie', '≈ 1450', 'Caractères mobiles (Gutenberg) : des livres en série, plus vite et moins chers.') +
+      notion('humanisme', '🧠', 'L’Humanisme', 'XVᵉ–XVIᵉ s.', 'Courant de pensée qui place l’être humain, le savoir et la raison au centre.') +
+      notion('renaissance', '🎨', 'La Renaissance', 'XVᵉ s.', 'Renouveau des arts né en Italie, inspiré de l’Antiquité.') +
+      notion('mecenes', '💰', 'Les mécènes', '', 'Riches protecteurs qui financent les artistes (ex. les Médicis).')
+    )}
+    ${notionGroup('⛪ La Réforme &amp; la Contre-Réforme',
+      notion('reforme', '📖', 'La Réforme', '1517', 'Mouvement lancé par Luther : naissance du protestantisme.') +
+      notion('indulgences', '💸', 'Les indulgences', '', 'Payer l’Église pour le pardon de ses péchés — l’abus que dénonce Luther.') +
+      notion('predestination', '✝️', 'La prédestination', '', 'L’idée de Calvin : Dieu a déjà choisi qui sera sauvé.') +
+      notion('contre-reforme', '⛪', 'La Contre-Réforme', '1545–1563', 'La réaction catholique : Concile de Trente, Jésuites.') +
+      notion('jesuites', '🎓', 'Les Jésuites', 'XVIᵉ s.', 'Ordre catholique, fer de lance de la Contre-Réforme.')
+    )}
+    ${notionGroup('⚔️ Les guerres de religion',
+      notion('guerres-religion', '⚔️', 'Les guerres de religion', 'XVIᵉ s.', 'Catholiques contre protestants en France.') +
+      notion('saint-barthelemy', '🗡️', 'La Saint-Barthélemy', '24 août 1572', 'Massacre de milliers de protestants à Paris, puis en province.') +
+      notion('edit-de-nantes', '🕊️', 'L’Édit de Nantes', '1598', 'Henri IV accorde la tolérance aux protestants → fin des guerres.')
+    )}
+    ${notionGroup('👑 L’absolutisme &amp; l’Ancien Régime',
+      notion('absolutisme', '👑', 'L’absolutisme', '', 'Le roi détient tous les pouvoirs, qu’il tient de Dieu.') +
+      notion('droit-divin', '☀️', 'Le droit divin', '', 'Le roi affirme tenir son pouvoir directement de Dieu.') +
+      notion('mercantilisme', '⚓', 'Le mercantilisme', '', 'La politique de Colbert : enrichir l’État (exporter plus qu’importer).') +
+      notion('ancien-regime', '🏛️', 'L’Ancien Régime', 'avant 1789', 'La société en 3 ordres : clergé, noblesse, tiers état.')
+    )}`;
+
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
     // ── Carte des religions (fin chapitre Réforme) ──
@@ -602,7 +643,7 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📅 Dates & repères', exercices: "🎯 S'entraîner" },
-      extraTabs: [{ label: '👑 Personnages', html: PERSONNAGES }],
+      extraTabs: [{ label: '👑 Personnages', html: PERSONNAGES }, { label: '📜 Notions clés', html: NOTIONS }],
       chapOrder: ['periodes', 'livre', 'humanisme', 'reforme', 'absolutisme', 'methode'],
       chapLabels: { periodes: 'Grandes périodes', livre: 'Le livre', humanisme: 'Humanisme & Renaissance', reforme: 'Réforme protestante', absolutisme: 'Absolutisme', methode: 'Critique de document' }
     }
