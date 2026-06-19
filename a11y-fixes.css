@@ -56,6 +56,16 @@ code {
   color: #aeb9cb !important;
 }
 
+/* ---------- 2b. Badges verrouillés : lisibles mais toujours « grisés » ----------
+   Avant : tout le badge à opacity .55 → textes illisibles. On remet l'opacité
+   pleine et on garde le grayscale : le badge reste visiblement non gagné
+   (désaturé) mais ses textes deviennent lisibles. */
+.badge-tile:not(.on) { opacity: 1 !important; filter: grayscale(0.85) !important; }
+.badge-ds, .badge-pr { color: #aeb9cb !important; }
+/* libellés de l'éditeur de quiz (Mes créations) */
+#cre-pane-quiz label,
+#cre-pane-quiz label span { color: #b6c2d4 !important; opacity: 1 !important; }
+
 /* ---------- 3. Cibles tactiles : minimum confortable au doigt ---------- */
 .nav-btn,
 .subj-btn,
