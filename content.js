@@ -934,6 +934,15 @@ const SECTIONS_CONTENT = {
   exercices: `<div id="exercices" class="section">
   <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:0.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">✏️ Exercices guidés par étapes</h2>
 
+  <div class="exercise-card">
+    <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+    <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour réviser les maths autrement :</p>
+    <ul style="line-height:2;">
+      <li><a href="https://fr.khanacademy.org/math" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Khan Academy</a> — maths gratuites, <strong>programme belge (FWB)</strong> : vidéos + exercices corrigés qui suivent ta progression.</li>
+      <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos &amp; quiz de maths.</li>
+    </ul>
+  </div>
+
   <div class="exercise-card" id="geo-calc">
     <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.4rem;">🧮 Calculatrice : milieu, distance & pente</h3>
     <p style="color:var(--text-secondary); margin-bottom:0.9rem; font-size:14px;">Entre les coordonnées de 2 points → le milieu de [AB], la distance AB et la pente, <strong>avec les étapes</strong>.</p>
