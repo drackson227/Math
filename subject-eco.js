@@ -296,6 +296,16 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Essaie de répondre de tête, puis vérifie.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour comprendre l'économie autrement :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.citeco.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Citéco</a> — la Cité de l'économie (articles &amp; vidéos).</li>
+        <li><a href="https://www.lafinancepourtous.com/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">La finance pour tous</a> — notions d'argent &amp; d'économie expliquées simplement.</li>
+        <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos d'économie.</li>
+      </ul>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Quel risque de la mondialisation ?</h3>
       <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne un effet ; tu choisis le bon risque (économique · social · environnemental). Correction immédiate + score. (Clavier : 1-3, puis Entrée.)</p>
       <button type="button" class="nav-btn" data-mg="eco-mm">▶ Commencer le jeu</button>

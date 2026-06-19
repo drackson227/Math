@@ -489,6 +489,16 @@
   sections.exercices = `<div id="exercices" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:0.5rem;">✏️ Exercices guidés</h2>
     <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Révèle les étapes une par une.</p>
+
+    <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour réviser la bio autrement (vidéos, animations) :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://fr.khanacademy.org/science" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Khan Academy</a> — vidéos &amp; exercices de sciences (programme belge).</li>
+        <li><a href="https://www.edumedia.com/fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">éduMédia</a> — animations (cellule, corps humain, génétique…).</li>
+        <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos &amp; quiz de sciences.</li>
+      </ul>
+    </div>
     <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Mitose ou Méiose ?</h3>
       <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne une caractéristique, tu choisis la bonne division. Correction immédiate + score &amp; série.</p>

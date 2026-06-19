@@ -187,6 +187,16 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Traduis de tête, puis vérifie. (Cache la colonne de droite avec ta main.)</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits (belges) pour pratiquer le néerlandais :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.nedbox.be/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">NedBox</a> — vidéos &amp; exercices de néerlandais (3 niveaux, gratuit).</li>
+        <li><a href="https://www.wablieft.be/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Wablieft</a> — l'actu en néerlandais <em>facile</em>.</li>
+        <li><a href="https://www.wordreference.com/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">WordReference</a> — dictionnaire &amp; conjugaison.</li>
+      </ul>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">✍️ Traductions FR → NL (passé composé)</h3>
       <ul style="line-height:2;">
         <li>Pendant les vacances, j'ai voyagé en Italie. → <strong>Tijdens de vakantie heb ik in Italië gereisd.</strong></li>

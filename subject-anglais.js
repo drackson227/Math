@@ -363,6 +363,15 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Le <strong>Quiz</strong> et les <strong>Flashcards</strong> testent tout ça automatiquement.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour progresser en anglais :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.bbc.co.uk/learningenglish" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">BBC Learning English</a> — vidéos, grammaire &amp; vocabulaire (par des pros).</li>
+        <li><a href="https://www.wordreference.com/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">WordReference</a> — dictionnaire &amp; conjugaison.</li>
+      </ul>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🎯 Entraîne-toi aux verbes irréguliers</h3>
       <p style="color:var(--text-secondary); margin:0 0 .8rem;">12 verbes au hasard : on te donne la base, écris le <strong>prétérit</strong> et le <strong>participe</strong>. Correction automatique + 🔊 audio.</p>
       <button type="button" class="nav-btn" id="irr-start">▶ Commencer l'entraînement</button>

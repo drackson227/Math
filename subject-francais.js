@@ -538,6 +538,16 @@
     <p style="color:var(--text-secondary); margin-bottom:1.2rem;">Le <strong>Quiz</strong> et les <strong>Flashcards</strong> testent tout ça automatiquement.</p>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🔗 Réviser en ligne</h3>
+      <p style="color:var(--text-secondary); margin:0 0 .6rem;">Des sites gratuits pour réviser le français :</p>
+      <ul style="line-height:2;">
+        <li><a href="https://www.lumni.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Lumni</a> — vidéos &amp; quiz de français.</li>
+        <li><a href="https://www.lelivrescolaire.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Le Livre Scolaire</a> — manuels de français gratuits.</li>
+        <li><a href="https://www.projet-voltaire.fr/" target="_blank" rel="noopener" style="color:var(--text-primary);font-weight:700;text-decoration:underline;">Projet Voltaire</a> — entraînement à l'orthographe &amp; la grammaire.</li>
+      </ul>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav); margin-bottom:0.5rem;">🎮 Quelle figure de style ?</h3>
       <p style="color:var(--text-secondary); margin:0 0 .8rem;">On te donne un exemple (ou une définition) ; tu choisis la figure. Correction immédiate + score &amp; série. (Clavier : 1-4, puis Entrée.)</p>
       <button type="button" class="nav-btn" data-mg="fr-mm">▶ Commencer le jeu</button>
