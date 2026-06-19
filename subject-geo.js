@@ -107,12 +107,13 @@
 
     <div class="synth-section">
       <h2>4. L'hydrographie (les cours d'eau)</h2>
-      <p>Deux grands fleuves drainent la Belgique vers la mer du Nord :</p>
+      <p>La Belgique compte <strong>3 fleuves</strong>, tous tournés vers la <strong>mer du Nord</strong> : deux grands — la <strong>Meuse</strong> et l'<strong>Escaut</strong> — et un petit fleuve côtier, l'<strong>Yser</strong>.</p>
       <figure class="hfig hfig-float" style="max-width:180px"><img src="meuse.jpg" alt="La Meuse" loading="lazy"><figcaption>La Meuse (à Namur, Liège). Clique pour la fiche.</figcaption></figure>
       <ul style="line-height:1.9;">
         <li>La <strong>Meuse</strong> : traverse Namur et Liège (la Sambre la rejoint à Namur).</li>
         <li>L'<strong>Escaut</strong> : passe à Tournai, Gand et Anvers (la Lys le rejoint à Gand).</li>
-        <li>Autres : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
+        <li>L'<strong>Yser</strong> : petit fleuve <strong>côtier</strong> de Flandre-Occidentale ; il se jette dans la mer du Nord à <strong>Nieuport</strong>.</li>
+        <li>Autres (rivières/affluents) : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
       </ul>
 
       <h3 style="color:var(--color-nav); margin-top:1.2rem;">💧 Eaux de surface vs eaux souterraines</h3>
@@ -182,7 +183,7 @@
       </div>
       <div>
         <div class="formula-box"><h3>Relief (du bas vers le haut)</h3><div class="formula-main" style="font-size:17px;">Basse (&lt;100 m) → Moyenne (100–200 m) → Haute (&gt;200 m)</div><p class="note">Point culminant : <strong>Signal de Botrange, 694 m</strong>.</p></div>
-        <div class="formula-box"><h3>Les fleuves</h3><div class="formula-main" style="font-size:18px;">la Meuse &nbsp;·&nbsp; l'Escaut</div><p class="note">Sambre → Meuse (à Namur) · Lys → Escaut (à Gand). Tout va vers la <strong>mer du Nord</strong>.</p></div>
+        <div class="formula-box"><h3>Les fleuves</h3><div class="formula-main" style="font-size:17px;">la Meuse · l'Escaut · l'Yser</div><p class="note">2 grands (Meuse, Escaut) + l'<strong>Yser</strong> (petit, côtier, à Nieuport). Sambre → Meuse (Namur) · Lys → Escaut (Gand). Tout va vers la <strong>mer du Nord</strong>.</p></div>
         <div class="formula-box"><h3>4 pays voisins</h3><div class="formula-main" style="font-size:18px;">France · Luxembourg · Allemagne · Pays-Bas</div><p class="note">+ la <strong>mer du Nord</strong> à l'ouest.</p></div>
         <div class="formula-box"><h3>Biocarburants — types</h3><p style="line-height:1.9; margin:0;"><strong>Bioéthanol</strong> (→ essence) · <strong>Biodiesel</strong> (→ diesel) · <strong>Biogaz</strong> (méthane)</p><p class="note">Source = biomasse (renouvelable).</p></div>
       </div>
@@ -292,6 +293,7 @@
     { q: "La Région de Bruxelles-Capitale compte…", opts: ["19 communes", "10 communes", "1 commune", "100 communes"], ans: 0, chapter: "belgique", difficulty: "intermediaire", exp: "19 communes ; Région bilingue (français + néerlandais)." },
     { q: "Le biogaz est produit par…", opts: ["méthanisation de déchets organiques", "fermentation de betteraves", "transestérification d'huiles", "raffinage du pétrole"], ans: 0, chapter: "biocarburants", difficulty: "intermediaire", exp: "Biogaz = méthane issu de la méthanisation (déchets organiques)." },
     { q: "L'Escaut passe par quelles villes ?", opts: ["Tournai, Gand, Anvers", "Namur, Liège", "Arlon, Bastogne", "Bruges, Ostende"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "L'Escaut : Tournai → Gand (la Lys le rejoint) → Anvers → mer du Nord." },
+    { q: "Combien de fleuves traversent la Belgique ?", opts: ["3 (Meuse, Escaut, Yser)", "1", "2", "5"], ans: 0, chapter: "hydro", difficulty: "intermediaire", exp: "Les 2 grands (Meuse, Escaut) + l'Yser, petit fleuve côtier qui se jette à Nieuport." },
     { q: "Le 1ᵉʳ producteur mondial de fèves de cacao est…", opts: ["la Côte d'Ivoire", "la Belgique", "la Suisse", "la France"], ans: 0, chapter: "agro", difficulty: "facile", exp: "La Côte d'Ivoire (devant le Ghana) ; les fèves partent par le port de San Pedro." },
     { q: "Le n°1 mondial de la transformation du chocolat est…", opts: ["Barry Callebaut (belge)", "Coca-Cola", "Apple", "Toyota"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "Barry Callebaut, entreprise belge, leader mondial de la transformation du cacao." },
     { q: "Le marché agroalimentaire mondial est dominé par…", opts: ["une dizaine de multinationales", "des milliers de petites fermes", "un seul pays", "l'État belge"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "≈ 10 multinationales (Nestlé, Mondelez, Mars, Unilever, Danone…) possèdent la plupart des marques." },
@@ -310,7 +312,7 @@
     { front: "Les 4 pays voisins ?", back: "France, Luxembourg, Allemagne, Pays-Bas (+ mer du Nord à l'ouest).", chapter: "belgique" },
     { front: "Les 3 ensembles de relief ?", back: "Basse Belgique (<100 m), Moyenne Belgique (100-200 m), Haute Belgique / Ardenne (>200 m).", chapter: "relief" },
     { front: "Point culminant de la Belgique ?", back: "Le Signal de Botrange, 694 m (Hautes Fagnes, Ardenne).", chapter: "relief" },
-    { front: "Les 2 grands fleuves ?", back: "La Meuse (Namur, Liège) et l'Escaut (Tournai, Gand, Anvers). Tout va vers la mer du Nord.", chapter: "hydro" },
+    { front: "Les fleuves de Belgique ?", back: "3 fleuves vers la mer du Nord : la Meuse (Namur, Liège) et l'Escaut (Tournai, Gand, Anvers) = les 2 grands, + l'Yser (petit fleuve côtier, à Nieuport).", chapter: "hydro" },
     { front: "Sambre et Lys : où rejoignent-elles ?", back: "La Sambre rejoint la Meuse à Namur ; la Lys rejoint l'Escaut à Gand.", chapter: "hydro" },
     { front: "Qu'est-ce qu'un biocarburant ?", back: "Un carburant produit à partir de biomasse (matière organique végétale/animale) : ressource renouvelable.", chapter: "biocarburants" },
     { front: "Bioéthanol vs biodiesel ?", back: "Bioéthanol = fermentation de plantes sucrées/amidon → essence. Biodiesel = transestérification d'huiles végétales → diesel.", chapter: "biocarburants" },

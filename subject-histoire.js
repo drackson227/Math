@@ -298,6 +298,7 @@
     <div class="synth-section">
       <h2>3. Humanisme et Renaissance (XVᵉ–XVIᵉ s.)</h2>
       <p>La <strong>Renaissance</strong> est un grand mouvement artistique et culturel né en <strong>Italie</strong> (Florence) au XVᵉ siècle, qui <strong>redécouvre l'Antiquité</strong> gréco-romaine.</p>
+      <p><strong>Pourquoi ?</strong> La <strong>chute de Constantinople</strong> (<strong>1453</strong>) pousse des savants byzantins à fuir en <strong>Italie</strong> avec des <strong>manuscrits grecs</strong> antiques ; l'<strong>imprimerie</strong> (vers 1450) diffuse ensuite rapidement ces idées dans toute l'Europe.</p>
       <p>L'<strong>Humanisme</strong> est le courant de pensée associé : il place l'<strong>être humain</strong> et sa raison au centre, valorise le <strong>savoir</strong>, l'<strong>esprit critique</strong> et l'éducation.</p>
       <div class="hfig-row">
         ${fig('vinci.jpg', 'Léonard de Vinci', 140)}
@@ -538,7 +539,8 @@
     { q: "La « dîme » était…", opts: ["un impôt versé à l'Église", "une fête religieuse", "une arme", "un livre"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Un impôt (≈ un dixième des récoltes) prélevé par l'Église sur le peuple." },
     { q: "« Mens sana in corpore sano » signifie…", opts: ["un esprit sain dans un corps sain", "l'État c'est moi", "je pense donc je suis", "vivre caché"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Idéal humaniste : développer le corps ET l'esprit." },
     { q: "La typographie, c'est…", opts: ["imprimer avec des caractères mobiles", "peindre des fresques", "copier à la main", "sculpter le marbre"], ans: 0, chapter: "livre", difficulty: "intermediaire", exp: "La technique d'impression de Gutenberg : assembler des caractères mobiles." },
-    { q: "Combien de sacrements chez les protestants ?", opts: ["2 (baptême, Cène)", "7", "0", "12"], ans: 0, chapter: "reforme", difficulty: "difficile", exp: "Protestants : 2 sacrements ; catholiques : 7." }
+    { q: "Combien de sacrements chez les protestants ?", opts: ["2 (baptême, Cène)", "7", "0", "12"], ans: 0, chapter: "reforme", difficulty: "difficile", exp: "Protestants : 2 sacrements ; catholiques : 7." },
+    { q: "Quel événement de 1453 favorise la Renaissance ?", opts: ["la chute de Constantinople", "la chute de Rome", "la Révolution française", "la mort de Louis XIV"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -578,7 +580,8 @@
     { front: "Que signifie « Mens sana in corpore sano » ?", back: "« Un esprit sain dans un corps sain » : l'idéal humaniste de développer à la fois le corps et l'esprit.", chapter: "humanisme" },
     { front: "Qu'est-ce que la typographie ?", back: "La technique d'impression avec des caractères mobiles (assembler les lettres pour imprimer un texte).", chapter: "livre" },
     { front: "Doctrines : catholiques vs protestants ?", back: "Catholiques : le pape et l'Église comme intermédiaires, 7 sacrements, tradition + Bible. Protestants : pas d'intermédiaire (foi directe), 2 sacrements (baptême, Cène), la Bible seule.", chapter: "reforme" },
-    { front: "Qui a peint « La Naissance de Vénus » ?", back: "Botticelli (Renaissance italienne, à Florence, sous le mécénat des Médicis).", chapter: "humanisme" }
+    { front: "Qui a peint « La Naissance de Vénus » ?", back: "Botticelli (Renaissance italienne, à Florence, sous le mécénat des Médicis).", chapter: "humanisme" },
+    { front: "Quel événement de 1453 favorise la Renaissance ?", back: "La chute de Constantinople : des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité. L'imprimerie diffuse ensuite ces idées.", chapter: "humanisme" }
   ];
 
   window.registerSubject('histoire', {
