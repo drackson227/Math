@@ -530,7 +530,15 @@
     { q: "Charles Quint était un empereur…", opts: ["catholique, opposé à la Réforme", "protestant", "athée", "orthodoxe"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "Empereur catholique ; il régnait sur les Pays-Bas espagnols." },
     { q: "« L'État, c'est moi » est attribué à…", opts: ["Louis XIV", "Colbert", "Henri IV", "Louis XIII"], ans: 0, chapter: "absolutisme", difficulty: "facile", exp: "Louis XIV, symbole de l'absolutisme." },
     { q: "Sous l'Ancien Régime, qui paie les impôts ?", opts: ["le tiers état", "le clergé", "la noblesse", "le roi"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Le tiers état ; clergé et noblesse sont des privilégiés exemptés." },
-    { q: "L'Homme de Vitruve et La Cène sont des œuvres de…", opts: ["Léonard de Vinci", "Michel-Ange", "Raphaël", "Botticelli"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Léonard de Vinci, génie complet de la Renaissance." }
+    { q: "L'Homme de Vitruve et La Cène sont des œuvres de…", opts: ["Léonard de Vinci", "Michel-Ange", "Raphaël", "Botticelli"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Léonard de Vinci, génie complet de la Renaissance." },
+    { q: "Comment le pape réagit-il face à Luther ?", opts: ["il l'excommunie (1521)", "il le nomme évêque", "il accepte ses idées", "il l'ignore"], ans: 0, chapter: "reforme", difficulty: "intermediaire", exp: "Luther refuse de se rétracter → il est excommunié en 1521." },
+    { q: "Quel roi a fait venir Léonard de Vinci en France ?", opts: ["François Iᵉʳ", "Louis XIV", "Henri IV", "Charles Quint"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "François Iᵉʳ ; Vinci s'installe au Clos Lucé, près d'Amboise." },
+    { q: "Quelle était la résidence de Louis XIV avant Versailles ?", opts: ["le Louvre", "la Bastille", "le Clos Lucé", "Notre-Dame"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Le palais du Louvre, à Paris, avant l'installation à Versailles." },
+    { q: "Les dates de règne de Louis XIV sont…", opts: ["1643-1715", "1638-1715", "1515-1547", "1589-1610"], ans: 0, chapter: "absolutisme", difficulty: "difficile", exp: "Règne : 1643-1715 (né en 1638) — le plus long de l'histoire de France." },
+    { q: "La « dîme » était…", opts: ["un impôt versé à l'Église", "une fête religieuse", "une arme", "un livre"], ans: 0, chapter: "absolutisme", difficulty: "intermediaire", exp: "Un impôt (≈ un dixième des récoltes) prélevé par l'Église sur le peuple." },
+    { q: "« Mens sana in corpore sano » signifie…", opts: ["un esprit sain dans un corps sain", "l'État c'est moi", "je pense donc je suis", "vivre caché"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Idéal humaniste : développer le corps ET l'esprit." },
+    { q: "La typographie, c'est…", opts: ["imprimer avec des caractères mobiles", "peindre des fresques", "copier à la main", "sculpter le marbre"], ans: 0, chapter: "livre", difficulty: "intermediaire", exp: "La technique d'impression de Gutenberg : assembler des caractères mobiles." },
+    { q: "Combien de sacrements chez les protestants ?", opts: ["2 (baptême, Cène)", "7", "0", "12"], ans: 0, chapter: "reforme", difficulty: "difficile", exp: "Protestants : 2 sacrements ; catholiques : 7." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -560,7 +568,17 @@
     { front: "Qui est Colbert ?", back: "Le ministre de Louis XIV, créateur du mercantilisme.", chapter: "absolutisme" },
     { front: "Henri IV : phrase et acte célèbres ?", back: "« Paris vaut bien une messe » ; il signe l'Édit de Nantes (1598).", chapter: "reforme" },
     { front: "Les Jésuites ?", back: "Un ordre catholique, fer de lance de la Contre-Réforme (enseignement, missions).", chapter: "reforme" },
-    { front: "Source primaire vs secondaire ?", back: "Primaire = document d'époque (témoin direct). Secondaire = analyse écrite plus tard par un historien.", chapter: "methode" }
+    { front: "Source primaire vs secondaire ?", back: "Primaire = document d'époque (témoin direct). Secondaire = analyse écrite plus tard par un historien.", chapter: "methode" },
+    { front: "Réaction du pape face à Martin Luther ?", back: "Il l'excommunie (1521) : Luther, qui refuse de se rétracter, est exclu de l'Église catholique.", chapter: "reforme" },
+    { front: "Quel artiste François Iᵉʳ a-t-il fait venir en France ?", back: "Léonard de Vinci, installé au Clos Lucé (près d'Amboise) ; le roi était son protecteur (mécène).", chapter: "humanisme" },
+    { front: "Résidence de Louis XIV avant Versailles ?", back: "Le palais du Louvre, à Paris (la cour s'installe ensuite à Versailles).", chapter: "absolutisme" },
+    { front: "Un auteur de théâtre joué à Versailles ?", back: "Molière (ses comédies), sous la protection de Louis XIV.", chapter: "absolutisme" },
+    { front: "Dates de règne de Louis XIV ?", back: "1643-1715 (le plus long règne de l'histoire de France ; il est né en 1638).", chapter: "absolutisme" },
+    { front: "Qu'est-ce que la dîme ?", back: "Un impôt prélevé par l'Église (environ un dixième des récoltes) sur le peuple sous l'Ancien Régime.", chapter: "absolutisme" },
+    { front: "Que signifie « Mens sana in corpore sano » ?", back: "« Un esprit sain dans un corps sain » : l'idéal humaniste de développer à la fois le corps et l'esprit.", chapter: "humanisme" },
+    { front: "Qu'est-ce que la typographie ?", back: "La technique d'impression avec des caractères mobiles (assembler les lettres pour imprimer un texte).", chapter: "livre" },
+    { front: "Doctrines : catholiques vs protestants ?", back: "Catholiques : le pape et l'Église comme intermédiaires, 7 sacrements, tradition + Bible. Protestants : pas d'intermédiaire (foi directe), 2 sacrements (baptême, Cène), la Bible seule.", chapter: "reforme" },
+    { front: "Qui a peint « La Naissance de Vénus » ?", back: "Botticelli (Renaissance italienne, à Florence, sous le mécénat des Médicis).", chapter: "humanisme" }
   ];
 
   window.registerSubject('histoire', {
