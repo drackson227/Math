@@ -365,10 +365,29 @@
   /* ============================================================
      POINT D'ENTRÉE : appelé par showSection() à chaque affichage
      ============================================================ */
+  // Accessibilité : une zone qui défile horizontalement doit être atteignable au
+  // clavier. On greffe tabindex + rôle sur les tableaux/frises défilables de la
+  // section affichée (anglais, bio, stats…). Générique, sans toucher au contenu.
+  function makeScrollablesFocusable() {
+    try {
+      var act = document.querySelector('.section.active');
+      if (!act) return;
+      var sel = '.eng-recap-wrap, .eng-timeline, .bio-compare-wrap, .stats-table-wrap';
+      Array.prototype.forEach.call(act.querySelectorAll(sel), function (z) {
+        if (z.hasAttribute('tabindex')) return;
+        if (z.scrollWidth <= z.clientWidth + 2) return; // ne défile pas → inutile
+        z.setAttribute('tabindex', '0');
+        if (!z.getAttribute('role')) z.setAttribute('role', 'group');
+        if (!z.getAttribute('aria-label')) z.setAttribute('aria-label', 'Zone défilable horizontalement');
+      });
+    } catch (e) {}
+  }
+
   var lastBuiltFor = null;
   function onShowStudySection(sectionId) {
     ensureProgressBar();
     updateProgressBar();
+    makeScrollablesFocusable();
     if (sectionId !== 'synthese') return;
     var root = synthRoot(); if (!root) return;
     var key = subj();

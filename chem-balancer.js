@@ -105,7 +105,7 @@
       '<div class="cb-eq"><div class="cb-eqline">' + rHTML + '<span class="cb-op">→</span>' + pHTML + '</div></div>' +
       '<div class="cb-ctrl-label">Règle les coefficients :</div>' +
       '<div class="cb-steppers">' + steps + '</div>' +
-      '<table class="cb-tally"><thead><tr><th>Atome</th><th>Réactifs</th><th>Produits</th><th aria-label="équilibré"></th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<table class="cb-tally"><thead><tr><th>Atome</th><th>Réactifs</th><th>Produits</th><th aria-label="équilibré">⚖️</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="cb-status" role="status">Ajuste les coefficients avec − / + : le compteur d\'atomes se met à jour en direct.</div>' +
       '<div class="cb-controls">' +
         '<button type="button" class="cb-btn cb-reset">↻ Réinitialiser</button>' +

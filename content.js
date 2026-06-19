@@ -740,6 +740,7 @@ const SECTIONS_CONTENT = {
 </div>`,
 
   methodes: `<div id="methodes" class="section">
+  <h2 style="font-size:32px; font-weight:700; color:var(--color-nav); margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:4px solid var(--color-nav);">📝 Méthodes</h2>
   <div style="background:linear-gradient(135deg, var(--color-cercle-light), var(--color-droite-light)); border:1px solid var(--border-subtle); border-radius:14px; padding:1.1rem 1.25rem; margin-bottom:1.5rem;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:0.85rem;">
       <span style="font-size:26px;">🎬</span>

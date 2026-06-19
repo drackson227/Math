@@ -35,8 +35,8 @@
 .gr2-tool.on { border-color: var(--color-nav); background: rgba(167,139,250,0.16); color: var(--text-primary); }
 .gr2-pill {
   padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700;
-  background: rgba(96,165,250,0.12); color: var(--color-cercle);
-  border: 1px solid rgba(96,165,250,0.3); white-space: nowrap;
+  background: rgba(96,165,250,0.18); color: color-mix(in srgb, var(--color-cercle) 55%, #fff);
+  border: 1px solid rgba(96,165,250,0.45); white-space: nowrap;
 }
 
 /* palette du surligneur */
