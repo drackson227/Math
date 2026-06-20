@@ -75,7 +75,10 @@ const num = (rep, label) => { const l = rep.split('\n').find(x => x.includes(lab
 const ovPx = (rep) => { const m = rep.match(/dépasse de (\d+)px/); return m ? +m[1] : 0; };
 
 async function audit(page, vp, label) {
-  await page.waitForTimeout(200);
+  // Laisser les animations CSS (ex. .method-content slideUp 0.4s) se terminer AVANT de
+  // mesurer : sinon on lit des opacités intermédiaires → faux « contraste faible ».
+  // (On NE attend PAS document.getAnimations : certaines sont infinies et ne finissent jamais.)
+  await page.waitForTimeout(500);
   const rep = await page.evaluate(() => window.gr2BuildReport());
   const r = { vp, label, contrast: num(rep, 'Contraste trop faible'), tiny: num(rep, 'Textes < 12px'),
     inp: num(rep, 'Champs < 16px'), tap: num(rep, 'Boutons/liens petits'), ov: ovPx(rep) };
