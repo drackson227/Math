@@ -283,6 +283,8 @@
       <h2>2. Le livre, objet d'histoire (l'imprimerie)</h2>
       ${fig('gutenberg.jpg', 'Un atelier d’imprimerie (presse de Gutenberg)', 230)}
       <p>Avant le XVᵉ siècle, les livres étaient des <strong>manuscrits</strong> copiés à la main (surtout par des moines) : c'était <strong>long, rare et très cher</strong>.</p>
+      <p>Fabriquer un livre était un travail de <strong>moines</strong> : le <strong>copiste</strong> recopiait le texte (à la plume ou au roseau, encre noire ou brune, titres en rouge), l'<strong>enlumineur</strong> réalisait les décors et le <strong>relieur</strong> assemblait les pages et la couverture. Les pages étaient en <strong>parchemin</strong> (peau d'animal : il fallait ≈ <strong>40 peaux de mouton</strong> pour un seul livre !).</p>
+      <p>Les <strong>enluminures</strong> sont les <strong>décors colorés</strong> (plantes, motifs géométriques, personnages) qui ornent le manuscrit ; les <strong>lettrines</strong> sont les <strong>grandes premières lettres</strong> d'un paragraphe, peintes et décorées.</p>
       <p>Vers <strong>1450</strong>, <strong>Gutenberg</strong> (à Mayence) met au point l'<strong>imprimerie à caractères mobiles</strong>. Conséquences énormes :</p>
       <ul style="line-height:1.9;">
         <li>Les livres deviennent <strong>plus nombreux, plus rapides à produire et moins chers</strong>.</li>
@@ -308,7 +310,7 @@
       </div>
       <ul style="line-height:1.9;">
         <li><strong>Humanistes</strong> : <strong>Érasme</strong> (« Éloge de la folie »), <strong>Thomas More</strong> (« Utopia »), Rabelais, Montaigne.</li>
-        <li><strong>Artistes</strong> : <strong>Léonard de Vinci</strong>, <strong>Michel-Ange</strong>, Raphaël — perspective, réalisme, corps humain.</li>
+        <li><strong>Artistes</strong> : <strong>Léonard de Vinci</strong>, <strong>Michel-Ange</strong>, <strong>Raphaël</strong> (« L'École d'Athènes ») — perspective, réalisme, corps humain.</li>
         <li>Les <strong>mécènes</strong> (riches protecteurs, ex. les Médicis) financent les artistes.</li>
       </ul>
     </div>
@@ -570,7 +572,10 @@
     { q: "« Mens sana in corpore sano » signifie…", opts: ["un esprit sain dans un corps sain", "l'État c'est moi", "je pense donc je suis", "vivre caché"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Idéal humaniste : développer le corps ET l'esprit." },
     { q: "La typographie, c'est…", opts: ["imprimer avec des caractères mobiles", "peindre des fresques", "copier à la main", "sculpter le marbre"], ans: 0, chapter: "livre", difficulty: "intermediaire", exp: "La technique d'impression de Gutenberg : assembler des caractères mobiles." },
     { q: "Combien de sacrements chez les protestants ?", opts: ["2 (baptême, Cène)", "7", "0", "12"], ans: 0, chapter: "reforme", difficulty: "difficile", exp: "Protestants : 2 sacrements ; catholiques : 7." },
-    { q: "Quel événement de 1453 favorise la Renaissance ?", opts: ["la chute de Constantinople", "la chute de Rome", "la Révolution française", "la mort de Louis XIV"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité." }
+    { q: "Quel événement de 1453 favorise la Renaissance ?", opts: ["la chute de Constantinople", "la chute de Rome", "la Révolution française", "la mort de Louis XIV"], ans: 0, chapter: "humanisme", difficulty: "difficile", exp: "Des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité." },
+    { q: "Avant l'imprimerie, qui fabriquait les livres (manuscrits) ?", opts: ["des moines (copiste, enlumineur, relieur)", "des machines", "des imprimeurs", "les rois"], ans: 0, chapter: "livre", difficulty: "intermediaire", exp: "Le copiste recopiait, l'enlumineur décorait, le relieur assemblait — sur du parchemin." },
+    { q: "Dans un manuscrit, les « lettrines » sont…", opts: ["les grandes premières lettres décorées", "les fautes d'orthographe", "les pages blanches", "les couvertures"], ans: 0, chapter: "livre", difficulty: "difficile", exp: "Lettrines = premières lettres peintes/décorées ; enluminures = les décors colorés." },
+    { q: "« L'École d'Athènes » a été peinte par…", opts: ["Raphaël", "Gutenberg", "Calvin", "Charles Quint"], ans: 0, chapter: "humanisme", difficulty: "intermediaire", exp: "Raphaël, un des grands peintres de la Renaissance italienne." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -611,7 +616,10 @@
     { front: "Qu'est-ce que la typographie ?", back: "La technique d'impression avec des caractères mobiles (assembler les lettres pour imprimer un texte).", chapter: "livre" },
     { front: "Doctrines : catholiques vs protestants ?", back: "Catholiques : le pape et l'Église comme intermédiaires, 7 sacrements, tradition + Bible. Protestants : pas d'intermédiaire (foi directe), 2 sacrements (baptême, Cène), la Bible seule.", chapter: "reforme" },
     { front: "Qui a peint « La Naissance de Vénus » ?", back: "Botticelli (Renaissance italienne, à Florence, sous le mécénat des Médicis).", chapter: "humanisme" },
-    { front: "Quel événement de 1453 favorise la Renaissance ?", back: "La chute de Constantinople : des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité. L'imprimerie diffuse ensuite ces idées.", chapter: "humanisme" }
+    { front: "Quel événement de 1453 favorise la Renaissance ?", back: "La chute de Constantinople : des savants byzantins fuient en Italie avec des manuscrits grecs antiques → redécouverte de l'Antiquité. L'imprimerie diffuse ensuite ces idées.", chapter: "humanisme" },
+    { front: "Avant l'imprimerie : qui fabriquait les livres ?", back: "Des moines : le copiste recopiait le texte, l'enlumineur faisait les décors, le relieur assemblait les pages et la couverture. Sur du parchemin (≈ 40 peaux de mouton par livre).", chapter: "livre" },
+    { front: "Enluminures et lettrines ?", back: "Les enluminures = les décors colorés (plantes, motifs, personnages) d'un manuscrit. Les lettrines = les grandes premières lettres d'un paragraphe, peintes et décorées.", chapter: "livre" },
+    { front: "Qui a peint « L'École d'Athènes » ?", back: "Raphaël, un des grands artistes de la Renaissance italienne (avec Léonard de Vinci et Michel-Ange).", chapter: "humanisme" }
   ];
 
   window.registerSubject('histoire', {

@@ -154,15 +154,15 @@
       <h2>6. Mondialisation de l'alimentation : le cacao 🍫</h2>
       <p>Le <strong>chocolat</strong> illustre les <strong>inégalités Nord–Sud</strong> : la matière première est cultivée au <strong>Sud</strong>, mais transformée et vendue (chère) au <strong>Nord</strong>.</p>
       <ul style="line-height:1.9;">
-        <li><strong>Production</strong> : la <strong>Côte d'Ivoire</strong> est le <strong>1ᵉʳ producteur mondial</strong> de fèves de cacao (devant le Ghana). Les fèves partent par le <strong>port de San Pedro</strong>.</li>
+        <li><strong>Production</strong> : la <strong>Côte d'Ivoire</strong> est le <strong>1ᵉʳ producteur mondial</strong> de fèves de cacao (devant le Ghana) ; les fèves partent par le <strong>port de San Pedro</strong>. À l'échelle mondiale, ≈ <strong>75 % vient d'Afrique</strong>, <strong>18 % d'Amérique</strong> et <strong>7 % d'Asie &amp; Océanie</strong>.</li>
         <li><strong>Transformation</strong> : l'entreprise belge <strong>Barry Callebaut</strong> est le <strong>n°1 mondial</strong> de la transformation du chocolat.</li>
         <li><strong>Les géants de l'agroalimentaire</strong> : une <strong>dizaine de multinationales</strong> (Nestlé, Mondelez, Mars, Unilever, Danone, Coca-Cola, PepsiCo, Kellogg's…) possèdent la plupart des marques et <strong>fixent les prix</strong>.</li>
       </ul>
       <p><strong>Conséquences</strong> :</p>
       <ul style="line-height:1.9;">
-        <li>💰 <strong>Économiques</strong> : les <strong>producteurs du Sud</strong> sont <strong>mal payés</strong> ; les profits vont aux multinationales du Nord.</li>
+        <li>💰 <strong>Économiques</strong> : les <strong>producteurs du Sud</strong> sont <strong>mal payés</strong> ; les profits vont aux multinationales du Nord. Dans la <strong>chaîne de valeur</strong> du chocolat, le <strong>planteur ne touche qu'une toute petite part du prix</strong> ; l'essentiel revient à la <strong>transformation</strong> et à la <strong>distribution</strong>.</li>
         <li>👥 <strong>Sociales</strong> : pauvreté des planteurs, <strong>travail des enfants</strong> dans les plantations.</li>
-        <li>🌳 <strong>Environnementales</strong> : <strong>déforestation</strong> et monoculture pour étendre les plantations.</li>
+        <li>🌳 <strong>Environnementales</strong> : <strong>déforestation</strong> et monoculture pour étendre les plantations ; cultures <strong>très gourmandes en eau</strong> (≈ <strong>12 650 L d'eau pour 1 kg de fèves</strong> de cacao).</li>
       </ul>
       <p><strong>Solutions</strong> : le <strong>commerce équitable</strong> (mieux payer les producteurs), une <strong>consommation responsable</strong> et des <strong>labels</strong>.</p>
       <div class="simple-exp-box">
@@ -308,7 +308,10 @@
     { q: "Le 1ᵉʳ producteur mondial de fèves de cacao est…", opts: ["la Côte d'Ivoire", "la Belgique", "la Suisse", "la France"], ans: 0, chapter: "agro", difficulty: "facile", exp: "La Côte d'Ivoire (devant le Ghana) ; les fèves partent par le port de San Pedro." },
     { q: "Le n°1 mondial de la transformation du chocolat est…", opts: ["Barry Callebaut (belge)", "Coca-Cola", "Apple", "Toyota"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "Barry Callebaut, entreprise belge, leader mondial de la transformation du cacao." },
     { q: "Le marché agroalimentaire mondial est dominé par…", opts: ["une dizaine de multinationales", "des milliers de petites fermes", "un seul pays", "l'État belge"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "≈ 10 multinationales (Nestlé, Mondelez, Mars, Unilever, Danone…) possèdent la plupart des marques." },
-    { q: "Une solution aux inégalités du commerce du cacao :", opts: ["le commerce équitable", "plus de déforestation", "baisser les salaires des producteurs", "le travail des enfants"], ans: 0, chapter: "agro", difficulty: "facile", exp: "Le commerce équitable paie plus justement les producteurs du Sud." }
+    { q: "Une solution aux inégalités du commerce du cacao :", opts: ["le commerce équitable", "plus de déforestation", "baisser les salaires des producteurs", "le travail des enfants"], ans: 0, chapter: "agro", difficulty: "facile", exp: "Le commerce équitable paie plus justement les producteurs du Sud." },
+    { q: "La majorité du cacao mondial est produite en…", opts: ["Afrique (≈ 75 %)", "Europe", "Asie", "Océanie"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "≈ 75 % en Afrique, 18 % en Amérique, 7 % en Asie & Océanie." },
+    { q: "Dans le prix d'une tablette de chocolat, le planteur de cacao touche…", opts: ["une toute petite part", "la moitié", "presque tout", "les trois quarts"], ans: 0, chapter: "agro", difficulty: "intermediaire", exp: "L'essentiel du prix va à la transformation et à la distribution (au Nord) ; d'où le commerce équitable." },
+    { q: "Pourquoi dit-on que le cacao est « gourmand en eau » ?", opts: ["≈ 12 650 L d'eau pour 1 kg de fèves", "il ne pousse que dans l'eau", "il faut 10 L par tonne", "il ne consomme pas d'eau"], ans: 0, chapter: "agro", difficulty: "difficile", exp: "Produire 1 kg de fèves de cacao demande énormément d'eau (≈ 12 650 litres)." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -340,7 +343,10 @@
     { front: "1ᵉʳ producteur mondial de cacao ?", back: "La Côte d'Ivoire (devant le Ghana). Les fèves sont exportées par le port de San Pedro.", chapter: "agro" },
     { front: "Qui est Barry Callebaut ?", back: "Une entreprise belge, n°1 mondial de la transformation du chocolat (le cacao cultivé au Sud est transformé au Nord).", chapter: "agro" },
     { front: "Qui domine l'agroalimentaire mondial ?", back: "Une dizaine de multinationales (Nestlé, Mondelez, Mars, Unilever, Danone, Coca-Cola, PepsiCo, Kellogg's…) qui possèdent la plupart des marques et fixent les prix.", chapter: "agro" },
-    { front: "Cacao : conséquences + solution ?", back: "Producteurs du Sud mal payés, travail des enfants, déforestation. Solution : le commerce équitable + une consommation responsable.", chapter: "agro" }
+    { front: "Cacao : conséquences + solution ?", back: "Producteurs du Sud mal payés, travail des enfants, déforestation. Solution : le commerce équitable + une consommation responsable.", chapter: "agro" },
+    { front: "Cacao : d'où vient la production mondiale ?", back: "≈ 75 % d'Afrique, 18 % d'Amérique, 7 % d'Asie &amp; Océanie. La Côte d'Ivoire est le 1ᵉʳ producteur (devant le Ghana).", chapter: "agro" },
+    { front: "Cacao : qui gagne quoi (chaîne de valeur) ?", back: "Le planteur du Sud ne touche qu'une petite part du prix du chocolat ; l'essentiel va à la transformation et à la distribution (au Nord). D'où le commerce équitable.", chapter: "agro" },
+    { front: "Cacao et eau ?", back: "Les plantations sont très gourmandes en eau : ≈ 12 650 litres d'eau pour produire 1 kg de fèves de cacao.", chapter: "agro" }
   ];
 
   window.registerSubject('geo', {
