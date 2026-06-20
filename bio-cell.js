@@ -131,7 +131,7 @@
     var dom = counts.AA + counts.Aa, rec = counts.aa;
     function gcd(a, b) { return b ? gcd(b, a % b) : a; }
     function ratio(a, b) { if (!a || !b) return (a ? a + ' : 0' : '0 : ' + b); var d = gcd(a, b); return (a / d) + ' : ' + (b / d); }
-    var grid = '<table class="punnett-sim"><tr><th class="corner"></th><th>' + g2[0] + '</th><th>' + g2[1] + '</th></tr>';
+    var grid = '<table class="punnett-sim"><tr><td class="corner"></td><th>' + g2[0] + '</th><th>' + g2[1] + '</th></tr>';
     var k = 0;
     for (var rr = 0; rr < 2; rr++) {
       grid += '<tr><th>' + g1[rr] + '</th>';
