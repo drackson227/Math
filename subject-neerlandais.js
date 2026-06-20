@@ -583,6 +583,7 @@ Na de vakantie ben ik ziek geworden. Ik heb de griep. Ik heb koorts en hoofdpijn
     subtitle: 'Néerlandais (4N2) — grammaire, De woning & Aan tafel! · examen juin 2026',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       demos: {},

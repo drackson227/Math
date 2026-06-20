@@ -451,6 +451,7 @@
     subtitle: 'Chimie — UAA 3 · Ch.4 : pondération, combustions, mole & gaz',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       demos: {},

@@ -517,6 +517,7 @@
     subtitle: 'Anglais 4ᵉ — present perfect, past simple & perfect, future, modals, superstitions (Unit 7)',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       demos: {},

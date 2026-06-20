@@ -76,6 +76,22 @@
     sel.innerHTML = html;
   }
 
+  // « Cours complet » auto-assemblé : réunit les sections déjà validées (Synthèse + Repères +
+  // Méthode + Pièges) en une seule page. Pour les matières qui n'ont pas de cours rédigé à la main
+  // (sections.cours). Aucune duplication de contenu : on lit ce qui est déjà rendu dans le DOM.
+  function buildAutoCours(coursSec) {
+    if (!coursSec) coursSec = document.getElementById('cours');
+    if (!coursSec) return;
+    var html = '<div style="text-align:center; margin-bottom:1.2rem;">' +
+      '<h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet</h2>' +
+      '<p style="color:var(--text-secondary); margin-top:6px;">Tout le cours réuni au même endroit pour réviser à 100 % : synthèse, repères, méthode et pièges fréquents.</p></div>';
+    ['synthese', 'formules', 'methodes', 'erreurs'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.innerHTML && el.innerHTML.trim()) html += '<div class="cours-bloc">' + el.innerHTML + '</div>';
+    });
+    coursSec.innerHTML = html;
+  }
+
   // Personnalisation des onglets par matière : renommer + ajouter des onglets bonus.
   var NAV_DEFAULTS = null;
   function applyNav(content) {
@@ -105,12 +121,18 @@
         if (sec) sec.innerHTML = '';
       }
     }
-    // Onglet « Cours complet » (section principale) : affiché seulement si la matière fournit un cours détaillé
+    // Onglet « Cours complet » : affiché si la matière a un cours rédigé (sections.cours)
+    // OU si elle demande l'auto-assemblage (content.coursAuto).
     var coursBtn = document.getElementById('nav-cours');
-    var hasCours = !!(content && content.sections && content.sections.cours);
-    if (coursBtn) coursBtn.style.display = hasCours ? '' : 'none';
     var coursSec = document.getElementById('cours');
-    if (coursSec && !hasCours) coursSec.innerHTML = '';
+    var hasCustom = !!(content && content.sections && content.sections.cours);
+    var auto = !!(content && content.coursAuto);
+    var hasCours = hasCustom || auto;
+    if (coursBtn) coursBtn.style.display = hasCours ? '' : 'none';
+    if (coursSec) {
+      if (!hasCours) coursSec.innerHTML = '';
+      else if (auto && !hasCustom) buildAutoCours(coursSec);
+    }
   }
 
   function applyContent(c) {

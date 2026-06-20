@@ -458,6 +458,7 @@
     subtitle: 'Sciences éco (4ᵉ) — la mondialisation & la responsabilité civile',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       demos: {},

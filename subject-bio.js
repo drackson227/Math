@@ -664,6 +664,7 @@
     subtitle: 'Biologie — division cellulaire (mitose, méiose), caryotype & génétique (Mendel)',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       demos: {},

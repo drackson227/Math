@@ -781,6 +781,7 @@
     subtitle: 'Français 4ᵉ — résumé, mythe, argumentation, comédie, poésie',
     content: {
       sections: sections,
+      coursAuto: true,
       questions: questions,
       flashcards: flashcards,
       extraTabs: [{ label: '📖 Lexique', html: buildLexiqueHTML() }],
