@@ -22,7 +22,7 @@
   window.currentSubject = 'maths';
   var loaded = 'maths';            // matière dont le contenu est actuellement dans le DOM
   var mathsSnapshot = null;        // sauvegarde du contenu maths (capturée au 1er init)
-  var SECTION_IDS = ['synthese', 'formules', 'methodes', 'exercices', 'erreurs'];
+  var SECTION_IDS = ['synthese', 'cours', 'formules', 'methodes', 'exercices', 'erreurs'];
 
   // Permet à un fichier de contenu (ex. subject-chimie.js) de s'enregistrer.
   window.registerSubject = function (key, def) {
@@ -105,6 +105,12 @@
         if (sec) sec.innerHTML = '';
       }
     }
+    // Onglet « Cours complet » (section principale) : affiché seulement si la matière fournit un cours détaillé
+    var coursBtn = document.getElementById('nav-cours');
+    var hasCours = !!(content && content.sections && content.sections.cours);
+    if (coursBtn) coursBtn.style.display = hasCours ? '' : 'none';
+    var coursSec = document.getElementById('cours');
+    if (coursSec && !hasCours) coursSec.innerHTML = '';
   }
 
   function applyContent(c) {

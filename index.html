@@ -297,6 +297,7 @@
   <div class="nav-grp">
     <span class="nav-lab">📖 Apprendre</span>
     <button class="nav-btn active" data-sec="synthese" onclick="showSection(event,'synthese')">📚 Synthèse</button>
+    <button class="nav-btn" id="nav-cours" style="display:none;" onclick="showSection(event,'cours')">📖 Cours complet</button>
     <button class="nav-btn" data-sec="formules" onclick="showSection(event,'formules')">🧮 Formules clés</button>
     <button class="nav-btn" data-sec="methodes" onclick="showSection(event,'methodes')">📝 Méthodes</button>
     <button class="nav-btn" data-sec="exercices" onclick="showSection(event,'exercices')">✏️ Exercices guidés</button>
@@ -829,6 +830,8 @@
 </div>
 
 <div id="erreurs" class="section"><!-- contenu chargé depuis content.js --></div>
+
+<div id="cours" class="section"><!-- cours complet détaillé défini par la matière (sections.cours) --></div>
 
 <div id="extra1" class="section"><!-- onglet bonus défini par la matière --></div>
 <div id="extra2" class="section"><!-- onglet bonus défini par la matière --></div>

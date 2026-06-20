@@ -480,6 +480,178 @@
     </div>
   </div>`;
 
+  /* ---------------------- COURS COMPLET (tout le cours détaillé, pour réviser à 100 %) ---------------------- */
+  sections.cours = `<div id="cours" class="section">
+    <div style="text-align:center; margin-bottom:1.2rem;">
+      <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet — Histoire 4ᵉ</h2>
+      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La <strong>Synthèse</strong> sert à réviser vite ; ici, c'est le cours entier.</p>
+    </div>
+
+    <div class="key-rule"><div class="formula-main">🎯 Notre programme = les <strong>Temps modernes</strong> (1492 → 1789)</div><p class="note" style="margin-top:.3rem;">4 grands thèmes : le <strong>livre</strong> (imprimerie) · l'<strong>Humanisme &amp; la Renaissance</strong> · la <strong>Réforme protestante</strong> · l'<strong>Absolutisme</strong>. + savoir <strong>critiquer un document</strong>.</p></div>
+
+    <div class="synth-section">
+      <h2>1. Les grandes périodes de l'histoire</h2>
+      <p>Pour s'y retrouver dans le temps, les historiens découpent l'histoire en <strong>5 grandes périodes</strong>. Chaque période est séparée de la suivante par un <strong>événement très important</strong> (une « borne »).</p>
+      <table class="compare-table">
+        <thead><tr><th>Période</th><th>De … à …</th><th>Événement qui la termine</th></tr></thead>
+        <tbody>
+          <tr><th>Préhistoire</th><td>des origines à ≈ −3300</td><td>invention de l'<strong>écriture</strong></td></tr>
+          <tr><th>Antiquité</th><td>≈ −3300 → 476</td><td><strong>chute de l'Empire romain d'Occident (476)</strong></td></tr>
+          <tr><th>Moyen Âge</th><td>476 → 1492</td><td><strong>découverte de l'Amérique (1492)</strong></td></tr>
+          <tr><th>Temps modernes ⭐</th><td>1492 → 1789</td><td><strong>Révolution française (1789)</strong></td></tr>
+          <tr><th>Époque contemporaine</th><td>1789 → aujourd'hui</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.6rem;">⭐ <strong>Notre programme</strong> = les <strong>Temps modernes</strong> : entre les Grandes Découvertes (1492) et la Révolution française (1789). Mots-clés : imprimerie · Humanisme/Renaissance · Réforme · Louis XIV.</p>
+      <div class="key-rule"><div class="formula-main">3 dates-bornes à connaître par cœur : <strong>476</strong> · <strong>1492</strong> · <strong>1789</strong></div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>2. Le livre, objet d'histoire (chapitre 5)</h2>
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) Avant l'imprimerie : le manuscrit</h3>
+      <p>Jusqu'au milieu du XVᵉ siècle, un livre est un <strong>manuscrit</strong> (« écrit à la main »). Il est <strong>copié à la main</strong>, surtout par des <strong>moines</strong>, dans les monastères. C'est pourquoi le livre est alors <strong>long à produire, rare et très cher</strong>.</p>
+      <p>Fabriquer un livre demandait plusieurs métiers :</p>
+      <ul style="line-height:1.9;">
+        <li>le <strong>copiste</strong> recopie le texte (à la plume ou au roseau ; encre noire ou brune, titres en rouge) ;</li>
+        <li>l'<strong>enlumineur</strong> réalise les décors : les <strong>enluminures</strong> (décors colorés : plantes, motifs, personnages) et les <strong>lettrines</strong> (les grandes premières lettres d'un paragraphe, peintes et décorées) ;</li>
+        <li>le <strong>relieur</strong> assemble les pages et fabrique la couverture.</li>
+      </ul>
+      <p>Les pages sont en <strong>parchemin</strong> (peau d'animal préparée) : il fallait environ <strong>40 peaux de mouton</strong> pour un seul livre !</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) L'invention de l'imprimerie (≈ 1450)</h3>
+      <p>Vers <strong>1450</strong>, à <strong>Mayence</strong> (Allemagne), <strong>Johannes Gutenberg</strong> met au point l'<strong>imprimerie à caractères mobiles</strong> : on aligne de petites lettres en métal (réutilisables) pour composer une page, on les encre, puis on imprime sur le papier grâce à une <strong>presse</strong>. Ce procédé s'appelle la <strong>typographie</strong>.</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) Les conséquences de l'imprimerie</h3>
+      <ul style="line-height:1.9;">
+        <li>les livres deviennent <strong>plus nombreux, plus rapides à produire et moins chers</strong> ;</li>
+        <li>les <strong>idées circulent beaucoup plus vite</strong> dans toute l'Europe ;</li>
+        <li>de plus en plus de gens apprennent à <strong>lire</strong> (l'alphabétisation progresse) ;</li>
+        <li>l'imprimerie permettra la <strong>diffusion de l'Humanisme</strong> puis des <strong>idées de la Réforme</strong> (Luther).</li>
+      </ul>
+      <div class="key-rule"><div class="formula-main">≈ <strong>1450</strong> · <strong>Gutenberg</strong> · imprimerie à <strong>caractères mobiles</strong> (typographie) → les idées circulent vite</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>3. Humanisme et Renaissance (chapitre 6)</h2>
+      <p>Attention à ne pas les confondre : ce sont <strong>deux mouvements liés mais différents</strong>, qui naissent en <strong>Italie</strong> aux XVᵉ–XVIᵉ siècles.</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) L'Humanisme — un courant de pensée</h3>
+      <p>L'<strong>Humanisme</strong> est un <strong>mouvement intellectuel</strong> qui place l'<strong>être humain</strong> et la <strong>raison</strong> au centre. Les humanistes :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>redécouvrent l'Antiquité</strong> gréco-romaine (les textes des auteurs grecs et latins) ;</li>
+        <li>développent l'<strong>esprit critique</strong> et la soif de savoir (sciences, langues anciennes) ;</li>
+        <li>défendent l'idéal « <strong>Mens sana in corpore sano</strong> » (« un esprit sain dans un corps sain » : développer le corps ET l'esprit).</li>
+      </ul>
+      <p>Grands humanistes : <strong>Érasme</strong> (« <em>L'Éloge de la folie</em> », surnommé le « prince des humanistes ») et <strong>Thomas More</strong> (« <em>Utopia</em> »).</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) La Renaissance — un mouvement artistique</h3>
+      <p>La <strong>Renaissance</strong> est un <strong>renouveau artistique et culturel</strong> né en <strong>Italie</strong> (à <strong>Florence</strong>). Les artistes s'inspirent de l'Antiquité et recherchent le <strong>réalisme</strong> et la <strong>perspective</strong>.</p>
+      <p>Elle est financée par les <strong>mécènes</strong> : de riches protecteurs qui financent les artistes. L'exemple le plus célèbre est la famille <strong>Médicis</strong>, à Florence.</p>
+      <p>Grands artistes et œuvres :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Léonard de Vinci</strong> — « <em>La Joconde</em> » (invité en France par le roi <strong>François Iᵉʳ</strong>, au Clos Lucé) ;</li>
+        <li><strong>Michel-Ange</strong> — le plafond de la <strong>chapelle Sixtine</strong> ;</li>
+        <li><strong>Raphaël</strong> — « <em>L'École d'Athènes</em> » ;</li>
+        <li><strong>Botticelli</strong> — « <em>La Naissance de Vénus</em> ».</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Humanisme ou Renaissance ?</button>
+        <div class="simple-exp-content"><strong>Humanisme = les idées</strong> (la façon de penser : l'homme, la raison, l'Antiquité). <strong>Renaissance = l'art</strong> (peinture, sculpture, architecture). Les deux vont ensemble.</div>
+      </div>
+      <div class="key-rule"><div class="formula-main">Né en <strong>Italie</strong> · <strong>mécènes</strong> (Médicis) · Vinci · Michel-Ange · Raphaël · Érasme</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>4. La Réforme protestante (chapitre 7)</h2>
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) Les causes</h3>
+      <ul style="line-height:1.9;">
+        <li>l'Église catholique est <strong>très riche</strong> et on lui reproche ses <strong>abus</strong> ;</li>
+        <li>surtout, l'Église vend des <strong>indulgences</strong> : payer pour obtenir le « pardon » de ses péchés. Cela révolte beaucoup de croyants ;</li>
+        <li>l'<strong>imprimerie</strong> permet de diffuser très vite les critiques.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) Martin Luther (1517)</h3>
+      <p>En <strong>1517</strong>, le moine allemand <strong>Martin Luther</strong> publie ses <strong>95 thèses</strong> : il dénonce la vente des indulgences et les abus de l'Église. C'est le début de la <strong>Réforme protestante</strong>. Ses deux grands principes :</p>
+      <ul style="line-height:1.9;">
+        <li>le salut par la <strong>foi seule</strong> (et non en achetant des indulgences) ;</li>
+        <li>la <strong>Bible seule</strong> comme autorité (chacun peut la lire, traduite dans sa langue).</li>
+      </ul>
+      <p>Le <strong>pape</strong> refuse ces idées : Luther, qui ne se rétracte pas, est <strong>excommunié en 1521</strong> (exclu de l'Église catholique).</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) Les autres réformateurs</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>Jean Calvin</strong> développe le protestantisme à <strong>Genève</strong> (idée de la <strong>prédestination</strong>) ;</li>
+        <li>en Angleterre, le roi <strong>Henri VIII</strong> fonde l'<strong>anglicanisme</strong>.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">d) Les conséquences</h3>
+      <ul style="line-height:1.9;">
+        <li>la chrétienté se <strong>divise</strong> : catholiques, <strong>protestants</strong> (luthériens, calvinistes) et anglicans ;</li>
+        <li>des <strong>guerres de religion</strong> éclatent (ex. le massacre de la <strong>Saint-Barthélemy</strong>, le 24 août 1572, à Paris) ;</li>
+        <li>l'Église catholique réagit par la <strong>Contre-Réforme</strong> : le <strong>Concile de Trente</strong> réaffirme la doctrine catholique.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">e) La carte des religions en Europe (vers 1600)</h3>
+      <p>Après la Réforme, l'Europe est <strong>divisée religieusement</strong>. La règle simple :</p>
+      <ul style="line-height:1.9;">
+        <li>📖 <strong>Nord = protestant</strong> : <strong>luthériens</strong> (nord de l'Allemagne, Scandinavie), <strong>calvinistes</strong> (Suisse, Provinces-Unies, Écosse), <strong>anglicans</strong> (Angleterre) ;</li>
+        <li>⛪ <strong>Sud = catholique</strong> : Espagne, Italie, France, Pologne ;</li>
+        <li>☦️ <strong>Est = orthodoxe</strong> : Russie, Grèce, Balkans (séparés dès 1054, bien avant la Réforme).</li>
+      </ul>
+      <div class="key-rule"><div class="formula-main"><strong>1517</strong> · Luther · 95 thèses · foi seule + Bible seule · excommunié <strong>1521</strong></div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>5. L'Absolutisme (chapitre 8)</h2>
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) Définition</h3>
+      <p>L'<strong>absolutisme</strong> est un régime où le <strong>roi détient tous les pouvoirs</strong>. Il gouverne seul, sans partage, car il estime tenir son pouvoir de <strong>Dieu</strong> : c'est la <strong>monarchie de droit divin</strong>. Le peuple n'a <strong>aucun pouvoir politique</strong> (ce n'est donc pas une démocratie).</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) Louis XIV, le Roi-Soleil (1638-1715)</h3>
+      <p>Le modèle de l'absolutisme est <strong>Louis XIV</strong> (né en 1638, <strong>règne de 1643 à 1715</strong> — le plus long de l'histoire de France). On lui prête la formule « <strong>L'État, c'est moi</strong> ». On le surnomme le <strong>Roi-Soleil</strong>. Comment il exerce son pouvoir :</p>
+      <ul style="line-height:1.9;">
+        <li>il installe la cour au <strong>château de Versailles</strong> (avant, la résidence royale était le <strong>Louvre</strong>, à Paris). À Versailles, il <strong>surveille la noblesse</strong> et l'occupe par les fêtes et l'étiquette ;</li>
+        <li>il s'appuie sur des ministres comme <strong>Colbert</strong>, qui développe l'économie par le <strong>mercantilisme</strong> (enrichir l'État, exporter plus qu'on n'importe, créer des manufactures royales) ;</li>
+        <li>il protège les arts : <strong>Molière</strong> (théâtre) joue à Versailles ;</li>
+        <li>en <strong>1685</strong>, il <strong>révoque l'Édit de Nantes</strong> (signé par Henri IV en <strong>1598</strong>) : il met fin à la tolérance envers les protestants.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) La société d'Ancien Régime</h3>
+      <p>La société est divisée en <strong>3 ordres</strong> :</p>
+      <ul style="line-height:1.9;">
+        <li>le <strong>clergé</strong> (l'Église) ;</li>
+        <li>la <strong>noblesse</strong> ;</li>
+        <li>le <strong>tiers état</strong> (tout le reste : paysans, artisans, bourgeois — la grande majorité de la population).</li>
+      </ul>
+      <p>Le clergé et la noblesse sont <strong>privilégiés</strong> (peu ou pas d'impôts). Le peuple paie de lourds impôts, dont la <strong>dîme</strong> : un impôt versé à l'<strong>Église</strong> (environ un dixième des récoltes).</p>
+      <div class="key-rule"><div class="formula-main">Louis XIV · Roi-Soleil · règne <strong>1643-1715</strong> · Versailles · droit divin · dîme · 3 ordres</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>6. Méthode — critiquer un document</h2>
+      <p>À l'examen, tu devras <strong>analyser un document</strong>. On suit toujours les mêmes étapes, <strong>dans l'ordre</strong>.</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) La carte d'identité du document (les questions par cœur)</h3>
+      <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Nature</strong> : texte, image, carte, tableau, objet… ?</div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Auteur</strong> : qui l'a produit ? (et quel est son point de vue ?)</div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Date &amp; lieu</strong> : quand et où ?</div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>Source / destinataire</strong> : d'où vient le document, à qui s'adresse-t-il ?</div></div>
+      <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>Sujet</strong> : de quoi parle-t-il ? (l'idée principale)</div></div>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) Pertinence, fiabilité, contexte, problématique</h3>
+      <div class="step-item"><div class="step-num">A</div><div class="step-text"><strong>Pertinence</strong> : le document répond-il à la question posée ?</div></div>
+      <div class="step-item"><div class="step-num">B</div><div class="step-text"><strong>Fiabilité</strong> : source <strong>primaire</strong> (d'époque, témoin direct) ou <strong>secondaire</strong> (écrite plus tard par un historien) ? L'auteur a-t-il un <strong>parti pris</strong> ? → donner des arguments <em>pour</em> et <em>contre</em>.</div></div>
+      <div class="step-item"><div class="step-num">C</div><div class="step-text"><strong>Contexte</strong> : replacer le document dans son époque (que se passait-il alors ?).</div></div>
+      <div class="step-item"><div class="step-num">D</div><div class="step-text"><strong>Problématique</strong> : transformer le sujet en une <strong>question claire</strong> à laquelle on va répondre.</div></div>
+
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">📂 Les documents étudiés en classe</button>
+        <div class="simple-exp-content">En classe, tu as appliqué cette méthode à des documents-sources comme : un texte de <strong>Galilée</strong> (science et religion), des extraits de <strong>Martin Luther</strong>, une lettre d'<strong>Érasme</strong> (préface du Nouveau Testament, 1516), un discours d'<strong>Henri IV</strong> sur l'autorité royale, une ordonnance de <strong>Charles Quint</strong> (1531) contre les livres de Luther. Entraîne-toi à leur appliquer la carte d'identité. <em>(Textes non recopiés ici : droits d'auteur.)</em></div>
+      </div>
+    </div>
+
+    <div class="key-rule" style="margin-top:1rem;"><div class="formula-main">✅ Tu as lu tout le cours ! File aux <strong>Flashcards</strong> et au <strong>Quiz</strong> pour t'entraîner.</div></div>
+  </div>`;
+
   /* ---------------------- ONGLET BONUS : FICHES À CONNAÎTRE ---------------------- */
   // Galerie illustrée (personnages, œuvres, événements) — data-info → openInfoCard (fiche complète).
   function fiche(img, title, when, desc, key) {
