@@ -272,6 +272,152 @@
     </div>
   </div>`;
 
+  /* ---------------------- COURS COMPLET (tout le cours détaillé, pour réviser à 100 %) ---------------------- */
+  sections.cours = `<div id="cours" class="section">
+    <div style="text-align:center; margin-bottom:1.2rem;">
+      <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet — Géographie</h2>
+      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La <strong>Synthèse</strong> sert à réviser vite ; ici, c'est le cours entier.</p>
+    </div>
+
+    <div class="key-rule"><div class="formula-main">🎯 Au programme</div><p class="note" style="margin-top:.3rem;">La <strong>Belgique</strong> (État fédéral · 10 provinces · relief · eau) + 2 situations de <strong>mondialisation</strong> : les <strong>biocarburants</strong> et le <strong>cacao</strong>.</p></div>
+
+    <div class="synth-section">
+      <h2>1. La Belgique, un État fédéral</h2>
+      <p>La Belgique est un <strong>petit pays d'Europe de l'Ouest</strong> (≈ 30 700 km², ≈ 11,7 millions d'habitants). Sa capitale est <strong>Bruxelles</strong>. Elle est bordée à l'ouest par la <strong>mer du Nord</strong> et entourée de <strong>4 pays voisins</strong> : la <strong>France</strong>, le <strong>Luxembourg</strong> (le Grand-Duché), l'<strong>Allemagne</strong> et les <strong>Pays-Bas</strong>.</p>
+      <p>C'est un <strong>État fédéral</strong> : le pouvoir est partagé entre l'État central et des entités. On distingue <strong>3 Régions</strong> et <strong>3 Communautés</strong> (attention, ce n'est pas la même chose !).</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Les 3 Régions</strong> s'occupent du <strong>territoire</strong> (économie, environnement, routes, aménagement) : la <strong>Région flamande</strong> (la Flandre, au nord), la <strong>Région wallonne</strong> (la Wallonie, au sud) et la <strong>Région de Bruxelles-Capitale</strong> (19 communes).</li>
+        <li><strong>Les 3 Communautés</strong> s'occupent des <strong>personnes</strong> selon leur langue (enseignement, culture) : la Communauté <strong>française</strong>, la Communauté <strong>flamande</strong> (néerlandais) et la Communauté <strong>germanophone</strong> (les cantons de l'Est, région d'Eupen).</li>
+      </ul>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Région ou Communauté ?</button>
+        <div class="simple-exp-content">Une <strong>Région</strong> = le <em>territoire</em> (le sol : économie, environnement). Une <strong>Communauté</strong> = les <em>gens</em> selon leur langue (école, culture). Bruxelles est <strong>bilingue</strong> (français + néerlandais).</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>2. Les 10 provinces</h2>
+      <p>La Belgique compte <strong>10 provinces</strong> : <strong>5 en Flandre</strong> et <strong>5 en Wallonie</strong>. <strong>Bruxelles-Capitale n'appartient à aucune province</strong> (c'est une Région à part).</p>
+      <table class="compare-table">
+        <thead><tr><th>Flandre (nord)</th><th>Chef-lieu</th><th>Wallonie (sud)</th><th>Chef-lieu</th></tr></thead>
+        <tbody>
+          <tr><td>Anvers</td><td>Anvers</td><td>Brabant wallon</td><td>Wavre</td></tr>
+          <tr><td>Limbourg</td><td>Hasselt</td><td>Hainaut</td><td>Mons</td></tr>
+          <tr><td>Flandre-Orientale</td><td>Gand</td><td>Liège</td><td>Liège</td></tr>
+          <tr><td>Flandre-Occidentale</td><td>Bruges</td><td>Namur</td><td>Namur</td></tr>
+          <tr><td>Brabant flamand</td><td>Louvain</td><td>Luxembourg (belge)</td><td>Arlon</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.5rem;">⚠️ Le <strong>Luxembourg belge</strong> (province, chef-lieu Arlon) ne doit pas être confondu avec le <strong>Grand-Duché de Luxembourg</strong> (le pays voisin).</p>
+      <div class="key-rule"><div class="formula-main">10 provinces = 5 (Flandre) + 5 (Wallonie) · Bruxelles = à part</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>3. Le relief : 3 grands ensembles</h2>
+      <p>Le relief belge <strong>monte doucement</strong> du nord-ouest (la mer) vers le sud-est (l'Ardenne).</p>
+      <table class="compare-table">
+        <thead><tr><th>Ensemble</th><th>Altitude</th><th>Où / caractéristiques</th></tr></thead>
+        <tbody>
+          <tr><th>Basse Belgique</th><td>&lt; 100 m</td><td>la côte, les <strong>polders</strong>, la plaine flamande</td></tr>
+          <tr><th>Moyenne Belgique</th><td>100–200 m</td><td>plateaux fertiles (limons), grande région <strong>agricole</strong></td></tr>
+          <tr><th>Haute Belgique</th><td>&gt; 200 m</td><td>plateaux de l'<strong>Ardenne</strong> · point culminant : <strong>Signal de Botrange</strong> (694 m, Hautes Fagnes)</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:.6rem;">Le <strong>sillon Sambre-et-Meuse</strong> (la vallée de la Sambre puis de la Meuse : Mons → Charleroi → Namur → Liège) sépare la <strong>Moyenne</strong> de la <strong>Haute Belgique</strong>. C'est l'ancien <strong>axe industriel</strong> wallon (charbon, sidérurgie).</p>
+      <div class="key-rule"><div class="formula-main">Basse (&lt;100 m) → Moyenne (100–200 m) → Haute (&gt;200 m) · sommet : Botrange 694 m</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>4. L'hydrographie : les cours d'eau et l'eau</h2>
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) Les fleuves</h3>
+      <p>La Belgique compte <strong>3 fleuves</strong>, tous tournés vers la <strong>mer du Nord</strong> : deux grands — la <strong>Meuse</strong> et l'<strong>Escaut</strong> — et un petit fleuve côtier, l'<strong>Yser</strong>.</p>
+      <ul style="line-height:1.9;">
+        <li>La <strong>Meuse</strong> : traverse <strong>Namur</strong> et <strong>Liège</strong> (la <strong>Sambre</strong> la rejoint à Namur).</li>
+        <li>L'<strong>Escaut</strong> : passe à Tournai, <strong>Gand</strong> et <strong>Anvers</strong> (la <strong>Lys</strong> le rejoint à Gand).</li>
+        <li>L'<strong>Yser</strong> : petit fleuve <strong>côtier</strong> de Flandre-Occidentale ; il se jette dans la mer du Nord à <strong>Nieuport</strong>.</li>
+        <li>Autres rivières/affluents : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) Eaux de surface vs eaux souterraines</h3>
+      <p>L'eau douce qu'on utilise vient de deux sources :</p>
+      <table class="compare-table">
+        <thead><tr><th>Critère</th><th>🌊 Eaux de surface</th><th>🕳️ Eaux souterraines (nappes)</th></tr></thead>
+        <tbody>
+          <tr><th>Où ?</th><td>rivières, fleuves, lacs, barrages</td><td>sous terre, dans les <strong>nappes phréatiques</strong></td></tr>
+          <tr><th>Avantage</th><td>faciles d'<strong>accès</strong> et abondantes</td><td>mieux <strong>protégées</strong>, plus <strong>pures</strong></td></tr>
+          <tr><th>Inconvénient</th><td>plus exposées à la <strong>pollution</strong></td><td>plus difficiles à exploiter, <strong>lentes</strong> à se renouveler</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) Économiser l'eau</h3>
+      <p>L'eau potable est précieuse : il faut <strong>lutter contre le gaspillage</strong> → fermer le robinet, <strong>réparer les fuites</strong>, préférer la <strong>douche au bain</strong>, <strong>récupérer l'eau de pluie</strong>, utiliser des appareils économes.</p>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Le sais-tu ? (le Manneken-Pis)</button>
+        <div class="simple-exp-content">Le manuel utilise le <strong>Manneken-Pis</strong> (la célèbre fontaine de Bruxelles) comme accroche pour parler de notre <strong>consommation d'eau</strong> : une fontaine qui coule en continu, c'est énormément d'eau potable « utilisée » chaque jour — un bon rappel pour faire attention à l'eau au quotidien.</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>5. Situation d'apprentissage : les biocarburants 🌱⛽</h2>
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) Définition</h3>
+      <p>Un <strong>biocarburant</strong> (ou agrocarburant) est un carburant produit à partir de <strong>biomasse</strong> (matière organique végétale ou animale). C'est une ressource <strong>renouvelable</strong>, contrairement au <strong>pétrole</strong> (énergie fossile, épuisable).</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) Les principaux types</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>Bioéthanol</strong> : alcool obtenu par <strong>fermentation</strong> de plantes sucrées ou riches en amidon (betterave, canne à sucre, maïs, blé). On le mélange à l'<strong>essence</strong>.</li>
+        <li><strong>Biodiesel</strong> : obtenu par <strong>transestérification</strong> d'huiles végétales (colza, tournesol, palme). On le mélange au <strong>diesel</strong>.</li>
+        <li><strong>Biogaz</strong> : <strong>méthane</strong> produit par <strong>méthanisation</strong> de déchets organiques.</li>
+      </ul>
+      <p><strong>Les générations :</strong> 1ʳᵉ = cultures <em>alimentaires</em> (controversé) · 2ᵉ = <em>résidus</em> et bois (paille, déchets) · 3ᵉ = <strong>microalgues</strong>.</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) Deux notions du manuel : OGM et bilan carbone</h3>
+      <ul style="line-height:1.9;">
+        <li><strong>OGM</strong> = <strong>organisme génétiquement modifié</strong> : un être vivant dont on a modifié les gènes en laboratoire. Certaines plantes cultivées pour les biocarburants peuvent être des OGM.</li>
+        <li><strong>Le bilan carbone</strong> : pour juger si un biocarburant est vraiment écologique, on compare le CO₂ qu'il <strong>rejette</strong> (en le produisant puis en le brûlant) au CO₂ que les plantes <strong>absorbent</strong> en poussant. L'intérêt des biocarburants : les plantes <strong>réabsorbent</strong> une partie du CO₂ pendant leur croissance, ce que le pétrole ne fait pas. Mais ce bilan n'est <strong>favorable</strong> que si on dépense <strong>peu d'énergie fossile</strong> pour les cultiver et les fabriquer.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">d) Le débat : « Biocarburant ? » (avec un point d'interrogation)</h3>
+      <p>Ce n'est <strong>pas</strong> une solution parfaite. Les principaux problèmes :</p>
+      <ul style="line-height:1.9;">
+        <li>⚠️ <strong>concurrence avec l'alimentation</strong> : des champs servent à faire rouler des voitures plutôt qu'à nourrir les gens (surtout 1ʳᵉ génération) ;</li>
+        <li>🌳 <strong>déforestation</strong> (ex. huile de palme) pour créer de nouvelles cultures ;</li>
+        <li>💧 grande consommation d'<strong>eau</strong> et d'<strong>engrais</strong>.</li>
+      </ul>
+      <p>D'où le débat <strong>POUR / CONTRE</strong> : avantage écologique réel (renouvelable, moins de gaz à effet de serre que l'essence/le diesel) <em>ou</em> fausse bonne idée (concurrence alimentaire, déforestation) ?</p>
+      <div class="key-rule"><div class="formula-main">Biomasse (renouvelable) · bioéthanol / biodiesel / biogaz · débat : alimentation &amp; déforestation</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>6. Mondialisation de l'alimentation : le cacao 🍫</h2>
+      <p>Le <strong>chocolat</strong> illustre parfaitement les <strong>inégalités Nord–Sud</strong> : la matière première (les fèves de cacao) est cultivée au <strong>Sud</strong>, mais elle est <strong>transformée et vendue</strong> (cher) au <strong>Nord</strong>.</p>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">a) La production</h3>
+      <ul style="line-height:1.9;">
+        <li>La <strong>Côte d'Ivoire</strong> est le <strong>1ᵉʳ producteur mondial</strong> de fèves de cacao (devant le Ghana) ; les fèves partent par le <strong>port de San Pedro</strong>.</li>
+        <li>À l'échelle mondiale : ≈ <strong>75 % vient d'Afrique</strong>, <strong>18 % d'Amérique</strong> et <strong>7 % d'Asie &amp; Océanie</strong>.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">b) La transformation et les géants</h3>
+      <ul style="line-height:1.9;">
+        <li>L'entreprise <strong>belge</strong> <strong>Barry Callebaut</strong> est le <strong>n°1 mondial</strong> de la transformation du chocolat.</li>
+        <li>Une <strong>dizaine de multinationales</strong> de l'agroalimentaire (Nestlé, Mondelez, Mars, Unilever, Danone, Coca-Cola, PepsiCo, Kellogg's…) possèdent la plupart des marques et <strong>fixent les prix</strong>.</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">c) Les conséquences</h3>
+      <ul style="line-height:1.9;">
+        <li>💰 <strong>Économiques</strong> : les producteurs du Sud sont <strong>mal payés</strong>. Dans la <strong>chaîne de valeur</strong> du chocolat, le <strong>planteur ne touche qu'une toute petite part du prix</strong> ; l'essentiel revient à la <strong>transformation</strong> et à la <strong>distribution</strong> (au Nord).</li>
+        <li>👥 <strong>Sociales</strong> : pauvreté des planteurs, <strong>travail des enfants</strong> dans les plantations.</li>
+        <li>🌳 <strong>Environnementales</strong> : <strong>déforestation</strong> et monoculture pour étendre les plantations ; cultures <strong>très gourmandes en eau</strong> (≈ <strong>12 650 L d'eau pour 1 kg de fèves</strong> de cacao).</li>
+      </ul>
+
+      <h3 style="color:var(--color-nav); margin-top:1rem;">d) Les solutions</h3>
+      <p>Le <strong>commerce équitable</strong> (mieux payer les producteurs), une <strong>consommation responsable</strong> et des <strong>labels</strong>.</p>
+      <div class="key-rule"><div class="formula-main">Sud cultive (peu payé) → Nord transforme &amp; vend (cher) · solution : commerce équitable</div></div>
+    </div>
+
+    <div class="key-rule" style="margin-top:1rem;"><div class="formula-main">✅ Tu as lu tout le cours ! File aux <strong>Flashcards</strong> et au <strong>Quiz</strong> pour t'entraîner.</div></div>
+  </div>`;
+
   /* ---------------------- QUIZ ---------------------- */
   var questions = [
     // ── Eaux de surface / souterraines ──
