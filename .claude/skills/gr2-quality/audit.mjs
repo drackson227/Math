@@ -118,6 +118,60 @@ for (const W of VIEWPORTS) {
   await page.close();
 }
 
+// ---------- Extras : thèmes (contraste par palette) + parcours interactifs ----------
+const THEMES = ['default', 'forest', 'ocean', 'sunset', 'midnight', 'minimal'];
+const flows = [];
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 900 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+  await ctx.addInitScript(() => { try { localStorage.setItem('mathsgr2_welcome_seen', '1'); } catch (e) {} });
+  const page = await ctx.newPage();
+  page.on('pageerror', e => { if (!CDN_NOISE.test(e.message)) jsErrors.push('flow ' + e.message); });
+  page.on('console', m => { if (m.type() === 'error' && !CDN_NOISE.test(m.text())) jsErrors.push('flow ' + m.text()); });
+  await page.goto(INDEX, { waitUntil: 'load' });
+  await page.waitForFunction(() => typeof window.setSubject === 'function' && typeof window.gr2BuildReport === 'function', null, { timeout: 20000 });
+  if (HAS_AXE) { try { await page.addScriptTag({ path: AXE_PATH }); } catch (e) {} }
+  await page.evaluate(() => window.setSubject('maths'));
+
+  // 1) Chaque thème a sa palette → on vérifie le contraste (synthèse + exercices).
+  for (const th of THEMES) {
+    await page.evaluate(t => { try { window.setTheme(t); } catch (e) {} }, th);
+    for (const sec of ['synthese', 'exercices']) {
+      await page.evaluate(id => { try { window.showSection(id); } catch (e) {} }, sec);
+      await audit(page, 390, 'theme:' + th + '/' + sec);
+    }
+  }
+  await page.evaluate(() => { try { window.setTheme('default'); } catch (e) {} });
+
+  // 2) Parcours interactifs : on clique pour de vrai (capte les erreurs JS au clic).
+  async function flow(name, fn) {
+    const before = jsErrors.length;
+    try { await fn(); } catch (e) { jsErrors.push('flow ' + name + ': ' + e.message); }
+    await page.waitForTimeout(250);
+    flows.push({ name, errs: jsErrors.length - before });
+  }
+  await flow('quiz : démarrer + répondre', async () => {
+    await page.evaluate(() => window.showSection('quiz')); await page.waitForTimeout(300);
+    await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find(x => /Commencer le quiz/.test(x.textContent)); if (b) b.click(); });
+    await page.waitForTimeout(400);
+    await page.evaluate(() => { const o = document.querySelector('.opt'); if (o) o.click(); });
+  });
+  await flow('flashcards : retourner + noter', async () => {
+    await page.evaluate(() => window.showSection('flashcards')); await page.waitForTimeout(300);
+    await page.evaluate(() => { try { if (window.flipCard) window.flipCard(); } catch (e) {} });
+    await page.waitForTimeout(200);
+    await page.evaluate(() => { try { if (window.rateCard) window.rateCard('easy'); } catch (e) {} });
+  });
+  await flow('mode cours : ouvrir + avancer + fermer', async () => {
+    await page.evaluate(() => window.showSection('synthese')); await page.waitForTimeout(300);
+    await page.evaluate(() => { try { window.GR2Course && window.GR2Course.open(); } catch (e) {} });
+    await page.waitForTimeout(500);
+    await page.evaluate(() => { for (let i = 0; i < 3; i++) { const n = document.getElementById('gr2c-next'); if (n) n.click(); } });
+    await page.waitForTimeout(300);
+    await page.evaluate(() => { try { window.GR2Course && window.GR2Course.close(); } catch (e) {} });
+  });
+  await page.close();
+}
+
 // ---------- Rapport ----------
 const pad = (v, n) => String(v).padEnd(n);
 for (const W of VIEWPORTS) {
@@ -133,6 +187,9 @@ console.log('  TOTAUX : contraste(Diagnostic)=' + sumContrast + ' · pire tap<40
 console.log('  Erreurs JS réelles=' + jsErrors.length + ' · ids en double=' + dupIds.size + ' · images sans alt=' + imgNoAlt);
 if (jsErrors.length) jsErrors.slice(0, 10).forEach(e => console.log('    ❌ ' + e));
 if (dupIds.size) console.log('    ⚠️ ids dupliqués : ' + [...dupIds].slice(0, 15).join(', '));
+
+console.log('\n  PARCOURS INTERACTIFS :');
+for (const f of flows) console.log('   ' + (f.errs ? '❌' : '✅') + ' ' + f.name + (f.errs ? ' (' + f.errs + ' err)' : ''));
 
 const RANK = { critical: 0, serious: 1, moderate: 2, minor: 3 };
 const axeIds = Object.keys(axeAgg).sort((a, b) => (RANK[axeAgg[a].impact] ?? 9) - (RANK[axeAgg[b].impact] ?? 9));

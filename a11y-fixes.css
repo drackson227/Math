@@ -43,17 +43,15 @@ button[onclick="startQuiz()"] {
   background: color-mix(in srgb, var(--c) 60%, #000) !important;
 }
 
-/* ---------- 2. Contraste : pied de page, code, badges ---------- */
+/* ---------- 2. Contraste : pied de page, code, badges ----------
+   Opacité pleine pour TOUS les thèmes (l'opacité estompait trop le texte) ;
+   couleur éclaircie seulement en thème sombre (en clair, le texte foncé suffit). */
 footer p,
-footer a[href="#"] {
-  color: #b6c2d4 !important;
-  opacity: 1 !important;
-}
-code {
+footer a[href="#"] { opacity: 1 !important; }
+body:not(.theme-light) footer p,
+body:not(.theme-light) footer a[href="#"] { color: #b6c2d4 !important; }
+body:not(.theme-light) code {
   color: color-mix(in srgb, var(--color-nav) 45%, #fff) !important;
-}
-.badge-ds {
-  color: #aeb9cb !important;
 }
 
 /* ---------- 2b. Badges verrouillés : lisibles mais toujours « grisés » ----------
@@ -61,7 +59,8 @@ code {
    pleine et on garde le grayscale : le badge reste visiblement non gagné
    (désaturé) mais ses textes deviennent lisibles. */
 .badge-tile:not(.on) { opacity: 1 !important; filter: grayscale(0.85) !important; }
-.badge-ds, .badge-pr { color: #aeb9cb !important; }
+body:not(.theme-light) .badge-ds,
+body:not(.theme-light) .badge-pr { color: #aeb9cb !important; }
 /* étiquettes colorées (« Cercle », « Vecteurs »…) : fond neutre + texte clair
    pour un bon contraste (thème SOMBRE seulement ; le thème clair garde ses règles). */
 body:not(.theme-light) .tag { background: rgba(255,255,255,0.08) !important; font-weight: 700; }
@@ -69,10 +68,10 @@ body:not(.theme-light) .tag-cercle { color: #93c5fd !important; }
 body:not(.theme-light) .tag-droite { color: #fcd34d !important; }
 body:not(.theme-light) .tag-parabole { color: #6ee7b7 !important; }
 body:not(.theme-light) .tag-vecteur { color: #c4b5fd !important; }
-/* libellés et textes d'aide de l'éditeur de quiz (Mes créations) */
-#cre-pane-quiz label,
-#cre-pane-quiz label span,
-#cre-pane-quiz p { color: #b6c2d4 !important; opacity: 1 !important; }
+/* libellés et textes d'aide de l'éditeur de quiz (Mes créations) — thèmes sombres */
+body:not(.theme-light) #cre-pane-quiz label,
+body:not(.theme-light) #cre-pane-quiz label span,
+body:not(.theme-light) #cre-pane-quiz p { color: #b6c2d4 !important; opacity: 1 !important; }
 
 /* ---------- 3. Cibles tactiles : minimum confortable au doigt ---------- */
 .nav-btn,
