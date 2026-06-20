@@ -1,17 +1,19 @@
-/* Audit qualité GR2 Study — boucle les 9 matières × sections, agrège le rapport
-   du Diagnostic intégré (window.gr2BuildReport) + axe-core (a11y/WCAG) + erreurs JS.
-   Vue MOBILE (390px) par défaut = le cas le plus exigeant.
+/* Audit qualité GR2 Study — analyse mesurée et large du site rendu.
+   • 9 matières × 5 sections de cours  +  écrans interactifs (quiz, flashcards, profil…)
+   • 2 tailles d'écran par défaut : MOBILE (390) et BUREAU (1100)
+   • Diagnostic intégré (window.gr2BuildReport) : contraste / <12px / <16px / tap<40 / débordement
+   • axe-core (WCAG : ARIA, landmarks, contraste, noms accessibles…) — vendorisé (axe.min.js)
+   • Heuristiques bonus : identifiants en double, images sans alt
+   • Erreurs JS réelles (bruit CDN hors-ligne ignoré)
 
    Lancer depuis la racine du projet :  node .claude/skills/gr2-quality/audit.mjs
-   Variables d'environnement (optionnelles) :
-     PW_INDEX   URL ou chemin de index.html      (def: ./index.html en file://)
-     PW_CHROME  executablePath d'un Chromium       (def: Chromium fourni par Playwright)
-     PW_MODULE  chemin/URL d'un module playwright   (def: 'playwright' résolu normalement)
-     PW_WIDTH   largeur du viewport                 (def: 390 ; mets 1000 pour le bureau)
-
-   Sortie : tableau par matière/section + résumé axe-core + verdict. Code de sortie ≠ 0
-   si régression (erreur JS réelle, contraste faible, débordement, ou violation axe critique).
-   axe-core est vendorisé à côté de ce fichier (axe.min.js) → aucune install requise. */
+   Variables d'env (optionnelles) :
+     PW_INDEX   URL/chemin index.html      (def: ./index.html en file://)
+     PW_CHROME  executablePath Chromium    (def: Chromium de Playwright)
+     PW_MODULE  module playwright           (def: 'playwright')
+     PW_WIDTH   force UNE largeur            (def: les deux, 390 et 1100)
+   Sortie : tableaux + résumé axe + verdict. Code ≠ 0 si régression (erreur JS, contraste faible,
+   débordement, id en double, ou violation axe critique). */
 import path from 'node:path';
 import url from 'node:url';
 import fs from 'node:fs';
@@ -30,92 +32,118 @@ const AXE_PATH = path.join(HERE, 'axe.min.js');
 const HAS_AXE = fs.existsSync(AXE_PATH);
 
 const INDEX = process.env.PW_INDEX ? toUrl(process.env.PW_INDEX) : url.pathToFileURL(path.resolve('index.html')).href;
-const WIDTH = parseInt(process.env.PW_WIDTH || '390', 10);
 const opts = { headless: true };
 if (process.env.PW_CHROME) opts.executablePath = process.env.PW_CHROME;
+const VIEWPORTS = process.env.PW_WIDTH ? [parseInt(process.env.PW_WIDTH, 10)] : [390, 1100];
 
 const SUBJECTS = ['maths', 'francais', 'anglais', 'histoire', 'geo', 'chimie', 'bio', 'eco', 'neerlandais'];
 const SECTIONS = ['synthese', 'formules', 'methodes', 'exercices', 'erreurs'];
+const APP_SECTIONS = ['quiz', 'flashcards', 'profil', 'progression', 'glossaire', 'mesexos', 'memoformules', 'journal', 'notes', 'graphiques'];
 
-// Bruit de console à IGNORER (CDN bloqués hors-ligne / cross-origin) → pas de vraies erreurs JS.
 const CDN_NOISE = /Failed to load resource|net::|ERR_CERT|ERR_NAME|ERR_BLOCKED|jsdelivr|cloudflare|supabase|gstatic|googleapis|Script error/i;
 
+// Heuristiques exécutées dans la page (en plus du Diagnostic intégré).
+function pageChecks() {
+  const ids = {};
+  document.querySelectorAll('[id]').forEach(e => { ids[e.id] = (ids[e.id] || 0) + 1; });
+  const dup = Object.keys(ids).filter(k => ids[k] > 1);
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none'; };
+  const imgs = [...document.querySelectorAll('img')].filter(vis);
+  const imgNoAlt = imgs.filter(i => !i.hasAttribute('alt') || i.getAttribute('alt').trim() === '').length;
+  return { dup, imgNoAlt };
+}
+
 const browser = await chromium.launch(opts);
-const ctx = await browser.newContext({ viewport: { width: WIDTH, height: 900 }, isMobile: WIDTH < 768, hasTouch: WIDTH < 768, deviceScaleFactor: 1 });
-await ctx.addInitScript(() => { try { localStorage.setItem('mathsgr2_welcome_seen', '1'); } catch (e) {} });
-const page = await ctx.newPage();
+const axeAgg = {};               // id -> {impact, help, max, states:Set, sample}
 const jsErrors = [];
-page.on('pageerror', e => { if (!CDN_NOISE.test(e.message)) jsErrors.push('PAGEERROR: ' + e.message); });
-page.on('console', m => { if (m.type() === 'error' && !CDN_NOISE.test(m.text())) jsErrors.push('CONSOLE: ' + m.text()); });
+const dupIds = new Set();
+let imgNoAlt = 0;
+let sumContrast = 0, sumTap = 0, worstOv = 0;
+const rows = [];
 
-await page.goto(INDEX, { waitUntil: 'load' });
-await page.waitForFunction(() => typeof window.setSubject === 'function' && typeof window.gr2BuildReport === 'function', null, { timeout: 20000 });
-if (HAS_AXE) { try { await page.addScriptTag({ path: AXE_PATH }); } catch (e) { console.error('⚠️ axe non injecté:', e.message); } }
-
-const num = (rep, label) => { const l = rep.split('\n').find(x => x.includes(label)); const m = l && l.match(/:\s*(\d+)/); return m ? +m[1] : 0; };
-const ovPx = (rep) => { const m = rep.match(/dépasse de (\d+)px/); return m ? +m[1] : 0; };
-
-async function runAxe() {
+async function runAxe(page) {
   if (!HAS_AXE) return [];
   try {
     return await page.evaluate(async () => {
       if (typeof window.axe === 'undefined') return [];
       const r = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'best-practice'] }, resultTypes: ['violations'] });
-      return r.violations.map(v => ({ id: v.id, impact: v.impact, help: v.help, nodes: v.nodes.length, sample: (v.nodes[0] && v.nodes[0].target.join(' ').slice(0, 70)) || '' }));
+      return r.violations.map(v => ({ id: v.id, impact: v.impact, help: v.help, nodes: v.nodes.length, sample: (v.nodes[0] && v.nodes[0].target.join(' ').slice(0, 60)) || '' }));
     });
   } catch (e) { return []; }
 }
+const num = (rep, label) => { const l = rep.split('\n').find(x => x.includes(label)); const m = l && l.match(/:\s*(\d+)/); return m ? +m[1] : 0; };
+const ovPx = (rep) => { const m = rep.match(/dépasse de (\d+)px/); return m ? +m[1] : 0; };
 
-const rows = [];
-const axeAgg = {}; // id -> {impact, help, max, states:Set, sample}
-let sumContrast = 0, sumTiny = 0, sumTap = 0, worstOv = 0;
-for (const s of SUBJECTS) {
-  await page.evaluate(k => window.setSubject(k), s);
-  for (const sec of SECTIONS) {
-    const before = jsErrors.length;
-    await page.evaluate(id => { try { window.showSection(id); } catch (e) {} }, sec);
-    await page.waitForTimeout(220);
-    const rep = await page.evaluate(() => window.gr2BuildReport());
-    const r = { s, sec, contrast: num(rep, 'Contraste trop faible'), tiny: num(rep, 'Textes < 12px'),
-      inp: num(rep, 'Champs < 16px'), tap: num(rep, 'Boutons/liens petits'), ov: ovPx(rep), errs: jsErrors.length - before };
-    sumContrast += r.contrast; sumTiny += r.tiny; sumTap = Math.max(sumTap, r.tap); worstOv = Math.max(worstOv, r.ov);
-    rows.push(r);
-    for (const v of await runAxe()) {
-      const a = axeAgg[v.id] || (axeAgg[v.id] = { impact: v.impact, help: v.help, max: 0, states: new Set(), sample: v.sample });
-      a.max = Math.max(a.max, v.nodes); a.states.add(s + '/' + sec);
+async function audit(page, vp, label) {
+  await page.waitForTimeout(200);
+  const rep = await page.evaluate(() => window.gr2BuildReport());
+  const r = { vp, label, contrast: num(rep, 'Contraste trop faible'), tiny: num(rep, 'Textes < 12px'),
+    inp: num(rep, 'Champs < 16px'), tap: num(rep, 'Boutons/liens petits'), ov: ovPx(rep) };
+  sumContrast += r.contrast; sumTap = Math.max(sumTap, r.tap); worstOv = Math.max(worstOv, r.ov);
+  rows.push(r);
+  for (const v of await runAxe(page)) {
+    const a = axeAgg[v.id] || (axeAgg[v.id] = { impact: v.impact, help: v.help, max: 0, states: new Set(), sample: v.sample });
+    a.max = Math.max(a.max, v.nodes); a.states.add(vp + ':' + label);
+  }
+  const c = await page.evaluate(pageChecks);
+  c.dup.forEach(d => dupIds.add(d)); imgNoAlt = Math.max(imgNoAlt, c.imgNoAlt);
+}
+
+for (const W of VIEWPORTS) {
+  const ctx = await browser.newContext({ viewport: { width: W, height: 900 }, isMobile: W < 768, hasTouch: W < 768, deviceScaleFactor: 1 });
+  await ctx.addInitScript(() => { try { localStorage.setItem('mathsgr2_welcome_seen', '1'); } catch (e) {} });
+  const page = await ctx.newPage();
+  page.on('pageerror', e => { if (!CDN_NOISE.test(e.message)) jsErrors.push(W + 'px ' + e.message); });
+  page.on('console', m => { if (m.type() === 'error' && !CDN_NOISE.test(m.text())) jsErrors.push(W + 'px ' + m.text()); });
+  await page.goto(INDEX, { waitUntil: 'load' });
+  await page.waitForFunction(() => typeof window.setSubject === 'function' && typeof window.gr2BuildReport === 'function', null, { timeout: 20000 });
+  if (HAS_AXE) { try { await page.addScriptTag({ path: AXE_PATH }); } catch (e) { console.error('⚠️ axe non injecté:', e.message); } }
+
+  for (const s of SUBJECTS) {
+    await page.evaluate(k => window.setSubject(k), s);
+    for (const sec of SECTIONS) {
+      await page.evaluate(id => { try { window.showSection(id); } catch (e) {} }, sec);
+      await audit(page, W, s + '/' + sec);
     }
   }
+  // écrans interactifs (sur maths)
+  await page.evaluate(() => window.setSubject('maths'));
+  for (const sec of APP_SECTIONS) {
+    await page.evaluate(id => { try { window.showSection(id); } catch (e) {} }, sec);
+    await audit(page, W, 'app/' + sec);
+  }
+  await page.close();
 }
 
+// ---------- Rapport ----------
 const pad = (v, n) => String(v).padEnd(n);
-console.log('\n  AUDIT GR2 — viewport ' + WIDTH + 'px   (contraste / <12px / <16px / tap<40 / déb. / err)');
-console.log('  ' + '─'.repeat(72));
-let curr = '';
-for (const r of rows) {
-  if (r.s !== curr) { curr = r.s; console.log('  ' + r.s.toUpperCase()); }
-  const flags = [r.contrast && '⚠️contraste', r.ov > 2 && '⚠️débord', r.errs && '❌err'].filter(Boolean).join(' ');
-  console.log('   ' + pad(r.sec, 11) + pad(r.contrast, 4) + pad(r.tiny, 5) + pad(r.inp, 5) + pad(r.tap, 6) + pad(r.ov, 5) + pad(r.errs, 4) + flags);
+for (const W of VIEWPORTS) {
+  console.log('\n  AUDIT GR2 — ' + W + 'px   (contraste / <12px / <16px / tap<40 / déb.)');
+  console.log('  ' + '─'.repeat(72));
+  for (const r of rows.filter(x => x.vp === W)) {
+    const flags = [r.contrast && '⚠️contraste', r.ov > 2 && '⚠️débord'].filter(Boolean).join(' ');
+    console.log('   ' + pad(r.label, 22) + pad(r.contrast, 4) + pad(r.tiny, 5) + pad(r.inp, 5) + pad(r.tap, 6) + pad(r.ov, 5) + flags);
+  }
 }
-console.log('  ' + '─'.repeat(72));
-console.log('  TOTAUX : contraste=' + sumContrast + ' · pire tap<40=' + sumTap + ' · pire débord=' + worstOv + 'px · erreurs JS=' + jsErrors.length);
-if (jsErrors.length) jsErrors.slice(0, 12).forEach(e => console.log('    ' + e));
+console.log('\n  ' + '═'.repeat(72));
+console.log('  TOTAUX : contraste(Diagnostic)=' + sumContrast + ' · pire tap<40=' + sumTap + ' · pire débord=' + worstOv + 'px');
+console.log('  Erreurs JS réelles=' + jsErrors.length + ' · ids en double=' + dupIds.size + ' · images sans alt=' + imgNoAlt);
+if (jsErrors.length) jsErrors.slice(0, 10).forEach(e => console.log('    ❌ ' + e));
+if (dupIds.size) console.log('    ⚠️ ids dupliqués : ' + [...dupIds].slice(0, 15).join(', '));
 
-// ---- Résumé axe-core ----
 const RANK = { critical: 0, serious: 1, moderate: 2, minor: 3 };
 const axeIds = Object.keys(axeAgg).sort((a, b) => (RANK[axeAgg[a].impact] ?? 9) - (RANK[axeAgg[b].impact] ?? 9));
-console.log('\n  AXE-CORE (accessibilité/WCAG) : ' + (HAS_AXE ? (axeIds.length + ' type(s) de violation') : 'non disponible (axe.min.js absent)'));
+console.log('\n  AXE-CORE (accessibilité/WCAG) : ' + (HAS_AXE ? (axeIds.length + ' type(s)') : 'non disponible'));
 for (const id of axeIds) {
   const a = axeAgg[id];
   console.log('   [' + (a.impact || '?').toUpperCase() + '] ' + id + ' — ' + a.help + ' (≤' + a.max + ' él., ' + a.states.size + ' états) · ex: ' + a.sample);
 }
 const axeCritical = axeIds.filter(id => axeAgg[id].impact === 'critical');
 
-console.log('\n  Note : ~5 textes <12px et ~30 cibles <40px sont une BASE connue (éléments compacts volontaires :');
-console.log('         barre de nav, palette de dessin, cases natives). Ne corriger que ce qui DÉPASSE cette base.');
-
-const fail = jsErrors.length > 0 || sumContrast > 0 || worstOv > 2 || axeCritical.length > 0;
+console.log('\n  Note : ~5 textes <12px et ~30 cibles <40px = BASE connue (éléments compacts volontaires).');
+const fail = jsErrors.length > 0 || sumContrast > 0 || worstOv > 2 || dupIds.size > 0 || axeCritical.length > 0;
 console.log('\n  ' + (fail
-  ? '❌ RÉGRESSION — à corriger (contraste / débordement / erreur JS / axe critique : ' + (axeCritical.join(', ') || 'aucune') + ')'
-  : '✅ OK — 0 contraste faible, 0 débordement, 0 erreur JS, 0 violation axe critique') + '\n');
+  ? '❌ RÉGRESSION — à corriger (JS / contraste / débordement / id double / axe critique : ' + (axeCritical.join(', ') || 'aucune') + ')'
+  : '✅ OK — 0 erreur JS, 0 contraste faible, 0 débordement, 0 id double, 0 axe critique') + '\n');
 await browser.close();
 process.exit(fail ? 1 : 0);
