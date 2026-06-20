@@ -41,6 +41,7 @@
       chapOrder:  (typeof CHAP_ORDER !== 'undefined') ? CHAP_ORDER : [],
       chapLabels: (typeof CHAP_LABELS !== 'undefined') ? CHAP_LABELS : {}
     };
+    mathsSnapshot.coursAuto = true;
     window.SUBJECTS.maths.content = mathsSnapshot;
   }
 
@@ -90,6 +91,8 @@
       if (el && el.innerHTML && el.innerHTML.trim()) html += '<div class="cours-bloc">' + el.innerHTML + '</div>';
     });
     coursSec.innerHTML = html;
+    // Re-rendre les formules MathJax copiées (utile surtout pour les maths/chimie)
+    try { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([coursSec]); } catch (_) {}
   }
 
   // Personnalisation des onglets par matière : renommer + ajouter des onglets bonus.
@@ -122,7 +125,9 @@
       }
     }
     // Onglet « Cours complet » : affiché si la matière a un cours rédigé (sections.cours)
-    // OU si elle demande l'auto-assemblage (content.coursAuto).
+    // OU si elle demande l'auto-assemblage (content.coursAuto). L'auto-assemblage est
+    // construit « paresseusement » (à l'ouverture de l'onglet) pour ne pas ralentir le
+    // démarrage — important pour les maths (beaucoup de formules MathJax).
     var coursBtn = document.getElementById('nav-cours');
     var coursSec = document.getElementById('cours');
     var hasCustom = !!(content && content.sections && content.sections.cours);
@@ -130,9 +135,22 @@
     var hasCours = hasCustom || auto;
     if (coursBtn) coursBtn.style.display = hasCours ? '' : 'none';
     if (coursSec) {
-      if (!hasCours) coursSec.innerHTML = '';
-      else if (auto && !hasCustom) buildAutoCours(coursSec);
+      if (auto && !hasCustom) { coursSec.dataset.coursAuto = '1'; coursSec.innerHTML = ''; }
+      else { delete coursSec.dataset.coursAuto; if (!hasCours) coursSec.innerHTML = ''; }
     }
+  }
+
+  // Construction paresseuse : on assemble le cours auto seulement à l'ouverture de l'onglet.
+  if (typeof window.showSection === 'function') {
+    var _origShowSection = window.showSection;
+    window.showSection = function (a, bb) {
+      var id = (typeof a === 'string') ? a : bb;
+      if (id === 'cours') {
+        var sec = document.getElementById('cours');
+        if (sec && sec.dataset && sec.dataset.coursAuto === '1') buildAutoCours(sec);
+      }
+      return _origShowSection.apply(this, arguments);
+    };
   }
 
   function applyContent(c) {
