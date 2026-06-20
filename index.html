@@ -85,8 +85,6 @@
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Ouvrir le menu de navigation">☰</button>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <canvas id="particle-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;pointer-events:none;z-index:0;opacity:0.6;display:none;"></canvas>
-<h2 class="sr-only">GR2 Study — Application d'étude multi-matières (Maths, Chimie, Bio…)</h2>
-
 <button class="settings-toggle" onclick="toggleSettings()" aria-label="Ouvrir les paramètres">⚙️</button>
 
 <div class="settings-panel" id="settings-panel" style="width:320px; max-height:90vh; overflow-y:auto;">
@@ -277,12 +275,13 @@
     </svg>
     <h1 style="font-size:28px; font-weight:800; background:linear-gradient(135deg, var(--color-cercle), var(--color-nav), var(--color-parabole)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0;">GR2 Study</h1>
   </div>
+  <h2 class="sr-only">GR2 Study — Application d'étude multi-matières (Maths, Chimie, Bio…)</h2>
   <p id="app-subtitle" style="font-size:13px; color:var(--text-secondary);">Maths — Géométrie analytique plane · Vecteurs · Cercle · Droites</p>
   <p id="app-validated" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
   <button id="exam-chip" type="button" onclick="showSection('profil')" title="Voir mon planning d'examens" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.4); color:#fbbf24; font-size:12px; font-weight:700; cursor:pointer;"></button>
 </div>
 <button id="subj-fold" class="subj-fold" onclick="toggleSubjectBar()" aria-expanded="false" aria-controls="subject-bar">📚 Matière ▾</button>
-<div id="subject-bar" class="subject-bar" role="group" aria-label="Choisir une matière">
+<div id="subject-bar" class="subject-bar" role="navigation" aria-label="Choisir une matière">
   <button class="subj-btn on" data-subj="maths" onclick="setSubject('maths')">📐 Maths</button>
   <button class="subj-btn" data-subj="francais" onclick="setSubject('francais')">✍️ Français</button>
   <button class="subj-btn" data-subj="anglais" onclick="setSubject('anglais')">🇬🇧 Anglais</button>
@@ -426,7 +425,7 @@
     <p id="flashcard-due-count" style="font-weight:600; margin-bottom:0.5rem;">🔔 — à réviser aujourd'hui</p>
     <div id="flashcard-stats"></div>
     <p id="flashcard-interval" style="color:var(--text-secondary); margin-bottom:1rem;">Prochain rappel : 1 jour</p>
-    <p style="text-align:center; font-size:11px; color:var(--text-secondary); opacity:0.55; margin-bottom:0.5rem;">
+    <p style="text-align:center; font-size:12px; color:var(--text-secondary); opacity:0.9; margin-bottom:0.5rem;">
       ␣/↵ Retourner &nbsp;·&nbsp; ← Difficile &nbsp;·&nbsp; → Facile
     </p>
     <div id="flashcard-controls" style="display:none; gap:10px; justify-content:center;">

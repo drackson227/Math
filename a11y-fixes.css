@@ -69,9 +69,10 @@ body:not(.theme-light) .tag-cercle { color: #93c5fd !important; }
 body:not(.theme-light) .tag-droite { color: #fcd34d !important; }
 body:not(.theme-light) .tag-parabole { color: #6ee7b7 !important; }
 body:not(.theme-light) .tag-vecteur { color: #c4b5fd !important; }
-/* libellés de l'éditeur de quiz (Mes créations) */
+/* libellés et textes d'aide de l'éditeur de quiz (Mes créations) */
 #cre-pane-quiz label,
-#cre-pane-quiz label span { color: #b6c2d4 !important; opacity: 1 !important; }
+#cre-pane-quiz label span,
+#cre-pane-quiz p { color: #b6c2d4 !important; opacity: 1 !important; }
 
 /* ---------- 3. Cibles tactiles : minimum confortable au doigt ---------- */
 .nav-btn,
