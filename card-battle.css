@@ -270,8 +270,8 @@ body.arene-on #cb-cosmos { display: block; }
 @keyframes cb-cine { from { opacity: 0; } to { opacity: 1; } }
 .cb-arena-field.cb-zoom { animation: cb-zoom 1.3s ease; }
 @keyframes cb-zoom { 0% { transform: scale(1); } 18% { transform: scale(1.06); } 80% { transform: scale(1.06); } 100% { transform: scale(1); } }
-.cb-stage.cb-quake { animation: cb-quake .5s ease; }
-@keyframes cb-quake { 0%, 100% { transform: translate(0,0); } 20% { transform: translate(-6px,3px); } 40% { transform: translate(5px,-3px); } 60% { transform: translate(-4px,2px); } 80% { transform: translate(3px,-2px); } }
+.cb-stage.cb-quake { animation: cb-quake .55s ease; }
+@keyframes cb-quake { 0% { transform: scale(1.13) translate(0,0); } 20% { transform: scale(1.09) translate(-7px,4px); } 40% { transform: scale(1.06) translate(6px,-4px); } 60% { transform: scale(1.03) translate(-4px,2px); } 80% { transform: scale(1.01) translate(3px,-2px); } 100% { transform: scale(1) translate(0,0); } }
 /* l'attaquant grossit + aura de type pendant l'incantation */
 .cb-fighter.cb-cast { z-index: 5; animation: cb-cast .9s ease; }
 .cb-fighter.cb-cast::before { content: ''; position: absolute; inset: -6px; border-radius: 22px; z-index: -1;
@@ -336,6 +336,29 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-fighter.cb-hphit .cb-hpbar { animation: cb-hpflash .32s ease; }
 @keyframes cb-hpflash { 0%, 100% { box-shadow: none; } 45% { box-shadow: 0 0 0 2px rgba(248,113,113,.8), 0 0 14px rgba(248,113,113,.6); } }
 
+/* aura pulsée derrière les cartes 5★ (Légendaire/Mythique) de la collection */
+.cb-cell.cb-r-leg, .cb-cell.cb-r-myth { animation: cb-cardaura 2.6s ease-in-out infinite; }
+@keyframes cb-cardaura { 0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 0 14px -5px var(--rc); } 50% { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 0 30px -1px var(--rc); } }
+
+/* accueil de l'Arène (bannière + équipe en cartes) */
+.cb-hero { position: relative; text-align: center; border-radius: 16px; padding: 16px 12px; margin-bottom: 12px; overflow: hidden;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--g-vio) 30%, rgba(20,14,40,.7)), rgba(12,9,24,.6)); border: 1px solid var(--g-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
+.cb-hero::before { content: ''; position: absolute; inset: -20%; background: repeating-conic-gradient(from 0deg, rgba(168,85,247,.12) 0 6deg, transparent 6deg 20deg); -webkit-mask: radial-gradient(circle, #000, transparent 70%); mask: radial-gradient(circle, #000, transparent 70%); animation: cb-spin 26s linear infinite; }
+.cb-hero-label { position: relative; font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--g-cyan); text-shadow: 0 0 10px var(--g-cyan); }
+.cb-hero-stage { position: relative; font-size: 30px; font-weight: 900; color: #fff; text-shadow: 0 0 18px var(--g-vio); line-height: 1.1; }
+.cb-hero-rec { position: relative; font-size: 13px; color: var(--g-tx2); font-weight: 700; margin-top: 2px; }
+.cb-cyc-wrap { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; margin: 4px 0; }
+.cb-cyc-arrow { color: var(--g-tx2); font-weight: 900; margin: 0 1px; }
+.cb-teamttl { text-align: center; margin: 8px 0 6px; font-weight: 800; color: var(--g-tx); }
+.cb-tcards { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+.cb-tcard { position: relative; width: 94px; border-radius: 13px; padding: 10px 6px 8px; text-align: center; overflow: hidden;
+  border: 1px solid var(--g-line); border-top: 2px solid var(--rc); background: linear-gradient(180deg, color-mix(in srgb, var(--rc) 14%, rgba(18,12,36,.85)), rgba(12,9,24,.9)); box-shadow: inset 0 0 22px -12px var(--tc); }
+.cb-tcard .cb-emoji { font-size: 38px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); }
+.cb-tname { display: block; font-size: 11px; font-weight: 800; color: #fff; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cb-tcard .cb-stars { display: block; font-size: 11px; }
+.cb-fightbtn { display: block; width: 100%; font-size: 15px; }
+.cb-reveal-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 560px) {
   .cb-tabs { width: 100%; justify-content: center; }
@@ -346,6 +369,6 @@ body.arene-on #cb-cosmos { display: block; }
 @media (prefers-reduced-motion: reduce) {
   #cb-cosmos::before, #cb-cosmos::after, .cb-ring, .cb-core, .cb-halo, .cb-rays, .cb-foil, .cb-fighter .cb-emoji,
   .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div, .cb-tab.on,
-  .cb-reveal-orb, .cb-reveal-rays, .cb-rcard { animation: none !important; }
+  .cb-reveal-orb, .cb-reveal-rays, .cb-rcard, .cb-cell.cb-r-leg, .cb-cell.cb-r-myth, .cb-hero::before { animation: none !important; }
   .cb-pcard, .cb-rcard { transform: none !important; opacity: 1 !important; }
 }

@@ -236,6 +236,7 @@
   };
   CB.go = function (v) { G.view = v; save(); render(); };
   CB.closeReveal = function () { var ov = document.querySelector('.cb-reveal'); if (ov) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 240); } render(); };
+  CB.again = function (n) { CB.closeReveal(); setTimeout(function () { CB.pull(n); }, 280); }; // refaire un tirage depuis l'écran de révélation
 
   /* ---------------- RENDU ---------------- */
   function toast(m) { if (typeof showToast === 'function') showToast(m, 'var(--color-nav)'); }
@@ -485,7 +486,7 @@
       }).join('');
       ov.innerHTML = '<div class="cb-reveal-head">' + (res.length > 1 ? '✨ ' + res.length + ' invocations !' : '✨ Invocation !') + '</div>' +
         '<div class="cb-reveal-cards">' + cards + '</div>' +
-        '<button class="cb-btn cb-btn-main cb-reveal-skip" onclick="CB.closeReveal()">Continuer ▶</button>';
+        '<div class="cb-reveal-btns"><button class="cb-btn" onclick="CB.again(10)">🎟️ Refaire ×10</button><button class="cb-btn cb-btn-main" onclick="CB.closeReveal()">Continuer ▶</button></div>';
       if (best >= 2) cbConfetti(best >= 4 ? 150 : best >= 3 ? 95 : 55, [bc, '#ffffff', '#fde047']);
       if (best >= 3) playLottie(ov, 'summon', (window.innerWidth / 2), (window.innerHeight * 0.4), 380);
     }, 720);
@@ -502,10 +503,10 @@
     }
     var grid = CREATURES.map(function (c) {
       var o = G.owned[c.id];
-      if (!o) return '<div class="cb-cell locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + pwin(c) + '<div class="cb-cplate"><div class="cb-clk">❓ ???</div><div class="cb-stars">' + starStr(RAR[c.r].st) + '</div></div></div>';
+      if (!o) return '<div class="cb-cell cb-r-' + c.r + ' locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + pwin(c) + '<div class="cb-cplate"><div class="cb-clk">❓ ???</div><div class="cb-stars">' + starStr(RAR[c.r].st) + '</div></div></div>';
       var inTeam = G.team.indexOf(c.id) >= 0;
       var s = stats(c.id, o.lvl);
-      return '<div class="cb-cell" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' +
+      return '<div class="cb-cell cb-r-' + c.r + '" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' +
         pwin(c) +
         '<div class="cb-cplate">' +
           '<div class="cb-cname">' + esc(c.n) + '</div>' +
@@ -526,16 +527,23 @@
 
   function viewArena() {
     var ids = teamIds();
-    var team = ids.map(function (id) { return '<span class="cb-atok">' + BYID[id].e + ' ' + esc(BYID[id].n) + '</span>'; }).join('');
-    var cyc = TYPES.map(function (t) { return tag(t); }).join('<span class="cb-mut" style="margin:0 2px;">›</span>');
+    var team = ids.length ? ids.map(function (id) {
+      var c = BYID[id];
+      return '<div class="cb-tcard" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '"><span class="cb-emoji">' + c.e + '</span><span class="cb-tname">' + esc(c.n) + '</span><span class="cb-stars">' + starStr(RAR[c.r].st) + '</span></div>';
+    }).join('') : '<span class="cb-mut">Aucune équipe — va dans 📒 Collection pour en composer une.</span>';
+    var cyc = TYPES.map(function (t) { return tag(t); }).join('<span class="cb-cyc-arrow">›</span>');
     return head() +
       '<div class="cb-panel cb-arena">' +
-        '<h3 class="cb-h" style="justify-content:center;">⚔️ Arène — étage ' + G.stage + '</h3>' +
-        '<p class="cb-mut">🏆 Record : étage ' + G.bestStage + '</p>' +
-        '<div class="cb-cycle">' + cyc + '</div>' +
-        '<p class="cb-mut">↑ chaque type bat le suivant (super efficace ×1.5)</p>' +
-        '<div class="cb-myteam">' + (team || '<span class="cb-mut">Aucune équipe — va dans 📒 Collection.</span>') + '</div>' +
-        '<button class="cb-btn cb-btn-main" onclick="CB.fight()">⚔️ Combattre l’étage ' + G.stage + '</button>' +
+        '<div class="cb-hero">' +
+          '<div class="cb-hero-label">⚔ ARÈNE ⚔</div>' +
+          '<div class="cb-hero-stage">Étage ' + G.stage + '</div>' +
+          '<div class="cb-hero-rec">🏆 Record : étage ' + G.bestStage + '</div>' +
+        '</div>' +
+        '<div class="cb-cyc-wrap"><span class="cb-mut">Avantages :</span><div class="cb-cycle">' + cyc + '</div></div>' +
+        '<div class="cb-mut" style="text-align:center;margin:2px 0 10px;">chaque type bat le suivant (super efficace ×1.5)</div>' +
+        '<div class="cb-teamttl">Ton équipe</div>' +
+        '<div class="cb-tcards">' + team + '</div>' +
+        '<button class="cb-btn cb-btn-main cb-fightbtn" onclick="CB.fight()">⚔️ Combattre — étage ' + G.stage + '</button>' +
       '</div>';
   }
 
