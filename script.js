@@ -2311,30 +2311,56 @@ function geoPick(i) {
   var panel = document.getElementById('bemap-panel');
   if (panel) panel.innerHTML = '<strong style="font-size:16px;">' + (i + 1) + '. ' + p.n + '</strong><br>Région : <strong>' + p.r + '</strong> · Chef-lieu : <strong>' + p.c + '</strong>';
 }
+// Quiz carte = TOUR COMPLET des 11 provinces (révision active), avec score, série et record.
 function geoMapQuiz() {
   var ps = window.BE_PROVINCES; if (!ps || !ps.length) return;
-  var i = Math.floor(Math.random() * ps.length);
-  window._geoQuiz = i;
+  var order = ps.map(function (_, i) { return i; });
+  for (var a = order.length - 1; a > 0; a--) { var b = Math.floor(Math.random() * (a + 1)); var tmp = order[a]; order[a] = order[b]; order[b] = tmp; }
+  var best = (loadSavedData().geoMapBest) || 0;
+  window._geoQ = { queue: order, pos: 0, score: 0, streak: 0, best: best };
+  geoMapAsk();
+}
+function geoScoreHtml(st) { return ' <span class="bemap-score">✅ ' + st.score + ' · 🔥 ' + st.streak + '</span>'; }
+function geoMapAsk() {
+  var st = window._geoQ; if (!st) return;
+  var ps = window.BE_PROVINCES;
+  if (st.pos >= st.queue.length) { geoMapDone(); return; }
+  var i = st.queue[st.pos]; window._geoQuiz = i;
   var p = ps[i];
   var hasChef = p.c && /^[A-ZÉ]/.test(p.c) && p.c.indexOf('commune') < 0;
   var byChef = hasChef && Math.random() < 0.5;
   var q = byChef ? 'Clique sur la province dont le chef-lieu est <strong>' + p.c + '</strong>' : 'Clique sur : <strong>' + p.n + '</strong>';
-  var el = document.getElementById('bemap-quiz'); if (el) el.innerHTML = '🎯 ' + q;
+  var el = document.getElementById('bemap-quiz');
+  if (el) el.innerHTML = '<span class="bemap-prog">' + (st.pos + 1) + '/' + st.queue.length + '</span> 🎯 ' + q + geoScoreHtml(st);
   document.querySelectorAll('#bemap .bemap-dot').forEach(function (d) { d.classList.remove('sel', 'ok', 'no'); });
-  var panel = document.getElementById('bemap-panel'); if (panel) panel.innerHTML = '🎯 <strong>Quiz carte</strong> en cours — clique la bonne pastille !';
+  var panel = document.getElementById('bemap-panel'); if (panel) panel.innerHTML = '🎯 <strong>Quiz carte</strong> — clique la bonne pastille !';
 }
 function geoMapCheck(i) {
-  var t = window._geoQuiz; var ps = window.BE_PROVINCES;
+  var st = window._geoQ, t = window._geoQuiz, ps = window.BE_PROVINCES;
+  if (t == null || !st) return;
   var dots = document.querySelectorAll('#bemap .bemap-dot');
   var good = (i === t);
   if (dots[i]) dots[i].classList.add(good ? 'ok' : 'no');
   if (!good && dots[t]) dots[t].classList.add('ok');
-  var el = document.getElementById('bemap-quiz');
-  if (el) el.innerHTML = good
-    ? '✅ Bravo ! <strong>' + ps[t].n + '</strong> (chef-lieu : ' + ps[t].c + ')'
-    : '❌ C\'était <strong>' + ps[t].n + '</strong>. <button type="button" class="step-btn" onclick="geoMapQuiz()">↻ Rejouer</button>';
+  if (good) { st.score++; st.streak++; } else { st.streak = 0; }
   window._geoQuiz = null;
-  if (good) { if (typeof showToast === 'function') showToast('✅ Bien joué !', 'var(--color-parabole)'); setTimeout(geoMapQuiz, 1200); }
+  var fb = good ? '✅ Bravo ! <strong>' + ps[t].n + '</strong> (chef-lieu : ' + ps[t].c + ')'
+                : '❌ C\'était <strong>' + ps[t].n + '</strong> (chef-lieu : ' + ps[t].c + ')';
+  var el = document.getElementById('bemap-quiz');
+  if (el) el.innerHTML = '<span class="bemap-prog">' + (st.pos + 1) + '/' + st.queue.length + '</span> ' + fb + geoScoreHtml(st);
+  st.pos++;
+  if (good && typeof showToast === 'function') showToast('✅ Bien joué !', 'var(--color-parabole)');
+  setTimeout(geoMapAsk, 1150);
+}
+function geoMapDone() {
+  var st = window._geoQ; if (!st) return;
+  var n = st.queue.length, record = st.best;
+  if (st.score > record) { var d = loadSavedData(); d.geoMapBest = st.score; saveData(d); record = st.score; }
+  var el = document.getElementById('bemap-quiz');
+  if (el) el.innerHTML = '🏁 <strong>Score : ' + st.score + '/' + n + '</strong>' + (st.score >= n ? ' 🏆 sans-faute !' : ' · record : ' + record + '/' + n) + ' <button type="button" class="step-btn" onclick="geoMapQuiz()">↻ Rejouer</button>';
+  var panel = document.getElementById('bemap-panel');
+  if (panel) panel.innerHTML = st.score >= n ? '🎉 Parfait ! Tu connais tes 11 provinces et leurs chefs-lieux.' : '👍 Recommence pour viser le sans-faute (11/11).';
+  window._geoQ = null; window._geoQuiz = null;
 }
 
 // Planning d'examen : enregistre/efface une date d'examen par matière
