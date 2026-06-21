@@ -20,12 +20,13 @@
   };
   // Raretés : poids de tirage (somme 100) + multiplicateur de stats.
   // c = couleur vive (cadre/lueur) ; t = couleur de TEXTE éclaircie (lisible AA sur fond sombre).
+  // Drop RELEVÉ (mythique vraiment rare) : Légendaire ≈ 1/59, Mythique ≈ 1/333. st = nb d'étoiles.
   var RAR = {
-    commun: { n: 'Commun',     c: '#9ca3af', t: '#cbd5e1', w: 60,  m: 1.00, s: '⚪' },
-    rare:   { n: 'Rare',       c: '#3b82f6', t: '#7cb0ff', w: 27,  m: 1.28, s: '🔵' },
-    epic:   { n: 'Épique',     c: '#a855f7', t: '#cd9bff', w: 9,   m: 1.62, s: '🟣' },
-    leg:    { n: 'Légendaire', c: '#f59e0b', t: '#fbbf24', w: 3.4, m: 2.10, s: '🟡' },
-    myth:   { n: 'Mythique',   c: '#ec4899', t: '#f9a8d4', w: 0.6, m: 2.85, s: '🌈' }
+    commun: { n: 'Commun',     c: '#9ca3af', t: '#cbd5e1', w: 70,  m: 1.00, s: '⚪', st: 1 },
+    rare:   { n: 'Rare',       c: '#3b82f6', t: '#7cb0ff', w: 22,  m: 1.30, s: '🔵', st: 2 },
+    epic:   { n: 'Épique',     c: '#a855f7', t: '#cd9bff', w: 6,   m: 1.65, s: '🟣', st: 3 },
+    leg:    { n: 'Légendaire', c: '#f59e0b', t: '#fbbf24', w: 1.7, m: 2.15, s: '🟡', st: 4 },
+    myth:   { n: 'Mythique',   c: '#ec4899', t: '#f9a8d4', w: 0.3, m: 3.00, s: '🌈', st: 5 }
   };
   var RAR_ORDER = ['commun', 'rare', 'epic', 'leg', 'myth'];
 
@@ -87,8 +88,19 @@
   function beats(a, b) { return TYPES[(TYPES.indexOf(a) + 1) % 5] === b; }
   function typeMult(att, def) { if (beats(att, def)) return 1.5; if (beats(def, att)) return 0.67; return 1; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-  // portrait = halo de type (lueur colorée) derrière la créature ; le conteneur parent porte --tc/--rc.
-  function portrait(cr, sizeCls) { return '<div class="cb-port"><span class="cb-halo"></span><span class="' + sizeCls + '">' + cr.e + '</span></div>'; }
+  // étoiles de rareté (1→5)
+  function starStr(n) { var s = ''; for (var i = 0; i < n; i++) s += '★'; return s; }
+  // fenêtre d'art d'une carte : god-rays + reflet holo + halo de type + créature + badge de type en coin.
+  // Le conteneur parent porte --tc (couleur type) et --rc (couleur rareté).
+  function pwin(c) {
+    return '<div class="cb-pwin">' +
+      '<span class="cb-rays"></span><span class="cb-foil"></span><span class="cb-halo"></span>' +
+      '<span class="cb-emoji">' + c.e + '</span>' +
+      '<span class="cb-ptype cb-t-' + c.t + '" title="' + TM[c.t].n + '">' + TM[c.t].e + '</span>' +
+      '</div>';
+  }
+  // portrait simple (combattants) : halo + créature
+  function portrait(c) { return '<div class="cb-fport"><span class="cb-halo"></span><span class="cb-emoji">' + c.e + '</span></div>'; }
   // crée le fond cosmique fixe une seule fois
   function ensureCosmos() { if (document.getElementById('cb-cosmos')) return; var d = document.createElement('div'); d.id = 'cb-cosmos'; d.setAttribute('aria-hidden', 'true'); document.body.appendChild(d); }
 
@@ -160,20 +172,21 @@
     B.busy = true;
     var adv = typeMult(me.cr.t, foe.cr.t);
     var dmg = hit(me, foe, special);
-    cbHitFx('foe', dmg, special || adv > 1);
-    setTimeout(function () {
+    playAttack(me, foe, 'me', special, dmg, function () { // à l'impact : appliquer les dégâts + log (sans re-render)
       foe.hp = Math.max(0, foe.hp - dmg);
       me.charge = special ? 0 : Math.min(3, me.charge + 1);
-      B.log.push((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      pushLog((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      setHp('foe', foe);
+    }, function () { // fin de séquence
       if (foe.hp <= 0) {
-        B.log.push('💥 ' + foe.cr.n + ' adverse est K.O. !');
+        pushLog('💥 ' + foe.cr.n + ' adverse est K.O. !');
         var ni = alive(B.enemy, B.ei + 1);
         if (ni < 0) { renderBattle(); return endBattle(true); }
         B.ei = ni;
       }
       renderBattle();
-      setTimeout(enemyTurn, 720);
-    }, 460);
+      setTimeout(enemyTurn, 520);
+    });
   };
   function enemyTurn() {
     if (!B || B.over) return;
@@ -181,19 +194,20 @@
     var sp = foe.charge >= 3 && Math.random() < 0.5;
     var adv = typeMult(foe.cr.t, me.cr.t);
     var dmg = hit(foe, me, sp);
-    cbHitFx('me', dmg, sp || adv > 1);
-    setTimeout(function () {
+    playAttack(foe, me, 'foe', sp, dmg, function () {
       me.hp = Math.max(0, me.hp - dmg);
       foe.charge = sp ? 0 : Math.min(3, foe.charge + 1);
-      B.log.push((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      pushLog((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      setHp('me', me);
+    }, function () {
       if (me.hp <= 0) {
-        B.log.push('💀 Ton ' + me.cr.n + ' est K.O. !');
+        pushLog('💀 Ton ' + me.cr.n + ' est K.O. !');
         var ni = alive(B.team, B.ti + 1);
         if (ni < 0) { B.busy = false; renderBattle(); return endBattle(false); }
         B.ti = ni;
       }
       B.busy = false; renderBattle();
-    }, 460);
+    });
   }
   function endBattle(win) {
     B.over = true; B.win = win; B.busy = false;
@@ -246,12 +260,130 @@
     el.appendChild(f);
     setTimeout(function () { f.remove(); }, 900);
   }
-  // impact : l'attaquant fonce, la cible tremble + flash + dégâts qui montent
-  function cbHitFx(targetSide, dmg, big) {
-    var tgt = document.querySelector('#arene .cb-fighter.' + targetSide);
-    var atk = document.querySelector('#arene .cb-fighter.' + (targetSide === 'foe' ? 'me' : 'foe'));
-    if (atk) { var lc = targetSide === 'foe' ? 'cb-lunge-r' : 'cb-lunge-l'; atk.classList.add(lc); setTimeout(function () { atk.classList.remove(lc); }, 440); }
-    if (tgt) { var hc = big ? 'cb-hurt-big' : 'cb-hurt'; tgt.classList.add(hc); setTimeout(function () { tgt.classList.remove(hc); }, 560); cbFloat(tgt, '-' + dmg, big ? 'crit' : ''); }
+  /* ---------------- MOTEUR D'EFFETS DE COMBAT ---------------- */
+  // attaque SIGNATURE par animal (chaque créature joue son effet)
+  var FXMAP = {
+    renard: 'slash', lapin: 'stomp', herisson: 'slash', serpent: 'venom',
+    canard: 'dive', chouette: 'dive', tortue: 'water', crabe: 'water',
+    loup: 'slash', ours: 'slash', panthere: 'slash', aigle: 'dive', perroquet: 'dive',
+    requin: 'water', pieuvre: 'water',
+    mammouth: 'stomp', dodo: 'dive', smilodon: 'slash', rhino: 'stomp', paresseux: 'slash',
+    trex: 'chomp', triceratops: 'stomp', spino: 'water', megalodon: 'water',
+    dragon: 'fire', licorne: 'beam', kraken: 'water', golem: 'stomp'
+  };
+  var FXC = { fire: '#fb923c', water: '#38bdf8', venom: '#a3e635', dive: '#e2e8f0', slash: '#ffffff', stomp: '#fbbf24', chomp: '#ffffff', beam: '#c4b5fd' };
+  function prefersReduced() { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
+  function mkFx(stage, cls) { var e = document.createElement('div'); e.className = cls; stage.appendChild(e); return e; }
+  function ctr(el) { return { x: el.offsetLeft + el.offsetWidth / 2, y: el.offsetTop + el.offsetHeight * 0.42 }; }
+  // projectile qui vole de l'attaquant vers la cible
+  function travelFx(el, a, b, dur) {
+    el.style.left = a.x + 'px'; el.style.top = a.y + 'px';
+    var an = el.animate([
+      { transform: 'translate(-50%,-50%) scale(.5)', opacity: 0 },
+      { transform: 'translate(-50%,-50%) scale(1.05)', opacity: 1, offset: .16 },
+      { transform: 'translate(calc(-50% + ' + (b.x - a.x) + 'px), calc(-50% + ' + (b.y - a.y) + 'px)) scale(1)', opacity: 1, offset: .82 },
+      { transform: 'translate(calc(-50% + ' + (b.x - a.x) + 'px), calc(-50% + ' + (b.y - a.y) + 'px)) scale(1.4)', opacity: 0 }
+    ], { duration: dur, easing: 'cubic-bezier(.45,0,.7,1)' });
+    an.onfinish = function () { el.remove(); };
+  }
+  // gerbe d'étincelles à l'impact
+  function sparkBurst(stage, defEl, color, n) {
+    var c = ctr(defEl);
+    for (var i = 0; i < n; i++) {
+      var s = mkFx(stage, 'cb-spark'); s.style.setProperty('--fxc', color); s.style.left = c.x + 'px'; s.style.top = c.y + 'px';
+      var ang = Math.random() * Math.PI * 2, dist = 28 + Math.random() * 64;
+      var an = s.animate([
+        { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+        { transform: 'translate(calc(-50% + ' + (Math.cos(ang) * dist) + 'px), calc(-50% + ' + (Math.sin(ang) * dist) + 'px)) scale(.2)', opacity: 0 }
+      ], { duration: 460 + Math.random() * 240, easing: 'ease-out' });
+      an.onfinish = (function (el) { return function () { el.remove(); }; })(s);
+    }
+  }
+  // effet signature selon la catégorie d'attaque de l'animal
+  function signatureFx(stage, atkEl, defEl, side, key, tc) {
+    var a = ctr(atkEl), b = ctr(defEl), fxc = (key === 'beam' ? tc : (FXC[key] || tc));
+    if (key === 'fire' || key === 'water' || key === 'venom') {
+      var emo = key === 'fire' ? '🔥' : key === 'water' ? '🌊' : '☠️';
+      var p = mkFx(stage, 'cb-fx'); p.innerHTML = '<span class="cb-fx-emoji" style="--fxc:' + fxc + '">' + emo + '</span>';
+      travelFx(p, a, b, 560);
+      setTimeout(function () { sparkBurst(stage, defEl, fxc, 16); }, 520);
+    } else if (key === 'beam') {
+      var len = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+      var be = mkFx(stage, 'cb-beam'); be.style.setProperty('--fxc', fxc); be.style.left = a.x + 'px'; be.style.top = a.y + 'px'; be.style.width = len + 'px'; be.style.transform = 'rotate(' + ang + 'deg)';
+      setTimeout(function () { be.remove(); }, 520);
+      setTimeout(function () { sparkBurst(stage, defEl, fxc, 18); }, 250);
+    } else if (key === 'slash' || key === 'chomp') {
+      var c = ctr(defEl), tops = key === 'chomp' ? [-12, 12] : [-12, 0, 12];
+      tops.forEach(function (off, idx) {
+        setTimeout(function () { var cl = mkFx(stage, 'cb-claw'); cl.style.left = c.x + 'px'; cl.style.top = (c.y + off) + 'px'; setTimeout(function () { cl.remove(); }, 420); }, idx * 70);
+      });
+      setTimeout(function () { sparkBurst(stage, defEl, fxc, 14); }, 240);
+    } else if (key === 'dive') {
+      var dxp = b.x - a.x, dyp = b.y - a.y;
+      atkEl.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(' + (dxp * 0.7) + 'px,' + (dyp * 0.5) + 'px) rotate(' + (side === 'me' ? 14 : -14) + 'deg)', offset: .5 }, { transform: 'translate(0,0)' }], { duration: 560, easing: 'ease-in-out' });
+      var len2 = Math.hypot(b.x - a.x, b.y - a.y), ang2 = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+      var st = mkFx(stage, 'cb-beam'); st.style.setProperty('--fxc', fxc); st.style.height = '5px'; st.style.left = a.x + 'px'; st.style.top = a.y + 'px'; st.style.width = len2 + 'px'; st.style.transform = 'rotate(' + ang2 + 'deg)';
+      setTimeout(function () { st.remove(); }, 520);
+      setTimeout(function () { sparkBurst(stage, defEl, fxc, 12); }, 420);
+    } else { // stomp : l'attaquant charge puis onde de choc
+      var dxp2 = b.x - a.x;
+      atkEl.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(' + (dxp2 * 0.6) + 'px,0)', offset: .45 }, { transform: 'translate(' + (dxp2 * 0.6) + 'px,0)', offset: .55 }, { transform: 'translate(0,0)' }], { duration: 600, easing: 'cubic-bezier(.4,0,.2,1)' });
+      setTimeout(function () {
+        var sh = mkFx(stage, 'cb-shock'); sh.style.setProperty('--fxc', fxc); var c2 = ctr(defEl); sh.style.left = c2.x + 'px'; sh.style.top = (defEl.offsetTop + defEl.offsetHeight - 12) + 'px'; setTimeout(function () { sh.remove(); }, 520);
+        sparkBurst(stage, defEl, fxc, 14);
+      }, 330);
+    }
+  }
+  // bannière « nom de l'attaque » (style anime/Dokkan)
+  function bannerEl(stage, cr, tc) {
+    var d = document.createElement('div'); d.className = 'cb-movecard'; d.style.setProperty('--tc', tc);
+    d.innerHTML = esc(cr.mv) + '<small>' + TM[cr.t].e + ' ' + esc(cr.n) + '</small>';
+    stage.appendChild(d); return d;
+  }
+  // met à jour la barre de PV d'un combattant SANS re-render (pour ne pas couper l'animation)
+  function setHp(side, f) {
+    var el = document.querySelector('#arene .cb-fighter.' + side); if (!el) return;
+    var p = Math.max(0, Math.round(f.hp / f.max * 100));
+    var sp = el.querySelector('.cb-hpbar span'); if (sp) { sp.style.width = p + '%'; sp.style.background = f.hp > f.max * 0.3 ? 'linear-gradient(90deg,#16a34a,#4ade80)' : 'linear-gradient(90deg,#ef4444,#f87171)'; }
+    var t = el.querySelector('.cb-fhp'); if (t) t.textContent = f.hp + ' / ' + f.max;
+    if (f.hp <= 0) el.classList.add('ko');
+  }
+  function pushLog(s) {
+    if (!B) return; B.log.push(s);
+    var box = document.querySelector('#arene .cb-log'); if (!box) return;
+    var d = document.createElement('div'); d.innerHTML = s; box.appendChild(d);
+    while (box.children.length > 5) box.removeChild(box.firstChild);
+    box.scrollTop = box.scrollHeight;
+  }
+  // joue une attaque : onImpact (= appliquer les dégâts) puis onDone (= suite du tour)
+  function playAttack(me, foe, side, special, dmg, onImpact, onDone) {
+    var stage = document.querySelector('#arene .cb-stage');
+    var atkEl = document.querySelector('#arene .cb-fighter.' + side);
+    var defSide = side === 'me' ? 'foe' : 'me';
+    var defEl = document.querySelector('#arene .cb-fighter.' + defSide);
+    var key = FXMAP[me.cr.id] || 'slash', tc = TM[me.cr.t].c;
+    if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
+    var field = stage.querySelector('.cb-arena-field');
+    if (special) {
+      var cine = mkFx(stage, 'cb-cinema'); if (field) field.classList.add('cb-zoom');
+      atkEl.style.setProperty('--tc', tc); atkEl.classList.add('cb-cast');
+      var banner = bannerEl(stage, me.cr, tc);
+      setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, tc); }, 340);
+      setTimeout(function () {
+        if (onImpact) onImpact();
+        var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 320);
+        stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 500);
+        defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
+      }, 820);
+      setTimeout(function () { atkEl.classList.remove('cb-cast'); defEl.classList.remove('cb-hurt-big'); if (field) field.classList.remove('cb-zoom'); cine.remove(); banner.remove(); if (onDone) onDone(); }, 1320);
+    } else {
+      var lc = side === 'me' ? 'cb-lunge-r' : 'cb-lunge-l'; atkEl.classList.add(lc);
+      var a = ctr(atkEl), b = ctr(defEl), p = mkFx(stage, 'cb-fx');
+      p.innerHTML = '<span class="cb-fx-emoji" style="--fxc:' + tc + ';font-size:30px">' + TM[me.cr.t].e + '</span>';
+      travelFx(p, a, b, 360);
+      setTimeout(function () { if (onImpact) onImpact(); defEl.classList.add('cb-hurt'); sparkBurst(stage, defEl, tc, 8); cbFloat(defEl, '-' + dmg, ''); }, 360);
+      setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt'); if (onDone) onDone(); }, 640);
+    }
   }
   function bar(cur, max, col) {
     var p = Math.max(0, Math.round(cur / max * 100));
@@ -271,7 +403,7 @@
   }
 
   function viewSummon() {
-    var rates = RAR_ORDER.map(function (k) { return '<span class="cb-rate" style="color:' + RAR[k].t + '">' + RAR[k].s + ' ' + RAR[k].n + ' ' + RAR[k].w + '%</span>'; }).join('');
+    var rates = RAR_ORDER.map(function (k) { return '<span class="cb-rate" style="color:' + RAR[k].t + '"><span class="cb-stars">' + starStr(RAR[k].st) + '</span> ' + RAR[k].n + ' ' + RAR[k].w + '%</span>'; }).join('');
     return head() +
       '<div class="cb-panel cb-summon">' +
         '<h3 class="cb-h" style="justify-content:center;">🎴 Invocation</h3>' +
@@ -293,14 +425,19 @@
     var bc = RAR[RAR_ORDER[best]].c;
     var beams = ''; for (var bi = 0; bi < 7; bi++) { beams += '<i style="left:' + (15 + bi * 11) + '%; animation-delay:' + (bi * 0.05).toFixed(2) + 's"></i>'; }
     z.innerHTML = '<div class="cb-rng"><div class="cb-beams" style="--bc:' + bc + '">' + beams + '</div><div class="cb-burst" style="--bc:' + bc + '"></div></div>';
+    var panel = document.querySelector('#arene .cb-panel');
+    if (panel) { var fl = document.createElement('div'); fl.className = 'cb-flash'; fl.style.setProperty('--bc', bc); panel.appendChild(fl); setTimeout(function () { fl.remove(); }, 760); }
     setTimeout(function () {
       z.innerHTML = '<div class="cb-pulls">' + res.map(function (r, i) {
-        return '<div class="cb-pcard cb-r-' + r.c.r + '" style="--rc:' + RAR[r.c.r].c + '; --tc:' + TM[r.c.t].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
+        var rr = r.c.r, gold = (rr === 'leg' || rr === 'myth') ? ' goldname' : '';
+        return '<div class="cb-pcard cb-r-' + rr + '" style="--rc:' + RAR[rr].c + '; --tc:' + TM[r.c.t].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
           '<div class="cb-pshine"></div>' +
-          portrait(r.c, 'cb-pemoji') +
-          '<div class="cb-pname">' + esc(r.c.n) + '</div>' +
-          '<div class="cb-prar" style="color:' + RAR[r.c.r].t + '">' + RAR[r.c.r].s + ' ' + RAR[r.c.r].n + '</div>' +
-          (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
+          pwin(r.c) +
+          '<div class="cb-pplate">' +
+            '<div class="cb-pname' + gold + '">' + esc(r.c.n) + '</div>' +
+            '<div class="cb-stars">' + starStr(RAR[rr].st) + '</div>' +
+            (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
+          '</div>' +
           '</div>';
       }).join('') + '</div>';
       if (best >= 2) cbConfetti(best >= 4 ? 130 : best >= 3 ? 80 : 50, [RAR[RAR_ORDER[best]].c, '#ffffff', '#fde047']);
@@ -318,16 +455,17 @@
     }
     var grid = CREATURES.map(function (c) {
       var o = G.owned[c.id];
-      if (!o) return '<div class="cb-cell locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + portrait(c, 'cb-cemoji') + '<div class="cb-clk">❓ ???</div></div>';
+      if (!o) return '<div class="cb-cell locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + pwin(c) + '<div class="cb-cplate"><div class="cb-clk">❓ ???</div><div class="cb-stars">' + starStr(RAR[c.r].st) + '</div></div></div>';
       var inTeam = G.team.indexOf(c.id) >= 0;
       var s = stats(c.id, o.lvl);
       return '<div class="cb-cell" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' +
-        portrait(c, 'cb-cemoji') +
-        '<div class="cb-cname">' + esc(c.n) + '</div>' +
-        '<div class="cb-crar" style="color:' + RAR[c.r].t + '">' + RAR[c.r].s + ' niv.' + o.lvl + '</div>' +
-        '<div class="cb-cstat">' + tag(c.t) + '</div>' +
-        '<div class="cb-cstat">❤️ ' + s.hp + ' · ⚔️ ' + s.atk + '</div>' +
-        '<button class="cb-mini' + (inTeam ? ' on' : '') + '" onclick="CB.team(\'' + c.id + '\')">' + (inTeam ? '✓ Équipe' : '+ Équipe') + '</button>' +
+        pwin(c) +
+        '<div class="cb-cplate">' +
+          '<div class="cb-cname">' + esc(c.n) + '</div>' +
+          '<div class="cb-stars">' + starStr(RAR[c.r].st) + ' <span class="cb-mut">niv.' + o.lvl + '</span></div>' +
+          '<div class="cb-power">⚡ <b>' + (s.hp + s.atk) + '</b> <span class="cb-mut">❤' + s.hp + ' ⚔' + s.atk + '</span></div>' +
+          '<button class="cb-mini' + (inTeam ? ' on' : '') + '" onclick="CB.team(\'' + c.id + '\')">' + (inTeam ? '✓ Équipe' : '+ Équipe') + '</button>' +
+        '</div>' +
         '</div>';
     }).join('');
     return head() +
@@ -355,9 +493,10 @@
   }
 
   function fighterCard(f, side) {
-    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + '" style="--tc:' + TM[f.cr.t].c + '">' +
-      portrait(f.cr, 'cb-femoji') +
+    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + '" style="--tc:' + TM[f.cr.t].c + '; --rc:' + RAR[f.cr.r].c + '">' +
+      portrait(f.cr) +
       '<div class="cb-fname">' + esc(f.cr.n) + ' <span class="cb-mut">niv.' + f.lvl + '</span></div>' +
+      '<div class="cb-stars">' + starStr(RAR[f.cr.r].st) + '</div>' +
       tag(f.cr.t) +
       bar(f.hp, f.max, f.hp > f.max * 0.3 ? '#22c55e' : '#ef4444') +
       '<div class="cb-fhp">' + f.hp + ' / ' + f.max + '</div>' +
