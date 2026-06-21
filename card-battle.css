@@ -62,7 +62,8 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-tab { position: relative; padding: 9px 16px; border-radius: 11px; border: 0; background: transparent; color: var(--g-tx2);
   font-weight: 800; font-size: 13.5px; cursor: pointer; min-height: 42px; transition: color .15s ease, background .15s ease, box-shadow .15s ease; }
 .cb-tab:hover { color: var(--g-tx); }
-.cb-tab.on { color: #fff; background: linear-gradient(135deg, var(--g-vio), #6d28d9); box-shadow: 0 0 18px -3px var(--g-vio); }
+.cb-tab.on { color: #fff; background: linear-gradient(135deg, var(--g-vio), #6d28d9); box-shadow: 0 0 18px -3px var(--g-vio); animation: cb-tabglow 2.4s ease-in-out infinite; }
+@keyframes cb-tabglow { 0%, 100% { box-shadow: 0 0 16px -4px var(--g-vio); } 50% { box-shadow: 0 0 24px 0 var(--g-vio); } }
 
 /* ---------- panneau / titres ---------- */
 .cb-panel { position: relative; background: var(--g-glass); border: 1px solid var(--g-line); border-radius: 20px; padding: 20px;
@@ -182,7 +183,7 @@ body.arene-on #cb-cosmos { display: block; }
   border: 1px solid var(--g-line); border-top: 2px solid var(--rc);
   background: linear-gradient(180deg, color-mix(in srgb, var(--rc) 12%, rgba(18,12,36,.85)), rgba(12,9,24,.9));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 10px 24px -16px #000; transition: transform .12s ease, box-shadow .15s ease; }
-.cb-cell:hover { transform: translateY(-3px); box-shadow: 0 0 22px -6px var(--rc); }
+.cb-cell:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 0 26px -5px var(--rc); z-index: 2; }
 .cb-cell.locked { opacity: .6; border-top-color: var(--g-line); }
 .cb-cell.locked .cb-emoji { filter: grayscale(1) brightness(.6); }
 .cb-cell.locked .cb-rays, .cb-cell.locked .cb-foil { display: none; }
@@ -316,6 +317,6 @@ body.arene-on #cb-cosmos { display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
   #cb-cosmos::before, #cb-cosmos::after, .cb-ring, .cb-core, .cb-halo, .cb-rays, .cb-foil, .cb-fighter .cb-emoji,
-  .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div { animation: none !important; }
+  .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div, .cb-tab.on { animation: none !important; }
   .cb-pcard { transform: none !important; opacity: 1 !important; }
 }

@@ -177,6 +177,7 @@
       me.charge = special ? 0 : Math.min(3, me.charge + 1);
       pushLog((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
       setHp('foe', foe);
+      if (foe.hp <= 0) cbKo('foe', TM[foe.cr.t].c);
     }, function () { // fin de séquence
       if (foe.hp <= 0) {
         pushLog('💥 ' + foe.cr.n + ' adverse est K.O. !');
@@ -199,6 +200,7 @@
       foe.charge = sp ? 0 : Math.min(3, foe.charge + 1);
       pushLog((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
       setHp('me', me);
+      if (me.hp <= 0) cbKo('me', TM[me.cr.t].c);
     }, function () {
       if (me.hp <= 0) {
         pushLog('💀 Ton ' + me.cr.n + ' est K.O. !');
@@ -323,6 +325,11 @@
       if (k < 1) requestAnimationFrame(tick); else if (onArrive) onArrive(x, y);
     })();
   }
+  // éclatement de particules quand un combattant tombe K.O.
+  function cbKo(side, color) {
+    var el = document.querySelector('#arene .cb-fighter.' + side); if (!el || !el.closest('.cb-stage')) return;
+    var c = ctr(el); fxBurst(c.x, c.y, color, 42, 7); fxBurst(c.x, c.y, '#ffffff', 22, 5); fxRing(c.x, c.y, color, 4);
+  }
   /* ===== animations LOTTIE (effets « grand studio », optionnelles) =====
      Dépose les .json dans le dossier "lottie/" (voir lottie/_A_LIRE.txt).
      Si la librairie ou le fichier manque → repli SILENCIEUX sur les particules canvas. */
@@ -341,7 +348,7 @@
         size = size || 180; box.style.width = size + 'px'; box.style.height = size + 'px';
         box.style.left = (cx - size / 2) + 'px'; box.style.top = (cy - size / 2) + 'px';
         container.appendChild(box);
-        var anim = lottie.loadAnimation({ container: box, renderer: 'svg', loop: !!loop, autoplay: true, animationData: data });
+        var anim = lottie.loadAnimation({ container: box, renderer: 'canvas', loop: !!loop, autoplay: true, animationData: data }); // canvas = plus léger que svg
         var kill = function () { try { anim.destroy(); } catch (e) {} if (box.parentNode) box.remove(); };
         anim.addEventListener('complete', kill); if (loop) setTimeout(kill, 2600);
       }).catch(function () { lottieMiss[key] = 1; }); // fichier absent → on n'insiste plus
@@ -407,8 +414,9 @@
       setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, tc); }, 360);
       setTimeout(function () {
         if (onImpact) onImpact();
-        var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 26, 6.5); fxBurst(bp.x, bp.y, tc, 30, 5); fxRing(bp.x, bp.y, '#ffffff', 3);
-        playLottie(stage, 'explosion', bp.x, bp.y, 250); // explosion « grand studio » si dispo (sinon canvas seul)
+        var bp = ctr(defEl);
+        fxBurst(bp.x, bp.y, '#ffffff', 34, 7); fxBurst(bp.x, bp.y, tc, 42, 6); fxBurst(bp.x, bp.y, '#ffffff', 14, 3.5);
+        fxRing(bp.x, bp.y, '#ffffff', 4); setTimeout(function () { fxRing(bp.x, bp.y, tc, 3); }, 90);
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
         defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
