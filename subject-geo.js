@@ -276,8 +276,9 @@
   sections.cours = `<div id="cours" class="section">
     <div style="text-align:center; margin-bottom:1.2rem;">
       <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet — Géographie</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La <strong>Synthèse</strong> sert à réviser vite ; ici, c'est le cours entier.</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La Synthèse sert à réviser vite ; ici, c'est le cours entier.</p>
     </div>
+    <div style="text-align:center; margin:-0.4rem 0 1.2rem;"><button class="gr2-tool" type="button" onclick="gr2ToggleCloze(this)">🙈 Mode test (cacher les mots-clés)</button></div>
 
     <div class="key-rule"><div class="formula-main">🎯 Au programme</div><p class="note" style="margin-top:.3rem;">La <strong>Belgique</strong> (État fédéral · 10 provinces · relief · eau) + 2 situations de <strong>mondialisation</strong> : les <strong>biocarburants</strong> et le <strong>cacao</strong>.</p></div>
 

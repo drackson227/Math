@@ -776,3 +776,39 @@
 
   window.GR2Course = { open: open, close: close };
 })();
+
+/* ============================================================
+   gr2-cloze — « Mode test » (révision active)
+   Masque les mots en GRAS (<strong>) du cours pour s'auto-tester :
+   clic (ou Entrée) = révéler. Transforme la lecture passive en
+   récupération active, sans rien rebaliser. 100 % vanilla.
+   ============================================================ */
+(function () {
+  'use strict';
+  function apply(sec) {
+    sec.querySelectorAll('strong').forEach(function (s) {
+      if (s.dataset.gr2cloze) return;
+      var t = (s.textContent || '').trim();
+      if (!t || t.length > 42) return;                         // pas les longues phrases en gras
+      if (s.closest('h1,h2,h3,h4,button,.gr2-tool')) return;   // pas les titres/boutons
+      s.dataset.gr2cloze = '1';
+      s.classList.add('gr2-cloze');
+      s.setAttribute('role', 'button');
+      s.setAttribute('tabindex', '0');
+      s.setAttribute('aria-label', 'mot masqué — clique pour révéler');
+      s.title = 'Clique pour révéler';
+    });
+  }
+  window.gr2ToggleCloze = function (btn) {
+    var sec = btn.closest('.section') || document.getElementById('cours');
+    if (!sec) return;
+    var on = sec.classList.toggle('gr2-cloze-on');
+    if (on) { apply(sec); sec.querySelectorAll('.gr2-cloze').forEach(function (s) { s.classList.remove('gr2-cloze-shown'); }); }
+    btn.innerHTML = on ? '👁️ Tout révéler' : '🙈 Mode test (cacher les mots-clés)';
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  };
+  function reveal(el) { if (el && el.classList.contains('gr2-cloze') && el.closest('.gr2-cloze-on')) el.classList.toggle('gr2-cloze-shown'); }
+  document.addEventListener('click', function (e) { var c = e.target.closest('.gr2-cloze'); if (c) { e.stopPropagation(); reveal(c); } });
+  document.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('gr2-cloze')) { e.preventDefault(); reveal(e.target); } });
+})();

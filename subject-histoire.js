@@ -484,8 +484,9 @@
   sections.cours = `<div id="cours" class="section">
     <div style="text-align:center; margin-bottom:1.2rem;">
       <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet — Histoire 4ᵉ</h2>
-      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La <strong>Synthèse</strong> sert à réviser vite ; ici, c'est le cours entier.</p>
+      <p style="color:var(--text-secondary); margin-top:6px;">Tout le cours en détail pour réviser à 100 %. La Synthèse sert à réviser vite ; ici, c'est le cours entier.</p>
     </div>
+    <div style="text-align:center; margin:-0.4rem 0 1.2rem;"><button class="gr2-tool" type="button" onclick="gr2ToggleCloze(this)">🙈 Mode test (cacher les mots-clés)</button></div>
 
     <div class="key-rule"><div class="formula-main">🎯 Notre programme = les <strong>Temps modernes</strong> (1492 → 1789)</div><p class="note" style="margin-top:.3rem;">4 grands thèmes : le <strong>livre</strong> (imprimerie) · l'<strong>Humanisme &amp; la Renaissance</strong> · la <strong>Réforme protestante</strong> · l'<strong>Absolutisme</strong>. + savoir <strong>critiquer un document</strong>.</p></div>
 

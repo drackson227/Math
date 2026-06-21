@@ -83,9 +83,11 @@
   function buildAutoCours(coursSec) {
     if (!coursSec) coursSec = document.getElementById('cours');
     if (!coursSec) return;
+    coursSec.classList.remove('gr2-cloze-on'); // repart toujours « mode test » désactivé
     var html = '<div style="text-align:center; margin-bottom:1.2rem;">' +
       '<h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin:0;">📖 Cours complet</h2>' +
-      '<p style="color:var(--text-secondary); margin-top:6px;">Tout le cours réuni au même endroit pour réviser à 100 % : synthèse, repères, méthode et pièges fréquents.</p></div>';
+      '<p style="color:var(--text-secondary); margin-top:6px;">Tout le cours réuni au même endroit pour réviser à 100 % : synthèse, repères, méthode et pièges fréquents.</p></div>' +
+      '<div style="text-align:center; margin:-0.2rem 0 1.2rem;"><button class="gr2-tool" type="button" onclick="gr2ToggleCloze(this)">🙈 Mode test (cacher les mots-clés)</button></div>';
     ['synthese', 'formules', 'methodes', 'erreurs'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el && el.innerHTML && el.innerHTML.trim()) html += '<div class="cours-bloc">' + el.innerHTML + '</div>';
