@@ -258,20 +258,20 @@
     '</div></div>';
 
   /* ---------------------- FRISE INTERACTIVE DES DATES-CLÉS (Temps modernes) ---------------------- */
-  // Chaque date du tableau « à connaître » placée proportionnellement (axe 1440→1800) et cliquable.
-  // Couleurs = grandes phases : Renaissance / Réforme / Absolutisme / Fin (mémoire visuelle).
+  // Frise = cartes « année + événement écrit » (du plus ancien au plus récent), cliquables.
+  // Couleur de phase en accent : Renaissance / Réforme / Absolutisme / Fin (mémoire visuelle).
   var DATE_LIST = [
-    { key: 'd1450', x: 1450, full: '≈ 1450', cat: 'rena', event: 'imprimerie à caractères mobiles (<b>Gutenberg</b>)' },
-    { key: 'd1453', x: 1453, full: '1453', cat: 'rena', event: 'chute de <b>Constantinople</b>' },
-    { key: 'd1492', x: 1492, full: '1492', cat: 'rena', event: 'découverte de l’<b>Amérique</b> (début des Temps modernes)' },
-    { key: 'd1517', x: 1517, full: '1517', cat: 'refo', event: 'les <b>95 thèses de Luther</b> (début de la Réforme)' },
-    { key: 'd1521', x: 1521, full: '1521', cat: 'refo', event: '<b>excommunication de Luther</b>' },
-    { key: 'd1545', x: 1545, end: 1563, full: '1545–1563', cat: 'refo', event: '<b>Concile de Trente</b> (Contre-Réforme)' },
-    { key: 'd1572', x: 1572, full: '1572', cat: 'refo', event: 'massacre de la <b>Saint-Barthélemy</b>' },
-    { key: 'd1598', x: 1598, full: '1598', cat: 'refo', event: '<b>Édit de Nantes</b> (Henri IV → tolérance des protestants)' },
-    { key: 'd1643', x: 1643, end: 1715, full: '1643–1715', cat: 'abso', event: 'règne de <b>Louis XIV</b> (le Roi-Soleil)' },
-    { key: 'd1685', x: 1685, full: '1685', cat: 'abso', event: '<b>révocation de l’Édit de Nantes</b> (Louis XIV)' },
-    { key: 'd1789', x: 1789, full: '1789', cat: 'fin', event: '<b>Révolution française</b> (fin des Temps modernes)' }
+    { key: 'd1450', full: '≈ 1450', lbl: 'imprimerie (Gutenberg)', cat: 'rena', event: 'imprimerie à caractères mobiles (<b>Gutenberg</b>)' },
+    { key: 'd1453', full: '1453', lbl: 'chute de Constantinople', cat: 'rena', event: 'chute de <b>Constantinople</b>' },
+    { key: 'd1492', full: '1492', lbl: 'découverte de l’Amérique', cat: 'rena', event: 'découverte de l’<b>Amérique</b> (début des Temps modernes)' },
+    { key: 'd1517', full: '1517', lbl: '95 thèses de Luther', cat: 'refo', event: 'les <b>95 thèses de Luther</b> (début de la Réforme)' },
+    { key: 'd1521', full: '1521', lbl: 'Luther excommunié', cat: 'refo', event: '<b>excommunication de Luther</b>' },
+    { key: 'd1545', full: '1545–1563', lbl: 'Concile de Trente', cat: 'refo', event: '<b>Concile de Trente</b> (Contre-Réforme)' },
+    { key: 'd1572', full: '1572', lbl: 'Saint-Barthélemy', cat: 'refo', event: 'massacre de la <b>Saint-Barthélemy</b>' },
+    { key: 'd1598', full: '1598', lbl: 'Édit de Nantes', cat: 'refo', event: '<b>Édit de Nantes</b> (Henri IV → tolérance des protestants)' },
+    { key: 'd1643', full: '1643–1715', lbl: 'règne de Louis XIV', cat: 'abso', event: 'règne de <b>Louis XIV</b> (le Roi-Soleil)' },
+    { key: 'd1685', full: '1685', lbl: 'révocation de l’Édit de Nantes', cat: 'abso', event: '<b>révocation de l’Édit de Nantes</b> (Louis XIV)' },
+    { key: 'd1789', full: '1789', lbl: 'Révolution française', cat: 'fin', event: '<b>Révolution française</b> (fin des Temps modernes)' }
   ];
   var DATE_CAT = { rena: 'Renaissance', refo: 'Réforme', abso: 'Absolutisme', fin: 'Fin des T.M.' };
   var DATE_INFO = {}; DATE_LIST.forEach(function (d) { DATE_INFO[d.key] = d; });
@@ -280,35 +280,63 @@
     var wrap = el.closest('.hist-frise-wrap'); if (!wrap) return;
     var cap = wrap.querySelector('.hist-frise-cap');
     if (cap) cap.innerHTML = '<strong>' + d.full + '</strong> — <b class="hf-tag ' + d.cat + '">' + DATE_CAT[d.cat] + '</b><br>' + d.event;
-    wrap.querySelectorAll('.hf-pt').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
+    wrap.querySelectorAll('.dfr-chip').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
   };
-  var HIST_FRISE_SVG = (function () {
-    var X0 = 24, W = 412, Y0 = 1440, YW = 360, AX = 80; // axe x:24→436, années 1440→1800, axe à y=80
-    function xOf(y) { return (X0 + (y - Y0) / YW * W).toFixed(1); }
-    var s = '<line class="hf-axis" x1="' + X0 + '" y1="' + AX + '" x2="' + (X0 + W) + '" y2="' + AX + '"></line>';
-    for (var t = 1450; t <= 1750; t += 50) {
-      s += '<line class="hf-tick" x1="' + xOf(t) + '" y1="' + AX + '" x2="' + xOf(t) + '" y2="' + (AX + 6) + '"></line>';
-      s += '<text class="hf-tick-lbl" x="' + xOf(t) + '" y="152" text-anchor="middle" style="font-size:9px">' + t + '</text>';
-    }
-    DATE_LIST.forEach(function (d, i) {
-      var x = xOf(d.x), above = (i % 2 === 0), dotY = above ? 54 : 106, lblY = above ? 44 : 122;
-      var g = '<g class="hf-pt hf-' + d.cat + '" data-k="' + d.key + '" role="button" tabindex="0" aria-label="' + d.full + ' : ' + d.event.replace(/<[^>]+>/g, '') + '"' +
-        ' onclick="histDateShow(this,\'' + d.key + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();histDateShow(this,\'' + d.key + '\');}">';
-      if (d.end) g += '<rect class="hf-bar hf-' + d.cat + '" x="' + x + '" y="' + (AX - 3) + '" width="' + (xOf(d.end) - x).toFixed(1) + '" height="6" rx="3"></rect>';
-      g += '<line class="hf-stem" x1="' + x + '" y1="' + AX + '" x2="' + x + '" y2="' + dotY + '"></line>';
-      g += '<circle class="hf-dot" cx="' + x + '" cy="' + dotY + '" r="6"></circle>';
-      g += '<text class="hf-yr" x="' + x + '" y="' + lblY + '" text-anchor="middle" style="font-size:10px">' + d.x + '</text></g>';
-      s += g;
-    });
-    return s;
-  })();
+  // --- Quiz dates : QCM « Quand a eu lieu … ? » (années cachées) sur la frise ---
+  var hdState = null;
+  function hdBest() { try { return loadSavedData().histDatesBest || 0; } catch (e) { return 0; } }
+  function hdSaveBest(s) { try { var d = loadSavedData(); d.histDatesBest = Math.max(d.histDatesBest || 0, s); saveData(d); return d.histDatesBest; } catch (e) { return s; } }
+  function hdShuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  window.histDateQuiz = function (btn) {
+    var wrap = btn.closest('.hist-frise-wrap'); if (!wrap) return;
+    document.querySelectorAll('.hist-frise-wrap.hd-quiz-on').forEach(function (w) { w.classList.remove('hd-quiz-on'); });
+    hdState = { wrap: wrap, queue: hdShuffle(DATE_LIST.map(function (_, i) { return i; })), pos: 0, score: 0, streak: 0, best: hdBest() };
+    wrap.classList.add('hd-quiz-on');
+    hdAsk();
+  };
+  function hdAsk() {
+    var st = hdState; if (!st) return;
+    if (st.pos >= st.queue.length) { return hdDone(); }
+    var d = DATE_LIST[st.queue[st.pos]];
+    var opts = [d.full], pool = hdShuffle(DATE_LIST.filter(function (x) { return x.full !== d.full; }));
+    for (var i = 0; i < pool.length && opts.length < 4; i++) { if (opts.indexOf(pool[i].full) < 0) opts.push(pool[i].full); }
+    hdShuffle(opts);
+    st.wrap.querySelectorAll('.dfr-chip').forEach(function (z) { z.classList.remove('sel', 'hd-reveal'); });
+    var ev = d.lbl;
+    var cap = st.wrap.querySelector('.hist-frise-cap');
+    if (cap) cap.innerHTML =
+      '<div class="hd-q"><span class="hd-prog">' + (st.pos + 1) + '/' + st.queue.length + '</span> 🎯 <b>Quand : ' + ev + ' ?</b></div>' +
+      '<div class="hd-opts">' + opts.map(function (o) { return '<button type="button" class="hd-opt" onclick="histDateAnswer(this,\'' + o.replace(/'/g, "\\'") + '\')">' + o + '</button>'; }).join('') + '</div>' +
+      '<div class="hd-score">✅ ' + st.score + ' · 🔥 ' + st.streak + '</div>';
+  }
+  window.histDateAnswer = function (btn, chosen) {
+    var st = hdState; if (!st) return;
+    var d = DATE_LIST[st.queue[st.pos]], good = (chosen === d.full);
+    if (good) { st.score++; st.streak++; } else { st.streak = 0; }
+    st.wrap.querySelectorAll('.hd-opt').forEach(function (b) { b.disabled = true; if (b.textContent === d.full) b.classList.add('hd-ok'); else if (b === btn) b.classList.add('hd-no'); });
+    st.wrap.querySelectorAll('.dfr-chip').forEach(function (z) { if (z.getAttribute('data-k') === d.key) z.classList.add('sel', 'hd-reveal'); });
+    st.pos++;
+    setTimeout(hdAsk, 1200);
+  };
+  function hdDone() {
+    var st = hdState; if (!st) return;
+    var n = st.queue.length, rec = hdSaveBest(st.score);
+    st.wrap.classList.remove('hd-quiz-on');
+    st.wrap.querySelectorAll('.dfr-chip').forEach(function (z) { z.classList.remove('sel', 'hd-reveal'); });
+    var cap = st.wrap.querySelector('.hist-frise-cap');
+    if (cap) cap.innerHTML = '🏁 <strong>Score : ' + st.score + '/' + n + '</strong>' + (st.score >= n ? ' 🏆 sans-faute !' : ' · record : ' + rec + '/' + n) + ' <button type="button" class="step-btn" onclick="histDateQuiz(this)">↻ Rejouer</button>';
+    hdState = null;
+  }
   var DATES_FRISE =
     '<div class="hist-frise-wrap">' +
-      '<div class="hist-frise-head">📍 <strong>Frise des dates-clés</strong> (Temps modernes) — 👆 clique une date<span class="hist-frise-hint"> · ↔ glisse sur mobile</span></div>' +
-      '<div class="hist-frise-scroll">' +
-        '<svg viewBox="0 0 460 162" class="hist-frise-svg" role="img" aria-label="Frise chronologique des dates clés des Temps modernes, de 1450 à 1789">' +
-          HIST_FRISE_SVG +
-        '</svg>' +
+      '<div class="hist-frise-head">📍 <strong>Frise des dates-clés</strong> (Temps modernes) — du plus ancien au plus récent. 👆 Clique une carte pour le détail.</div>' +
+      '<div class="dfr-track">' +
+        DATE_LIST.map(function (d) {
+          return '<button type="button" class="dfr-chip dfr-' + d.cat + '" data-k="' + d.key + '" onclick="histDateShow(this,\'' + d.key + '\')">' +
+            '<span class="dfr-top"><i class="dfr-dot"></i><span class="dfr-year">' + d.full + '</span></span>' +
+            '<span class="dfr-ev">' + d.lbl + '</span>' +
+            '</button>';
+        }).join('') +
       '</div>' +
       '<div class="hist-frise-legend">' +
         '<span class="lg"><i class="sw rena"></i>Renaissance</span>' +
@@ -316,7 +344,8 @@
         '<span class="lg"><i class="sw abso"></i>Absolutisme</span>' +
         '<span class="lg"><i class="sw fin"></i>Fin des T.M.</span>' +
       '</div>' +
-      '<div class="hist-frise-cap" aria-live="polite">👆 Clique une date pour revoir l’événement. <span style="color:var(--text-secondary)">Avant les Temps modernes : −3300 (écriture) · 476 (chute de Rome) · 1054 (schisme d’Orient).</span></div>' +
+      '<div style="text-align:center; margin-top:8px;"><button type="button" class="step-btn" onclick="histDateQuiz(this)">🎯 Quiz dates</button></div>' +
+      '<div class="hist-frise-cap" aria-live="polite">👆 Clique une date pour le détail, ou lance le <strong>Quiz dates</strong>. <span style="color:var(--text-secondary)">Avant : −3300 écriture · 476 chute de Rome · 1054 schisme.</span></div>' +
     '</div>';
 
   /* ---------------------- CARTE VISUELLE DES RELIGIONS EN EUROPE (vers 1600) ---------------------- */
