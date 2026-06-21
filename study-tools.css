@@ -195,6 +195,7 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .gg-reveal.show { display: block; }
 .gg-res-ok { color: #16a34a; font-weight: 800; }
 .gg-res-no { color: #ef4444; font-weight: 800; }
+.gr2-guess.daily { border-left-color: #f59e0b; }
 
 /* Animations façon Brilliant : feedback du quiz + transitions de section */
 .opt.correct { animation: gr2-opt-correct .5s ease; }

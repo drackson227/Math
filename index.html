@@ -280,6 +280,7 @@
   <p id="app-subtitle" style="font-size:13px; color:var(--text-secondary);">Maths — Géométrie analytique plane · Vecteurs · Cercle · Droites</p>
   <p id="app-validated" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; padding:4px 12px; border-radius:999px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:12px; font-weight:700;">✅ Validé par prof de math M. Dutilleux</p>
   <button id="exam-chip" type="button" onclick="showSection('profil')" title="Voir mon planning d'examens" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.4); color:#fbbf24; font-size:12px; font-weight:700; cursor:pointer;"></button>
+  <button id="streak-chip" type="button" onclick="showSection('profil')" title="Ta série de jours d'affilée" style="display:none; align-items:center; gap:6px; margin:6px 0 0 8px; padding:4px 12px; border-radius:999px; background:rgba(249,115,22,0.14); border:1px solid rgba(249,115,22,0.45); color:#fb923c; font-size:12px; font-weight:800; cursor:pointer;"></button>
 </div>
 <button id="subj-fold" class="subj-fold" onclick="toggleSubjectBar()" aria-expanded="false" aria-controls="subject-bar">📚 Matière ▾</button>
 <div id="subject-bar" class="subject-bar" role="navigation" aria-label="Choisir une matière">
@@ -468,6 +469,7 @@
 </div>
 
 <div id="quiz" class="section">
+  <div id="daily-challenge" style="margin:0 0 1.1rem;"></div>
   <!-- Écran d'accueil quiz -->
   <div id="quiz-start-screen" style="text-align:center; padding:1.25rem 1rem 2rem;">
     <div style="font-size:64px; margin-bottom:1rem;">🧠</div>

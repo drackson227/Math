@@ -1485,6 +1485,7 @@ function showSection(evtOrId, id) {
   if (sectionId === 'formules') initFormulaBookmarks();
   if (sectionId === 'journal') loadJournalHistory();
   if (sectionId === 'graphiques') requestAnimationFrame(() => requestAnimationFrame(() => initGraphs()));
+  if (sectionId === 'quiz' && typeof renderDailyChallenge === 'function') { try { renderDailyChallenge(); } catch (e) {} }
   if (sectionId === 'mesexos') { renderCustomExoList(); if (typeof initCreations === 'function') initCreations(); }
   if (sectionId === 'progression') renderProgression();
   if (sectionId === 'chat' && typeof initChat === 'function') initChat();
@@ -1500,6 +1501,7 @@ function showSection(evtOrId, id) {
   // Aides à la lecture & à l'étude (study-tools.js) : sommaire, progression,
   // marquage compris/à revoir, surligneur, mode lecture, mode cours animé.
   if (typeof onShowStudySection === 'function') { try { onShowStudySection(sectionId); } catch (e) {} }
+  if (typeof renderStreakChip === 'function') { try { renderStreakChip(); } catch (e) {} }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -2416,7 +2418,67 @@ function renderExamChip() {
   chip.style.display = 'inline-flex';
   if (best.dleft <= 3) { chip.style.color = '#f87171'; chip.style.borderColor = 'rgba(248,113,113,0.45)'; chip.style.background = 'rgba(248,113,113,0.12)'; }
 }
-document.addEventListener('DOMContentLoaded', function () { setTimeout(renderExamChip, 600); });
+document.addEventListener('DOMContentLoaded', function () { setTimeout(function () { renderExamChip(); renderStreakChip(); }, 600); });
+
+// 🔥 Série visible (façon Brilliant) + 🎯 Défi du jour
+function renderStreakChip() {
+  var chip = document.getElementById('streak-chip'); if (!chip) return;
+  var n = (loadSavedData().streak) || 0;
+  if (n < 1) { chip.style.display = 'none'; return; }
+  chip.textContent = '🔥 ' + n + ' j';
+  chip.title = n + ' jour' + (n > 1 ? 's' : '') + ' d\'affilée — reviens demain pour continuer !';
+  chip.style.display = 'inline-flex';
+}
+function _dayKey() { var n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); }
+function _dailyPool() {
+  try {
+    var cur = window.currentSubject || 'maths';
+    if (cur !== 'maths') { var s = window.SUBJECTS && window.SUBJECTS[cur]; if (s && s.content && s.content.questions && s.content.questions.length) return s.content.questions; }
+    if (typeof allQuestions !== 'undefined' && allQuestions.length) return allQuestions;
+  } catch (e) {}
+  return [];
+}
+function renderDailyChallenge() {
+  var box = document.getElementById('daily-challenge'); if (!box) return;
+  var pool = _dailyPool(); if (!pool.length) { box.innerHTML = ''; return; }
+  var day = _dayKey(); var data = loadSavedData();
+  if (data.dailyChallenge && data.dailyChallenge.day === day) {
+    var okTxt = data.dailyChallenge.ok ? '✅ <strong>Défi du jour réussi !</strong>' : '☑️ <strong>Défi du jour terminé.</strong>';
+    box.innerHTML = '<div class="gr2-guess daily"><p class="gg-q">🎯 Défi du jour</p><div style="color:var(--text-primary);line-height:1.5;">' + okTxt + ' Reviens demain pour un nouveau défi. 🔥 Série : <strong>' + ((data.streak) || 0) + ' j</strong>.</div></div>';
+    return;
+  }
+  var seed = 0; for (var i = 0; i < day.length; i++) seed = (seed * 31 + day.charCodeAt(i)) >>> 0;
+  var q = pool[seed % pool.length];
+  var sh = (typeof shuffleOptions === 'function') ? shuffleOptions(q) : { opts: q.opts || [], ans: q.ans };
+  box.innerHTML = '<div class="gr2-guess daily">' +
+    '<p class="gg-q">🎯 Défi du jour <span style="color:var(--text-secondary);font-weight:600;font-size:12px;">— 1 question/jour · +15 XP</span></p>' +
+    '<div style="margin-bottom:8px;color:var(--text-primary);line-height:1.5;">' + (q.q || '') + '</div>' +
+    '<div class="gg-opts">' + sh.opts.map(function (o, j) { return '<button class="gg-opt" data-ok="' + (j === sh.ans ? '1' : '0') + '" onclick="dailyAnswer(this)">' + o + '</button>'; }).join('') + '</div>' +
+    '<div class="gg-reveal">' + (q.exp || '') + '</div>' +
+    '</div>';
+  if (typeof safeMathJax === 'function') { try { safeMathJax([box]); } catch (e) {} }
+}
+function dailyAnswer(btn) {
+  var box = btn.closest('.gr2-guess'); if (!box || box.classList.contains('gg-done')) return;
+  box.classList.add('gg-done');
+  var ok = btn.getAttribute('data-ok') === '1';
+  box.querySelectorAll('.gg-opt').forEach(function (o) {
+    o.disabled = true;
+    if (o.getAttribute('data-ok') === '1') o.classList.add('gg-ok');
+    else if (o === btn) o.classList.add('gg-bad');
+    else o.classList.add('gg-dim');
+  });
+  var rev = box.querySelector('.gg-reveal'); if (rev) { rev.classList.add('show'); rev.innerHTML = (ok ? '<span class="gg-res-ok">✅ Bravo !</span> ' : '<span class="gg-res-no">❌ Raté —</span> ') + rev.innerHTML; }
+  var data = loadSavedData();
+  data.dailyChallenge = { day: _dayKey(), ok: ok };
+  if (ok) data.xp = (data.xp || 0) + 15;
+  try { updateCalendar(data); } catch (e) {}
+  try { if (typeof updateLevel === 'function') updateLevel(data); } catch (e) {}
+  saveData(data);
+  try { if (typeof recordStudyAction === 'function') recordStudyAction(); } catch (e) {}
+  if (typeof renderStreakChip === 'function') renderStreakChip();
+  if (ok) { try { if (typeof showRewardAnimation === 'function') showRewardAnimation('correct'); if (typeof celebrate === 'function') celebrate('🎯 Défi du jour réussi ! +15 XP'); } catch (e) {} }
+}
 
 // Lance un quiz CIBLÉ sur le chapitre faible d'une matière (depuis le dashboard).
 function reviseWeakChapter(key, chapter) {
