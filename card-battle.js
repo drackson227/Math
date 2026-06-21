@@ -151,19 +151,23 @@
     if (!B || B.over || B.busy) return;
     var me = B.team[B.ti], foe = B.enemy[B.ei];
     if (special && me.charge < 3) { return; }
+    B.busy = true;
     var adv = typeMult(me.cr.t, foe.cr.t);
     var dmg = hit(me, foe, special);
-    foe.hp = Math.max(0, foe.hp - dmg);
-    me.charge = special ? 0 : Math.min(3, me.charge + 1);
-    B.log.push((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
-    if (foe.hp <= 0) {
-      B.log.push('💥 ' + foe.cr.n + ' adverse est K.O. !');
-      var ni = alive(B.enemy, B.ei + 1);
-      if (ni < 0) { return endBattle(true); }
-      B.ei = ni;
-    }
-    B.busy = true; renderBattle();
-    setTimeout(enemyTurn, 850);
+    cbHitFx('foe', dmg, special || adv > 1);
+    setTimeout(function () {
+      foe.hp = Math.max(0, foe.hp - dmg);
+      me.charge = special ? 0 : Math.min(3, me.charge + 1);
+      B.log.push((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      if (foe.hp <= 0) {
+        B.log.push('💥 ' + foe.cr.n + ' adverse est K.O. !');
+        var ni = alive(B.enemy, B.ei + 1);
+        if (ni < 0) { renderBattle(); return endBattle(true); }
+        B.ei = ni;
+      }
+      renderBattle();
+      setTimeout(enemyTurn, 720);
+    }, 460);
   };
   function enemyTurn() {
     if (!B || B.over) return;
@@ -171,16 +175,19 @@
     var sp = foe.charge >= 3 && Math.random() < 0.5;
     var adv = typeMult(foe.cr.t, me.cr.t);
     var dmg = hit(foe, me, sp);
-    me.hp = Math.max(0, me.hp - dmg);
-    foe.charge = sp ? 0 : Math.min(3, foe.charge + 1);
-    B.log.push((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
-    if (me.hp <= 0) {
-      B.log.push('💀 Ton ' + me.cr.n + ' est K.O. !');
-      var ni = alive(B.team, B.ti + 1);
-      if (ni < 0) { return endBattle(false); }
-      B.ti = ni;
-    }
-    B.busy = false; renderBattle();
+    cbHitFx('me', dmg, sp || adv > 1);
+    setTimeout(function () {
+      me.hp = Math.max(0, me.hp - dmg);
+      foe.charge = sp ? 0 : Math.min(3, foe.charge + 1);
+      B.log.push((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      if (me.hp <= 0) {
+        B.log.push('💀 Ton ' + me.cr.n + ' est K.O. !');
+        var ni = alive(B.team, B.ti + 1);
+        if (ni < 0) { B.busy = false; renderBattle(); return endBattle(false); }
+        B.ti = ni;
+      }
+      B.busy = false; renderBattle();
+    }, 460);
   }
   function endBattle(win) {
     B.over = true; B.win = win; B.busy = false;
@@ -195,6 +202,7 @@
       B.log.push('☠️ Défaite… réessaie (aucune perte). Astuce : exploite les avantages de type.');
     }
     save(); renderBattle();
+    if (win) cbConfetti(120, ['#16a34a', '#fde047', '#ffffff', '#60a5fa', '#f472b6']);
   }
 
   /* ---------------- ÉQUIPE / COLLECTION ---------------- */
@@ -208,6 +216,37 @@
 
   /* ---------------- RENDU ---------------- */
   function toast(m) { if (typeof showToast === 'function') showToast(m, 'var(--color-nav)'); }
+  // pluie de confettis (récompense / rareté élevée)
+  function cbConfetti(n, colors) {
+    try {
+      var box = document.createElement('div'); box.className = 'cb-confetti';
+      for (var i = 0; i < n; i++) {
+        var s = document.createElement('i');
+        s.style.left = (Math.random() * 100) + '%';
+        s.style.background = colors[i % colors.length];
+        s.style.animationDelay = (Math.random() * 0.4).toFixed(2) + 's';
+        s.style.setProperty('--dx', (Math.random() * 220 - 110) + 'px');
+        s.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+        box.appendChild(s);
+      }
+      document.body.appendChild(box);
+      setTimeout(function () { box.remove(); }, 2400);
+    } catch (e) {}
+  }
+  // nombre de dégâts qui s'envole au-dessus d'un combattant
+  function cbFloat(el, text, cls) {
+    if (!el) return;
+    var f = document.createElement('div'); f.className = 'cb-float ' + (cls || ''); f.textContent = text;
+    el.appendChild(f);
+    setTimeout(function () { f.remove(); }, 900);
+  }
+  // impact : l'attaquant fonce, la cible tremble + flash + dégâts qui montent
+  function cbHitFx(targetSide, dmg, big) {
+    var tgt = document.querySelector('#arene .cb-fighter.' + targetSide);
+    var atk = document.querySelector('#arene .cb-fighter.' + (targetSide === 'foe' ? 'me' : 'foe'));
+    if (atk) { var lc = targetSide === 'foe' ? 'cb-lunge-r' : 'cb-lunge-l'; atk.classList.add(lc); setTimeout(function () { atk.classList.remove(lc); }, 440); }
+    if (tgt) { var hc = big ? 'cb-hurt-big' : 'cb-hurt'; tgt.classList.add(hc); setTimeout(function () { tgt.classList.remove(hc); }, 560); cbFloat(tgt, '-' + dmg, big ? 'crit' : ''); }
+  }
   function bar(cur, max, col) {
     var p = Math.max(0, Math.round(cur / max * 100));
     return '<div class="cb-hpbar"><span style="width:' + p + '%;background:' + col + '"></span></div>';
@@ -243,14 +282,20 @@
   function showPullResult(res) {
     G.view = 'summon'; render();
     var z = document.getElementById('cb-pullzone'); if (!z) return;
-    z.innerHTML = '<div class="cb-pulls">' + res.map(function (r) {
-      return '<div class="cb-pcard" style="--rc:' + RAR[r.c.r].c + '">' +
-        '<div class="cb-pemoji">' + r.c.e + '</div>' +
-        '<div class="cb-pname">' + esc(r.c.n) + '</div>' +
-        '<div class="cb-prar" style="color:' + RAR[r.c.r].c + '">' + RAR[r.c.r].s + ' ' + RAR[r.c.r].n + '</div>' +
-        (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
-        '</div>';
-    }).join('') + '</div>';
+    var best = res.reduce(function (m, r) { return Math.max(m, RAR_ORDER.indexOf(r.c.r)); }, 0);
+    z.innerHTML = '<div class="cb-burst" style="--bc:' + RAR[RAR_ORDER[best]].c + '"></div>';
+    setTimeout(function () {
+      z.innerHTML = '<div class="cb-pulls">' + res.map(function (r, i) {
+        return '<div class="cb-pcard cb-r-' + r.c.r + '" style="--rc:' + RAR[r.c.r].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
+          '<div class="cb-pshine"></div>' +
+          '<div class="cb-pemoji">' + r.c.e + '</div>' +
+          '<div class="cb-pname">' + esc(r.c.n) + '</div>' +
+          '<div class="cb-prar" style="color:' + RAR[r.c.r].c + '">' + RAR[r.c.r].s + ' ' + RAR[r.c.r].n + '</div>' +
+          (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
+          '</div>';
+      }).join('') + '</div>';
+      if (best >= 2) cbConfetti(best >= 4 ? 130 : best >= 3 ? 80 : 50, [RAR[RAR_ORDER[best]].c, '#ffffff', '#fde047']);
+    }, 560);
   }
 
   function viewCollection() {
