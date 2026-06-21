@@ -94,6 +94,26 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .hist-rel-cap { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; color: var(--text-primary); line-height: 1.5; }
 .hist-rel-cap .rel-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 
+/* ---------- Coupe du relief de la Belgique (géo) ---------- */
+.geo-relief-wrap { margin: 1rem 0; }
+.geo-relief-svg { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; }
+.geo-relief-svg .geo-z { cursor: pointer; }
+.geo-relief-svg .geo-z > rect { stroke: rgba(255,255,255,0.5); stroke-width: 1; transition: filter .12s ease; }
+.geo-relief-svg .geo-z:hover > rect, .geo-relief-svg .geo-z:focus-visible > rect { filter: brightness(1.14); }
+.geo-relief-svg .geo-z.sel > rect { stroke: #fff; stroke-width: 3.5; }
+.geo-relief-svg .geo-basse > rect { fill: #3f6212; }
+.geo-relief-svg .geo-moy > rect { fill: #92500a; }
+.geo-relief-svg .geo-haute > rect { fill: #713f12; }
+.geo-relief-svg .geo-sea { fill: #2563eb; }
+.geo-relief-svg .geo-peak { fill: #e5e7eb; stroke: #713f12; stroke-width: 1.5; }
+.geo-relief-svg .geo-lbl { fill: #fff; font-weight: 800; pointer-events: none; }
+.geo-relief-svg .geo-sub { font-weight: 700; opacity: .95; }
+.geo-relief-svg .geo-peak-lbl { fill: var(--text-primary); pointer-events: none; }
+.geo-relief-svg .geo-axis { stroke: var(--text-secondary); stroke-width: 1.5; }
+.geo-relief-cap { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; color: var(--text-primary); line-height: 1.5; margin-top: 8px; }
+.geo-relief-cap .geo-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.geo-tag.geo-basse { background: #3f6212; } .geo-tag.geo-moy { background: #92500a; } .geo-tag.geo-haute { background: #713f12; }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {

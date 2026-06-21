@@ -58,6 +58,45 @@
     '<div class="bemap-foot"><button type="button" class="step-btn" onclick="geoMapQuiz()">🎯 Quiz carte</button><span class="bemap-quiz" id="bemap-quiz"></span></div>' +
     '</div>';
 
+  /* ---------------------- COUPE VISUELLE DU RELIEF (NO → SE) ---------------------- */
+  // Le terrain monte de la mer du Nord (gauche) vers l'Ardenne (droite). Étages cliquables.
+  var GEO_RELIEF = {
+    basse:   ['Basse Belgique', '< 100 m', 'La côte, les polders et la plaine flamande.', 'basse'],
+    moyenne: ['Moyenne Belgique', '100–200 m', 'Plateaux fertiles (limons) — grande région agricole.', 'moy'],
+    haute:   ['Haute Belgique', '> 200 m', 'Les plateaux de l’Ardenne. Sommet : Signal de Botrange (694 m).', 'haute']
+  };
+  window.geoReliefShow = function (el, key) {
+    var d = GEO_RELIEF[key]; if (!d) return;
+    var wrap = el.closest('.geo-relief-wrap'); if (!wrap) return;
+    var cap = wrap.querySelector('.geo-relief-cap');
+    if (cap) cap.innerHTML = '<strong>' + d[0] + '</strong> — <b class="geo-tag geo-' + d[3] + '">' + d[1] + '</b><br>' + d[2];
+    wrap.querySelectorAll('.geo-z').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
+  };
+  function reliefZone(k, x, y, w, h, name, alt, fsN, fsA) {
+    return '<g class="geo-z geo-' + GEO_RELIEF[k][3] + '" data-k="' + k + '" role="button" tabindex="0" aria-label="' + name + ', ' + alt + '"' +
+      ' onclick="geoReliefShow(this,\'' + k + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();geoReliefShow(this,\'' + k + '\');}">' +
+      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"></rect>' +
+      '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 - 2) + '" text-anchor="middle" class="geo-lbl" style="font-size:' + fsN + 'px">' + name + '</text>' +
+      '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 12) + '" text-anchor="middle" class="geo-lbl geo-sub" style="font-size:' + fsA + 'px">' + alt + '</text>' +
+      '</g>';
+  }
+  var RELIEF_PROFILE =
+    '<div class="geo-relief-wrap">' +
+      '<svg viewBox="0 0 420 244" class="geo-relief-svg" role="img" aria-label="Coupe du relief de la Belgique, du nord-ouest au sud-est">' +
+        '<rect class="geo-sea" x="10" y="196" width="48" height="16" rx="3"></rect>' +
+        '<text x="34" y="207" text-anchor="middle" class="geo-lbl" style="font-size:9px">mer</text>' +
+        reliefZone('basse', 62, 176, 108, 36, 'Basse Belgique', '&lt; 100 m', 10, 9) +
+        reliefZone('moyenne', 172, 146, 108, 66, 'Moyenne', '100–200 m', 10.5, 9.5) +
+        reliefZone('haute', 282, 92, 120, 120, 'Haute Belgique', '&gt; 200 m (Ardenne)', 11, 9.5) +
+        '<polygon class="geo-peak" points="345,70 326,92 364,92"></polygon>' +
+        '<text x="345" y="62" text-anchor="middle" class="geo-peak-lbl" style="font-size:10px;font-weight:800">▲ Botrange 694 m</text>' +
+        '<line x1="58" y1="218" x2="406" y2="218" class="geo-axis"></line>' +
+        '<text x="60" y="232" class="geo-peak-lbl" style="font-size:10px">NO · mer du Nord</text>' +
+        '<text x="404" y="232" text-anchor="end" class="geo-peak-lbl" style="font-size:10px">Ardenne · SE</text>' +
+      '</svg>' +
+      '<div class="geo-relief-cap" aria-live="polite">👆 Clique un étage du relief pour le détail.</div>' +
+    '</div>';
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
@@ -94,6 +133,7 @@
     <div class="synth-section">
       <h2>3. Le relief : 3 grands ensembles</h2>
       <p>Le relief belge monte doucement du nord-ouest (mer) vers le sud-est (Ardenne).</p>
+      ${RELIEF_PROFILE}
       <table class="compare-table">
         <thead><tr><th>Ensemble</th><th>Altitude</th><th>Où / caractéristiques</th></tr></thead>
         <tbody>
@@ -316,6 +356,7 @@
     <div class="synth-section">
       <h2>3. Le relief : 3 grands ensembles</h2>
       <p>Le relief belge <strong>monte doucement</strong> du nord-ouest (la mer) vers le sud-est (l'Ardenne).</p>
+      ${RELIEF_PROFILE}
       <table class="compare-table">
         <thead><tr><th>Ensemble</th><th>Altitude</th><th>Où / caractéristiques</th></tr></thead>
         <tbody>
