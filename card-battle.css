@@ -308,6 +308,34 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-confetti i { position: absolute; top: -16px; width: 9px; height: 15px; border-radius: 2px; opacity: .96; animation: cb-fall 2.1s linear forwards; }
 @keyframes cb-fall { to { transform: translate(var(--dx, 0), 110vh) rotate(var(--rot, 360deg)); opacity: .15; } }
 
+/* ============================================================
+   RÉVÉLATION PLEIN ÉCRAN (tirage) — suspense + flip des cartes
+   ============================================================ */
+.cb-reveal { position: fixed; inset: 0; z-index: 99998; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 20px;
+  background: radial-gradient(60% 50% at 50% 42%, color-mix(in srgb, var(--bc) 32%, transparent), transparent 70%), rgba(6,4,14,.92);
+  backdrop-filter: blur(9px); animation: cb-revin .3s ease both; }
+.cb-reveal.out { animation: cb-revout .24s ease forwards; }
+@keyframes cb-revin { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cb-revout { to { opacity: 0; } }
+.cb-reveal-orb { position: relative; width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, #fff, var(--bc) 58%, transparent 72%); box-shadow: 0 0 90px 24px var(--bc); animation: cb-orb .72s ease-out forwards; }
+@keyframes cb-orb { 0% { transform: scale(.2); opacity: .3; } 55% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(2.6); opacity: 0; } }
+.cb-reveal-rays { position: absolute; inset: -70%; background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--bc) 70%, transparent) 0 4deg, transparent 4deg 16deg);
+  -webkit-mask: radial-gradient(circle, #000 8%, transparent 60%); mask: radial-gradient(circle, #000 8%, transparent 60%); animation: cb-spin 3s linear infinite; }
+.cb-reveal-head { font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 0 16px var(--bc); animation: cb-pop2 .4s ease both; }
+.cb-reveal-cards { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: flex-start; max-width: 780px; max-height: 70vh; overflow-y: auto; perspective: 1100px; }
+.cb-rcard { width: 140px; transform-style: preserve-3d; animation: cb-flipin .6s cubic-bezier(.2,.8,.3,1.1) both; }
+@keyframes cb-flipin { from { transform: rotateY(95deg) translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+.cb-rcard-in { position: relative; overflow: hidden; border-radius: 16px; border: 1.5px solid color-mix(in srgb, var(--rc) 80%, #fff 6%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rc) 16%, rgba(14,10,28,.92)), rgba(9,7,18,.96)); box-shadow: 0 0 28px -3px var(--rc), 0 18px 36px -16px #000; }
+.cb-rcard .cb-pwin { height: 122px; } .cb-rcard .cb-emoji { font-size: 66px; }
+.cb-rcard.cb-r-leg, .cb-rcard.cb-r-myth { animation: cb-flipin .6s cubic-bezier(.2,.8,.3,1.1) both, cb-glow 1.8s ease-in-out .6s infinite; }
+.cb-reveal-skip { margin-top: 4px; }
+
+/* flash des PV à l'impact */
+.cb-fighter.cb-hphit .cb-hpbar { animation: cb-hpflash .32s ease; }
+@keyframes cb-hpflash { 0%, 100% { box-shadow: none; } 45% { box-shadow: 0 0 0 2px rgba(248,113,113,.8), 0 0 14px rgba(248,113,113,.6); } }
+
 /* ---------- responsive ---------- */
 @media (max-width: 560px) {
   .cb-tabs { width: 100%; justify-content: center; }
@@ -317,6 +345,7 @@ body.arene-on #cb-cosmos { display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
   #cb-cosmos::before, #cb-cosmos::after, .cb-ring, .cb-core, .cb-halo, .cb-rays, .cb-foil, .cb-fighter .cb-emoji,
-  .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div, .cb-tab.on { animation: none !important; }
-  .cb-pcard { transform: none !important; opacity: 1 !important; }
+  .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div, .cb-tab.on,
+  .cb-reveal-orb, .cb-reveal-rays, .cb-rcard { animation: none !important; }
+  .cb-pcard, .cb-rcard { transform: none !important; opacity: 1 !important; }
 }

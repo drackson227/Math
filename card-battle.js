@@ -128,7 +128,7 @@
     G.tickets -= n;
     var res = []; for (var i = 0; i < n; i++) res.push(pullOne());
     save();
-    showPullResult(res);
+    showRevealOverlay(res);
   };
 
   /* ---------------- COMBAT ---------------- */
@@ -235,6 +235,7 @@
     save(); render();
   };
   CB.go = function (v) { G.view = v; save(); render(); };
+  CB.closeReveal = function () { var ov = document.querySelector('.cb-reveal'); if (ov) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 240); } render(); };
 
   /* ---------------- RENDU ---------------- */
   function toast(m) { if (typeof showToast === 'function') showToast(m, 'var(--color-nav)'); }
@@ -389,6 +390,7 @@
     var p = Math.max(0, Math.round(f.hp / f.max * 100));
     var sp = el.querySelector('.cb-hpbar span'); if (sp) { sp.style.width = p + '%'; sp.style.background = f.hp > f.max * 0.3 ? 'linear-gradient(90deg,#16a34a,#4ade80)' : 'linear-gradient(90deg,#ef4444,#f87171)'; }
     var t = el.querySelector('.cb-fhp'); if (t) t.textContent = f.hp + ' / ' + f.max;
+    el.classList.add('cb-hphit'); setTimeout(function () { el.classList.remove('cb-hphit'); }, 320);
     if (f.hp <= 0) el.classList.add('ko');
   }
   function pushLog(s) {
@@ -463,31 +465,30 @@
       '</div>';
   }
 
-  function showPullResult(res) {
-    G.view = 'summon'; render();
-    var z = document.getElementById('cb-pullzone'); if (!z) return;
+  // RÉVÉLATION PLEIN ÉCRAN : suspense (orbe + rayons couleur de la meilleure rareté) puis cartes qui se retournent
+  function showRevealOverlay(res) {
     var best = res.reduce(function (m, r) { return Math.max(m, RAR_ORDER.indexOf(r.c.r)); }, 0);
     var bc = RAR[RAR_ORDER[best]].c;
-    var beams = ''; for (var bi = 0; bi < 7; bi++) { beams += '<i style="left:' + (15 + bi * 11) + '%; animation-delay:' + (bi * 0.05).toFixed(2) + 's"></i>'; }
-    z.innerHTML = '<div class="cb-rng"><div class="cb-beams" style="--bc:' + bc + '">' + beams + '</div><div class="cb-burst" style="--bc:' + bc + '"></div></div>';
-    var panel = document.querySelector('#arene .cb-panel');
-    if (panel) { var fl = document.createElement('div'); fl.className = 'cb-flash'; fl.style.setProperty('--bc', bc); panel.appendChild(fl); setTimeout(function () { fl.remove(); }, 760); }
-    if (best >= 3 && panel) playLottie(panel, 'summon', panel.clientWidth / 2, 150, 340); // révélation « grand studio » (Épique+)
+    var ov = document.createElement('div'); ov.className = 'cb-reveal'; ov.style.setProperty('--bc', bc);
+    ov.innerHTML = '<div class="cb-reveal-orb"><span class="cb-reveal-rays"></span></div>';
+    ov.addEventListener('click', function (e) { if (e.target === ov) CB.closeReveal(); });
+    document.body.appendChild(ov);
     setTimeout(function () {
-      z.innerHTML = '<div class="cb-pulls">' + res.map(function (r, i) {
+      var cards = res.map(function (r, i) {
         var rr = r.c.r, gold = (rr === 'leg' || rr === 'myth') ? ' goldname' : '';
-        return '<div class="cb-pcard cb-r-' + rr + '" style="--rc:' + RAR[rr].c + '; --tc:' + TM[r.c.t].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
-          '<div class="cb-pshine"></div>' +
-          pwin(r.c) +
-          '<div class="cb-pplate">' +
-            '<div class="cb-pname' + gold + '">' + esc(r.c.n) + '</div>' +
-            '<div class="cb-stars">' + starStr(RAR[rr].st) + '</div>' +
-            (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
-          '</div>' +
-          '</div>';
-      }).join('') + '</div>';
-      if (best >= 2) cbConfetti(best >= 4 ? 130 : best >= 3 ? 80 : 50, [RAR[RAR_ORDER[best]].c, '#ffffff', '#fde047']);
-    }, 560);
+        return '<div class="cb-rcard cb-r-' + rr + '" style="--rc:' + RAR[rr].c + '; --tc:' + TM[r.c.t].c + '; animation-delay:' + (i * 0.1).toFixed(2) + 's">' +
+          '<div class="cb-rcard-in"><div class="cb-pshine"></div>' + pwin(r.c) +
+          '<div class="cb-pplate"><div class="cb-pname' + gold + '">' + esc(r.c.n) + '</div>' +
+          '<div class="cb-stars">' + starStr(RAR[rr].st) + '</div>' +
+          (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">niv. ' + r.lvl + '</div>') +
+          '</div></div></div>';
+      }).join('');
+      ov.innerHTML = '<div class="cb-reveal-head">' + (res.length > 1 ? '✨ ' + res.length + ' invocations !' : '✨ Invocation !') + '</div>' +
+        '<div class="cb-reveal-cards">' + cards + '</div>' +
+        '<button class="cb-btn cb-btn-main cb-reveal-skip" onclick="CB.closeReveal()">Continuer ▶</button>';
+      if (best >= 2) cbConfetti(best >= 4 ? 150 : best >= 3 ? 95 : 55, [bc, '#ffffff', '#fde047']);
+      if (best >= 3) playLottie(ov, 'summon', (window.innerWidth / 2), (window.innerHeight * 0.4), 380);
+    }, 720);
   }
 
   function viewCollection() {
