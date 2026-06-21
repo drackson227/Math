@@ -546,7 +546,7 @@
       <p>Grands humanistes : <strong>Érasme</strong> (« <em>L'Éloge de la folie</em> », surnommé le « prince des humanistes ») et <strong>Thomas More</strong> (« <em>Utopia</em> »).</p>
 
       <h3 style="color:var(--color-nav); margin-top:1rem;">b) La Renaissance — un mouvement artistique</h3>
-      <p>La <strong>Renaissance</strong> est un <strong>renouveau artistique et culturel</strong> né en <strong>Italie</strong> (à <strong>Florence</strong>). Les artistes s'inspirent de l'Antiquité et recherchent le <strong>réalisme</strong> et la <strong>perspective</strong>.</p>
+      <p>La <strong>Renaissance</strong> est un <strong>renouveau artistique et culturel</strong> né en <strong>Italie</strong> (à <strong>Florence</strong>). Les artistes s'inspirent de l'Antiquité et recherchent le <strong>réalisme</strong> et la <strong>perspective</strong>. La <strong>chute de Constantinople (1453)</strong> y a contribué : des savants grecs fuient vers l'Italie en apportant les textes antiques.</p>
       <p>Elle est financée par les <strong>mécènes</strong> : de riches protecteurs qui financent les artistes. L'exemple le plus célèbre est la famille <strong>Médicis</strong>, à Florence.</p>
       <p>Grands artistes et œuvres :</p>
       <ul style="line-height:1.9;">
@@ -589,7 +589,7 @@
       <ul style="line-height:1.9;">
         <li>la chrétienté se <strong>divise</strong> : catholiques, <strong>protestants</strong> (luthériens, calvinistes) et anglicans ;</li>
         <li>des <strong>guerres de religion</strong> éclatent (ex. le massacre de la <strong>Saint-Barthélemy</strong>, le 24 août 1572, à Paris) ;</li>
-        <li>l'Église catholique réagit par la <strong>Contre-Réforme</strong> : le <strong>Concile de Trente</strong> réaffirme la doctrine catholique.</li>
+        <li>l'Église catholique réagit par la <strong>Contre-Réforme</strong> : le <strong>Concile de Trente (1545-1563)</strong> réaffirme la doctrine catholique ; les <strong>Jésuites</strong> en sont le fer de lance.</li>
       </ul>
 
       <h3 style="color:var(--color-nav); margin-top:1rem;">e) La carte des religions en Europe (vers 1600)</h3>
@@ -702,6 +702,30 @@
         <i>↓</i>
         <b class="end">Monarchie absolue (de droit divin)</b>
       </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>📅 Les dates à connaître par cœur</h2>
+      <p>👉 Active le <strong>Mode test</strong> en haut : les dates se cachent → interroge-toi (« que s'est-il passé en… ? » et « en quelle année… ? »).</p>
+      <table class="compare-table">
+        <thead><tr><th>Date</th><th>Événement</th></tr></thead>
+        <tbody>
+          <tr><td><strong>≈ −3300</strong></td><td>invention de l'écriture (début de l'Antiquité)</td></tr>
+          <tr><td><strong>476</strong></td><td>chute de Rome (fin de l'Antiquité)</td></tr>
+          <tr><td><strong>1054</strong></td><td>séparation des orthodoxes (schisme d'Orient)</td></tr>
+          <tr><td><strong>≈ 1450</strong></td><td>imprimerie à caractères mobiles (Gutenberg)</td></tr>
+          <tr><td><strong>1453</strong></td><td>chute de Constantinople</td></tr>
+          <tr><td><strong>1492</strong></td><td>découverte de l'Amérique (début des Temps modernes)</td></tr>
+          <tr><td><strong>1517</strong></td><td>les 95 thèses de Luther (début de la Réforme)</td></tr>
+          <tr><td><strong>1521</strong></td><td>excommunication de Luther</td></tr>
+          <tr><td><strong>1545-1563</strong></td><td>Concile de Trente (Contre-Réforme)</td></tr>
+          <tr><td><strong>1572</strong></td><td>massacre de la Saint-Barthélemy</td></tr>
+          <tr><td><strong>1598</strong></td><td>Édit de Nantes (Henri IV → tolérance des protestants)</td></tr>
+          <tr><td><strong>1643-1715</strong></td><td>règne de Louis XIV (le Roi-Soleil)</td></tr>
+          <tr><td><strong>1685</strong></td><td>révocation de l'Édit de Nantes (Louis XIV)</td></tr>
+          <tr><td><strong>1789</strong></td><td>Révolution française (fin des Temps modernes)</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="synth-section">
