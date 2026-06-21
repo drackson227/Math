@@ -196,6 +196,15 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .gg-res-ok { color: #16a34a; font-weight: 800; }
 .gg-res-no { color: #ef4444; font-weight: 800; }
 
+/* Animations façon Brilliant : feedback du quiz + transitions de section */
+.opt.correct { animation: gr2-opt-correct .5s ease; }
+.opt.wrong { animation: gr2-opt-wrong .45s ease; }
+@keyframes gr2-opt-correct { 0% { transform: scale(1); } 35% { transform: scale(1.05); } 100% { transform: scale(1); } }
+@keyframes gr2-opt-wrong { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+.section.active { animation: gr2-section-in .3s ease; }
+@keyframes gr2-section-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .opt.correct, .opt.wrong, .section.active { animation: none; } }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {

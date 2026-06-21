@@ -3976,10 +3976,18 @@ function setAmbientMusic(type) {
 function showRewardAnimation(type) {
   if (type === 'correct') {
     const el = document.createElement('div');
-    el.textContent = '✨';
-    el.style.cssText = 'position:fixed;font-size:36px;left:50%;top:45%;transform:translateX(-50%);z-index:9999;pointer-events:none;animation:rewardPop 0.8s ease forwards;';
+    el.textContent = '✅';
+    el.style.cssText = 'position:fixed;font-size:50px;left:50%;top:44%;transform:translateX(-50%);z-index:9999;pointer-events:none;animation:rewardPop 0.8s ease forwards;';
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 800);
+    // petit jet de confettis (façon Brilliant)
+    const cols = ['#34d399', '#fbbf24', '#60a5fa', '#a78bfa', '#ffffff'];
+    for (let i = 0; i < 14; i++) {
+      const c = document.createElement('div');
+      c.style.cssText = `position:fixed;width:8px;height:8px;background:${cols[i % 5]};left:${44 + Math.random() * 12}%;top:44%;border-radius:2px;z-index:9999;pointer-events:none;animation:confettiFall ${0.7 + Math.random() * 0.8}s ease ${Math.random() * 0.2}s forwards;`;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 1600);
+    }
   } else if (type === 'perfect') {
     const colors = ['#a78bfa','#60a5fa','#34d399','#fbbf24','#f87171'];
     for (let i = 0; i < 24; i++) {
