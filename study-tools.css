@@ -145,6 +145,40 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .geo-fl-cap .fl-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 .fl-tag.meuse { background: #2563eb; } .fl-tag.escaut { background: #0f766e; } .fl-tag.yser { background: #6d28d9; }
 
+/* ---------- Frise interactive des dates-clés (histoire) ---------- */
+.hist-frise-wrap { margin: 1rem 0; }
+.hist-frise-head { font-size: 13px; color: var(--text-primary); margin-bottom: 4px; }
+.hist-frise-hint { color: var(--text-secondary); font-size: 12px; }
+.hist-frise-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+.hist-frise-svg { width: 100%; min-width: 480px; height: auto; display: block; }
+.hist-frise-svg .hf-axis { stroke: var(--text-secondary); stroke-width: 2; }
+.hist-frise-svg .hf-tick { stroke: var(--border-subtle); stroke-width: 1; }
+.hist-frise-svg .hf-tick-lbl { fill: var(--text-secondary); pointer-events: none; }
+.hist-frise-svg .hf-stem { stroke-width: 1.6; opacity: .55; }
+.hist-frise-svg .hf-yr { fill: var(--text-primary); font-weight: 800; paint-order: stroke; stroke: var(--bg-card); stroke-width: 3px; pointer-events: none; }
+.hist-frise-svg .hf-pt { cursor: pointer; }
+.hist-frise-svg .hf-dot { stroke: var(--bg-card); stroke-width: 2; transition: r .1s ease; }
+.hist-frise-svg .hf-pt:hover .hf-dot, .hist-frise-svg .hf-pt:focus-visible .hf-dot { r: 8; }
+.hist-frise-svg .hf-pt.sel .hf-dot { r: 8.5; stroke: var(--text-primary); stroke-width: 2.5; }
+.hist-frise-svg .hf-rena .hf-dot, .hist-frise-svg rect.hf-bar.hf-rena { fill: #3b82f6; }
+.hist-frise-svg .hf-refo .hf-dot, .hist-frise-svg rect.hf-bar.hf-refo { fill: #a855f7; }
+.hist-frise-svg .hf-abso .hf-dot, .hist-frise-svg rect.hf-bar.hf-abso { fill: #f59e0b; }
+.hist-frise-svg .hf-fin .hf-dot,  .hist-frise-svg rect.hf-bar.hf-fin  { fill: #14b8a6; }
+.hist-frise-svg .hf-rena .hf-stem { stroke: #3b82f6; }
+.hist-frise-svg .hf-refo .hf-stem { stroke: #a855f7; }
+.hist-frise-svg .hf-abso .hf-stem { stroke: #f59e0b; }
+.hist-frise-svg .hf-fin .hf-stem { stroke: #14b8a6; }
+.hist-frise-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; justify-content: center; margin-top: 8px; font-size: 12px; }
+.hist-frise-legend .lg { display: inline-flex; align-items: center; gap: 5px; color: var(--text-primary); }
+.hist-frise-legend .sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.hist-frise-legend .sw.rena { background: #3b82f6; }
+.hist-frise-legend .sw.refo { background: #a855f7; }
+.hist-frise-legend .sw.abso { background: #f59e0b; }
+.hist-frise-legend .sw.fin { background: #14b8a6; }
+.hist-frise-cap { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; color: var(--text-primary); line-height: 1.5; margin-top: 8px; }
+.hist-frise-cap .hf-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.hf-tag.rena { background: #2563eb; } .hf-tag.refo { background: #7c3aed; } .hf-tag.abso { background: #b45309; } .hf-tag.fin { background: #0f766e; }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {

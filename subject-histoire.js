@@ -257,6 +257,68 @@
     tlSeg('periode-contemporaine', 'Époque contemp.', '1789 → ...', '#4a8cc7', false) +
     '</div></div>';
 
+  /* ---------------------- FRISE INTERACTIVE DES DATES-CLÉS (Temps modernes) ---------------------- */
+  // Chaque date du tableau « à connaître » placée proportionnellement (axe 1440→1800) et cliquable.
+  // Couleurs = grandes phases : Renaissance / Réforme / Absolutisme / Fin (mémoire visuelle).
+  var DATE_LIST = [
+    { key: 'd1450', x: 1450, full: '≈ 1450', cat: 'rena', event: 'imprimerie à caractères mobiles (<b>Gutenberg</b>)' },
+    { key: 'd1453', x: 1453, full: '1453', cat: 'rena', event: 'chute de <b>Constantinople</b>' },
+    { key: 'd1492', x: 1492, full: '1492', cat: 'rena', event: 'découverte de l’<b>Amérique</b> (début des Temps modernes)' },
+    { key: 'd1517', x: 1517, full: '1517', cat: 'refo', event: 'les <b>95 thèses de Luther</b> (début de la Réforme)' },
+    { key: 'd1521', x: 1521, full: '1521', cat: 'refo', event: '<b>excommunication de Luther</b>' },
+    { key: 'd1545', x: 1545, end: 1563, full: '1545–1563', cat: 'refo', event: '<b>Concile de Trente</b> (Contre-Réforme)' },
+    { key: 'd1572', x: 1572, full: '1572', cat: 'refo', event: 'massacre de la <b>Saint-Barthélemy</b>' },
+    { key: 'd1598', x: 1598, full: '1598', cat: 'refo', event: '<b>Édit de Nantes</b> (Henri IV → tolérance des protestants)' },
+    { key: 'd1643', x: 1643, end: 1715, full: '1643–1715', cat: 'abso', event: 'règne de <b>Louis XIV</b> (le Roi-Soleil)' },
+    { key: 'd1685', x: 1685, full: '1685', cat: 'abso', event: '<b>révocation de l’Édit de Nantes</b> (Louis XIV)' },
+    { key: 'd1789', x: 1789, full: '1789', cat: 'fin', event: '<b>Révolution française</b> (fin des Temps modernes)' }
+  ];
+  var DATE_CAT = { rena: 'Renaissance', refo: 'Réforme', abso: 'Absolutisme', fin: 'Fin des T.M.' };
+  var DATE_INFO = {}; DATE_LIST.forEach(function (d) { DATE_INFO[d.key] = d; });
+  window.histDateShow = function (el, key) {
+    var d = DATE_INFO[key]; if (!d) return;
+    var wrap = el.closest('.hist-frise-wrap'); if (!wrap) return;
+    var cap = wrap.querySelector('.hist-frise-cap');
+    if (cap) cap.innerHTML = '<strong>' + d.full + '</strong> — <b class="hf-tag ' + d.cat + '">' + DATE_CAT[d.cat] + '</b><br>' + d.event;
+    wrap.querySelectorAll('.hf-pt').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
+  };
+  var HIST_FRISE_SVG = (function () {
+    var X0 = 24, W = 412, Y0 = 1440, YW = 360, AX = 80; // axe x:24→436, années 1440→1800, axe à y=80
+    function xOf(y) { return (X0 + (y - Y0) / YW * W).toFixed(1); }
+    var s = '<line class="hf-axis" x1="' + X0 + '" y1="' + AX + '" x2="' + (X0 + W) + '" y2="' + AX + '"></line>';
+    for (var t = 1450; t <= 1750; t += 50) {
+      s += '<line class="hf-tick" x1="' + xOf(t) + '" y1="' + AX + '" x2="' + xOf(t) + '" y2="' + (AX + 6) + '"></line>';
+      s += '<text class="hf-tick-lbl" x="' + xOf(t) + '" y="152" text-anchor="middle" style="font-size:9px">' + t + '</text>';
+    }
+    DATE_LIST.forEach(function (d, i) {
+      var x = xOf(d.x), above = (i % 2 === 0), dotY = above ? 54 : 106, lblY = above ? 44 : 122;
+      var g = '<g class="hf-pt hf-' + d.cat + '" data-k="' + d.key + '" role="button" tabindex="0" aria-label="' + d.full + ' : ' + d.event.replace(/<[^>]+>/g, '') + '"' +
+        ' onclick="histDateShow(this,\'' + d.key + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();histDateShow(this,\'' + d.key + '\');}">';
+      if (d.end) g += '<rect class="hf-bar hf-' + d.cat + '" x="' + x + '" y="' + (AX - 3) + '" width="' + (xOf(d.end) - x).toFixed(1) + '" height="6" rx="3"></rect>';
+      g += '<line class="hf-stem" x1="' + x + '" y1="' + AX + '" x2="' + x + '" y2="' + dotY + '"></line>';
+      g += '<circle class="hf-dot" cx="' + x + '" cy="' + dotY + '" r="6"></circle>';
+      g += '<text class="hf-yr" x="' + x + '" y="' + lblY + '" text-anchor="middle" style="font-size:10px">' + d.x + '</text></g>';
+      s += g;
+    });
+    return s;
+  })();
+  var DATES_FRISE =
+    '<div class="hist-frise-wrap">' +
+      '<div class="hist-frise-head">📍 <strong>Frise des dates-clés</strong> (Temps modernes) — 👆 clique une date<span class="hist-frise-hint"> · ↔ glisse sur mobile</span></div>' +
+      '<div class="hist-frise-scroll">' +
+        '<svg viewBox="0 0 460 162" class="hist-frise-svg" role="img" aria-label="Frise chronologique des dates clés des Temps modernes, de 1450 à 1789">' +
+          HIST_FRISE_SVG +
+        '</svg>' +
+      '</div>' +
+      '<div class="hist-frise-legend">' +
+        '<span class="lg"><i class="sw rena"></i>Renaissance</span>' +
+        '<span class="lg"><i class="sw refo"></i>Réforme</span>' +
+        '<span class="lg"><i class="sw abso"></i>Absolutisme</span>' +
+        '<span class="lg"><i class="sw fin"></i>Fin des T.M.</span>' +
+      '</div>' +
+      '<div class="hist-frise-cap" aria-live="polite">👆 Clique une date pour revoir l’événement. <span style="color:var(--text-secondary)">Avant les Temps modernes : −3300 (écriture) · 476 (chute de Rome) · 1054 (schisme d’Orient).</span></div>' +
+    '</div>';
+
   /* ---------------------- CARTE VISUELLE DES RELIGIONS EN EUROPE (vers 1600) ---------------------- */
   // Carte stylisée cliquable : chaque région → sa religion + un détail. Mnémo des couleurs :
   // Nord (couleurs froides) = protestant · Sud (chaud) = catholique · Est (vert) = orthodoxe.
@@ -447,6 +509,7 @@
   sections.formules = `<div id="formules" class="section">
     <h2 style="font-size:30px; font-weight:800; color:var(--color-nav); margin-bottom:1rem;">📅 Dates & repères clés</h2>
     ${TIMELINE}
+    ${DATES_FRISE}
     <div class="formula-grid">
       <div>
         <div class="formula-box"><h3>Les bornes des périodes</h3><p style="line-height:2; margin:0;">≈ −3300 écriture · <strong>476</strong> chute de Rome · <strong>1492</strong> Amérique · <strong>1789</strong> Révolution</p></div>
@@ -790,6 +853,7 @@
           <tr><td><strong>1789</strong></td><td>Révolution française (fin des Temps modernes)</td></tr>
         </tbody>
       </table>
+      ${DATES_FRISE}
     </div>
 
     <div class="synth-section">
