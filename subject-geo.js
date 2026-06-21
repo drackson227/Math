@@ -416,6 +416,19 @@
       <div class="key-rule"><div class="formula-main">Sud cultive (peu payé) → Nord transforme &amp; vend (cher) · solution : commerce équitable</div></div>
     </div>
 
+    <div class="synth-section">
+      <h2>🧠 Astuces pour retenir</h2>
+      <ul style="line-height:2;">
+        <li><strong>3 provinces faciles</strong> : pour <strong>Anvers</strong>, <strong>Liège</strong> et <strong>Namur</strong>, la province porte le <em>même nom</em> que son chef-lieu (3 gagnées d'office !).</li>
+        <li>Les autres chefs-lieux : Limbourg→<strong>Hasselt</strong> · Flandre-Orientale→<strong>Gand</strong> · Flandre-Occidentale→<strong>Bruges</strong> · Brabant flamand→<strong>Louvain</strong> · Brabant wallon→<strong>Wavre</strong> · Hainaut→<strong>Mons</strong> · Luxembourg→<strong>Arlon</strong>.</li>
+        <li><strong>Relief</strong> : plus on va vers le <em>Sud-Est</em> (l'Ardenne), plus ça <em>monte</em> (Basse → Moyenne → Haute). Sommet : <strong>Botrange, 694 m</strong>.</li>
+        <li><strong>Affluents</strong> : la <strong>Sambre</strong> rejoint la <strong>Meuse</strong> à <strong>Namur</strong> ; la <strong>Lys</strong> rejoint l'<strong>Escaut</strong> à <strong>Gand</strong>.</li>
+        <li><strong>Région ou Communauté ?</strong> <strong>Région = teRRitoire</strong> (le sol) ; <strong>Communauté = les gens</strong> (langue, école, culture).</li>
+        <li><strong>Cacao</strong> : environ <strong>¾ (75 %)</strong> vient d'<strong>Afrique</strong> → « le chocolat est surtout africain ».</li>
+      </ul>
+      <p style="color:var(--text-secondary); font-size:13px;">💡 Active le <strong>Mode test</strong> en haut : les réponses en gras se cachent, à toi de les retrouver !</p>
+    </div>
+
     <div class="key-rule" style="margin-top:1rem;"><div class="formula-main">✅ Tu as lu tout le cours ! File aux <strong>Flashcards</strong> et au <strong>Quiz</strong> pour t'entraîner.</div></div>
   </div>`;
 

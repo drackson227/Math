@@ -650,6 +650,73 @@
       </div>
     </div>
 
+    <div class="synth-section">
+      <h2>🔍 S'entraîner : analyser un document (comme à l'examen)</h2>
+      <p>Pour chaque document réel étudié en classe, fais sa <strong>carte d'identité</strong> de tête, puis clique pour vérifier. <em>(Les textes ne sont pas recopiés ici — droits d'auteur ; entraîne-toi avec ce que tu connais.)</em></p>
+
+      <div class="exercise-card">
+        <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin:0 0 .5rem;">📄 Document A — « Les 95 thèses » de Martin Luther (1517)</h3>
+        <details class="gr2-q"><summary>1. Nature du document ?</summary><p>Un <strong>texte</strong> (un écrit religieux : une liste de critiques/thèses).</p></details>
+        <details class="gr2-q"><summary>2. Auteur ? A-t-il un parti pris ?</summary><p><strong>Martin Luther</strong>, moine allemand. <strong>Oui, parti pris</strong> : il critique l'Église, il n'est pas neutre.</p></details>
+        <details class="gr2-q"><summary>3. Date et lieu ?</summary><p><strong>1517</strong>, en <strong>Allemagne</strong> (Wittenberg).</p></details>
+        <details class="gr2-q"><summary>4. Source primaire ou secondaire ?</summary><p><strong>Primaire</strong> : document d'époque, écrit par un acteur direct.</p></details>
+        <details class="gr2-q"><summary>5. Sujet (idée principale) ?</summary><p>La critique de la <strong>vente des indulgences</strong> et des abus de l'Église → point de départ de la <strong>Réforme protestante</strong>.</p></details>
+        <details class="gr2-q"><summary>➕ Pertinent &amp; fiable pour étudier les causes de la Réforme ?</summary><p><strong>Très pertinent</strong> (c'est l'acte fondateur). Mais <strong>fiabilité à nuancer</strong> : Luther est « juge et partie » → croiser avec d'autres sources.</p></details>
+      </div>
+
+      <div class="exercise-card">
+        <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin:0 0 .5rem;">📄 Document B — Ordonnance de Charles Quint (1531)</h3>
+        <details class="gr2-q"><summary>1. Nature ?</summary><p>Un <strong>texte officiel</strong> / une loi (une ordonnance impériale).</p></details>
+        <details class="gr2-q"><summary>2. Auteur ? Parti pris ?</summary><p><strong>Charles Quint</strong>, empereur catholique du Saint-Empire. <strong>Parti pris : contre Luther.</strong></p></details>
+        <details class="gr2-q"><summary>3. Date et lieu ?</summary><p><strong>1531</strong>, dans le <strong>Saint-Empire</strong>.</p></details>
+        <details class="gr2-q"><summary>4. Source ?</summary><p><strong>Primaire</strong> (document officiel d'époque).</p></details>
+        <details class="gr2-q"><summary>5. Sujet ?</summary><p><strong>Interdire d'imprimer et de diffuser les livres de Luther</strong> → la réaction du pouvoir catholique face à la Réforme.</p></details>
+        <details class="gr2-q"><summary>➕ Que montre-t-il ?</summary><p>Que les autorités catholiques <strong>combattent la Réforme</strong>, en s'attaquant notamment à l'<strong>imprimerie</strong> (qui diffusait les idées de Luther).</p></details>
+      </div>
+
+      <div class="exercise-card">
+        <h3 style="font-size:18px; font-weight:700; color:var(--color-nav); margin:0 0 .5rem;">📄 Document C — Discours d'Henri IV sur l'autorité du roi</h3>
+        <details class="gr2-q"><summary>1. Nature ?</summary><p>Un <strong>texte</strong> (un discours).</p></details>
+        <details class="gr2-q"><summary>2. Auteur ? Parti pris ?</summary><p><strong>Henri IV</strong>, roi de France. <strong>Parti pris : oui</strong> — il défend son propre pouvoir.</p></details>
+        <details class="gr2-q"><summary>3. Sujet ?</summary><p>L'<strong>obéissance due au roi</strong> et l'<strong>autorité royale</strong> → illustre les principes de l'<strong>absolutisme</strong>.</p></details>
+        <details class="gr2-q"><summary>➕ À relier à quel chapitre ?</summary><p>À l'<strong>Absolutisme</strong> (le roi détient le pouvoir, de droit divin).</p></details>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>🗺️ Schéma récap : tout s'enchaîne</h2>
+      <p>Retenir les <strong>liens cause → conséquence</strong> aide bien plus que des faits isolés.</p>
+      <div class="gr2-flow">
+        <b class="start">Imprimerie (≈ 1450, Gutenberg)</b>
+        <i>↓ diffuse vite les idées</i>
+        <div class="gr2-flow-row"><b>Humanisme &amp; Renaissance</b><b>Réforme protestante (Luther, 1517)</b></div>
+        <i>↓ la Réforme divise</i>
+        <b>Division de la chrétienté : catholiques · protestants · anglicans</b>
+        <i>↓</i>
+        <div class="gr2-flow-row"><b>Guerres de religion (Saint-Barthélemy, 1572)</b><b>Contre-Réforme (Concile de Trente)</b></div>
+      </div>
+      <div class="gr2-flow">
+        <b class="start">Peur de la noblesse rebelle</b>
+        <i>↓</i>
+        <b>Louis XIV installe la noblesse à Versailles (il la contrôle)</b>
+        <i>↓</i>
+        <b class="end">Monarchie absolue (de droit divin)</b>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>🧠 Astuces pour retenir</h2>
+      <ul style="line-height:2;">
+        <li><strong>Les 5 périodes dans l'ordre</strong> → phrase-truc : « <em>Petit Âne Mange Trois Carottes</em> » = <strong>P</strong>réhistoire · <strong>A</strong>ntiquité · <strong>M</strong>oyen Âge · <strong>T</strong>emps modernes · <strong>C</strong>ontemporaine.</li>
+        <li><strong>Les 3 dates-bornes</strong> : <strong>1492</strong> (Colomb → Amérique) et <strong>1789</strong> (Révolution française) encadrent NOTRE programme ; avant, <strong>476</strong> = chute de Rome. <em>(2 dates déjà hyper connues + 1 à retenir.)</em></li>
+        <li><strong>Luther</strong> : « en <strong>15-17</strong> il <em>affiche</em> ses 95 thèses, en <strong>15-21</strong> il est <em>exclu</em> (excommunié). »</li>
+        <li><strong>Édit de Nantes</strong> : Henri IV le <em>signe</em> en <strong>1598</strong> (tolérance) ; Louis XIV le <em>révoque</em> en <strong>1685</strong>.</li>
+        <li><strong>Carte des religions</strong> : <strong>Nord = protestant</strong> · <strong>Sud = catholique</strong> · <strong>Est = orthodoxe</strong>.</li>
+        <li><strong>Humanisme ou Renaissance ?</strong> Humanisme = les <em>idées</em> (la tête) ; Renaissance = l'<em>art</em> (les mains).</li>
+      </ul>
+      <p style="color:var(--text-secondary); font-size:13px;">💡 Active le <strong>Mode test</strong> en haut : les réponses en gras se cachent, à toi de les retrouver !</p>
+    </div>
+
     <div class="key-rule" style="margin-top:1rem;"><div class="formula-main">✅ Tu as lu tout le cours ! File aux <strong>Flashcards</strong> et au <strong>Quiz</strong> pour t'entraîner.</div></div>
   </div>`;
 

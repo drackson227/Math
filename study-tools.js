@@ -790,7 +790,7 @@
       if (s.dataset.gr2cloze) return;
       var t = (s.textContent || '').trim();
       if (!t || t.length > 42) return;                         // pas les longues phrases en gras
-      if (s.closest('h1,h2,h3,h4,button,.gr2-tool')) return;   // pas les titres/boutons
+      if (s.closest('h1,h2,h3,h4,button,.gr2-tool,details,.gr2-flow')) return;   // pas les titres/boutons/réponses à révéler/schéma
       s.dataset.gr2cloze = '1';
       s.classList.add('gr2-cloze');
       s.setAttribute('role', 'button');
