@@ -262,6 +262,7 @@ body.arene-on #cb-cosmos { display: block; }
 /* ============================================================
    FX D'ATTAQUE — mode « cinéma » (spectaculaire)
    ============================================================ */
+.cb-fxcanvas { position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: 18px; }
 .cb-cinema { position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: 18px;
   background: radial-gradient(120% 100% at 50% 50%, transparent 36%, rgba(4,2,12,.74) 100%); animation: cb-cine .2s ease both; }
 @keyframes cb-cine { from { opacity: 0; } to { opacity: 1; } }
