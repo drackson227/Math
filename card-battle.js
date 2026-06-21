@@ -222,7 +222,7 @@
       B.log.push('☠️ Défaite… réessaie (aucune perte). Astuce : exploite les avantages de type.');
     }
     save(); renderBattle();
-    if (win) cbConfetti(120, ['#16a34a', '#fde047', '#ffffff', '#60a5fa', '#f472b6']);
+    if (win) { cbConfetti(120, ['#16a34a', '#fde047', '#ffffff', '#60a5fa', '#f472b6']); var ar = document.getElementById('arene'); if (ar) playLottie(ar, 'victory', ar.clientWidth / 2, 200, 360); }
   }
 
   /* ---------------- ÉQUIPE / COLLECTION ---------------- */
@@ -323,6 +323,31 @@
       if (k < 1) requestAnimationFrame(tick); else if (onArrive) onArrive(x, y);
     })();
   }
+  /* ===== animations LOTTIE (effets « grand studio », optionnelles) =====
+     Dépose les .json dans le dossier "lottie/" (voir lottie/_A_LIRE.txt).
+     Si la librairie ou le fichier manque → repli SILENCIEUX sur les particules canvas. */
+  var LOTTIE = {
+    explosion: 'lottie/explosion.json', // impact d'attaque spéciale
+    summon:    'lottie/summon.json',    // révélation d'invocation (rareté élevée)
+    victory:   'lottie/victory.json'    // victoire de combat
+  };
+  var lottieMiss = {};
+  function playLottie(container, key, cx, cy, size, loop) {
+    try {
+      if (typeof lottie === 'undefined' || !container || lottieMiss[key] || !LOTTIE[key]) return false;
+      // on récupère le JSON via fetch : un 404 est SILENCIEUX (pas d'erreur console) → repli propre sur le canvas
+      fetch(LOTTIE[key]).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (data) {
+        var box = document.createElement('div'); box.className = 'cb-lottie';
+        size = size || 180; box.style.width = size + 'px'; box.style.height = size + 'px';
+        box.style.left = (cx - size / 2) + 'px'; box.style.top = (cy - size / 2) + 'px';
+        container.appendChild(box);
+        var anim = lottie.loadAnimation({ container: box, renderer: 'svg', loop: !!loop, autoplay: true, animationData: data });
+        var kill = function () { try { anim.destroy(); } catch (e) {} if (box.parentNode) box.remove(); };
+        anim.addEventListener('complete', kill); if (loop) setTimeout(kill, 2600);
+      }).catch(function () { lottieMiss[key] = 1; }); // fichier absent → on n'insiste plus
+      return true;
+    } catch (e) { return false; }
+  }
   // effet SIGNATURE par catégorie d'attaque (tout en particules canvas)
   function signatureFx(stage, atkEl, defEl, side, key, tc) {
     var a = ctr(atkEl), b = ctr(defEl), col = (key === 'beam' ? tc : (FXC[key] || tc)), dir = Math.atan2(b.y - a.y, b.x - a.x);
@@ -383,6 +408,7 @@
       setTimeout(function () {
         if (onImpact) onImpact();
         var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 26, 6.5); fxBurst(bp.x, bp.y, tc, 30, 5); fxRing(bp.x, bp.y, '#ffffff', 3);
+        playLottie(stage, 'explosion', bp.x, bp.y, 250); // explosion « grand studio » si dispo (sinon canvas seul)
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
         defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
@@ -438,6 +464,7 @@
     z.innerHTML = '<div class="cb-rng"><div class="cb-beams" style="--bc:' + bc + '">' + beams + '</div><div class="cb-burst" style="--bc:' + bc + '"></div></div>';
     var panel = document.querySelector('#arene .cb-panel');
     if (panel) { var fl = document.createElement('div'); fl.className = 'cb-flash'; fl.style.setProperty('--bc', bc); panel.appendChild(fl); setTimeout(function () { fl.remove(); }, 760); }
+    if (best >= 3 && panel) playLottie(panel, 'summon', panel.clientWidth / 2, 150, 340); // révélation « grand studio » (Épique+)
     setTimeout(function () {
       z.innerHTML = '<div class="cb-pulls">' + res.map(function (r, i) {
         var rr = r.c.r, gold = (rr === 'leg' || rr === 'myth') ? ' goldname' : '';

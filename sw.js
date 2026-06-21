@@ -4,7 +4,7 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v225';
+const CACHE = 'mathsgr2-v226';
 const CORE = [
   './', './index.html', './style.css', './enhancements.css', './study-tools.css', './a11y-fixes.css', './card-battle.css',
   './data.js', './content.js', './script.js',
@@ -16,7 +16,8 @@ const CDN_PRECACHE = [
   'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js',
   'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+  'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js'
 ];
 
 // Hôtes CDN dont on garde une copie en cache (pour le hors-ligne)

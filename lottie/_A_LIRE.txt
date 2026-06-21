@@ -1,0 +1,30 @@
+🎬 ANIMATIONS LOTTIE DE L'ARÈNE — mode d'emploi (effets « grand studio »)
+=========================================================================
+
+Le jeu sait afficher des animations Lottie (faites par des motion designers pros)
+au lieu des simples particules. Tant que les fichiers ci-dessous ne sont pas là,
+le jeu utilise automatiquement les particules canvas (aucun bug).
+
+➡️ POUR ACTIVER LES EFFETS PRO :
+1. Va sur https://lottiefiles.com (gratuit, filtre « Free »).
+2. Télécharge l'animation au format **Lottie JSON** (bouton Download → "Lottie JSON").
+3. Renomme le fichier EXACTEMENT comme indiqué et mets-le dans CE dossier (math/lottie/).
+4. Dis-le-moi : je le mets en ligne (commit + bump du cache) et ça s'allume.
+
+FICHIERS ATTENDUS (nom EXACT → quoi chercher sur LottieFiles) :
+---------------------------------------------------------------
+explosion.json   → cherche : "explosion", "impact", "energy blast", "boom"
+                   (joué quand une carte lance son attaque SPÉCIALE)
+summon.json      → cherche : "magic burst", "power up", "portal", "summon", "shine burst"
+                   (joué à l'invocation d'une carte Épique ou mieux)
+victory.json     → cherche : "confetti", "victory", "winner", "celebration"
+                   (joué quand tu gagnes un combat)
+
+CONSEILS pour que ce soit "hors norme" :
+- Prends des animations sur FOND TRANSPARENT (pas de fond blanc/noir).
+- Style "game/anime/VFX" plutôt que "corporate/flat".
+- Vérifie la licence : "Free" (souvent attribution facultative) — évite "Premium".
+- Format LOTTIE JSON (.json). Le .lottie (dotLottie) n'est PAS géré ici.
+
+Tu peux en ajouter d'autres plus tard (aura légendaire, feu, éclair, vague…) :
+dis-moi lesquels, j'ajoute les emplacements dans le code.
