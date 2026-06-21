@@ -422,6 +422,15 @@
     <div class="synth-section">
       <h2>1. Les grandes périodes de l'histoire</h2>
       ${TIMELINE}
+      <div class="gr2-guess">
+        <p class="gg-q">🤔 Devine d'abord : quel événement marque le DÉBUT des Temps modernes (notre programme) ?</p>
+        <div class="gg-opts">
+          <button class="gg-opt" data-ok="0" onclick="gr2Guess(this)">La chute de Rome (476)</button>
+          <button class="gg-opt" data-ok="1" onclick="gr2Guess(this)">La découverte de l'Amérique (1492)</button>
+          <button class="gg-opt" data-ok="0" onclick="gr2Guess(this)">La Révolution française (1789)</button>
+        </div>
+        <div class="gg-reveal">Les <strong>Temps modernes</strong> vont de <strong>1492</strong> (découverte de l'Amérique) à <strong>1789</strong> (Révolution française) — c'est notre programme.</div>
+      </div>
       <p>On découpe l'histoire en grandes périodes, séparées par des <strong>événements-clés</strong> :</p>
       <ul style="line-height:1.9;">
         <li><strong>Préhistoire</strong> → jusqu'à l'invention de l'écriture (≈ −3300).</li>

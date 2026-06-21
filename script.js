@@ -1516,6 +1516,28 @@ function toggleSimpleExp(btn) {
   btn.textContent = content.classList.contains('show') ? "💡 Masquer l'explication" : "💡 Comprendre simplement";
 }
 
+// « Devine d'abord » (inspiré de Brilliant) : on devine AVANT, puis le site révèle + explique.
+// Markup : <div class="gr2-guess"><p class="gg-q">…</p><div class="gg-opts">
+//   <button class="gg-opt" data-ok="1" onclick="gr2Guess(this)">…</button>…</div>
+//   <div class="gg-reveal">explication…</div></div>
+function gr2Guess(btn) {
+  const box = btn.closest('.gr2-guess');
+  if (!box || box.classList.contains('gg-done')) return;
+  box.classList.add('gg-done');
+  const ok = btn.getAttribute('data-ok') === '1';
+  box.querySelectorAll('.gg-opt').forEach(o => {
+    o.disabled = true;
+    if (o.getAttribute('data-ok') === '1') o.classList.add('gg-ok');
+    else if (o === btn) o.classList.add('gg-bad');
+    else o.classList.add('gg-dim');
+  });
+  const rev = box.querySelector('.gg-reveal');
+  if (rev) {
+    rev.classList.add('show');
+    rev.innerHTML = (ok ? '<span class="gg-res-ok">✅ Bien vu !</span> ' : '<span class="gg-res-no">❌ Pas tout à fait —</span> ') + rev.innerHTML;
+  }
+}
+
 function toggleLegendItem(item) {
   item.classList.toggle('open');
   const accordion = item.querySelector('.accordion-content');

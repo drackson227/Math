@@ -181,6 +181,21 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .hd-opt.hd-no { background: #b91c1c; color: #fff; border-color: #b91c1c; }
 .hd-score { margin-top: 8px; font-weight: 800; }
 
+/* « Devine d'abord » (pretest façon Brilliant) */
+.gr2-guess { background: var(--bg-card); border: 1px solid var(--border-subtle); border-left: 4px solid var(--color-nav); border-radius: 12px; padding: 12px 14px; margin: 1rem 0; }
+.gg-q { font-weight: 700; color: var(--text-primary); margin: 0 0 8px; }
+.gg-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.gg-opt { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-main); color: var(--text-primary); font-weight: 700; font-size: 14px; cursor: pointer; min-height: 40px; }
+.gg-opt:hover:not(:disabled) { border-color: var(--color-nav); }
+.gg-opt:disabled { cursor: default; }
+.gg-opt.gg-ok { background: #15803d; color: #fff; border-color: #15803d; }
+.gg-opt.gg-bad { background: #b91c1c; color: #fff; border-color: #b91c1c; }
+.gg-opt.gg-dim { opacity: .5; }
+.gg-reveal { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-subtle); color: var(--text-primary); line-height: 1.55; }
+.gg-reveal.show { display: block; }
+.gg-res-ok { color: #16a34a; font-weight: 800; }
+.gg-res-no { color: #ef4444; font-weight: 800; }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {

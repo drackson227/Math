@@ -190,6 +190,15 @@
     <div class="synth-section">
       <h2>3. Le relief : 3 grands ensembles</h2>
       <p>Le relief belge monte doucement du nord-ouest (mer) vers le sud-est (Ardenne).</p>
+      <div class="gr2-guess">
+        <p class="gg-q">🤔 Devine d'abord : quel est le point culminant de la Belgique ?</p>
+        <div class="gg-opts">
+          <button class="gg-opt" data-ok="0" onclick="gr2Guess(this)">350 m</button>
+          <button class="gg-opt" data-ok="1" onclick="gr2Guess(this)">694 m</button>
+          <button class="gg-opt" data-ok="0" onclick="gr2Guess(this)">1 340 m</button>
+        </div>
+        <div class="gg-reveal">Le point culminant est le <strong>Signal de Botrange</strong> : <strong>694 m</strong> (Hautes Fagnes, en Ardenne).</div>
+      </div>
       ${RELIEF_PROFILE}
       <table class="compare-table">
         <thead><tr><th>Ensemble</th><th>Altitude</th><th>Où / caractéristiques</th></tr></thead>
