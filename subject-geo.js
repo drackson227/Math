@@ -97,6 +97,63 @@
       '<div class="geo-relief-cap" aria-live="polite">👆 Clique un étage du relief pour le détail.</div>' +
     '</div>';
 
+  /* ---------------------- CARTE DES 3 FLEUVES (schéma cliquable) ---------------------- */
+  // Meuse, Escaut, Yser — tous vers la mer du Nord. Confluences : Sambre→Meuse (Namur), Lys→Escaut (Gand).
+  var FLEUVE_DATA = {
+    meuse:  ['La Meuse', 'grand fleuve', 'Entre par le sud (France), traverse <b>Namur</b> puis <b>Liège</b>, et rejoint la mer du Nord (via les Pays-Bas). La <b>Sambre</b> la rejoint à Namur.', 'meuse'],
+    escaut: ['L’Escaut', 'grand fleuve', 'Passe à <b>Tournai</b>, <b>Gand</b> (la <b>Lys</b> le rejoint) puis <b>Anvers</b> ; il rejoint la mer du Nord (via les Pays-Bas).', 'escaut'],
+    yser:   ['L’Yser', 'petit fleuve côtier', 'Petit fleuve de Flandre-Occidentale ; il se jette dans la mer du Nord à <b>Nieuport</b>.', 'yser']
+  };
+  window.geoFleuveShow = function (el, key) {
+    var d = FLEUVE_DATA[key]; if (!d) return;
+    var wrap = el.closest('.geo-fleuve-wrap'); if (!wrap) return;
+    var cap = wrap.querySelector('.geo-fl-cap');
+    if (cap) cap.innerHTML = '<strong>' + d[0] + '</strong> — <b class="fl-tag ' + d[3] + '">' + d[1] + '</b><br>' + d[2];
+    wrap.querySelectorAll('.geo-fl').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
+  };
+  function fleuveLine(k, pts) {
+    return '<g class="geo-fl geo-fl-' + FLEUVE_DATA[k][3] + '" data-k="' + k + '" role="button" tabindex="0" aria-label="' + FLEUVE_DATA[k][0] + '"' +
+      ' onclick="geoFleuveShow(this,\'' + k + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();geoFleuveShow(this,\'' + k + '\');}">' +
+      '<polyline class="geo-fl-hit" points="' + pts + '"></polyline>' +
+      '<polyline class="geo-fl-line" points="' + pts + '"></polyline>' +
+      '</g>';
+  }
+  function flCity(cx, cy, name, lx, ly, anchor) {
+    return '<circle class="geo-city" cx="' + cx + '" cy="' + cy + '" r="4"></circle>' +
+      '<text x="' + lx + '" y="' + ly + '" text-anchor="' + anchor + '" class="geo-city-lbl" style="font-size:10px">' + name + '</text>';
+  }
+  var FLEUVES_MAP =
+    '<div class="geo-fleuve-wrap">' +
+      '<svg viewBox="0 0 420 300" class="geo-fleuve-svg" role="img" aria-label="Schéma des trois fleuves de Belgique : Meuse, Escaut et Yser, tous vers la mer du Nord">' +
+        '<polygon class="geo-fl-land" points="40,34 300,34 392,120 340,252 160,276 70,180"></polygon>' +
+        '<rect class="geo-fl-sea" x="0" y="0" width="420" height="30"></rect>' +
+        '<text x="210" y="20" text-anchor="middle" class="geo-fl-sea-lbl" style="font-size:13px">⬆ Mer du Nord</text>' +
+        '<polyline class="geo-aff" points="58,120 110,100 150,92"></polyline>' +
+        '<text x="52" y="116" text-anchor="end" class="geo-aff-lbl" style="font-size:9px">Lys</text>' +
+        '<polyline class="geo-aff" points="120,250 170,222 215,200"></polyline>' +
+        '<text x="116" y="258" text-anchor="end" class="geo-aff-lbl" style="font-size:9px">Sambre</text>' +
+        fleuveLine('yser', '105,150 80,100 60,52 55,30') +
+        fleuveLine('escaut', '110,205 150,92 250,70 262,30') +
+        fleuveLine('meuse', '210,276 215,200 320,150 365,30') +
+        '<circle class="geo-conf" cx="215" cy="200" r="6"></circle>' +
+        '<circle class="geo-conf" cx="150" cy="92" r="6"></circle>' +
+        flCity(60, 52, 'Nieuport', 60, 67, 'middle') +
+        flCity(150, 92, 'Gand', 150, 108, 'middle') +
+        flCity(250, 70, 'Anvers', 250, 61, 'middle') +
+        flCity(110, 205, 'Tournai', 110, 221, 'middle') +
+        flCity(215, 200, 'Namur', 227, 196, 'start') +
+        flCity(320, 150, 'Liège', 329, 148, 'start') +
+      '</svg>' +
+      '<div class="geo-fl-legend">' +
+        '<span class="lg"><i class="sw meuse"></i>Meuse</span>' +
+        '<span class="lg"><i class="sw escaut"></i>Escaut</span>' +
+        '<span class="lg"><i class="sw yser"></i>Yser</span>' +
+        '<span class="lg"><i class="sw aff"></i>affluents (Sambre, Lys)</span>' +
+        '<span class="lg"><i class="dot-conf"></i>confluence</span>' +
+      '</div>' +
+      '<div class="geo-fl-cap" aria-live="polite">👆 Clique un fleuve (Meuse, Escaut, Yser) pour voir son trajet et les villes traversées.</div>' +
+    '</div>';
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
@@ -156,6 +213,8 @@
         <li>L'<strong>Yser</strong> : petit fleuve <strong>côtier</strong> de Flandre-Occidentale ; il se jette dans la mer du Nord à <strong>Nieuport</strong>.</li>
         <li>Autres (rivières/affluents) : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
       </ul>
+      ${FLEUVES_MAP}
+      <p style="text-align:center; color:var(--text-secondary); font-size:13px; margin-top:.4rem;">🗺️ Schéma : clique un fleuve pour suivre son trajet vers la <strong>mer du Nord</strong> et voir les villes traversées.</p>
 
       <h3 style="color:var(--color-nav); margin-top:1.2rem;">💧 Eaux de surface vs eaux souterraines</h3>
       <p>L'eau douce qu'on utilise vient de deux sources :</p>
@@ -379,6 +438,8 @@
         <li>L'<strong>Yser</strong> : petit fleuve <strong>côtier</strong> de Flandre-Occidentale ; il se jette dans la mer du Nord à <strong>Nieuport</strong>.</li>
         <li>Autres rivières/affluents : la <strong>Sambre</strong>, la <strong>Lys</strong>, la <strong>Dendre</strong>, l'<strong>Ourthe</strong>, la <strong>Semois</strong> (Ardenne).</li>
       </ul>
+      ${FLEUVES_MAP}
+      <p style="text-align:center; color:var(--text-secondary); font-size:13px; margin-top:.4rem;">🗺️ Schéma : clique un fleuve pour suivre son trajet vers la <strong>mer du Nord</strong> et voir les villes traversées.</p>
 
       <h3 style="color:var(--color-nav); margin-top:1rem;">b) Eaux de surface vs eaux souterraines</h3>
       <p>L'eau douce qu'on utilise vient de deux sources :</p>

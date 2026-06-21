@@ -114,6 +114,37 @@ details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 
 .geo-relief-cap .geo-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 .geo-tag.geo-basse { background: #3f6212; } .geo-tag.geo-moy { background: #92500a; } .geo-tag.geo-haute { background: #713f12; }
 
+/* ---------- Carte des 3 fleuves de Belgique (géo) ---------- */
+.geo-fleuve-wrap { margin: 1rem 0; }
+.geo-fleuve-svg { width: 100%; max-width: 460px; height: auto; display: block; margin: 0 auto; }
+.geo-fleuve-svg .geo-fl-land { fill: rgba(148,163,184,0.10); stroke: var(--border-subtle); stroke-width: 1.5; }
+.geo-fleuve-svg .geo-fl-sea { fill: #2563eb; }
+.geo-fleuve-svg .geo-fl-sea-lbl { fill: #fff; font-weight: 800; pointer-events: none; }
+.geo-fleuve-svg .geo-aff { fill: none; stroke: #94a3b8; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.geo-fleuve-svg .geo-aff-lbl { fill: var(--text-secondary); font-weight: 700; pointer-events: none; }
+.geo-fleuve-svg .geo-fl { cursor: pointer; }
+.geo-fleuve-svg .geo-fl-hit { fill: none; stroke: transparent; stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; }
+.geo-fleuve-svg .geo-fl-line { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; transition: stroke-width .12s ease, filter .12s ease; }
+.geo-fleuve-svg .geo-fl:hover .geo-fl-line, .geo-fleuve-svg .geo-fl:focus-visible .geo-fl-line { stroke-width: 5.5; filter: brightness(1.18); }
+.geo-fleuve-svg .geo-fl.sel .geo-fl-line { stroke-width: 6.5; filter: brightness(1.25); }
+.geo-fleuve-svg .geo-fl-meuse .geo-fl-line { stroke: #3b82f6; }
+.geo-fleuve-svg .geo-fl-escaut .geo-fl-line { stroke: #14b8a6; }
+.geo-fleuve-svg .geo-fl-yser .geo-fl-line { stroke: #8b5cf6; }
+.geo-fleuve-svg .geo-city { fill: #fff; stroke: #1e293b; stroke-width: 1.5; pointer-events: none; }
+.geo-fleuve-svg .geo-city-lbl { fill: var(--text-primary); font-weight: 700; paint-order: stroke; stroke: var(--bg-card); stroke-width: 3px; pointer-events: none; }
+.geo-fleuve-svg .geo-conf { fill: #facc15; stroke: #1e293b; stroke-width: 1.5; pointer-events: none; }
+.geo-fl-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; justify-content: center; margin-top: 8px; font-size: 12px; }
+.geo-fl-legend .lg { display: inline-flex; align-items: center; gap: 5px; color: var(--text-primary); }
+.geo-fl-legend .sw { width: 16px; height: 4px; border-radius: 2px; display: inline-block; }
+.geo-fl-legend .sw.meuse { background: #3b82f6; }
+.geo-fl-legend .sw.escaut { background: #14b8a6; }
+.geo-fl-legend .sw.yser { background: #8b5cf6; }
+.geo-fl-legend .sw.aff { background: #94a3b8; height: 3px; }
+.geo-fl-legend .dot-conf { width: 9px; height: 9px; border-radius: 50%; background: #facc15; border: 1.5px solid #1e293b; display: inline-block; }
+.geo-fl-cap { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; color: var(--text-primary); line-height: 1.5; margin-top: 8px; }
+.geo-fl-cap .fl-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.fl-tag.meuse { background: #2563eb; } .fl-tag.escaut { background: #0f766e; } .fl-tag.yser { background: #6d28d9; }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {
