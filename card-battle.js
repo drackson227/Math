@@ -10,20 +10,22 @@
 
   // Types et cycle d'avantages : chaque type bat le SUIVANT (terre→ciel→mer→ancien→mythe→terre).
   var TYPES = ['terre', 'ciel', 'mer', 'ancien', 'mythe'];
+  // c = couleur néon du type (halo/lueur décoratifs).
   var TM = {
-    terre:  { e: '🐾', n: 'Terre' },
-    ciel:   { e: '🐦', n: 'Ciel' },
-    mer:    { e: '🌊', n: 'Mer' },
-    ancien: { e: '🦴', n: 'Ancien' },
-    mythe:  { e: '🐉', n: 'Mythe' }
+    terre:  { e: '🐾', n: 'Terre',  c: '#84cc16' },
+    ciel:   { e: '🐦', n: 'Ciel',   c: '#38bdf8' },
+    mer:    { e: '🌊', n: 'Mer',    c: '#2dd4bf' },
+    ancien: { e: '🦴', n: 'Ancien', c: '#f59e0b' },
+    mythe:  { e: '🐉', n: 'Mythe',  c: '#f472b6' }
   };
-  // Raretés : poids de tirage (somme 100) + multiplicateur de stats + couleur.
+  // Raretés : poids de tirage (somme 100) + multiplicateur de stats.
+  // c = couleur vive (cadre/lueur) ; t = couleur de TEXTE éclaircie (lisible AA sur fond sombre).
   var RAR = {
-    commun: { n: 'Commun',     c: '#9ca3af', w: 60,  m: 1.00, s: '⚪' },
-    rare:   { n: 'Rare',       c: '#3b82f6', w: 27,  m: 1.28, s: '🔵' },
-    epic:   { n: 'Épique',     c: '#a855f7', w: 9,   m: 1.62, s: '🟣' },
-    leg:    { n: 'Légendaire', c: '#f59e0b', w: 3.4, m: 2.10, s: '🟡' },
-    myth:   { n: 'Mythique',   c: '#ec4899', w: 0.6, m: 2.85, s: '🌈' }
+    commun: { n: 'Commun',     c: '#9ca3af', t: '#cbd5e1', w: 60,  m: 1.00, s: '⚪' },
+    rare:   { n: 'Rare',       c: '#3b82f6', t: '#7cb0ff', w: 27,  m: 1.28, s: '🔵' },
+    epic:   { n: 'Épique',     c: '#a855f7', t: '#cd9bff', w: 9,   m: 1.62, s: '🟣' },
+    leg:    { n: 'Légendaire', c: '#f59e0b', t: '#fbbf24', w: 3.4, m: 2.10, s: '🟡' },
+    myth:   { n: 'Mythique',   c: '#ec4899', t: '#f9a8d4', w: 0.6, m: 2.85, s: '🌈' }
   };
   var RAR_ORDER = ['commun', 'rare', 'epic', 'leg', 'myth'];
 
@@ -85,6 +87,10 @@
   function beats(a, b) { return TYPES[(TYPES.indexOf(a) + 1) % 5] === b; }
   function typeMult(att, def) { if (beats(att, def)) return 1.5; if (beats(def, att)) return 0.67; return 1; }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  // portrait = halo de type (lueur colorée) derrière la créature ; le conteneur parent porte --tc/--rc.
+  function portrait(cr, sizeCls) { return '<div class="cb-port"><span class="cb-halo"></span><span class="' + sizeCls + '">' + cr.e + '</span></div>'; }
+  // crée le fond cosmique fixe une seule fois
+  function ensureCosmos() { if (document.getElementById('cb-cosmos')) return; var d = document.createElement('div'); d.id = 'cb-cosmos'; d.setAttribute('aria-hidden', 'true'); document.body.appendChild(d); }
 
   /* ---------------- GACHA ---------------- */
   function rollRarity() {
@@ -255,6 +261,7 @@
 
   function head() {
     return '<div class="cb-head">' +
+      '<button class="cb-quit" onclick="showSection(\'synthese\')" title="Revenir à l’étude">← Quitter</button>' +
       '<div class="cb-bal"><span title="Tirages">🎟️ <b>' + G.tickets + '</b></span><span title="Poussières (doublons)">✨ <b>' + G.dust + '</b></span><span title="Étage d’arène">🏟️ <b>' + G.stage + '</b></span></div>' +
       '<div class="cb-tabs">' +
         '<button class="cb-tab' + (G.view === 'summon' ? ' on' : '') + '" onclick="CB.go(\'summon\')">🎴 Invocation</button>' +
@@ -264,12 +271,12 @@
   }
 
   function viewSummon() {
-    var rates = RAR_ORDER.map(function (k) { return '<span class="cb-rate" style="color:' + RAR[k].c + '">' + RAR[k].s + ' ' + RAR[k].n + ' ' + RAR[k].w + '%</span>'; }).join('');
+    var rates = RAR_ORDER.map(function (k) { return '<span class="cb-rate" style="color:' + RAR[k].t + '">' + RAR[k].s + ' ' + RAR[k].n + ' ' + RAR[k].w + '%</span>'; }).join('');
     return head() +
       '<div class="cb-panel cb-summon">' +
-        '<h3 style="margin:.2rem 0;">🎴 Invocation</h3>' +
+        '<h3 class="cb-h" style="justify-content:center;">🎴 Invocation</h3>' +
         '<p class="cb-mut">Tu gagnes <b>1 tirage 🎟️ tous les 10 XP</b> (quiz, flashcards…) et en gagnant des combats.</p>' +
-        '<div class="cb-summon-art">🥚</div>' +
+        '<div class="cb-portal"><span class="cb-ring"></span><span class="cb-ring r2"></span><span class="cb-core">🥚</span></div>' +
         '<div class="cb-summon-btns">' +
           '<button class="cb-btn cb-btn-main" onclick="CB.pull(1)">Invoquer ×1 (1 🎟️)</button>' +
           '<button class="cb-btn" onclick="CB.pull(10)">Invoquer ×10 (10 🎟️)</button>' +
@@ -283,14 +290,16 @@
     G.view = 'summon'; render();
     var z = document.getElementById('cb-pullzone'); if (!z) return;
     var best = res.reduce(function (m, r) { return Math.max(m, RAR_ORDER.indexOf(r.c.r)); }, 0);
-    z.innerHTML = '<div class="cb-burst" style="--bc:' + RAR[RAR_ORDER[best]].c + '"></div>';
+    var bc = RAR[RAR_ORDER[best]].c;
+    var beams = ''; for (var bi = 0; bi < 7; bi++) { beams += '<i style="left:' + (15 + bi * 11) + '%; animation-delay:' + (bi * 0.05).toFixed(2) + 's"></i>'; }
+    z.innerHTML = '<div class="cb-rng"><div class="cb-beams" style="--bc:' + bc + '">' + beams + '</div><div class="cb-burst" style="--bc:' + bc + '"></div></div>';
     setTimeout(function () {
       z.innerHTML = '<div class="cb-pulls">' + res.map(function (r, i) {
-        return '<div class="cb-pcard cb-r-' + r.c.r + '" style="--rc:' + RAR[r.c.r].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
+        return '<div class="cb-pcard cb-r-' + r.c.r + '" style="--rc:' + RAR[r.c.r].c + '; --tc:' + TM[r.c.t].c + '; animation-delay:' + (i * 0.08).toFixed(2) + 's">' +
           '<div class="cb-pshine"></div>' +
-          '<div class="cb-pemoji">' + r.c.e + '</div>' +
+          portrait(r.c, 'cb-pemoji') +
           '<div class="cb-pname">' + esc(r.c.n) + '</div>' +
-          '<div class="cb-prar" style="color:' + RAR[r.c.r].c + '">' + RAR[r.c.r].s + ' ' + RAR[r.c.r].n + '</div>' +
+          '<div class="cb-prar" style="color:' + RAR[r.c.r].t + '">' + RAR[r.c.r].s + ' ' + RAR[r.c.r].n + '</div>' +
           (r.isNew ? '<div class="cb-pnew">NOUVEAU !</div>' : '<div class="cb-pdup">doublon · niv. ' + r.lvl + '</div>') +
           '</div>';
       }).join('') + '</div>';
@@ -309,13 +318,13 @@
     }
     var grid = CREATURES.map(function (c) {
       var o = G.owned[c.id];
-      if (!o) return '<div class="cb-cell locked"><div class="cb-cemoji">' + c.e + '</div><div class="cb-clk">❓</div></div>';
+      if (!o) return '<div class="cb-cell locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + portrait(c, 'cb-cemoji') + '<div class="cb-clk">❓ ???</div></div>';
       var inTeam = G.team.indexOf(c.id) >= 0;
       var s = stats(c.id, o.lvl);
-      return '<div class="cb-cell" style="--rc:' + RAR[c.r].c + '">' +
-        '<div class="cb-cemoji">' + c.e + '</div>' +
+      return '<div class="cb-cell" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' +
+        portrait(c, 'cb-cemoji') +
         '<div class="cb-cname">' + esc(c.n) + '</div>' +
-        '<div class="cb-crar" style="color:' + RAR[c.r].c + '">' + RAR[c.r].s + ' niv.' + o.lvl + '</div>' +
+        '<div class="cb-crar" style="color:' + RAR[c.r].t + '">' + RAR[c.r].s + ' niv.' + o.lvl + '</div>' +
         '<div class="cb-cstat">' + tag(c.t) + '</div>' +
         '<div class="cb-cstat">❤️ ' + s.hp + ' · ⚔️ ' + s.atk + '</div>' +
         '<button class="cb-mini' + (inTeam ? ' on' : '') + '" onclick="CB.team(\'' + c.id + '\')">' + (inTeam ? '✓ Équipe' : '+ Équipe') + '</button>' +
@@ -323,7 +332,8 @@
     }).join('');
     return head() +
       '<div class="cb-panel">' +
-        '<h3 style="margin:.2rem 0;">📒 Collection <span class="cb-mut">(' + owned + '/' + CREATURES.length + ')</span></h3>' +
+        '<h3 class="cb-h">📒 Collection <span class="cb-mut">' + owned + '/' + CREATURES.length + '</span></h3>' +
+        '<div class="cb-prog"><span style="width:' + Math.round(owned / CREATURES.length * 100) + '%"></span></div>' +
         '<div class="cb-team"><span class="cb-mut">Mon équipe (3 max) :</span><div class="cb-slots">' + teamSlots + '</div></div>' +
         '<div class="cb-grid">' + grid + '</div>' +
       '</div>';
@@ -332,19 +342,21 @@
   function viewArena() {
     var ids = teamIds();
     var team = ids.map(function (id) { return '<span class="cb-atok">' + BYID[id].e + ' ' + esc(BYID[id].n) + '</span>'; }).join('');
-    var cyc = TYPES.map(function (t) { return TM[t].e; }).join(' → ') + ' → ' + TM[TYPES[0]].e;
+    var cyc = TYPES.map(function (t) { return tag(t); }).join('<span class="cb-mut" style="margin:0 2px;">›</span>');
     return head() +
       '<div class="cb-panel cb-arena">' +
-        '<h3 style="margin:.2rem 0;">⚔️ Arène — étage ' + G.stage + '</h3>' +
-        '<p class="cb-mut">Record : étage ' + G.bestStage + '. Avantages de type : ' + cyc + ' (chacun bat le suivant).</p>' +
+        '<h3 class="cb-h" style="justify-content:center;">⚔️ Arène — étage ' + G.stage + '</h3>' +
+        '<p class="cb-mut">🏆 Record : étage ' + G.bestStage + '</p>' +
+        '<div class="cb-cycle">' + cyc + '</div>' +
+        '<p class="cb-mut">↑ chaque type bat le suivant (super efficace ×1.5)</p>' +
         '<div class="cb-myteam">' + (team || '<span class="cb-mut">Aucune équipe — va dans 📒 Collection.</span>') + '</div>' +
         '<button class="cb-btn cb-btn-main" onclick="CB.fight()">⚔️ Combattre l’étage ' + G.stage + '</button>' +
       '</div>';
   }
 
   function fighterCard(f, side) {
-    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + '">' +
-      '<div class="cb-femoji">' + f.cr.e + '</div>' +
+    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + '" style="--tc:' + TM[f.cr.t].c + '">' +
+      portrait(f.cr, 'cb-femoji') +
       '<div class="cb-fname">' + esc(f.cr.n) + ' <span class="cb-mut">niv.' + f.lvl + '</span></div>' +
       tag(f.cr.t) +
       bar(f.hp, f.max, f.hp > f.max * 0.3 ? '#22c55e' : '#ef4444') +
@@ -371,7 +383,7 @@
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
         '<div class="cb-brow"><span class="cb-mut">Toi</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
-        '<div class="cb-arena-field">' + fighterCard(me, 'me') + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe') + '</div>' +
+        '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me') + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe') + '</div></div>' +
         '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
         '<div class="cb-log">' + log + '</div>' +
         ctrl +
@@ -389,14 +401,19 @@
   }
   CB.render = render;
 
-  // Branche le rendu quand on ouvre l'onglet (sans casser les autres wrappers de showSection).
+  // Branche le rendu + le mode plein écran quand on ouvre l'onglet (sans casser les autres wrappers de showSection).
   if (typeof window.showSection === 'function') {
     var prev = window.showSection;
     window.showSection = function (a, b) {
       var r = prev.apply(this, arguments);
-      try { var id = (typeof a === 'string') ? a : b; if (id === 'arene') render(); } catch (e) {}
+      try {
+        var id = (typeof a === 'string') ? a : b;
+        document.body.classList.toggle('arene-on', id === 'arene'); // masque l'UI de l'école hors Arène
+        if (id === 'arene') { ensureCosmos(); render(); }
+      } catch (e) {}
       return r;
     };
   }
+  ensureCosmos();
   load();
 })();
