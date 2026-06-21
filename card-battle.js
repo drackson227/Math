@@ -290,28 +290,32 @@
   /* ===== moteur de particules sur CANVAS (fusion additive = vraie lueur) ===== */
   var fxC = null, fxX = null, fxW = 0, fxH = 0, parts = [], raf = 0, lastT = 0;
   function fxEnsure(stage) {
-    if (!fxC || fxC.parentNode !== stage) { fxC = document.createElement('canvas'); fxC.className = 'cb-fxcanvas'; stage.appendChild(fxC); fxX = fxC.getContext('2d'); }
+    var w = stage.clientWidth, h = stage.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (!fxC || fxC.parentNode !== stage) { fxC = document.createElement('canvas'); fxC.className = 'cb-fxcanvas'; stage.appendChild(fxC); fxX = fxC.getContext('2d'); fxC._w = 0; }
     else { stage.appendChild(fxC); } // remet le canvas au-dessus (après le voile cinéma)
-    var r = stage.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-    fxW = r.width; fxH = r.height; fxC.width = Math.round(fxW * dpr); fxC.height = Math.round(fxH * dpr);
-    fxC.style.width = fxW + 'px'; fxC.style.height = fxH + 'px'; fxX.setTransform(dpr, 0, 0, dpr, 0, 0);
+    fxW = w; fxH = h;
+    if (fxC._w !== w || fxC._h !== h) { // redimensionnement (coûteux) SEULEMENT si la taille a changé
+      fxC.width = Math.round(w * dpr); fxC.height = Math.round(h * dpr); fxC.style.width = w + 'px'; fxC.style.height = h + 'px';
+      fxX.setTransform(dpr, 0, 0, dpr, 0, 0); fxC._w = w; fxC._h = h;
+    }
   }
-  function fxAdd(p) { parts.push(p); if (!raf) { lastT = performance.now(); raf = requestAnimationFrame(fxFrame); } }
+  function fxAdd(p) { if (parts.length > 260) return; parts.push(p); if (!raf) { lastT = performance.now(); raf = requestAnimationFrame(fxFrame); } } // plafond = anti-lag
   function fxFrame(now) {
     var t = Math.min(2.4, (now - lastT) / 16.67); lastT = now;
     if (!fxX) { raf = 0; return; }
-    fxX.clearRect(0, 0, fxW, fxH); fxX.globalCompositeOperation = 'lighter'; fxX.lineCap = 'round';
+    fxX.clearRect(0, 0, fxW, fxH); fxX.globalCompositeOperation = 'lighter'; fxX.lineCap = 'round'; fxX.shadowBlur = 0;
     for (var i = parts.length - 1; i >= 0; i--) {
       var p = parts[i]; p.life -= t; if (p.life <= 0) { parts.splice(i, 1); continue; }
       if (p.grav) p.vy += p.grav * t; if (p.drag) { var d = Math.pow(p.drag, t); p.vx *= d; p.vy *= d; }
       p.x += p.vx * t; p.y += p.vy * t; var k = p.life / p.max;
-      fxX.globalAlpha = Math.max(0, Math.min(1, k)); fxX.shadowBlur = p.glow || 14; fxX.shadowColor = p.color;
-      if (p.kind === 'ring') { p.r += p.vr * t; fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.arc(p.x, p.y, p.r, 0, 6.2832); fxX.stroke(); }
-      else if (p.kind === 'beam') { fxX.strokeStyle = p.color; fxX.lineWidth = p.size * (0.65 + 0.35 * Math.sin(p.life * 0.8)); fxX.beginPath(); fxX.moveTo(p.x, p.y); fxX.lineTo(p.bx, p.by); fxX.stroke(); }
+      fxX.globalAlpha = Math.max(0, Math.min(1, k));
+      // shadowBlur (coûteux) UNIQUEMENT sur anneaux/faisceaux (peu nombreux) ; les centaines de points/étincelles n'en ont pas (la fusion additive suffit à les faire briller)
+      if (p.kind === 'ring') { fxX.shadowBlur = p.glow || 14; fxX.shadowColor = p.color; p.r += p.vr * t; fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.arc(p.x, p.y, p.r, 0, 6.2832); fxX.stroke(); fxX.shadowBlur = 0; }
+      else if (p.kind === 'beam') { fxX.shadowBlur = p.glow || 16; fxX.shadowColor = p.color; fxX.strokeStyle = p.color; fxX.lineWidth = p.size * (0.65 + 0.35 * Math.sin(p.life * 0.8)); fxX.beginPath(); fxX.moveTo(p.x, p.y); fxX.lineTo(p.bx, p.by); fxX.stroke(); fxX.shadowBlur = 0; }
       else if (p.streak) { fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.moveTo(p.x, p.y); fxX.lineTo(p.x - p.vx * p.streak, p.y - p.vy * p.streak); fxX.stroke(); }
       else { var sz = p.shrink ? p.size * k : p.size; fxX.fillStyle = p.color; fxX.beginPath(); fxX.arc(p.x, p.y, Math.max(0.5, sz), 0, 6.2832); fxX.fill(); }
     }
-    fxX.globalAlpha = 1; fxX.shadowBlur = 0; fxX.globalCompositeOperation = 'source-over';
+    fxX.globalAlpha = 1; fxX.globalCompositeOperation = 'source-over';
     raf = parts.length ? requestAnimationFrame(fxFrame) : 0;
   }
   function rnd(a, b) { return a + Math.random() * (b - a); }

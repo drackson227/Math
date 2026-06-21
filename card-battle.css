@@ -69,6 +69,7 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-panel { position: relative; background: var(--g-glass); border: 1px solid var(--g-line); border-radius: 20px; padding: 20px;
   backdrop-filter: blur(12px); box-shadow: 0 20px 52px -26px #000, inset 0 1px 0 rgba(255,255,255,.06); }
 .cb-panel:not(.cb-battle) { animation: cb-fadein .34s ease both; }
+.cb-panel.cb-battle { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(18,13,38,.92); } /* perf : pas de re-flou pendant le zoom d'impact */
 @keyframes cb-fadein { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .cb-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 6px; font-size: 20px; font-weight: 800; color: #fff; letter-spacing: .3px; }
 .cb-mut { color: var(--g-tx2); font-size: 13px; font-weight: 600; }
@@ -271,7 +272,7 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-arena-field.cb-zoom { animation: cb-zoom 1.3s ease; }
 @keyframes cb-zoom { 0% { transform: scale(1); } 18% { transform: scale(1.06); } 80% { transform: scale(1.06); } 100% { transform: scale(1); } }
 .cb-stage.cb-quake { animation: cb-quake .55s ease; }
-@keyframes cb-quake { 0% { transform: scale(1.13) translate(0,0); } 20% { transform: scale(1.09) translate(-7px,4px); } 40% { transform: scale(1.06) translate(6px,-4px); } 60% { transform: scale(1.03) translate(-4px,2px); } 80% { transform: scale(1.01) translate(3px,-2px); } 100% { transform: scale(1) translate(0,0); } }
+@keyframes cb-quake { 0% { transform: scale(1.08) translate(0,0); } 20% { transform: scale(1.06) translate(-6px,3px); } 40% { transform: scale(1.04) translate(5px,-3px); } 60% { transform: scale(1.02) translate(-3px,2px); } 80% { transform: scale(1.01) translate(2px,-2px); } 100% { transform: scale(1) translate(0,0); } }
 /* l'attaquant grossit + aura de type pendant l'incantation */
 .cb-fighter.cb-cast { z-index: 5; animation: cb-cast .9s ease; }
 .cb-fighter.cb-cast::before { content: ''; position: absolute; inset: -6px; border-radius: 22px; z-index: -1;
