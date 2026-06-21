@@ -73,6 +73,27 @@ details.gr2-q > summary::before { content: '❔ '; }
 details.gr2-q[open] > summary::before { content: '✅ '; }
 details.gr2-q > p { margin: 8px 0 0; color: var(--text-secondary); line-height: 1.6; }
 
+/* ---------- Carte des religions en Europe (histoire) ---------- */
+.hist-rel-wrap { margin: 1rem 0; }
+.hist-rel-svg { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; }
+.hist-rel-svg .rel-z { cursor: pointer; }
+.hist-rel-svg .rel-z > rect { stroke: rgba(255,255,255,0.5); stroke-width: 1; transition: filter .12s ease; }
+.hist-rel-svg .rel-z:hover > rect, .hist-rel-svg .rel-z:focus-visible > rect { filter: brightness(1.14); }
+.hist-rel-svg .rel-z.sel > rect { stroke: #fff; stroke-width: 3.5; }
+.hist-rel-svg .rel-lbl { fill: #fff; font-weight: 800; pointer-events: none; }
+/* mêmes couleurs pour les régions (SVG: fill) et la légende (HTML: background) */
+.rel-luth { fill: #1d4ed8; background: #1d4ed8; }
+.rel-calv { fill: #6d28d9; background: #6d28d9; }
+.rel-angl { fill: #0f766e; background: #0f766e; }
+.rel-catho { fill: #b45309; background: #b45309; }
+.rel-orth { fill: #166534; background: #166534; }
+.hist-rel-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; justify-content: center; margin: 10px 0; }
+.hist-rel-legend span { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-primary); font-weight: 600; }
+.hist-rel-legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.hist-rel-rule { text-align: center; color: var(--text-secondary); font-size: 13.5px; margin: 6px 0 10px; }
+.hist-rel-cap { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; color: var(--text-primary); line-height: 1.5; }
+.hist-rel-cap .rel-tag { color: #fff; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+
 /* palette du surligneur */
 .gr2-hl-palette { display: flex; align-items: center; gap: 6px; }
 .gr2-sw {

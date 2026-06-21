@@ -257,6 +257,68 @@
     tlSeg('periode-contemporaine', 'Époque contemp.', '1789 → ...', '#4a8cc7', false) +
     '</div></div>';
 
+  /* ---------------------- CARTE VISUELLE DES RELIGIONS EN EUROPE (vers 1600) ---------------------- */
+  // Carte stylisée cliquable : chaque région → sa religion + un détail. Mnémo des couleurs :
+  // Nord (couleurs froides) = protestant · Sud (chaud) = catholique · Est (vert) = orthodoxe.
+  var REL_DATA = {
+    scandinavie: ['Scandinavie', 'Luthérienne', 'Danemark, Suède, Norvège, Finlande — protestants luthériens.', 'luth'],
+    allnord:     ['Allemagne du Nord', 'Luthérienne', 'Le berceau du luthéranisme (Luther, 1517).', 'luth', 'All. Nord'],
+    angleterre:  ['Angleterre', 'Anglicane', 'Henri VIII y fonde l’anglicanisme.', 'angl'],
+    ecosse:      ['Écosse', 'Calviniste', 'Protestante (presbytérienne).', 'calv'],
+    provinces:   ['Provinces-Unies', 'Calviniste', 'Les Pays-Bas du Nord, calvinistes.', 'calv', 'P.-Unies'],
+    suisse:      ['Suisse', 'Calviniste', 'Genève = la ville de Calvin.', 'calv'],
+    france:      ['France', 'Catholique', 'Catholique, avec une minorité protestante : les huguenots.', 'catho'],
+    espagne:     ['Espagne', 'Catholique', 'Un grand bastion catholique.', 'catho'],
+    italie:      ['Italie', 'Catholique', 'Le pape réside à Rome.', 'catho'],
+    allsud:      ['Allemagne du Sud / Autriche', 'Catholique', 'Reste catholique (les Habsbourg).', 'catho', 'All. Sud'],
+    pologne:     ['Pologne', 'Catholique', 'Catholique.', 'catho'],
+    russie:      ['Russie', 'Orthodoxe', 'Orthodoxe — séparée dès 1054, bien avant la Réforme.', 'orth'],
+    grece:       ['Grèce & Balkans', 'Orthodoxe', 'Orthodoxes (Est de l’Europe).', 'orth', 'Grèce/Balk.']
+  };
+  window.histReligionShow = function (el, key) {
+    var d = REL_DATA[key]; if (!d) return;
+    var wrap = el.closest('.hist-rel-wrap'); if (!wrap) return;
+    var cap = wrap.querySelector('.hist-rel-cap');
+    if (cap) cap.innerHTML = '<strong>' + d[0] + '</strong> — <b class="rel-tag rel-' + d[3] + '">' + d[1] + '</b><br>' + d[2];
+    wrap.querySelectorAll('.rel-z').forEach(function (z) { z.classList.toggle('sel', z.getAttribute('data-k') === key); });
+  };
+  function relZone(k, x, y, w, h, fs) {
+    var full = REL_DATA[k][0], label = REL_DATA[k][4] || full;
+    return '<g class="rel-z rel-' + REL_DATA[k][3] + '" data-k="' + k + '" role="button" tabindex="0" aria-label="' + full + ' : ' + REL_DATA[k][1] + '"' +
+      ' onclick="histReligionShow(this,\'' + k + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();histReligionShow(this,\'' + k + '\');}">' +
+      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="9"></rect>' +
+      '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 3) + '" text-anchor="middle" class="rel-lbl" style="font-size:' + (fs || 10.5) + 'px">' + label + '</text>' +
+      '</g>';
+  }
+  var RELIGIONS_MAP =
+    '<div class="hist-rel-wrap">' +
+      '<svg viewBox="0 0 400 360" class="hist-rel-svg" role="img" aria-label="Carte stylisée des religions en Europe vers 1600">' +
+        '<rect x="0" y="0" width="400" height="360" rx="14" fill="#d6eaf6"></rect>' +
+        relZone('scandinavie', 168, 8, 132, 58, 11) +
+        relZone('ecosse', 38, 56, 56, 38, 9.5) +
+        relZone('angleterre', 38, 100, 64, 52, 10) +
+        relZone('provinces', 120, 108, 52, 32, 9) +
+        relZone('allnord', 176, 78, 108, 44, 10.5) +
+        relZone('allsud', 180, 126, 108, 48, 10.5) +
+        relZone('pologne', 290, 76, 66, 50, 10.5) +
+        relZone('suisse', 158, 178, 50, 26, 9) +
+        relZone('france', 70, 160, 84, 82, 12) +
+        relZone('espagne', 30, 252, 120, 84, 12) +
+        relZone('italie', 206, 184, 52, 116, 11) +
+        relZone('russie', 300, 132, 94, 118, 12) +
+        relZone('grece', 250, 300, 94, 52, 9) +
+      '</svg>' +
+      '<div class="hist-rel-legend">' +
+        '<span><i class="rel-luth"></i> Luthériens</span>' +
+        '<span><i class="rel-calv"></i> Calvinistes</span>' +
+        '<span><i class="rel-angl"></i> Anglicans</span>' +
+        '<span><i class="rel-catho"></i> Catholiques</span>' +
+        '<span><i class="rel-orth"></i> Orthodoxes</span>' +
+      '</div>' +
+      '<p class="hist-rel-rule">🧭 <strong>Nord</strong> (couleurs froides) = <strong>protestant</strong> · <strong>Sud</strong> = <strong>catholique</strong> · <strong>Est</strong> (vert) = <strong>orthodoxe</strong></p>' +
+      '<div class="hist-rel-cap" aria-live="polite">👆 Clique une région pour voir sa religion.</div>' +
+    '</div>';
+
   var sections = {};
 
   /* ---------------------- SYNTHÈSE (cours) ---------------------- */
@@ -352,6 +414,7 @@
 
       <h3 style="color:var(--color-nav); margin-top:1.2rem;">🗺️ La carte des religions en Europe (vers 1600)</h3>
       <p>Après la Réforme, l'Europe est <strong>divisée religieusement</strong> — en gros : le <strong>Nord</strong> devient protestant, le <strong>Sud</strong> reste catholique, l'<strong>Est</strong> est orthodoxe.</p>
+      ${RELIGIONS_MAP}
       <ul style="line-height:2;">
         <li>⛪ <strong>Catholiques</strong> (Sud) : <strong>Espagne, Portugal, Italie, France</strong> (majorité), <strong>Pologne</strong>, sud de l'Allemagne, Pays-Bas du Sud (Belgique actuelle), Irlande.</li>
         <li>📖 <strong>Luthériens</strong> (Nord) : <strong>nord de l'Allemagne</strong> et la <strong>Scandinavie</strong> (Danemark, Suède, Norvège, Finlande).</li>
@@ -594,6 +657,7 @@
 
       <h3 style="color:var(--color-nav); margin-top:1rem;">e) La carte des religions en Europe (vers 1600)</h3>
       <p>Après la Réforme, l'Europe est <strong>divisée religieusement</strong>. La règle simple :</p>
+      ${RELIGIONS_MAP}
       <ul style="line-height:1.9;">
         <li>📖 <strong>Nord = protestant</strong> : <strong>luthériens</strong> (nord de l'Allemagne, Scandinavie), <strong>calvinistes</strong> (Suisse, Provinces-Unies, Écosse), <strong>anglicans</strong> (Angleterre) ;</li>
         <li>⛪ <strong>Sud = catholique</strong> : Espagne, Italie, France, Pologne ;</li>
