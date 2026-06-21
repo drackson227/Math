@@ -381,6 +381,20 @@
       </div>
     </div>
 
+    <!-- VECTEUR — explorateur à curseurs (inspiré de Brilliant : on manipule, ça réagit) -->
+    <div style="background:var(--bg-card); border:1px solid rgba(167,139,250,0.3); border-radius:20px; padding:1.5rem; box-shadow:0 0 30px rgba(167,139,250,0.1);">
+      <h3 style="font-size:17px; font-weight:700; color:var(--color-parabole); margin-bottom:0.3rem;">📐 Vecteur, distance &amp; milieu</h3>
+      <p style="font-size:12.5px; color:var(--text-secondary); margin:0 0 0.8rem;">🎛️ <strong style="color:var(--text-primary);">Glisse les curseurs</strong> pour bouger A et B : le vecteur, la distance et le milieu se mettent à jour en direct.</p>
+      <canvas id="graph-vecteur" width="500" height="360" style="width:100%; border-radius:12px; background:var(--bg-formula); display:block;"></canvas>
+      <div id="vecteur-eq" style="margin:0.6rem 0; font-size:13px; color:var(--color-parabole); font-family:'Courier New',monospace; text-align:center; background:rgba(167,139,250,0.08); border-radius:8px; padding:7px; line-height:1.7;"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 16px;">
+        <div style="display:flex; align-items:center; gap:8px;"><label for="vec-xa" style="font-size:12px; color:var(--color-cercle); font-weight:700; width:30px;">A x</label><input type="range" id="vec-xa" min="-10" max="10" step="1" value="-3" oninput="drawVecteur()" aria-label="Abscisse de A" style="flex:1; accent-color:var(--color-cercle);"><span id="vec-xa-v" style="font-size:12px; color:var(--text-primary); width:24px; text-align:right;"></span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><label for="vec-ya" style="font-size:12px; color:var(--color-cercle); font-weight:700; width:30px;">A y</label><input type="range" id="vec-ya" min="-10" max="10" step="1" value="2" oninput="drawVecteur()" aria-label="Ordonnée de A" style="flex:1; accent-color:var(--color-cercle);"><span id="vec-ya-v" style="font-size:12px; color:var(--text-primary); width:24px; text-align:right;"></span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><label for="vec-xb" style="font-size:12px; color:var(--color-droite); font-weight:700; width:30px;">B x</label><input type="range" id="vec-xb" min="-10" max="10" step="1" value="4" oninput="drawVecteur()" aria-label="Abscisse de B" style="flex:1; accent-color:var(--color-droite);"><span id="vec-xb-v" style="font-size:12px; color:var(--text-primary); width:24px; text-align:right;"></span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><label for="vec-yb" style="font-size:12px; color:var(--color-droite); font-weight:700; width:30px;">B y</label><input type="range" id="vec-yb" min="-10" max="10" step="1" value="-1" oninput="drawVecteur()" aria-label="Ordonnée de B" style="flex:1; accent-color:var(--color-droite);"><span id="vec-yb-v" style="font-size:12px; color:var(--text-primary); width:24px; text-align:right;"></span></div>
+      </div>
+    </div>
+
   </div>
 </div>
 <div id="flashcards" class="section">

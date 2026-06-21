@@ -4350,6 +4350,51 @@ function drawDroite() {
   renderGraphEq('droite-eq', `y = ${mStr}${pStr}`);
 }
 
+// Explorateur « Vecteur, distance & milieu » (curseurs) — inspiré de Brilliant : on manipule, ça réagit.
+function drawVecteur() {
+  const fmtN = v => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
+  const setV = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const ax = Math.round(clampInput((document.getElementById('vec-xa') || {}).value, -3, -1000, 1000));
+  const ay = Math.round(clampInput((document.getElementById('vec-ya') || {}).value, 2, -1000, 1000));
+  const bx = Math.round(clampInput((document.getElementById('vec-xb') || {}).value, 4, -1000, 1000));
+  const by = Math.round(clampInput((document.getElementById('vec-yb') || {}).value, -1, -1000, 1000));
+  setV('vec-xa-v', ax); setV('vec-ya-v', ay); setV('vec-xb-v', bx); setV('vec-yb-v', by);
+  const cEl = document.getElementById('graph-vecteur');
+  if (cEl && cEl.offsetWidth > 0) { cEl.width = cEl.offsetWidth; cEl.height = Math.round(cEl.offsetWidth * 0.72); }
+  const _v = canvasCtx('graph-vecteur'); if (!_v) return;
+  const { ctx, W, H } = _v; ctx.clearRect(0, 0, W, H);
+  const margin = 46;
+  const range = Math.max(Math.abs(ax), Math.abs(ay), Math.abs(bx), Math.abs(by), 5) * 1.25;
+  const scale = Math.min((W - margin * 2) / (range * 2), (H - margin * 2) / (range * 2));
+  const ox = W / 2, oy = H / 2;
+  drawGrid(ctx, W, H, ox, oy, scale, '#fff');
+  const PX = x => ox + x * scale, PY = y => oy - y * scale;
+  const cA = getThemeColor('--color-cercle', '#60a5fa');
+  const cB = getThemeColor('--color-droite', '#fbbf24');
+  const cV = getThemeColor('--color-parabole', '#a78bfa');
+  // segment A–B (pointillé léger)
+  ctx.save(); ctx.strokeStyle = getThemeColor('--text-secondary', '#94a3b8'); ctx.globalAlpha = .45; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(PX(ax), PY(ay)); ctx.lineTo(PX(bx), PY(by)); ctx.stroke(); ctx.restore();
+  // vecteur AB (flèche pleine)
+  const x1 = PX(ax), y1 = PY(ay), x2 = PX(bx), y2 = PY(by);
+  ctx.strokeStyle = cV; ctx.fillStyle = cV; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  if (x1 !== x2 || y1 !== y2) {
+    const ang = Math.atan2(y2 - y1, x2 - x1), hl = 12;
+    ctx.beginPath(); ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - hl * Math.cos(ang - Math.PI / 7), y2 - hl * Math.sin(ang - Math.PI / 7));
+    ctx.lineTo(x2 - hl * Math.cos(ang + Math.PI / 7), y2 - hl * Math.sin(ang + Math.PI / 7));
+    ctx.closePath(); ctx.fill();
+  }
+  const mx = (ax + bx) / 2, my = (ay + by) / 2;
+  drawDot(ctx, PX(mx), PY(my), 4, '#22c55e', `M(${fmtN(mx)} ; ${fmtN(my)})`);
+  drawDot(ctx, PX(ax), PY(ay), 5, cA, `A(${ax} ; ${ay})`);
+  drawDot(ctx, PX(bx), PY(by), 5, cB, `B(${bx} ; ${by})`);
+  const dx = bx - ax, dy = by - ay, d2 = dx * dx + dy * dy, dist = Math.sqrt(d2);
+  const eq = document.getElementById('vecteur-eq');
+  if (eq) eq.textContent = `AB = (${dx} ; ${dy})   •   ‖AB‖ = √${d2} ≈ ${Math.round(dist * 100) / 100}   •   M = (${fmtN(mx)} ; ${fmtN(my)})`;
+}
+
 // ════════════════════════════════════════════════════════════
 //  MES EXERCICES — l'utilisateur crée ses propres questions
 //  (3 thèmes), stockées dans data.customExercises (localStorage).
@@ -4696,12 +4741,13 @@ let graphsInitialized = false;
 function initGraphs() {
   drawCercle();
   drawDroite();
+  drawVecteur();
   if (graphsInitialized) return; // Prevent listener accumulation on repeat visits
   graphsInitialized = true;
   // B5 — redraw on window resize so canvases stay crisp
   window.addEventListener('resize', () => {
     if (document.getElementById('graphiques').classList.contains('active')) {
-      drawCercle(); drawDroite();
+      drawCercle(); drawDroite(); drawVecteur();
     }
   });
   ['cercle-h','cercle-k','cercle-r'].forEach(id => {
