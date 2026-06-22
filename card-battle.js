@@ -434,7 +434,9 @@
   /* ===== moteur de particules sur CANVAS (fusion additive = vraie lueur) ===== */
   var fxC = null, fxX = null, fxW = 0, fxH = 0, parts = [], raf = 0, lastT = 0;
   function fxEnsure(stage) {
-    var w = stage.clientWidth, h = stage.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Canvas d'effets en dpr=1 : les particules sont des halos additifs flous → identiques à l'œil,
+    // mais 4× à 9× moins de pixels à effacer/dessiner par image sur un téléphone rétina → anti-lag majeur.
+    var w = stage.clientWidth, h = stage.clientHeight, dpr = 1;
     if (!fxC || fxC.parentNode !== stage) { fxC = document.createElement('canvas'); fxC.className = 'cb-fxcanvas'; stage.appendChild(fxC); fxX = fxC.getContext('2d'); fxC._w = 0; }
     else { stage.appendChild(fxC); } // remet le canvas au-dessus (après le voile cinéma)
     fxW = w; fxH = h;
@@ -456,8 +458,9 @@
       // shadowBlur (coûteux) UNIQUEMENT sur anneaux/faisceaux (peu nombreux) ; les centaines de points/étincelles n'en ont pas (la fusion additive suffit à les faire briller)
       if (p.kind === 'ring') { fxX.shadowBlur = p.glow || 14; fxX.shadowColor = p.color; p.r += p.vr * t; fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.arc(p.x, p.y, p.r, 0, 6.2832); fxX.stroke(); fxX.shadowBlur = 0; }
       else if (p.kind === 'beam') { fxX.shadowBlur = p.glow || 16; fxX.shadowColor = p.color; fxX.strokeStyle = p.color; fxX.lineWidth = p.size * (0.65 + 0.35 * Math.sin(p.life * 0.8)); fxX.beginPath(); fxX.moveTo(p.x, p.y); fxX.lineTo(p.bx, p.by); fxX.stroke(); fxX.shadowBlur = 0; }
+      else if (p.kind === 'arc') { fxX.shadowBlur = p.glow || 12; fxX.shadowColor = p.color; if (p.spin) { p.a0 += p.spin * t; p.a1 += p.spin * t; } if (p.gr) p.r += p.gr * t; fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.arc(p.x, p.y, p.r, p.a0, p.a1); fxX.stroke(); fxX.shadowBlur = 0; }
       else if (p.streak) { fxX.strokeStyle = p.color; fxX.lineWidth = p.size; fxX.beginPath(); fxX.moveTo(p.x, p.y); fxX.lineTo(p.x - p.vx * p.streak, p.y - p.vy * p.streak); fxX.stroke(); }
-      else { var sz = p.shrink ? p.size * k : p.size; fxX.fillStyle = p.color; fxX.beginPath(); fxX.arc(p.x, p.y, Math.max(0.5, sz), 0, 6.2832); fxX.fill(); }
+      else { var sz = p.grow ? p.size * (2 - k) : (p.shrink ? p.size * k : p.size); fxX.fillStyle = p.color; fxX.beginPath(); fxX.arc(p.x, p.y, Math.max(0.5, sz), 0, 6.2832); fxX.fill(); }
     }
     fxX.globalAlpha = 1; fxX.globalCompositeOperation = 'source-over';
     raf = parts.length ? requestAnimationFrame(fxFrame) : 0;
@@ -472,6 +475,26 @@
       now = now || performance.now(); var k = Math.min(1, (now - t0) / dur);
       var x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k - Math.sin(k * Math.PI) * 24;
       for (var i = 0; i < 3; i++) fxAdd({ x: x + rnd(-3, 3), y: y + rnd(-3, 3), vx: rnd(-0.6, 0.6), vy: rnd(-0.6, 0.6), life: rnd(10, 18), max: 18, size: rnd(2, 4.5), color: color, glow: 16, shrink: true, drag: 0.95 });
+      if (k < 1) requestAnimationFrame(tick); else if (onArrive) onArrive(x, y);
+    })();
+  }
+  // ANTICIPATION : des particules convergent vers (x,y) → on « charge » l'attaque
+  function fxCharge(x, y, color, n) {
+    n = n || 12;
+    for (var i = 0; i < n; i++) { var a = rnd(0, 6.2832), R = rnd(24, 46), life = rnd(16, 26); fxAdd({ x: x + Math.cos(a) * R, y: y + Math.sin(a) * R, vx: -Math.cos(a) * R / life * 1.15, vy: -Math.sin(a) * R / life * 1.15, life: life, max: life, size: rnd(1.6, 3.2), color: color, glow: 14, shrink: true }); }
+  }
+  // POP lumineux qui grandit puis s'efface (cœur d'impact)
+  function fxFlash(x, y, color, size) { fxAdd({ x: x, y: y, vx: 0, vy: 0, life: 12, max: 12, size: size || 26, color: color || '#ffffff', grow: true }); }
+  // ARC de lame (coup de griffe / mâchoire)
+  function fxArc(x, y, r, ang, spread, color, size, spin) { fxAdd({ kind: 'arc', x: x, y: y, r: r, a0: ang - spread, a1: ang + spread, spin: spin || 0, gr: 0.7, size: size || 3.5, life: 16, max: 16, color: color, glow: 14 }); }
+  // FLUX d'attaque épais : tête blanche brillante + traînée colorée (feu / eau / plongeon)
+  function fxStream(a, b, dur, color, onArrive) {
+    var t0 = performance.now();
+    (function tick(now) {
+      now = now || performance.now(); var k = Math.min(1, (now - t0) / dur);
+      var x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k - Math.sin(k * Math.PI) * 16;
+      fxAdd({ x: x, y: y, vx: 0, vy: 0, life: 8, max: 8, size: 5.5, color: '#ffffff', shrink: true });
+      for (var i = 0; i < 4; i++) fxAdd({ x: x + rnd(-4, 4), y: y + rnd(-4, 4), vx: rnd(-1, 1), vy: rnd(-1, 1), life: rnd(12, 22), max: 22, size: rnd(2, 4.2), color: color, glow: 14, shrink: true, drag: 0.94 });
       if (k < 1) requestAnimationFrame(tick); else if (onArrive) onArrive(x, y);
     })();
   }
@@ -506,26 +529,59 @@
       return true;
     } catch (e) { return false; }
   }
-  // effet SIGNATURE par catégorie d'attaque (tout en particules canvas)
+  // effet SIGNATURE par catégorie d'attaque : CHARGE (anticipation) → TRAJET → IMPACT + traînée.
+  // 100 % particules canvas. shadowBlur réservé aux anneaux/faisceaux/arcs (peu nombreux) → fluide.
   function signatureFx(stage, atkEl, defEl, side, key, tc) {
-    var a = ctr(atkEl), b = ctr(defEl), col = (key === 'beam' ? tc : (FXC[key] || tc)), dir = Math.atan2(b.y - a.y, b.x - a.x);
-    if (key === 'fire') { fxComet(a, b, 500, '#ff7a1a', function (x, y) { fxBurst(x, y, '#ffb43a', 48, 6); fxBurst(x, y, '#ff4d1a', 26, 4); }); }
-    else if (key === 'water') { fxComet(a, b, 520, '#38bdf8', function (x, y) { fxBurst(x, y, '#7dd3fc', 46, 6); fxRing(x, y, '#38bdf8', 4); }); }
-    else if (key === 'venom') { fxComet(a, b, 560, '#a3e635', function (x, y) { fxBurst(x, y, '#bef264', 42, 4.5); }); }
+    var a = ctr(atkEl), b = ctr(defEl), col = (key === 'beam' ? tc : (FXC[key] || tc));
+    if (key === 'fire') {
+      fxCharge(a.x, a.y, '#ff7a1a', 14); // on « charge » la boule de feu
+      setTimeout(function () { fxStream(a, b, 360, '#ff7a1a', function (x, y) {
+        fxFlash(x, y, '#fff4e0', 34); fxBurst(x, y, '#ffb43a', 38, 6); fxBurst(x, y, '#ff4d1a', 22, 4); fxRing(x, y, '#ff7a1a', 4);
+        for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-14, 14), y: y, vx: rnd(-1, 1), vy: rnd(-3.2, -1.1), grav: 0.03, life: rnd(30, 50), max: 50, size: rnd(1.4, 3), color: '#ffb43a', glow: 12, shrink: true }); // braises qui montent
+      }); }, 180);
+    }
+    else if (key === 'water') {
+      fxCharge(a.x, a.y, '#38bdf8', 14);
+      setTimeout(function () { fxStream(a, b, 380, '#38bdf8', function (x, y) {
+        fxFlash(x, y, '#e0f5ff', 32); fxBurst(x, y, '#7dd3fc', 38, 6); fxRing(x, y, '#38bdf8', 4); setTimeout(function () { fxRing(x, y, '#7dd3fc', 3); }, 90);
+        for (var i = 0; i < 14; i++) fxAdd({ x: x, y: y, vx: rnd(-4, 4), vy: rnd(-5, -1), grav: 0.22, life: rnd(24, 40), max: 40, size: rnd(1.6, 3.4), color: '#7dd3fc', glow: 10, shrink: true }); // éclaboussures qui retombent
+      }); }, 160);
+    }
+    else if (key === 'venom') {
+      fxCharge(a.x, a.y, '#a3e635', 10);
+      setTimeout(function () {
+        for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxStream(a, { x: b.x + rnd(-10, 10), y: b.y + rnd(-10, 10) }, 320, '#a3e635', function (x, y) { fxBurst(x, y, '#bef264', 14, 4); }); }, s * 90); })(s);
+        setTimeout(function () { fxFlash(b.x, b.y, '#eaffc2', 24); fxBurst(b.x, b.y, '#a3e635', 24, 4);
+          for (var i = 0; i < 12; i++) fxAdd({ x: b.x + rnd(-18, 18), y: b.y + rnd(-6, 10), vx: rnd(-0.6, 0.6), vy: rnd(-1.4, -0.5), life: rnd(40, 64), max: 64, size: rnd(2, 4), color: '#bef264', glow: 10, shrink: true }); // bulles toxiques qui montent
+        }, 360);
+      }, 150);
+    }
     else if (key === 'beam') {
-      fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 10, life: 18, max: 18, color: col, glow: 24 });
-      fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 3.5, life: 18, max: 18, color: '#ffffff', glow: 14 });
-      setTimeout(function () { fxBurst(b.x, b.y, col, 42, 6); fxBurst(b.x, b.y, '#ffffff', 16, 4); }, 170);
+      fxCharge(a.x, a.y, col, 16);
+      setTimeout(function () {
+        fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 12, life: 20, max: 20, color: col, glow: 26 });
+        fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 4, life: 20, max: 20, color: '#ffffff', glow: 16 });
+        for (var i = 0; i < 10; i++) { var kk = i / 10; fxAdd({ x: a.x + (b.x - a.x) * kk, y: a.y + (b.y - a.y) * kk, vx: rnd(-1.5, 1.5), vy: rnd(-1.5, 1.5), life: rnd(10, 18), max: 18, size: rnd(1.5, 3), color: '#ffffff', glow: 12, shrink: true }); } // étincelles le long du rayon
+        setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 34); fxBurst(b.x, b.y, col, 38, 6); fxBurst(b.x, b.y, '#ffffff', 16, 4); fxRing(b.x, b.y, col, 5); }, 150);
+      }, 220);
     }
-    else if (key === 'slash' || key === 'chomp') {
-      var n = key === 'chomp' ? 2 : 3;
-      for (var s = 0; s < n; s++) (function (s) { setTimeout(function () { fxStreaks(b.x, b.y, '#ffffff', 7, (s % 2 ? -0.7 : 0.7)); fxStreaks(b.x, b.y, col, 4, (s % 2 ? -0.7 : 0.7)); }, s * 80); })(s);
-      setTimeout(function () { fxBurst(b.x, b.y, '#ffffff', 18, 5); }, 120);
+    else if (key === 'chomp') { // mâchoires qui se referment
+      fxArc(b.x, b.y, 30, -0.5, 1.0, '#ffffff', 4.5, 0.05); fxArc(b.x, b.y, 30, Math.PI - 0.5, 1.0, col, 4.5, -0.05);
+      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 30); fxBurst(b.x, b.y, '#ffffff', 22, 6); fxBurst(b.x, b.y, col, 16, 4); }, 160);
     }
-    else if (key === 'dive') { fxStreaks(a.x, a.y, '#e2e8f0', 10, dir); fxComet(a, b, 420, '#e2e8f0', function (x, y) { fxBurst(x, y, '#ffffff', 30, 5); }); }
-    else { // stomp : onde de choc au sol + projection
-      var gy = bottomY(defEl) - 10; fxRing(b.x, gy, col, 5); fxRing(b.x, gy, '#ffffff', 2);
-      for (var i = 0; i < 22; i++) { var ang = rnd(-2.4, -0.7); fxAdd({ x: b.x + rnd(-20, 20), y: gy, vx: Math.cos(ang) * rnd(2, 5), vy: Math.sin(ang) * rnd(3, 6), grav: 0.16, life: rnd(20, 34), max: 34, size: rnd(2, 4), color: col, glow: 12, shrink: true }); }
+    else if (key === 'slash') { // 3 coups de griffe croisés
+      for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { var ang = s % 2 ? 0.8 : -0.8; fxArc(b.x + rnd(-8, 8), b.y + rnd(-8, 8), rnd(20, 30), ang, 0.7, '#ffffff', 3.5); fxStreaks(b.x, b.y, col, 5, ang); }, s * 90); })(s);
+      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, '#ffffff', 16, 5); }, 140);
+    }
+    else if (key === 'dive') { // plongeon depuis le haut
+      var top = { x: a.x, y: Math.max(8, a.y - 70) };
+      fxStreaks(a.x, a.y, '#e2e8f0', 8, -1.57);
+      setTimeout(function () { fxStream(top, b, 300, '#e2e8f0', function (x, y) { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, '#ffffff', 28, 6); fxRing(x, bottomY(defEl) - 8, '#e2e8f0', 4); }); }, 120);
+    }
+    else { // stomp : séisme (onde de choc au sol + débris)
+      var gy = bottomY(defEl) - 8;
+      fxFlash(b.x, gy, '#ffffff', 26); fxRing(b.x, gy, col, 6); fxRing(b.x, gy, '#ffffff', 2); setTimeout(function () { fxRing(b.x, gy, col, 3); }, 110);
+      for (var i = 0; i < 24; i++) { var ang = rnd(-2.5, -0.6); fxAdd({ x: b.x + rnd(-26, 26), y: gy, vx: Math.cos(ang) * rnd(2, 6), vy: Math.sin(ang) * rnd(3, 7), grav: 0.18, life: rnd(22, 38), max: 38, size: rnd(2, 4.5), color: col, glow: 12, shrink: true }); }
     }
   }
   // bannière « nom de l'attaque » (style anime/Dokkan)
@@ -569,8 +625,7 @@
         if (onImpact) onImpact();
         sfx('crit'); cbAdvPopup(adv);
         var bp = ctr(defEl);
-        fxBurst(bp.x, bp.y, '#ffffff', 34, 7); fxBurst(bp.x, bp.y, tc, 42, 6); fxBurst(bp.x, bp.y, '#ffffff', 14, 3.5);
-        fxRing(bp.x, bp.y, '#ffffff', 5); fxRing(bp.x, bp.y, tc, 7); // double onde de choc = impact « pro »
+        fxBurst(bp.x, bp.y, '#ffffff', 16, 5); // l'effet SIGNATURE gère le gros de l'impact ; ce flash blanc le « cale »
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
         defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
@@ -589,6 +644,7 @@
     return '<div class="cb-hpbar"><span style="width:' + p + '%;background:' + col + '"></span></div>';
   }
   function tag(t) { return '<span class="cb-type cb-t-' + t + '">' + TM[t].e + ' ' + TM[t].n + '</span>'; }
+  function chargePips(c) { var s = ''; for (var i = 0; i < 3; i++) s += '<i class="cb-pip' + (i < c ? ' on' : '') + '"></i>'; return s; } // jauge du coup spécial
 
   function head() {
     return '<div class="cb-head">' +
@@ -727,7 +783,7 @@
     } else {
       ctrl = '<div class="cb-summon-btns">' +
         '<button class="cb-btn cb-btn-main" onclick="CB.act(false)"' + (B.busy ? ' disabled' : '') + '>⚔️ Attaquer</button>' +
-        '<button class="cb-btn cb-special" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>✨ ' + me.cr.mv + (me.charge < 3 ? ' (' + me.charge + '/3)' : '') + '</button>' +
+        '<button class="cb-btn cb-special' + (me.charge >= 3 ? ' ready' : '') + '" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>' + (me.charge >= 3 ? '⚡ ' + esc(me.cr.mv) + ' — PRÊT !' : '✨ ' + esc(me.cr.mv) + ' <span class="cb-gauge">' + chargePips(me.charge) + '</span>') + '</button>' +
         '<button class="cb-btn" onclick="CB.go(\'arena\')">🏳️ Abandonner</button></div>';
     }
     var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ En cours…' : '🟢 À toi de jouer') + '</div>';
