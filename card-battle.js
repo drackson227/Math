@@ -59,7 +59,18 @@
     { id: 'dragon', n: 'Dragon', e: '🐉', t: 'mythe', r: 'myth', mv: 'Souffle ardent' },
     { id: 'licorne', n: 'Licorne', e: '🦄', t: 'mythe', r: 'myth', mv: 'Corne céleste' },
     { id: 'kraken', n: 'Kraken', e: '🦑', t: 'mythe', r: 'myth', mv: 'Étreinte des abysses' },
-    { id: 'golem', n: 'Golem de pierre', e: '🗿', t: 'mythe', r: 'myth', mv: 'Poing de roche' }
+    { id: 'golem', n: 'Golem de pierre', e: '🗿', t: 'mythe', r: 'myth', mv: 'Poing de roche' },
+    { id: 'grenouille', n: 'Grenouille', e: '🐸', t: 'mer', r: 'commun', mv: 'Coup de langue' },
+    { id: 'souris', n: 'Souris', e: '🐁', t: 'terre', r: 'commun', mv: 'Grignotage' },
+    { id: 'abeille', n: 'Abeille', e: '🐝', t: 'ciel', r: 'commun', mv: 'Dard' },
+    { id: 'scorpion', n: 'Scorpion', e: '🦂', t: 'terre', r: 'rare', mv: 'Dard venimeux' },
+    { id: 'cygne', n: 'Cygne', e: '🦢', t: 'ciel', r: 'rare', mv: 'Coup d’aile' },
+    { id: 'dauphin', n: 'Dauphin', e: '🐬', t: 'mer', r: 'rare', mv: 'Saut sonar' },
+    { id: 'sanglier', n: 'Sanglier', e: '🐗', t: 'terre', r: 'rare', mv: 'Charge sauvage' },
+    { id: 'aurochs', n: 'Aurochs', e: '🐂', t: 'ancien', r: 'epic', mv: 'Charge cornue' },
+    { id: 'megacero', n: 'Mégacéros', e: '🦌', t: 'ancien', r: 'epic', mv: 'Ramure perçante' },
+    { id: 'narval', n: 'Narval', e: '🐳', t: 'mer', r: 'leg', mv: 'Lance de glace' },
+    { id: 'phenix', n: 'Phénix', e: '🔥', t: 'mythe', r: 'myth', mv: 'Flammes éternelles' }
   ];
   var BYID = {}; CREATURES.forEach(function (c) { BYID[c.id] = c; });
 
@@ -369,7 +380,18 @@
     dragon: 'Crache un souffle assez chaud pour fondre la pierre.',
     licorne: 'Sa corne céleste libère une lumière pure et dévastatrice.',
     kraken: 'Des tentacules capables d’engloutir un navire entier.',
-    golem: 'Une montagne de roche animée par une magie ancienne.'
+    golem: 'Une montagne de roche animée par une magie ancienne.',
+    grenouille: 'Sa langue jaillit plus vite que l’œil ne la suit.',
+    souris: 'Minuscule, mais file partout et grignote sans relâche.',
+    abeille: 'Un seul dard, mais qui fait reculer bien plus gros qu’elle.',
+    scorpion: 'Sa queue se dresse, et la partie est déjà finie.',
+    cygne: 'Élégant sur l’eau ; un coup d’aile peut briser un os.',
+    dauphin: 'Vif et malin, il étourdit ses cibles de son sonar.',
+    sanglier: 'Une charge têtue que rien n’arrête.',
+    aurochs: 'L’ancêtre sauvage des bœufs, colossal et furieux.',
+    megacero: 'Un cerf géant disparu, aux bois larges comme un arbre.',
+    narval: 'La « licorne des mers » : sa défense transperce la glace.',
+    phenix: 'Renaît de ses cendres, toujours plus ardent.'
   };
   CB.detail = function (id) {
     var c = BYID[id], o = G.owned[id]; if (!c || !o) return;
@@ -457,7 +479,10 @@
     requin: 'water', pieuvre: 'water',
     mammouth: 'stomp', dodo: 'dive', smilodon: 'slash', rhino: 'stomp', paresseux: 'slash',
     trex: 'chomp', triceratops: 'stomp', spino: 'water', megalodon: 'water',
-    dragon: 'fire', licorne: 'beam', kraken: 'water', golem: 'stomp'
+    dragon: 'fire', licorne: 'beam', kraken: 'water', golem: 'stomp',
+    grenouille: 'water', souris: 'slash', abeille: 'dive', scorpion: 'venom',
+    cygne: 'dive', dauphin: 'water', sanglier: 'stomp', aurochs: 'stomp',
+    megacero: 'stomp', narval: 'water', phenix: 'fire'
   };
   var FXC = { fire: '#ff7a1a', water: '#38bdf8', venom: '#a3e635', dive: '#e2e8f0', slash: '#ffffff', stomp: '#fbbf24', chomp: '#ffffff', beam: '#c4b5fd' };
   function prefersReduced() { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
