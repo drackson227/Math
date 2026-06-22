@@ -880,7 +880,7 @@ function printRevisionSheet() {
     '<p>Géométrie analytique plane · drackson227.github.io/Math</p></div>' +
     '<div class="rs-grid">' +
     section('Vecteurs', '#7c3aed', [
-      ['Composantes', '\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)'],
+      ['Composantes', '\\vec{AB}=\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}'],
       ['Norme', '\\|\\vec{AB}\\|=\\sqrt{x^2+y^2}'],
       ['Distance A→B', 'AB=\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}'],
       ['Milieu', 'M\\left(\\tfrac{x_A+x_B}{2}\\,;\\,\\tfrac{y_A+y_B}{2}\\right)'],
@@ -898,8 +898,8 @@ function printRevisionSheet() {
     section('Droites', '#d97706', [
       ['Forme explicite', 'y=mx+p'],
       ['Pente (2 points)', 'm=\\tfrac{y_B-y_A}{x_B-x_A}'],
-      ['Vecteur directeur', '\\vec{u}=(-b\\,;\\,a)'],
-      ['Vecteur normal', '\\vec{n}=(a\\,;\\,b)'],
+      ['Vecteur directeur', '\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}'],
+      ['Vecteur normal', '\\vec{n}=\\begin{pmatrix}a\\\\b\\end{pmatrix}'],
       ['Parallèles / perp.', 'm_1=m_2\\quad|\\quad m\\cdot m\'=-1'],
       ['Distance point-droite', 'd=\\tfrac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}']
     ]) +

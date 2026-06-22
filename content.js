@@ -197,7 +197,7 @@ const SECTIONS_CONTENT = {
         <div class="simple-exp-box">
           <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
           <div class="simple-exp-content">
-            Cette forme est comme une recette : elle cache deux vecteurs utiles. Le vecteur normal \\(\\vec{n}=(a;b)\\) est perpendiculaire à la droite. Le vecteur directeur \\(\\vec{u}=(-b;a)\\) est parallèle à la droite — il pointe dans sa direction. Astuce : pour passer de \\(\\vec{n}\\) à \\(\\vec{u}\\), on échange les composantes et on change un signe !
+            Cette forme est comme une recette : elle cache deux vecteurs utiles. Le vecteur normal \\(\\vec{n}=\\begin{pmatrix}a\\\\b\\end{pmatrix}\\) est perpendiculaire à la droite. Le vecteur directeur \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\) est parallèle à la droite — il pointe dans sa direction. Astuce : pour passer de \\(\\vec{n}\\) à \\(\\vec{u}\\), on échange les composantes et on change un signe !
           </div>
         </div>
       </div>
@@ -292,7 +292,7 @@ const SECTIONS_CONTENT = {
     </ul>
 
     <p style="margin-top:1.5rem; font-weight:600; font-size:18px;">Vecteur normal :</p>
-    <p>Pour d ≡ ax + by + c = 0, le vecteur normal est \\(\\vec{n} = (a ; b)\\) (perpendiculaire à la droite).</p>
+    <p>Pour d ≡ ax + by + c = 0, le vecteur normal est \\(\\vec{n} = \\begin{pmatrix}a\\\\b\\end{pmatrix}\\) (perpendiculaire à la droite).</p>
     <p><em>Explication :</em> Le vecteur normal est perpendiculaire à la droite. Il est très utile pour :</p>
     <ul>
       <li>Trouver l'équation d'une droite perpendiculaire</li>
@@ -692,7 +692,7 @@ const SECTIONS_CONTENT = {
         <div class="formula-main droite">$$y = mx + p$$</div>
         <div class="formula-legend">
           <span class="formula-legend-item"><span class="symbol">k</span> <span class="meaning">Paramètre</span><span class="accordion-icon">▾</span><span class="tooltip">Paramètre de déplacement</span><div class="accordion-content">k est un nombre réel quelconque. Quand k=0 on est au point A. Quand k=1 on s'est déplacé d'un vecteur u. Faire varier k de -∞ à +∞ génère TOUS les points de la droite.</div></span>
-          <span class="formula-legend-item"><span class="symbol">\\(\\vec{u}\\)</span> <span class="meaning">Vecteur directeur</span><span class="accordion-icon">▾</span><span class="tooltip">Vecteur directeur</span><div class="accordion-content">\\(\\vec{u}(u_x\\,;u_y)\\) donne la direction de la droite. Pour aller d'un point au suivant sur la droite, on « avance » de \\(u_x\\) horizontalement et \\(u_y\\) verticalement. Pour \\(ax+by+c=0\\), \\(\\vec{u}=(-b\\,;a)\\).</div></span>
+          <span class="formula-legend-item"><span class="symbol">\\(\\vec{u}\\)</span> <span class="meaning">Vecteur directeur</span><span class="accordion-icon">▾</span><span class="tooltip">Vecteur directeur</span><div class="accordion-content">\\(\\vec{u}\\begin{pmatrix}u_x\\\\u_y\\end{pmatrix}\\) donne la direction de la droite. Pour aller d'un point au suivant sur la droite, on « avance » de \\(u_x\\) horizontalement et \\(u_y\\) verticalement. Pour \\(ax+by+c=0\\), \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\).</div></span>
           <span class="formula-legend-item"><span class="symbol">m</span> <span class="meaning">Pente</span><span class="accordion-icon">▾</span><span class="tooltip">Pente de la droite</span><div class="accordion-content">La pente m = Δy/Δx indique de combien monte (ou descend) la droite quand on avance d'une unité vers la droite. m>0 : monte. m&lt;0 : descend. m=0 : horizontale. Droite verticale : pente indéfinie.</div></span>
           <span class="formula-legend-item"><span class="symbol">p</span> <span class="meaning">Ordonnée à l'origine</span><span class="accordion-icon">▾</span><span class="tooltip">Ordonnée à l'origine</span><div class="accordion-content">p est la valeur de y quand x=0 : c'est le point où la droite coupe l'axe y. Dans y=mx+p, si tu poses x=0 tu obtiens y=p directement.</div></span>
         </div>
@@ -707,7 +707,7 @@ const SECTIONS_CONTENT = {
         <p class="note">Pour un point \\(P(x_P\\,;y_P)\\) et une droite \\(d \\equiv ax + by + c = 0\\)</p>
         <div class="formula-legend">
           <span class="formula-legend-item"><span class="symbol">d</span> <span class="meaning">Distance</span><span class="accordion-icon">▾</span><span class="tooltip">Distance</span><div class="accordion-content">La distance d(P,d) est la longueur du segment perpendiculaire qui relie le point P à la droite d. C'est la distance la plus courte entre P et n'importe quel point de la droite.</div></span>
-          <span class="formula-legend-item"><span class="symbol">a, b, c</span> <span class="meaning">Coefficients droite</span><span class="accordion-icon">▾</span><span class="tooltip">Coefficients de la forme implicite</span><div class="accordion-content">Dans \\(ax+by+c=0\\) : le vecteur normal est \\(\\vec{n}=(a\\,;b)\\) (perpendiculaire à la droite), le vecteur directeur est \\(\\vec{u}=(-b\\,;a)\\), et la pente est \\(m=-\\dfrac{a}{b}\\). Erreur fréquente : prendre \\((a;b)\\) comme directeur au lieu de \\((-b;a)\\) !</div></span>
+          <span class="formula-legend-item"><span class="symbol">a, b, c</span> <span class="meaning">Coefficients droite</span><span class="accordion-icon">▾</span><span class="tooltip">Coefficients de la forme implicite</span><div class="accordion-content">Dans \\(ax+by+c=0\\) : le vecteur normal est \\(\\vec{n}=\\begin{pmatrix}a\\\\b\\end{pmatrix}\\) (perpendiculaire à la droite), le vecteur directeur est \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\), et la pente est \\(m=-\\dfrac{a}{b}\\). Erreur fréquente : prendre \\(\\begin{pmatrix}a\\\\b\\end{pmatrix}\\) comme directeur au lieu de \\(\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\) !</div></span>
           <span class="formula-legend-item"><span class="symbol">|...|</span> <span class="meaning">Valeur absolue</span><span class="accordion-icon">▾</span><span class="tooltip">Valeur absolue</span><div class="accordion-content">La valeur absolue garantit que la distance est toujours positive. Sans elle, le résultat pourrait être négatif selon le côté du point. Une distance est TOUJOURS ≥ 0.</div></span>
         </div>
         <div class="simple-exp-box">
@@ -819,7 +819,7 @@ const SECTIONS_CONTENT = {
     <div class="step-list">
       <div class="step-item"><div class="step-num">1</div><div class="step-text">Paramétriques : x = 4 + 2k, y = −1 + 3k
         <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">\\(\\vec{AP}=k\\cdot\\vec{u}\\) en coordonnées : \\(x=x_A+k\\cdot u_x\\) et \\(y=y_A+k\\cdot u_y\\). Ici \\(A(4\\,;-1)\\) et \\(\\vec{u}(2\\,;3)\\) : \\(x=4+2k\\), \\(y=-1+3k\\).</div>
+        <div class="why-content">\\(\\vec{AP}=k\\cdot\\vec{u}\\) en coordonnées : \\(x=x_A+k\\cdot u_x\\) et \\(y=y_A+k\\cdot u_y\\). Ici \\(A(4\\,;-1)\\) et \\(\\vec{u}\\begin{pmatrix}2\\\\3\\end{pmatrix}\\) : \\(x=4+2k\\), \\(y=-1+3k\\).</div>
       </div></div>
       <div class="step-item"><div class="step-num">2</div><div class="step-text">Éliminer k : $$\\frac{x-4}{2} = \\frac{y+1}{3}$$
         <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
@@ -827,7 +827,7 @@ const SECTIONS_CONTENT = {
       </div></div>
       <div class="step-item"><div class="step-num">3</div><div class="step-text">Implicite : 3x − 2y − 14 = 0
         <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
-        <div class="why-content">On développe : 3(x-4)=2(y+1) → 3x-12=2y+2 → 3x-2y-14=0. Vecteur normal \\(\\vec{n}=(3;-2)\\), vecteur directeur \\(\\vec{u}=(2;3)\\).</div>
+        <div class="why-content">On développe : 3(x-4)=2(y+1) → 3x-12=2y+2 → 3x-2y-14=0. Vecteur normal \\(\\vec{n}=\\begin{pmatrix}3\\\\-2\\end{pmatrix}\\), vecteur directeur \\(\\vec{u}=\\begin{pmatrix}2\\\\3\\end{pmatrix}\\).</div>
       </div></div>
       <div class="step-item"><div class="step-num">4</div><div class="step-text">Explicite : y = 1.5x − 7
         <button class="why-btn" onclick="toggleWhyMethod(this)">💡 Pourquoi cette étape ?</button>
@@ -1236,7 +1236,7 @@ const SECTIONS_CONTENT = {
   </div>
   <div class="synth-section droite">
     <h3 style="font-size:24px; font-weight:600; color:var(--color-droite); margin-bottom:1.5rem;">Droites</h3>
-    <div class="formula-box droite"><h3>❌ Confondre vecteur directeur et vecteur normal</h3><p><strong>Erreur :</strong> Prendre \\(\\vec{u} = (a ; b)\\)</p><p><strong>Correction :</strong> \\(\\vec{u} = \\begin{pmatrix}-b \\\\ a\\end{pmatrix}\\), \\(\\vec{n} = \\begin{pmatrix}a \\\\ b\\end{pmatrix}\\)</p><p><strong>Contre-exemple :</strong> Pour \\(2x+3y-5=0\\), \\(\\vec{u}=(-3;2)\\), pas \\((2;3)\\).</p></div>
+    <div class="formula-box droite"><h3>❌ Confondre vecteur directeur et vecteur normal</h3><p><strong>Erreur :</strong> Prendre \\(\\vec{u} = \\begin{pmatrix}a \\\\ b\\end{pmatrix}\\)</p><p><strong>Correction :</strong> \\(\\vec{u} = \\begin{pmatrix}-b \\\\ a\\end{pmatrix}\\), \\(\\vec{n} = \\begin{pmatrix}a \\\\ b\\end{pmatrix}\\)</p><p><strong>Contre-exemple :</strong> Pour \\(2x+3y-5=0\\), \\(\\vec{u}=\\begin{pmatrix}-3\\\\2\\end{pmatrix}\\), pas \\(\\begin{pmatrix}2\\\\3\\end{pmatrix}\\).</p></div>
     <div class="formula-box droite"><h3>❌ Erreur dans le calcul de la pente</h3><p><strong>Erreur :</strong> Prendre \\(m = \\dfrac{a}{b}\\)</p><p><strong>Correction :</strong> \\(m = -\\dfrac{a}{b}\\)</p><p><strong>Contre-exemple :</strong> Pour \\(2x+3y-5=0\\), \\(m=-\\dfrac{2}{3}\\), pas \\(\\dfrac{2}{3}\\).</p></div>
     <div class="formula-box droite"><h3>❌ Erreur dans la condition de perpendicularité</h3><p><strong>Erreur :</strong> Penser que \\(m = m'\\)</p><p><strong>Correction :</strong> \\(m \\cdot m' = -1\\)</p><p><strong>Contre-exemple :</strong> \\(y=2x\\) et \\(y=-0.5x\\) sont perpendiculaires car \\(2 \\times (-0.5) = -1\\).</p></div>
     <div class="formula-box droite"><h3>❌ Oublier la valeur absolue dans la distance</h3><p><strong>Erreur :</strong> Écrire \\(d = \\dfrac{ax_P+by_P+c}{\\sqrt{a^2+b^2}}\\)</p><p><strong>Correction :</strong> \\(d = \\dfrac{|ax_P+by_P+c|}{\\sqrt{a^2+b^2}}\\)</p><p><strong>Contre-exemple :</strong> Distance de (0;0) à \\(x+y-1=0\\) : \\(\\dfrac{|0+0-1|}{\\sqrt{2}}=\\dfrac{1}{\\sqrt{2}}\\), pas \\(-\\dfrac{1}{\\sqrt{2}}\\).</p></div>

@@ -58,9 +58,9 @@
         chapter: 'vecteur',
         title: 'Composantes et norme',
         statement: 'Donne les composantes de \\(\\vec{AB}\\) et sa norme, avec \\(A(' + ax + '\\,;\\,' + ay + ')\\) et \\(B(' + bx + '\\,;\\,' + by + ')\\).',
-        answer: '\\(\\vec{AB}=(' + dx + '\\,;\\,' + dy + ')\\) , \\(\\|\\vec{AB}\\|=' + h + '\\)',
+        answer: '\\(\\vec{AB}=\\begin{pmatrix}' + dx + '\\\\' + dy + '\\end{pmatrix}\\) , \\(\\|\\vec{AB}\\|=' + h + '\\)',
         steps: [
-          'Composantes : \\(\\vec{AB}=(x_B-x_A\\,;\\,y_B-y_A)=(' + dx + '\\,;\\,' + dy + ')\\)',
+          'Composantes : \\(\\vec{AB}=\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}=\\begin{pmatrix}' + dx + '\\\\' + dy + '\\end{pmatrix}\\)',
           'Norme : \\(\\|\\vec{AB}\\|=\\sqrt{(' + dx + ')^2+(' + dy + ')^2}=\\sqrt{' + (dx * dx + dy * dy) + '}=' + h + '\\)'
         ]
       };
