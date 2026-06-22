@@ -254,7 +254,19 @@ let allQuestions = [
   {q: "À partir des paramétriques \\(x=4+2k\\), \\(y=-1+3k\\), quelle est l'équation cartésienne de la droite ?", opts: ["\\(3x-2y-14=0\\)", "\\(2x-3y-14=0\\)", "\\(3x-2y+14=0\\)", "\\(2x+3y-14=0\\)"], ans: 0, chapter: "droite", difficulty: "avance",
     exp: "On isole \\(k\\) : \\(k=\\dfrac{x-4}{2}=\\dfrac{y+1}{3}\\). Donc \\(3(x-4)=2(y+1)\\) → \\(3x-12=2y+2\\) → \\(3x-2y-14=0\\).",
     formula: "Éliminer \\(k\\) : \\(\\dfrac{x-x_A}{u_x}=\\dfrac{y-y_A}{u_y}\\)",
-    simple: "Tu isoles k dans les deux équations, tu les égales, tu développes → \\(3x-2y-14=0\\)."}];
+    simple: "Tu isoles k dans les deux équations, tu les égales, tu développes → \\(3x-2y-14=0\\)."},
+  {q: "Le produit scalaire \\(\\vec{u}\\cdot\\vec{v}\\) de \\(\\vec{u}=\\begin{pmatrix}3\\\\4\\end{pmatrix}\\) et \\(\\vec{v}=\\begin{pmatrix}2\\\\-1\\end{pmatrix}\\) vaut :", opts: ["2", "10", "11", "−2"], ans: 0, chapter: "vecteur", difficulty: "intermediaire",
+    exp: "\\(\\vec{u}\\cdot\\vec{v}=x_u x_v+y_u y_v=3\\times2+4\\times(-1)=6-4=2\\).",
+    formula: "\\(\\vec{u}\\cdot\\vec{v}=x_u x_v+y_u y_v\\)",
+    simple: "On multiplie les x entre eux (3×2=6), les y entre eux (4×(−1)=−4), puis on additionne : 6−4=2."},
+  {q: "Deux vecteurs non nuls sont perpendiculaires si et seulement si :", opts: ["\\(\\vec{u}\\cdot\\vec{v}=0\\)", "\\(\\vec{u}\\cdot\\vec{v}=1\\)", "\\(\\vec{u}=\\vec{v}\\)", "\\(x_u y_v-y_u x_v=0\\)"], ans: 0, chapter: "vecteur", difficulty: "facile",
+    exp: "Orthogonaux ⟺ produit scalaire nul : \\(\\vec{u}\\cdot\\vec{v}=0\\). La condition \\(x_u y_v-y_u x_v=0\\) est celle de la <strong>colinéarité</strong> (vecteurs parallèles), pas de la perpendicularité.",
+    formula: "\\(\\vec{u}\\perp\\vec{v}\\Leftrightarrow\\vec{u}\\cdot\\vec{v}=0\\)",
+    simple: "Produit scalaire = 0 → angle droit."},
+  {q: "Les vecteurs \\(\\vec{u}=\\begin{pmatrix}2\\\\3\\end{pmatrix}\\) et \\(\\vec{v}=\\begin{pmatrix}-3\\\\2\\end{pmatrix}\\) sont :", opts: ["perpendiculaires", "colinéaires", "égaux", "opposés"], ans: 0, chapter: "vecteur", difficulty: "intermediaire",
+    exp: "\\(\\vec{u}\\cdot\\vec{v}=2\\times(-3)+3\\times2=-6+6=0\\) → leur produit scalaire est nul, donc ils sont perpendiculaires.",
+    formula: "\\(\\vec{u}\\cdot\\vec{v}=0\\Leftrightarrow\\vec{u}\\perp\\vec{v}\\)",
+    simple: "Produit scalaire : \\(2\\times(-3)+3\\times2=-6+6=0\\) → angle droit."}];
 
 // ════════════════════════════════════════════════════════════
 //  NOTIONS CLÉS par chapitre (onglet « Progression »)
@@ -273,7 +285,8 @@ const learningConcepts = {
     { concept: "Colinéarité & alignement", keywords: ["colinéaires", "alignés", "parallèles si"] },
     { concept: "Milieu d'un segment", keywords: ["milieu de [AB]"] },
     { concept: "Règle du parallélogramme", keywords: ["\\vec{OA}+\\vec{OB}"] },
-    { concept: "Composantes d'un vecteur", keywords: ["composantes de"] }
+    { concept: "Composantes d'un vecteur", keywords: ["composantes de"] },
+    { concept: "Produit scalaire & orthogonalité", keywords: ["produit scalaire", "perpendiculaires si et seulement"] }
   ],
   cercle: [
     { concept: "Équation canonique (centre, rayon)", keywords: ["équation canonique d'un cercle", "centré à l'origine"] },
@@ -318,6 +331,8 @@ let flashcards = [
   {front: "Comment caractériser le milieu M de [AB] ?", back: "Avec les <strong>vecteurs</strong> : $$\\vec{AM}=\\tfrac{1}{2}\\,\\vec{AB}$$ (le chemin de A à M = la moitié du chemin de A à B).<br>Avec les <strong>coordonnées</strong> (la moyenne) : $$M\\left(\\dfrac{x_A+x_B}{2}\\,;\\,\\dfrac{y_A+y_B}{2}\\right)$$", chapter: "vecteur"},
   {front: "Qu'est-ce qu'une combinaison linéaire de \\(\\vec{u}\\) et \\(\\vec{v}\\) ?", back: "C'est un vecteur \\(\\vec{w}\\) qu'on <strong>fabrique en mélangeant</strong> \\(\\vec{u}\\) et \\(\\vec{v}\\) : un peu de l'un, un peu de l'autre. $$\\vec{w}=a\\,\\vec{u}+b\\,\\vec{v}$$ où a et b sont des nombres réels (pas tous les deux nuls).<br><strong>Exemple :</strong> \\(\\vec{w}=2\\,\\vec{u}-3\\,\\vec{v}\\). Si \\(\\vec{u}\\) et \\(\\vec{v}\\) ne sont pas colinéaires, on peut écrire <em>n'importe quel</em> vecteur du plan de cette façon.", chapter: "vecteur"},
   {front: "Composantes du vecteur \\(\\vec{AB}\\) dans un repère ?", back: "$$\\vec{AB}=\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$$ Composantes = <strong>arrivée − départ</strong> : la différence des x en haut, la différence des y en bas.", chapter: "vecteur"},
+  {front: "Produit scalaire de deux vecteurs ?", back: "$$\\vec{u}\\cdot\\vec{v}=x_u\\,x_v+y_u\\,y_v$$ On multiplie les x entre eux, les y entre eux, puis on additionne. Le résultat est un <strong>nombre</strong> (pas un vecteur).", chapter: "vecteur"},
+  {front: "Comment savoir si deux vecteurs sont perpendiculaires ?", back: "Leur <strong>produit scalaire est nul</strong> : $$\\vec{u}\\cdot\\vec{v}=0 \\;\\Leftrightarrow\\; \\vec{u}\\perp\\vec{v}$$ <em>À ne pas confondre</em> avec la colinéarité \\(x_u y_v-y_u x_v=0\\), qui signifie <strong>parallèles</strong>.", chapter: "vecteur"},
   {front: "Quelle est la forme canonique d'un cercle ?", back: "$$(x - x_0)^2 + (y - y_0)^2 = R^2$$<details class='fc-ex'><summary onclick='event.stopPropagation()'>📝 Exemple chiffré</summary><div class='fc-ex-body'>Centre \\(C(2\\,;-3)\\), rayon \\(R=4\\) → \\((x-2)^2+(y+3)^2=16\\). <em>(On met l'opposé des coordonnées du centre, et \\(R^2\\) à droite.)</em></div></details>", chapter: "cercle"},
   {front: "Quelle est la forme développée d'un cercle ?", back: "$$x^2 + y^2 + ax + by + c = 0$$", chapter: "cercle"},
   {front: "Comment trouver le centre d'un cercle en forme développée ?", back: "$$C\\left(\\frac{-a}{2} ; \\frac{-b}{2}\\right)$$<details class='fc-ex'><summary onclick='event.stopPropagation()'>📝 Exemple chiffré</summary><div class='fc-ex-body'>Pour \\(x^2+y^2-6x+4y-3=0\\) : \\(a=-6,\\ b=4\\) → \\(C\\left(\\tfrac{-(-6)}{2}\\,;\\tfrac{-4}{2}\\right)=C(3\\,;-2)\\).</div></details>", chapter: "cercle"},

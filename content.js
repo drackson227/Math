@@ -614,6 +614,15 @@ const SECTIONS_CONTENT = {
           <div class="simple-exp-content">C'est le théorème de Pythagore ! Pour aller de A à B tu te déplaces de \\((x_B-x_A)\\) horizontalement et de \\((y_B-y_A)\\) verticalement : ça forme un triangle rectangle dont [AB] est l'hypoténuse. La distance vaut donc \\(\\sqrt{\\text{(déplacement en x)}^2 + \\text{(déplacement en y)}^2}\\). 🧮 Brouillon dispo pour calculer.</div>
         </div>
       </div>
+      <div class="formula-box vecteur">
+        <h3><span class="tag tag-vecteur">Vecteurs</span> Produit scalaire &amp; orthogonalité</h3>
+        <div class="formula-main vecteur">$$\\vec{u}\\cdot\\vec{v} = x_u\\,x_v + y_u\\,y_v$$</div>
+        <p class="note">Le résultat est un <strong>nombre</strong>. Deux vecteurs non nuls sont <strong>perpendiculaires (orthogonaux)</strong> exactement quand \\(\\vec{u}\\cdot\\vec{v}=0\\).</p>
+        <div class="simple-exp-box">
+          <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+          <div class="simple-exp-content">On multiplie les x entre eux, les y entre eux, puis on additionne. Exemple : \\(\\vec{u}\\begin{pmatrix}3\\\\4\\end{pmatrix}\\) et \\(\\vec{v}\\begin{pmatrix}2\\\\-1\\end{pmatrix}\\) → \\(3\\times2+4\\times(-1)=6-4=2\\). Si le résultat est \\(0\\), les deux vecteurs forment un <strong>angle droit</strong>. (À ne pas confondre avec la colinéarité \\(x_u y_v-y_u x_v=0\\), qui veut dire <em>parallèles</em>.)</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="grid2">

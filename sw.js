@@ -4,7 +4,7 @@
      repli sur le cache si hors-ligne. Évite d'afficher une vieille version.
    - Librairies CDN (MathJax, GSAP, Supabase, polices) : réseau d'abord, puis cache.
    - Supabase API & Giphy : jamais mis en cache (données/temps réel). */
-const CACHE = 'mathsgr2-v242';
+const CACHE = 'mathsgr2-v243';
 const CORE = [
   './', './index.html', './style.css', './enhancements.css', './study-tools.css', './a11y-fixes.css', './card-battle.css',
   './data.js', './content.js', './script.js',
