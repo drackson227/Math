@@ -72,6 +72,8 @@
   }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify({ owned: G.owned, team: G.team, tickets: G.tickets, xpClaimed: G.xpClaimed, dust: G.dust, stage: G.stage, bestStage: G.bestStage, welcomed: G.welcomed })); } catch (e) {}
+    // Sauvegarde aussi sur le compte (cloud) si connecté → la progression suit l'élève d'un appareil à l'autre.
+    if (typeof cloudPushDebounced === 'function') { try { cloudPushDebounced(); } catch (e) {} }
   }
   function getXp() { try { return (loadSavedData().xp) || 0; } catch (e) { return 0; } }
   // 10 XP gagnés = 1 tirage (accordé une seule fois, sans jamais retirer d'XP au joueur).
@@ -598,6 +600,16 @@
     else el.innerHTML = viewSummon();
   }
   CB.render = render;
+
+  // Recharge l'état depuis localStorage (appelé après une synchro cloud : connexion / autre appareil)
+  // puis rafraîchit l'affichage si l'Arène est ouverte et qu'aucun combat n'est en cours.
+  CB.reload = function () {
+    load();
+    try {
+      var open = document.getElementById('arene') && document.body.classList.contains('arene-on');
+      if (open && !(B && !B.over)) { if (G.view === 'battle') G.view = 'arena'; render(); }
+    } catch (e) {}
+  };
 
   // Branche le rendu + le mode plein écran quand on ouvre l'onglet (sans casser les autres wrappers de showSection).
   if (typeof window.showSection === 'function') {

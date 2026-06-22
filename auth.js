@@ -153,14 +153,42 @@ window.MGR2Auth = {
 };
 
 // Synchronisation de la progression (table "progress")
+// Clés locales SUPPLÉMENTAIRES synchronisées avec le compte, en plus de la progression scolaire
+// (mathsgr2_data). Ex. : l'Arène (gr2_arene_v1) → le jeu suit l'élève d'un appareil à l'autre.
+const SYNC_KEYS = ['gr2_arene_v1'];
+
+// Rassemble tout ce qui doit partir dans le cloud. Format "bundle" rétro-compatible :
+// { __bundle:1, mathsgr2_data:{…}, gr2_arene_v1:{…} }.
+function _collectBundle() {
+  let school = {};
+  try { school = JSON.parse(localStorage.getItem('mathsgr2_data') || '{}'); } catch (e) {}
+  const bundle = { __bundle: 1, mathsgr2_data: school };
+  SYNC_KEYS.forEach(function (k) {
+    try { const v = localStorage.getItem(k); if (v != null) bundle[k] = JSON.parse(v); } catch (e) {}
+  });
+  return bundle;
+}
+
+// Écrit dans localStorage ce qui vient du cloud. Gère l'ANCIEN format (le blob = mathsgr2_data tel quel).
+function _applyBundle(d) {
+  if (!d) return;
+  if (d.__bundle) {
+    if (d.mathsgr2_data) localStorage.setItem('mathsgr2_data', JSON.stringify(d.mathsgr2_data));
+    SYNC_KEYS.forEach(function (k) { if (d[k] != null) localStorage.setItem(k, JSON.stringify(d[k])); });
+  } else {
+    localStorage.setItem('mathsgr2_data', JSON.stringify(d)); // rétro-compat : ancien enregistrement
+  }
+}
+
 async function pullProgressFromCloud() {
   if (!_sb || !_authUser) return;
   try {
     const res = await _sb.from('progress').select('data').eq('user_id', _authUser.id).maybeSingle();
     if (res.error) throw res.error;
     if (res.data && res.data.data) {
-      localStorage.setItem('mathsgr2_data', JSON.stringify(res.data.data));
+      _applyBundle(res.data.data);
       if (typeof updateProfile === 'function') { try { updateProfile(); } catch (e) {} }
+      if (window.CB && typeof window.CB.reload === 'function') { try { window.CB.reload(); } catch (e) {} } // rafraîchit l'Arène
       if (typeof showToast === 'function') showToast('☁️ Progression chargee', 'var(--color-parabole)');
     } else {
       await cloudPushNow(true);
@@ -186,7 +214,7 @@ document.addEventListener('visibilitychange', function () {
 async function cloudPushNow(silent) {
   if (!_sb || !_authUser) { if (!silent && typeof showToast === 'function') showToast('Connecte-toi d\'abord', '#f87171'); return; }
   try {
-    const local = JSON.parse(localStorage.getItem('mathsgr2_data') || '{}');
+    const local = _collectBundle();
     const res = await _sb.from('progress').upsert({ user_id: _authUser.id, data: local, updated_at: new Date().toISOString() });
     if (res.error) throw res.error;
     if (!silent && typeof showToast === 'function') showToast('☁️ Sauvegarde en ligne', 'var(--color-parabole)');

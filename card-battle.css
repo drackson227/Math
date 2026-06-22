@@ -312,7 +312,8 @@ body.arene-on #cb-cosmos { display: block; }
 /* ============================================================
    RÉVÉLATION PLEIN ÉCRAN (tirage) — suspense + flip des cartes
    ============================================================ */
-.cb-reveal { position: fixed; inset: 0; z-index: 99998; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 20px;
+.cb-reveal { position: fixed; inset: 0; z-index: 99998; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   background: radial-gradient(60% 50% at 50% 42%, color-mix(in srgb, var(--bc) 32%, transparent), transparent 70%), rgba(6,4,14,.92);
   backdrop-filter: blur(9px); animation: cb-revin .3s ease both; }
 .cb-reveal.out { animation: cb-revout .24s ease forwards; }
@@ -360,12 +361,34 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-fightbtn { display: block; width: 100%; font-size: 15px; }
 .cb-reveal-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
+/* ---------- confort tactile (téléphone) ----------
+   Pas de flash bleu au tap, pas de délai/zoom au double-tap, pas de sélection de texte
+   quand on tapote vite les boutons du jeu. */
+.cb-btn, .cb-tab, .cb-quit, .cb-cell, .cb-tcard, .cb-fightbtn, .cb-rate, .cb-reveal-btns button {
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  -webkit-user-select: none; user-select: none; }
+
+/* ---------- zones sûres (encoche / barre d'accueil) en plein écran Arène ----------
+   env(...) vaut 0 sur les écrans sans encoche → aucun effet sur PC ; sur iPhone/Android
+   plein écran, le contenu ne passe plus sous la barre d'état ni la barre d'accueil. */
+body.arene-on #arene {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+
 /* ---------- responsive ---------- */
 @media (max-width: 560px) {
   .cb-tabs { width: 100%; justify-content: center; }
   .cb-fighter .cb-emoji { font-size: 50px; } .cb-fighter { padding: 11px 7px 14px; }
   .cb-portal { width: 128px; height: 128px; } .cb-core { font-size: 60px; }
   .cb-pcard .cb-emoji { font-size: 48px; } .cb-grid { grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); }
+}
+/* très petits téléphones (≤ 360px) : on resserre un peu pour éviter que ça soit à l'étroit */
+@media (max-width: 360px) {
+  .cb-panel { padding: 15px; } #arene { --pad: 12px; }
+  .cb-quit { padding: 7px 11px; font-size: 12.5px; }
+  .cb-bal span { padding: 5px 10px; font-size: 12.5px; }
+  .cb-tab { padding: 9px 10px; font-size: 12.5px; }
+  .cb-h { font-size: 18px; }
+  .cb-fighter .cb-emoji { font-size: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   #cb-cosmos::before, #cb-cosmos::after, .cb-ring, .cb-core, .cb-halo, .cb-rays, .cb-foil, .cb-fighter .cb-emoji,
