@@ -90,3 +90,32 @@ body:not(.theme-light) #cre-pane-quiz p { color: #b6c2d4 !important; opacity: 1 
 .gr2-cc { padding-top: 8px; padding-bottom: 8px; }
 .gr2-sw { width: 32px; height: 32px; }
 .gr2-sw-clear { width: 38px; height: 38px; }
+
+/* ---------- 3b. Cibles tactiles — compléments mesurés (audit mobile, v244) ----------
+   Boutons/champs trouvés < 40px au doigt à 360px de large. Hauteur tactile portée
+   à 40px (les largeurs restent inchangées → pas de débordement). */
+.formula-anim-btn,
+#formula-bookmark-filter,
+button[onclick="printRevisionSheet()"],
+.reset-prog-btn,
+.fx-mini,
+.ansheet,
+.ansheet-key,
+#exo-answer,
+#cre-zoom-val, #cre-full-btn,
+#cercle-h, #cercle-k, #cercle-r,
+#droite-m, #droite-p,
+#vec-xa, #vec-ya, #vec-xb, #vec-yb {
+  min-height: 40px !important;
+}
+/* champs numériques très courts des Graphiques : un peu d'air pour la frappe */
+#vec-xa, #vec-ya, #vec-xb, #vec-yb { padding-top: 6px !important; padding-bottom: 6px !important; }
+/* barre d'outils de l'éditeur (Mes créations / Notes) : ces boutons réutilisent
+   .nav-btn MAIS sont DANS une .section → on élargit au doigt sans toucher la
+   barre de navigation principale (qui est hors .section). */
+.section .nav-btn { min-width: 40px !important; min-height: 40px !important; }
+/* boutons « couper le son » et « Quitter » de l'Arène (étaient < 40px) */
+.cb-bal-btn { min-width: 40px !important; min-height: 40px !important; }
+.cb-quit { min-height: 40px !important; }
+/* frise chronologique (histoire) : dates trop petites → minimum lisible */
+.htl-date { font-size: 11px !important; }
