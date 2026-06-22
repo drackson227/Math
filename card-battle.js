@@ -69,9 +69,10 @@
     G.owned = G.owned || {}; G.team = G.team || []; G.tickets = G.tickets || 0;
     G.xpClaimed = G.xpClaimed || 0; G.dust = G.dust || 0; G.stage = G.stage || 1;
     G.bestStage = G.bestStage || 1; G.view = G.view || 'summon'; G.welcomed = G.welcomed || false;
+    G.pityEpic = G.pityEpic || 0; // compteur de pitié (tirages depuis le dernier Épique+)
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ owned: G.owned, team: G.team, tickets: G.tickets, xpClaimed: G.xpClaimed, dust: G.dust, stage: G.stage, bestStage: G.bestStage, welcomed: G.welcomed })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ owned: G.owned, team: G.team, tickets: G.tickets, xpClaimed: G.xpClaimed, dust: G.dust, stage: G.stage, bestStage: G.bestStage, welcomed: G.welcomed, pityEpic: G.pityEpic })); } catch (e) {}
     // Sauvegarde aussi sur le compte (cloud) si connecté → la progression suit l'élève d'un appareil à l'autre.
     if (typeof cloudPushDebounced === 'function') { try { cloudPushDebounced(); } catch (e) {} }
   }
@@ -106,14 +107,21 @@
   // crée le fond cosmique fixe une seule fois
   function ensureCosmos() { if (document.getElementById('cb-cosmos')) return; var d = document.createElement('div'); d.id = 'cb-cosmos'; d.setAttribute('aria-hidden', 'true'); document.body.appendChild(d); }
 
-  /* ---------------- GACHA ---------------- */
-  function rollRarity() {
-    var r = Math.random() * 100, acc = 0;
-    for (var i = 0; i < RAR_ORDER.length; i++) { acc += RAR[RAR_ORDER[i]].w; if (r < acc) return RAR_ORDER[i]; }
-    return 'commun';
+  /* ---------------- GACHA (avec PITIÉ façon vrais gacha) ---------------- */
+  var PITY_EPIC = 50; // Épique+ GARANTI au bout de 50 tirages sans Épique+
+  // floorIdx : rareté minimale forcée (index dans RAR_ORDER) — pour la pitié et le garanti ×10
+  function rollRarity(floorIdx) {
+    var r = Math.random() * 100, acc = 0, res = 'commun';
+    for (var i = 0; i < RAR_ORDER.length; i++) { acc += RAR[RAR_ORDER[i]].w; if (r < acc) { res = RAR_ORDER[i]; break; } }
+    if (floorIdx != null && RAR_ORDER.indexOf(res) < floorIdx) res = RAR_ORDER[floorIdx];
+    return res;
   }
-  function pullOne() {
-    var rar = rollRarity();
+  function pullOne(forceMin) {
+    var floor = null;
+    if (G.pityEpic >= PITY_EPIC - 1) floor = 2;            // pitié : Épique garanti
+    if (forceMin != null && (floor == null || forceMin > floor)) floor = forceMin; // garanti ×10
+    var rar = rollRarity(floor);
+    if (RAR_ORDER.indexOf(rar) >= 2) G.pityEpic = 0; else G.pityEpic++; // reset si Épique+
     var pool = CREATURES.filter(function (c) { return c.r === rar; });
     var c = pool[Math.floor(Math.random() * pool.length)];
     var o = G.owned[c.id];
@@ -123,12 +131,59 @@
     return { c: c, isNew: isNew, lvl: G.owned[c.id].lvl };
   }
   window.CB = window.CB || {};
+
+  /* ---------------- SONS (Web Audio, AUCUN fichier) + VIBRATIONS ----------------
+     Tout est synthétisé à la volée → 0 octet à télécharger. Le contexte audio démarre
+     au 1er clic (tirage/attaque) car les navigateurs l'exigent. Bouton muet 🔊/🔇. */
+  var AC = null, muted = false;
+  try { muted = localStorage.getItem('gr2_arene_mute') === '1'; } catch (e) {}
+  function actx() { if (muted) return null; try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { AC = null; } return AC; }
+  function tone(freq, dur, type, vol, slideTo, when) {
+    var ac = actx(); if (!ac) return;
+    var t0 = ac.currentTime + (when || 0), o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t0);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + dur + 0.03);
+  }
+  function noise(dur, vol, hp, when) {
+    var ac = actx(); if (!ac) return;
+    var n = Math.floor(ac.sampleRate * dur), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+    var src = ac.createBufferSource(); src.buffer = buf; var g = ac.createGain(); g.gain.value = vol || 0.2;
+    if (hp) { var f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp; src.connect(f); f.connect(g); } else src.connect(g);
+    g.connect(ac.destination); src.start(ac.currentTime + (when || 0));
+  }
+  function vib(p) { try { if (!muted && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+  var SFX = {
+    tap:     function () { tone(440, 0.05, 'triangle', 0.05); },
+    whoosh:  function () { noise(0.35, 0.10, 480); tone(160, 0.35, 'sine', 0.07, 540); },
+    hit:     function () { noise(0.12, 0.22, 280); tone(130, 0.12, 'square', 0.10, 60); vib(15); },
+    crit:    function () { noise(0.18, 0.30, 700); tone(880, 0.20, 'sawtooth', 0.12, 180); tone(220, 0.22, 'square', 0.10, 70); vib([0, 28, 35, 28]); },
+    ko:      function () { tone(320, 0.5, 'sawtooth', 0.16, 45); noise(0.45, 0.2, 180); vib(55); },
+    // ding montant selon la rareté (0=commun … 4=mythique) ; accords brillants pour les hautes raretés
+    reveal:  function (r) { var b = [392, 523, 659, 784, 988][r] || 392; tone(b, 0.5, 'sine', 0.16); tone(b * 1.5, 0.55, 'sine', 0.10, null, 0.07); if (r >= 3) { tone(b * 2, 0.6, 'triangle', 0.09, null, 0.14); tone(b * 2.5, 0.6, 'triangle', 0.06, null, 0.2); vib([0, 40, 30, 70]); } else if (r >= 2) vib(30); },
+    win:     function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.32, 'triangle', 0.14, null, i * 0.12); }); vib([0, 40, 30, 40, 30, 90]); },
+    lose:    function () { [392, 330, 262].forEach(function (f, i) { tone(f, 0.38, 'sine', 0.12, null, i * 0.15); }); },
+    levelup: function () { [523, 659, 880].forEach(function (f, i) { tone(f, 0.24, 'triangle', 0.13, null, i * 0.08); }); vib(30); },
+    charge:  function () { tone(150, 0.5, 'sawtooth', 0.09, 520); noise(0.5, 0.05, 1200); }
+  };
+  function sfx(n, a) { try { if (SFX[n]) SFX[n](a); } catch (e) {} }
+  CB.toggleMute = function () { muted = !muted; try { localStorage.setItem('gr2_arene_mute', muted ? '1' : '0'); } catch (e) {} if (!muted) { AC = null; sfx('tap'); } render(); };
+
   CB.pull = function (n) {
     syncTickets();
     n = n || 1;
     if (G.tickets < n) { toast('Pas assez de tirages 🎟️ — gagne de l’XP (quiz, flashcards) !'); return; }
     G.tickets -= n;
-    var res = []; for (var i = 0; i < n; i++) res.push(pullOne());
+    sfx('whoosh');
+    var res = [], gotRare = false;
+    for (var i = 0; i < n; i++) {
+      var forceMin = (n >= 10 && i === n - 1 && !gotRare) ? 1 : null; // ×10 : au moins 1 Rare+ garanti
+      var one = pullOne(forceMin);
+      if (RAR_ORDER.indexOf(one.c.r) >= 1) gotRare = true;
+      res.push(one);
+    }
     save();
     showRevealOverlay(res);
   };
@@ -225,7 +280,7 @@
     } else {
       B.log.push('☠️ Défaite… réessaie (aucune perte). Astuce : exploite les avantages de type.');
     }
-    save(); renderBattle();
+    save(); renderBattle(); sfx(win ? 'win' : 'lose');
     if (win) { cbConfetti(120, ['#16a34a', '#fde047', '#ffffff', '#60a5fa', '#f472b6']); var ar = document.getElementById('arene'); if (ar) playLottie(ar, 'victory', ar.clientWidth / 2, 200, 360); }
   }
 
@@ -236,9 +291,83 @@
     else { if (G.team.length >= 3) { toast('Équipe pleine (3 max) — retire-en une d’abord.'); return; } G.team.push(id); }
     save(); render();
   };
-  CB.go = function (v) { G.view = v; save(); render(); };
+  CB.go = function (v) { sfx('tap'); G.view = v; save(); render(); };
   CB.closeReveal = function () { var ov = document.querySelector('.cb-reveal'); if (ov) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 240); } render(); };
   CB.again = function (n) { CB.closeReveal(); setTimeout(function () { CB.pull(n); }, 280); }; // refaire un tirage depuis l'écran de révélation
+
+  /* ---------------- FICHE CARTE DÉTAILLÉE (façon RPG) ---------------- */
+  // petite description (lore) par créature — 100 % original
+  var DESC = {
+    renard: 'Rusé et vif, il piège ses proies par la malice plus que par la force.',
+    lapin: 'De petits bonds si rapides qu’on le perd de vue.',
+    herisson: 'Une boule de piquants : on l’attaque une fois, on le regrette.',
+    canard: 'Tranquille sur l’eau, redoutable d’un coup de bec.',
+    chouette: 'Vole sans le moindre bruit et frappe dans l’obscurité.',
+    tortue: 'Sa carapace encaisse tout ; la patience est son arme.',
+    crabe: 'Une pince capable de broyer une coquille d’un seul coup.',
+    serpent: 'Frappe vite, injecte son venin, et disparaît.',
+    loup: 'Seul ou en meute, son hurlement glace le sang.',
+    ours: 'Une force brute : un coup de patte suffit.',
+    aigle: 'Du haut du ciel, il fond sur sa cible à pleine vitesse.',
+    perroquet: 'Son cri perçant déstabilise n’importe quel adversaire.',
+    requin: 'Il sent une goutte de sang à des kilomètres.',
+    pieuvre: 'Huit bras, un nuage d’encre, et une ruse redoutable.',
+    panthere: 'Invisible jusqu’à la seconde où elle bondit.',
+    mammouth: 'Un colosse de l’âge de glace, lent mais inarrêtable.',
+    dodo: 'Disparu du monde réel… il revient pour prendre sa revanche.',
+    smilodon: 'Ses crocs-sabres transpercent la plus dure des armures.',
+    rhino: 'La charge d’un rhinocéros laineux ne se dévie pas.',
+    paresseux: 'Lent en apparence ; ses griffes, elles, ne pardonnent pas.',
+    trex: 'Le roi des prédateurs : une morsure, une fin.',
+    triceratops: 'Trois cornes lancées comme un bélier vivant.',
+    spino: 'Maître des marais, mi-terre mi-eau, toujours mortel.',
+    megalodon: 'Le requin-titan des abysses, légende des océans.',
+    dragon: 'Crache un souffle assez chaud pour fondre la pierre.',
+    licorne: 'Sa corne céleste libère une lumière pure et dévastatrice.',
+    kraken: 'Des tentacules capables d’engloutir un navire entier.',
+    golem: 'Une montagne de roche animée par une magie ancienne.'
+  };
+  CB.detail = function (id) {
+    var c = BYID[id], o = G.owned[id]; if (!c || !o) return;
+    sfx('tap');
+    var s = stats(id, o.lvl), nx = o.lvl < 5 ? stats(id, o.lvl + 1) : null, cost = 30 * o.lvl, inTeam = G.team.indexOf(id) >= 0;
+    var prev = document.querySelector('.cb-detail'); if (prev) prev.remove();
+    var ov = document.createElement('div'); ov.className = 'cb-detail';
+    var gold = (c.r === 'leg' || c.r === 'myth') ? ' goldname' : '';
+    ov.innerHTML =
+      '<div class="cb-detail-box cb-r-' + c.r + '" style="--rc:' + RAR[c.r].c + ';--tc:' + TM[c.t].c + '">' +
+        '<button class="cb-detail-x" onclick="CB.closeDetail()" aria-label="Fermer">✕</button>' +
+        '<div class="cb-detail-card">' + pwin(c) + '</div>' +
+        '<div class="cb-detail-info">' +
+          '<div class="cb-detail-name' + gold + '">' + esc(c.n) + '</div>' +
+          '<div class="cb-stars cb-detail-stars">' + starStr(RAR[c.r].st) + ' <span class="cb-mut">' + RAR[c.r].n + '</span></div>' +
+          '<div class="cb-detail-tags">' + tag(c.t) + '<span class="cb-detail-lvl">niv. ' + o.lvl + (o.lvl >= 5 ? ' · max' : '') + '</span><span class="cb-mut">×' + o.count + ' exemplaire' + (o.count > 1 ? 's' : '') + '</span></div>' +
+          '<div class="cb-detail-stats">' +
+            '<div class="cb-detail-stat"><span>❤️ PV</span><b>' + s.hp + (nx ? ' <i>→ ' + nx.hp + '</i>' : '') + '</b></div>' +
+            '<div class="cb-detail-stat"><span>⚔️ Attaque</span><b>' + s.atk + (nx ? ' <i>→ ' + nx.atk + '</i>' : '') + '</b></div>' +
+          '</div>' +
+          '<div class="cb-detail-move">✨ <b>' + esc(c.mv) + '</b> <span class="cb-mut">· coup spécial</span></div>' +
+          '<p class="cb-detail-desc">' + esc(DESC[id] || '') + '</p>' +
+          '<div class="cb-detail-btns">' +
+            (o.lvl < 5
+              ? '<button class="cb-btn cb-btn-main" onclick="CB.levelUp(\'' + id + '\')">⬆️ Niveau (' + cost + ' ✨)</button>'
+              : '<button class="cb-btn" disabled>Niveau max ✓</button>') +
+            '<button class="cb-btn' + (inTeam ? ' on' : '') + '" onclick="CB.team(\'' + id + '\');CB.detail(\'' + id + '\')">' + (inTeam ? '✓ Équipe' : '+ Équipe') + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    ov.addEventListener('click', function (e) { if (e.target === ov) CB.closeDetail(); });
+    document.body.appendChild(ov);
+  };
+  CB.closeDetail = function () { var ov = document.querySelector('.cb-detail'); if (ov) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 200); } };
+  CB.levelUp = function (id) {
+    var o = G.owned[id]; if (!o) return;
+    if (o.lvl >= 5) { toast('Niveau max atteint (5).'); return; }
+    var cost = 30 * o.lvl;
+    if (G.dust < cost) { toast('Pas assez de poussières ✨ (' + cost + ' requis). Gagne-en avec les doublons et les combats.'); return; }
+    G.dust -= cost; o.lvl++; sfx('levelup'); cbConfetti(36, [TM[BYID[id].t].c, '#ffffff', '#fbbf24']); save();
+    CB.detail(id); // rouvre la fiche mise à jour
+  };
 
   /* ---------------- RENDU ---------------- */
   function toast(m) { if (typeof showToast === 'function') showToast(m, 'var(--color-nav)'); }
@@ -265,6 +394,14 @@
     var f = document.createElement('div'); f.className = 'cb-float ' + (cls || ''); f.textContent = text;
     el.appendChild(f);
     setTimeout(function () { f.remove(); }, 900);
+  }
+  // bandeau « SUPER EFFICACE ! » / « Peu efficace… » selon l'avantage de type
+  function cbAdvPopup(adv) {
+    if (adv === 1) return;
+    var stage = document.querySelector('#arene .cb-stage'); if (!stage) return;
+    var d = document.createElement('div'); d.className = 'cb-adv ' + (adv > 1 ? 'super' : 'weak');
+    d.textContent = adv > 1 ? 'SUPER EFFICACE ! ×1.5' : 'Peu efficace… ×0.67';
+    stage.appendChild(d); setTimeout(function () { d.remove(); }, 1100);
   }
   /* ---------------- MOTEUR D'EFFETS DE COMBAT ---------------- */
   // attaque SIGNATURE par animal (chaque créature joue son effet)
@@ -335,6 +472,7 @@
   }
   // éclatement de particules quand un combattant tombe K.O.
   function cbKo(side, color) {
+    sfx('ko');
     var el = document.querySelector('#arene .cb-fighter.' + side); if (!el || !el.closest('.cb-stage')) return;
     var c = ctr(el); fxBurst(c.x, c.y, color, 42, 7); fxBurst(c.x, c.y, '#ffffff', 22, 5); fxRing(c.x, c.y, color, 4);
   }
@@ -413,19 +551,21 @@
     var atkEl = document.querySelector('#arene .cb-fighter.' + side);
     var defSide = side === 'me' ? 'foe' : 'me';
     var defEl = document.querySelector('#arene .cb-fighter.' + defSide);
-    var key = FXMAP[me.cr.id] || 'slash', tc = TM[me.cr.t].c;
-    if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
+    var key = FXMAP[me.cr.id] || 'slash', tc = TM[me.cr.t].c, adv = typeMult(me.cr.t, foe.cr.t);
+    if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); cbAdvPopup(adv); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
     var field = stage.querySelector('.cb-arena-field');
     if (special) {
       var cine = mkFx(stage, 'cb-cinema'); fxEnsure(stage); if (field) field.classList.add('cb-zoom');
       atkEl.style.setProperty('--tc', tc); atkEl.classList.add('cb-cast');
       var banner = bannerEl(stage, me.cr, tc);
+      sfx('charge'); // anticipation : on « charge » le coup
       setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, tc); }, 360);
       setTimeout(function () {
         if (onImpact) onImpact();
+        sfx('crit'); cbAdvPopup(adv);
         var bp = ctr(defEl);
         fxBurst(bp.x, bp.y, '#ffffff', 34, 7); fxBurst(bp.x, bp.y, tc, 42, 6); fxBurst(bp.x, bp.y, '#ffffff', 14, 3.5);
-        fxRing(bp.x, bp.y, '#ffffff', 4); setTimeout(function () { fxRing(bp.x, bp.y, tc, 3); }, 90);
+        fxRing(bp.x, bp.y, '#ffffff', 5); fxRing(bp.x, bp.y, tc, 7); setTimeout(function () { fxRing(bp.x, bp.y, tc, 3); }, 110); // double onde de choc = impact « pro »
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
         defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
@@ -435,7 +575,7 @@
       var lc = side === 'me' ? 'cb-lunge-r' : 'cb-lunge-l'; atkEl.classList.add(lc);
       fxEnsure(stage); var a = ctr(atkEl), b = ctr(defEl);
       fxComet(a, b, 300, tc, function (x, y) { fxBurst(x, y, tc, 14, 4); });
-      setTimeout(function () { if (onImpact) onImpact(); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 10, 3.5); cbFloat(defEl, '-' + dmg, ''); }, 320);
+      setTimeout(function () { if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 12, 4); fxRing(bp.x, bp.y, tc, 3); cbFloat(defEl, '-' + dmg, ''); }, 320);
       setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt'); if (onDone) onDone(); }, 620);
     }
   }
@@ -448,7 +588,8 @@
   function head() {
     return '<div class="cb-head">' +
       '<button class="cb-quit" onclick="showSection(\'synthese\')" title="Revenir à l’étude">← Quitter</button>' +
-      '<div class="cb-bal"><span title="Tirages">🎟️ <b>' + G.tickets + '</b></span><span title="Poussières (doublons)">✨ <b>' + G.dust + '</b></span><span title="Étage d’arène">🏟️ <b>' + G.stage + '</b></span></div>' +
+      '<div class="cb-bal"><span title="Tirages">🎟️ <b>' + G.tickets + '</b></span><span title="Poussières (doublons)">✨ <b>' + G.dust + '</b></span><span title="Étage d’arène">🏟️ <b>' + G.stage + '</b></span>' +
+        '<button class="cb-bal-btn" onclick="CB.toggleMute()" title="' + (muted ? 'Activer le son' : 'Couper le son') + '" aria-label="Son">' + (muted ? '🔇' : '🔊') + '</button></div>' +
       '<div class="cb-tabs">' +
         '<button class="cb-tab' + (G.view === 'summon' ? ' on' : '') + '" onclick="CB.go(\'summon\')">🎴 Invocation</button>' +
         '<button class="cb-tab' + (G.view === 'collection' ? ' on' : '') + '" onclick="CB.go(\'collection\')">📒 Collection</button>' +
@@ -467,6 +608,9 @@
           '<button class="cb-btn cb-btn-main" onclick="CB.pull(1)">Invoquer ×1 (1 🎟️)</button>' +
           '<button class="cb-btn" onclick="CB.pull(10)">Invoquer ×10 (10 🎟️)</button>' +
         '</div>' +
+        '<div class="cb-pity"><span class="cb-mut">✨ Épique+ <b>garanti</b> dans <b style="color:var(--g-vio)">' + Math.max(0, PITY_EPIC - G.pityEpic) + '</b> tirage' + (Math.max(0, PITY_EPIC - G.pityEpic) > 1 ? 's' : '') + '</span>' +
+          '<div class="cb-pity-bar"><span style="width:' + Math.min(100, Math.round(G.pityEpic / PITY_EPIC * 100)) + '%"></span></div>' +
+          '<span class="cb-mut" style="font-size:11.5px">Tirage ×10 : au moins 1 Rare garanti 🔵</span></div>' +
         '<div class="cb-rates">' + rates + '</div>' +
         '<div id="cb-pullzone"></div>' +
       '</div>';
@@ -493,6 +637,7 @@
       ov.innerHTML = '<div class="cb-reveal-head">' + (res.length > 1 ? '✨ ' + res.length + ' invocations !' : '✨ Invocation !') + '</div>' +
         '<div class="cb-reveal-cards">' + cards + '</div>' +
         '<div class="cb-reveal-btns"><button class="cb-btn" onclick="CB.again(10)">🎟️ Refaire ×10</button><button class="cb-btn cb-btn-main" onclick="CB.closeReveal()">Continuer ▶</button></div>';
+      sfx('reveal', best);
       if (best >= 2) cbConfetti(best >= 4 ? 150 : best >= 3 ? 95 : 55, [bc, '#ffffff', '#fde047']);
       if (best >= 3) playLottie(ov, 'summon', (window.innerWidth / 2), (window.innerHeight * 0.4), 380);
     }, 720);
@@ -513,7 +658,7 @@
       var inTeam = G.team.indexOf(c.id) >= 0;
       var s = stats(c.id, o.lvl);
       return '<div class="cb-cell cb-r-' + c.r + '" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' +
-        pwin(c) +
+        '<button class="cb-cell-art" onclick="CB.detail(\'' + c.id + '\')" aria-label="Voir la fiche de ' + esc(c.n) + '">' + pwin(c) + '<span class="cb-cell-zoom">🔍</span></button>' +
         '<div class="cb-cplate">' +
           '<div class="cb-cname">' + esc(c.n) + '</div>' +
           '<div class="cb-stars">' + starStr(RAR[c.r].st) + ' <span class="cb-mut">niv.' + o.lvl + '</span></div>' +
@@ -553,8 +698,8 @@
       '</div>';
   }
 
-  function fighterCard(f, side) {
-    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + '" style="--tc:' + TM[f.cr.t].c + '; --rc:' + RAR[f.cr.r].c + '">' +
+  function fighterCard(f, side, active) {
+    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + (active ? ' active' : '') + '" style="--tc:' + TM[f.cr.t].c + '; --rc:' + RAR[f.cr.r].c + '">' +
       portrait(f.cr) +
       '<div class="cb-fname">' + esc(f.cr.n) + ' <span class="cb-mut">niv.' + f.lvl + '</span></div>' +
       '<div class="cb-stars">' + starStr(RAR[f.cr.r].st) + '</div>' +
@@ -580,10 +725,12 @@
         '<button class="cb-btn cb-special" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>✨ ' + me.cr.mv + (me.charge < 3 ? ' (' + me.charge + '/3)' : '') + '</button>' +
         '<button class="cb-btn" onclick="CB.go(\'arena\')">🏳️ Abandonner</button></div>';
     }
+    var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ En cours…' : '🟢 À toi de jouer') + '</div>';
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
+        turn +
         '<div class="cb-brow"><span class="cb-mut">Toi</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
-        '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me') + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe') + '</div></div>' +
+        '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me', !B.busy && !B.over) + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe', false) + '</div></div>' +
         '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
         '<div class="cb-log">' + log + '</div>' +
         ctrl +

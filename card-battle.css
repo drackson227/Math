@@ -361,10 +361,73 @@ body.arene-on #cb-cosmos { display: block; }
 .cb-fightbtn { display: block; width: 100%; font-size: 15px; }
 .cb-reveal-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
+/* ---------- bouton son (barre du haut) ---------- */
+.cb-bal-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; min-height: 38px; padding: 0 9px;
+  font-size: 15px; border-radius: 999px; border: 1px solid var(--g-line); background: var(--g-glass); color: var(--g-tx); cursor: pointer; backdrop-filter: blur(8px); transition: border-color .12s ease, box-shadow .12s ease; }
+.cb-bal-btn:hover { border-color: var(--g-cyan); box-shadow: 0 0 14px -4px var(--g-cyan); }
+
+/* ---------- compteur de pitié (invocation) ---------- */
+.cb-pity { margin: 13px auto 4px; max-width: 360px; text-align: center; display: flex; flex-direction: column; gap: 5px; align-items: center; }
+.cb-pity-bar { width: 100%; height: 8px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; }
+.cb-pity-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--g-vio), var(--g-pink)); box-shadow: 0 0 10px var(--g-vio); transition: width .5s ease; }
+
+/* ---------- art de carte cliquable (collection) ---------- */
+.cb-cell-art { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; position: relative; }
+.cb-cell-zoom { position: absolute; top: 6px; left: 6px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(8,5,20,.6); border: 1px solid rgba(255,255,255,.18); font-size: 12px; opacity: 0; transform: scale(.7); transition: opacity .15s ease, transform .15s ease; }
+.cb-cell:hover .cb-cell-zoom { opacity: 1; transform: scale(1); }
+
+/* ---------- popup avantage de type (SUPER EFFICACE) ---------- */
+.cb-adv { position: absolute; top: 30%; left: 50%; z-index: 7; font-weight: 900; letter-spacing: .5px;
+  font-size: clamp(17px, 5vw, 30px); white-space: nowrap; pointer-events: none; text-shadow: 0 2px 10px rgba(0,0,0,.85); animation: cb-adv 1s ease-out forwards; }
+.cb-adv.super { color: #fde047; -webkit-text-stroke: 1px #b45309; }
+.cb-adv.weak { color: #cbd5e1; font-size: clamp(13px, 4vw, 20px); }
+@keyframes cb-adv { 0% { transform: translate(-50%,-50%) scale(.4); opacity: 0; } 18% { transform: translate(-50%,-50%) scale(1.16); opacity: 1; } 72% { opacity: 1; transform: translate(-50%,-50%) scale(1); } 100% { transform: translate(-50%,-120%) scale(1); opacity: 0; } }
+
+/* ---------- indicateur de tour ---------- */
+.cb-turn { text-align: center; font-weight: 800; font-size: 13px; padding: 5px 13px; border-radius: 999px; width: fit-content; margin: 0 auto 9px; border: 1px solid var(--g-line); }
+.cb-turn.you { color: #4ade80; background: rgba(34,197,94,.12); animation: cb-turnpulse 1.6s ease-in-out infinite; }
+.cb-turn.wait { color: var(--g-tx2); background: var(--g-glass2); }
+@keyframes cb-turnpulse { 0%,100% { box-shadow: 0 0 14px -7px #22c55e; } 50% { box-shadow: 0 0 20px -2px #22c55e; } }
+
+/* ---------- combattant actif (à toi de jouer) ---------- */
+.cb-fighter.active { box-shadow: 0 0 0 2px rgba(74,222,128,.55), 0 0 26px -6px #22c55e; }
+
+/* ---------- FICHE CARTE DÉTAILLÉE (façon RPG) ---------- */
+.cb-detail { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: rgba(6,4,14,.84); backdrop-filter: blur(8px); animation: cb-revin .25s ease both; }
+.cb-detail.out { animation: cb-revout .2s ease forwards; }
+.cb-detail-box { position: relative; width: 100%; max-width: 470px; max-height: 100%; overflow: auto; display: flex; gap: 16px; flex-wrap: wrap;
+  background: linear-gradient(180deg, rgba(30,22,54,.97), rgba(18,13,38,.97)); border: 1.5px solid var(--rc); border-radius: 22px; padding: 18px;
+  box-shadow: 0 0 44px -8px var(--rc), inset 0 1px 0 rgba(255,255,255,.06); animation: cb-fadein .3s ease both; }
+.cb-detail-x { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--g-line);
+  background: rgba(0,0,0,.4); color: #fff; font-size: 14px; cursor: pointer; z-index: 2; }
+.cb-detail-card { flex: 0 0 132px; }
+.cb-detail-card .cb-pwin { height: 156px; }
+.cb-detail-card .cb-emoji { font-size: 74px; }
+.cb-detail-info { flex: 1; min-width: 190px; display: flex; flex-direction: column; gap: 6px; }
+.cb-detail-name { font-size: 22px; font-weight: 900; color: #fff; line-height: 1.1; }
+.cb-detail-name.goldname { background: linear-gradient(180deg,#fff7d6,#fbbf24 60%,#f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cb-detail-stars { font-size: 15px; color: var(--g-gold); }
+.cb-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cb-detail-lvl { font-size: 12px; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid var(--g-line); color: var(--g-tx); }
+.cb-detail-stats { display: flex; gap: 8px; margin: 2px 0; }
+.cb-detail-stat { flex: 1; background: rgba(0,0,0,.25); border: 1px solid var(--g-line); border-radius: 12px; padding: 7px 10px; }
+.cb-detail-stat span { display: block; font-size: 11px; color: var(--g-tx2); }
+.cb-detail-stat b { font-size: 18px; color: #fff; font-variant-numeric: tabular-nums; }
+.cb-detail-stat i { font-style: normal; color: #4ade80; font-size: 13.5px; }
+.cb-detail-move { font-size: 13.5px; color: var(--g-tx); }
+.cb-detail-move b { color: var(--g-gold); }
+.cb-detail-desc { font-size: 13px; line-height: 1.5; color: var(--g-tx2); font-style: italic; margin: 2px 0 6px; }
+.cb-detail-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.cb-detail-btns .cb-btn { flex: 1; min-width: 130px; min-height: 46px; }
+.cb-btn.on { border-color: var(--g-cyan); color: #fff; box-shadow: 0 0 14px -5px var(--g-cyan); }
+
 /* ---------- confort tactile (téléphone) ----------
    Pas de flash bleu au tap, pas de délai/zoom au double-tap, pas de sélection de texte
    quand on tapote vite les boutons du jeu. */
-.cb-btn, .cb-tab, .cb-quit, .cb-cell, .cb-tcard, .cb-fightbtn, .cb-rate, .cb-reveal-btns button {
+.cb-btn, .cb-tab, .cb-quit, .cb-cell, .cb-tcard, .cb-fightbtn, .cb-rate, .cb-reveal-btns button, .cb-bal-btn, .cb-cell-art, .cb-detail-x {
   -webkit-tap-highlight-color: transparent; touch-action: manipulation;
   -webkit-user-select: none; user-select: none; }
 
@@ -393,6 +456,8 @@ body.arene-on #arene {
 @media (prefers-reduced-motion: reduce) {
   #cb-cosmos::before, #cb-cosmos::after, .cb-ring, .cb-core, .cb-halo, .cb-rays, .cb-foil, .cb-fighter .cb-emoji,
   .cb-panel, .cb-pcard, .cb-pnew, .cb-result, .cb-btn-main::after, .cb-pshine, .cb-log div, .cb-tab.on,
-  .cb-reveal-orb, .cb-reveal-rays, .cb-rcard, .cb-cell.cb-r-leg, .cb-cell.cb-r-myth, .cb-hero::before { animation: none !important; }
+  .cb-reveal-orb, .cb-reveal-rays, .cb-rcard, .cb-cell.cb-r-leg, .cb-cell.cb-r-myth, .cb-hero::before,
+  .cb-turn.you, .cb-detail-box { animation: none !important; }
   .cb-pcard, .cb-rcard { transform: none !important; opacity: 1 !important; }
+  .cb-adv { animation: none !important; opacity: 1 !important; transform: translate(-50%, -50%) !important; }
 }
