@@ -2973,7 +2973,9 @@ function _dueCards() {
   return flashcards.filter(c => { const r = flashcardData[c.front]; return !r || !r.due || new Date(r.due).getTime() <= now; });
 }
 
+let currentFcFilter = 'all'; // filtre de flashcards actif (pour le bouton « Revoir les difficiles » / retour)
 function filterFlashcards(chapter) {
+  currentFcFilter = chapter || 'all';
   if (chapter === 'due') {
     filteredFlashcards = _dueCards();
   } else if (chapter === 'fav') {
@@ -3074,6 +3076,15 @@ function updateFcStats() {
     if ((r.interval || 0) >= 7) known++; else learning++;
   });
   const pct = x => Math.round(x / total * 100);
+  // Bouton TOUJOURS visible (hors filtres repliés) pour aller revoir les cartes difficiles,
+  // et pour en sortir quand on y est. Répond au besoin « pas d'endroit pour les revoir ».
+  var action = '';
+  if (currentFcFilter === 'hard') {
+    action = '<button type="button" onclick="filterFlashcards(\'all\'); event.stopPropagation();" style="margin-top:9px; padding:9px 16px; border-radius:999px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-weight:600; cursor:pointer; min-height:40px;">← Revenir à toutes les cartes</button>';
+  } else if (hard > 0) {
+    var hlabel = hard > 1 ? ('😓 Revoir les ' + hard + ' cartes difficiles') : '😓 Revoir la carte difficile';
+    action = '<button type="button" onclick="filterFlashcards(\'hard\'); event.stopPropagation();" style="margin-top:9px; padding:9px 18px; border-radius:999px; border:1px solid #f87171; background:rgba(248,113,113,.14); color:#f87171; font-weight:700; cursor:pointer; min-height:40px;">' + hlabel + '</button>';
+  }
   el.innerHTML =
     '<div style="height:8px; border-radius:5px; overflow:hidden; display:flex; background:var(--border-subtle);">' +
       '<div style="width:' + pct(known) + '%; background:var(--color-parabole);"></div>' +
@@ -3082,7 +3093,7 @@ function updateFcStats() {
     '<p style="font-size:12px; color:var(--text-secondary); margin:5px 0 0;">' +
       '✅ ' + known + ' sue' + (known > 1 ? 's' : '') + ' · 📘 ' + learning + ' en cours · 🆕 ' + fresh + ' nouvelle' + (fresh > 1 ? 's' : '') +
       (hard ? ' · <span style="color:#f87171;">😓 ' + hard + ' difficile' + (hard > 1 ? 's' : '') + '</span>' : '') +
-    '</p>';
+    '</p>' + action;
 }
 
 function initFlashcards() {
@@ -3269,8 +3280,8 @@ function rateCard(rating) {
   const sEl = document.getElementById('fc-session');
   if (sEl) { sEl.style.display = ''; sEl.textContent = '✅ ' + fcSessionCount + ' carte' + (fcSessionCount > 1 ? 's' : '') + ' révisée' + (fcSessionCount > 1 ? 's' : '') + ' cette session'; }
   if (typeof showToast === 'function') {
-    const emo = rating === 'easy' ? '😊' : (rating === 'medium' ? '🤔' : '😓');
-    showToast(emo + ' Revu — prochain rappel dans ' + interval + ' jour' + (interval > 1 ? 's' : ''), rating === 'hard' ? '#f87171' : 'var(--color-parabole)');
+    if (rating === 'hard') showToast('😓 Gardée dans « Difficiles » — tu pourras la revoir (bouton rouge en bas)', '#f87171');
+    else showToast((rating === 'easy' ? '😊' : '🤔') + ' Revu — prochain rappel dans ' + interval + ' jour' + (interval > 1 ? 's' : ''), 'var(--color-parabole)');
   }
 
   if (cards.length === 0) return;

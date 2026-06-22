@@ -146,13 +146,17 @@
     g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + dur + 0.03);
   }
+  var _noiseBuf = null, _noiseSr = 0;
   function noise(dur, vol, hp, when) {
     var ac = actx(); if (!ac) return;
-    var n = Math.floor(ac.sampleRate * dur), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
-    for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
-    var src = ac.createBufferSource(); src.buffer = buf; var g = ac.createGain(); g.gain.value = vol || 0.2;
+    if (!_noiseBuf || _noiseSr !== ac.sampleRate) { // bruit blanc généré UNE seule fois puis réutilisé (anti-lag : plus d'allocation par son)
+      _noiseSr = ac.sampleRate; var n = ac.sampleRate; _noiseBuf = ac.createBuffer(1, n, n);
+      var d = _noiseBuf.getChannelData(0); for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    }
+    var t0 = ac.currentTime + (when || 0), src = ac.createBufferSource(); src.buffer = _noiseBuf;
+    var g = ac.createGain(); g.gain.setValueAtTime(vol || 0.2, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur); // décroissance via enveloppe de gain
     if (hp) { var f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp; src.connect(f); f.connect(g); } else src.connect(g);
-    g.connect(ac.destination); src.start(ac.currentTime + (when || 0));
+    g.connect(ac.destination); src.start(t0); src.stop(t0 + dur + 0.05);
   }
   function vib(p) { try { if (!muted && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
   var SFX = {
@@ -200,6 +204,7 @@
     return Object.keys(G.owned).sort(function (a, b) { return stats(b, G.owned[b].lvl).atk - stats(a, G.owned[a].lvl).atk; }).slice(0, 3);
   }
   CB.fight = function () {
+    sfx('tap'); // démarre/réveille le moteur audio AVANT le combat (évite un à-coup au 1er coup)
     syncTickets();
     var ids = teamIds();
     if (!ids.length) { toast('Invoque d’abord au moins 1 carte, puis compose ton équipe !'); G.view = 'summon'; render(); return; }
@@ -565,7 +570,7 @@
         sfx('crit'); cbAdvPopup(adv);
         var bp = ctr(defEl);
         fxBurst(bp.x, bp.y, '#ffffff', 34, 7); fxBurst(bp.x, bp.y, tc, 42, 6); fxBurst(bp.x, bp.y, '#ffffff', 14, 3.5);
-        fxRing(bp.x, bp.y, '#ffffff', 5); fxRing(bp.x, bp.y, tc, 7); setTimeout(function () { fxRing(bp.x, bp.y, tc, 3); }, 110); // double onde de choc = impact « pro »
+        fxRing(bp.x, bp.y, '#ffffff', 5); fxRing(bp.x, bp.y, tc, 7); // double onde de choc = impact « pro »
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
         defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
@@ -575,7 +580,7 @@
       var lc = side === 'me' ? 'cb-lunge-r' : 'cb-lunge-l'; atkEl.classList.add(lc);
       fxEnsure(stage); var a = ctr(atkEl), b = ctr(defEl);
       fxComet(a, b, 300, tc, function (x, y) { fxBurst(x, y, tc, 14, 4); });
-      setTimeout(function () { if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 12, 4); fxRing(bp.x, bp.y, tc, 3); cbFloat(defEl, '-' + dmg, ''); }, 320);
+      setTimeout(function () { if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 12, 4); cbFloat(defEl, '-' + dmg, ''); }, 320);
       setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt'); if (onDone) onDone(); }, 620);
     }
   }
@@ -726,9 +731,14 @@
         '<button class="cb-btn" onclick="CB.go(\'arena\')">🏳️ Abandonner</button></div>';
     }
     var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ En cours…' : '🟢 À toi de jouer') + '</div>';
+    // indice de stratégie : comment ton type se comporte face à l'ennemi actuel (statique = aucun coût d'anim)
+    var mAdv = typeMult(me.cr.t, foe.cr.t);
+    var matchup = B.over ? '' : (mAdv > 1
+      ? '<div class="cb-matchup good">🔥 Super efficace contre ' + esc(foe.cr.n) + ' — frappe fort !</div>'
+      : (mAdv < 1 ? '<div class="cb-matchup bad">🛡 ' + esc(foe.cr.n) + ' résiste à ton type (change peut-être de combattant)</div>' : ''));
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
-        turn +
+        turn + matchup +
         '<div class="cb-brow"><span class="cb-mut">Toi</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
         '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me', !B.busy && !B.over) + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe', false) + '</div></div>' +
         '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
