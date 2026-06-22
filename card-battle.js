@@ -472,29 +472,16 @@
   }
   /* ---------------- MOTEUR D'EFFETS DE COMBAT ---------------- */
   // attaque SIGNATURE par animal (chaque créature joue son effet)
-  // SIGNATURE par CRÉATURE : { k: mouvement, c: couleur propre } → chaque carte a SA propre
-  // animation d'attaque (mouvement adapté à l'animal + couleur unique). 13 mouvements possibles.
+  // Couleur PROPRE de chaque créature (couleurs toutes distinctes). L'ANIMATION elle-même
+  // (mise en scène unique par carte) est dans la table ATK plus bas → aucune carte n'a la même.
   var SIG = {
-    // commun
-    renard: { k: 'slash', c: '#f97316' }, lapin: { k: 'dive', c: '#fde047' }, herisson: { k: 'roll', c: '#fbbf24' },
-    canard: { k: 'sting', c: '#facc15' }, chouette: { k: 'gust', c: '#cbd5e1' }, tortue: { k: 'roll', c: '#2dd4bf' },
-    crabe: { k: 'chomp', c: '#22d3ee' }, serpent: { k: 'venom', c: '#a3e635' }, grenouille: { k: 'sting', c: '#4ade80' },
-    souris: { k: 'slash', c: '#d4d4d4' }, abeille: { k: 'sting', c: '#fbbf24' },
-    // rare
-    loup: { k: 'sonic', c: '#93c5fd' }, ours: { k: 'stomp', c: '#b45309' }, aigle: { k: 'dive', c: '#fcd34d' },
-    perroquet: { k: 'sonic', c: '#f472b6' }, requin: { k: 'chomp', c: '#0ea5e9' }, pieuvre: { k: 'ink', c: '#818cf8' },
-    panthere: { k: 'slash', c: '#a855f7' }, scorpion: { k: 'sting', c: '#84cc16' }, cygne: { k: 'gust', c: '#e0f2fe' },
-    dauphin: { k: 'sonic', c: '#22d3ee' }, sanglier: { k: 'stomp', c: '#f59e0b' },
-    // épique
-    mammouth: { k: 'stomp', c: '#60a5fa' }, dodo: { k: 'sting', c: '#f87171' }, smilodon: { k: 'slash', c: '#f43f5e' },
-    rhino: { k: 'sting', c: '#94a3b8' }, paresseux: { k: 'slash', c: '#a3e635' }, aurochs: { k: 'stomp', c: '#a16207' },
-    megacero: { k: 'sting', c: '#d97706' },
-    // légendaire
-    trex: { k: 'chomp', c: '#ef4444' }, triceratops: { k: 'sting', c: '#f59e0b' }, spino: { k: 'water', c: '#16a34a' },
-    megalodon: { k: 'water', c: '#0284c7' }, narval: { k: 'sting', c: '#67e8f9' },
-    // mythique
-    dragon: { k: 'fire', c: '#ff7a1a' }, licorne: { k: 'beam', c: '#c4b5fd' }, kraken: { k: 'ink', c: '#6366f1' },
-    golem: { k: 'stomp', c: '#d6d3d1' }, phenix: { k: 'fire', c: '#fb7185' }
+    renard: '#f97316', lapin: '#fde047', herisson: '#fbbf24', canard: '#facc15', chouette: '#cbd5e1',
+    tortue: '#2dd4bf', crabe: '#22d3ee', serpent: '#a3e635', grenouille: '#4ade80', souris: '#d4d4d4', abeille: '#eab308',
+    loup: '#93c5fd', ours: '#b45309', aigle: '#fcd34d', perroquet: '#f472b6', requin: '#0ea5e9', pieuvre: '#818cf8',
+    panthere: '#a855f7', scorpion: '#84cc16', cygne: '#e0f2fe', dauphin: '#06b6d4', sanglier: '#f59e0b',
+    mammouth: '#60a5fa', dodo: '#f87171', smilodon: '#f43f5e', rhino: '#94a3b8', paresseux: '#65a30d', aurochs: '#a16207', megacero: '#d97706',
+    trex: '#ef4444', triceratops: '#fb923c', spino: '#16a34a', megalodon: '#0284c7', narval: '#67e8f9',
+    dragon: '#ff7a1a', licorne: '#c4b5fd', kraken: '#6366f1', golem: '#d6d3d1', phenix: '#fb7185'
   };
   // mélange une couleur hex vers le blanc (facteur 0..1) → teinte d'accent claire
   function lighten(hex, f) {
@@ -613,83 +600,72 @@
   }
   // effet SIGNATURE par catégorie d'attaque : CHARGE (anticipation) → TRAJET → IMPACT + traînée.
   // 100 % particules canvas. shadowBlur réservé aux anneaux/faisceaux/arcs (peu nombreux) → fluide.
-  // col = couleur PROPRE à la créature (table SIG). lt = accent clair, wht = quasi-blanc teinté.
-  function signatureFx(stage, atkEl, defEl, side, key, col) {
-    var a = ctr(atkEl), b = ctr(defEl), lt = lighten(col, 0.5), wht = lighten(col, 0.85);
-    if (key === 'fire') { // souffle ardent : comète + explosion + braises qui montent
-      fxCharge(a.x, a.y, col, 14);
-      setTimeout(function () { fxStream(a, b, 360, col, function (x, y) {
-        fxFlash(x, y, wht, 34); fxBurst(x, y, lt, 38, 6); fxBurst(x, y, col, 22, 4); fxRing(x, y, col, 4);
-        for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-14, 14), y: y, vx: rnd(-1, 1), vy: rnd(-3.2, -1.1), grav: 0.03, life: rnd(30, 50), max: 50, size: rnd(1.4, 3), color: lt, glow: 12, shrink: true });
-      }); }, 180);
-    }
-    else if (key === 'water') { // jet d'eau + éclaboussures qui retombent
-      fxCharge(a.x, a.y, col, 14);
-      setTimeout(function () { fxStream(a, b, 380, col, function (x, y) {
-        fxFlash(x, y, wht, 32); fxBurst(x, y, lt, 38, 6); fxRing(x, y, col, 4); setTimeout(function () { fxRing(x, y, lt, 3); }, 90);
-        for (var i = 0; i < 14; i++) fxAdd({ x: x, y: y, vx: rnd(-4, 4), vy: rnd(-5, -1), grav: 0.22, life: rnd(24, 40), max: 40, size: rnd(1.6, 3.4), color: lt, glow: 10, shrink: true });
-      }); }, 160);
-    }
-    else if (key === 'venom') { // 3 crachats + bulles toxiques qui montent
-      fxCharge(a.x, a.y, col, 10);
-      setTimeout(function () {
-        for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxStream(a, { x: b.x + rnd(-10, 10), y: b.y + rnd(-10, 10) }, 320, col, function (x, y) { fxBurst(x, y, lt, 14, 4); }); }, s * 90); })(s);
-        setTimeout(function () { fxFlash(b.x, b.y, wht, 24); fxBurst(b.x, b.y, col, 24, 4);
-          for (var i = 0; i < 12; i++) fxAdd({ x: b.x + rnd(-18, 18), y: b.y + rnd(-6, 10), vx: rnd(-0.6, 0.6), vy: rnd(-1.4, -0.5), life: rnd(40, 64), max: 64, size: rnd(2, 4), color: lt, glow: 10, shrink: true });
-        }, 360);
-      }, 150);
-    }
-    else if (key === 'beam') { // faisceau d'énergie + étincelles
-      fxCharge(a.x, a.y, col, 16);
-      setTimeout(function () {
-        fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 12, life: 20, max: 20, color: col, glow: 26 });
-        fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 4, life: 20, max: 20, color: '#ffffff', glow: 16 });
-        for (var i = 0; i < 10; i++) { var kk = i / 10; fxAdd({ x: a.x + (b.x - a.x) * kk, y: a.y + (b.y - a.y) * kk, vx: rnd(-1.5, 1.5), vy: rnd(-1.5, 1.5), life: rnd(10, 18), max: 18, size: rnd(1.5, 3), color: '#ffffff', glow: 12, shrink: true }); }
-        setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 34); fxBurst(b.x, b.y, col, 38, 6); fxBurst(b.x, b.y, '#ffffff', 16, 4); fxRing(b.x, b.y, col, 5); }, 150);
-      }, 220);
-    }
-    else if (key === 'chomp') { // mâchoires qui se referment
-      fxArc(b.x, b.y, 30, -0.5, 1.0, '#ffffff', 4.5, 0.05); fxArc(b.x, b.y, 30, Math.PI - 0.5, 1.0, col, 4.5, -0.05);
-      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 30); fxBurst(b.x, b.y, '#ffffff', 22, 6); fxBurst(b.x, b.y, col, 16, 4); }, 160);
-    }
-    else if (key === 'slash') { // 3 coups de griffe croisés
-      for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { var ang = s % 2 ? 0.8 : -0.8; fxArc(b.x + rnd(-8, 8), b.y + rnd(-8, 8), rnd(20, 30), ang, 0.7, '#ffffff', 3.5); fxStreaks(b.x, b.y, col, 5, ang); }, s * 90); })(s);
-      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, lt, 16, 5); }, 140);
-    }
-    else if (key === 'dive') { // plongeon depuis le haut
-      var top = { x: a.x, y: Math.max(8, a.y - 70) };
-      fxStreaks(a.x, a.y, lt, 8, -1.57);
-      setTimeout(function () { fxStream(top, b, 300, col, function (x, y) { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, lt, 28, 6); fxRing(x, bottomY(defEl) - 8, col, 4); }); }, 120);
-    }
-    else if (key === 'sting') { // dard perçant : trait fin et rapide + éclat sec en croix
-      fxCharge(a.x, a.y, col, 8);
-      setTimeout(function () { fxStream(a, b, 230, col, function (x, y) { fxFlash(x, y, '#ffffff', 22); fxBurst(x, y, lt, 20, 8); fxStreaks(x, y, col, 4, 0); fxStreaks(x, y, col, 4, 1.57); fxRing(x, y, col, 2); }); }, 110);
-    }
-    else if (key === 'sonic') { // ondes sonores : anneaux qui partent de l'attaquant puis frappent
-      for (var i = 0; i < 3; i++) (function (i) { setTimeout(function () { fxRing(a.x, a.y, col, 3); }, i * 110); })(i);
-      setTimeout(function () { for (var j = 0; j < 3; j++) (function (j) { setTimeout(function () { fxRing(b.x, b.y, j ? lt : col, 4); }, j * 100); })(j); fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, lt, 22, 5); }, 240);
-    }
-    else if (key === 'ink') { // encre : projectile sombre qui s'étale en nuage
-      fxCharge(a.x, a.y, col, 8);
-      setTimeout(function () { fxStream(a, b, 340, col, function (x, y) { fxFlash(x, y, lt, 20);
-        for (var i = 0; i < 22; i++) fxAdd({ x: x, y: y, vx: rnd(-3, 3), vy: rnd(-3, 3), grav: 0.02, life: rnd(40, 70), max: 70, size: rnd(3, 6), color: i % 3 ? col : lt, glow: 8, shrink: true });
-        fxRing(x, y, col, 3); }); }, 150);
-    }
-    else if (key === 'gust') { // bourrasque : arcs tournoyants + souffle qui éclate
-      fxCharge(a.x, a.y, lt, 8);
-      setTimeout(function () { fxStream(a, b, 260, lt, function (x, y) { fxArc(x, y, 26, 0, 1.5, col, 3, 0.14); fxArc(x, y, 26, Math.PI, 1.5, lt, 3, 0.14);
-        for (var i = 0; i < 16; i++) { var an = rnd(0, 6.28); fxAdd({ x: x, y: y, vx: Math.cos(an) * rnd(2, 5), vy: Math.sin(an) * rnd(2, 5), life: rnd(18, 30), max: 30, size: rnd(1.4, 3), color: '#ffffff', glow: 8, shrink: true }); }
-        fxFlash(x, y, '#ffffff', 24); }); }, 120);
-    }
-    else if (key === 'roll') { // roulade : projectile tournant + éclat circulaire
-      fxCharge(a.x, a.y, col, 8);
-      setTimeout(function () { fxStream(a, b, 300, col, function (x, y) { fxFlash(x, y, '#ffffff', 26); fxBurst(x, y, col, 28, 5); fxRing(x, y, col, 3); fxStreaks(x, y, lt, 6, 0.5); }); }, 140);
-    }
-    else { // stomp : séisme (onde de choc au sol + débris)
-      var gy = bottomY(defEl) - 8;
-      fxFlash(b.x, gy, '#ffffff', 26); fxRing(b.x, gy, col, 6); fxRing(b.x, gy, '#ffffff', 2); setTimeout(function () { fxRing(b.x, gy, col, 3); }, 110);
-      for (var i = 0; i < 24; i++) { var ang = rnd(-2.5, -0.6); fxAdd({ x: b.x + rnd(-26, 26), y: gy, vx: Math.cos(ang) * rnd(2, 6), vy: Math.sin(ang) * rnd(3, 7), grav: 0.18, life: rnd(22, 38), max: 38, size: rnd(2, 4.5), color: col, glow: 12, shrink: true }); }
-    }
+  // ---- briques d'impact réutilisables (chaque créature les COMBINE différemment → animation unique) ----
+  function _radial(x, y, c, n) { for (var i = 0; i < n; i++) fxStreaks(x, y, c, 1, (i / n) * 6.2832); }
+  function _spark(x, y, c, n) { for (var i = 0; i < n; i++) fxAdd({ x: x + rnd(-22, 22), y: y + rnd(-22, 22), vx: rnd(-0.3, 0.3), vy: rnd(-0.3, 0.3), life: rnd(20, 46), max: 46, size: rnd(1, 2.4), color: c, glow: 14, shrink: true }); }
+  function _nova(x, y, c, l) { fxFlash(x, y, '#ffffff', 36); fxBurst(x, y, l, 40, 6); fxBurst(x, y, c, 22, 4); fxRing(x, y, c, 5); }
+  function _pop(x, y, c, l) { fxFlash(x, y, '#ffffff', 24); fxBurst(x, y, l, 22, 5); }
+  function _pierce(x, y, c, l) { fxFlash(x, y, '#ffffff', 22); fxBurst(x, y, l, 18, 8); fxStreaks(x, y, c, 4, 0); fxStreaks(x, y, c, 4, 1.57); fxRing(x, y, c, 2); }
+  function _shards(x, y, c, l) { fxFlash(x, y, '#ffffff', 26); _radial(x, y, c, 9); fxBurst(x, y, l, 16, 5); }
+  function _jaws(x, y, c) { fxArc(x, y, 30, -0.5, 1.0, '#ffffff', 4.5, 0.05); fxArc(x, y, 30, Math.PI - 0.5, 1.0, c, 4.5, -0.05); setTimeout(function () { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, '#ffffff', 20, 6); fxBurst(x, y, c, 16, 4); }, 150); }
+  function _claws(x, y, c, n) { for (var s = 0; s < (n || 3); s++) (function (s) { setTimeout(function () { var ang = s % 2 ? 0.8 : -0.8; fxArc(x + rnd(-8, 8), y + rnd(-8, 8), rnd(20, 30), ang, 0.7, '#ffffff', 3.5); fxStreaks(x, y, c, 5, ang); }, s * 90); })(s); }
+  function _rings(x, y, c, l, n) { for (var j = 0; j < (n || 3); j++) (function (j) { setTimeout(function () { fxRing(x, y, j ? l : c, 4); }, j * 100); })(j); fxFlash(x, y, '#ffffff', 24); fxBurst(x, y, l, 20, 5); }
+  function _quake(x, gy, c, n) { fxFlash(x, gy, '#ffffff', 26); fxRing(x, gy, c, 6); fxRing(x, gy, '#ffffff', 2); setTimeout(function () { fxRing(x, gy, c, 3); }, 110); for (var i = 0; i < (n || 22); i++) { var an = rnd(-2.5, -0.6); fxAdd({ x: x + rnd(-26, 26), y: gy, vx: Math.cos(an) * rnd(2, 6), vy: Math.sin(an) * rnd(3, 7), grav: 0.18, life: rnd(22, 38), max: 38, size: rnd(2, 4.5), color: c, glow: 12, shrink: true }); } }
+  function _embers(x, y, c) { for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-14, 14), y: y, vx: rnd(-1, 1), vy: rnd(-3.2, -1.1), grav: 0.03, life: rnd(30, 50), max: 50, size: rnd(1.4, 3), color: c, glow: 12, shrink: true }); }
+  function _drops(x, y, c) { for (var i = 0; i < 14; i++) fxAdd({ x: x, y: y, vx: rnd(-4, 4), vy: rnd(-5, -1), grav: 0.22, life: rnd(24, 40), max: 40, size: rnd(1.6, 3.4), color: c, glow: 10, shrink: true }); }
+  function _bubbles(x, y, c) { for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-18, 18), y: y, vx: rnd(-0.6, 0.6), vy: rnd(-1.4, -0.5), life: rnd(40, 64), max: 64, size: rnd(2, 4), color: c, glow: 10, shrink: true }); }
+  function _cloud(x, y, c, l) { fxFlash(x, y, l, 20); for (var i = 0; i < 20; i++) fxAdd({ x: x, y: y, vx: rnd(-3, 3), vy: rnd(-3, 3), grav: 0.02, life: rnd(40, 70), max: 70, size: rnd(3, 6), color: i % 3 ? c : l, glow: 8, shrink: true }); fxRing(x, y, c, 3); }
+  function _swirl(x, y, c, l) { fxArc(x, y, 26, 0, 1.5, c, 3, 0.16); fxArc(x, y, 26, Math.PI, 1.5, l, 3, 0.16); for (var i = 0; i < 14; i++) { var an = rnd(0, 6.2832); fxAdd({ x: x, y: y, vx: Math.cos(an) * rnd(2, 5), vy: Math.sin(an) * rnd(2, 5), life: rnd(18, 30), max: 30, size: rnd(1.4, 3), color: '#ffffff', glow: 8, shrink: true }); } fxFlash(x, y, '#ffffff', 22); }
+  function _top(p) { return { x: p.x, y: Math.max(6, p.y - 78) }; }
+  function _zig(a, b, dur, c, cb) { var m1 = { x: a.x + (b.x - a.x) * 0.4, y: a.y + rnd(-26, -8) }, m2 = { x: a.x + (b.x - a.x) * 0.7, y: a.y + rnd(8, 26) }; fxStream(a, m1, dur * 0.34, c, function () { fxStream(m1, m2, dur * 0.33, c, function () { fxStream(m2, b, dur * 0.33, c, cb); }); }); }
+
+  // ATK : la mise en scène UNIQUE de chaque carte (a=attaquant, b=cible, d=élément cible, c=couleur, l=accent clair)
+  var ATK = {
+    renard: function (a, b, d, c, l) { _claws(b.x, b.y, c, 2); setTimeout(function () { _jaws(b.x, b.y, c); }, 130); },
+    lapin: function (a, b, d, c, l) { fxStreaks(a.x, a.y, l, 6, -1.4); fxStream(a, b, 220, c, function (x, y) { _pop(x, y, c, l); fxStreaks(x, y, l, 6, -1.57); }); },
+    herisson: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 8); setTimeout(function () { fxComet(a, b, 300, c, function (x, y) { fxFlash(x, y, '#ffffff', 26); _radial(x, y, c, 12); fxBurst(x, y, l, 16, 4); }); }, 120); },
+    canard: function (a, b, d, c, l) { fxStream(a, b, 200, c, function (x, y) { _pierce(x, y, c, l); }); },
+    chouette: function (a, b, d, c, l) { var t = _top(a); fxStreaks(a.x, a.y, l, 6, -1.2); setTimeout(function () { fxStream(t, b, 320, c, function (x, y) { _swirl(x, y, c, l); for (var i = 0; i < 10; i++) fxAdd({ x: x + rnd(-16, 16), y: y, vx: rnd(-0.5, 0.5), vy: rnd(0.4, 1.4), life: rnd(30, 50), max: 50, size: rnd(1.6, 3), color: l, glow: 8, shrink: true }); }); }, 120); },
+    tortue: function (a, b, d, c, l) { var gy = bottomY(d) - 8; fxComet({ x: a.x, y: gy - 10 }, { x: b.x, y: gy - 10 }, 320, c, function (x, y) { _quake(b.x, gy, c, 16); fxRing(x, y - 6, l, 3); }); },
+    crabe: function (a, b, d, c, l) { fxArc(b.x, b.y, 28, 0, 0.9, '#ffffff', 4.5, 0.06); fxArc(b.x, b.y, 28, Math.PI, 0.9, c, 4.5, -0.06); setTimeout(function () { _pop(b.x, b.y, c, l); }, 150); },
+    serpent: function (a, b, d, c, l) { _zig(a, b, 360, c, function (x, y) { fxFlash(x, y, l, 22); fxBurst(x, y, c, 18, 4); _bubbles(x, y, l); }); },
+    grenouille: function (a, b, d, c, l) { fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, size: 4, life: 12, max: 12, color: l, glow: 14 }); setTimeout(function () { _pop(b.x, b.y, c, l); }, 130); },
+    souris: function (a, b, d, c, l) { for (var s = 0; s < 4; s++) (function (s) { setTimeout(function () { fxBurst(b.x + rnd(-12, 12), b.y + rnd(-12, 12), c, 8, 4); fxFlash(b.x + rnd(-10, 10), b.y + rnd(-10, 10), '#ffffff', 14); }, s * 90); })(s); },
+    abeille: function (a, b, d, c, l) { _zig(a, b, 300, c, function (x, y) { _pierce(x, y, c, l); }); },
+    loup: function (a, b, d, c, l) { for (var i = 0; i < 3; i++) (function (i) { setTimeout(function () { fxRing(a.x, a.y, c, 3); }, i * 110); })(i); setTimeout(function () { _rings(b.x, b.y, c, l, 3); }, 240); },
+    ours: function (a, b, d, c, l) { fxArc(b.x, b.y, 36, -0.4, 1.2, '#ffffff', 5, 0.04); setTimeout(function () { _nova(b.x, b.y, c, l); _quake(b.x, bottomY(d) - 8, c, 14); }, 150); },
+    aigle: function (a, b, d, c, l) { var t = { x: a.x, y: 6 }; fxStreaks(a.x, a.y, l, 8, -1.57); setTimeout(function () { fxStream(t, b, 260, c, function (x, y) { _nova(x, y, c, l); }); }, 120); },
+    perroquet: function (a, b, d, c, l) { _rings(b.x, b.y, c, l, 3); setTimeout(function () { fxBurst(b.x, b.y, '#fef08a', 14, 5); fxBurst(b.x, b.y, c, 14, 4); }, 160); },
+    requin: function (a, b, d, c, l) { fxStream(a, b, 240, c, function (x, y) { _jaws(x, y, c); }); setTimeout(function () { _jaws(b.x, b.y, c); }, 380); },
+    pieuvre: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 8); setTimeout(function () { fxStream(a, b, 320, c, function (x, y) { _cloud(x, y, c, l); for (var k = 0; k < 4; k++) fxArc(x, y, 22 + k * 4, k * 1.6, 0.7, l, 2.5, 0.1); }); }, 130); },
+    panthere: function (a, b, d, c, l) { fxStreaks(a.x, a.y, l, 6, 0); setTimeout(function () { _claws(b.x, b.y, c, 3); fxFlash(b.x, b.y, '#ffffff', 22); }, 110); },
+    scorpion: function (a, b, d, c, l) { var t = { x: b.x, y: Math.max(6, b.y - 70) }; setTimeout(function () { fxStream(t, b, 240, c, function (x, y) { _pierce(x, y, c, l); _bubbles(x, y, l); }); }, 120); },
+    cygne: function (a, b, d, c, l) { fxArc(b.x, b.y, 32, -0.2, 1.4, '#ffffff', 4, 0.14); fxArc(b.x, b.y, 32, Math.PI - 0.2, 1.4, l, 4, 0.14); setTimeout(function () { _swirl(b.x, b.y, c, l); }, 130); },
+    dauphin: function (a, b, d, c, l) { var t = _top(a); fxStream(a, t, 140, c, function () { fxStream(t, b, 220, c, function (x, y) { _rings(x, y, c, l, 3); }); }); },
+    sanglier: function (a, b, d, c, l) { var gy = bottomY(d) - 8; fxComet({ x: a.x, y: gy - 12 }, { x: b.x, y: gy - 12 }, 240, c, function (x, y) { _quake(b.x, gy, c, 22); fxFlash(x, y, '#ffffff', 24); }); },
+    mammouth: function (a, b, d, c, l) { var gy = bottomY(d) - 8; fxFlash(b.x, gy, '#ffffff', 30); fxRing(b.x, gy, c, 7); setTimeout(function () { fxRing(b.x, gy, l, 5); }, 120); setTimeout(function () { fxRing(b.x, gy, c, 4); }, 240); _quake(b.x, gy, c, 28); },
+    dodo: function (a, b, d, c, l) { var t = _top(a); setTimeout(function () { fxStream(t, b, 240, c, function (x, y) { _nova(x, y, c, l); fxStreaks(x, y, c, 6, 1.57); }); }, 120); },
+    smilodon: function (a, b, d, c, l) { fxArc(b.x, b.y, 34, -0.7, 0.5, '#ffffff', 5, 0); fxArc(b.x, b.y, 34, 2.4, 0.5, c, 5, 0); setTimeout(function () { _shards(b.x, b.y, c, l); }, 150); },
+    rhino: function (a, b, d, c, l) { var gy = bottomY(d) - 10; fxStream({ x: a.x, y: gy }, { x: b.x, y: gy }, 220, c, function (x, y) { _pierce(x, y, c, l); fxRing(x, y, c, 4); }); },
+    paresseux: function (a, b, d, c, l) { for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxArc(b.x + rnd(-6, 6), b.y + rnd(-6, 6), rnd(26, 36), s % 2 ? 0.7 : -0.7, 0.8, '#ffffff', 4.5); fxStreaks(b.x, b.y, c, 6, s % 2 ? 0.7 : -0.7); }, s * 150); })(s); setTimeout(function () { _pop(b.x, b.y, c, l); }, 480); },
+    aurochs: function (a, b, d, c, l) { var gy = bottomY(d) - 8; fxComet({ x: a.x, y: gy - 10 }, { x: b.x, y: gy - 10 }, 240, c, function (x, y) { fxRing(b.x, gy, c, 6); fxRing(b.x, gy, l, 4); _quake(b.x, gy, c, 18); }); },
+    megacero: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 8); setTimeout(function () { for (var k = -2; k <= 2; k++) (function (k) { fxStream(a, { x: b.x, y: b.y + k * 14 }, 240, c, function (x, y) { fxBurst(x, y, l, 8, 5); }); })(k); setTimeout(function () { _shards(b.x, b.y, c, l); }, 260); }, 120); },
+    trex: function (a, b, d, c, l) { fxArc(b.x, b.y, 40, -0.6, 1.1, '#ffffff', 6, 0.05); fxArc(b.x, b.y, 40, Math.PI - 0.6, 1.1, c, 6, -0.05); setTimeout(function () { _nova(b.x, b.y, c, l); _quake(b.x, bottomY(d) - 8, c, 16); }, 170); },
+    triceratops: function (a, b, d, c, l) { var gy = bottomY(d) - 10; for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxStream({ x: a.x, y: gy }, { x: b.x, y: gy }, 200, c, function (x, y) { _pierce(x, y, c, l); }); }, s * 160); })(s); },
+    spino: function (a, b, d, c, l) { fxStream(a, b, 300, c, function (x, y) { _drops(x, y, l); _jaws(x, y, c); fxRing(x, y, c, 4); }); },
+    megalodon: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 12); setTimeout(function () { fxStream(a, b, 340, c, function (x, y) { for (var k = 0; k < 4; k++) fxArc(x, y, 18 + k * 6, k * 1.6, 0.8, l, 3, 0.12); _jaws(x, y, c); _drops(x, y, l); }); }, 150); },
+    narval: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 10); setTimeout(function () { fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, size: 9, life: 16, max: 16, color: c, glow: 22 }); fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, size: 3, life: 16, max: 16, color: '#ffffff', glow: 14 }); setTimeout(function () { _shards(b.x, b.y, c, l); _drops(b.x, b.y, l); }, 150); }, 170); },
+    dragon: function (a, b, d, c, l) { fxCharge(a.x, a.y, c, 16); setTimeout(function () { for (var k = -1; k <= 1; k++) (function (k) { fxStream(a, { x: b.x, y: b.y + k * 16 }, 360, c, function (x, y) { fxFlash(x, y, '#fff4e0', 30); fxBurst(x, y, l, 24, 6); }); })(k); setTimeout(function () { _nova(b.x, b.y, c, l); _embers(b.x, b.y, l); }, 380); }, 180); },
+    licorne: function (a, b, d, c, l) { var t = { x: b.x, y: 6 }; fxCharge(b.x, 30, l, 10); setTimeout(function () { fxAdd({ kind: 'beam', x: t.x, y: t.y, bx: b.x, by: b.y, size: 11, life: 20, max: 20, color: c, glow: 26 }); fxAdd({ kind: 'beam', x: t.x, y: t.y, bx: b.x, by: b.y, size: 4, life: 20, max: 20, color: '#ffffff', glow: 16 }); setTimeout(function () { _nova(b.x, b.y, c, l); _radial(b.x, b.y, '#ffffff', 8); _spark(b.x, b.y, l, 14); }, 150); }, 200); },
+    kraken: function (a, b, d, c, l) { var gy = bottomY(d) - 6; for (var k = 0; k < 5; k++) (function (k) { setTimeout(function () { var off = (k - 2) * 18; fxArc(b.x + off, gy - 30, 34, -1.57, 1.0, c, 3.5, k % 2 ? 0.1 : -0.1); }, k * 70); })(k); setTimeout(function () { _cloud(b.x, b.y, c, l); _nova(b.x, b.y, c, l); }, 380); },
+    golem: function (a, b, d, c, l) { var t = _top(b); fxCharge(t.x, t.y, c, 10); setTimeout(function () { fxStream(t, b, 220, c, function (x, y) { var gy = bottomY(d) - 8; fxFlash(b.x, gy, '#ffffff', 34); fxRing(b.x, gy, c, 8); fxRing(b.x, gy, '#ffffff', 3); _quake(b.x, gy, c, 30); }); }, 160); },
+    phenix: function (a, b, d, c, l) { var gy = bottomY(d) - 8; fxCharge(b.x, gy, c, 12); setTimeout(function () { for (var i = 0; i < 26; i++) fxAdd({ x: b.x + rnd(-16, 16), y: gy, vx: rnd(-1.2, 1.2), vy: rnd(-7, -3), grav: 0.06, life: rnd(34, 60), max: 60, size: rnd(2, 4.4), color: i % 2 ? c : l, glow: 14, shrink: true }); fxFlash(b.x, b.y, '#fff4e0', 32); fxRing(b.x, b.y, c, 6); setTimeout(function () { fxRing(b.x, b.y, l, 4); }, 130); fxBurst(b.x, b.y, l, 28, 5); }, 160); }
+  };
+  // répartiteur : joue la mise en scène propre à la créature (id). col = sa couleur.
+  function signatureFx(stage, atkEl, defEl, side, id, col) {
+    var a = ctr(atkEl), b = ctr(defEl), l = lighten(col, 0.5);
+    var fn = ATK[id] || function (a, b, d, cc, ll) { _nova(b.x, b.y, cc, ll); };
+    try { fn(a, b, defEl, col, l); } catch (e) {}
   }
   // bannière « nom de l'attaque » (style anime/Dokkan)
   function bannerEl(stage, cr, tc) {
@@ -719,7 +695,7 @@
     var atkEl = document.querySelector('#arene .cb-fighter.' + side);
     var defSide = side === 'me' ? 'foe' : 'me';
     var defEl = document.querySelector('#arene .cb-fighter.' + defSide);
-    var sig = SIG[me.cr.id] || { k: 'slash', c: TM[me.cr.t].c }, key = sig.k, tc = TM[me.cr.t].c, col = sig.c || tc, adv = typeMult(me.cr.t, foe.cr.t);
+    var tc = TM[me.cr.t].c, col = SIG[me.cr.id] || tc, adv = typeMult(me.cr.t, foe.cr.t);
     if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); cbAdvPopup(adv); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
     var field = stage.querySelector('.cb-arena-field');
     if (special) {
@@ -727,7 +703,7 @@
       atkEl.style.setProperty('--tc', tc); atkEl.classList.add('cb-cast');
       var banner = bannerEl(stage, me.cr, tc);
       sfx('charge'); // anticipation : on « charge » le coup
-      setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, col); }, 360);
+      setTimeout(function () { signatureFx(stage, atkEl, defEl, side, me.cr.id, col); }, 360);
       setTimeout(function () {
         if (onImpact) onImpact();
         sfx('crit'); cbAdvPopup(adv);
