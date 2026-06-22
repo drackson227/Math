@@ -135,20 +135,45 @@
   /* ---------------- SONS (Web Audio, AUCUN fichier) + VIBRATIONS ----------------
      Tout est synthétisé à la volée → 0 octet à télécharger. Le contexte audio démarre
      au 1er clic (tirage/attaque) car les navigateurs l'exigent. Bouton muet 🔊/🔇. */
-  var AC = null, muted = false;
+  var AC = null, muted = false, MASTER = null, REVERB = null;
   try { muted = localStorage.getItem('gr2_arene_mute') === '1'; } catch (e) {}
-  function actx() { if (muted) return null; try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { AC = null; } return AC; }
-  function tone(freq, dur, type, vol, slideTo, when) {
-    var ac = actx(); if (!ac) return;
+  function actx() {
+    if (muted) return null;
+    try { if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); MASTER = REVERB = null; } if (AC.state === 'suspended') AC.resume(); } catch (e) { AC = null; }
+    return AC;
+  }
+  // Chaîne master construite UNE fois : compresseur (évite la saturation quand les couches s'empilent)
+  // + une petite réverbération (impulsion générée une seule fois) pour donner de l'espace et de la profondeur.
+  function bus() {
+    var ac = actx(); if (!ac) return null;
+    if (!MASTER) {
+      var comp = ac.createDynamicsCompressor();
+      try { comp.threshold.value = -16; comp.knee.value = 26; comp.ratio.value = 3.2; comp.attack.value = 0.003; comp.release.value = 0.25; } catch (e) {}
+      comp.connect(ac.destination);
+      MASTER = ac.createGain(); MASTER.gain.value = 0.85; MASTER.connect(comp);
+      try { // réverb « algorithmique » : bruit qui décroît → impulsion de convolution (faite 1×, mise en cache)
+        var len = Math.floor(ac.sampleRate * 1.0), ir = ac.createBuffer(2, len, ac.sampleRate);
+        for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8); }
+        REVERB = ac.createConvolver(); REVERB.buffer = ir;
+        var rg = ac.createGain(); rg.gain.value = 0.55; REVERB.connect(rg); rg.connect(MASTER);
+      } catch (e) { REVERB = null; }
+    }
+    return MASTER;
+  }
+  // tone(... rev) : rev = quantité envoyée à la réverb (0..1). slideTo = glissando.
+  function tone(freq, dur, type, vol, slideTo, when, rev) {
+    var ac = actx(); if (!ac) return; var out = bus(); if (!out) return;
     var t0 = ac.currentTime + (when || 0), o = ac.createOscillator(), g = ac.createGain();
     o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t0);
     if (slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), t0 + dur);
     g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.16, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + dur + 0.03);
+    o.connect(g); g.connect(out);
+    if (rev && REVERB) { var s = ac.createGain(); s.gain.value = rev; g.connect(s); s.connect(REVERB); }
+    o.start(t0); o.stop(t0 + dur + 0.03);
   }
   var _noiseBuf = null, _noiseSr = 0;
-  function noise(dur, vol, hp, when) {
-    var ac = actx(); if (!ac) return;
+  function noise(dur, vol, hp, when, rev) {
+    var ac = actx(); if (!ac) return; var out = bus(); if (!out) return;
     if (!_noiseBuf || _noiseSr !== ac.sampleRate) { // bruit blanc généré UNE seule fois puis réutilisé (anti-lag : plus d'allocation par son)
       _noiseSr = ac.sampleRate; var n = ac.sampleRate; _noiseBuf = ac.createBuffer(1, n, n);
       var d = _noiseBuf.getChannelData(0); for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
@@ -156,21 +181,35 @@
     var t0 = ac.currentTime + (when || 0), src = ac.createBufferSource(); src.buffer = _noiseBuf;
     var g = ac.createGain(); g.gain.setValueAtTime(vol || 0.2, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur); // décroissance via enveloppe de gain
     if (hp) { var f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp; src.connect(f); f.connect(g); } else src.connect(g);
-    g.connect(ac.destination); src.start(t0); src.stop(t0 + dur + 0.05);
+    g.connect(out);
+    if (rev && REVERB) { var s = ac.createGain(); s.gain.value = rev; g.connect(s); s.connect(REVERB); }
+    src.start(t0); src.stop(t0 + dur + 0.05);
   }
+  // petite cascade scintillante (cloches aiguës) pour les moments « waouh »
+  function sparkle(base, when, n) { n = n || 4; for (var i = 0; i < n; i++) tone(base * (1 + i * 0.46), 0.18, 'triangle', 0.05, null, (when || 0) + i * 0.045, 0.5); }
   function vib(p) { try { if (!muted && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
   var SFX = {
-    tap:     function () { tone(440, 0.05, 'triangle', 0.05); },
-    whoosh:  function () { noise(0.35, 0.10, 480); tone(160, 0.35, 'sine', 0.07, 540); },
-    hit:     function () { noise(0.12, 0.22, 280); tone(130, 0.12, 'square', 0.10, 60); vib(15); },
-    crit:    function () { noise(0.18, 0.30, 700); tone(880, 0.20, 'sawtooth', 0.12, 180); tone(220, 0.22, 'square', 0.10, 70); vib([0, 28, 35, 28]); },
-    ko:      function () { tone(320, 0.5, 'sawtooth', 0.16, 45); noise(0.45, 0.2, 180); vib(55); },
-    // ding montant selon la rareté (0=commun … 4=mythique) ; accords brillants pour les hautes raretés
-    reveal:  function (r) { var b = [392, 523, 659, 784, 988][r] || 392; tone(b, 0.5, 'sine', 0.16); tone(b * 1.5, 0.55, 'sine', 0.10, null, 0.07); if (r >= 3) { tone(b * 2, 0.6, 'triangle', 0.09, null, 0.14); tone(b * 2.5, 0.6, 'triangle', 0.06, null, 0.2); vib([0, 40, 30, 70]); } else if (r >= 2) vib(30); },
-    win:     function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.32, 'triangle', 0.14, null, i * 0.12); }); vib([0, 40, 30, 40, 30, 90]); },
-    lose:    function () { [392, 330, 262].forEach(function (f, i) { tone(f, 0.38, 'sine', 0.12, null, i * 0.15); }); },
-    levelup: function () { [523, 659, 880].forEach(function (f, i) { tone(f, 0.24, 'triangle', 0.13, null, i * 0.08); }); vib(30); },
-    charge:  function () { tone(150, 0.5, 'sawtooth', 0.09, 520); noise(0.5, 0.05, 1200); }
+    tap:     function () { tone(660, 0.04, 'triangle', 0.045); tone(990, 0.05, 'sine', 0.025, null, 0.012); },
+    // souffle d'invocation : air filtré + nappe grave qui descend (un peu de réverb)
+    whoosh:  function () { noise(0.42, 0.11, 520, 0, 0.3); tone(240, 0.4, 'sine', 0.06, 90, 0, 0.3); tone(360, 0.34, 'triangle', 0.04, 150, 0.03, 0.3); },
+    // impact : transitoire claquant + corps grave (« boum ») + craquement
+    hit:     function () { noise(0.10, 0.20, 1100, 0, 0.15); tone(190, 0.16, 'sine', 0.18, 55, 0, 0.2); tone(95, 0.18, 'sine', 0.12, 42); tone(440, 0.05, 'square', 0.07, 130); vib(15); },
+    // critique : métallique brillant + zap descendant + corps + étincelle
+    crit:    function () { noise(0.16, 0.28, 900, 0, 0.25); tone(1250, 0.18, 'sawtooth', 0.10, 320, 0, 0.3); tone(900, 0.2, 'square', 0.09, 180); tone(150, 0.24, 'sine', 0.14, 50, 0, 0.2); tone(1900, 0.22, 'triangle', 0.05, 700, 0.02, 0.4); vib([0, 28, 35, 28]); },
+    // K.O. : grosse explosion grave avec longue traîne de réverb
+    ko:      function () { tone(130, 0.6, 'sine', 0.22, 32, 0, 0.5); tone(72, 0.7, 'sine', 0.16, 26, 0, 0.5); noise(0.5, 0.22, 150, 0, 0.45); noise(0.22, 0.16, 2200, 0, 0.2); tone(300, 0.3, 'sawtooth', 0.10, 45, 0, 0.3); vib(60); },
+    // ding montant selon la rareté (0=commun … 4=mythique) : VRAI accord (fondamentale + tierce + quinte + octave) + shimmer pour les hautes raretés
+    reveal:  function (r) { var b = [392, 523, 659, 784, 988][r] || 392; [1, 1.26, 1.5].forEach(function (m, i) { tone(b * m, 0.6, 'sine', 0.12 - i * 0.02, null, i * 0.02, 0.45); }); tone(b * 2, 0.62, 'triangle', 0.06, null, 0.05, 0.45); if (r >= 3) { sparkle(b * 2, 0.12, 4); tone(b * 3, 0.7, 'triangle', 0.05, null, 0.18, 0.5); vib([0, 40, 30, 70]); } else if (r >= 2) { sparkle(b * 2, 0.1, 2); vib(30); } },
+    // fanfare de victoire : arpège montant + accord tenu + scintillement
+    win:     function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.3, 'triangle', 0.13, null, i * 0.1, 0.4); }); [523, 659, 784, 1047].forEach(function (f) { tone(f, 0.75, 'sine', 0.06, null, 0.45, 0.5); }); sparkle(1047, 0.5, 4); vib([0, 40, 30, 40, 30, 90]); },
+    // défaite : descente un peu dissonante (oscillateurs désaccordés = « battement » triste) + drone grave
+    lose:    function () { [392, 330, 262, 196].forEach(function (f, i) { tone(f, 0.5, 'sine', 0.10, null, i * 0.16, 0.4); tone(f * 1.006, 0.5, 'sine', 0.05, null, i * 0.16, 0.4); }); tone(98, 1.2, 'sine', 0.06, null, 0, 0.5); },
+    // montée de niveau : cloches ascendantes + scintillement + résonance
+    levelup: function () { [523, 659, 784, 1047, 1319].forEach(function (f, i) { tone(f, 0.3, 'triangle', 0.12, null, i * 0.07, 0.4); }); sparkle(1319, 0.34, 3); tone(1047, 0.8, 'sine', 0.06, null, 0.36, 0.5); vib(30); },
+    // charge du coup spécial : montée de tension (sweep) + harmonique + souffle qui monte
+    charge:  function () { tone(120, 0.6, 'sawtooth', 0.08, 620, 0, 0.3); tone(180, 0.6, 'square', 0.05, 740, 0.02, 0.3); noise(0.6, 0.05, 1400, 0, 0.2); },
+    // avantage de type : petit « ping » lumineux ascendant
+    adv:     function (good) { if (good) { tone(880, 0.12, 'triangle', 0.08, 1320, 0, 0.4); tone(1320, 0.16, 'sine', 0.05, null, 0.06, 0.4); } else { tone(330, 0.16, 'sine', 0.07, 247, 0, 0.3); } }
   };
   function sfx(n, a) { try { if (SFX[n]) SFX[n](a); } catch (e) {} }
   CB.toggleMute = function () { muted = !muted; try { localStorage.setItem('gr2_arene_mute', muted ? '1' : '0'); } catch (e) {} if (!muted) { AC = null; sfx('tap'); } render(); };
@@ -403,6 +442,7 @@
   // bandeau « SUPER EFFICACE ! » / « Peu efficace… » selon l'avantage de type
   function cbAdvPopup(adv) {
     if (adv === 1) return;
+    sfx('adv', adv > 1);
     var stage = document.querySelector('#arene .cb-stage'); if (!stage) return;
     var d = document.createElement('div'); d.className = 'cb-adv ' + (adv > 1 ? 'super' : 'weak');
     d.textContent = adv > 1 ? 'SUPER EFFICACE ! ×1.5' : 'Peu efficace… ×0.67';
