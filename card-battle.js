@@ -472,19 +472,36 @@
   }
   /* ---------------- MOTEUR D'EFFETS DE COMBAT ---------------- */
   // attaque SIGNATURE par animal (chaque créature joue son effet)
-  var FXMAP = {
-    renard: 'slash', lapin: 'stomp', herisson: 'slash', serpent: 'venom',
-    canard: 'dive', chouette: 'dive', tortue: 'water', crabe: 'water',
-    loup: 'slash', ours: 'slash', panthere: 'slash', aigle: 'dive', perroquet: 'dive',
-    requin: 'water', pieuvre: 'water',
-    mammouth: 'stomp', dodo: 'dive', smilodon: 'slash', rhino: 'stomp', paresseux: 'slash',
-    trex: 'chomp', triceratops: 'stomp', spino: 'water', megalodon: 'water',
-    dragon: 'fire', licorne: 'beam', kraken: 'water', golem: 'stomp',
-    grenouille: 'water', souris: 'slash', abeille: 'dive', scorpion: 'venom',
-    cygne: 'dive', dauphin: 'water', sanglier: 'stomp', aurochs: 'stomp',
-    megacero: 'stomp', narval: 'water', phenix: 'fire'
+  // SIGNATURE par CRÉATURE : { k: mouvement, c: couleur propre } → chaque carte a SA propre
+  // animation d'attaque (mouvement adapté à l'animal + couleur unique). 13 mouvements possibles.
+  var SIG = {
+    // commun
+    renard: { k: 'slash', c: '#f97316' }, lapin: { k: 'dive', c: '#fde047' }, herisson: { k: 'roll', c: '#fbbf24' },
+    canard: { k: 'sting', c: '#facc15' }, chouette: { k: 'gust', c: '#cbd5e1' }, tortue: { k: 'roll', c: '#2dd4bf' },
+    crabe: { k: 'chomp', c: '#22d3ee' }, serpent: { k: 'venom', c: '#a3e635' }, grenouille: { k: 'sting', c: '#4ade80' },
+    souris: { k: 'slash', c: '#d4d4d4' }, abeille: { k: 'sting', c: '#fbbf24' },
+    // rare
+    loup: { k: 'sonic', c: '#93c5fd' }, ours: { k: 'stomp', c: '#b45309' }, aigle: { k: 'dive', c: '#fcd34d' },
+    perroquet: { k: 'sonic', c: '#f472b6' }, requin: { k: 'chomp', c: '#0ea5e9' }, pieuvre: { k: 'ink', c: '#818cf8' },
+    panthere: { k: 'slash', c: '#a855f7' }, scorpion: { k: 'sting', c: '#84cc16' }, cygne: { k: 'gust', c: '#e0f2fe' },
+    dauphin: { k: 'sonic', c: '#22d3ee' }, sanglier: { k: 'stomp', c: '#f59e0b' },
+    // épique
+    mammouth: { k: 'stomp', c: '#60a5fa' }, dodo: { k: 'sting', c: '#f87171' }, smilodon: { k: 'slash', c: '#f43f5e' },
+    rhino: { k: 'sting', c: '#94a3b8' }, paresseux: { k: 'slash', c: '#a3e635' }, aurochs: { k: 'stomp', c: '#a16207' },
+    megacero: { k: 'sting', c: '#d97706' },
+    // légendaire
+    trex: { k: 'chomp', c: '#ef4444' }, triceratops: { k: 'sting', c: '#f59e0b' }, spino: { k: 'water', c: '#16a34a' },
+    megalodon: { k: 'water', c: '#0284c7' }, narval: { k: 'sting', c: '#67e8f9' },
+    // mythique
+    dragon: { k: 'fire', c: '#ff7a1a' }, licorne: { k: 'beam', c: '#c4b5fd' }, kraken: { k: 'ink', c: '#6366f1' },
+    golem: { k: 'stomp', c: '#d6d3d1' }, phenix: { k: 'fire', c: '#fb7185' }
   };
-  var FXC = { fire: '#ff7a1a', water: '#38bdf8', venom: '#a3e635', dive: '#e2e8f0', slash: '#ffffff', stomp: '#fbbf24', chomp: '#ffffff', beam: '#c4b5fd' };
+  // mélange une couleur hex vers le blanc (facteur 0..1) → teinte d'accent claire
+  function lighten(hex, f) {
+    try { var n = parseInt(String(hex).slice(1), 16), r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+      r = Math.round(r + (255 - r) * f); g = Math.round(g + (255 - g) * f); b = Math.round(b + (255 - b) * f);
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1); } catch (e) { return hex; }
+  }
   function prefersReduced() { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
   function mkFx(stage, cls) { var e = document.createElement('div'); e.className = cls; stage.appendChild(e); return e; }
   // centre d'un combattant en coordonnées RELATIVES au stage (= repère du canvas)
@@ -596,37 +613,38 @@
   }
   // effet SIGNATURE par catégorie d'attaque : CHARGE (anticipation) → TRAJET → IMPACT + traînée.
   // 100 % particules canvas. shadowBlur réservé aux anneaux/faisceaux/arcs (peu nombreux) → fluide.
-  function signatureFx(stage, atkEl, defEl, side, key, tc) {
-    var a = ctr(atkEl), b = ctr(defEl), col = (key === 'beam' ? tc : (FXC[key] || tc));
-    if (key === 'fire') {
-      fxCharge(a.x, a.y, '#ff7a1a', 14); // on « charge » la boule de feu
-      setTimeout(function () { fxStream(a, b, 360, '#ff7a1a', function (x, y) {
-        fxFlash(x, y, '#fff4e0', 34); fxBurst(x, y, '#ffb43a', 38, 6); fxBurst(x, y, '#ff4d1a', 22, 4); fxRing(x, y, '#ff7a1a', 4);
-        for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-14, 14), y: y, vx: rnd(-1, 1), vy: rnd(-3.2, -1.1), grav: 0.03, life: rnd(30, 50), max: 50, size: rnd(1.4, 3), color: '#ffb43a', glow: 12, shrink: true }); // braises qui montent
+  // col = couleur PROPRE à la créature (table SIG). lt = accent clair, wht = quasi-blanc teinté.
+  function signatureFx(stage, atkEl, defEl, side, key, col) {
+    var a = ctr(atkEl), b = ctr(defEl), lt = lighten(col, 0.5), wht = lighten(col, 0.85);
+    if (key === 'fire') { // souffle ardent : comète + explosion + braises qui montent
+      fxCharge(a.x, a.y, col, 14);
+      setTimeout(function () { fxStream(a, b, 360, col, function (x, y) {
+        fxFlash(x, y, wht, 34); fxBurst(x, y, lt, 38, 6); fxBurst(x, y, col, 22, 4); fxRing(x, y, col, 4);
+        for (var i = 0; i < 12; i++) fxAdd({ x: x + rnd(-14, 14), y: y, vx: rnd(-1, 1), vy: rnd(-3.2, -1.1), grav: 0.03, life: rnd(30, 50), max: 50, size: rnd(1.4, 3), color: lt, glow: 12, shrink: true });
       }); }, 180);
     }
-    else if (key === 'water') {
-      fxCharge(a.x, a.y, '#38bdf8', 14);
-      setTimeout(function () { fxStream(a, b, 380, '#38bdf8', function (x, y) {
-        fxFlash(x, y, '#e0f5ff', 32); fxBurst(x, y, '#7dd3fc', 38, 6); fxRing(x, y, '#38bdf8', 4); setTimeout(function () { fxRing(x, y, '#7dd3fc', 3); }, 90);
-        for (var i = 0; i < 14; i++) fxAdd({ x: x, y: y, vx: rnd(-4, 4), vy: rnd(-5, -1), grav: 0.22, life: rnd(24, 40), max: 40, size: rnd(1.6, 3.4), color: '#7dd3fc', glow: 10, shrink: true }); // éclaboussures qui retombent
+    else if (key === 'water') { // jet d'eau + éclaboussures qui retombent
+      fxCharge(a.x, a.y, col, 14);
+      setTimeout(function () { fxStream(a, b, 380, col, function (x, y) {
+        fxFlash(x, y, wht, 32); fxBurst(x, y, lt, 38, 6); fxRing(x, y, col, 4); setTimeout(function () { fxRing(x, y, lt, 3); }, 90);
+        for (var i = 0; i < 14; i++) fxAdd({ x: x, y: y, vx: rnd(-4, 4), vy: rnd(-5, -1), grav: 0.22, life: rnd(24, 40), max: 40, size: rnd(1.6, 3.4), color: lt, glow: 10, shrink: true });
       }); }, 160);
     }
-    else if (key === 'venom') {
-      fxCharge(a.x, a.y, '#a3e635', 10);
+    else if (key === 'venom') { // 3 crachats + bulles toxiques qui montent
+      fxCharge(a.x, a.y, col, 10);
       setTimeout(function () {
-        for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxStream(a, { x: b.x + rnd(-10, 10), y: b.y + rnd(-10, 10) }, 320, '#a3e635', function (x, y) { fxBurst(x, y, '#bef264', 14, 4); }); }, s * 90); })(s);
-        setTimeout(function () { fxFlash(b.x, b.y, '#eaffc2', 24); fxBurst(b.x, b.y, '#a3e635', 24, 4);
-          for (var i = 0; i < 12; i++) fxAdd({ x: b.x + rnd(-18, 18), y: b.y + rnd(-6, 10), vx: rnd(-0.6, 0.6), vy: rnd(-1.4, -0.5), life: rnd(40, 64), max: 64, size: rnd(2, 4), color: '#bef264', glow: 10, shrink: true }); // bulles toxiques qui montent
+        for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { fxStream(a, { x: b.x + rnd(-10, 10), y: b.y + rnd(-10, 10) }, 320, col, function (x, y) { fxBurst(x, y, lt, 14, 4); }); }, s * 90); })(s);
+        setTimeout(function () { fxFlash(b.x, b.y, wht, 24); fxBurst(b.x, b.y, col, 24, 4);
+          for (var i = 0; i < 12; i++) fxAdd({ x: b.x + rnd(-18, 18), y: b.y + rnd(-6, 10), vx: rnd(-0.6, 0.6), vy: rnd(-1.4, -0.5), life: rnd(40, 64), max: 64, size: rnd(2, 4), color: lt, glow: 10, shrink: true });
         }, 360);
       }, 150);
     }
-    else if (key === 'beam') {
+    else if (key === 'beam') { // faisceau d'énergie + étincelles
       fxCharge(a.x, a.y, col, 16);
       setTimeout(function () {
         fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 12, life: 20, max: 20, color: col, glow: 26 });
         fxAdd({ kind: 'beam', x: a.x, y: a.y, bx: b.x, by: b.y, vx: 0, vy: 0, size: 4, life: 20, max: 20, color: '#ffffff', glow: 16 });
-        for (var i = 0; i < 10; i++) { var kk = i / 10; fxAdd({ x: a.x + (b.x - a.x) * kk, y: a.y + (b.y - a.y) * kk, vx: rnd(-1.5, 1.5), vy: rnd(-1.5, 1.5), life: rnd(10, 18), max: 18, size: rnd(1.5, 3), color: '#ffffff', glow: 12, shrink: true }); } // étincelles le long du rayon
+        for (var i = 0; i < 10; i++) { var kk = i / 10; fxAdd({ x: a.x + (b.x - a.x) * kk, y: a.y + (b.y - a.y) * kk, vx: rnd(-1.5, 1.5), vy: rnd(-1.5, 1.5), life: rnd(10, 18), max: 18, size: rnd(1.5, 3), color: '#ffffff', glow: 12, shrink: true }); }
         setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 34); fxBurst(b.x, b.y, col, 38, 6); fxBurst(b.x, b.y, '#ffffff', 16, 4); fxRing(b.x, b.y, col, 5); }, 150);
       }, 220);
     }
@@ -636,12 +654,36 @@
     }
     else if (key === 'slash') { // 3 coups de griffe croisés
       for (var s = 0; s < 3; s++) (function (s) { setTimeout(function () { var ang = s % 2 ? 0.8 : -0.8; fxArc(b.x + rnd(-8, 8), b.y + rnd(-8, 8), rnd(20, 30), ang, 0.7, '#ffffff', 3.5); fxStreaks(b.x, b.y, col, 5, ang); }, s * 90); })(s);
-      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, '#ffffff', 16, 5); }, 140);
+      setTimeout(function () { fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, lt, 16, 5); }, 140);
     }
     else if (key === 'dive') { // plongeon depuis le haut
       var top = { x: a.x, y: Math.max(8, a.y - 70) };
-      fxStreaks(a.x, a.y, '#e2e8f0', 8, -1.57);
-      setTimeout(function () { fxStream(top, b, 300, '#e2e8f0', function (x, y) { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, '#ffffff', 28, 6); fxRing(x, bottomY(defEl) - 8, '#e2e8f0', 4); }); }, 120);
+      fxStreaks(a.x, a.y, lt, 8, -1.57);
+      setTimeout(function () { fxStream(top, b, 300, col, function (x, y) { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, lt, 28, 6); fxRing(x, bottomY(defEl) - 8, col, 4); }); }, 120);
+    }
+    else if (key === 'sting') { // dard perçant : trait fin et rapide + éclat sec en croix
+      fxCharge(a.x, a.y, col, 8);
+      setTimeout(function () { fxStream(a, b, 230, col, function (x, y) { fxFlash(x, y, '#ffffff', 22); fxBurst(x, y, lt, 20, 8); fxStreaks(x, y, col, 4, 0); fxStreaks(x, y, col, 4, 1.57); fxRing(x, y, col, 2); }); }, 110);
+    }
+    else if (key === 'sonic') { // ondes sonores : anneaux qui partent de l'attaquant puis frappent
+      for (var i = 0; i < 3; i++) (function (i) { setTimeout(function () { fxRing(a.x, a.y, col, 3); }, i * 110); })(i);
+      setTimeout(function () { for (var j = 0; j < 3; j++) (function (j) { setTimeout(function () { fxRing(b.x, b.y, j ? lt : col, 4); }, j * 100); })(j); fxFlash(b.x, b.y, '#ffffff', 24); fxBurst(b.x, b.y, lt, 22, 5); }, 240);
+    }
+    else if (key === 'ink') { // encre : projectile sombre qui s'étale en nuage
+      fxCharge(a.x, a.y, col, 8);
+      setTimeout(function () { fxStream(a, b, 340, col, function (x, y) { fxFlash(x, y, lt, 20);
+        for (var i = 0; i < 22; i++) fxAdd({ x: x, y: y, vx: rnd(-3, 3), vy: rnd(-3, 3), grav: 0.02, life: rnd(40, 70), max: 70, size: rnd(3, 6), color: i % 3 ? col : lt, glow: 8, shrink: true });
+        fxRing(x, y, col, 3); }); }, 150);
+    }
+    else if (key === 'gust') { // bourrasque : arcs tournoyants + souffle qui éclate
+      fxCharge(a.x, a.y, lt, 8);
+      setTimeout(function () { fxStream(a, b, 260, lt, function (x, y) { fxArc(x, y, 26, 0, 1.5, col, 3, 0.14); fxArc(x, y, 26, Math.PI, 1.5, lt, 3, 0.14);
+        for (var i = 0; i < 16; i++) { var an = rnd(0, 6.28); fxAdd({ x: x, y: y, vx: Math.cos(an) * rnd(2, 5), vy: Math.sin(an) * rnd(2, 5), life: rnd(18, 30), max: 30, size: rnd(1.4, 3), color: '#ffffff', glow: 8, shrink: true }); }
+        fxFlash(x, y, '#ffffff', 24); }); }, 120);
+    }
+    else if (key === 'roll') { // roulade : projectile tournant + éclat circulaire
+      fxCharge(a.x, a.y, col, 8);
+      setTimeout(function () { fxStream(a, b, 300, col, function (x, y) { fxFlash(x, y, '#ffffff', 26); fxBurst(x, y, col, 28, 5); fxRing(x, y, col, 3); fxStreaks(x, y, lt, 6, 0.5); }); }, 140);
     }
     else { // stomp : séisme (onde de choc au sol + débris)
       var gy = bottomY(defEl) - 8;
@@ -677,7 +719,7 @@
     var atkEl = document.querySelector('#arene .cb-fighter.' + side);
     var defSide = side === 'me' ? 'foe' : 'me';
     var defEl = document.querySelector('#arene .cb-fighter.' + defSide);
-    var key = FXMAP[me.cr.id] || 'slash', tc = TM[me.cr.t].c, adv = typeMult(me.cr.t, foe.cr.t);
+    var sig = SIG[me.cr.id] || { k: 'slash', c: TM[me.cr.t].c }, key = sig.k, tc = TM[me.cr.t].c, col = sig.c || tc, adv = typeMult(me.cr.t, foe.cr.t);
     if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); cbAdvPopup(adv); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
     var field = stage.querySelector('.cb-arena-field');
     if (special) {
@@ -685,7 +727,7 @@
       atkEl.style.setProperty('--tc', tc); atkEl.classList.add('cb-cast');
       var banner = bannerEl(stage, me.cr, tc);
       sfx('charge'); // anticipation : on « charge » le coup
-      setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, tc); }, 360);
+      setTimeout(function () { signatureFx(stage, atkEl, defEl, side, key, col); }, 360);
       setTimeout(function () {
         if (onImpact) onImpact();
         sfx('crit'); cbAdvPopup(adv);
@@ -699,7 +741,7 @@
     } else {
       var lc = side === 'me' ? 'cb-lunge-r' : 'cb-lunge-l'; atkEl.classList.add(lc);
       fxEnsure(stage); var a = ctr(atkEl), b = ctr(defEl);
-      fxComet(a, b, 300, tc, function (x, y) { fxBurst(x, y, tc, 14, 4); });
+      fxComet(a, b, 300, col, function (x, y) { fxBurst(x, y, col, 14, 4); });
       setTimeout(function () { if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 12, 4); cbFloat(defEl, '-' + dmg, ''); }, 320);
       setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt'); if (onDone) onDone(); }, 620);
     }
