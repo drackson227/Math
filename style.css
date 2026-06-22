@@ -173,7 +173,14 @@ h2.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1
 .tag-droite { background: var(--color-droite-light); color: var(--color-droite); }
 .tag-vecteur { background: rgba(167,139,250,0.13); color: #c4b5fd; }
 
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px; }
+/* Graphiques : les cartes sont des éléments de grille → min-width:auto les empêche de rétrécir
+   sous la taille « intrinsèque » du canvas (500px) → débordement sur téléphone. On force min-width:0
+   et on borne le canvas à 100% pour que tout rentre. */
+#graphiques > div > div { min-width: 0; }
+#graphiques canvas { max-width: 100%; min-width: 0; }
+#graphiques [id$="-eq"] { overflow-wrap: anywhere; }
+#graphiques input[type="range"] { min-width: 0; } /* les curseurs peuvent rétrécir → pas de débordement à 2 colonnes */
 .card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 2rem; transition: all 0.3s ease; }
 .card:hover { transform: translateY(-6px); background: var(--bg-card-hover); }
 .card.cercle { border-color: rgba(96,165,250,0.3); box-shadow: var(--shadow-glow-cercle); }

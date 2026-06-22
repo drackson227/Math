@@ -80,7 +80,7 @@
 
   /* ---------- créer / rejoindre ---------- */
   window.mpCreate = function () {
-    var client = sb(), u = user(); if (!client || !u) return;
+    var client = sb(), u = user(); if (!client || !u) { if (window.MGR2Auth) window.MGR2Auth.openLogin(); else toast('Connecte-toi pour jouer en duel', '#f87171'); return; }
     var code = genCode();
     var row = { code: code, host_id: u.id, status: 'lobby', q_index: -1, questions: pickQuestions(st.mode === 'duel' ? 5 : QPERGAME) };
     client.from(R_ROOMS).insert(row).select().single().then(function (res) {
@@ -94,7 +94,7 @@
     mpJoin((i.value || '').trim().toUpperCase());
   };
   window.mpJoin = function (code) {
-    var client = sb(), u = user(); if (!client || !u) return;
+    var client = sb(), u = user(); if (!client || !u) { if (window.MGR2Auth) window.MGR2Auth.openLogin(); else toast('Connecte-toi pour jouer en duel', '#f87171'); return; }
     if (!code || code.length < 4) { toast('Entre un code à 4 lettres', '#f87171'); return; }
     client.from(R_ROOMS).select('*').eq('code', code).maybeSingle().then(function (res) {
       if (res.error || !res.data) { toast('Code introuvable', '#f87171'); return; }
@@ -109,6 +109,12 @@
   }
 
   /* ---------- temps réel ---------- */
+  // signature de l'état partagé : sert à ne re-rendre QUE si quelque chose a changé
+  // (évite de casser une question en cours lors des rafraîchissements du filet de sécurité).
+  function stateSig() {
+    if (!st.room) return '';
+    return st.room.status + '|' + st.room.q_index + '|' + (st.players || []).map(function (p) { return p.user_id + ':' + p.score + ':' + p.answered_idx; }).join(',');
+  }
   function subscribe() {
     var client = sb(); if (!client || st.channel) return;
     st.channel = client.channel('mp-' + st.code)
@@ -120,6 +126,23 @@
         refreshPlayers().then(render);
       })
       .subscribe();
+    // FILET DE SÉCURITÉ anti-bug : si le « temps réel » Supabase n'est pas activé sur le projet,
+    // les notifications n'arrivent jamais → la partie restait bloquée (l'hôte ne voyait pas le 2e
+    // joueur, le duel ne démarrait pas). On interroge donc la base toutes les 2,5 s en repli, et on
+    // ne re-rend QUE si l'état a changé (donc sans perturber une question en cours).
+    if (st.poll) clearInterval(st.poll);
+    st.poll = setInterval(pollTick, 2500);
+  }
+  function pollTick() {
+    var client = sb(); if (!client || !st.code) return;
+    client.from(R_ROOMS).select('*').eq('code', st.code).maybeSingle().then(function (rm) {
+      if (rm && rm.error) return;
+      if (rm && !rm.data) { roomClosed(); return; } // salle fermée/supprimée
+      if (rm && rm.data) st.room = rm.data;
+      return refreshPlayers();
+    }).then(function () {
+      if (st.room && stateSig() !== st._sig) render(); // render() met st._sig à jour
+    });
   }
   function refreshPlayers() {
     return sb().from(R_PLAYERS).select('*').eq('code', st.code).order('score', { ascending: false })
@@ -137,6 +160,7 @@
     if (st.room.status === 'lobby') renderLobby();
     else if (st.room.status === 'playing') renderQuestion();
     else if (st.room.status === 'finished') renderPodium();
+    st._sig = stateSig(); // mémorise l'état rendu (le filet de sécurité compare à ça)
   }
 
   function renderLobby() {
@@ -279,6 +303,7 @@
   function cleanupLocal() {
     if (st.channel) { try { sb().removeChannel(st.channel); } catch (e) {} }
     if (st.timer) clearInterval(st.timer);
+    if (st.poll) clearInterval(st.poll); // arrête le filet de sécurité
     st = blankState();
   }
   function leaveRoom() {

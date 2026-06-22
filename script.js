@@ -2160,9 +2160,10 @@ document.addEventListener('keydown', (e) => {
 (function welcomeScreen() {
   var KEY = 'mathsgr2_welcome_seen';
   var slides = [
-    { emoji: '👋', title: 'Bienvenue sur GR2 Study !', text: 'Ton appli pour réviser toutes tes matières : Maths, Chimie, Bio… Choisis une matière en haut. 100% gratuit.' },
-    { emoji: '📚', title: 'Apprends à ton rythme', text: 'Cours animés, formules clés, méthodes pas-à-pas, flashcards à répétition espacée et un générateur d’exercices à l’infini.' },
-    { emoji: '🎮', title: 'Teste-toi et amuse-toi', text: 'Quiz, défi du jour, parties à plusieurs et chat mondial. Tu peux même installer l’appli et l’utiliser hors-ligne !' }
+    { emoji: '👋', title: 'Bienvenue sur GR2 Study !', text: 'Ton appli pour réviser toutes tes matières (Maths, Chimie, Bio, Histoire…). 100% gratuit, et ça marche même hors-ligne. Voici comment l’utiliser en 3 étapes 👇' },
+    { emoji: '📚', title: '1️⃣ Choisis ta matière', text: 'Tout en haut, appuie sur le bouton « 📚 Matière ▾ » : la liste s’ouvre (Maths, Chimie, Bio…). Touche celle que tu veux réviser.' },
+    { emoji: '🧭', title: '2️⃣ Navigue avec le menu', text: 'Juste en dessous, le menu est rangé en 3 parties : « 📖 Apprendre » (Synthèse, Cours, Formules), « 🎯 S’entraîner » (Quiz, Flashcards) et « 📊 Suivre » (ta progression).' },
+    { emoji: '🎮', title: '3️⃣ Gagne de l’XP & amuse-toi', text: 'Les Quiz et Flashcards te donnent de l’XP → tu débloques des tirages dans l’Arène 🎮. Tu peux aussi installer l’appli sur ton écran d’accueil !' }
   ];
   var i = 0;
   function render(ov) {
@@ -2182,7 +2183,7 @@ document.addEventListener('keydown', (e) => {
     ov.innerHTML = '<div class="wel-card">' +
       '<button class="wel-skip" type="button">Passer</button>' +
       '<div class="wel-emoji"></div><h2 class="wel-title"></h2><p class="wel-text"></p>' +
-      '<div class="wel-dots"><span class="wel-dot"></span><span class="wel-dot"></span><span class="wel-dot"></span></div>' +
+      '<div class="wel-dots">' + slides.map(function () { return '<span class="wel-dot"></span>'; }).join('') + '</div>' +
       '<button class="wel-next" type="button"></button></div>';
     document.body.appendChild(ov);
     i = 0; render(ov);
@@ -4454,6 +4455,13 @@ function drawDroite() {
 }
 
 // Explorateur « Vecteur, distance & milieu » (curseurs) — inspiré de Brilliant : on manipule, ça réagit.
+// Vecteur affiché en COLONNE (vertical) sans MathJax → mise à jour instantanée au curseur.
+function colVec(a, b) {
+  return '<span style="display:inline-flex; align-items:center; vertical-align:middle;">' +
+    '<span style="font-size:1.7em; line-height:.9; font-weight:300;">(</span>' +
+    '<span style="display:inline-flex; flex-direction:column; line-height:1.15; padding:0 3px; text-align:center; font-weight:700;"><span>' + a + '</span><span>' + b + '</span></span>' +
+    '<span style="font-size:1.7em; line-height:.9; font-weight:300;">)</span></span>';
+}
 function drawVecteur() {
   const fmtN = v => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
   const setV = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
@@ -4495,7 +4503,8 @@ function drawVecteur() {
   drawDot(ctx, PX(bx), PY(by), 5, cB, `B(${bx} ; ${by})`);
   const dx = bx - ax, dy = by - ay, d2 = dx * dx + dy * dy, dist = Math.sqrt(d2);
   const eq = document.getElementById('vecteur-eq');
-  if (eq) eq.textContent = `AB = (${dx} ; ${dy})   •   ‖AB‖ = √${d2} ≈ ${Math.round(dist * 100) / 100}   •   M = (${fmtN(mx)} ; ${fmtN(my)})`;
+  // Vecteur AB en COLONNE ; le milieu M reste un POINT (horizontal).
+  if (eq) eq.innerHTML = 'AB⃗ = ' + colVec(dx, dy) + '&nbsp; • &nbsp;‖AB⃗‖ = √' + d2 + ' ≈ ' + (Math.round(dist * 100) / 100) + '&nbsp; • &nbsp;M = (' + fmtN(mx) + ' ; ' + fmtN(my) + ')';
 }
 
 // ════════════════════════════════════════════════════════════
@@ -4725,31 +4734,47 @@ function isConceptMastered(chapter, concept, mastered) {
   const qs = questionsForConcept(chapter, concept);
   return qs.some(q => (mastered[q.q] || 0) >= 2);
 }
+// Avancement d'un concept : 1 = maîtrisé (≥2 bonnes), 0.5 = en cours (≥1 bonne), 0 = pas encore vu.
+// Permet à la barre de progression de BOUGER dès la 1re bonne réponse (avant : il fallait 2 bonnes).
+function conceptProgress(chapter, concept, mastered) {
+  const qs = questionsForConcept(chapter, concept);
+  if (qs.some(q => (mastered[q.q] || 0) >= 2)) return 1;
+  if (qs.some(q => (mastered[q.q] || 0) >= 1)) return 0.5;
+  return 0;
+}
 
 // Progression générique (toute matière sauf maths) : par chapitre, basée sur le Quiz.
 function renderProgressionGeneric(container) {
   const data = loadSavedData();
   const mastered = data.masteredQuestions || {};
-  const order = (typeof CHAP_ORDER !== 'undefined') ? CHAP_ORDER : [];
   const labels = (typeof CHAP_LABELS !== 'undefined') ? CHAP_LABELS : {};
-  let totalQ = 0, totalMas = 0, html = '';
+  const qsrc = (typeof allQuestions !== 'undefined' ? allQuestions : (window.allQuestions || [])) || [];
+  // Chapitres réellement présents dans les questions de la matière COURANTE (ordre d'apparition).
+  // Corrige le bug « ça se met pas à jour » : avant on filtrait avec l'ordre des chapitres d'une AUTRE
+  // matière (CHAP_ORDER pas remis à jour pour les matières sans chapOrder) → 0 question → barre figée.
+  const order = [];
+  qsrc.forEach((q) => { const ch = q.chapter || 'Divers'; if (order.indexOf(ch) < 0) order.push(ch); });
+  let totalScore = 0, totalQ = 0, totalMas = 0, html = '';
   order.forEach((ch) => {
-    const qs = (typeof allQuestions !== 'undefined' ? allQuestions : []).filter((q) => q.chapter === ch);
+    const qs = qsrc.filter((q) => (q.chapter || 'Divers') === ch);
     if (!qs.length) return;
     const mas = qs.filter((q) => (mastered[q.q] || 0) >= 2).length;
-    totalQ += qs.length; totalMas += mas;
-    const pct = Math.round(mas / qs.length * 100);
+    // Crédit PARTIEL : 1 bonne réponse = à moitié, 2 bonnes = à fond → la barre BOUGE dès la 1re bonne
+    // réponse (avant il fallait retomber 2× sur la même question au hasard → ça semblait bloqué).
+    const score = qs.reduce((s, q) => s + Math.min(mastered[q.q] || 0, 2) / 2, 0);
+    totalQ += qs.length; totalMas += mas; totalScore += score;
+    const pct = Math.round(score / qs.length * 100);
     html += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.1rem 1.3rem; margin-bottom:1rem;">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.6rem;">' +
       '<span style="font-size:17px; font-weight:700; color:var(--color-nav);">' + (labels[ch] || ch) + '</span>' +
-      '<span style="font-size:14px; color:var(--text-secondary);">' + mas + ' / ' + qs.length + ' questions maîtrisées</span></div>' +
+      '<span style="font-size:14px; color:var(--text-secondary);">' + mas + ' / ' + qs.length + ' maîtrisées</span></div>' +
       '<div style="height:12px; background:var(--border-subtle); border-radius:8px; overflow:hidden;"><div style="height:100%; width:' + pct + '%; background:' + _statColor(pct) + '; border-radius:8px; transition:width .5s;"></div></div>' +
       (mas < qs.length ? '<button class="nav-btn" style="margin-top:0.9rem; width:100%;" onclick="reviseChapter(\'' + ch + '\')">🎯 Réviser ce chapitre</button>' : '<p style="margin-top:0.8rem; text-align:center; color:var(--color-parabole); font-weight:600; font-size:14px;">🎉 Chapitre maîtrisé !</p>') +
       '</div>';
   });
   container.innerHTML = (html || '<p style="color:var(--text-secondary);">Réponds à quelques questions du <strong>Quiz</strong> pour suivre ta progression ici. 💪</p>') +
     '<button type="button" onclick="printRevisionSheet()" style="display:block; width:100%; margin-top:0.6rem; padding:11px 16px; border-radius:14px; border:none; background:linear-gradient(135deg, var(--color-nav), #7c3aed); color:#fff; font-size:14px; font-weight:700; cursor:pointer;">📄 Fiche de révision (PDF) — tout l\'essentiel de la matière</button>';
-  const pct = totalQ ? Math.round(totalMas / totalQ * 100) : 0;
+  const pct = totalQ ? Math.round(totalScore / totalQ * 100) : 0;
   const pctEl = document.getElementById('prog-global-pct');
   const barEl = document.getElementById('prog-global-bar');
   const cntEl = document.getElementById('prog-global-count');
@@ -4767,32 +4792,36 @@ function renderProgression() {
   const data = loadSavedData();
   const mastered = data.masteredQuestions || {};
 
-  let totalConcepts = 0, totalMastered = 0;
+  let totalConcepts = 0, totalMastered = 0, totalScore = 0;
   let html = '';
 
   Object.keys(learningConcepts).forEach(chapter => {
     const meta = PROG_CHAP[chapter] || { label: chapter, color: 'var(--text-secondary)' };
     const concepts = learningConcepts[chapter];
-    const states = concepts.map(c => isConceptMastered(chapter, c, mastered));
-    const nbOk = states.filter(Boolean).length;
+    const progs = concepts.map(c => conceptProgress(chapter, c, mastered)); // 0 / 0.5 / 1
+    const nbOk = progs.filter(p => p >= 1).length;
+    const chScore = progs.reduce((s, p) => s + p, 0);
     totalConcepts += concepts.length;
     totalMastered += nbOk;
+    totalScore += chScore;
     const notMastered = nbOk < concepts.length;
+    const cpct = Math.round(chScore / concepts.length * 100);
 
     html += '<div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.25rem 1.4rem; margin-bottom:1.25rem;">';
-    html += '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:1rem;">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.7rem;">';
     html += '<span style="font-size:18px; font-weight:700; color:' + meta.color + ';">' + meta.label + '</span>';
     html += '<span style="font-size:14px; font-weight:600; color:var(--text-secondary);">' + nbOk + ' / ' + concepts.length + ' notions</span>';
     html += '</div>';
+    // mini-barre du chapitre (bouge avec le crédit partiel)
+    html += '<div style="height:8px; background:var(--border-subtle); border-radius:6px; overflow:hidden; margin-bottom:0.9rem;"><div style="height:100%; width:' + cpct + '%; background:' + meta.color + '; border-radius:6px; transition:width .5s;"></div></div>';
 
     html += '<div style="display:flex; flex-direction:column; gap:7px;">';
     concepts.forEach((c, i) => {
-      const ok = states[i];
-      const icon = ok ? '✅' : '❌';
-      const col = ok ? 'var(--text-primary)' : 'var(--text-secondary)';
-      const deco = ok ? '' : '';
+      const p = progs[i];
+      const icon = p >= 1 ? '✅' : (p > 0 ? '🔸' : '⬜');
+      const col = p > 0 ? 'var(--text-primary)' : 'var(--text-secondary)';
       html += '<div style="display:flex; align-items:center; gap:10px; font-size:14px; color:' + col + ';">' +
-              '<span>' + icon + '</span><span' + deco + '>' + c.concept + '</span></div>';
+              '<span>' + icon + '</span><span>' + c.concept + '</span></div>';
     });
     html += '</div>';
 
@@ -4806,7 +4835,7 @@ function renderProgression() {
 
   container.innerHTML = html;
 
-  const pct = totalConcepts ? Math.round(totalMastered / totalConcepts * 100) : 0;
+  const pct = totalConcepts ? Math.round(totalScore / totalConcepts * 100) : 0;
   const pctEl = document.getElementById('prog-global-pct');
   const barEl = document.getElementById('prog-global-bar');
   const cntEl = document.getElementById('prog-global-count');
