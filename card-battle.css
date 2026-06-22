@@ -350,7 +350,11 @@ body.arene-on #cb-cosmos { display: block; }
 /* accueil de l'Arène (bannière + équipe en cartes) */
 .cb-hero { position: relative; text-align: center; border-radius: 16px; padding: 16px 12px; margin-bottom: 12px; overflow: hidden;
   background: linear-gradient(135deg, color-mix(in srgb, var(--g-vio) 30%, rgba(20,14,40,.7)), rgba(12,9,24,.6)); border: 1px solid var(--g-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
-.cb-hero::before { content: ''; position: absolute; inset: -20%; background: repeating-conic-gradient(from 0deg, rgba(168,85,247,.12) 0 6deg, transparent 6deg 20deg); -webkit-mask: radial-gradient(circle, #000, transparent 70%); mask: radial-gradient(circle, #000, transparent 70%); animation: cb-spin 26s linear infinite; }
+/* rayons animés : CARRÉ centré (côté = 150% de la largeur) → couvre la bannière à
+   N'IMPORTE quelle rotation. Avant : rectangle large (inset:-20%) qui, en tournant,
+   devenait trop étroit à 90°/270° et laissait des vides sur les côtés = animation « buguée ».
+   cb-spin tourne autour du centre de l'élément (donc du centre de la bannière). */
+.cb-hero::before { content: ''; position: absolute; left: 50%; top: 50%; width: 150%; aspect-ratio: 1 / 1; margin-left: -75%; margin-top: -75%; background: repeating-conic-gradient(from 0deg, rgba(168,85,247,.12) 0 6deg, transparent 6deg 20deg); -webkit-mask: radial-gradient(circle, #000, transparent 70%); mask: radial-gradient(circle, #000, transparent 70%); animation: cb-spin 26s linear infinite; }
 .cb-hero-label { position: relative; font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--g-cyan); text-shadow: 0 0 10px var(--g-cyan); }
 .cb-hero-stage { position: relative; font-size: 30px; font-weight: 900; color: #fff; text-shadow: 0 0 18px var(--g-vio); line-height: 1.1; }
 .cb-hero-rec { position: relative; font-size: 13px; color: var(--g-tx2); font-weight: 700; margin-top: 2px; }
