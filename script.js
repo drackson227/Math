@@ -2163,7 +2163,9 @@ document.addEventListener('keydown', (e) => {
     { emoji: '👋', title: 'Bienvenue sur GR2 Study !', text: 'Ton appli pour réviser toutes tes matières (Maths, Chimie, Bio, Histoire…). 100% gratuit, et ça marche même hors-ligne. Voici comment l’utiliser en 3 étapes 👇' },
     { emoji: '📚', title: '1️⃣ Choisis ta matière', text: 'Tout en haut, appuie sur le bouton « 📚 Matière ▾ » : la liste s’ouvre (Maths, Chimie, Bio…). Touche celle que tu veux réviser.' },
     { emoji: '🧭', title: '2️⃣ Navigue avec le menu', text: 'Juste en dessous, le menu est rangé en 3 parties : « 📖 Apprendre » (Synthèse, Cours, Formules), « 🎯 S’entraîner » (Quiz, Flashcards) et « 📊 Suivre » (ta progression).' },
-    { emoji: '🎮', title: '3️⃣ Gagne de l’XP & amuse-toi', text: 'Les Quiz et Flashcards te donnent de l’XP → tu débloques des tirages dans l’Arène 🎮. Tu peux aussi installer l’appli sur ton écran d’accueil !' }
+    { emoji: '🎯', title: '3️⃣ Gagne de l’XP', text: 'Les Quiz et Flashcards te donnent de l’XP → tu montes de niveau et tu débloques des tirages dans l’Arène 🎮. Tu peux aussi installer l’appli sur ton écran d’accueil, comme une vraie appli !' },
+    { emoji: '⚔️', title: '4️⃣ Joue & défie tes amis', text: 'Onglet « 🎮 Arène » : collectionne des cartes (tirages) et fais des combats. Tu peux aussi lancer un « ⚔️ Duel 1v1 » ou un « 🎮 Quiz à plusieurs » : tu crées une partie, tu partages le code à 4 lettres, et l’autre tape « Rejoindre ».' },
+    { emoji: '💡', title: 'Perdu ? Reviens ici quand tu veux', text: 'Tu peux rouvrir ce guide à tout moment avec le bouton « ❓ Comment ça marche ? » en haut de la page. Bonne révision ! 🚀' }
   ];
   var i = 0;
   function render(ov) {
