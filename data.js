@@ -239,7 +239,22 @@ let allQuestions = [
   {q: "La droite perpendiculaire à \\(y=2x+1\\) a pour pente :", opts: ["\\(-\\tfrac{1}{2}\\)", "2", "\\(\\tfrac{1}{2}\\)", "−2"], ans: 0, chapter: "droite", difficulty: "intermediaire",
     exp: "Deux droites perpendiculaires vérifient \\(m\\cdot m'=-1\\). Ici \\(m=2\\) donc \\(m'=-\\dfrac{1}{2}\\).",
     formula: "\\(m\\cdot m'=-1\\)",
-    simple: "Perpendiculaire = on inverse et on change le signe : 2 devient \\(-\\tfrac{1}{2}\\). Vérifie : \\(2\\times(-\\tfrac12)=-1\\). ✓"}];
+    simple: "Perpendiculaire = on inverse et on change le signe : 2 devient \\(-\\tfrac{1}{2}\\). Vérifie : \\(2\\times(-\\tfrac12)=-1\\). ✓"},
+  {q: "Équations paramétriques de la droite passant par \\(A(2\\,;3)\\) de vecteur directeur \\(\\vec{u}=\\begin{pmatrix}4\\\\-1\\end{pmatrix}\\) ?", opts: ["\\(\\begin{cases}x=2+4k\\\\y=3-k\\end{cases}\\)", "\\(\\begin{cases}x=4+2k\\\\y=-1+3k\\end{cases}\\)", "\\(\\begin{cases}x=2-k\\\\y=3+4k\\end{cases}\\)", "\\(\\begin{cases}x=4+2k\\\\y=1+3k\\end{cases}\\)"], ans: 0, chapter: "droite", difficulty: "intermediaire",
+    exp: "On écrit \\(x=x_A+k\\,u_x=2+4k\\) et \\(y=y_A+k\\,u_y=3+(-1)k=3-k\\).",
+    formula: "\\(\\begin{cases}x=x_A+k\\,u_x\\\\y=y_A+k\\,u_y\\end{cases}\\)",
+    simple: "Tu écris le point, puis tu ajoutes k fois chaque composante du vecteur directeur : \\(x=2+4k\\), \\(y=3-k\\)."},
+  {q: "Les équations paramétriques d'une droite sont \\(x=1+2k\\), \\(y=-3+5k\\). Un vecteur directeur de cette droite est :", opts: ["\\(\\begin{pmatrix}2\\\\5\\end{pmatrix}\\)", "\\(\\begin{pmatrix}1\\\\-3\\end{pmatrix}\\)", "\\(\\begin{pmatrix}5\\\\2\\end{pmatrix}\\)", "\\(\\begin{pmatrix}-3\\\\1\\end{pmatrix}\\)"], ans: 0, chapter: "droite", difficulty: "intermediaire",
+    exp: "Le vecteur directeur, ce sont les coefficients de \\(k\\) : \\(\\vec{u}=\\begin{pmatrix}2\\\\5\\end{pmatrix}\\). Le couple \\((1\\,;-3)\\) est un point de la droite (pour \\(k=0\\)), pas le vecteur directeur.",
+    formula: "\\(x=x_A+k\\,u_x,\\ y=y_A+k\\,u_y\\) → \\(\\vec{u}=\\begin{pmatrix}u_x\\\\u_y\\end{pmatrix}\\)",
+    simple: "Le vecteur directeur, c'est ce qui multiplie k : ici \\(\\begin{pmatrix}2\\\\5\\end{pmatrix}\\)."},
+  {q: "Pour les équations paramétriques \\(x=1+2k\\), \\(y=-3+5k\\), quel point obtient-on pour \\(k=0\\) ?", opts: ["\\(A(1\\,;-3)\\)", "\\(A(2\\,;5)\\)", "\\(A(0\\,;0)\\)", "\\(A(3\\,;2)\\)"], ans: 0, chapter: "droite", difficulty: "facile",
+    exp: "Pour \\(k=0\\) : \\(x=1+2(0)=1\\) et \\(y=-3+5(0)=-3\\). On retrouve le point de départ \\(A(1\\,;-3)\\).",
+    simple: "Tu remplaces k par 0 : \\(x=1\\), \\(y=-3\\) → le point \\(A(1\\,;-3)\\)."},
+  {q: "À partir des paramétriques \\(x=4+2k\\), \\(y=-1+3k\\), quelle est l'équation cartésienne de la droite ?", opts: ["\\(3x-2y-14=0\\)", "\\(2x-3y-14=0\\)", "\\(3x-2y+14=0\\)", "\\(2x+3y-14=0\\)"], ans: 0, chapter: "droite", difficulty: "avance",
+    exp: "On isole \\(k\\) : \\(k=\\dfrac{x-4}{2}=\\dfrac{y+1}{3}\\). Donc \\(3(x-4)=2(y+1)\\) → \\(3x-12=2y+2\\) → \\(3x-2y-14=0\\).",
+    formula: "Éliminer \\(k\\) : \\(\\dfrac{x-x_A}{u_x}=\\dfrac{y-y_A}{u_y}\\)",
+    simple: "Tu isoles k dans les deux équations, tu les égales, tu développes → \\(3x-2y-14=0\\)."}];
 
 // ════════════════════════════════════════════════════════════
 //  NOTIONS CLÉS par chapitre (onglet « Progression »)
@@ -282,7 +297,8 @@ const learningConcepts = {
     { concept: "Droites perpendiculaires", keywords: ["perpendiculaires", "perpendiculaire par"] },
     { concept: "Équation d'une droite par 2 points", keywords: ["droite par A", "d'une droite par"] },
     { concept: "Distance point-droite", keywords: ["distance de", "distance du point"] },
-    { concept: "Médiatrice d'un segment", keywords: ["médiatrice"] }
+    { concept: "Médiatrice d'un segment", keywords: ["médiatrice"] },
+    { concept: "Équations paramétriques d'une droite", keywords: ["paramétr"] }
   ]
 };
 
@@ -308,6 +324,9 @@ let flashcards = [
   {front: "Condition d'existence d'un cercle ?", back: "$$a^2 + b^2 - 4c > 0$$", chapter: "cercle"},
   {front: "Équation explicite d'une droite ?", back: "$$y = mx + p$$", chapter: "droite"},
   {front: "Équation cartésienne (forme implicite) d'une droite ?", back: "$$ax + by + c = 0$$ On y lit directement le vecteur normal \\(\\vec{n}=\\begin{pmatrix}a\\\\b\\end{pmatrix}\\) et le vecteur directeur \\(\\vec{u}=\\begin{pmatrix}-b\\\\a\\end{pmatrix}\\).", chapter: "droite"},
+  {front: "Équations paramétriques d'une droite (point \\(A\\), vecteur directeur \\(\\vec{u}\\)) ?", back: "$$\\begin{cases}x=x_A+k\\,u_x\\\\y=y_A+k\\,u_y\\end{cases}$$ \\(k\\) est le <strong>paramètre</strong> : chaque valeur de \\(k\\) donne un point de la droite (\\(k=0\\) → le point \\(A\\)).", chapter: "droite"},
+  {front: "Comment passer des équations paramétriques à l'équation cartésienne ?", back: "On <strong>élimine le paramètre \\(k\\)</strong> : on isole \\(k\\) dans chaque équation, puis on égale.<br>$$k=\\dfrac{x-x_A}{u_x}=\\dfrac{y-y_A}{u_y}$$ puis on développe pour obtenir \\(ax+by+c=0\\).", chapter: "droite"},
+  {front: "Dans des équations paramétriques, où lit-on un point et un vecteur directeur ?", back: "Le <strong>point</strong> = les termes constants \\((x_A\\,;y_A)\\) (la valeur pour \\(k=0\\)).<br>Le <strong>vecteur directeur</strong> = les coefficients de \\(k\\) : \\(\\vec{u}=\\begin{pmatrix}u_x\\\\u_y\\end{pmatrix}\\).", chapter: "droite"},
   {front: "Condition pour que deux droites soient parallèles ?", back: "$$m_1 = m_2$$ (et $p_1 \\neq p_2$ sinon elles sont confondues)<details class='fc-ex'><summary onclick='event.stopPropagation()'>📝 Exemple chiffré</summary><div class='fc-ex-body'>\\(y=2x+1\\) et \\(y=2x-3\\) : même pente \\(m=2\\) → <strong>parallèles</strong>.</div></details>", chapter: "droite"},
   {front: "Condition pour que deux droites soient perpendiculaires ?", back: "$$m \\cdot m' = -1$$<details class='fc-ex'><summary onclick='event.stopPropagation()'>📝 Exemple chiffré</summary><div class='fc-ex-body'>\\(m=2\\) et \\(m'=-\\tfrac12\\) : \\(2\\times(-\\tfrac12)=-1\\) → <strong>perpendiculaires</strong>.</div></details>", chapter: "droite"},
   {front: "Comment calculer le rayon depuis la forme développée x²+y²+ax+by+c=0 ?", back: "$$R = \\frac{\\sqrt{a^2 + b^2 - 4c}}{2}$$<details class='fc-ex'><summary onclick='event.stopPropagation()'>📝 Exemple chiffré</summary><div class='fc-ex-body'>Pour \\(x^2+y^2-6x+4y-3=0\\) : \\(R=\\tfrac{\\sqrt{(-6)^2+4^2-4(-3)}}{2}=\\tfrac{\\sqrt{36+16+12}}{2}=\\tfrac{\\sqrt{64}}{2}=4\\).</div></details>", chapter: "cercle"},
