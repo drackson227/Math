@@ -275,8 +275,19 @@
     } catch (e) { if (typeof showToast === 'function') showToast('Copie impossible — sélectionne le texte à la main', '#f87171'); }
   }
 
-  // raccourci clavier Ctrl+Shift+D
+  // ACCÈS RÉSERVÉ AU CRÉATEUR — le rapport n'est PAS visible/accessible pour tout le monde.
+  // Le lien « 🔧 Diagnostic » du pied de page est masqué par défaut. 3 façons discrètes de débloquer :
+  //  • Ctrl+Maj+D (sur PC) ;
+  //  • ouvrir l'URL du site avec « #diag » à la fin (pratique sur téléphone) ;
+  //  • le déblocage est mémorisé sur l'appareil (localStorage gr2_creator) → le lien réapparaît ensuite.
+  function diagIsCreator() { try { return localStorage.getItem('gr2_creator') === '1'; } catch (e) { return false; } }
+  function diagRevealLink() { var l = document.getElementById('diag-link'); if (l) l.style.display = ''; }
+  function diagUnlock() { try { localStorage.setItem('gr2_creator', '1'); } catch (e) {} diagRevealLink(); }
+  if (diagIsCreator()) diagRevealLink();
+  if (location.hash === '#diag') { diagUnlock(); setTimeout(function () { try { window.gr2Diag(); } catch (e) {} }, 350); }
+
+  // raccourci clavier Ctrl+Shift+D (débloque aussi l'appareil → fait réapparaître le lien)
   document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')) { e.preventDefault(); window.gr2Diag(); }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')) { e.preventDefault(); diagUnlock(); window.gr2Diag(); }
   });
 })();
