@@ -8,7 +8,8 @@
   'use strict';
 
   var R_ROOMS = 'rooms', R_PLAYERS = 'room_players';
-  var QPERGAME = 10;        // nombre de questions par partie
+  var QPERGAME = 10;        // nombre de questions par partie (mode groupe)
+  var QDUEL = 20;           // nombre de questions par duel 1v1
   var QTIME = 20;           // secondes par question
 
   var st = blankState();
@@ -53,7 +54,7 @@
     body(
       '<h2 class="mp-title">' + (duel ? '⚔️ Duel 1 contre 1' : '🎮 Quiz à plusieurs') + '</h2>' +
       '<p class="mp-sub">' + (duel
-        ? 'Défie un ami en tête-à-tête : 5 questions, le plus rapide et précis gagne ! La partie démarre dès qu’il rejoint.'
+        ? 'Défie un ami en tête-à-tête : 20 questions, le plus rapide et précis gagne ! La partie démarre dès qu’il rejoint.'
         : 'Affronte tes amis sur les mêmes questions, en direct !') + '</p>' +
       '<button class="mp-btn mp-btn-primary" onclick="mpCreate()">➕ ' + (duel ? 'Créer un duel' : 'Créer une partie') + '</button>' +
       '<div class="mp-or">ou</div>' +
@@ -82,7 +83,7 @@
   window.mpCreate = function () {
     var client = sb(), u = user(); if (!client || !u) { if (window.MGR2Auth) window.MGR2Auth.openLogin(); else toast('Connecte-toi pour jouer en duel', '#f87171'); return; }
     var code = genCode();
-    var row = { code: code, host_id: u.id, status: 'lobby', q_index: -1, questions: pickQuestions(st.mode === 'duel' ? 5 : QPERGAME) };
+    var row = { code: code, host_id: u.id, status: 'lobby', q_index: -1, questions: pickQuestions(st.mode === 'duel' ? QDUEL : QPERGAME) };
     client.from(R_ROOMS).insert(row).select().single().then(function (res) {
       if (res.error) { console.warn('mp create:', res.error.message); toast('Création impossible (tables créées ?)', '#f87171'); return; }
       st.code = code; st.isHost = true; st.room = res.data;
