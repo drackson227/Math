@@ -356,7 +356,7 @@
     }
     B = { team: team, enemy: enemy, ti: 0, ei: 0, syn: syn, log: ['Combat de l’étage ' + G.stage + ' !'], over: false, win: false, busy: false };
     if (syn.n) B.log.push('🔗 Synergie ' + syn.n + ' : ' + syn.d);
-    G.view = 'battle'; renderBattle();
+    G.view = 'battle'; renderBattle(); vsSplash();
   };
   function alive(arr, from) { for (var i = from; i < arr.length; i++) if (arr[i].hp > 0) return i; return -1; }
   function hit(att, def, special) {
@@ -448,8 +448,9 @@
     B.over = true; B.win = win; B.busy = false;
     if (win) {
       var reward = 1 + Math.floor(G.stage / 3);
-      G.tickets += reward; G.dust += 10 + G.stage * 2;
-      B.reward = reward;
+      var dust = 10 + G.stage * 2;
+      G.tickets += reward; G.dust += dust;
+      B.reward = reward; B.dustGain = dust;
       if (G.stage >= G.bestStage) G.bestStage = G.stage + 1;
       G.stage++;
       B.log.push('🏆 Victoire ! +' + reward + ' 🎟️ tirage(s). Étage suivant débloqué.');
@@ -458,7 +459,45 @@
     }
     save(); renderBattle(); sfx(win ? 'win' : 'lose');
     if (win) { cbConfetti(120, ['#16a34a', '#fde047', '#ffffff', '#60a5fa', '#f472b6']); var ar = document.getElementById('arene'); if (ar) playLottie(ar, 'victory', ar.clientWidth / 2, 200, 360); }
+    setTimeout(function () { showBattleEnd(win); }, win ? 650 : 450);
   }
+  // écran VS d'intro (courte cinématique au lancement d'un combat) — ignoré si « mouvement réduit »
+  function vsSplash() {
+    if (!B) return;
+    var prevv = document.querySelector('.cb-vsplash'); if (prevv) prevv.remove();
+    if (prefersReduced()) return;
+    var meC = B.team[0], foeC = B.enemy[0];
+    var side = function (f, cls) { return '<div class="cb-vs-side ' + cls + '" style="--tc:' + TM[f.cr.t].c + '"><div class="cb-vs-port">' + f.cr.e + '</div><div class="cb-vs-nm">' + esc(f.cr.n) + '</div>' + tag(f.cr.t) + '</div>'; };
+    var ov = document.createElement('div'); ov.className = 'cb-vsplash';
+    ov.innerHTML = side(meC, 'me') + '<div class="cb-vs-bolt">VS</div>' + side(foeC, 'foe') + '<div class="cb-vs-stage">⚔ Étage ' + G.stage + '</div>';
+    document.body.appendChild(ov);
+    var kill = function () { if (ov.parentNode) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 240); } };
+    ov.addEventListener('click', kill); setTimeout(kill, 1450); sfx('charge');
+  }
+  // écran de fin de combat : récompenses animées à la victoire / conseils à la défaite
+  function showBattleEnd(win) {
+    if (!B) return;
+    var prev = document.querySelector('.cb-endscreen'); if (prev) prev.remove();
+    var ov = document.createElement('div'); ov.className = 'cb-endscreen ' + (win ? 'win' : 'lose');
+    var inner;
+    if (win) {
+      inner = '<div class="cb-end-ttl win">🏆 VICTOIRE !</div>' +
+        '<div class="cb-end-rewards">' +
+          '<div class="cb-end-rw"><span class="cb-end-ic">🎟️</span><b>+' + B.reward + '</b><small>tirage' + (B.reward > 1 ? 's' : '') + '</small></div>' +
+          '<div class="cb-end-rw"><span class="cb-end-ic">✨</span><b>+' + (B.dustGain || 0) + '</b><small>poussières</small></div>' +
+          '<div class="cb-end-rw"><span class="cb-end-ic">🏟️</span><b>' + G.stage + '</b><small>étage débloqué</small></div>' +
+        '</div>' +
+        '<div class="cb-end-btns"><button class="cb-btn cb-btn-main" onclick="CB.endAgain()">⚔️ Étage ' + G.stage + '</button><button class="cb-btn" onclick="CB.endClose()">🏟️ Arène</button></div>';
+    } else {
+      inner = '<div class="cb-end-ttl lose">☠️ DÉFAITE</div>' +
+        '<p class="cb-end-tip">Aucune perte — retente ! Astuce : exploite les <b>avantages de type</b> et les <b>statuts</b> (poison, étourdissement, bouclier…).</p>' +
+        '<div class="cb-end-btns"><button class="cb-btn cb-btn-main" onclick="CB.endAgain()">↻ Réessayer</button><button class="cb-btn" onclick="CB.endClose()">🏟️ Arène</button></div>';
+    }
+    ov.innerHTML = '<div class="cb-end-box">' + inner + '</div>';
+    document.body.appendChild(ov);
+  }
+  CB.endClose = function () { var o = document.querySelector('.cb-endscreen'); if (o) o.remove(); CB.go('arena'); };
+  CB.endAgain = function () { var o = document.querySelector('.cb-endscreen'); if (o) o.remove(); CB.fight(); };
 
   /* ---------------- ÉQUIPE / COLLECTION ---------------- */
   CB.team = function (id) {
@@ -992,15 +1031,16 @@
     } else {
       ctrl = '<div class="cb-summon-btns">' +
         '<button class="cb-btn cb-btn-main" onclick="CB.act(false)"' + (B.busy ? ' disabled' : '') + '>⚔️ Attaquer</button>' +
-        '<button class="cb-btn cb-special' + (me.charge >= 3 ? ' ready' : '') + '" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>' + (me.charge >= 3 ? '⚡ ' + esc(me.cr.mv) + ' — PRÊT !' : '✨ ' + esc(me.cr.mv) + ' <span class="cb-gauge">' + chargePips(me.charge) + '</span>') + '</button>' +
+        '<button class="cb-btn cb-special' + (me.charge >= 3 ? ' ready' : '') + '" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>' + (me.charge >= 3 ? '⚡ ' + esc(me.cr.mv) + ' — PRÊT !' : '🔒 ' + esc(me.cr.mv)) + '</button>' +
         '<button class="cb-btn" onclick="CB.go(\'arena\')">🏳️ Abandonner</button></div>';
     }
-    var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ En cours…' : '🟢 À toi de jouer') + '</div>';
+    var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ Tour adverse…' : '🟢 À toi de jouer — ' + esc(me.cr.n)) + '</div>';
     // indice de stratégie : comment ton type se comporte face à l'ennemi actuel (statique = aucun coût d'anim)
     var mAdv = typeMult(me.cr.t, foe.cr.t);
     var matchup = B.over ? '' : (mAdv > 1
       ? '<div class="cb-matchup good">🔥 Super efficace contre ' + esc(foe.cr.n) + ' — frappe fort !</div>'
       : (mAdv < 1 ? '<div class="cb-matchup bad">🛡 ' + esc(foe.cr.n) + ' résiste à ton type (change peut-être de combattant)</div>' : ''));
+    var ult = B.over ? '' : '<div class="cb-ult' + (me.charge >= 3 ? ' ready' : '') + '"><div class="cb-ult-top"><span class="cb-ult-lbl">⚡ ULTIME · ' + esc(me.cr.mv) + '</span><span class="cb-ult-pct">' + (me.charge >= 3 ? 'PRÊT !' : me.charge + ' / 3') + '</span></div><div class="cb-ult-bar"><span style="width:' + Math.min(100, Math.round(me.charge / 3 * 100)) + '%"></span></div></div>';
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
         turn + matchup +
@@ -1008,7 +1048,7 @@
         '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me', !B.busy && !B.over) + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe', false) + '</div></div>' +
         '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
         '<div class="cb-log">' + log + '</div>' +
-        ctrl +
+        ult + ctrl +
       '</div>';
   }
 
@@ -1040,6 +1080,7 @@
       var r = prev.apply(this, arguments);
       try {
         var id = (typeof a === 'string') ? a : b;
+        if (id !== 'arene') { var ovs = document.querySelectorAll('.cb-endscreen,.cb-vsplash'); for (var oi = 0; oi < ovs.length; oi++) ovs[oi].remove(); }
         document.body.classList.toggle('arene-on', id === 'arene'); // masque l'UI de l'école hors Arène
         if (id === 'arene') { ensureCosmos(); render(); }
       } catch (e) {}
