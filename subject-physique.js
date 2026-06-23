@@ -292,6 +292,32 @@
     </div>
 
     <div class="exercise-card">
+      <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">📐 Exercices du Chapitre IV (calculs de moments)</h3>
+
+      <p style="margin-bottom:.2rem;"><strong>⑤ La clé et l'écrou.</strong> Pour serrer l'écrou du pédalier d'un vélo, on pousse sur une clé. Le bras de levier vaut <strong>ℓ = 13 cm</strong> et la force <strong>F = 300 N</strong>. Que vaut le moment de la force ? Quand l'effet est-il maximal ?</p>
+      <details style="margin:.2rem 0 .9rem;"><summary style="cursor:pointer; color:var(--color-nav); font-weight:600;">Voir la solution</summary>
+      <div style="line-height:1.9; padding:.4rem 0;">Conversion : \\(\\ell = 13\\) cm \\(= 0,13\\) m.<br>
+      \\(M = F \\times \\ell = 300 \\times 0,13 = \\mathbf{39\\ N\\cdot m}\\).<br>
+      L'effet (le moment) est <strong>maximal</strong> quand la force est <strong>perpendiculaire</strong> à la clé (sin α = 1) et que le bras de levier est le <strong>plus grand</strong> possible.</div></details>
+
+      <p style="margin-bottom:.2rem;"><strong>⑥ La force inclinée.</strong> Une barre de <strong>150 cm</strong> tourne autour d'un axe à une extrémité. À l'autre bout, on tire avec une force <strong>F = 4 N</strong> faisant un angle de <strong>30°</strong> avec la barre. Calcule le moment.</p>
+      <details style="margin:.2rem 0 .9rem;"><summary style="cursor:pointer; color:var(--color-nav); font-weight:600;">Voir la solution</summary>
+      <div style="line-height:1.9; padding:.4rem 0;">Force non perpendiculaire → \\(M = F \\times \\ell \\times \\sin\\alpha\\).<br>
+      \\(\\ell = 150\\) cm \\(= 1,5\\) m ; \\(\\alpha = 30°\\) (\\(\\sin 30° = 0,5\\)).<br>
+      \\(M = 4 \\times 1,5 \\times \\sin 30° = 4 \\times 1,5 \\times 0,5 = \\mathbf{3\\ N\\cdot m}\\).</div></details>
+
+      <p style="margin-bottom:.2rem;"><strong>⑦ La barre en équilibre.</strong> Une barre homogène de masse négligeable, de <strong>50 cm</strong> de long, est posée sur un support à son <strong>extrémité droite</strong>. À <strong>10 cm</strong> de cette extrémité est accroché un objet de <strong>300 g</strong>, et <strong>25 cm plus loin</strong> un objet de <strong>100 g</strong>. Quelle force faut-il exercer à l'autre extrémité pour maintenir l'équilibre ?</p>
+      <details style="margin:.2rem 0 .2rem;"><summary style="cursor:pointer; color:var(--color-nav); font-weight:600;">Voir la solution</summary>
+      <div style="line-height:1.9; padding:.4rem 0;">Le <strong>pivot</strong> = le support (extrémité droite) ; on mesure les bras de levier depuis ce pivot.<br>
+      Poids : \\(P_1 = 0,300 \\times 9,81 = 2,943\\) N (à 0,10 m) ; \\(P_2 = 0,100 \\times 9,81 = 0,981\\) N (à \\(0,10+0,25 = 0,35\\) m).<br>
+      La force cherchée \\(F\\) agit à l'autre bout, soit à 0,50 m du pivot.<br>
+      Équilibre de rotation \\((\\sum M = 0)\\) :<br>
+      \\(F \\times 0,50 = P_1 \\times 0,10 + P_2 \\times 0,35 = 0,2943 + 0,3434 = 0,6376\\)<br>
+      \\(F = \\dfrac{0,6376}{0,50} \\approx \\mathbf{1,28\\ N}\\), dirigée <strong>vers le haut</strong>.<br>
+      <em>Caractéristiques de la force :</em> point d'application = l'extrémité gauche · direction = verticale · sens = vers le haut · intensité ≈ 1,28 N.</div></details>
+    </div>
+
+    <div class="exercise-card">
       <h3 style="font-size:20px; font-weight:600; color:var(--color-nav);">🧮 Calculs express</h3>
       <ul style="line-height:2;">
         <li>Poids d'une masse de <strong>5 kg</strong> (g = 9,81 N/kg) ? → \\(P = 5\\times 9,81 = \\mathbf{49{,}05\\ N}\\).</li>
@@ -355,6 +381,8 @@
     { q: "Pourquoi pousse-t-on une porte loin des gonds ?", opts: ["pour augmenter le bras de levier (donc le moment)", "pour diminuer le moment", "pour augmenter la masse", "ça ne change rien"], ans: 0, chapter: "moment", difficulty: "intermediaire", exp: "Loin des gonds -> l grand -> M = F x l grand -> on tourne la porte avec moins de force.", simple: "Essaie de pousser une porte juste à côté des charnières : très dur ! Loin des charnières, c'est facile." },
     { q: "Une force dont la droite d'action passe par l'axe de rotation a un moment :", opts: ["nul (elle ne fait pas tourner)", "maximal", "négatif", "égal à la force"], ans: 0, chapter: "moment", difficulty: "difficile", exp: "Si la force passe par l'axe, le bras de levier est nul -> M = F x 0 = 0." },
     { q: "Quand la force n'est PAS perpendiculaire au bras de levier, le moment vaut :", opts: ["M = ± F × ℓ × sin α", "M = F × ℓ", "M = F / sin α", "M = F + ℓ"], ans: 0, chapter: "moment", difficulty: "difficile", exp: "On ajoute sin(alpha), l'angle entre le bras de levier et la force : M = +/- F x l x sin(alpha)." },
+    { q: "Une clé (bras de levier 13 cm) serre un écrou avec une force de 300 N. Le moment vaut :", opts: ["39 N·m", "3900 N·m", "300 N·m", "23 N·m"], ans: 0, chapter: "moment", difficulty: "difficile", exp: "Convertir d'abord : 13 cm = 0,13 m. M = F x l = 300 x 0,13 = 39 N.m. (Piege : ne pas oublier de convertir les cm en m.)" },
+    { q: "Une force de 4 N agit à 30° au bout d'une barre de 150 cm. Le moment vaut :", opts: ["3 N·m", "6 N·m", "600 N·m", "1,5 N·m"], ans: 0, chapter: "moment", difficulty: "difficile", exp: "Force non perpendiculaire : M = F x l x sin(alpha) = 4 x 1,5 x sin30 = 4 x 1,5 x 0,5 = 3 N.m." },
     // -- Manivelles, treuils & poulies --
     { q: "L'avantage mécanique d'un treuil se calcule par :", opts: ["γ = F_R / F_M = r_moteur / r_résistant", "γ = F_M / F_R", "γ = r_résistant / r_moteur", "γ = F × ℓ"], ans: 0, chapter: "machines", difficulty: "difficile", exp: "Avantage mecanique gamma = force resistante / force motrice = rayon moteur / rayon resistant." },
     { q: "Avec un treuil (rayon moteur > rayon résistant) :", opts: ["on soulève une grosse charge avec peu de force (mais on tire plus de corde)", "on a besoin de plus de force que la charge", "la force et la charge sont égales", "on ne peut rien soulever"], ans: 0, chapter: "machines", difficulty: "intermediaire", exp: "Comme r_moteur > r_resistant, gamma > 1 : gain de force, au prix d'une plus grande longueur de corde." },
@@ -365,6 +393,7 @@
     // -- Equilibre de rotation --
     { q: "Pour qu'un objet étendu soit en équilibre, il faut :", opts: ["ΣF = 0 ET Σmoments = 0", "seulement ΣF = 0", "seulement Σmoments = 0", "que le poids soit nul"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Deux conditions simultanees : equilibre de translation (somme des forces = 0) ET de rotation (somme des moments = 0)." },
     { q: "Sur une balançoire à l'équilibre :", opts: ["F₁ × ℓ₁ = F₂ × ℓ₂", "F₁ = F₂", "ℓ₁ = ℓ₂", "F₁ + F₂ = 0"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Les moments se compensent : F1.l1 = F2.l2. Un enfant leger loin du pivot equilibre un lourd pres du pivot.", simple: "Le plus léger se met loin du centre, le plus lourd se met près : leurs « forces de rotation » s'égalisent." },
+    { q: "Barre (support à droite) : 300 g à 10 cm et 100 g à 35 cm du support. Force à exercer à 50 cm pour l'équilibre ?", opts: ["≈ 1,28 N vers le haut", "≈ 4 N vers le bas", "0 N", "≈ 40 N"], ans: 0, chapter: "equilibre", difficulty: "difficile", exp: "Somme des moments = 0 : F x 0,50 = (0,300x9,81)x0,10 + (0,100x9,81)x0,35 = 0,638. Donc F = 0,638/0,50 = 1,28 N, dirigee vers le haut." },
     { q: "L'équilibre de rotation peut être statique ou dynamique. « Dynamique » signifie :", opts: ["l'objet tourne à vitesse constante", "l'objet est totalement immobile", "l'objet accélère", "il n'y a aucune force"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Equilibre statique = immobile ; equilibre dynamique = rotation a vitesse constante. Dans les deux cas la somme des moments = 0." },
     { q: "Le centre de gravité d'un objet est :", opts: ["le point d'application de son poids", "le point le plus lourd visible", "toujours au sommet", "le point d'appui au sol"], ans: 0, chapter: "equilibre", difficulty: "facile", exp: "Le centre de gravite (G) est le point d'application du poids de tout l'objet." },
     { q: "Le centre de gravité d'un objet :", opts: ["peut se situer hors de la matière (boomerang, fer à cheval)", "est toujours dans la matière", "est toujours au sol", "n'existe que pour les sphères"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Pour un objet homogene symetrique il est au centre de symetrie, mais il peut etre hors matiere (boule creuse, fer a cheval, boomerang)." },
