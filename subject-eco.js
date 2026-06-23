@@ -213,7 +213,7 @@
 
     <div class="synth-section">
       <h2>8. Les modalités des obligations (droit civil)</h2>
-      <p>Une <strong>obligation</strong> est un lien de droit entre un <strong>créancier</strong> (à qui on doit) et un <strong>débiteur</strong> (qui doit). Elle peut prendre plusieurs formes :</p>
+      <p>Une <strong>obligation</strong> est le <strong>lien de droit existant entre au moins deux personnes</strong> : un <strong>créancier</strong> (à qui on doit) et un <strong>débiteur</strong> (qui doit). Elle peut prendre plusieurs formes :</p>
       <ul style="line-height:2;">
         <li><strong>Obligation pure et simple</strong> : exigible immédiatement.</li>
         <li><strong>Obligation à terme</strong> (un <strong>terme</strong> = événement <strong>futur et certain</strong>) :
