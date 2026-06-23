@@ -112,8 +112,12 @@
       <ul style="line-height:1.9;">
         <li>\\(F_M\\) = <strong>force motrice</strong> (exercée par l'opérateur) ; \\(F_R\\) = <strong>force résistante</strong> (exercée par l'objet manipulé / la charge).</li>
         <li>\\(r_M\\) = <strong>rayon moteur</strong> (grand rayon, ex. la manivelle) ; \\(r_R\\) = <strong>rayon résistant</strong> (petit rayon, ex. l'axe/tambour).</li>
-        <li>Comme \\(r_M > r_R\\), on a \\(\\gamma > 1\\) : on soulève une <strong>grosse charge avec peu de force</strong>. En contrepartie, il faut tirer <strong>plus de longueur</strong> de corde. (Même idée : les <strong>petits et grands plateaux</strong> d'un vélo.)</li>
+        <li>Comme \\(r_M > r_R\\), on a \\(\\gamma > 1\\) : on soulève une <strong>grosse charge avec peu de force</strong>. En contrepartie, il faut tirer <strong>plus de longueur</strong> de corde.</li>
       </ul>
+      <div style="background:rgba(96,165,250,.10);border:1px solid #60a5fa;border-radius:10px;padding:12px 14px;margin:10px 0;">
+        <p style="margin:0 0 6px;color:#93c5fd;font-weight:700;">🚲 Les petits et grands plateaux du vélo</p>
+        <p style="margin:0;line-height:1.8;">Sur le pédalier, la force motrice \\(F_M\\) s'applique sur la <strong>pédale</strong> (bras de levier = la <strong>manivelle</strong>, \\(r_M\\)) et la force résistante \\(F_R\\) sur le <strong>plateau</strong> (bras de levier = le <strong>rayon du plateau</strong>, \\(r_R\\)). La force exercée sur la chaîne est <strong>d'autant plus grande que la manivelle est longue et que le plateau est petit</strong>. Donc, pour <strong>augmenter la tension dans la chaîne et faciliter le démarrage</strong> (ou monter une côte), le cycliste a intérêt à choisir le <strong>plus petit plateau</strong> ; le <strong>grand plateau</strong> sert à aller plus vite (plus de distance par tour de pédale).</p>
+      </div>
       <p>La <strong>poulie simple (poulie fixe)</strong> est un cas particulier de manivelle. Comme le rayon est le même des deux côtés (\\(r_M = r_R\\)) :</p>
       <div class="key-rule"><div class="formula-main" style="font-size:18px;">$$\\gamma = \\dfrac{r_M}{r_R} = 1 \\quad\\Rightarrow\\quad F_M = F_R$$</div></div>
       <ul style="line-height:1.9;">
@@ -130,13 +134,25 @@
         <line x1="200" y1="70" x2="200" y2="135" stroke="#34d399" stroke-width="3" marker-end="url(#tArr)"/><text x="206" y="112" fill="#6ee7b7" font-size="12">F (effort)</text>
         <line x1="132" y1="88" x2="132" y2="140" stroke="#f87171" stroke-width="4" marker-end="url(#tArr2)"/><text x="74" y="120" fill="#fca5a5" font-size="12">F (charge)</text>
       </svg>
-      <p style="margin-bottom:.3rem;"><strong>Exemples de manivelles / treuils dans la vie courante :</strong></p>
+      <p style="margin-bottom:.3rem;"><strong>Les différents dispositifs semblables aux manivelles (cours) :</strong></p>
+      <ul style="line-height:1.9; margin-top:0;">
+        <li>les <strong>treuils</strong> : un <strong>câble s'embobine</strong> au fur et à mesure de la rotation ;</li>
+        <li>les <strong>poulies étagées</strong> : plusieurs poulies de <strong>diamètres différents</strong>, solidaires ;</li>
+        <li>les <strong>engrenages</strong>.</li>
+      </ul>
+      <p style="margin-bottom:.3rem;"><strong>Dans la vie courante :</strong></p>
       <ul style="line-height:1.9; margin-top:0;">
         <li>🚲 le <strong>pédalier de vélo</strong> · ☕ le <strong>moulin à café</strong> · 🎣 le <strong>moulinet de pêche</strong> · 🚗 le <strong>cric de voiture</strong> · 🪣 le <strong>treuil de puits</strong>.</li>
       </ul>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
         <div class="simple-exp-content">Un treuil de puits : tu tournes une grande manivelle (rayon moteur) pour remonter un lourd seau enroulé sur un petit axe (rayon résistant). Tu fais beaucoup de tours (longue distance) mais sans forcer. Une poulie fixe, elle, ne te fait pas gagner de force (γ = 1) — juste tirer dans un sens plus confortable.</div>
+      </div>
+      <div style="background:rgba(245,158,11,.10);border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin:12px 0;">
+        <p style="margin:0 0 6px;color:#fbbf24;font-weight:700;">🔎 Pour aller plus loin : le rôle des chaussures à « clic » des cyclistes</p>
+        <p style="margin:0 0 6px;line-height:1.8;">Pour que le <strong>moment de force sur le pédalier soit maximal</strong>, il faut que le cycliste veille à ce que la force qu'il exerce sur la pédale soit <strong>perpendiculaire à la manivelle</strong>. Cela devient difficile quand cette manivelle n'est plus en <strong>position horizontale et vers l'avant</strong>.</p>
+        <p style="margin:0 0 6px;line-height:1.8;">Les <strong>chaussures à « clic »</strong>, grâce à leur <strong>fixation aux pédales</strong>, permettent au cycliste d'<strong>adapter l'orientation de la force</strong> qu'il exerce, au fur et à mesure de la rotation du pédalier.</p>
+        <p style="margin:0;line-height:1.8;">Le cycliste peut ainsi <strong>combiner l'action de ses deux pieds</strong>, de manière à ce que la <strong>somme de leurs moments soit la plus constante possible</strong>, et que la <strong>tension dans la chaîne</strong> le soit aussi.</p>
       </div>
     </div>
 
@@ -390,6 +406,8 @@
     { q: "Un treuil a un tambour de 20 cm de diamètre et une manivelle de 40 cm. Son avantage mécanique vaut :", opts: ["4", "2", "0,5", "8"], ans: 0, chapter: "machines", difficulty: "difficile", exp: "r_moteur = 40 cm, r_resistant = 20/2 = 10 cm. gamma = 40/10 = 4." },
     { q: "Parmi ces objets, lequel N'EST PAS une manivelle / un treuil ?", opts: ["une échelle posée contre un mur", "un moulin à café", "un moulinet de pêche", "un cric de voiture"], ans: 0, chapter: "machines", difficulty: "facile", exp: "Moulin a cafe, moulinet de peche et cric de voiture sont des manivelles/treuils. Pas l'echelle." },
     { q: "Un cycliste pousse à 50 N sur la pédale (r moteur 18 cm, r résistant 8 cm). La tension dans la chaîne vaut :", opts: ["112,5 N", "50 N", "22,2 N", "400 N"], ans: 0, chapter: "machines", difficulty: "difficile", exp: "gamma = 18/8 = 2,25 ; F_R = gamma x F_M = 2,25 x 50 = 112,5 N." },
+    { q: "Le moment de force sur le pédalier est maximal quand la force sur la pédale est :", opts: ["perpendiculaire à la manivelle", "parallèle à la manivelle", "dirigée vers l'axe", "la plus petite possible"], ans: 0, chapter: "machines", difficulty: "intermediaire", exp: "M est maximal quand la force est perpendiculaire a la manivelle. C'est difficile a garder quand la manivelle n'est plus horizontale et vers l'avant." },
+    { q: "À quoi servent les chaussures à « clic » du cycliste ?", opts: ["adapter l'orientation de la force pendant toute la rotation (moment le plus constant possible)", "rendre le vélo plus léger", "pédaler moins souvent", "freiner plus vite"], ans: 0, chapter: "machines", difficulty: "intermediaire", exp: "Fixees aux pedales, elles permettent d'orienter la force a chaque instant et de combiner les deux pieds : la somme des moments (et la tension dans la chaine) reste la plus constante possible." },
     // -- Equilibre de rotation --
     { q: "Pour qu'un objet étendu soit en équilibre, il faut :", opts: ["ΣF = 0 ET Σmoments = 0", "seulement ΣF = 0", "seulement Σmoments = 0", "que le poids soit nul"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Deux conditions simultanees : equilibre de translation (somme des forces = 0) ET de rotation (somme des moments = 0)." },
     { q: "Sur une balançoire à l'équilibre :", opts: ["F₁ × ℓ₁ = F₂ × ℓ₂", "F₁ = F₂", "ℓ₁ = ℓ₂", "F₁ + F₂ = 0"], ans: 0, chapter: "equilibre", difficulty: "intermediaire", exp: "Les moments se compensent : F1.l1 = F2.l2. Un enfant leger loin du pivot equilibre un lourd pres du pivot.", simple: "Le plus léger se met loin du centre, le plus lourd se met près : leurs « forces de rotation » s'égalisent." },
@@ -418,6 +436,7 @@
     { front: "Formule de l'avantage mécanique γ (treuil, manivelle) ?", back: "$$\\gamma = \\dfrac{F_R}{F_M} = \\dfrac{r_M}{r_R}$$ \\(F_R\\) résistante, \\(F_M\\) motrice, \\(r_M\\) rayon moteur, \\(r_R\\) rayon résistant. On <strong>gagne en force</strong>, on <strong>perd en distance</strong>.", chapter: "machines" },
     { front: "À quoi sert une poulie FIXE (simple) ?", back: "Son avantage mécanique vaut <strong>γ = 1</strong> : elle <strong>ne multiplie pas</strong> la force (\\(F_M=F_R\\)) ; elle <strong>change la direction</strong> de la force.", chapter: "machines" },
     { front: "Exemples de manivelles / treuils ?", back: "🚲 Pédalier de vélo · ☕ moulin à café · 🎣 moulinet de pêche · 🚗 cric de voiture · 🪣 treuil de puits.", chapter: "machines" },
+    { front: "À quoi servent les chaussures à « clic » (cyclisme) ?", back: "Grâce à leur <strong>fixation aux pédales</strong>, elles permettent d'<strong>adapter l'orientation de la force</strong> exercée tout au long de la rotation du pédalier et de <strong>combiner les deux pieds</strong> → la <strong>somme des moments</strong> (et la tension dans la chaîne) reste la <strong>plus constante possible</strong>. <em>(Le moment est maximal quand la force est perpendiculaire à la manivelle.)</em>", chapter: "machines" },
     { front: "Les 2 conditions d'équilibre d'un objet étendu ?", back: "<strong>① Translation</strong> : \\(\\sum \\vec{F}=\\vec{0}\\) · <strong>② Rotation</strong> : \\(\\sum M = 0\\) (loi des moments). Les deux <strong>en même temps</strong>.", chapter: "equilibre" },
     { front: "Définition de l'équilibre de rotation ?", back: "Un objet libre de tourner autour d'un axe fixe est en équilibre de rotation quand la <strong>somme des moments</strong> des forces par rapport à cet axe est <strong>nulle</strong> : \\(\\sum M = 0\\).", chapter: "equilibre" },
     { front: "Équilibre de rotation : statique ou dynamique ?", back: "<strong>Statique</strong> = l'objet est immobile. <strong>Dynamique</strong> = il tourne à <strong>vitesse constante</strong>. Dans les deux cas \\(\\sum M = 0\\).", chapter: "equilibre" },
