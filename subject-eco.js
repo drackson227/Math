@@ -179,35 +179,54 @@
 
     <div class="synth-section">
       <h2>7. Les modes de preuve en droit civil belge</h2>
-      <p>Pour faire valoir un droit en justice, il faut le <strong>prouver</strong>. La règle de base (<strong>article 8.4 du Code civil</strong>) : <strong>celui qui réclame</strong> (qui allègue un fait) <strong>doit le prouver</strong> — pas celui qui nie.</p>
-      <p>Le droit civil belge reconnaît officiellement <strong>5 modes de preuve</strong> :</p>
-      <ul style="line-height:2;">
-        <li><strong>1. La preuve écrite (l'écrit)</strong> — deux sortes :
-          <ul style="line-height:1.9;">
-            <li><strong>Acte authentique</strong> : reçu par un <strong>officier public</strong> compétent (notaire, huissier). <strong>Force probante très forte.</strong> Ex. : un acte notarié.</li>
-            <li><strong>Acte sous signature privée</strong> : signé par les parties <strong>seules</strong> (sans officier public). Force probante <strong>moindre</strong> (peut être contesté).</li>
-          </ul>
-        </li>
-        <li><strong>2. Le témoignage</strong> : la déclaration d'une personne sur des faits qu'elle a constatés.</li>
-        <li><strong>3. Les présomptions</strong> : on <strong>déduit un fait inconnu à partir de faits connus</strong>.
-          <ul style="line-height:1.9;">
-            <li><strong>Présomption légale</strong> : prévue par la loi → elle <strong>s'impose au juge</strong>.</li>
-            <li><strong>Présomption de fait</strong> : laissée à l'<strong>appréciation du juge</strong>. Les indices doivent être <strong>sérieux, précis et concordants</strong>.</li>
-          </ul>
-        </li>
-        <li><strong>4. L'aveu</strong> : une partie reconnaît un fait.
-          <ul style="line-height:1.9;">
-            <li><strong>Aveu judiciaire</strong> (devant le juge) : <strong>irrévocable</strong>, force probante très forte.</li>
-            <li><strong>Aveu extrajudiciaire</strong> (SMS, e-mail) : force probante <strong>moindre</strong>.</li>
-          </ul>
-        </li>
-        <li><strong>5. Le serment</strong> : très <strong>rarement</strong> utilisé dans les tribunaux belges.</li>
+      <p>Pour faire valoir un droit en justice, il faut le <strong>prouver</strong>. La preuve d'un droit soulève trois questions :</p>
+      <ul style="line-height:1.95;">
+        <li><strong>Qui doit prouver ?</strong> <strong>Celui qui réclame l'exécution d'une obligation</strong> doit le prouver (<strong>art. 8.4</strong>).</li>
+        <li><strong>Que doit-on prouver ?</strong> L'<strong>existence du fait</strong> (ou de l'obligation) que l'on invoque.</li>
+        <li><strong>Comment prouver ?</strong> Par les <strong>modes de preuve</strong> : la loi n'admet que certains modes déterminés, qui n'ont pas la même <strong>force probante</strong> (degré de fiabilité).</li>
       </ul>
+      <p>Le <strong>débat contradictoire</strong> : tous les éléments de preuve invoqués par une partie au litige doivent être <strong>examinés et discutés par l'autre partie</strong>.</p>
+      <div class="key-rule"><div class="formula-main">Charge de la preuve (art. 8.4) : celui qui réclame l'exécution d'une obligation doit la prouver</div></div>
+
+      <h3 style="font-size:19px; color:var(--color-nav); margin:1rem 0 .4rem;">Les 5 modes de preuve</h3>
+      <p>Le droit civil belge connaît <strong>cinq modes de preuve</strong> distincts :</p>
+
+      <p style="margin:.6rem 0 .2rem;"><strong>1. La preuve par écrit signé</strong> — le mode le plus courant et souvent le plus solide. Il existe <strong>deux catégories d'écrit</strong> :</p>
+      <ul style="line-height:1.95;">
+        <li><strong>L'acte authentique</strong> (<strong>art. 8.15</strong>) : un <strong>écrit reçu, avec les solennités requises, par un officier public ou ministériel ayant compétence et qualité pour instrumenter</strong>. Il est rédigé par un <strong>officier public</strong> (notaire, huissier de justice, greffier), une personne <strong>sous serment</strong> : sa fonction officielle donne une valeur à l'écrit. Il <strong>fait pleine foi</strong> — le juge doit le croire, <strong>sauf si on prouve que c'est un faux</strong>. <em>Ex. : tes parents achètent une maison et signent chez le notaire → l'acte notarié prouve l'achat.</em></li>
+        <li><strong>L'acte sous signature privée</strong> (<strong>art. 8.15</strong>) : un <strong>écrit établi en vue de créer des conséquences juridiques, signé par la ou les parties avec l'intention de s'en approprier le contenu, et qui n'est pas un acte authentique</strong>. Rédigé et signé <strong>entre particuliers</strong>, sans officier public. Il a une <strong>force probante forte entre les parties</strong> qui l'ont signé. <em>Ex. : tu vends ton vélo à un ami pour 200 € et vous signez tous les deux un petit contrat.</em></li>
+      </ul>
+
+      <p style="margin:.6rem 0 .2rem;"><strong>2. La preuve par témoin (le témoignage)</strong> (<strong>art. 8.28 et suivants du Code judiciaire</strong>) : une <strong>personne raconte devant un juge ce qu'elle a vu, entendu ou vécu</strong>, en relation avec le conflit. Le témoignage n'est admis que <strong>lorsque la loi autorise la preuve libre</strong> ; le <strong>juge décide librement</strong> s'il croit le témoin ou non.</p>
+      <ul style="line-height:1.9;">
+        <li><em>Ex. simple : un piéton est témoin d'un accident entre deux conducteurs qu'il ne connaît pas.</em></li>
+        <li><em>Ex. : Sophie prête 1 500 € en cash à Lucas sans rien écrire ; 3 amis étaient présents. Si Lucas nie, leur <strong>témoignage concordant</strong> constitue une preuve.</em></li>
+      </ul>
+
+      <p style="margin:.6rem 0 .2rem;"><strong>3. La présomption de fait</strong> (<strong>art. 8.1, 9°</strong>) — <strong>particulièrement importante</strong>. C'est un <strong>raisonnement logique par lequel le juge déduit un fait inconnu à partir d'un ou plusieurs faits connus</strong> (comme résoudre une énigme à partir d'indices). Pour être valable, les indices doivent être :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>sérieux</strong> (crédibles et rationnels) ;</li>
+        <li><strong>précis</strong> (pas de vagues suppositions, mais des éléments concrets) ;</li>
+        <li><strong>concordants</strong> (plusieurs indices qui pointent tous dans la même direction).</li>
+      </ul>
+      <p><em>Ex. : Paul envoie un SMS à Marie « ok je te livre 50 canettes de coca demain à 15 h au prix de 30 € ». Le juge en déduit qu'il existe un <strong>contrat de vente</strong> (accord sur la chose, le prix et la livraison — indices sérieux, précis et concordants).</em></p>
+      <div class="key-rule"><div class="formula-main">Présomption légale = imposée par la loi (le juge doit l'appliquer) · Présomption de fait = laissée à l'appréciation du juge</div></div>
+      <p><em>Ex. de présomption légale (art. 315 de l'ancien Code civil) : l'enfant né pendant le mariage (ou dans les 300 jours suivant sa dissolution) a pour père le mari de la mère.</em></p>
+      <p><strong>Pièges à éviter :</strong> confondre présomption et simple <strong>supposition</strong> (non prouvée par des faits) ; se contenter d'un <strong>seul indice isolé</strong> (il en faut plusieurs, concordants) ; oublier que le juge garde son <strong>pouvoir d'appréciation</strong> (il peut rejeter une présomption qu'il juge insuffisante).</p>
+
+      <p style="margin:.6rem 0 .2rem;"><strong>4. L'aveu</strong> (<strong>art. 8.1, 10° et art. 8.30 à 8.32</strong>) : c'est quand une <strong>personne reconnaît elle-même un fait qui lui est défavorable</strong>. Deux types :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>L'aveu judiciaire</strong> (fait <strong>devant le juge</strong>) : <strong>force probante maximale</strong>, il est <strong>irrévocable</strong> (on ne peut plus revenir en arrière). <em>Ex. : devant le juge, Sophie dit « oui, je dois 2 500 € à Thomas pour l'ordinateur » → elle ne peut plus le nier, le juge doit la condamner à payer.</em></li>
+        <li><strong>L'aveu extrajudiciaire</strong> (fait <strong>hors du tribunal</strong> : e-mail, SMS, lettre) : accepté comme preuve mais avec <strong>moins de force</strong>.</li>
+      </ul>
+
+      <p style="margin:.6rem 0 .2rem;"><strong>5. Le serment</strong> (<strong>art. 8.1, 12° et art. 8.32 et suivants</strong>) : une <strong>déclaration solennelle</strong> d'une partie devant le juge, où elle affirme que ce qu'elle dit est vrai. Le <strong>serment décisoire</strong> fait dépendre le procès de ce serment. <em>Ex. : Pierre prétend avoir remboursé 5 000 € à Jean en cash, sans preuve. Jean peut demander à Pierre de jurer devant le juge : s'il jure, il gagne ; s'il refuse de jurer, il perd automatiquement.</em></p>
+
       <p style="margin-top:1rem;"><strong>La règle des 3.500 € :</strong> pour un acte juridique d'une valeur <strong>≥ 3.500 €</strong>, un <strong>écrit signé est obligatoire</strong>. En dessous de 3.500 €, la <strong>preuve est libre</strong> (tous les modes sont admis).</p>
       <p><strong>Aujourd'hui :</strong> la <strong>signature électronique qualifiée</strong> (itsme, eID) a la <strong>même valeur juridique</strong> que la signature manuscrite. Un <strong>huissier</strong> peut établir un <strong>constat électronique</strong> ayant valeur d'acte authentique.</p>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Si tu veux gagner un procès, tu dois <strong>prouver</strong> ce que tu affirmes. Le plus solide, c'est l'<strong>écrit</strong> fait chez le notaire (acte authentique). Un <strong>SMS</strong> ou un aveu hors tribunal, c'est plus faible. Une <strong>présomption de fait</strong> = le juge déduit la vérité à partir d'indices <strong>sérieux, précis et concordants</strong>. Et pour tout ce qui vaut <strong>3.500 € ou plus</strong>, il faut un papier signé.</div>
+        <div class="simple-exp-content">Pour gagner un procès, tu dois <strong>prouver</strong> ce que tu affirmes. Le plus solide = l'<strong>écrit</strong> chez le notaire (acte authentique, pleine foi). Un <strong>SMS</strong> ou un aveu hors tribunal = plus faible. La <strong>présomption de fait</strong> = le juge déduit la vérité d'indices <strong>sérieux, précis et concordants</strong>. L'<strong>aveu judiciaire</strong> est irrévocable. Et tout ce qui vaut <strong>3.500 € ou plus</strong> exige un écrit signé.</div>
       </div>
     </div>
 
@@ -540,6 +559,9 @@
     { q: "Un SMS peut constituer :", opts: ["un aveu extrajudiciaire ou une présomption de fait", "un acte authentique", "une preuve sans aucune valeur juridique", "exclusivement une présomption légale"], ans: 0, chapter: "preuve", difficulty: "difficile", exp: "Un SMS = aveu extrajudiciaire ou présomption de fait (force probante moindre qu'un aveu judiciaire)." },
     { q: "La signature électronique qualifiée (itsme, eID) a :", opts: ["la même valeur juridique que la signature manuscrite", "aucune valeur juridique", "une valeur seulement entre commerçants", "valeur d'acte authentique automatiquement"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "La signature électronique qualifiée (itsme, eID) = même valeur que la signature manuscrite." },
     { q: "Le serment, comme mode de preuve, est :", opts: ["très rarement utilisé dans les tribunaux belges", "le mode de preuve le plus fréquent", "réservé aux actes notariés", "interdit en droit belge"], ans: 0, chapter: "preuve", difficulty: "facile", exp: "Le serment est un mode de preuve qui existe mais est très rarement utilisé." },
+    { q: "Lequel de ces modes de preuve possède la force probante la plus forte ?", opts: ["l'aveu", "le témoignage", "la présomption de fait", "l'acte sous signature privée"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "L'aveu (surtout l'aveu judiciaire, irrévocable) a la force probante la plus forte." },
+    { q: "Pourquoi une capture d'écran seule a-t-elle une faible valeur probante ?", opts: ["car elle peut facilement être manipulée et son intégrité n'est pas garantie", "car elle doit obligatoirement être signée par un notaire", "car un juge ne peut jamais l'accepter", "car elle est trop coûteuse à produire"], ans: 0, chapter: "preuve", difficulty: "intermediaire", exp: "Une capture d'écran est facilement manipulable : son intégrité n'est pas garantie." },
+    { q: "Serment décisoire : si la partie refuse de jurer devant le juge ?", opts: ["elle perd automatiquement son procès", "elle gagne automatiquement", "le procès est annulé", "elle doit payer une amende"], ans: 0, chapter: "preuve", difficulty: "difficile", exp: "Le serment décisoire fait dépendre le procès du serment : jurer = gagner ; refuser de jurer = perdre automatiquement." },
     { q: "La mondialisation, c'est avant tout :", opts: ["l'intensification des échanges entre les parties du monde", "la fin du commerce international", "un pays qui se ferme aux autres", "une monnaie unique mondiale"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Mondialisation = mise en relation du monde par l'intensification des échanges (marchandises, services, capitaux, informations, personnes).", simple: "C'est l'idée que tout circule de plus en plus entre les pays : produits, argent, infos, gens. Le monde devient un seul grand marché connecté." },
     { q: "Lequel n'est PAS un type de flux mondial ?", opts: ["les flux de montagnes", "les flux de marchandises", "les flux de capitaux", "les flux d'informations"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Les flux = marchandises, services, capitaux, informations et personnes. « Montagnes » n'a aucun sens ici." },
     { q: "Le 1ᵉ⁰ exportateur mondial de marchandises est :", opts: ["la Chine", "la Belgique", "le Brésil", "la Russie"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "La Chine est le 1ᵉ⁰ exportateur de marchandises, devant les États-Unis et l'Allemagne." },
@@ -619,6 +641,12 @@
     { front: "La règle des 3.500 € (preuve) ?", back: "Acte juridique <strong>≥ 3.500 €</strong> → <strong>écrit signé obligatoire</strong>. En dessous → <strong>preuve libre</strong> (tous modes admis). La signature électronique qualifiée (itsme, eID) = même valeur que la manuscrite.", chapter: "preuve" },
     { front: "Le serment est-il un mode de preuve courant ?", back: "<strong>Non</strong> : le serment est <strong>devenu rare</strong> dans la pratique judiciaire moderne. Il reste néanmoins l'un des <strong>5 modes</strong> de preuve.", chapter: "preuve" },
     { front: "Un huissier peut-il dresser un constat électronique ?", back: "<strong>Oui</strong> : un huissier peut établir un <strong>constat électronique</strong> qui a <strong>valeur d'acte authentique</strong>.", chapter: "preuve" },
+    { front: "Qu'est-ce que le débat contradictoire ?", back: "Tous les éléments de preuve invoqués par une partie doivent être <strong>examinés et discutés par l'autre partie</strong>.", chapter: "preuve" },
+    { front: "Définition de l'acte authentique (art. 8.15) ?", back: "Un <strong>écrit reçu, avec les solennités requises, par un officier public ou ministériel ayant compétence et qualité pour instrumenter</strong> (notaire, huissier, greffier). Il <strong>fait pleine foi</strong> (sauf si on prouve un faux).", chapter: "preuve" },
+    { front: "Définition de l'acte sous signature privée (art. 8.15) ?", back: "Un <strong>écrit établi en vue de créer des conséquences juridiques, signé par la ou les parties avec l'intention de s'en approprier le contenu</strong>, et qui n'est pas authentique. Force probante forte <strong>entre les parties</strong>.", chapter: "preuve" },
+    { front: "La preuve par témoin (art. 8.28) ?", back: "Une personne <strong>raconte devant le juge ce qu'elle a vu, entendu ou vécu</strong>. Admise seulement si la loi autorise la <strong>preuve libre</strong> ; le juge croit (ou non) librement le témoin.", chapter: "preuve" },
+    { front: "Qu'est-ce que le serment décisoire ?", back: "Une <strong>déclaration solennelle</strong> devant le juge dont dépend le procès : si la partie <strong>jure</strong>, elle gagne ; si elle <strong>refuse de jurer</strong>, elle perd automatiquement.", chapter: "preuve" },
+    { front: "Quelles sont les conditions d'une présomption de fait valable ?", back: "Les indices doivent être <strong>sérieux</strong> (crédibles), <strong>précis</strong> (concrets) et <strong>concordants</strong> (qui pointent dans la même direction).", chapter: "preuve" },
     { front: "Qu'est-ce que la mondialisation ?", back: "La mise en relation des parties du monde par l'<strong>intensification des échanges</strong> (marchandises, services, capitaux, informations, personnes) → <strong>interdépendance</strong> des pays.", chapter: "mondialisation" },
     { front: "Les 5 types de flux mondiaux ?", back: "<strong>Marchandises</strong>, <strong>services</strong>, <strong>capitaux</strong> (argent), <strong>informations</strong>, <strong>personnes</strong> (migrations).", chapter: "mondialisation" },
     { front: "Les 3 plus grands exportateurs de marchandises ?", back: "La <strong>Chine</strong> (1ᵉ⁰), les <strong>États-Unis</strong>, l'<strong>Allemagne</strong>.", chapter: "mondialisation" },
