@@ -273,27 +273,36 @@
     <div class="synth-section">
       <h2>9. Le droit des contrats</h2>
       <p>Selon le <strong>nouvel article 5.4</strong> du Code civil : « le <strong>contrat</strong>, ou convention, est un <strong>accord de volontés entre deux ou plusieurs personnes</strong> avec l'<strong>intention de faire naître des effets de droit</strong> ». <span style="color:var(--text-secondary);">(Ancien Code civil : « un accord de deux ou plusieurs volontés conclu dans le but de produire mutuellement des droits et des obligations ».)</span></p>
-      <ul style="line-height:2;">
-        <li><strong>L'autonomie de la volonté</strong> : chaque partie est <strong>libre</strong> de contracter, de <strong>choisir son cocontractant</strong> et de <strong>déterminer le contenu</strong> de l'accord (= la liberté contractuelle).</li>
-        <li><strong>Les restrictions</strong> à cette liberté : on ne peut pas tout prévoir. Ex. : interdiction de fixer un <strong>salaire inférieur au salaire minimum légal</strong>. Ces limites viennent des <strong>lois impératives</strong>.</li>
-        <li><strong>Loi supplétive vs loi impérative</strong> :
+      <p>Le contrat repose sur le <strong>principe de l'autonomie de la volonté</strong> (aussi appelé <strong>liberté contractuelle</strong>) : chacun est <strong>libre de contracter ou de ne pas contracter</strong>, de <strong>choisir son cocontractant</strong> et de <strong>déterminer librement le contenu</strong> de l'accord.</p>
+
+      <h3 style="font-size:18px; color:var(--color-nav); margin:1rem 0 .3rem;">Les limites à la liberté contractuelle</h3>
+      <ul style="line-height:1.95;">
+        <li><strong>Les lois supplétives</strong> : elles viennent <strong>compléter le silence d'un contrat</strong>. On peut <strong>y échapper</strong> en précisant la volonté des contractants par écrit dans le contrat. <em>Ex. : selon le Code civil, les frais de transport sont à la charge du vendeur ; comme cette règle est supplétive, on peut préciser dans le contrat qu'ils sont à la charge de l'acheteur.</em></li>
+        <li><strong>Les restrictions incontournables</strong> :
           <ul style="line-height:1.9;">
-            <li><strong>Loi supplétive</strong> : elle <strong>complète</strong> le contrat là où il est muet, mais peut être <strong>écartée</strong> par les parties.</li>
-            <li><strong>Loi impérative</strong> : elle protège la <strong>partie faible</strong> et ne peut <strong>pas</strong> être écartée.</li>
-          </ul>
-        </li>
-        <li><strong>La capacité</strong> : il faut être <strong>capable</strong> de contracter. Sont <strong>incapables</strong> : les <strong>mineurs</strong> et les personnes atteintes de <strong>déficience mentale</strong>.</li>
-        <li><strong>Les vices du consentement</strong> (ils rendent le contrat <strong>annulable</strong>) :
-          <ul style="line-height:1.9;">
-            <li><strong>L'erreur</strong> : <strong>involontaire</strong> ; elle n'annule le contrat que si elle porte sur un <strong>élément fondamental</strong> (substantiel).</li>
-            <li><strong>Le dol</strong> : une <strong>machination volontaire</strong> (tromperie intentionnelle) pour pousser l'autre à contracter.</li>
-            <li><strong>La violence</strong> : consentement obtenu sous la <strong>menace, physique ou morale</strong>.</li>
+            <li>le respect de l'<strong>ordre public</strong> — <em>ex. : un contrat visant l'engagement d'un tueur à gages est interdit ;</em></li>
+            <li>le respect des <strong>lois impératives</strong>, qui s'imposent sans qu'on puisse y échapper par le contrat. Pourquoi ? Pour <strong>protéger le cocontractant supposé faible</strong> (dans une négociation, une partie peut se trouver en position d'infériorité). <em>Ex. : interdiction de fixer un salaire inférieur au salaire minimum légal.</em></li>
           </ul>
         </li>
       </ul>
+
+      <h3 style="font-size:18px; color:var(--color-nav); margin:1rem 0 .3rem;">Les 2 conditions de validité du contrat</h3>
+      <p><strong>① La capacité de contracter.</strong> Une <strong>incapacité</strong> peut exister du fait :</p>
+      <ul style="line-height:1.9;">
+        <li>de l'<strong>âge</strong> : le <strong>mineur d'âge</strong> ne peut généralement pas signer un contrat (s'il a des biens, ils sont gérés par les parents ou un tuteur) ;</li>
+        <li>de l'<strong>état mental</strong> : la <strong>déficience mentale</strong> touchant un adulte peut l'empêcher de gérer ses biens ;</li>
+        <li>d'un <strong>autre fait</strong> : ex. une personne condamnée pour fraude peut se voir interdire toute activité indépendante par le tribunal de l'entreprise.</li>
+      </ul>
+      <p><strong>② Le consentement de chaque partie</strong>, donné <strong>librement et en connaissance de cause</strong>. Le contrat n'existe que s'il y a un <strong>accord de volontés</strong> ; il peut être <strong>annulé</strong> s'il est affecté par un <strong>vice du consentement</strong>. Les trois vices :</p>
+      <ul style="line-height:1.95;">
+        <li><strong>L'erreur</strong> : une <strong>fausse information ou une absence d'information involontaire</strong>. Elle n'entraîne l'annulation que si elle porte sur un <strong>élément substantiel (fondamental)</strong> du contrat (il faut prouver que sans l'erreur, on n'aurait pas conclu). <em>Ex. : la vente d'un terrain cru « à bâtir » ; la vente d'une maison située sur le futur trajet d'une autoroute, ignoré des deux parties.</em></li>
+        <li><strong>Le dol</strong> : une <strong>machination</strong> (donc <strong>volontaire</strong>) — des manœuvres d'une partie pour amener l'autre à conclure un contrat qu'elle n'aurait pas conclu. Il peut entraîner l'<strong>annulation</strong> ou des <strong>dommages et intérêts</strong>. <em>Ex. : M. X vend une voiture d'occasion après avoir trafiqué le compteur (30 000 km affichés au lieu de 60 000 réels).</em></li>
+        <li><strong>La violence</strong> : le consentement est obtenu sous la <strong>menace, physique ou morale</strong>. <em>Ex. : Guillaume signe une reconnaissance de dette de 10 000 € sous la menace d'un chantage.</em></li>
+      </ul>
+      <div class="key-rule"><div class="formula-main">Contrat valable = respect de l'ordre public + des lois impératives · capacité de contracter · consentement libre (sans erreur, dol ni violence)</div></div>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
-        <div class="simple-exp-content">Un contrat = un accord pour créer des droits/obligations. En principe tu fais ce que tu veux (<strong>autonomie de la volonté</strong>), sauf interdits (lois impératives, ex. salaire minimum). Si ton « oui » est faussé — par une <strong>erreur</strong> grave, une <strong>tromperie (dol)</strong> ou une <strong>menace (violence)</strong> — le contrat peut être <strong>annulé</strong>. Et un <strong>mineur</strong> ne peut pas signer n'importe quoi.</div>
+        <div class="simple-exp-content">Un contrat = un accord pour créer des droits/obligations. En principe tu fais ce que tu veux (<strong>autonomie de la volonté</strong>), sauf l'<strong>ordre public</strong> et les <strong>lois impératives</strong> (ex. salaire minimum). Il faut être <strong>capable</strong> (un mineur ne signe pas n'importe quoi) et donner un « oui » libre : si ton consentement est faussé par une <strong>erreur</strong>, une <strong>tromperie (dol)</strong> ou une <strong>menace (violence)</strong>, le contrat peut être <strong>annulé</strong>.</div>
       </div>
     </div>
 
@@ -633,6 +642,12 @@
     { front: "Loi supplétive vs loi impérative ?", back: "<strong>Supplétive</strong> : complète le contrat muet, <strong>écartable</strong> par les parties. <strong>Impérative</strong> : protège la <strong>partie faible</strong>, <strong>non écartable</strong>.", chapter: "contrats" },
     { front: "Les 3 vices du consentement ?", back: "<strong>Erreur</strong> (involontaire, sur un élément fondamental) · <strong>Dol</strong> (machination volontaire/tromperie) · <strong>Violence</strong> (menace physique ou morale). Ils rendent le contrat <strong>annulable</strong>.", chapter: "contrats" },
     { front: "Qui est incapable de contracter ?", back: "Les <strong>mineurs</strong> et les personnes atteintes de <strong>déficience mentale</strong>.", chapter: "contrats" },
+    { front: "Les causes d'incapacité de contracter ?", back: "L'<strong>âge</strong> (le mineur d'âge), l'<strong>état mental</strong> (déficience mentale d'un adulte), ou un <strong>autre fait</strong> (ex. personne condamnée pour fraude, interdite d'activité indépendante).", chapter: "contrats" },
+    { front: "Le vice du consentement : l'erreur ?", back: "Une <strong>fausse information ou une absence d'information involontaire</strong>. Elle annule le contrat seulement si elle porte sur un <strong>élément substantiel (fondamental)</strong>.", chapter: "contrats" },
+    { front: "Le vice du consentement : le dol ?", back: "Une <strong>machination</strong> (donc <strong>volontaire</strong>) : des manœuvres d'une partie pour amener l'autre à conclure. → annulation ou <strong>dommages et intérêts</strong>. Ex. : trafiquer le compteur d'une voiture.", chapter: "contrats" },
+    { front: "Le vice du consentement : la violence ?", back: "Le consentement est obtenu sous la <strong>menace, physique ou morale</strong> (ex. un chantage). Le contrat est annulable.", chapter: "contrats" },
+    { front: "Les 2 restrictions incontournables à la liberté contractuelle ?", back: "Le respect de l'<strong>ordre public</strong> (ex. interdit : engager un tueur à gages) et des <strong>lois impératives</strong> (qui protègent le cocontractant faible, ex. salaire minimum).", chapter: "contrats" },
+    { front: "Loi supplétive : un exemple ?", back: "Les <strong>frais de transport</strong> : le Code civil les met à charge du <strong>vendeur</strong>, mais comme la règle est supplétive, on peut préciser dans le contrat qu'ils sont à charge de l'<strong>acheteur</strong>.", chapter: "contrats" },
     { front: "Terme vs condition (obligations) ?", back: "<strong>Terme</strong> = événement futur et <strong>certain</strong> (suspensif / extinctif). <strong>Condition</strong> = futur et <strong>incertain</strong> (suspensive : suspend la naissance / résolutoire : annule).", chapter: "obligations" },
     { front: "Divisibilité (principe des obligations) ?", back: "La <strong>dette</strong> se divise par le nombre de <strong>débiteurs</strong>, la <strong>créance</strong> par le nombre de <strong>créanciers</strong>. Ex. : X et Y prêtent 10.000 € à Z → chacun réclame <strong>5.000 €</strong>.", chapter: "obligations" },
     { front: "Solidarité active vs passive ?", back: "<strong>Active</strong> (plusieurs créanciers) : le débiteur peut tout payer à un seul. <strong>Passive</strong> (plusieurs débiteurs) : le créancier peut réclamer <strong>tout à un seul</strong> débiteur (qui se retourne ensuite vers les autres).", chapter: "obligations" },
