@@ -246,6 +246,80 @@
         <div class="simple-exp-content">Un contrat = un accord pour créer des droits/obligations. En principe tu fais ce que tu veux (<strong>autonomie de la volonté</strong>), sauf interdits (lois impératives, ex. salaire minimum). Si ton « oui » est faussé — par une <strong>erreur</strong> grave, une <strong>tromperie (dol)</strong> ou une <strong>menace (violence)</strong> — le contrat peut être <strong>annulé</strong>. Et un <strong>mineur</strong> ne peut pas signer n'importe quoi.</div>
       </div>
     </div>
+
+    <div class="synth-section">
+      <h2>10. Les sources des obligations</h2>
+      <p>Selon l'<strong>article 5.1 du nouveau Code civil</strong>, une <strong>obligation</strong> est « un <strong>lien de droit</strong> en vertu duquel un <strong>créancier</strong> peut exiger, si nécessaire en justice, d'un <strong>débiteur</strong> l'exécution d'une <strong>prestation</strong> ».</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Créancier</strong> = celui à qui on doit ; <strong>débiteur</strong> = celui qui doit ; <strong>prestation</strong> = donner, faire ou ne pas faire quelque chose.</li>
+      </ul>
+      <p>D'où <strong>naissent</strong> les obligations ? Il existe <strong>trois sources</strong> :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>1. La loi</strong> : l'obligation est imposée <strong>directement par la loi</strong>, sans aucun accord. Ex. (<strong>art. 205</strong>, toujours d'application) : les <strong>enfants doivent des aliments</strong> à leurs père et mère (et ascendants) qui sont dans le besoin.</li>
+        <li><strong>2. Le contrat</strong> : l'obligation naît d'un <strong>accord de volontés</strong> (obligations contractuelles).</li>
+        <li><strong>3. Les faits juridiques</strong> : un fait produit des effets de droit <strong>sans accord</strong>. On distingue :
+          <ul style="line-height:1.9;">
+            <li><strong>La responsabilité extracontractuelle</strong> : le <strong>délit</strong> (faute <em>intentionnelle</em>) et le <strong>quasi-délit</strong> (faute <em>non intentionnelle</em> : négligence, imprudence). <strong>Art. 5.137</strong> : « Toute personne est responsable du dommage qu'elle cause à autrui par sa faute. »</li>
+            <li><strong>Les quasi-contrats</strong> : on est engagé <strong>sans avoir rien signé</strong> (ex. gérer l'affaire d'un absent, ou devoir rembourser une somme reçue par erreur).</li>
+          </ul>
+        </li>
+      </ul>
+      <svg viewBox="0 0 360 158" width="330" style="max-width:100%;height:auto;margin:10px 0 4px" role="img" aria-label="Schéma : les trois sources des obligations">
+        <rect x="128" y="8" width="104" height="32" rx="8" fill="rgba(168,85,247,.20)" stroke="#a855f7" stroke-width="1.5"/>
+        <text x="180" y="29" fill="#e9d5ff" font-size="13" text-anchor="middle" font-weight="bold">OBLIGATION</text>
+        <line x1="180" y1="40" x2="58" y2="74" stroke="#9ca3af" stroke-width="1.4"/>
+        <line x1="180" y1="40" x2="180" y2="74" stroke="#9ca3af" stroke-width="1.4"/>
+        <line x1="180" y1="40" x2="302" y2="74" stroke="#9ca3af" stroke-width="1.4"/>
+        <rect x="14" y="74" width="88" height="30" rx="6" fill="rgba(52,211,153,.15)" stroke="#34d399"/>
+        <text x="58" y="93" fill="#6ee7b7" font-size="12" text-anchor="middle" font-weight="bold">La loi</text>
+        <text x="58" y="120" fill="#9ca3af" font-size="10" text-anchor="middle">art. 205 (aliments)</text>
+        <rect x="136" y="74" width="88" height="30" rx="6" fill="rgba(96,165,250,.15)" stroke="#60a5fa"/>
+        <text x="180" y="93" fill="#93c5fd" font-size="12" text-anchor="middle" font-weight="bold">Le contrat</text>
+        <text x="180" y="120" fill="#9ca3af" font-size="10" text-anchor="middle">accord de volontés</text>
+        <rect x="258" y="74" width="88" height="30" rx="6" fill="rgba(251,191,36,.15)" stroke="#fbbf24"/>
+        <text x="302" y="86" fill="#fcd34d" font-size="11" text-anchor="middle" font-weight="bold">Les faits</text>
+        <text x="302" y="98" fill="#fcd34d" font-size="11" text-anchor="middle" font-weight="bold">juridiques</text>
+        <text x="302" y="120" fill="#9ca3af" font-size="9.5" text-anchor="middle">resp. extracontr.</text>
+        <text x="302" y="132" fill="#9ca3af" font-size="9.5" text-anchor="middle">+ quasi-contrats</text>
+      </svg>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Une <strong>obligation</strong>, c'est « devoir quelque chose à quelqu'un ». Il y a 3 façons de se retrouver obligé : parce que la <strong>loi</strong> l'impose (nourrir ses parents âgés), parce qu'on a <strong>signé un contrat</strong>, ou à cause d'un <strong>fait</strong> (j'ai causé un dommage → je dois réparer, même sans contrat).</div>
+      </div>
+      <div class="key-rule"><div class="formula-main">3 sources d'obligations : la loi · le contrat · les faits juridiques (responsabilité extracontractuelle + quasi-contrats)</div></div>
+    </div>
+
+    <div class="synth-section">
+      <h2>11. Les voisins : les servitudes</h2>
+      <p>Quand deux <strong>terrains (fonds)</strong> voisins appartiennent à des propriétaires différents, le droit organise leurs rapports. Une <strong>servitude</strong> est une <strong>charge</strong> imposée à un terrain — le <strong>fonds servant</strong> — au profit d'un autre terrain — le <strong>fonds dominant</strong> — appartenant à un autre propriétaire.</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Fonds dominant</strong> = le terrain qui <strong>profite</strong> de la servitude (il a le droit).</li>
+        <li><strong>Fonds servant</strong> = le terrain qui <strong>supporte</strong> la charge.</li>
+      </ul>
+      <p>L'exemple le plus ancien est la <strong>servitude de passage</strong>. Imagine un terrain <strong>A</strong> qui n'a <strong>pas d'accès direct à la voie publique</strong>, parce qu'il en est séparé par le terrain <strong>B</strong> : on dit que A est <strong>enclavé</strong>. Sans passage, le terrain A est <strong>inexploitable</strong> — c'est un véritable <strong>besoin économique</strong>.</p>
+      <p>Deux solutions sont possibles :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>1.</strong> A <strong>achète une bande de terrain</strong> à B et en devient propriétaire.</li>
+        <li><strong>2. La servitude de passage</strong> : A obtient le <strong>droit de passer</strong> sur le fonds de B <strong>sans en devenir propriétaire</strong>. B reste propriétaire mais doit <strong>supporter</strong> le passage.</li>
+      </ul>
+      <svg viewBox="0 0 340 210" width="312" style="max-width:100%;height:auto;margin:10px 0 4px" role="img" aria-label="Schéma : terrain A enclavé et servitude de passage vers la voie publique à travers le terrain B">
+        <rect x="12" y="10" width="316" height="30" rx="4" fill="#374151" stroke="#9ca3af"/>
+        <text x="170" y="30" fill="#e5e7eb" font-size="13" text-anchor="middle" font-weight="bold">Voie publique</text>
+        <rect x="12" y="50" width="316" height="60" rx="4" fill="rgba(96,165,250,.14)" stroke="#60a5fa"/>
+        <text x="170" y="85" fill="#93c5fd" font-size="13" text-anchor="middle">Terrain B — fonds servant</text>
+        <rect x="12" y="120" width="316" height="76" rx="4" fill="rgba(248,113,113,.12)" stroke="#f87171"/>
+        <text x="170" y="150" fill="#fca5a5" font-size="13" text-anchor="middle" font-weight="bold">Terrain A — ENCLAVÉ</text>
+        <text x="170" y="170" fill="#fca5a5" font-size="11" text-anchor="middle">(fonds dominant)</text>
+        <defs><marker id="svArr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L7,4L0,8z" fill="#34d399"/></marker></defs>
+        <line x1="278" y1="158" x2="278" y2="42" stroke="#34d399" stroke-width="3" stroke-dasharray="7 4" marker-end="url(#svArr)"/>
+        <text x="240" y="108" fill="#6ee7b7" font-size="11" font-weight="bold">passage</text>
+      </svg>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Ton terrain est « coincé » derrière celui du voisin, sans accès à la route ? La <strong>servitude de passage</strong> te donne le <strong>droit de traverser</strong> chez lui pour rejoindre la rue — sans racheter son terrain. Le terrain qui profite = <strong>dominant</strong> ; celui qui subit = <strong>servant</strong>.</div>
+      </div>
+      <div class="key-rule"><div class="formula-main">Servitude = charge sur le fonds servant au profit du fonds dominant · terrain enclavé → servitude de passage</div></div>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES ---------------------- */
@@ -412,7 +486,19 @@
     { q: "La réparation d'un dommage se fait souvent par :", opts: ["des dommages-intérêts (une somme d'argent)", "une peine de prison", "un avertissement scolaire", "rien du tout"], ans: 0, chapter: "responsabilite", difficulty: "facile", exp: "La victime est indemnisée, en général par des dommages-intérêts (réparation par équivalent)." },
     { q: "Différence entre responsabilité civile et pénale ?", opts: ["civile = réparer la victime ; pénale = punir l'infraction", "elles sont identiques", "civile = prison ; pénale = argent", "la civile n'existe qu'au travail"], ans: 0, chapter: "responsabilite", difficulty: "intermediaire", exp: "Civile = réparer le dommage (dommages-intérêts) ; pénale = sanctionner une infraction (amende, prison) au nom de la société.", simple: "Le civil, c'est pour dédommager la victime (payer). Le pénal, c'est pour punir celui qui a enfreint la loi (amende ou prison)." },
     { q: "En Belgique, à partir de quel âge est-on responsable civilement ?", opts: ["il n'y a pas d'âge fixe : c'est le discernement qui compte", "exactement 18 ans", "exactement 12 ans", "dès la naissance"], ans: 0, chapter: "responsabilite", difficulty: "difficile", exp: "Pas d'âge légal précis : on regarde si l'enfant avait le discernement (capacité de comprendre la portée de ses actes), apprécié par le juge.", simple: "Pas de chiffre magique (genre 18 ans). Le juge se demande : « l'enfant comprenait-il que son acte pouvait causer un dommage ? » C'est ça, le discernement. Un tout-petit ne l'a pas." },
-    { q: "Une assurance « RC familiale » sert à :", opts: ["couvrir les dommages causés à autrui par les membres de la famille", "rembourser tes propres vacances", "payer tes amendes pénales", "garantir un salaire"], ans: 0, chapter: "responsabilite", difficulty: "intermediaire", exp: "L'assurance responsabilité civile (RC) prend en charge la réparation des dommages que tu (ou ta famille) causes à autrui.", simple: "C'est l'assurance qui paie à ta place quand toi ou ta famille cassez/blessez quelque chose ou quelqu'un par accident. Elle couvre la « réparation » à donner à la victime, pas tes propres dégâts." }
+    { q: "Une assurance « RC familiale » sert à :", opts: ["couvrir les dommages causés à autrui par les membres de la famille", "rembourser tes propres vacances", "payer tes amendes pénales", "garantir un salaire"], ans: 0, chapter: "responsabilite", difficulty: "intermediaire", exp: "L'assurance responsabilité civile (RC) prend en charge la réparation des dommages que tu (ou ta famille) causes à autrui.", simple: "C'est l'assurance qui paie à ta place quand toi ou ta famille cassez/blessez quelque chose ou quelqu'un par accident. Elle couvre la « réparation » à donner à la victime, pas tes propres dégâts." },
+    // ── Les sources des obligations (art. 5.1, 205, 5.137) ──
+    { q: "Selon l'art. 5.1 du Code civil, une obligation est :", opts: ["un lien de droit : le créancier peut exiger du débiteur l'exécution d'une prestation", "une simple promesse sans valeur", "une loi votée au parlement", "une décision de la police"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "Obligation = lien de droit. Le créancier (à qui on doit) peut exiger du débiteur (qui doit) une prestation : donner, faire ou ne pas faire." },
+    { q: "Quelles sont les 3 sources des obligations ?", opts: ["la loi, le contrat, les faits juridiques", "le juge, l'avocat, le notaire", "l'écrit, le témoignage, l'aveu", "la faute, le dommage, le lien"], ans: 0, chapter: "obligations", difficulty: "facile", exp: "Une obligation naît soit de la loi, soit d'un contrat, soit d'un fait juridique." },
+    { q: "L'obligation des enfants de verser des aliments à leurs parents dans le besoin (art. 205) naît :", opts: ["de la loi", "d'un contrat", "d'un quasi-contrat", "d'un serment"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "Personne n'a rien signé : c'est la loi (art. 205) qui impose directement cette obligation." },
+    { q: "La responsabilité extracontractuelle (délit, quasi-délit) est une obligation née :", opts: ["d'un fait juridique", "d'un contrat", "de la loi seule", "d'un serment"], ans: 0, chapter: "obligations", difficulty: "intermediaire", exp: "Le délit/quasi-délit est un fait juridique : il oblige à réparer le dommage causé, même sans contrat (art. 5.137)." },
+    { q: "Différence entre délit et quasi-délit ?", opts: ["délit = faute intentionnelle ; quasi-délit = faute non intentionnelle (négligence)", "aucune différence", "le délit est civil, le quasi-délit pénal", "le délit ne concerne que les contrats"], ans: 0, chapter: "obligations", difficulty: "difficile", exp: "Délit = faute volontaire/intentionnelle ; quasi-délit = faute involontaire (imprudence, négligence). Les deux obligent à réparer." },
+    // ── Les voisins : les servitudes (droit de propriété) ──
+    { q: "Une servitude est :", opts: ["une charge imposée à un fonds (servant) au profit d'un autre fonds (dominant)", "un impôt sur les terrains", "un contrat de location", "une amende infligée au voisin"], ans: 0, chapter: "servitudes", difficulty: "intermediaire", exp: "Servitude = charge sur le fonds servant au profit du fonds dominant, appartenant à un autre propriétaire." },
+    { q: "Le fonds DOMINANT est :", opts: ["le terrain qui profite de la servitude", "le terrain qui supporte la charge", "le terrain de l'État", "le plus grand terrain"], ans: 0, chapter: "servitudes", difficulty: "facile", exp: "Dominant = celui qui a le droit (qui profite). Servant = celui qui supporte la charge." },
+    { q: "Un terrain sans accès direct à la voie publique est dit :", opts: ["enclavé", "dominant", "indivis", "servant"], ans: 0, chapter: "servitudes", difficulty: "facile", exp: "Un terrain enclavé est séparé de la voie publique par d'autres fonds → il a besoin d'une servitude de passage." },
+    { q: "La servitude de passage permet au fonds dominant de :", opts: ["passer sur le fonds servant sans en devenir propriétaire", "devenir propriétaire du terrain voisin", "interdire l'accès au voisin", "ne plus payer d'impôts"], ans: 0, chapter: "servitudes", difficulty: "intermediaire", exp: "La servitude donne un droit de passage ; le fonds servant reste la propriété de son propriétaire, qui doit supporter le passage." },
+    { q: "Pourquoi la servitude de passage répond-elle à un « besoin économique » ?", opts: ["sans accès à la route, le terrain enclavé est inexploitable", "parce qu'elle rapporte de l'argent à l'État", "parce qu'elle fait monter les impôts", "parce qu'elle crée des emplois"], ans: 0, chapter: "servitudes", difficulty: "difficile", exp: "Un terrain enclavé qu'on ne peut ni atteindre ni exploiter perd toute valeur : le passage est une nécessité économique." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -451,11 +537,19 @@
     { front: "Comment répare-t-on un dommage ?", back: "En général par des <strong>dommages-intérêts</strong> (une somme d'argent versée à la victime).", chapter: "responsabilite" },
     { front: "Responsabilité civile vs pénale ?", back: "<strong>Civile</strong> = réparer le dommage de la victime (dommages-intérêts). <strong>Pénale</strong> = punir une infraction au nom de la société (amende, prison).", chapter: "responsabilite" },
     { front: "À quel âge est-on responsable civilement (Belgique) ?", back: "Pas d'<strong>âge fixe</strong> : ce qui compte est le <strong>discernement</strong> (comprendre la portée de ses actes), apprécié par le juge.", chapter: "responsabilite" },
-    { front: "À quoi sert une assurance RC ?", back: "L'assurance <strong>responsabilité civile</strong> (ex. RC familiale) <strong>couvre les dommages</strong> que tu causes à autrui.", chapter: "responsabilite" }
+    { front: "À quoi sert une assurance RC ?", back: "L'assurance <strong>responsabilité civile</strong> (ex. RC familiale) <strong>couvre les dommages</strong> que tu causes à autrui.", chapter: "responsabilite" },
+    { front: "Définition d'une obligation (art. 5.1) ?", back: "Un <strong>lien de droit</strong> : le <strong>créancier</strong> peut exiger d'un <strong>débiteur</strong> l'exécution d'une <strong>prestation</strong> (donner, faire, ne pas faire).", chapter: "obligations" },
+    { front: "Les 3 sources des obligations ?", back: "<strong>1. La loi</strong> (ex. art. 205 : aliments) · <strong>2. Le contrat</strong> (accord de volontés) · <strong>3. Les faits juridiques</strong> (responsabilité extracontractuelle + quasi-contrats).", chapter: "obligations" },
+    { front: "Délit vs quasi-délit ?", back: "<strong>Délit</strong> = faute <strong>intentionnelle</strong>. <strong>Quasi-délit</strong> = faute <strong>non intentionnelle</strong> (négligence, imprudence). Les deux obligent à <strong>réparer</strong> (art. 5.137).", chapter: "obligations" },
+    { front: "Qu'est-ce qu'un quasi-contrat ?", back: "Un engagement <strong>sans rien avoir signé</strong> : ex. gérer l'affaire d'un absent, ou devoir <strong>rembourser</strong> une somme reçue <strong>par erreur</strong>.", chapter: "obligations" },
+    { front: "Qu'est-ce qu'une servitude ?", back: "Une <strong>charge</strong> imposée à un terrain (le <strong>fonds servant</strong>) au profit d'un autre terrain (le <strong>fonds dominant</strong>), appartenant à un autre propriétaire.", chapter: "servitudes" },
+    { front: "Fonds dominant vs fonds servant ?", back: "<strong>Dominant</strong> = le terrain qui <strong>profite</strong> de la servitude (il a le droit). <strong>Servant</strong> = le terrain qui <strong>supporte</strong> la charge.", chapter: "servitudes" },
+    { front: "Qu'est-ce qu'un terrain enclavé ?", back: "Un terrain <strong>sans accès direct à la voie publique</strong> (séparé d'elle par d'autres fonds) → il a besoin d'une <strong>servitude de passage</strong>.", chapter: "servitudes" },
+    { front: "La servitude de passage ?", back: "Elle donne au fonds dominant le <strong>droit de passer</strong> sur le fonds servant <strong>sans en devenir propriétaire</strong>. Elle répond au <strong>besoin économique</strong> d'exploiter un terrain enclavé.", chapter: "servitudes" }
   ];
 
   window.registerSubject('eco', {
-    subtitle: 'Sciences éco (4ᵉ) — la mondialisation & la responsabilité civile',
+    subtitle: 'Sciences éco (4ᵉ) — mondialisation & droit civil (responsabilité, obligations, preuve, contrats, servitudes)',
     content: {
       sections: sections,
       coursAuto: true,
@@ -463,8 +557,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
-      chapOrder: ['mondialisation', 'responsabilite', 'preuve', 'obligations', 'contrats'],
-      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)', obligations: 'Modalités des obligations', contrats: 'Le droit des contrats' }
+      chapOrder: ['mondialisation', 'responsabilite', 'preuve', 'obligations', 'contrats', 'servitudes'],
+      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)', obligations: 'Les obligations (modalités & sources)', contrats: 'Le droit des contrats', servitudes: 'Les voisins & servitudes' }
     }
   });
 })();
