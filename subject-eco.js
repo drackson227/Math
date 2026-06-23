@@ -61,7 +61,7 @@
     </div>
 
     <div class="synth-section">
-      <h2>2. Les flux mondiaux</h2>
+      <h2>2. Les flux mondiaux &amp; la balance commerciale</h2>
       <p>Un <strong>flux</strong> = un déplacement, une circulation. On distingue :</p>
       <ul style="line-height:1.9;">
         <li><strong>Flux de marchandises</strong> : les biens matériels (voitures, vêtements, électronique…), transportés surtout par <strong>porte-conteneurs</strong>.</li>
@@ -72,6 +72,30 @@
       </ul>
       <p>Les plus <strong>grands exportateurs de marchandises</strong> sont la <strong>Chine</strong> (1ᵉ⁰), les <strong>États-Unis</strong> et l'<strong>Allemagne</strong>.</p>
       <div class="key-rule"><div class="formula-main">Mondialisation = intensification des échanges (marchandises · services · capitaux · informations · personnes)</div></div>
+
+      <h3 style="font-size:18px; color:var(--color-nav); margin:1.1rem 0 .3rem;">📊 La balance commerciale</h3>
+      <p>La <strong>balance commerciale</strong> d'un pays est la <strong>différence</strong> entre la valeur de ses <strong>exportations (X)</strong> et de ses <strong>importations (M)</strong> de marchandises, sur une période donnée.</p>
+      <svg viewBox="0 0 300 165" width="280" style="max-width:100%;height:auto;margin:8px 0 4px" role="img" aria-label="Balance commerciale : exportations X contre importations M">
+        <text x="150" y="16" fill="#e5e7eb" font-size="13" text-anchor="middle" font-weight="bold">Solde = X − M</text>
+        <line x1="150" y1="28" x2="150" y2="120" stroke="#9ca3af" stroke-width="3"/>
+        <line x1="118" y1="122" x2="182" y2="122" stroke="#9ca3af" stroke-width="3"/>
+        <circle cx="150" cy="32" r="4" fill="#9ca3af"/>
+        <line x1="78" y1="44" x2="222" y2="52" stroke="#60a5fa" stroke-width="3"/>
+        <line x1="78" y1="44" x2="78" y2="74" stroke="#6b7280" stroke-width="1.5"/>
+        <path d="M58,74 a20,11 0 0 0 40,0 z" fill="rgba(52,211,153,.18)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="78" y="98" fill="#6ee7b7" font-size="13" text-anchor="middle" font-weight="bold">X</text>
+        <text x="78" y="113" fill="#9ca3af" font-size="10" text-anchor="middle">exportations</text>
+        <line x1="222" y1="52" x2="222" y2="78" stroke="#6b7280" stroke-width="1.5"/>
+        <path d="M202,78 a20,11 0 0 0 40,0 z" fill="rgba(248,113,113,.16)" stroke="#f87171" stroke-width="1.5"/>
+        <text x="222" y="102" fill="#fca5a5" font-size="13" text-anchor="middle" font-weight="bold">M</text>
+        <text x="222" y="117" fill="#9ca3af" font-size="10" text-anchor="middle">importations</text>
+      </svg>
+      <ul style="line-height:1.9;">
+        <li><strong>X &gt; M</strong> → <strong>excédent</strong> commercial (le pays vend plus qu'il n'achète) ;</li>
+        <li><strong>X &lt; M</strong> → <strong>déficit</strong> commercial (il achète plus qu'il ne vend) ;</li>
+        <li><strong>X = M</strong> → balance <strong>équilibrée</strong>.</li>
+      </ul>
+      <div class="key-rule"><div class="formula-main">Balance commerciale = Exportations (X) − Importations (M)</div></div>
     </div>
 
     <div class="synth-section">
@@ -106,6 +130,8 @@
         <div class="eco-arrow">→</div>
         <div class="eco-step"><span class="eco-ico">🏭</span><strong>Assemblé</strong><span>Chine 🇨🇳</span></div>
       </div>
+      <p>Pour produire moins cher, les FMN pratiquent souvent la <strong>délocalisation</strong> :</p>
+      <div class="key-rule"><div class="formula-main">Délocalisation = transférer une activité (production, service) vers un autre pays où les coûts (main-d'œuvre) sont plus faibles</div></div>
       <p>La mondialisation est aussi <strong>à notre porte</strong> : le <strong>port d'Anvers</strong> (Belgique), l'un des plus grands ports d'Europe, a vu transiter environ <strong>278 millions de tonnes</strong> de marchandises en 2024.</p>
     </div>
 
@@ -476,6 +502,9 @@
     { q: "Le risque SOCIAL de la mondialisation, c'est :", opts: ["les inégalités et les mauvaises conditions de travail", "la baisse des prix", "plus de choix de produits", "l'invention d'Internet"], ans: 0, chapter: "mondialisation", difficulty: "intermediaire", exp: "Risque social = creusement des inégalités, bas salaires et mauvaises conditions de travail dans certains pays." },
     { q: "Un porte-conteneurs sert surtout à transporter :", opts: ["des marchandises", "des informations", "des capitaux", "des touristes"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Les marchandises voyagent surtout par bateau, dans des conteneurs (flux de marchandises)." },
     { q: "« Interdépendance » des pays signifie :", opts: ["ils dépendent les uns des autres", "ils sont totalement isolés", "ils ont la même langue", "ils ont la même monnaie"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Avec la mondialisation, chaque pays dépend des autres (pour produire, vendre, s'approvisionner).", simple: "« Inter » = entre, « dépendance » = avoir besoin. Aucun pays ne vit en autarcie : chacun a besoin des autres (pour acheter, vendre, fabriquer). Si l'un a un problème, ça touche les autres." },
+    { q: "La balance commerciale d'un pays, c'est :", opts: ["la différence entre ses exportations (X) et ses importations (M)", "le nombre de ses habitants", "le total de ses impôts", "la somme de ses dettes"], ans: 0, chapter: "mondialisation", difficulty: "intermediaire", exp: "Balance commerciale = exportations (X) − importations (M) de marchandises, sur une période." },
+    { q: "Si un pays exporte PLUS qu'il n'importe (X > M), sa balance commerciale est :", opts: ["excédentaire", "déficitaire", "nulle", "négative"], ans: 0, chapter: "mondialisation", difficulty: "intermediaire", exp: "X > M -> excedent commercial. X < M -> deficit. X = M -> equilibre.", simple: "Il vend plus à l'étranger qu'il n'achète : il « gagne » au commerce → excédent." },
+    { q: "La délocalisation, c'est :", opts: ["transférer une activité vers un pays où les coûts sont plus faibles", "fermer définitivement une entreprise", "faire venir des touristes", "augmenter les salaires locaux"], ans: 0, chapter: "mondialisation", difficulty: "facile", exp: "Delocaliser = deplacer la production (ou un service) vers un pays ou la main-d'oeuvre coute moins cher. C'est une cause du risque economique (perte d'emplois)." },
     { q: "La responsabilité civile, c'est l'obligation de :", opts: ["réparer le dommage causé à autrui", "aller en prison", "payer une amende à l'État", "passer un examen"], ans: 0, chapter: "responsabilite", difficulty: "facile", exp: "Responsabilité civile = réparer le dommage causé à quelqu'un d'autre (principe de l'article 1382 de l'ancien Code civil).", simple: "Si tu causes un dommage à quelqu'un, tu dois le « réparer » — en général en payant. C'est ça la responsabilité civile." },
     { q: "Quelles sont les 3 conditions de la responsabilité civile ?", opts: ["une faute, un dommage, un lien de causalité", "un contrat, un juge, un avocat", "un témoin, une preuve, un aveu", "une assurance, un constat, une plainte"], ans: 0, chapter: "responsabilite", difficulty: "intermediaire", exp: "Il faut les 3 ensemble : une faute (ou un fait), un dommage, et un lien de causalité entre les deux.", simple: "Pour être responsable il faut : (1) avoir fait quelque chose de fautif, (2) que ça crée un dommage, (3) que ton acte soit bien la cause du dommage. Les trois en même temps." },
     { q: "Si une faute et un dommage existent mais SANS lien entre eux :", opts: ["il n'y a pas de responsabilité civile", "la responsabilité est automatique", "on va forcément en prison", "le dommage double"], ans: 0, chapter: "responsabilite", difficulty: "intermediaire", exp: "Sans lien de causalité (la faute n'a pas causé le dommage), une des 3 conditions manque → pas de responsabilité.", simple: "Il faut que ta faute soit VRAIMENT la cause du dommage. Si tu as fait une bêtise mais que le dommage serait arrivé de toute façon (autre cause), tu n'es pas responsable : le lien manque." },
@@ -524,6 +553,8 @@
     { front: "Qu'est-ce que la Triade ?", back: "Les <strong>3 grands pôles</strong> économiques : <strong>Amérique du Nord</strong>, <strong>Europe</strong>, <strong>Asie de l'Est</strong>. Ils font ≈ <strong>¾ du commerce mondial</strong> (beaucoup d'échanges intra-régionaux).", chapter: "mondialisation" },
     { front: "Qu'est-ce qu'une firme multinationale (FMN) ?", back: "Une entreprise présente dans <strong>plusieurs pays</strong> (Apple, Samsung, Nike…). Ce sont les grands <strong>acteurs</strong> de la mondialisation.", chapter: "mondialisation" },
     { front: "La chaîne de valeur mondiale (ex. iPhone) ?", back: "Répartir les <strong>étapes de fabrication</strong> entre plusieurs pays pour produire moins cher. iPhone : <strong>conçu</strong> en Californie, <strong>composants</strong> du monde entier, <strong>assemblé</strong> en Chine.", chapter: "mondialisation" },
+    { front: "Qu'est-ce que la balance commerciale ?", back: "La <strong>différence</strong> entre les <strong>exportations (X)</strong> et les <strong>importations (M)</strong> de marchandises. <strong>X &gt; M</strong> → excédent · <strong>X &lt; M</strong> → déficit · <strong>X = M</strong> → équilibre.", chapter: "mondialisation" },
+    { front: "Qu'est-ce que la délocalisation ?", back: "<strong>Transférer une activité</strong> (production, service) vers un <strong>autre pays</strong> où les <strong>coûts</strong> (main-d'œuvre) sont plus faibles → cause de pertes d'emplois (risque économique).", chapter: "mondialisation" },
     { front: "Pourquoi parle-t-on du port d'Anvers ?", back: "C'est l'un des plus grands ports d'Europe (≈ <strong>278 millions de tonnes</strong> en 2024) : la « <strong>mondialisation à notre porte</strong> » (Belgique).", chapter: "mondialisation" },
     { front: "Les 3 risques de la mondialisation ?", back: "<strong>Économique</strong> : perte d'emplois (délocalisations).<br><strong>Social</strong> : inégalités, mauvaises conditions de travail.<br><strong>Environnemental</strong> : pollution, épuisement des ressources.", chapter: "mondialisation" },
     { front: "Risque économique de la mondialisation ?", back: "La <strong>perte d'emplois</strong> dans les pays riches à cause des <strong>délocalisations</strong> (usines déplacées où la main-d'œuvre coûte moins cher).", chapter: "mondialisation" },
