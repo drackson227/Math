@@ -346,6 +346,57 @@
       </div>
       <div class="key-rule"><div class="formula-main">Servitude = charge sur le fonds servant au profit du fonds dominant · terrain enclavé → servitude de passage</div></div>
     </div>
+
+    <div class="synth-section">
+      <h2>12. L'extinction des obligations</h2>
+      <p>Une obligation peut <strong>disparaître</strong> (s'éteindre) de plusieurs façons (livre 5 du nouveau Code civil). Il y en a <strong>5</strong> à connaître :</p>
+      <ul style="line-height:1.95;">
+        <li><strong>① La confusion</strong> : les qualités de <strong>créancier</strong> et de <strong>débiteur</strong> se réunissent sur la <strong>même personne</strong>. <em>Ex. : M. Dubois emprunte 5 000 € à son père ; son père décède et Dubois est son seul héritier → il deviendrait son propre créancier : la dette s'éteint.</em></li>
+        <li><strong>② La compensation</strong> : <strong>deux dettes réciproques</strong> entre deux personnes s'effacent <strong>jusqu'à concurrence de la plus petite</strong> (il faut que les deux dettes soient <strong>exigibles</strong>). <em>Ex. : Dubois doit 5 000 € à Durand ; Durand lui doit 2 500 € (réparation) → Dubois ne devra plus que 2 500 €.</em></li>
+        <li><strong>③ La novation</strong> : on <strong>remplace</strong> une obligation existante par une <strong>obligation nouvelle</strong> — par changement de <strong>débiteur</strong>, d'<strong>objet</strong> ou de <strong>créancier</strong>.</li>
+        <li><strong>④ La remise de dette</strong> : le <strong>créancier abandonne volontairement</strong> tout ou partie de sa créance.</li>
+        <li><strong>⑤ La prescription</strong> : l'obligation s'éteint <strong>après un certain temps</strong> (délai ordinaire <strong>30 ans</strong> ; parfois plus court, ex. <strong>1 an</strong> pour les sommes dues aux commerçants).</li>
+      </ul>
+      <div class="key-rule"><div class="formula-main">5 modes d'extinction = confusion · compensation · novation · remise de dette · prescription</div></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Une dette ne dure pas toujours : elle peut s'éteindre si tu <strong>hérites</strong> de ton créancier (confusion), si vous vous devez <strong>mutuellement</strong> de l'argent (compensation), si on la <strong>remplace</strong> par une autre (novation), si le créancier <strong>renonce</strong> (remise), ou avec le <strong>temps</strong> (prescription).</div>
+      </div>
+    </div>
+
+    <div class="synth-section">
+      <h2>13. L'usufruit</h2>
+      <p>La <strong>pleine propriété</strong> réunit <strong>3 prérogatives</strong> héritées du droit romain :</p>
+      <ul style="line-height:1.95;">
+        <li><strong>l'usus</strong> : le droit d'<strong>utiliser</strong> le bien ;</li>
+        <li><strong>le fructus</strong> : le droit d'en <strong>percevoir les fruits</strong> (récoltes, loyers…) ;</li>
+        <li><strong>l'abusus</strong> : le droit d'en <strong>disposer</strong> (vendre, donner, détruire).</li>
+      </ul>
+      <p>L'<strong>usufruit</strong> (art. <strong>3.138</strong> du nouveau Code civil) est un <strong>démembrement</strong> de la propriété : il donne à son titulaire, l'<strong>usufruitier</strong>, le droit d'<strong>utiliser</strong> un bien appartenant au <strong>nu-propriétaire</strong> et d'en <strong>percevoir les fruits</strong>, selon la destination du bien, avec l'<strong>obligation de le restituer</strong> à la fin de son droit.</p>
+      <ul style="line-height:1.95;">
+        <li>L'<strong>usufruitier</strong> a l'<strong>usus + le fructus</strong> ;</li>
+        <li>le <strong>nu-propriétaire</strong> garde l'<strong>abusus</strong> (le droit de disposer du bien).</li>
+      </ul>
+      <svg viewBox="0 0 320 160" width="300" style="max-width:100%;height:auto;margin:8px 0 4px" role="img" aria-label="Usufruit : usufruitier (usus et fructus) et nu-propriétaire (abusus)">
+        <text x="160" y="16" fill="#e5e7eb" font-size="12.5" text-anchor="middle" font-weight="bold">Pleine propriété = usus + fructus + abusus</text>
+        <rect x="14" y="32" width="184" height="112" rx="6" fill="rgba(52,211,153,.12)" stroke="#34d399"/>
+        <text x="106" y="56" fill="#6ee7b7" font-size="13" text-anchor="middle" font-weight="bold">USUFRUITIER</text>
+        <text x="106" y="82" fill="#a7f3d0" font-size="12" text-anchor="middle">usus → utiliser</text>
+        <text x="106" y="102" fill="#a7f3d0" font-size="12" text-anchor="middle">fructus → les fruits</text>
+        <text x="106" y="128" fill="#9ca3af" font-size="10.5" text-anchor="middle">(droit temporaire)</text>
+        <rect x="210" y="32" width="96" height="112" rx="6" fill="rgba(96,165,250,.12)" stroke="#60a5fa"/>
+        <text x="258" y="56" fill="#93c5fd" font-size="12" text-anchor="middle" font-weight="bold">NU-</text>
+        <text x="258" y="72" fill="#93c5fd" font-size="12" text-anchor="middle" font-weight="bold">PROPRIÉTAIRE</text>
+        <text x="258" y="100" fill="#bfdbfe" font-size="12" text-anchor="middle">abusus</text>
+        <text x="258" y="118" fill="#bfdbfe" font-size="11" text-anchor="middle">(disposer)</text>
+      </svg>
+      <p>L'usufruit est <strong>temporaire</strong> : à la fin (souvent au <strong>décès</strong> de l'usufruitier), le nu-propriétaire récupère la <strong>pleine propriété</strong>. <strong>Cas classique</strong> (succession) : l'<strong>usufruit</strong> revient au <strong>conjoint survivant</strong>, la <strong>nue-propriété</strong> aux <strong>enfants</strong> (origine romaine : protéger la veuve).</p>
+      <div class="key-rule"><div class="formula-main">Usufruit = usus + fructus (usufruitier) · l'abusus reste au nu-propriétaire · droit temporaire</div></div>
+      <div class="simple-exp-box">
+        <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
+        <div class="simple-exp-content">Imagine une maison : l'<strong>usufruitier</strong> peut y <strong>vivre</strong> et la <strong>louer</strong> (toucher les loyers), mais il ne peut pas la <strong>vendre</strong>. Vendre, c'est le droit du <strong>nu-propriétaire</strong>. Quand l'usufruit se termine, ce dernier récupère tout.</div>
+      </div>
+    </div>
   </div>`;
 
   /* ---------------------- REPÈRES ---------------------- */
@@ -531,7 +582,21 @@
     { q: "Le fonds DOMINANT est :", opts: ["le terrain qui profite de la servitude", "le terrain qui supporte la charge", "le terrain de l'État", "le plus grand terrain"], ans: 0, chapter: "servitudes", difficulty: "facile", exp: "Dominant = celui qui a le droit (qui profite). Servant = celui qui supporte la charge." },
     { q: "Un terrain sans accès direct à la voie publique est dit :", opts: ["enclavé", "dominant", "indivis", "servant"], ans: 0, chapter: "servitudes", difficulty: "facile", exp: "Un terrain enclavé est séparé de la voie publique par d'autres fonds → il a besoin d'une servitude de passage." },
     { q: "La servitude de passage permet au fonds dominant de :", opts: ["passer sur le fonds servant sans en devenir propriétaire", "devenir propriétaire du terrain voisin", "interdire l'accès au voisin", "ne plus payer d'impôts"], ans: 0, chapter: "servitudes", difficulty: "intermediaire", exp: "La servitude donne un droit de passage ; le fonds servant reste la propriété de son propriétaire, qui doit supporter le passage." },
-    { q: "Pourquoi la servitude de passage répond-elle à un « besoin économique » ?", opts: ["sans accès à la route, le terrain enclavé est inexploitable", "parce qu'elle rapporte de l'argent à l'État", "parce qu'elle fait monter les impôts", "parce qu'elle crée des emplois"], ans: 0, chapter: "servitudes", difficulty: "difficile", exp: "Un terrain enclavé qu'on ne peut ni atteindre ni exploiter perd toute valeur : le passage est une nécessité économique." }
+    { q: "Pourquoi la servitude de passage répond-elle à un « besoin économique » ?", opts: ["sans accès à la route, le terrain enclavé est inexploitable", "parce qu'elle rapporte de l'argent à l'État", "parce qu'elle fait monter les impôts", "parce qu'elle crée des emplois"], ans: 0, chapter: "servitudes", difficulty: "difficile", exp: "Un terrain enclavé qu'on ne peut ni atteindre ni exploiter perd toute valeur : le passage est une nécessité économique." },
+    // ── L'extinction des obligations (5 modes) ──
+    { q: "Combien de modes d'extinction des obligations vois-tu au cours ?", opts: ["5", "3", "7", "2"], ans: 0, chapter: "extinction", difficulty: "facile", exp: "5 : la confusion, la compensation, la novation, la remise de dette et la prescription." },
+    { q: "La confusion éteint une obligation quand :", opts: ["les qualités de créancier et de débiteur se réunissent sur la même personne", "le créancier oublie sa créance", "le débiteur déménage", "deux contrats se ressemblent"], ans: 0, chapter: "extinction", difficulty: "intermediaire", exp: "Confusion : on devient à la fois créancier et débiteur (ex. on hérite de son créancier) → la dette s'éteint." },
+    { q: "La compensation, c'est :", opts: ["l'extinction de deux dettes réciproques jusqu'à concurrence de la plus petite", "payer en plusieurs fois", "annuler un contrat", "transférer une dette à un tiers"], ans: 0, chapter: "extinction", difficulty: "intermediaire", exp: "Deux personnes se doivent mutuellement de l'argent : les dettes s'effacent jusqu'au montant le plus petit (dettes exigibles)." },
+    { q: "La novation consiste à :", opts: ["remplacer une obligation existante par une obligation nouvelle", "diviser une dette en deux", "supprimer toute dette", "prouver une dette"], ans: 0, chapter: "extinction", difficulty: "intermediaire", exp: "Novation = substituer une nouvelle obligation (changement de débiteur, d'objet ou de créancier)." },
+    { q: "La remise de dette, c'est quand :", opts: ["le créancier abandonne volontairement tout ou partie de sa créance", "le débiteur refuse de payer", "le juge annule la dette", "la dette est payée en retard"], ans: 0, chapter: "extinction", difficulty: "facile", exp: "Remise de dette : le créancier renonce, de son plein gré, à tout ou partie de ce qu'on lui doit." },
+    { q: "La prescription éteint une obligation :", opts: ["après un certain temps (délai ordinaire de 30 ans)", "immédiatement", "seulement par écrit", "uniquement chez le notaire"], ans: 0, chapter: "extinction", difficulty: "intermediaire", exp: "Avec le temps, l'obligation s'éteint. Délai ordinaire : 30 ans ; parfois plus court (ex. 1 an pour les sommes dues aux commerçants)." },
+    // ── L'usufruit (démembrement de la propriété) ──
+    { q: "Les 3 prérogatives de la propriété (droit romain) sont :", opts: ["l'usus, le fructus et l'abusus", "la loi, le contrat et le fait", "le terme, la condition et la solidarité", "l'erreur, le dol et la violence"], ans: 0, chapter: "usufruit", difficulty: "intermediaire", exp: "Usus (utiliser), fructus (percevoir les fruits), abusus (disposer : vendre, détruire)." },
+    { q: "L'usufruitier possède :", opts: ["l'usus et le fructus (utiliser + percevoir les fruits)", "l'abusus seul", "les 3 prérogatives", "aucun droit sur le bien"], ans: 0, chapter: "usufruit", difficulty: "intermediaire", exp: "L'usufruitier peut utiliser le bien et en percevoir les fruits, mais pas en disposer." },
+    { q: "Le droit de disposer du bien (vendre, détruire) s'appelle :", opts: ["l'abusus", "l'usus", "le fructus", "la prescription"], ans: 0, chapter: "usufruit", difficulty: "facile", exp: "L'abusus = le droit de disposer ; il reste au nu-propriétaire." },
+    { q: "Dans un usufruit, qui conserve l'abusus ?", opts: ["le nu-propriétaire", "l'usufruitier", "l'État", "le juge"], ans: 0, chapter: "usufruit", difficulty: "facile", exp: "Le nu-propriétaire garde le droit de disposer (abusus) ; l'usufruitier n'a que l'usus et le fructus." },
+    { q: "L'usufruit est défini par l'article :", opts: ["3.138 du nouveau Code civil", "1382 de l'ancien Code civil", "8.4 du Code civil", "205 du Code civil"], ans: 0, chapter: "usufruit", difficulty: "difficile", exp: "L'usufruit est défini à l'article 3.138 du nouveau Code civil." },
+    { q: "À un décès, l'attribution classique est :", opts: ["usufruit au conjoint survivant, nue-propriété aux enfants", "tout à l'État", "pleine propriété au conjoint", "nue-propriété au conjoint, usufruit aux enfants"], ans: 0, chapter: "usufruit", difficulty: "intermediaire", exp: "Cas typique d'une succession : le conjoint survivant reçoit l'usufruit, les enfants la nue-propriété (origine romaine : protéger la veuve)." }
   ];
 
   /* ---------------------- FLASHCARDS ---------------------- */
@@ -585,11 +650,24 @@
     { front: "Qu'est-ce qu'une servitude ?", back: "Une <strong>charge</strong> imposée à un terrain (le <strong>fonds servant</strong>) au profit d'un autre terrain (le <strong>fonds dominant</strong>), appartenant à un autre propriétaire.", chapter: "servitudes" },
     { front: "Fonds dominant vs fonds servant ?", back: "<strong>Dominant</strong> = le terrain qui <strong>profite</strong> de la servitude (il a le droit). <strong>Servant</strong> = le terrain qui <strong>supporte</strong> la charge.", chapter: "servitudes" },
     { front: "Qu'est-ce qu'un terrain enclavé ?", back: "Un terrain <strong>sans accès direct à la voie publique</strong> (séparé d'elle par d'autres fonds) → il a besoin d'une <strong>servitude de passage</strong>.", chapter: "servitudes" },
-    { front: "La servitude de passage ?", back: "Elle donne au fonds dominant le <strong>droit de passer</strong> sur le fonds servant <strong>sans en devenir propriétaire</strong>. Elle répond au <strong>besoin économique</strong> d'exploiter un terrain enclavé.", chapter: "servitudes" }
+    { front: "La servitude de passage ?", back: "Elle donne au fonds dominant le <strong>droit de passer</strong> sur le fonds servant <strong>sans en devenir propriétaire</strong>. Elle répond au <strong>besoin économique</strong> d'exploiter un terrain enclavé.", chapter: "servitudes" },
+    { front: "Responsabilité du fait des animaux / des choses : que prouver ?", back: "C'est une responsabilité <strong>objective</strong> : pour l'<strong>animal</strong>, prouver seulement qu'il a <strong>causé le dommage</strong> ; pour la <strong>chose</strong>, que le <strong>gardien</strong> en répond si elle a un <strong>vice</strong> ou a joué un <strong>rôle actif</strong>.", chapter: "responsabilite" },
+    { front: "Quel mode de preuve a la force probante la plus forte ?", back: "L'<strong>aveu</strong> (surtout l'aveu <strong>judiciaire</strong>, irrévocable).", chapter: "preuve" },
+    { front: "Les 5 modes d'extinction des obligations ?", back: "<strong>1. La confusion</strong> · <strong>2. La compensation</strong> · <strong>3. La novation</strong> · <strong>4. La remise de dette</strong> · <strong>5. La prescription</strong>.", chapter: "extinction" },
+    { front: "L'extinction par confusion ?", back: "Les qualités de <strong>créancier</strong> et de <strong>débiteur</strong> se réunissent sur la <strong>même personne</strong> (ex. on <strong>hérite</strong> de son créancier) → la dette s'éteint.", chapter: "extinction" },
+    { front: "L'extinction par compensation ?", back: "<strong>Deux dettes réciproques</strong> s'effacent <strong>jusqu'à concurrence de la plus petite</strong> (les deux dettes doivent être <strong>exigibles</strong>).", chapter: "extinction" },
+    { front: "L'extinction par novation ?", back: "On <strong>remplace</strong> une obligation existante par une <strong>obligation nouvelle</strong> : changement de <strong>débiteur</strong>, d'<strong>objet</strong> ou de <strong>créancier</strong>.", chapter: "extinction" },
+    { front: "L'extinction par remise de dette ?", back: "Le <strong>créancier abandonne volontairement</strong> tout ou partie de sa <strong>créance</strong>.", chapter: "extinction" },
+    { front: "L'extinction par prescription ?", back: "L'obligation s'éteint <strong>après un certain temps</strong> : délai ordinaire <strong>30 ans</strong> (parfois plus court, ex. <strong>1 an</strong> pour les sommes dues aux commerçants).", chapter: "extinction" },
+    { front: "Les 3 prérogatives de la propriété ?", back: "<strong>L'usus</strong> (utiliser) · <strong>le fructus</strong> (percevoir les fruits) · <strong>l'abusus</strong> (disposer : vendre, donner, détruire).", chapter: "usufruit" },
+    { front: "Qu'est-ce que l'usufruit (art. 3.138) ?", back: "Un <strong>démembrement</strong> de la propriété : le droit d'<strong>utiliser</strong> un bien d'autrui et d'en <strong>percevoir les fruits</strong>, avec l'<strong>obligation de le restituer</strong> à la fin.", chapter: "usufruit" },
+    { front: "Usufruitier vs nu-propriétaire ?", back: "L'<strong>usufruitier</strong> a l'<strong>usus + le fructus</strong> (il jouit du bien). Le <strong>nu-propriétaire</strong> garde l'<strong>abusus</strong> (le droit de disposer).", chapter: "usufruit" },
+    { front: "L'usufruit est-il définitif ?", back: "<strong>Non, il est temporaire</strong> : à la fin (souvent au décès de l'usufruitier), le nu-propriétaire récupère la <strong>pleine propriété</strong>.", chapter: "usufruit" },
+    { front: "Attribution classique de l'usufruit (succession) ?", back: "L'<strong>usufruit</strong> revient au <strong>conjoint survivant</strong> et la <strong>nue-propriété</strong> aux <strong>enfants</strong> (origine romaine : protéger la veuve).", chapter: "usufruit" }
   ];
 
   window.registerSubject('eco', {
-    subtitle: 'Sciences éco (4ᵉ) — mondialisation & droit civil (responsabilité, obligations, preuve, contrats, servitudes)',
+    subtitle: 'Sciences éco (4ᵉ) — mondialisation & droit civil (responsabilité, obligations, extinction, preuve, contrats, servitudes, usufruit)',
     content: {
       sections: sections,
       coursAuto: true,
@@ -597,8 +675,8 @@
       flashcards: flashcards,
       demos: {},
       navLabels: { formules: '📌 Repères', exercices: '🎯 Exercices' },
-      chapOrder: ['mondialisation', 'responsabilite', 'preuve', 'obligations', 'contrats', 'servitudes'],
-      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)', obligations: 'Les obligations (modalités & sources)', contrats: 'Le droit des contrats', servitudes: 'Les voisins & servitudes' }
+      chapOrder: ['mondialisation', 'responsabilite', 'preuve', 'obligations', 'extinction', 'contrats', 'servitudes', 'usufruit'],
+      chapLabels: { mondialisation: 'La mondialisation', responsabilite: 'Responsabilité civile', preuve: 'Modes de preuve (droit civil)', obligations: 'Les obligations (modalités & sources)', extinction: 'L\'extinction des obligations', contrats: 'Le droit des contrats', servitudes: 'Les voisins & servitudes', usufruit: 'L\'usufruit' }
     }
   });
 })();
