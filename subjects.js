@@ -16,7 +16,8 @@
     chimie:   { label: 'Chimie',       icon: '🧪', subtitle: 'Chimie — réactions, pondération, mole & gaz', ready: false, mathTools: false },
     bio:      { label: 'Bio',          icon: '🧬', subtitle: 'Biologie — le vivant, cellules, systèmes', ready: false, mathTools: false },
     eco:      { label: 'Sciences éco', icon: '💶', subtitle: 'Sciences éco (4ᵉ) — mondialisation & responsabilité civile', ready: false, mathTools: false },
-    neerlandais: { label: 'Néerlandais', icon: '🇳🇱', subtitle: 'Néerlandais (4N2) — grammaire, De woning & Aan tafel!', ready: false, mathTools: false }
+    neerlandais: { label: 'Néerlandais', icon: '🇳🇱', subtitle: 'Néerlandais (4N2) — grammaire, De woning & Aan tafel!', ready: false, mathTools: false },
+    physique: { label: 'Physique', icon: '⚛️', subtitle: 'Physique (4ᵉ) — UAA3 · Moments de force & équilibre', ready: false, mathTools: false }
   };
 
   window.currentSubject = 'maths';
