@@ -244,9 +244,93 @@
 
   /* ---------------- COMBAT ---------------- */
   var B = null;
-  function makeFighter(id, lvl, stageMul) {
-    var s = stats(id, lvl); var hp = Math.round(s.hp * (stageMul || 1));
-    return { id: id, cr: BYID[id], lvl: lvl || 1, hp: hp, max: hp, atk: Math.round(s.atk * (stageMul || 1)), charge: 0 };
+  /* ===== PROFONDEUR DE COMBAT : statuts, pouvoirs de type, venin, synergies ===== */
+  // poison/brûlure : dégâts en début de tour. étourdi : saute son tour. bouclier : absorbe les dégâts.
+  var STATUS = {
+    shield: { e: '🛡️', n: 'Bouclier', col: '#38bdf8' },
+    poison: { e: '🟢', n: 'Poison',   col: '#84cc16' },
+    burn:   { e: '🔥', n: 'Brûlure',  col: '#f97316' },
+    stun:   { e: '💫', n: 'Étourdi',  col: '#facc15' }
+  };
+  // pouvoir du COUP SPÉCIAL selon le type de l'attaquant (un effet distinct par type).
+  var TPOW = { terre: 'étourdit', ciel: 'frappe 2×', mer: 'draine la vie', ancien: 'bouclier', mythe: 'brûle' };
+  // créatures venimeuses : chance d'empoisonner à chaque coup réussi.
+  var VENOM = { serpent: 1, scorpion: 1, spino: 1, pieuvre: 1, megalodon: 1 };
+  function newSt() { return { poison: 0, burn: 0, stun: 0, shield: 0 }; }
+  function elFor(side) { return document.querySelector('#arene .cb-fighter.' + side); }
+  function nm(f, side) { return esc(f.cr.n) + (side === 'foe' ? ' adverse' : ''); }
+  // badges de statut (sous la barre de PV) : nombre = tours restants (ou montant pour le bouclier)
+  function stInner(f) {
+    if (!f.st) return ''; var s = '';
+    ['shield', 'poison', 'burn', 'stun'].forEach(function (k) {
+      var v = f.st[k]; if (v > 0) s += '<span class="cb-stb cb-stb-' + k + '" title="' + STATUS[k].n + (k !== 'shield' ? ' (' + v + ' tour' + (v > 1 ? 's' : '') + ')' : '') + '">' + STATUS[k].e + '<b>' + v + '</b></span>';
+    });
+    return s;
+  }
+  function setStatuses(side, f) { var el = elFor(side); if (!el) return; var b = el.querySelector('.cb-stbadges'); if (b) b.innerHTML = stInner(f); }
+  // pastille de statut qui s'envole (feedback à l'application)
+  function flashStatus(side, kind) { var el = elFor(side); if (!el) return; cbFloat(el, STATUS[kind].e, 'st ' + kind); if (el.closest('.cb-stage')) { var c = ctr(el); fxRing(c.x, c.y, STATUS[kind].col, 3); } }
+  // applique des dégâts en tenant compte du bouclier (absorbe en premier)
+  function applyDmg(t, side, dmg) {
+    if (t.st && t.st.shield > 0) {
+      var ab = Math.min(t.st.shield, dmg); t.st.shield -= ab; dmg -= ab;
+      if (ab > 0) { cbFloat(elFor(side), '🛡️-' + ab, 'shield'); setStatuses(side, t); }
+    }
+    t.hp = Math.max(0, t.hp - dmg); return dmg;
+  }
+  // effets à l'impact : venin (tout coup) + pouvoir de type (coup spécial uniquement)
+  function applyPower(att, def, defSide, dmg, special, attSide) {
+    if (VENOM[att.cr.id] && def.hp > 0 && Math.random() < 0.42) {
+      def.st.poison = Math.max(def.st.poison, 3); flashStatus(defSide, 'poison'); setStatuses(defSide, def);
+      pushLog('🟢 ' + nm(def, defSide) + ' est empoisonné !');
+    }
+    if (!special) return;
+    var tp = att.cr.t;
+    if (tp === 'terre') { if (def.hp > 0) { def.st.stun = Math.max(def.st.stun, 1); flashStatus(defSide, 'stun'); setStatuses(defSide, def); pushLog('💫 ' + nm(def, defSide) + ' est étourdi : il sautera son tour !'); } }
+    else if (tp === 'ciel') { var ex = Math.max(1, Math.round(dmg * 0.5)); applyDmg(def, defSide, ex); cbFloat(elFor(defSide), '-' + ex, ''); pushLog('🐦 Frappe à nouveau ! +' + ex + ' dégâts.'); }
+    else if (tp === 'mer') { var h = Math.max(1, Math.round(dmg * 0.3)); att.hp = Math.min(att.max, att.hp + h); setHp(attSide, att); cbFloat(elFor(attSide), '+' + h, 'heal'); pushLog('💧 ' + nm(att, attSide) + ' draine ' + h + ' PV.'); }
+    else if (tp === 'ancien') { var sh = Math.max(1, Math.round(att.max * 0.25)); att.st.shield += sh; flashStatus(attSide, 'shield'); setStatuses(attSide, att); pushLog('🛡️ ' + nm(att, attSide) + ' érige un bouclier (' + sh + ').'); }
+    else if (tp === 'mythe') { if (def.hp > 0) { def.st.burn = Math.max(def.st.burn, 3); flashStatus(defSide, 'burn'); setStatuses(defSide, def); pushLog('🔥 ' + nm(def, defSide) + ' prend feu !'); } }
+  }
+  // début de tour : applique poison/brûlure, décrémente les durées, vérifie l'étourdissement.
+  // onReady(skip, died) : skip = tour sauté (étourdi) ; died = K.O. par les dégâts sur la durée.
+  function startTurn(f, side, onReady) {
+    if (!B || B.over) { onReady(false, false); return; }
+    var dot = 0, ic = [];
+    if (f.st.burn > 0) { dot += Math.max(1, Math.round(f.max * 0.06)); f.st.burn--; ic.push('🔥'); }
+    if (f.st.poison > 0) { dot += Math.max(2, Math.round(f.max * 0.08)); f.st.poison--; ic.push('🟢'); }
+    function afterDot() {
+      if (!B || B.over) { onReady(false, false); return; }
+      if (f.st.stun > 0) { f.st.stun--; setStatuses(side, f); onReady(true, false); }
+      else onReady(false, false);
+    }
+    if (dot > 0) {
+      f.hp = Math.max(0, f.hp - dot); // poison/brûlure ignorent le bouclier
+      setHp(side, f); setStatuses(side, f);
+      var el = elFor(side); cbFloat(el, '-' + dot + ' ' + ic.join(''), 'dot');
+      if (el && el.closest('.cb-stage')) { var c = ctr(el); fxBurst(c.x, c.y, ic[0] === '🔥' ? '#f97316' : '#84cc16', 10, 3); }
+      sfx('hit');
+      pushLog(ic.join('') + ' ' + nm(f, side) + ' subit ' + dot + ' dégâts ' + (ic.length > 1 ? '(brûlure + poison)' : ic[0] === '🔥' ? '(brûlure)' : '(poison)') + '.');
+      if (f.hp <= 0) { cbKo(side, TM[f.cr.t].c); setTimeout(function () { onReady(false, true); }, 520); return; }
+      setTimeout(afterDot, 560);
+    } else { setStatuses(side, f); afterDot(); }
+  }
+  // synergie d'équipe : 3 même type → +ATK ; 3 types différents → +PV ; 2 même type → +ATK (moindre)
+  function teamSynergy(ids) {
+    var ts = ids.map(function (id) { return BYID[id].t; });
+    if (ids.length >= 3) {
+      if (ts[0] === ts[1] && ts[1] === ts[2]) return { atk: 1.18, hp: 1, n: 'Meute', e: '🐾', d: '+18% ATK (3 du même type)' };
+      var uniq = ts.filter(function (v, i) { return ts.indexOf(v) === i; });
+      if (uniq.length === 3) return { atk: 1, hp: 1.18, n: 'Équilibre', e: '⚖️', d: '+18% PV (3 types différents)' };
+    }
+    var cnt = {}; ts.forEach(function (t) { cnt[t] = (cnt[t] || 0) + 1; });
+    for (var k in cnt) if (cnt[k] >= 2) return { atk: 1.09, hp: 1, n: 'Duo', e: '🤝', d: '+9% ATK (2 du même type)' };
+    return { atk: 1, hp: 1, n: '', e: '', d: '' };
+  }
+  function makeFighter(id, lvl, stageMul, syn) {
+    var s = stats(id, lvl); syn = syn || { atk: 1, hp: 1 };
+    var hp = Math.round(s.hp * (stageMul || 1) * (syn.hp || 1));
+    return { id: id, cr: BYID[id], lvl: lvl || 1, hp: hp, max: hp, atk: Math.round(s.atk * (stageMul || 1) * (syn.atk || 1)), charge: 0, st: newSt() };
   }
   function teamIds() {
     if (G.team && G.team.length) return G.team.filter(function (id) { return G.owned[id]; }).slice(0, 3);
@@ -259,7 +343,8 @@
     var ids = teamIds();
     if (!ids.length) { toast('Invoque d’abord au moins 1 carte, puis compose ton équipe !'); G.view = 'summon'; render(); return; }
     var mul = 1 + 0.15 * (G.stage - 1);
-    var team = ids.map(function (id) { return makeFighter(id, G.owned[id].lvl, 1); });
+    var syn = teamSynergy(ids);
+    var team = ids.map(function (id) { return makeFighter(id, G.owned[id].lvl, 1, syn); });
     var size = Math.min(3, 1 + Math.floor(G.stage / 2));
     var maxRar = Math.min(4, Math.floor((G.stage - 1) / 2)); // rareté ennemie plafonnée par l'étage (équilibrage)
     var pool = CREATURES.filter(function (c) { return RAR_ORDER.indexOf(c.r) <= maxRar; });
@@ -269,7 +354,8 @@
       var pick = pool[Math.floor(Math.random() * pool.length)];
       enemy.push(makeFighter(pick.id, 1 + Math.floor(G.stage / 3), mul));
     }
-    B = { team: team, enemy: enemy, ti: 0, ei: 0, log: ['Combat de l’étage ' + G.stage + ' !'], over: false, win: false, busy: false };
+    B = { team: team, enemy: enemy, ti: 0, ei: 0, syn: syn, log: ['Combat de l’étage ' + G.stage + ' !'], over: false, win: false, busy: false };
+    if (syn.n) B.log.push('🔗 Synergie ' + syn.n + ' : ' + syn.d);
     G.view = 'battle'; renderBattle();
   };
   function alive(arr, from) { for (var i = from; i < arr.length; i++) if (arr[i].hp > 0) return i; return -1; }
@@ -285,9 +371,10 @@
     var adv = typeMult(me.cr.t, foe.cr.t);
     var dmg = hit(me, foe, special);
     playAttack(me, foe, 'me', special, dmg, function () { // à l'impact : appliquer les dégâts + log (sans re-render)
-      foe.hp = Math.max(0, foe.hp - dmg);
+      applyDmg(foe, 'foe', dmg);
       me.charge = special ? 0 : Math.min(3, me.charge + 1);
       pushLog((special ? '✨ ' + me.cr.n + ' utilise ' + me.cr.mv + ' !' : me.cr.e + ' ' + me.cr.n + ' attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      applyPower(me, foe, 'foe', dmg, special, 'me');
       setHp('foe', foe);
       if (foe.hp <= 0) cbKo('foe', TM[foe.cr.t].c);
     }, function () { // fin de séquence
@@ -301,16 +388,33 @@
       setTimeout(enemyTurn, 520);
     });
   };
+  // début du tour de l'ENNEMI : poison/brûlure puis attaque (ou tour sauté si étourdi / K.O. par les dégâts)
   function enemyTurn() {
+    if (!B || B.over) return;
+    var foe0 = B.enemy[B.ei];
+    startTurn(foe0, 'foe', function (skip, died) {
+      if (!B || B.over) return;
+      if (died) {
+        pushLog('💥 ' + foe0.cr.n + ' adverse succombe à ses blessures !');
+        var ni = alive(B.enemy, B.ei + 1);
+        if (ni < 0) { renderBattle(); return endBattle(true); }
+        B.ei = ni; renderBattle(); return setTimeout(enemyTurn, 650);
+      }
+      if (skip) { pushLog('💫 ' + foe0.cr.n + ' adverse est étourdi : tour sauté.'); renderBattle(); return setTimeout(beginPlayerTurn, 750); }
+      doEnemyAttack();
+    });
+  }
+  function doEnemyAttack() {
     if (!B || B.over) return;
     var foe = B.enemy[B.ei], me = B.team[B.ti];
     var sp = foe.charge >= 3 && Math.random() < 0.5;
     var adv = typeMult(foe.cr.t, me.cr.t);
     var dmg = hit(foe, me, sp);
     playAttack(foe, me, 'foe', sp, dmg, function () {
-      me.hp = Math.max(0, me.hp - dmg);
+      applyDmg(me, 'me', dmg);
       foe.charge = sp ? 0 : Math.min(3, foe.charge + 1);
       pushLog((sp ? '✨ ' + foe.cr.n + ' adverse utilise ' + foe.cr.mv + ' !' : foe.cr.n + ' adverse attaque') + ' → ' + dmg + (adv > 1 ? ' (super efficace !)' : adv < 1 ? ' (peu efficace…)' : '') + ' dégâts.');
+      applyPower(foe, me, 'me', dmg, sp, 'foe');
       setHp('me', me);
       if (me.hp <= 0) cbKo('me', TM[me.cr.t].c);
     }, function () {
@@ -320,6 +424,23 @@
         if (ni < 0) { B.busy = false; renderBattle(); return endBattle(false); }
         B.ti = ni;
       }
+      if (B.over) return;
+      beginPlayerTurn();
+    });
+  }
+  // début du tour du JOUEUR : poison/brûlure puis on rend la main (ou tour sauté si étourdi)
+  function beginPlayerTurn() {
+    if (!B || B.over) return;
+    var me0 = B.team[B.ti];
+    startTurn(me0, 'me', function (skip, died) {
+      if (!B || B.over) return;
+      if (died) {
+        pushLog('💀 Ton ' + me0.cr.n + ' succombe à ses blessures !');
+        var ni = alive(B.team, B.ti + 1);
+        if (ni < 0) { B.busy = false; renderBattle(); return endBattle(false); }
+        B.ti = ni; B.busy = false; renderBattle(); return;
+      }
+      if (skip) { pushLog('💫 Ton ' + me0.cr.n + ' est étourdi : tour sauté.'); B.busy = true; renderBattle(); return setTimeout(enemyTurn, 800); }
       B.busy = false; renderBattle();
     });
   }
@@ -826,6 +947,9 @@
       var c = BYID[id];
       return '<div class="cb-tcard" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '"><span class="cb-emoji">' + c.e + '</span><span class="cb-tname">' + esc(c.n) + '</span><span class="cb-stars">' + starStr(RAR[c.r].st) + '</span></div>';
     }).join('') : '<span class="cb-mut">Aucune équipe — va dans 📒 Collection pour en composer une.</span>';
+    var syn = teamSynergy(ids);
+    var synHtml = '<div class="cb-syn' + (syn.n ? ' on' : '') + '">' + (syn.n ? syn.e + ' <b>' + syn.n + '</b> — ' + syn.d : '🔗 Synergies : 3 cartes du même type = +ATK · 3 types différents = +PV') + '</div>';
+    var legend = '<div class="cb-legend"><b>⚡ Coups spéciaux par type</b><br>🐾 étourdit · 🐦 frappe 2× · 🌊 draine la vie · 🦴 bouclier · 🐉 brûle<br><span class="cb-mut">🐍 🦂 🐊 🐙 venimeux : empoisonnent à chaque coup</span></div>';
     var cyc = TYPES.map(function (t) { return tag(t); }).join('<span class="cb-cyc-arrow">›</span>');
     return head() +
       '<div class="cb-panel cb-arena">' +
@@ -838,6 +962,7 @@
         '<div class="cb-mut" style="text-align:center;margin:2px 0 10px;">chaque type bat le suivant (super efficace ×1.5)</div>' +
         '<div class="cb-teamttl">Ton équipe</div>' +
         '<div class="cb-tcards">' + team + '</div>' +
+        synHtml + legend +
         '<button class="cb-btn cb-btn-main cb-fightbtn" onclick="CB.fight()">⚔️ Combattre — étage ' + G.stage + '</button>' +
       '</div>';
   }
@@ -850,6 +975,7 @@
       tag(f.cr.t) +
       bar(f.hp, f.max, f.hp > f.max * 0.3 ? '#22c55e' : '#ef4444') +
       '<div class="cb-fhp">' + f.hp + ' / ' + f.max + '</div>' +
+      '<div class="cb-stbadges">' + stInner(f) + '</div>' +
       '<div class="cb-charge">' + (side === 'me' ? 'Spécial ' + f.charge + '/3' : '') + '</div>' +
       '</div>';
   }
@@ -878,7 +1004,7 @@
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
         turn + matchup +
-        '<div class="cb-brow"><span class="cb-mut">Toi</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
+        '<div class="cb-brow"><span class="cb-mut">Toi' + (B.syn && B.syn.n ? ' <span class="cb-synmini" title="' + B.syn.d + '">' + B.syn.e + ' ' + B.syn.n + '</span>' : '') + '</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
         '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me', !B.busy && !B.over) + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe', false) + '</div></div>' +
         '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
         '<div class="cb-log">' + log + '</div>' +
