@@ -237,19 +237,26 @@
 
     <div class="synth-section">
       <h2>8. Les modalités des obligations (droit civil)</h2>
-      <p>Une <strong>obligation</strong> est le <strong>lien de droit existant entre au moins deux personnes</strong> : un <strong>créancier</strong> (à qui on doit) et un <strong>débiteur</strong> (qui doit). Elle peut prendre plusieurs formes :</p>
+      <p>Une <strong>obligation</strong> est le <strong>lien de droit existant entre au moins deux personnes</strong> : un <strong>créancier</strong> (à qui on doit) et un <strong>débiteur</strong> (qui doit). Le <strong>créancier doit pouvoir contraindre le débiteur à exécuter son obligation</strong>.</p>
+      <p>L'<strong>objet de l'obligation</strong> (ce à quoi le débiteur est tenu) peut être multiple :</p>
+      <ul style="line-height:1.9;">
+        <li><strong>Obligation de donner</strong> : transférer la propriété d'une chose (ex. payer une somme, livrer un bien).</li>
+        <li><strong>Obligation de faire</strong> : accomplir une prestation (ex. réaliser un travail, rendre un service).</li>
+        <li><strong>Obligation de ne pas faire</strong> : s'abstenir de quelque chose (ex. une clause de non-concurrence).</li>
+      </ul>
+      <p>Une obligation peut prendre plusieurs <strong>formes</strong> selon ses <strong>modalités</strong> :</p>
       <ul style="line-height:2;">
-        <li><strong>Obligation pure et simple</strong> : exigible immédiatement.</li>
+        <li><strong>Obligation pure et simple</strong> : exigible immédiatement (ex. : j'achète un journal — le paiement du prix et la délivrance du journal s'effectuent de suite).</li>
         <li><strong>Obligation à terme</strong> (un <strong>terme</strong> = événement <strong>futur et certain</strong>) :
           <ul style="line-height:1.9;">
             <li><strong>Terme suspensif</strong> : il <strong>suspend l'exigibilité</strong> (l'obligation existe, mais on ne peut l'exiger qu'à l'échéance). Ex. : achat d'une TV payable au 15 novembre.</li>
-            <li><strong>Terme extinctif</strong> : il <strong>éteint</strong> l'obligation à une date. Ex. : la fin d'un bail.</li>
+            <li><strong>Terme extinctif</strong> : il <strong>éteint</strong> l'obligation. Ex. : le bail prend fin au décès du locataire.</li>
           </ul>
         </li>
         <li><strong>Obligation sous condition</strong> (une <strong>condition</strong> = événement <strong>futur et incertain</strong>) :
           <ul style="line-height:1.9;">
             <li><strong>Condition suspensive</strong> : elle <strong>suspend la naissance</strong> de l'obligation (elle ne naît que si l'événement se réalise). Ex. : « j'achète la maison <em>si</em> la banque m'accorde le prêt ».</li>
-            <li><strong>Condition résolutoire</strong> : sa réalisation <strong>annule</strong> l'obligation. Elle doit dépendre au moins en partie du <strong>hasard</strong> (sinon elle est nulle).</li>
+            <li><strong>Condition résolutoire</strong> : sa réalisation <strong>annule</strong> l'obligation. Elle doit dépendre au moins en partie du <strong>hasard</strong> (si elle dépend entièrement de la volonté du débiteur, elle est <strong>nulle</strong>). Ex. : un contrat de collaboration entre un avocat et un jeune confrère, sous la condition résolutoire que celui-ci obtienne dans l'année un diplôme spécial en matière fiscale.</li>
           </ul>
         </li>
       </ul>
@@ -264,6 +271,21 @@
         </li>
         <li><strong>L'indivisibilité</strong> : l'obligation est indivisible si son <strong>objet</strong> est indivisible — <strong>par nature</strong> (ex. : livrer un bateau ne peut pas se faire « en deux moitiés ») ou <strong>en matière de prêt</strong> (les emprunteurs sont solidairement responsables).</li>
       </ul>
+      <p style="margin-top:1rem;"><strong>📊 Que devient la dette au décès (entre les héritiers) ?</strong></p>
+      <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:13.5px; line-height:1.45; margin:.3rem 0;">
+        <thead><tr style="background:rgba(96,165,250,.14);">
+          <th style="border:1px solid #374151; padding:.45rem;"></th>
+          <th style="border:1px solid #374151; padding:.45rem;">Avant le décès</th>
+          <th style="border:1px solid #374151; padding:.45rem;">Après le décès (entre héritiers)</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #374151; padding:.45rem;"><strong>Divisibilité</strong> (principe)</td><td style="border:1px solid #374151; padding:.45rem;">la dette se divise entre les débiteurs (chacun paie sa part)</td><td style="border:1px solid #374151; padding:.45rem;">elle se divise aussi entre les héritiers (chacun sa part)</td></tr>
+          <tr><td style="border:1px solid #374151; padding:.45rem;"><strong>Solidarité</strong></td><td style="border:1px solid #374151; padding:.45rem;">le créancier peut réclamer <strong>toute la dette à un seul</strong> débiteur</td><td style="border:1px solid #374151; padding:.45rem;">la solidarité ne passe pas : <strong>la dette se divise entre les héritiers</strong></td></tr>
+          <tr><td style="border:1px solid #374151; padding:.45rem;"><strong>Indivisibilité</strong></td><td style="border:1px solid #374151; padding:.45rem;">chacun peut être tenu <strong>du tout</strong> (l'objet ne se divise pas)</td><td style="border:1px solid #374151; padding:.45rem;"><strong>l'indivisibilité passe aux héritiers</strong> : chaque héritier reste tenu du tout</td></tr>
+        </tbody>
+      </table>
+      </div>
       <div class="simple-exp-box">
         <button class="simple-exp-toggle" onclick="toggleSimpleExp(this)">💡 Comprendre simplement</button>
         <div class="simple-exp-content"><strong>Terme</strong> = c'est sûr, mais plus tard (une date). <strong>Condition</strong> = ça arrivera peut-être (un « si »). Quand on est <strong>plusieurs</strong> à devoir : normalement chacun paie sa part (divisibilité) ; mais avec la <strong>solidarité</strong>, on peut réclamer <strong>tout à une seule personne</strong>. Et certaines choses (un bateau) ne se coupent pas en parts : c'est l'<strong>indivisibilité</strong>.</div>
@@ -652,6 +674,9 @@
     { front: "Divisibilité (principe des obligations) ?", back: "La <strong>dette</strong> se divise par le nombre de <strong>débiteurs</strong>, la <strong>créance</strong> par le nombre de <strong>créanciers</strong>. Ex. : X et Y prêtent 10.000 € à Z → chacun réclame <strong>5.000 €</strong>.", chapter: "obligations" },
     { front: "Solidarité active vs passive ?", back: "<strong>Active</strong> (plusieurs créanciers) : le débiteur peut tout payer à un seul. <strong>Passive</strong> (plusieurs débiteurs) : le créancier peut réclamer <strong>tout à un seul</strong> débiteur (qui se retourne ensuite vers les autres).", chapter: "obligations" },
     { front: "L'indivisibilité d'une obligation ?", back: "L'obligation est indivisible si son <strong>objet</strong> l'est : <strong>par nature</strong> (ex. livrer un bateau) ou <strong>en matière de prêt</strong> (emprunteurs solidairement responsables).", chapter: "obligations" },
+    { front: "L'objet de l'obligation (à quoi le débiteur est tenu) ?", back: "Il peut être : <strong>donner</strong> (transférer la propriété), <strong>faire</strong> (accomplir une prestation) ou <strong>ne pas faire</strong> (s'abstenir).", chapter: "obligations" },
+    { front: "Que devient une dette SOLIDAIRE au décès du débiteur ?", back: "La <strong>solidarité ne passe pas</strong> aux héritiers : <strong>la dette se divise entre les héritiers</strong> (chacun sa part).", chapter: "obligations" },
+    { front: "Que devient une obligation INDIVISIBLE au décès ?", back: "L'<strong>indivisibilité passe aux héritiers</strong> : <strong>chaque héritier reste tenu du tout</strong> (l'objet ne se divise pas).", chapter: "obligations" },
     { front: "Les 5 modes de preuve en droit civil belge ?", back: "<strong>1. L'écrit</strong> (acte authentique / sous signature privée) · <strong>2. Le témoignage</strong> · <strong>3. Les présomptions</strong> · <strong>4. L'aveu</strong> · <strong>5. Le serment</strong>.", chapter: "preuve" },
     { front: "Charge de la preuve (art. 8.4 Code civil) ?", back: "<strong>Celui qui réclame</strong> (qui allègue un fait) doit le <strong>prouver</strong> — pas celui qui nie.", chapter: "preuve" },
     { front: "Acte authentique vs acte sous signature privée ?", back: "<strong>Authentique</strong> : reçu par un <strong>officier public</strong> (notaire, huissier) → force forte. <strong>Sous signature privée</strong> : signé par les parties seules → force <strong>moindre</strong>, contestable.", chapter: "preuve" },
