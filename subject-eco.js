@@ -21,7 +21,7 @@
     },
     "modes-de-preuve": {
       title: "Les modes de preuve", sub: "droit civil belge · art. 8.4",
-      cours: "<p>Comment prouver un droit devant un juge : <strong>écrit</strong> (acte authentique / sous signature privée), <strong>témoignage</strong>, <strong>présomptions</strong>, <strong>aveu</strong>, <strong>serment</strong>. La charge de la preuve pèse sur celui qui <strong>affirme</strong> (art. 8.4).</p>",
+      cours: "<p>Comment prouver un droit devant un juge : <strong>écrit</strong> (acte authentique / sous signature privée), <strong>témoignage</strong>, <strong>présomptions</strong>, <strong>aveu</strong>, <strong>serment</strong>. La charge de la preuve pèse sur <strong>celui qui réclame</strong> l'exécution d'une obligation (art. 8.4).</p>",
       exam: "<ul><li>5 modes : écrit · témoignage · présomptions · aveu · serment.</li><li>Au-dessus de <strong>3 500 €</strong> : un écrit est exigé en principe.</li><li>Acte <strong>authentique</strong> (notaire) vs <strong>sous signature privée</strong>.</li></ul>"
     },
     "obligations-modalites": {
@@ -31,7 +31,7 @@
     },
     "contrats": {
       title: "Le droit des contrats", sub: "validité · vices du consentement",
-      cours: "<p>Le contrat repose sur l'<strong>autonomie de la volonté</strong>. Conditions de validité : <strong>capacité</strong> (18 ans) et <strong>consentement</strong> libre. Les <strong>vices du consentement</strong> : <strong>erreur</strong>, <strong>dol</strong> (tromperie), <strong>violence</strong>.</p>",
+      cours: "<p>« Le contrat, ou convention, est un <strong>accord de volontés entre deux ou plusieurs personnes</strong> avec l'intention de <strong>faire naître des effets de droit</strong> » (art. 5.4). Il repose sur l'<strong>autonomie de la volonté</strong> (liberté contractuelle). Vices du consentement : <strong>erreur</strong>, <strong>dol</strong>, <strong>violence</strong>.</p>",
       exam: "<ul><li>3 vices : erreur · dol · violence.</li><li>Lois <strong>impératives</strong> (on ne peut pas y déroger) vs <strong>supplétives</strong>.</li></ul>"
     }
   });
@@ -248,7 +248,7 @@
 
     <div class="synth-section">
       <h2>9. Le droit des contrats</h2>
-      <p>Un <strong>contrat</strong> est un <strong>accord entre deux ou plusieurs personnes</strong> ayant l'<strong>intention de produire des effets de droit</strong>.</p>
+      <p>Selon le <strong>nouvel article 5.4</strong> du Code civil : « le <strong>contrat</strong>, ou convention, est un <strong>accord de volontés entre deux ou plusieurs personnes</strong> avec l'<strong>intention de faire naître des effets de droit</strong> ». <span style="color:var(--text-secondary);">(Ancien Code civil : « un accord de deux ou plusieurs volontés conclu dans le but de produire mutuellement des droits et des obligations ».)</span></p>
       <ul style="line-height:2;">
         <li><strong>L'autonomie de la volonté</strong> : chaque partie est <strong>libre</strong> de contracter, de <strong>choisir son cocontractant</strong> et de <strong>déterminer le contenu</strong> de l'accord (= la liberté contractuelle).</li>
         <li><strong>Les restrictions</strong> à cette liberté : on ne peut pas tout prévoir. Ex. : interdiction de fixer un <strong>salaire inférieur au salaire minimum légal</strong>. Ces limites viennent des <strong>lois impératives</strong>.</li>
@@ -412,7 +412,7 @@
       </div>
       <div>
         <div class="formula-box"><h3>⚠️ Les 3 risques</h3><p style="line-height:1.9; margin:0;"><strong>Économique</strong> : perte d'emplois (délocalisations).<br><strong>Social</strong> : inégalités, conditions de travail.<br><strong>Environnemental</strong> : pollution, épuisement des ressources.</p></div>
-        <div class="formula-box"><h3>Responsabilité civile</h3><div class="formula-main" style="font-size:15px;">Obligation de réparer le dommage causé à autrui</div><p class="note">Principe : article 1382 de l'ancien Code civil.</p></div>
+        <div class="formula-box"><h3>Responsabilité civile</h3><div class="formula-main" style="font-size:15px;">Obligation de réparer le dommage causé à autrui</div><p class="note">Base : Livre 6 du Code civil (depuis le 1ᵉʳ janvier 2025) ; avant : art. 1382 et suivants.</p></div>
         <div class="formula-box"><h3>Les 3 conditions</h3><div class="formula-main" style="font-size:17px;">Faute + Dommage + Lien de causalité</div><p class="note">Les trois doivent être réunis en même temps.</p></div>
         <div class="formula-box"><h3>Types de responsabilité</h3><p style="line-height:1.9; margin:0;">Du <strong>fait personnel</strong> · du <strong>fait d'autrui</strong> (parents, instituteurs, employeur) · du <strong>fait des choses</strong> (gardien).</p></div>
         <div class="formula-box"><h3>Les 3 dommages</h3><div class="formula-main" style="font-size:17px;">Matériel · Corporel · Moral</div><p class="note">Le dommage doit être <strong>certain</strong> (≠ hypothétique). Réparation = <strong>dommages-intérêts</strong>.</p></div>
@@ -601,7 +601,7 @@
 
   /* ---------------------- FLASHCARDS ---------------------- */
   var flashcards = [
-    { front: "Définition d'un contrat ?", back: "Un <strong>accord entre 2 ou plusieurs personnes</strong> ayant l'<strong>intention de produire des effets de droit</strong>.", chapter: "contrats" },
+    { front: "Définition d'un contrat (art. 5.4) ?", back: "« Le contrat, ou convention, est un <strong>accord de volontés entre deux ou plusieurs personnes</strong> avec l'<strong>intention de faire naître des effets de droit</strong>. » (nouvel art. 5.4 du Code civil).", chapter: "contrats" },
     { front: "L'autonomie de la volonté ?", back: "Chaque partie est <strong>libre</strong> de contracter, de <strong>choisir son cocontractant</strong> et de <strong>fixer le contenu</strong> du contrat — dans les limites des <strong>lois impératives</strong> et de l'ordre public.", chapter: "contrats" },
     { front: "Loi supplétive vs loi impérative ?", back: "<strong>Supplétive</strong> : complète le contrat muet, <strong>écartable</strong> par les parties. <strong>Impérative</strong> : protège la <strong>partie faible</strong>, <strong>non écartable</strong>.", chapter: "contrats" },
     { front: "Les 3 vices du consentement ?", back: "<strong>Erreur</strong> (involontaire, sur un élément fondamental) · <strong>Dol</strong> (machination volontaire/tromperie) · <strong>Violence</strong> (menace physique ou morale). Ils rendent le contrat <strong>annulable</strong>.", chapter: "contrats" },
@@ -613,6 +613,7 @@
     { front: "Les 5 modes de preuve en droit civil belge ?", back: "<strong>1. L'écrit</strong> (acte authentique / sous signature privée) · <strong>2. Le témoignage</strong> · <strong>3. Les présomptions</strong> · <strong>4. L'aveu</strong> · <strong>5. Le serment</strong>.", chapter: "preuve" },
     { front: "Charge de la preuve (art. 8.4 Code civil) ?", back: "<strong>Celui qui réclame</strong> (qui allègue un fait) doit le <strong>prouver</strong> — pas celui qui nie.", chapter: "preuve" },
     { front: "Acte authentique vs acte sous signature privée ?", back: "<strong>Authentique</strong> : reçu par un <strong>officier public</strong> (notaire, huissier) → force forte. <strong>Sous signature privée</strong> : signé par les parties seules → force <strong>moindre</strong>, contestable.", chapter: "preuve" },
+    { front: "Qu'est-ce qu'une présomption (définition) ?", back: "La <strong>déduction d'un fait inconnu</strong> à partir d'un ou plusieurs <strong>faits connus</strong>.", chapter: "preuve" },
     { front: "Présomption légale vs présomption de fait ?", back: "<strong>Légale</strong> : prévue par la loi → <strong>s'impose au juge</strong>. <strong>De fait</strong> : <strong>appréciée par le juge</strong> ; indices <strong>sérieux, précis et concordants</strong>.", chapter: "preuve" },
     { front: "Aveu judiciaire vs extrajudiciaire ?", back: "<strong>Judiciaire</strong> (devant le juge) : <strong>irrévocable</strong>, force très forte. <strong>Extrajudiciaire</strong> (SMS, e-mail) : force <strong>moindre</strong>.", chapter: "preuve" },
     { front: "La règle des 3.500 € (preuve) ?", back: "Acte juridique <strong>≥ 3.500 €</strong> → <strong>écrit signé obligatoire</strong>. En dessous → <strong>preuve libre</strong> (tous modes admis). La signature électronique qualifiée (itsme, eID) = même valeur que la manuscrite.", chapter: "preuve" },
