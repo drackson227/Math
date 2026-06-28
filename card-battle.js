@@ -81,9 +81,19 @@
     G.xpClaimed = G.xpClaimed || 0; G.dust = G.dust || 0; G.stage = G.stage || 1;
     G.bestStage = G.bestStage || 1; G.view = G.view || 'summon'; G.welcomed = G.welcomed || false;
     G.pityEpic = G.pityEpic || 0; // compteur de pitié (tirages depuis le dernier Épique+)
+    // Stats cumulées (pour les Succès) + Quêtes du jour (réinitialisées chaque jour).
+    G.stats = G.stats || { pulls: 0, wins: 0, losses: 0, specials: 0, bossWins: 0, levelMax: 0 };
+    G.achClaimed = G.achClaimed || {};   // succès déjà récupérés
+    G.daily = G.daily || { date: '', prog: {}, claimed: {} };
+    ensureDaily();
+  }
+  // jour local au format AAAA-MM-JJ ; réinitialise les quêtes quotidiennes au changement de jour
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function ensureDaily() {
+    if (!G.daily || G.daily.date !== today()) { G.daily = { date: today(), prog: {}, claimed: {} }; }
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ owned: G.owned, team: G.team, tickets: G.tickets, xpClaimed: G.xpClaimed, dust: G.dust, stage: G.stage, bestStage: G.bestStage, welcomed: G.welcomed, pityEpic: G.pityEpic })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ owned: G.owned, team: G.team, tickets: G.tickets, xpClaimed: G.xpClaimed, dust: G.dust, stage: G.stage, bestStage: G.bestStage, welcomed: G.welcomed, pityEpic: G.pityEpic, stats: G.stats, achClaimed: G.achClaimed, daily: G.daily })); } catch (e) {}
     // Sauvegarde aussi sur le compte (cloud) si connecté → la progression suit l'élève d'un appareil à l'autre.
     if (typeof cloudPushDebounced === 'function') { try { cloudPushDebounced(); } catch (e) {} }
   }
@@ -142,6 +152,62 @@
     return { c: c, isNew: isNew, lvl: G.owned[c.id].lvl };
   }
   window.CB = window.CB || {};
+
+  /* ---------------- QUÊTES & SUCCÈS (boucle de progression façon vrais jeux) ---------------- */
+  // Quêtes du JOUR (réinitialisées chaque jour). ev = événement suivi ; rw = récompense {t:tirages, d:poussières}.
+  var QUESTS = [
+    { id: 'd_pull',    ev: 'pull',    e: '🎴', n: 'Faire 1 invocation',     goal: 1, rw: { t: 1 } },
+    { id: 'd_win',     ev: 'win',     e: '⚔️', n: 'Gagner 1 combat',         goal: 1, rw: { d: 25 } },
+    { id: 'd_special', ev: 'special', e: '⚡', n: 'Lancer 1 coup spécial',    goal: 1, rw: { t: 1 } },
+    { id: 'd_win3',    ev: 'win',     e: '🔥', n: 'Gagner 3 combats',         goal: 3, rw: { t: 2 } }
+  ];
+  function ownedCount() { return Object.keys(G.owned).length; }
+  function maxOwnedLevel() { var m = 0; for (var id in G.owned) if (G.owned[id].lvl > m) m = G.owned[id].lvl; return m; }
+  // Succès (objectifs à vie). val() = progression actuelle ; goal = objectif.
+  var ACHS = [
+    { id: 'coll1',  e: '📒', n: 'Collectionneur I',   d: 'Posséder 10 créatures',        goal: 10,               val: ownedCount,  rw: { t: 3 } },
+    { id: 'coll2',  e: '📚', n: 'Collectionneur II',  d: 'Posséder 20 créatures',        goal: 20,               val: ownedCount,  rw: { t: 6 } },
+    { id: 'coll3',  e: '🏅', n: 'Maître collectionneur', d: 'Posséder toutes les créatures', goal: CREATURES.length, val: ownedCount, rw: { t: 20 } },
+    { id: 'vet1',   e: '🗡️', n: 'Combattant',         d: 'Gagner 10 combats',            goal: 10,  val: function () { return G.stats.wins; }, rw: { t: 3 } },
+    { id: 'vet2',   e: '⚔️', n: 'Vétéran',            d: 'Gagner 30 combats',            goal: 30,  val: function () { return G.stats.wins; }, rw: { t: 6 } },
+    { id: 'vet3',   e: '👑', n: 'Champion de l’arène', d: 'Gagner 75 combats',            goal: 75,  val: function () { return G.stats.wins; }, rw: { t: 15 } },
+    { id: 'climb1', e: '🧗', n: 'Grimpeur',           d: 'Atteindre l’étage 10',         goal: 10,  val: function () { return G.bestStage; }, rw: { t: 4 } },
+    { id: 'climb2', e: '🏔️', n: 'Alpiniste',          d: 'Atteindre l’étage 20',         goal: 20,  val: function () { return G.bestStage; }, rw: { t: 8 } },
+    { id: 'boss1',  e: '💀', n: 'Tueur de boss',      d: 'Vaincre 1 boss',               goal: 1,   val: function () { return G.stats.bossWins; }, rw: { t: 4 } },
+    { id: 'boss2',  e: '☠️', n: 'Chasseur de boss',   d: 'Vaincre 10 boss',              goal: 10,  val: function () { return G.stats.bossWins; }, rw: { t: 12 } },
+    { id: 'master', e: '⭐', n: 'Dresseur',           d: 'Monter une carte au niveau 5', goal: 5,   val: maxOwnedLevel, rw: { d: 60 } },
+    { id: 'summon1',e: '🔮', n: 'Invocateur',         d: 'Faire 50 invocations',         goal: 50,  val: function () { return G.stats.pulls; }, rw: { t: 6 } }
+  ];
+  // accorde une récompense {t,d} et fait un petit retour visuel
+  function grant(rw) { if (!rw) return; if (rw.t) G.tickets += rw.t; if (rw.d) G.dust += rw.d; }
+  function rwTxt(rw) { var a = []; if (rw.t) a.push('+' + rw.t + ' 🎟️'); if (rw.d) a.push('+' + rw.d + ' ✨'); return a.join(' '); }
+  // suit un événement : incrémente les stats à vie ET la progression des quêtes du jour
+  function bump(ev, amount) {
+    amount = amount || 1; ensureDaily();
+    var statKey = { pull: 'pulls', win: 'wins', loss: 'losses', special: 'specials', boss: 'bossWins' }[ev];
+    if (statKey) G.stats[statKey] = (G.stats[statKey] || 0) + amount;
+    var lv = maxOwnedLevel(); if (lv > (G.stats.levelMax || 0)) G.stats.levelMax = lv;
+    QUESTS.forEach(function (q) { if (q.ev === ev) G.daily.prog[q.id] = Math.min(q.goal, (G.daily.prog[q.id] || 0) + amount); });
+  }
+  // nb de récompenses réclamables (pour la pastille rouge sur l'onglet)
+  function claimableCount() {
+    ensureDaily(); var n = 0;
+    QUESTS.forEach(function (q) { if ((G.daily.prog[q.id] || 0) >= q.goal && !G.daily.claimed[q.id]) n++; });
+    ACHS.forEach(function (a) { if (a.val() >= a.goal && !G.achClaimed[a.id]) n++; });
+    return n;
+  }
+  CB.claimQuest = function (id) {
+    ensureDaily(); var q = null; QUESTS.forEach(function (x) { if (x.id === id) q = x; }); if (!q) return;
+    if ((G.daily.prog[id] || 0) < q.goal || G.daily.claimed[id]) return;
+    G.daily.claimed[id] = true; grant(q.rw); sfx('levelup'); cbConfetti(28, ['#fbbf24', '#ffffff', '#a855f7']);
+    toast('Quête accomplie ! ' + rwTxt(q.rw)); save(); render();
+  };
+  CB.claimAch = function (id) {
+    var a = null; ACHS.forEach(function (x) { if (x.id === id) a = x; }); if (!a) return;
+    if (a.val() < a.goal || G.achClaimed[id]) return;
+    G.achClaimed[id] = true; grant(a.rw); sfx('levelup'); cbConfetti(40, ['#fbbf24', '#ffffff', '#f472b6']);
+    toast('Succès débloqué : ' + a.n + ' ! ' + rwTxt(a.rw)); save(); render();
+  };
 
   /* ---------------- SONS (Web Audio, AUCUN fichier) + VIBRATIONS ----------------
      Tout est synthétisé à la volée → 0 octet à télécharger. Le contexte audio démarre
@@ -238,6 +304,7 @@
       if (RAR_ORDER.indexOf(one.c.r) >= 1) gotRare = true;
       res.push(one);
     }
+    bump('pull', n);
     save();
     showRevealOverlay(res);
   };
@@ -343,18 +410,28 @@
     var ids = teamIds();
     if (!ids.length) { toast('Invoque d’abord au moins 1 carte, puis compose ton équipe !'); G.view = 'summon'; render(); return; }
     var mul = 1 + 0.15 * (G.stage - 1);
+    var isBoss = (G.stage % 5 === 0); // tous les 5 étages : un BOSS
     var syn = teamSynergy(ids);
     var team = ids.map(function (id) { return makeFighter(id, G.owned[id].lvl, 1, syn); });
-    var size = Math.min(3, 1 + Math.floor(G.stage / 2));
     var maxRar = Math.min(4, Math.floor((G.stage - 1) / 2)); // rareté ennemie plafonnée par l'étage (équilibrage)
     var pool = CREATURES.filter(function (c) { return RAR_ORDER.indexOf(c.r) <= maxRar; });
     if (!pool.length) pool = CREATURES;
     var enemy = [];
-    for (var i = 0; i < size; i++) {
-      var pick = pool[Math.floor(Math.random() * pool.length)];
-      enemy.push(makeFighter(pick.id, 1 + Math.floor(G.stage / 3), mul));
+    if (isBoss) {
+      // BOSS : un seul ennemi colossal (couronne), PV et niveau renforcés → un vrai mur à abattre.
+      var bpool = pool.filter(function (c) { return RAR_ORDER.indexOf(c.r) >= 2; }); if (!bpool.length) bpool = pool;
+      var bpick = bpool[Math.floor(Math.random() * bpool.length)];
+      var bf = makeFighter(bpick.id, 2 + Math.floor(G.stage / 2), mul * 1.15);
+      bf.hp = bf.max = Math.round(bf.max * 2.4); bf.atk = Math.round(bf.atk * 1.18); bf.boss = true;
+      enemy.push(bf);
+    } else {
+      var size = Math.min(3, 1 + Math.floor(G.stage / 2));
+      for (var i = 0; i < size; i++) {
+        var pick = pool[Math.floor(Math.random() * pool.length)];
+        enemy.push(makeFighter(pick.id, 1 + Math.floor(G.stage / 3), mul));
+      }
     }
-    B = { team: team, enemy: enemy, ti: 0, ei: 0, syn: syn, log: ['Combat de l’étage ' + G.stage + ' !'], over: false, win: false, busy: false };
+    B = { team: team, enemy: enemy, ti: 0, ei: 0, syn: syn, boss: isBoss, log: [(isBoss ? '👑 COMBAT DE BOSS — étage ' + G.stage + ' !' : 'Combat de l’étage ' + G.stage + ' !')], over: false, win: false, busy: false };
     if (syn.n) B.log.push('🔗 Synergie ' + syn.n + ' : ' + syn.d);
     G.view = 'battle'; renderBattle(); vsSplash();
   };
@@ -367,6 +444,7 @@
     if (!B || B.over || B.busy) return;
     var me = B.team[B.ti], foe = B.enemy[B.ei];
     if (special && me.charge < 3) { return; }
+    if (special) bump('special');
     B.busy = true;
     var adv = typeMult(me.cr.t, foe.cr.t);
     var dmg = hit(me, foe, special);
@@ -387,6 +465,15 @@
       renderBattle();
       setTimeout(enemyTurn, 520);
     });
+  };
+  // TACTIQUE : envoyer une autre créature au combat. Cela COÛTE le tour → l'adversaire attaque ensuite.
+  CB.switchTo = function (i) {
+    if (!B || B.over || B.busy) return;
+    if (i === B.ti || !B.team[i] || B.team[i].hp <= 0) return;
+    B.busy = true; B.ti = i; sfx('tap');
+    pushLog('🔄 Tu envoies ' + esc(B.team[i].cr.n) + ' au combat !');
+    renderBattle();
+    setTimeout(enemyTurn, 520);
   };
   // début du tour de l'ENNEMI : poison/brûlure puis attaque (ou tour sauté si étourdi / K.O. par les dégâts)
   function enemyTurn() {
@@ -449,12 +536,15 @@
     if (win) {
       var reward = 1 + Math.floor(G.stage / 3);
       var dust = 10 + G.stage * 2;
+      if (B.boss) { reward *= 2; dust = Math.round(dust * 1.5) + 20; bump('boss'); } // boss = grosses récompenses
       G.tickets += reward; G.dust += dust;
       B.reward = reward; B.dustGain = dust;
       if (G.stage >= G.bestStage) G.bestStage = G.stage + 1;
       G.stage++;
-      B.log.push('🏆 Victoire ! +' + reward + ' 🎟️ tirage(s). Étage suivant débloqué.');
+      bump('win');
+      B.log.push((B.boss ? '👑 BOSS vaincu ! ' : '🏆 Victoire ! ') + '+' + reward + ' 🎟️ tirage(s). Étage suivant débloqué.');
     } else {
+      bump('loss');
       B.log.push('☠️ Défaite… réessaie (aucune perte). Astuce : exploite les avantages de type.');
     }
     save(); renderBattle(); sfx(win ? 'win' : 'lose');
@@ -468,8 +558,8 @@
     if (prefersReduced()) return;
     var meC = B.team[0], foeC = B.enemy[0];
     var side = function (f, cls) { return '<div class="cb-vs-side ' + cls + '" style="--tc:' + TM[f.cr.t].c + '"><div class="cb-vs-port">' + f.cr.e + '</div><div class="cb-vs-nm">' + esc(f.cr.n) + '</div>' + tag(f.cr.t) + '</div>'; };
-    var ov = document.createElement('div'); ov.className = 'cb-vsplash';
-    ov.innerHTML = side(meC, 'me') + '<div class="cb-vs-bolt">VS</div>' + side(foeC, 'foe') + '<div class="cb-vs-stage">⚔ Étage ' + G.stage + '</div>';
+    var ov = document.createElement('div'); ov.className = 'cb-vsplash' + (B.boss ? ' boss' : '');
+    ov.innerHTML = side(meC, 'me') + '<div class="cb-vs-bolt">VS</div>' + side(foeC, 'foe') + '<div class="cb-vs-stage">' + (B.boss ? '👑 BOSS · Étage ' + G.stage : '⚔ Étage ' + G.stage) + '</div>';
     document.body.appendChild(ov);
     var kill = function () { if (ov.parentNode) { ov.classList.add('out'); setTimeout(function () { if (ov.parentNode) ov.remove(); }, 240); } };
     ov.addEventListener('click', kill); setTimeout(kill, 1450); sfx('charge');
@@ -890,6 +980,7 @@
   function chargePips(c) { var s = ''; for (var i = 0; i < 3; i++) s += '<i class="cb-pip' + (i < c ? ' on' : '') + '"></i>'; return s; } // jauge du coup spécial
 
   function head() {
+    var cc = claimableCount();
     return '<div class="cb-head">' +
       '<button class="cb-quit" onclick="showSection(\'synthese\')" title="Revenir à l’étude">← Quitter</button>' +
       '<div class="cb-bal"><span title="Tirages">🎟️ <b>' + G.tickets + '</b></span><span title="Poussières (doublons)">✨ <b>' + G.dust + '</b></span><span title="Étage d’arène">🏟️ <b>' + G.stage + '</b></span>' +
@@ -897,6 +988,7 @@
       '<div class="cb-tabs">' +
         '<button class="cb-tab' + (G.view === 'summon' ? ' on' : '') + '" onclick="CB.go(\'summon\')">🎴 Invocation</button>' +
         '<button class="cb-tab' + (G.view === 'collection' ? ' on' : '') + '" onclick="CB.go(\'collection\')">📒 Collection</button>' +
+        '<button class="cb-tab' + (G.view === 'quests' ? ' on' : '') + '" onclick="CB.go(\'quests\')">🎯 Quêtes' + (cc > 0 ? '<span class="cb-badge">' + cc + '</span>' : '') + '</button>' +
         '<button class="cb-tab' + (G.view === 'battle' ? ' on' : '') + '" onclick="CB.go(\'arena\')">⚔️ Arène</button>' +
       '</div></div>';
   }
@@ -945,6 +1037,37 @@
       if (best >= 2) cbConfetti(best >= 4 ? 150 : best >= 3 ? 95 : 55, [bc, '#ffffff', '#fde047']);
       if (best >= 3) playLottie(ov, 'summon', (window.innerWidth / 2), (window.innerHeight * 0.4), 380);
     }, 720);
+  }
+
+  // une ligne de quête/succès : icône + nom + barre de progression + bouton « réclamer » (ou récompense / coche)
+  function questRow(prog, goal, e, name, rw, claimed, onclick) {
+    var done = prog >= goal, pct = Math.min(100, Math.round(prog / goal * 100));
+    return '<div class="cb-quest' + (done ? ' done' : '') + (claimed ? ' claimed' : '') + '">' +
+      '<span class="cb-q-ic">' + e + '</span>' +
+      '<div class="cb-q-mid"><div class="cb-q-name">' + name + '</div>' +
+        '<div class="cb-q-barwrap"><div class="cb-q-bar"><span style="width:' + pct + '%"></span></div><span class="cb-q-num">' + Math.min(prog, goal) + '/' + goal + '</span></div></div>' +
+      (claimed ? '<span class="cb-q-claimed" title="Récupéré">✓</span>'
+        : done ? '<button class="cb-btn cb-q-claim" onclick="' + onclick + '">' + rwTxt(rw) + '</button>'
+          : '<span class="cb-q-rw">' + rwTxt(rw) + '</span>') +
+      '</div>';
+  }
+  function viewQuests() {
+    ensureDaily();
+    var daily = QUESTS.map(function (q) {
+      return questRow(G.daily.prog[q.id] || 0, q.goal, q.e, q.n, q.rw, !!G.daily.claimed[q.id], 'CB.claimQuest(\'' + q.id + '\')');
+    }).join('');
+    var achs = ACHS.map(function (a) {
+      return questRow(a.val(), a.goal, a.e, '<b>' + a.n + '</b><small>' + a.d + '</small>', a.rw, !!G.achClaimed[a.id], 'CB.claimAch(\'' + a.id + '\')');
+    }).join('');
+    var got = ACHS.filter(function (a) { return G.achClaimed[a.id]; }).length;
+    return head() +
+      '<div class="cb-panel">' +
+        '<h3 class="cb-h">🎯 Quêtes du jour <span class="cb-mut">remises à zéro chaque jour</span></h3>' +
+        '<p class="cb-mut" style="margin:0 0 8px;">Gagne des 🎟️ tirages et des ✨ poussières en jouant un peu chaque jour.</p>' +
+        '<div class="cb-quests">' + daily + '</div>' +
+        '<h3 class="cb-h" style="margin-top:18px;">🏆 Succès <span class="cb-mut">' + got + '/' + ACHS.length + '</span></h3>' +
+        '<div class="cb-quests">' + achs + '</div>' +
+      '</div>';
   }
 
   function viewCollection() {
@@ -1002,12 +1125,14 @@
         '<div class="cb-teamttl">Ton équipe</div>' +
         '<div class="cb-tcards">' + team + '</div>' +
         synHtml + legend +
-        '<button class="cb-btn cb-btn-main cb-fightbtn" onclick="CB.fight()">⚔️ Combattre — étage ' + G.stage + '</button>' +
+        (G.stage % 5 === 0 ? '<div class="cb-bossbanner">👑 Étage BOSS ! Ennemi colossal — <b>récompenses doublées</b></div>' : '') +
+        '<button class="cb-btn cb-btn-main cb-fightbtn' + (G.stage % 5 === 0 ? ' boss' : '') + '" onclick="CB.fight()">' + (G.stage % 5 === 0 ? '👑 Affronter le BOSS — étage ' + G.stage : '⚔️ Combattre — étage ' + G.stage) + '</button>' +
       '</div>';
   }
 
   function fighterCard(f, side, active) {
-    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + (active ? ' active' : '') + '" style="--tc:' + TM[f.cr.t].c + '; --rc:' + RAR[f.cr.r].c + '">' +
+    return '<div class="cb-fighter ' + side + (f.hp <= 0 ? ' ko' : '') + (active ? ' active' : '') + (f.boss ? ' boss' : '') + '" style="--tc:' + TM[f.cr.t].c + '; --rc:' + RAR[f.cr.r].c + '">' +
+      (f.boss ? '<div class="cb-bosstag">👑 BOSS</div>' : '') +
       portrait(f.cr) +
       '<div class="cb-fname">' + esc(f.cr.n) + ' <span class="cb-mut">niv.' + f.lvl + '</span></div>' +
       '<div class="cb-stars">' + starStr(RAR[f.cr.r].st) + '</div>' +
@@ -1021,7 +1146,10 @@
   function renderBattle() {
     var el = document.getElementById('arene'); if (!el || !B) return;
     var me = B.team[B.ti], foe = B.enemy[B.ei];
-    var reserve = function (arr, ai) { return arr.map(function (f, i) { return '<span class="cb-res' + (f.hp <= 0 ? ' dead' : i === ai ? ' act' : '') + '">' + f.cr.e + '</span>'; }).join(''); };
+    var reserve = function (arr, ai, mine) { return arr.map(function (f, i) {
+      var canSw = mine && !B.over && !B.busy && f.hp > 0 && i !== ai;
+      return '<span class="cb-res' + (f.hp <= 0 ? ' dead' : i === ai ? ' act' : '') + (canSw ? ' sw' : '') + '"' + (canSw ? ' onclick="CB.switchTo(' + i + ')" title="Envoyer ' + esc(f.cr.n) + ' (coûte le tour)"' : '') + '>' + f.cr.e + '</span>';
+    }).join(''); };
     var log = B.log.slice(-5).map(function (l) { return '<div>' + l + '</div>'; }).join('');
     var ctrl;
     if (B.over) {
@@ -1044,9 +1172,9 @@
     el.innerHTML = head() +
       '<div class="cb-panel cb-battle">' +
         turn + matchup +
-        '<div class="cb-brow"><span class="cb-mut">Toi' + (B.syn && B.syn.n ? ' <span class="cb-synmini" title="' + B.syn.d + '">' + B.syn.e + ' ' + B.syn.n + '</span>' : '') + '</span><div class="cb-reserve">' + reserve(B.team, B.ti) + '</div></div>' +
+        '<div class="cb-brow"><span class="cb-mut">Toi' + (B.syn && B.syn.n ? ' <span class="cb-synmini" title="' + B.syn.d + '">' + B.syn.e + ' ' + B.syn.n + '</span>' : '') + (!B.over && !B.busy && B.team.filter(function (f) { return f.hp > 0; }).length > 1 ? ' <span class="cb-swhint">🔄 clique pour changer</span>' : '') + '</span><div class="cb-reserve">' + reserve(B.team, B.ti, true) + '</div></div>' +
         '<div class="cb-stage"><div class="cb-arena-field">' + fighterCard(me, 'me', !B.busy && !B.over) + '<div class="cb-vs">VS</div>' + fighterCard(foe, 'foe', false) + '</div></div>' +
-        '<div class="cb-brow"><span class="cb-mut">Adversaire (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei) + '</div></div>' +
+        '<div class="cb-brow"><span class="cb-mut">' + (B.boss ? '👑 BOSS' : 'Adversaire') + ' (étage ' + G.stage + ')</span><div class="cb-reserve">' + reserve(B.enemy, B.ei, false) + '</div></div>' +
         '<div class="cb-log">' + log + '</div>' +
         ult + ctrl +
       '</div>';
@@ -1058,6 +1186,7 @@
     if (G.view === 'battle' && B && !B.over) { renderBattle(); return; }
     if (G.view === 'battle') G.view = 'arena';
     if (G.view === 'collection') el.innerHTML = viewCollection();
+    else if (G.view === 'quests') el.innerHTML = viewQuests();
     else if (G.view === 'arena') el.innerHTML = viewArena();
     else el.innerHTML = viewSummon();
   }

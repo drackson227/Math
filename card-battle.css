@@ -564,3 +564,50 @@ body.arene-on #arene {
   .cb-end-box, .cb-end-rw, .cb-vs-side, .cb-vs-bolt, .cb-vs-stage { animation: none !important; }
   .cb-ult.ready .cb-ult-bar span { animation: none !important; }
 }
+
+/* ===== Pastille de notif sur l'onglet Quêtes ===== */
+.cb-badge { position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px;
+  background: linear-gradient(135deg, #f43f5e, #e11d48); color: #fff; font-size: 11px; font-weight: 800; line-height: 17px;
+  text-align: center; box-shadow: 0 0 10px -1px #f43f5e; animation: cb-badgepulse 1.6s ease-in-out infinite; }
+@keyframes cb-badgepulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+
+/* ===== Quêtes & Succès ===== */
+.cb-quests { display: flex; flex-direction: column; gap: 9px; }
+.cb-quest { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 14px;
+  background: var(--g-glass); border: 1px solid var(--g-line); transition: border-color .2s ease, box-shadow .2s ease; }
+.cb-quest.done { border-color: color-mix(in srgb, var(--g-gold) 60%, var(--g-line)); box-shadow: 0 0 16px -7px var(--g-gold); }
+.cb-quest.claimed { opacity: .55; }
+.cb-q-ic { font-size: 23px; line-height: 1; flex: 0 0 auto; width: 30px; text-align: center; }
+.cb-q-mid { flex: 1 1 auto; min-width: 0; }
+.cb-q-name { font-size: 14px; font-weight: 700; color: #fff; }
+.cb-q-name small { display: block; font-size: 11.5px; font-weight: 500; color: var(--g-tx2); margin-top: 1px; }
+.cb-q-barwrap { display: flex; align-items: center; gap: 7px; margin-top: 5px; }
+.cb-q-bar { flex: 1 1 auto; height: 7px; border-radius: 4px; background: rgba(255,255,255,.10); overflow: hidden; }
+.cb-q-bar span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--g-cyan), var(--g-vio)); box-shadow: 0 0 8px var(--g-vio); transition: width .5s ease; }
+.cb-quest.done .cb-q-bar span { background: linear-gradient(90deg, var(--g-gold), #f59e0b); box-shadow: 0 0 8px var(--g-gold); }
+.cb-q-num { font-size: 11.5px; font-weight: 700; color: var(--g-tx2); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+.cb-q-rw { flex: 0 0 auto; font-size: 12.5px; font-weight: 700; color: var(--g-tx2); white-space: nowrap; }
+.cb-q-claim { flex: 0 0 auto; padding: 8px 13px; font-size: 13px; white-space: nowrap;
+  background: linear-gradient(135deg, var(--g-gold), #f59e0b); color: #3a2600; border-color: transparent; font-weight: 800;
+  box-shadow: 0 0 16px -4px var(--g-gold); animation: cb-badgepulse 1.5s ease-in-out infinite; }
+.cb-q-claim:hover:not(:disabled) { border-color: #fff; box-shadow: 0 0 20px -2px var(--g-gold); }
+.cb-q-claimed { flex: 0 0 auto; width: 30px; text-align: center; color: var(--g-gold); font-size: 19px; font-weight: 900; }
+
+/* ===== Boss ===== */
+.cb-bossbanner { margin: 10px 0 8px; padding: 9px 12px; border-radius: 12px; text-align: center; font-size: 13.5px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, rgba(244,63,94,.22), rgba(168,85,247,.18)); border: 1px solid color-mix(in srgb, #f43f5e 55%, var(--g-line));
+  box-shadow: 0 0 20px -8px #f43f5e; animation: cb-bosspulse 1.8s ease-in-out infinite; }
+.cb-bossbanner b { color: var(--g-gold); }
+@keyframes cb-bosspulse { 0%, 100% { box-shadow: 0 0 18px -9px #f43f5e; } 50% { box-shadow: 0 0 26px -4px #f43f5e; } }
+.cb-fightbtn.boss { background: linear-gradient(135deg, #f43f5e, #b91c1c 60%, #7f1d1d); box-shadow: 0 8px 26px -8px #f43f5e, inset 0 0 0 1px rgba(255,255,255,.10); }
+.cb-bosstag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 3; padding: 2px 9px; border-radius: 8px;
+  font-size: 11px; font-weight: 900; letter-spacing: .5px; color: #3a2600; white-space: nowrap;
+  background: linear-gradient(135deg, var(--g-gold), #f59e0b); box-shadow: 0 0 14px -3px var(--g-gold); }
+.cb-fighter.boss { transform: scale(1.06); }
+.cb-fighter.boss .cb-emoji { filter: drop-shadow(0 0 12px #f43f5e); }
+.cb-vsplash.boss .cb-vs-stage { color: var(--g-gold); text-shadow: 0 0 16px #f43f5e; }
+
+/* ===== Réserve cliquable (changer de créature) ===== */
+.cb-res.sw { cursor: pointer; }
+.cb-res.sw:hover { transform: scale(1.3); filter: drop-shadow(0 0 8px var(--g-cyan)); }
+.cb-swhint { font-size: 10.5px; color: var(--g-cyan); opacity: .85; margin-left: 6px; white-space: nowrap; }
