@@ -75,6 +75,7 @@
   var BYID = {}; CREATURES.forEach(function (c) { BYID[c.id] = c; });
 
   var G = {};
+  var colFilter = { type: 'all', ownedOnly: false, sort: 'rarity' }; // tri/filtre de la Collection (en mémoire)
   function load() {
     try { G = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { G = {}; }
     G.owned = G.owned || {}; G.team = G.team || []; G.tickets = G.tickets || 0;
@@ -475,6 +476,19 @@
     renderBattle();
     setTimeout(enemyTurn, 520);
   };
+  // AUTO-COMBAT : quand c'est ton tour et que l'auto est actif, joue tout seul (spécial si prêt, sinon attaque).
+  function scheduleAuto() {
+    if (!B || B.over || B.busy || !B.auto) return;
+    setTimeout(function () {
+      if (!B || B.over || B.busy || !B.auto) return;
+      var me = B.team[B.ti]; if (!me || me.hp <= 0) return;
+      CB.act(me.charge >= 3);
+    }, 560);
+  }
+  CB.toggleAuto = function () {
+    if (!B || B.over) return; B.auto = !B.auto; sfx('tap'); renderBattle();
+    if (B.auto && !B.busy) scheduleAuto();
+  };
   // début du tour de l'ENNEMI : poison/brûlure puis attaque (ou tour sauté si étourdi / K.O. par les dégâts)
   function enemyTurn() {
     if (!B || B.over) return;
@@ -525,10 +539,10 @@
         pushLog('💀 Ton ' + me0.cr.n + ' succombe à ses blessures !');
         var ni = alive(B.team, B.ti + 1);
         if (ni < 0) { B.busy = false; renderBattle(); return endBattle(false); }
-        B.ti = ni; B.busy = false; renderBattle(); return;
+        B.ti = ni; B.busy = false; renderBattle(); scheduleAuto(); return;
       }
       if (skip) { pushLog('💫 Ton ' + me0.cr.n + ' est étourdi : tour sauté.'); B.busy = true; renderBattle(); return setTimeout(enemyTurn, 800); }
-      B.busy = false; renderBattle();
+      B.busy = false; renderBattle(); scheduleAuto();
     });
   }
   function endBattle(win) {
@@ -804,6 +818,20 @@
   }
   // POP lumineux qui grandit puis s'efface (cœur d'impact)
   function fxFlash(x, y, color, size) { fxAdd({ x: x, y: y, vx: 0, vy: 0, life: 12, max: 12, size: size || 26, color: color || '#ffffff', grow: true }); }
+  // ONDE DE CHOC : anneau très fin qui s'écarte vite (donne du « punch » à l'impact)
+  function fxShock(x, y, color, size) { fxAdd({ kind: 'ring', x: x, y: y, r: 4, vr: rnd(7.5, 9.5), size: size || 2.5, life: 15, max: 15, color: color, glow: 22 }); }
+  // ÉCLAIR en zigzag entre deux points (segments de faisceau aléatoires)
+  function fxBolt(ax, ay, bx, by, color, segs) {
+    segs = segs || 6; var px = ax, py = ay;
+    for (var i = 1; i <= segs; i++) {
+      var k = i / segs, last = (i === segs);
+      var nx = ax + (bx - ax) * k + (last ? 0 : rnd(-13, 13)), ny = ay + (by - ay) * k + (last ? 0 : rnd(-13, 13));
+      fxAdd({ kind: 'beam', x: px, y: py, bx: nx, by: ny, size: rnd(1.6, 3), life: 10, max: 10, color: color, glow: 18 });
+      px = nx; py = ny;
+    }
+  }
+  // étoiles filantes radiales courtes (lignes de vitesse autour de l'impact)
+  function fxSpeed(x, y, color, n) { for (var i = 0; i < (n || 8); i++) { var a = (i / (n || 8)) * 6.2832 + rnd(-0.2, 0.2); fxAdd({ x: x + Math.cos(a) * 10, y: y + Math.sin(a) * 10, vx: Math.cos(a) * rnd(6, 10), vy: Math.sin(a) * rnd(6, 10), life: rnd(8, 14), max: 14, size: rnd(2, 3.4), color: color, glow: 14, streak: rnd(4, 7), drag: 0.9 }); } }
   // ARC de lame (coup de griffe / mâchoire)
   function fxArc(x, y, r, ang, spread, color, size, spin) { fxAdd({ kind: 'arc', x: x, y: y, r: r, a0: ang - spread, a1: ang + spread, spin: spin || 0, gr: 0.7, size: size || 3.5, life: 16, max: 16, color: color, glow: 14 }); }
   // FLUX d'attaque épais : tête blanche brillante + traînée colorée (feu / eau / plongeon)
@@ -853,9 +881,9 @@
   // ---- briques d'impact réutilisables (chaque créature les COMBINE différemment → animation unique) ----
   function _radial(x, y, c, n) { for (var i = 0; i < n; i++) fxStreaks(x, y, c, 1, (i / n) * 6.2832); }
   function _spark(x, y, c, n) { for (var i = 0; i < n; i++) fxAdd({ x: x + rnd(-22, 22), y: y + rnd(-22, 22), vx: rnd(-0.3, 0.3), vy: rnd(-0.3, 0.3), life: rnd(20, 46), max: 46, size: rnd(1, 2.4), color: c, glow: 14, shrink: true }); }
-  function _nova(x, y, c, l) { fxFlash(x, y, '#ffffff', 36); fxBurst(x, y, l, 40, 6); fxBurst(x, y, c, 22, 4); fxRing(x, y, c, 5); }
-  function _pop(x, y, c, l) { fxFlash(x, y, '#ffffff', 24); fxBurst(x, y, l, 22, 5); }
-  function _pierce(x, y, c, l) { fxFlash(x, y, '#ffffff', 22); fxBurst(x, y, l, 18, 8); fxStreaks(x, y, c, 4, 0); fxStreaks(x, y, c, 4, 1.57); fxRing(x, y, c, 2); }
+  function _nova(x, y, c, l) { fxFlash(x, y, '#ffffff', 40); fxShock(x, y, '#ffffff', 3); fxBurst(x, y, l, 44, 6.5); fxBurst(x, y, c, 24, 4); fxRing(x, y, c, 5); fxSpeed(x, y, l, 8); }
+  function _pop(x, y, c, l) { fxFlash(x, y, '#ffffff', 26); fxShock(x, y, c, 2.4); fxBurst(x, y, l, 24, 5); }
+  function _pierce(x, y, c, l) { fxFlash(x, y, '#ffffff', 24); fxBolt(x - 28, y - 28, x, y, '#ffffff', 5); fxBurst(x, y, l, 20, 8); fxStreaks(x, y, c, 4, 0); fxStreaks(x, y, c, 4, 1.57); fxRing(x, y, c, 2); }
   function _shards(x, y, c, l) { fxFlash(x, y, '#ffffff', 26); _radial(x, y, c, 9); fxBurst(x, y, l, 16, 5); }
   function _jaws(x, y, c) { fxArc(x, y, 30, -0.5, 1.0, '#ffffff', 4.5, 0.05); fxArc(x, y, 30, Math.PI - 0.5, 1.0, c, 4.5, -0.05); setTimeout(function () { fxFlash(x, y, '#ffffff', 30); fxBurst(x, y, '#ffffff', 20, 6); fxBurst(x, y, c, 16, 4); }, 150); }
   function _claws(x, y, c, n) { for (var s = 0; s < (n || 3); s++) (function (s) { setTimeout(function () { var ang = s % 2 ? 0.8 : -0.8; fxArc(x + rnd(-8, 8), y + rnd(-8, 8), rnd(20, 30), ang, 0.7, '#ffffff', 3.5); fxStreaks(x, y, c, 5, ang); }, s * 90); })(s); }
@@ -948,6 +976,7 @@
     var tc = TM[me.cr.t].c, col = SIG[me.cr.id] || tc, adv = typeMult(me.cr.t, foe.cr.t);
     if (prefersReduced() || !stage || !atkEl || !defEl) { if (onImpact) onImpact(); cbAdvPopup(adv); setTimeout(function () { if (onDone) onDone(); }, 140); return; }
     var field = stage.querySelector('.cb-arena-field');
+    var kc = side === 'me' ? 'cb-knock-r' : 'cb-knock-l'; // sens du recul de la cible
     if (special) {
       var cine = mkFx(stage, 'cb-cinema'); fxEnsure(stage); if (field) field.classList.add('cb-zoom');
       atkEl.style.setProperty('--tc', tc); atkEl.classList.add('cb-cast');
@@ -958,18 +987,28 @@
         if (onImpact) onImpact();
         sfx('crit'); cbAdvPopup(adv);
         var bp = ctr(defEl);
-        fxBurst(bp.x, bp.y, '#ffffff', 16, 5); // l'effet SIGNATURE gère le gros de l'impact ; ce flash blanc le « cale »
+        // l'effet SIGNATURE gère le gros de l'impact ; ici on « cale » le coup : flash + double onde de choc + lignes de vitesse
+        fxBurst(bp.x, bp.y, '#ffffff', 16, 5); fxShock(bp.x, bp.y, '#ffffff', 3.2); fxShock(bp.x, bp.y, col, 2.4); fxSpeed(bp.x, bp.y, col, 10);
         var fl = mkFx(stage, 'cb-impact-flash'); setTimeout(function () { fl.remove(); }, 300);
         stage.classList.add('cb-quake'); setTimeout(function () { stage.classList.remove('cb-quake'); }, 520);
-        defEl.classList.add('cb-hurt-big'); cbFloat(defEl, '-' + dmg, 'crit');
+        defEl.classList.add('cb-hurt-big', kc); cbFloat(defEl, '-' + dmg, 'crit');
       }, 880);
-      setTimeout(function () { atkEl.classList.remove('cb-cast'); defEl.classList.remove('cb-hurt-big'); if (field) field.classList.remove('cb-zoom'); cine.remove(); banner.remove(); if (onDone) onDone(); }, 1400);
+      setTimeout(function () { atkEl.classList.remove('cb-cast'); defEl.classList.remove('cb-hurt-big', kc); if (field) field.classList.remove('cb-zoom'); cine.remove(); banner.remove(); if (onDone) onDone(); }, 1400);
     } else {
       var lc = side === 'me' ? 'cb-lunge-r' : 'cb-lunge-l'; atkEl.classList.add(lc);
       fxEnsure(stage); var a = ctr(atkEl), b = ctr(defEl);
       fxComet(a, b, 300, col, function (x, y) { fxBurst(x, y, col, 14, 4); });
-      setTimeout(function () { if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv); defEl.classList.add('cb-hurt'); var bp = ctr(defEl); fxBurst(bp.x, bp.y, '#ffffff', 12, 4); cbFloat(defEl, '-' + dmg, ''); }, 320);
-      setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt'); if (onDone) onDone(); }, 620);
+      setTimeout(function () {
+        if (onImpact) onImpact(); sfx('hit'); cbAdvPopup(adv);
+        defEl.classList.add('cb-hurt', kc);
+        var bp = ctr(defEl);
+        // impact plus « lourd » : flash + onde de choc + éclats + mini-secousse de l'arène
+        fxFlash(bp.x, bp.y, '#ffffff', 18); fxShock(bp.x, bp.y, col, 2.2); fxBurst(bp.x, bp.y, '#ffffff', 14, 4.5); fxBurst(bp.x, bp.y, col, 10, 3.5);
+        stage.classList.add('cb-quake-sm'); setTimeout(function () { stage.classList.remove('cb-quake-sm'); }, 240);
+        if (adv > 1) { fxSpeed(bp.x, bp.y, col, 6); fxRing(bp.x, bp.y, col, 3); } // super efficace = plus de pêche
+        cbFloat(defEl, '-' + dmg, adv > 1 ? 'crit' : '');
+      }, 320);
+      setTimeout(function () { atkEl.classList.remove(lc); defEl.classList.remove('cb-hurt', kc); if (onDone) onDone(); }, 640);
     }
   }
   function bar(cur, max, col) {
@@ -1070,6 +1109,11 @@
       '</div>';
   }
 
+  CB.colFilter = function (key, val) {
+    if (key === 'ownedOnly') colFilter.ownedOnly = !colFilter.ownedOnly; else colFilter[key] = val;
+    sfx('tap'); render();
+  };
+  function powerOf(id) { if (!G.owned[id]) return 0; var s = stats(id, G.owned[id].lvl); return s.hp + s.atk; }
   function viewCollection() {
     var owned = Object.keys(G.owned).length;
     var teamSlots = '';
@@ -1079,7 +1123,18 @@
         ? '<button class="cb-slot full" onclick="CB.team(\'' + id + '\')" title="Retirer">' + BYID[id].e + '<span>' + esc(BYID[id].n) + '</span></button>'
         : '<div class="cb-slot empty">+</div>';
     }
-    var grid = CREATURES.map(function (c) {
+    // --- filtre (type / possédés) + tri (rareté ou puissance) ---
+    var list = CREATURES.filter(function (c) {
+      if (colFilter.type !== 'all' && c.t !== colFilter.type) return false;
+      if (colFilter.ownedOnly && !G.owned[c.id]) return false;
+      return true;
+    });
+    list.sort(function (a, b) {
+      if (colFilter.sort === 'power') return powerOf(b.id) - powerOf(a.id);
+      var d = RAR_ORDER.indexOf(b.r) - RAR_ORDER.indexOf(a.r); // rareté décroissante
+      return d !== 0 ? d : (TYPES.indexOf(a.t) - TYPES.indexOf(b.t));
+    });
+    var grid = list.map(function (c) {
       var o = G.owned[c.id];
       if (!o) return '<div class="cb-cell cb-r-' + c.r + ' locked" style="--rc:' + RAR[c.r].c + '; --tc:' + TM[c.t].c + '">' + pwin(c) + '<div class="cb-cplate"><div class="cb-clk">❓ ???</div><div class="cb-stars">' + starStr(RAR[c.r].st) + '</div></div></div>';
       var inTeam = G.team.indexOf(c.id) >= 0;
@@ -1094,11 +1149,22 @@
         '</div>' +
         '</div>';
     }).join('');
+    if (!list.length) grid = '<div class="cb-fempty">Aucune créature ne correspond à ce filtre.</div>';
+    var typeChips = '<button class="cb-fchip' + (colFilter.type === 'all' ? ' on' : '') + '" onclick="CB.colFilter(\'type\',\'all\')">Tous</button>' +
+      TYPES.map(function (t) { return '<button class="cb-fchip' + (colFilter.type === t ? ' on' : '') + '" onclick="CB.colFilter(\'type\',\'' + t + '\')" title="' + TM[t].n + '">' + TM[t].e + '</button>'; }).join('');
+    var bar = '<div class="cb-filter">' + typeChips +
+      '<span class="cb-fsep"></span>' +
+      '<button class="cb-fchip' + (colFilter.ownedOnly ? ' on' : '') + '" onclick="CB.colFilter(\'ownedOnly\',1)">✓ Possédés</button>' +
+      '<span class="cb-fsep"></span>' +
+      '<button class="cb-fchip' + (colFilter.sort === 'rarity' ? ' on' : '') + '" onclick="CB.colFilter(\'sort\',\'rarity\')">★ Rareté</button>' +
+      '<button class="cb-fchip' + (colFilter.sort === 'power' ? ' on' : '') + '" onclick="CB.colFilter(\'sort\',\'power\')">⚡ Puissance</button>' +
+      '</div>';
     return head() +
       '<div class="cb-panel">' +
         '<h3 class="cb-h">📒 Collection <span class="cb-mut">' + owned + '/' + CREATURES.length + '</span></h3>' +
         '<div class="cb-prog"><span style="width:' + Math.round(owned / CREATURES.length * 100) + '%"></span></div>' +
         '<div class="cb-team"><span class="cb-mut">Mon équipe (3 max) :</span><div class="cb-slots">' + teamSlots + '</div></div>' +
+        bar +
         '<div class="cb-grid">' + grid + '</div>' +
       '</div>';
   }
@@ -1160,6 +1226,7 @@
       ctrl = '<div class="cb-summon-btns">' +
         '<button class="cb-btn cb-btn-main" onclick="CB.act(false)"' + (B.busy ? ' disabled' : '') + '>⚔️ Attaquer</button>' +
         '<button class="cb-btn cb-special' + (me.charge >= 3 ? ' ready' : '') + '" onclick="CB.act(true)"' + (B.busy || me.charge < 3 ? ' disabled' : '') + '>' + (me.charge >= 3 ? '⚡ ' + esc(me.cr.mv) + ' — PRÊT !' : '🔒 ' + esc(me.cr.mv)) + '</button>' +
+        '<button class="cb-btn cb-auto' + (B.auto ? ' on' : '') + '" onclick="CB.toggleAuto()" title="Combat automatique">' + (B.auto ? '🤖 Auto ✓' : '🤖 Auto') + '</button>' +
         '<button class="cb-btn" onclick="CB.go(\'arena\')">🏳️ Abandonner</button></div>';
     }
     var turn = B.over ? '' : '<div class="cb-turn ' + (B.busy ? 'wait' : 'you') + '">' + (B.busy ? '⏳ Tour adverse…' : '🟢 À toi de jouer — ' + esc(me.cr.n)) + '</div>';
